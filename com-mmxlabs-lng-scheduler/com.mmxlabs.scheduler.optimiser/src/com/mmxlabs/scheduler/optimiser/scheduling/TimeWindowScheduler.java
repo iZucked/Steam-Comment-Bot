@@ -133,7 +133,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		if (useCanalBasedWindowTrimming) {
 			for (final var entrance : this.panamaSlotsProvider.getAllBookings().keySet()) {
 				for (final var booking : this.panamaSlotsProvider.getAllBookings().get(entrance)) {
-					IPanamaAllowedBookingsProvider allowedBookingsProvider =  sequences.getProviders().getProvider(IPanamaAllowedBookingsProvider.class);
+					final IPanamaAllowedBookingsProvider allowedBookingsProvider = sequences.getProviders().getProvider(IPanamaAllowedBookingsProvider.class);
 					if(allowedBookingsProvider == null || allowedBookingsProvider.isPanamaBookingAllowed(booking)) {
 						data.addBooking(booking);
 					}

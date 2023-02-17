@@ -5,21 +5,15 @@
 package com.mmxlabs.models.lng.analytics.ui.views.marketability;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement;
-import com.mmxlabs.models.lng.analytics.MarketabilityEndEvent;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -28,20 +22,16 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
-import com.mmxlabs.models.lng.schedule.EndEvent;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 
 public final class MarketabilityUtils {
+
+	private MarketabilityUtils() {
+	}
+
 	public static MarketabilityModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name, final Integer vesselSpeed) {
 		final MarketabilityModel model = AnalyticsFactory.eINSTANCE.createMarketabilityModel();
 		model.setName(name);
@@ -82,7 +72,7 @@ public final class MarketabilityUtils {
 //						shippingOption = ecmo;
 //					}
 				}
-				if(shippingOption == null) {
+				if (shippingOption == null) {
 					continue;
 				}
 				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
@@ -105,15 +95,13 @@ public final class MarketabilityUtils {
 				row.setResult(container);
 			}
 		}
-		if(vesselSpeed != null) {
+		if (vesselSpeed != null) {
 			model.setVesselSpeed(vesselSpeed);
 		} else {
 			model.unsetVesselSpeed();
 		}
-		
+
 		return model;
 	}
 
-	private MarketabilityUtils() {
-	}
 }

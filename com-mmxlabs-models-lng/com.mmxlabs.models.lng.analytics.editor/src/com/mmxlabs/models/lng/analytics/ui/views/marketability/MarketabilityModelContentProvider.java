@@ -43,10 +43,7 @@ public class MarketabilityModelContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		if (element instanceof OptionAnalysisModel) {
-			return true;
-		}
-		return false;
+		return element instanceof OptionAnalysisModel;
 	}
 
 }

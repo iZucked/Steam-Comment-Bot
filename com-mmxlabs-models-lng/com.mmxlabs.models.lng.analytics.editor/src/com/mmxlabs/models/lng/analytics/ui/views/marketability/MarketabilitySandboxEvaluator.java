@@ -63,6 +63,8 @@ public class MarketabilitySandboxEvaluator {
 
 	private static final ShippingOptionDescriptionFormatter SHIPPING_OPTION_DESCRIPTION_FORMATTER = new ShippingOptionDescriptionFormatter();
 
+	private MarketabilitySandboxEvaluator() {
+	}
 	protected static Map<ShippingOption, VesselAssignmentType> buildFullScenario(final LNGScenarioModel clone, final MarketabilityModel clonedModel, final IMapperClass mapper) {
 		final Map<ShippingOption, VesselAssignmentType> shippingMap = createShipping(clone, clonedModel, mapper);
 		final Set<String> usedIDs = getUsedSlotIDs(clone);
@@ -336,6 +338,5 @@ public class MarketabilitySandboxEvaluator {
 		});
 	}
 
-	private MarketabilitySandboxEvaluator() {
-	}
+	
 }

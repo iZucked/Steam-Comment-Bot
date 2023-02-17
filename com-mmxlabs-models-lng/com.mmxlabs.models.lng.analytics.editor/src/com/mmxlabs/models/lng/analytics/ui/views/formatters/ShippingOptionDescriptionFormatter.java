@@ -37,11 +37,10 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			final ViabilityRow row = (ViabilityRow) object;
 			final ShippingOption shipping = row.getShipping();
 			return render(shipping);
-		} else if(object instanceof MarketabilityRow row) {
+		} else if (object instanceof MarketabilityRow row) {
 			final ShippingOption shipping = row.getShipping();
 			return render(shipping);
-		}
-		else if (object instanceof BreakEvenAnalysisRow) {
+		} else if (object instanceof BreakEvenAnalysisRow) {
 			final BreakEvenAnalysisRow partialCaseRow = (BreakEvenAnalysisRow) object;
 			final ShippingOption shipping = partialCaseRow.getShipping();
 			return render(shipping);

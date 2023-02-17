@@ -108,14 +108,14 @@ public class MarketabilitySchedulerBuilder extends SchedulerBuilder {
 			throw new IllegalArgumentException("Expected instance of " + ThreadLocalVessel.class.getCanonicalName());
 		}
 
-		final ThreadLocalVessel veeselEditor = (ThreadLocalVessel) vessel;
+		final ThreadLocalVessel vesselEditor = (ThreadLocalVessel) vessel;
 
-		veeselEditor.setNBORate(state, nboRateInM3PerDay);
-		veeselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
-		veeselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
-		veeselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
-		veeselEditor.setServiceSpeed(state, serviceSpeed);
-		veeselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
+		vesselEditor.setNBORate(state, nboRateInM3PerDay);
+		vesselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
+		vesselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
+		vesselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
+		vesselEditor.setServiceSpeed(state, serviceSpeed);
+		vesselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
 	}
 	
 	@Override

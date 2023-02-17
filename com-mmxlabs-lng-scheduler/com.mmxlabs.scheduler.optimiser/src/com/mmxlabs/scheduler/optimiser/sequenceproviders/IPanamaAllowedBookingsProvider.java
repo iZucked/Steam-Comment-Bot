@@ -6,7 +6,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.NotInjectedScope;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 @NotInjectedScope
+@NonNullByDefault
 public interface IPanamaAllowedBookingsProvider {
-	@NonNullByDefault
 	boolean isPanamaBookingAllowed(IRouteOptionBooking booking);
 }

@@ -1262,14 +1262,14 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 			throw new IllegalArgumentException("Expected instance of " + Vessel.class.getCanonicalName());
 		}
 
-		final Vessel veeselEditor = (Vessel) vessel;
+		final Vessel vesselEditor = (Vessel) vessel;
 
-		veeselEditor.setNBORate(state, nboRateInM3PerDay);
-		veeselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
-		veeselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
-		veeselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
-		veeselEditor.setServiceSpeed(state, serviceSpeed);
-		veeselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
+		vesselEditor.setNBORate(state, nboRateInM3PerDay);
+		vesselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
+		vesselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
+		vesselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
+		vesselEditor.setServiceSpeed(state, serviceSpeed);
+		vesselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
 	}
 
 	/**
