@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
@@ -77,6 +78,7 @@ public class MainTableComponent {
 	private EObjectTableViewer tableViewer;
 	private Text vesselSpeedText;
 	private LocalResourceManager localResourceManager;
+	
 	public GridTreeViewer getViewer() {
 		return this.tableViewer;
 	}
@@ -95,7 +97,7 @@ public class MainTableComponent {
 		}
 	}
 
-	public void createControls(final Composite mainParent, final MarketabilityView breakEvenModellerView) {
+	public void createControls(final Composite mainParent, final MarketabilityView marketabilityModellerView) {
 		final Composite vesselSpeedComposite = new Composite(mainParent, SWT.NONE);
 		vesselSpeedComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
 		vesselSpeedComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.END).minSize(1000, -1).create());
@@ -115,6 +117,14 @@ public class MainTableComponent {
 		Control control = createViewer(mainParent);
 
 		control.setLayoutData(GridDataFactory.fillDefaults().minSize(0, 0).grab(true, true).create());
+		
+		final ESelectionService service = marketabilityModellerView.getSite().getService(ESelectionService.class);
+		tableViewer.addSelectionChangedListener(x -> {
+			Object obj = x.getStructuredSelection().getFirstElement();
+			if(obj instanceof MarketabilityRow row && row.getBuyOption() instanceof BuyReference br) {
+				service.setPostSelection(br.getSlot());
+			}
+		});
 	}
 
 	private Control createViewer(final Composite parent) {
@@ -122,7 +132,7 @@ public class MainTableComponent {
 		tableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tableViewer.init(new MarketabilityModelContentProvider(), null);
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
-
+		
 		assert tableViewer != null;
 		GridViewerHelper.configureLookAndFeel(tableViewer);
 		tableViewer.getGrid().setHeaderVisible(true);
