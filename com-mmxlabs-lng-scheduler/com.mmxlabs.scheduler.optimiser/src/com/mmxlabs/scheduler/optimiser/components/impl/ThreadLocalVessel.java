@@ -47,184 +47,7 @@ public class ThreadLocalVessel implements IVessel {
 	public void setMaxSpeed(final int maxSpeed) {
 		this.maxSpeed.set(maxSpeed);
 	}
-
-	/**
-	 */
-	public void setServiceSpeed(final VesselState vesselState, final int serviceSpeed) {
-		if (reference.get() != null) {
-			reference.get().setServiceSpeed(vesselState, serviceSpeed);
-		} else {
-			globalReference.setServiceSpeed(vesselState, serviceSpeed);
-		}
-	}
-
-	public void setSafetyHeel(final long safetyHeel) {
-		if (reference.get() != null) {
-			reference.get().setSafetyHeel(safetyHeel);
-		} else {
-			globalReference.setSafetyHeel(safetyHeel);
-		}
-	}
-
-	public void setNBORate(final VesselState state, final long nboRate) {
-		if (reference.get() != null) {
-			reference.get().setNBORate(state, nboRate);
-		} else {
-			globalReference.setNBORate(state, nboRate);
-		}
-	}
-
-	public void setIdleNBORate(final VesselState state, final long nboRate) {
-		if (reference.get() != null) {
-			reference.get().setIdleNBORate(state, nboRate);
-		} else {
-			globalReference.setIdleNBORate(state, nboRate);
-		}
-	}
-
-	public void setIdleConsumptionRate(final VesselState state, final long rate) {
-		if (reference.get() != null) {
-			reference.get().setIdleConsumptionRate(state, rate);
-		} else {
-			globalReference.setIdleConsumptionRate(state, rate);
-		}
-	}
-
-	public void setInPortConsumptionRateInMTPerDay(final PortType portType, final long rate) {
-		if (reference.get() != null) {
-			reference.get().setInPortConsumptionRateInMTPerDay(portType, rate);
-		} else {
-			globalReference.setInPortConsumptionRateInMTPerDay(portType, rate);
-		}
-	}
-
-	public void setConsumptionRate(final VesselState vesselState, final IConsumptionRateCalculator calc) {
-		if (reference.get() != null) {
-			reference.get().setConsumptionRate(vesselState, calc);
-		} else {
-			globalReference.setConsumptionRate(vesselState, calc);
-		}
-	}
-
-	public final void setPilotLightRate(final long pilotLightRate) {
-		if (reference.get() != null) {
-			reference.get().setPilotLightRate(pilotLightRate);
-		} else {
-			globalReference.setPilotLightRate(pilotLightRate);
-		}
-	}
-
-	public void setCooldownVolume(final long cooldownVolume) {
-		if (reference.get() != null) {
-			reference.get().setCooldownVolume(cooldownVolume);
-		} else {
-			globalReference.setCooldownVolume(cooldownVolume);
-		}
-	}
-
-	public void setWarmupTime(final int warmupTime) {
-		if (reference.get() != null) {
-			reference.get().setWarmupTime(warmupTime);
-		} else {
-			globalReference.setWarmupTime(warmupTime);
-		}
-	}
-
-	public void setPurgeTime(final int purgeTime) {
-		if (reference.get() != null) {
-			reference.get().setPurgeTime(purgeTime);
-		} else {
-			globalReference.setPurgeTime(purgeTime);
-		}
-	}
-
-	public void setTravelBaseFuel(final IBaseFuel bf) {
-		if (reference.get() != null) {
-			reference.get().setTravelBaseFuel(bf);
-		} else {
-			globalReference.setTravelBaseFuel(bf);
-		}
-	}
-
-	public void setHasReliqCapability(final boolean hasReliqCapability) {
-		if (reference.get() != null) {
-			reference.get().setHasReliqCapability(hasReliqCapability);
-		} else {
-			globalReference.setHasReliqCapability(hasReliqCapability);
-		}
-	}
-
-	public void setInPortNBORate(final VesselState state, final long nboRate) {
-		if (reference.get() != null) {
-			reference.get().setInPortNBORate(state, nboRate);
-		} else {
-			globalReference.setInPortNBORate(state, nboRate);
-		}
-	}
-
-	@Override
-	public @NonNull String getName() {
-		if (reference.get() != null) {
-			return reference.get().getName();
-		} else {
-			return globalReference.getName();
-		}
-	}
-
-	@Override
-	public long getCargoCapacity() {
-		if (reference.get() != null) {
-			return reference.get().getCargoCapacity();
-		} else {
-			return globalReference.getCargoCapacity();
-		}
-	}
-
-	@Override
-	public @NonNull IConsumptionRateCalculator getConsumptionRate(@NonNull VesselState vesselState) {
-		if (reference.get() != null) {
-			return reference.get().getConsumptionRate(vesselState);
-		} else {
-			return globalReference.getConsumptionRate(vesselState);
-		}
-	}
-
-	@Override
-	public long getIdleConsumptionRate(@NonNull VesselState vesselState) {
-		if (reference.get() != null) {
-			return reference.get().getIdleConsumptionRate(vesselState);
-		} else {
-			return globalReference.getIdleConsumptionRate(vesselState);
-		}
-	}
-
-	@Override
-	public long getInPortConsumptionRateInMTPerDay(@NonNull PortType portType) {
-		if (reference.get() != null) {
-			return reference.get().getInPortConsumptionRateInMTPerDay(portType);
-		} else {
-			return globalReference.getInPortConsumptionRateInMTPerDay(portType);
-		}
-	}
-
-	@Override
-	public long getIdleNBORate(@NonNull VesselState vesselState) {
-		if (reference.get() != null) {
-			return reference.get().getIdleNBORate(vesselState);
-		} else {
-			return globalReference.getIdleNBORate(vesselState);
-		}
-	}
-
-	@Override
-	public long getPilotLightRate() {
-		if (reference.get() != null) {
-			return reference.get().getPilotLightRate();
-		} else {
-			return globalReference.getPilotLightRate();
-		}
-	}
-
+	
 	@Override
 	public int getMaxSpeed() {
 		Integer ms = maxSpeed.get();
@@ -234,16 +57,6 @@ public class ThreadLocalVessel implements IVessel {
 			return globalReference.getMaxSpeed();
 		}
 	}
-
-	@Override
-	public long getSafetyHeel() {
-		if (reference.get() != null) {
-			return reference.get().getSafetyHeel();
-		} else {
-			return globalReference.getSafetyHeel();
-		}
-	}
-
 	@Override
 	public int getMinSpeed() {
 		Integer ms = minSpeed.get();
@@ -254,240 +67,241 @@ public class ThreadLocalVessel implements IVessel {
 		}
 	}
 
+	/**
+	 */
+	public void setServiceSpeed(final VesselState vesselState, final int serviceSpeed) {
+		getUnderlyingVessel().setServiceSpeed(vesselState, serviceSpeed);
+	}
+
+	public void setSafetyHeel(final long safetyHeel) {
+		getUnderlyingVessel().setSafetyHeel(safetyHeel);
+	}
+
+	public void setNBORate(final VesselState state, final long nboRate) {
+		getUnderlyingVessel().setNBORate(state, nboRate);
+	}
+
+	public void setIdleNBORate(final VesselState state, final long nboRate) {
+		getUnderlyingVessel().setIdleNBORate(state, nboRate);
+	}
+
+	public void setIdleConsumptionRate(final VesselState state, final long rate) {
+		getUnderlyingVessel().setIdleConsumptionRate(state, rate);
+	}
+
+	public void setInPortConsumptionRateInMTPerDay(final PortType portType, final long rate) {
+		getUnderlyingVessel().setInPortConsumptionRateInMTPerDay(portType, rate);
+	}
+
+	public void setConsumptionRate(final VesselState vesselState, final IConsumptionRateCalculator calc) {
+		getUnderlyingVessel().setConsumptionRate(vesselState, calc);
+	}
+
+	public final void setPilotLightRate(final long pilotLightRate) {
+		getUnderlyingVessel().setPilotLightRate(pilotLightRate);
+	}
+
+	public void setCooldownVolume(final long cooldownVolume) {
+		getUnderlyingVessel().setCooldownVolume(cooldownVolume);
+	}
+
+	public void setWarmupTime(final int warmupTime) {
+		getUnderlyingVessel().setWarmupTime(warmupTime);
+	}
+
+	public void setPurgeTime(final int purgeTime) {
+		getUnderlyingVessel().setPurgeTime(purgeTime);
+	}
+
+	public void setTravelBaseFuel(final IBaseFuel bf) {
+		getUnderlyingVessel().setTravelBaseFuel(bf);
+	}
+
+	public void setHasReliqCapability(final boolean hasReliqCapability) {
+		getUnderlyingVessel().hasReliqCapability();
+	}
+
+	public void setInPortNBORate(final VesselState state, final long nboRate) {
+		getUnderlyingVessel().setInPortNBORate(state, nboRate);
+	}
+
+	@Override
+	public @NonNull String getName() {
+		return getUnderlyingVessel().getName();
+	}
+
+	@Override
+	public long getCargoCapacity() {
+		return getUnderlyingVessel().getCargoCapacity();
+	}
+
+	@Override
+	public @NonNull IConsumptionRateCalculator getConsumptionRate(@NonNull VesselState vesselState) {
+		return getUnderlyingVessel().getConsumptionRate(vesselState);
+	}
+
+	@Override
+	public long getIdleConsumptionRate(@NonNull VesselState vesselState) {
+		return getUnderlyingVessel().getIdleConsumptionRate(vesselState);
+	}
+
+	@Override
+	public long getInPortConsumptionRateInMTPerDay(@NonNull PortType portType) {
+		return getUnderlyingVessel().getInPortConsumptionRateInMTPerDay(portType);
+	}
+
+	@Override
+	public long getIdleNBORate(@NonNull VesselState vesselState) {
+		return getUnderlyingVessel().getIdleNBORate(vesselState);
+	}
+
+	@Override
+	public long getPilotLightRate() {
+		return getUnderlyingVessel().getPilotLightRate();
+	}
+
+	@Override
+	public long getSafetyHeel() {
+		return getUnderlyingVessel().getSafetyHeel();
+	}
+
+
 	@Override
 	public int getServiceSpeed(@NonNull VesselState vesselState) {
-		if (reference.get() != null) {
-			return reference.get().getServiceSpeed(vesselState);
-		} else {
-			return globalReference.getServiceSpeed(vesselState);
-		}
+		return getUnderlyingVessel().getServiceSpeed(vesselState);
 	}
 
 	@Override
 	public long getNBORate(@NonNull VesselState vesselState) {
-		if (reference.get() != null) {
-			return reference.get().getNBORate(vesselState);
-		} else {
-			return globalReference.getNBORate(vesselState);
-		}
+		return getUnderlyingVessel().getNBORate(vesselState);
 	}
 
 	@Override
 	public int getWarmupTime() {
-		if (reference.get() != null) {
-			return reference.get().getWarmupTime();
-		} else {
-			return globalReference.getWarmupTime();
-		}
+		return getUnderlyingVessel().getWarmupTime();
 	}
 
 	@Override
 	public int getPurgeTime() {
-		if (reference.get() != null) {
-			return reference.get().getPurgeTime();
-		} else {
-			return globalReference.getPurgeTime();
-		}
+		return getUnderlyingVessel().getPurgeTime();
 	}
 
 	@Override
 	public long getCooldownVolume() {
-		if (reference.get() != null) {
-			return reference.get().getCooldownVolume();
-		} else {
-			return globalReference.getCooldownVolume();
-		}
+		return getUnderlyingVessel().getCooldownVolume();
 	}
 
 	@Override
 	public int getMinBaseFuelConsumptionInMTPerDay() {
-		if (reference.get() != null) {
-			return reference.get().getMinBaseFuelConsumptionInMTPerDay();
-		} else {
-			return globalReference.getMinBaseFuelConsumptionInMTPerDay();
-		}
+		return getUnderlyingVessel().getMinBaseFuelConsumptionInMTPerDay();
 	}
 
 	@Override
 	public @NonNull IBaseFuel getTravelBaseFuel() {
-		if (reference.get() != null) {
-			return reference.get().getTravelBaseFuel();
-		} else {
-			return globalReference.getTravelBaseFuel();
-		}
+		return getUnderlyingVessel().getTravelBaseFuel();
 	}
 
 	@Override
 	public @NonNull IBaseFuel getInPortBaseFuel() {
-		if (reference.get() != null) {
-			return reference.get().getInPortBaseFuel();
-		} else {
-			return globalReference.getInPortBaseFuel();
-		}
+		return getUnderlyingVessel().getInPortBaseFuel();
 	}
 
 	@Override
 	public void setInPortBaseFuel(@NonNull IBaseFuel baseFuel) {
-		if (reference.get() != null) {
-			reference.get().setInPortBaseFuel(baseFuel);
-		} else {
-			globalReference.setInPortBaseFuel(baseFuel);
-		}
+		getUnderlyingVessel().setInPortBaseFuel(baseFuel);
 
 	}
 
 	@Override
 	public @NonNull IBaseFuel getPilotLightBaseFuel() {
-		if (reference.get() != null) {
-			return reference.get().getPilotLightBaseFuel();
-		} else {
-			return globalReference.getPilotLightBaseFuel();
-		}
+		return getUnderlyingVessel().getPilotLightBaseFuel();
 	}
 
 	@Override
 	public void setPilotLightBaseFuel(@NonNull IBaseFuel baseFuel) {
-		if (reference.get() != null) {
-			reference.get().setPilotLightBaseFuel(baseFuel);
-		} else {
-			globalReference.setPilotLightBaseFuel(baseFuel);
-		}
+		getUnderlyingVessel().setPilotLightBaseFuel(baseFuel);
 	}
 
 	@Override
 	public @NonNull IBaseFuel getIdleBaseFuel() {
-		if (reference.get() != null) {
-			return reference.get().getIdleBaseFuel();
-		} else {
-			return globalReference.getIdleBaseFuel();
-		}
+		return getUnderlyingVessel().getIdleBaseFuel();
 	}
 
 	@Override
 	public void setIdleBaseFuel(@NonNull IBaseFuel baseFuel) {
-		if (reference.get() != null) {
-			reference.get().setIdleBaseFuel(baseFuel);
-		} else {
-			globalReference.setIdleBaseFuel(baseFuel);
-		}
-
+		getUnderlyingVessel().setIdleBaseFuel(baseFuel);
 	}
 
 	@Override
 	public long getInPortNBORate(@NonNull VesselState vesselState) {
-		if (reference.get() != null) {
-			return reference.get().getInPortNBORate(vesselState);
-		} else {
-			return globalReference.getInPortNBORate(vesselState);
-		}
+		return getUnderlyingVessel().getInPortNBORate(vesselState);
 	}
 
 	@Override
 	public boolean hasReliqCapability() {
-		if (reference.get() != null) {
-			return reference.get().hasReliqCapability();
-		} else {
-			return globalReference.hasReliqCapability();
-		}
+		return getUnderlyingVessel().hasReliqCapability();
 	}
 
 	@Override
 	public @NonNull FuelKey getTravelBaseFuelInMT() {
-		if (reference.get() != null) {
-			return reference.get().getTravelBaseFuelInMT();
-		} else {
-			return globalReference.getTravelBaseFuelInMT();
-		}
+		return getUnderlyingVessel().getTravelBaseFuelInMT();
 	}
 
 	@Override
 	public @NonNull FuelKey getSupplementalTravelBaseFuelInMT() {
-		if (reference.get() != null) {
-			return reference.get().getSupplementalTravelBaseFuelInMT();
-		} else {
-			return globalReference.getSupplementalTravelBaseFuelInMT();
-		}
+		return getUnderlyingVessel().getSupplementalTravelBaseFuelInMT();
 	}
 
 	@Override
 	public @NonNull FuelKey getIdleBaseFuelInMT() {
-		if (reference.get() != null) {
-			return reference.get().getIdleBaseFuelInMT();
-		} else {
-			return globalReference.getIdleBaseFuelInMT();
-		}
+		return getUnderlyingVessel().getIdleBaseFuelInMT();
 	}
 
 	@Override
 	public @NonNull FuelKey getPilotLightFuelInMT() {
-		if (reference.get() != null) {
-			return reference.get().getPilotLightFuelInMT();
-		} else {
-			return globalReference.getPilotLightFuelInMT();
-		}
+		return getUnderlyingVessel().getPilotLightFuelInMT();
 	}
 
 	@Override
 	public @NonNull FuelKey getIdlePilotLightFuelInMT() {
-		if (reference.get() != null) {
-			return reference.get().getIdlePilotLightFuelInMT();
-		} else {
-			return globalReference.getIdlePilotLightFuelInMT();
-		}
+		return getUnderlyingVessel().getIdlePilotLightFuelInMT();
 	}
 
 	@Override
 	public @NonNull FuelKey getInPortBaseFuelInMT() {
-		if (reference.get() != null) {
-			return reference.get().getInPortBaseFuelInMT();
-		} else {
-			return globalReference.getInPortBaseFuelInMT();
-		}
+		return getUnderlyingVessel().getInPortBaseFuelInMT();
 	}
 
 	@Override
 	public @NonNull Collection<@NonNull FuelKey> getPortFuelKeys() {
-		if (reference.get() != null) {
-			return reference.get().getPortFuelKeys();
-		} else {
-			return globalReference.getPortFuelKeys();
-		}
+		return getUnderlyingVessel().getPortFuelKeys();
 	}
 
 	@Override
 	public @NonNull Collection<@NonNull FuelKey> getTravelFuelKeys() {
-		if (reference.get() != null) {
-			return reference.get().getTravelFuelKeys();
-		} else {
-			return globalReference.getTravelFuelKeys();
-		}
+		return getUnderlyingVessel().getTravelFuelKeys();
 	}
 
 	@Override
 	public @NonNull Collection<@NonNull FuelKey> getIdleFuelKeys() {
-		if (reference.get() != null) {
-			return reference.get().getIdleFuelKeys();
-		} else {
-			return globalReference.getIdleFuelKeys();
-		}
+		return getUnderlyingVessel().getIdleFuelKeys();
 	}
 
 	@Override
 	public @NonNull Collection<@NonNull FuelKey> getVoyageFuelKeys() {
-		if (reference.get() != null) {
-			return reference.get().getVoyageFuelKeys();
-		} else {
-			return globalReference.getVoyageFuelKeys();
-		}
+		return getUnderlyingVessel().getVoyageFuelKeys();
 	}
 
 	@Override
 	public @NonNull Collection<@NonNull FuelKey> getAllFuelKeys() {
-		if (reference.get() != null) {
-			return reference.get().getAllFuelKeys();
-		} else {
-			return globalReference.getAllFuelKeys();
+		return getUnderlyingVessel().getAllFuelKeys();
+	}
+	
+	private @NonNull Vessel getUnderlyingVessel() {
+		if(reference.get() != null) {
+			return reference.get();
 		}
+		return globalReference;
 	}
 
 }

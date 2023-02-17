@@ -28,56 +28,39 @@ public class ThreadLocalStartRequirement implements IStartRequirement {
 
 	@Override
 	public IHeelOptionSupplier getHeelOptions() {
-		if (reference.get() != null) {
-			return reference.get().getHeelOptions();
-		} else {
-			return globalRef.getHeelOptions();
-		}
-
+		return getUnderlyingStartRequirement().getHeelOptions();
 	}
 
 	@Override
 	public boolean hasPortRequirement() {
-		if (reference.get() != null) {
-			return reference.get().hasPortRequirement();
-		} else {
-			return globalRef.hasPortRequirement();
-		}
+		return getUnderlyingStartRequirement().hasPortRequirement();
 	}
 
 	@Override
 	public boolean hasTimeRequirement() {
-		if (reference.get() != null) {
-			return reference.get().hasTimeRequirement();
-		} else {
-			return globalRef.hasTimeRequirement();
-		}
+		return getUnderlyingStartRequirement().hasTimeRequirement();
 	}
 
 	@Override
 	public IPort getLocation() {
-		if (reference.get() != null) {
-			return reference.get().getLocation();
-		} else {
-			return globalRef.getLocation();
-		}
+		return getUnderlyingStartRequirement().getLocation();
 	}
 
 	@Override
 	public ITimeWindow getTimeWindow() {
-		if (reference.get() != null) {
-			return reference.get().getTimeWindow();
-		} else {
-			return globalRef.getTimeWindow();
-		}
+		return getUnderlyingStartRequirement().getTimeWindow();
 	}
 
 	@Override
 	public Collection<@NonNull IPort> getLocations() {
+		return getUnderlyingStartRequirement().getLocations();
+	}
+	
+	private IStartRequirement getUnderlyingStartRequirement() {
 		if (reference.get() != null) {
-			return reference.get().getLocations();
+			return reference.get();
 		} else {
-			return globalRef.getLocations();
+			return globalRef;
 		}
 	}
 

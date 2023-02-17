@@ -28,109 +28,69 @@ public class ThreadLocalEndRequirement implements IEndRequirement {
 
 	@Override
 	public boolean hasPortRequirement() {
-		if (reference.get() != null) {
-			return reference.get().hasPortRequirement();
-		} else {
-			return globalRef.hasPortRequirement();
-		}
+		return getUnderlyingEndRequirement().hasPortRequirement();
 	}
 
 	@Override
 	public boolean hasTimeRequirement() {
-		if (reference.get() != null) {
-			return reference.get().hasTimeRequirement();
-		} else {
-			return globalRef.hasTimeRequirement();
-		}
+		return getUnderlyingEndRequirement().hasTimeRequirement();
 	}
 
 	@Override
 	public @Nullable ITimeWindow getTimeWindow() {
-		if (reference.get() != null) {
-			return reference.get().getTimeWindow();
-		} else {
-			return globalRef.getTimeWindow();
-		}
+		return getUnderlyingEndRequirement().getTimeWindow();
 	}
 
 	@Override
 	public @Nullable IPort getLocation() {
-		if (reference.get() != null) {
-			return reference.get().getLocation();
-		} else {
-			return globalRef.getLocation();
-		}
+		return getUnderlyingEndRequirement().getLocation();
 	}
 
 	@Override
 	public @NonNull Collection<@NonNull IPort> getLocations() {
-		if (reference.get() != null) {
-			return reference.get().getLocations();
-		} else {
-			return globalRef.getLocations();
-		}
+		return getUnderlyingEndRequirement().getLocations();
 	}
 
 	@Override
 	public @NonNull IHeelOptionConsumer getHeelOptions() {
-		if (reference.get() != null) {
-			return reference.get().getHeelOptions();
-		} else {
-			return globalRef.getHeelOptions();
-		}
+		return getUnderlyingEndRequirement().getHeelOptions();
 	}
 
 	@Override
 	public int getMinDurationInHours() {
-		if (reference.get() != null) {
-			return reference.get().getMinDurationInHours();
-		} else {
-			return globalRef.getMinDurationInHours();
-		}
+		return getUnderlyingEndRequirement().getMinDurationInHours();
 	}
 
 	@Override
 	public int getMaxDurationInHours() {
-		if (reference.get() != null) {
-			return reference.get().getMaxDurationInHours();
-		} else {
-			return globalRef.getMaxDurationInHours();
-		}
+		return getUnderlyingEndRequirement().getMaxDurationInHours();
 	}
 
 	@Override
 	public void setMinDurationInHours(int hours) {
-		if (reference.get() != null) {
-			reference.get().setMinDurationInHours(hours);
-		} else {
-			globalRef.setMinDurationInHours(hours);
-		}
+		getUnderlyingEndRequirement().setMinDurationInHours(hours);
 	}
 
 	@Override
 	public void setMaxDurationInHours(int hours) {
-		if (reference.get() != null) {
-			reference.get().setMaxDurationInHours(hours);
-		} else {
-			globalRef.setMaxDurationInHours(hours);
-		}
+		getUnderlyingEndRequirement().setMaxDurationInHours(hours);
 	}
 
 	@Override
 	public boolean isMinDurationSet() {
-		if (reference.get() != null) {
-			return reference.get().isMinDurationSet();
-		} else {
-			return globalRef.isMinDurationSet();
-		}
+		return getUnderlyingEndRequirement().isMinDurationSet();
 	}
 
 	@Override
 	public boolean isMaxDurationSet() {
+		return getUnderlyingEndRequirement().isMaxDurationSet();
+	}
+	
+	private IEndRequirement getUnderlyingEndRequirement() {
 		if (reference.get() != null) {
-			return reference.get().isMaxDurationSet();
+			return reference.get();
 		} else {
-			return globalRef.isMaxDurationSet();
+			return globalRef;
 		}
 	}
 
