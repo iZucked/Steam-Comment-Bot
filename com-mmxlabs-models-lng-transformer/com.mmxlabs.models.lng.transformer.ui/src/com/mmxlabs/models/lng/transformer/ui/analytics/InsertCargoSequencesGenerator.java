@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -165,11 +166,17 @@ public class InsertCargoSequencesGenerator {
 		ISequenceElement end = startEndRequirementProvider.getEndElement(targetResource);
 
 		IPortSlot nextEventSlot = portSlotProvider.getPortSlot(nextEvent);
-		Optional<SlotAllocation> nextEventAllocation = schedule.getSlotAllocations().stream().filter(x -> equalsTest(nextEventSlot, x.getSlot())).findFirst();
+		Optional<@NonNull SlotAllocation> nextEventAllocation = schedule.getSlotAllocations().stream()//
+				.filter(x -> equalsTest(nextEventSlot, x.getSlot()))//
+				.findFirst();
 		assert load != null;
 		{
 			IPortSlot loadSlot = portSlotProvider.getPortSlot(load);
-			SlotVisit visit = schedule.getSlotAllocations().stream().filter(x -> equalsTest(loadSlot, x.getSlot())).map(SlotAllocation::getSlotVisit).findFirst().orElseThrow();
+			SlotVisit visit = schedule.getSlotAllocations().stream()
+					.filter(x -> equalsTest(loadSlot, x.getSlot()))//
+					.map(SlotAllocation::getSlotVisit)//
+					.findFirst()//
+					.orElseThrow();
 			int startTime = dateHelper.convertTime(visit.getStart());
 			IStartRequirement newStartRequirement = new StartRequirement(loadSlot.getPort(), true, false, new TimeWindow(startTime, startTime + 1),
 					vesselCharter.getStartRequirement().getHeelOptions());
@@ -198,7 +205,10 @@ public class InsertCargoSequencesGenerator {
 		}
 
 		IPortSlot portSlot = portSlotProvider.getPortSlot(load);
-		SlotVisit visit = schedule.getSlotAllocations().stream().filter(x -> equalsTest(portSlot, x.getSlot())).map(SlotAllocation::getSlotVisit).findFirst().orElseThrow();
+		SlotVisit visit = schedule.getSlotAllocations().stream()
+				.filter(x -> equalsTest(portSlot, x.getSlot()))
+				.map(SlotAllocation::getSlotVisit)
+				.findFirst().orElseThrow();
 		int loadTime = dateHelper.convertTime(visit.getStart());
 
 		VoyageSpecificationProviderImpl voyageProvider = new VoyageSpecificationProviderImpl();
@@ -259,10 +269,12 @@ public class InsertCargoSequencesGenerator {
 
 		}
 
-		List<IRouteOptionBooking> allPanamaBookings = panamaBookings.getAllBookings().values().stream().flatMap(Collection::stream).toList();
+		Set<IRouteOptionBooking> allPanamaBookings = panamaBookings.getAllBookings().values().stream()
+				.flatMap(Collection::stream)
+				.collect(Collectors.toSet());
 		// Marketable Cargo can only use unused panama bookings and bookings used in the
 		// original cargo
-		panamaAllowedBookingsProvider.setAllowedBookings(Sets.difference(Set.copyOf(allPanamaBookings), otherCargoBookings));
+		panamaAllowedBookingsProvider.setAllowedBookings(Sets.difference(allPanamaBookings, otherCargoBookings));
 		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
 	}
 
