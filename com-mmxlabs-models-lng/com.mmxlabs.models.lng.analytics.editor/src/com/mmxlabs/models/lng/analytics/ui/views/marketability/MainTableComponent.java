@@ -77,7 +77,6 @@ public class MainTableComponent {
 	private EObjectTableViewer tableViewer;
 	private Text vesselSpeedText;
 	private LocalResourceManager localResourceManager;
-
 	public GridTreeViewer getViewer() {
 		return this.tableViewer;
 	}
@@ -114,7 +113,8 @@ public class MainTableComponent {
 		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
 		knotsLabel.setText("kts");
 		Control control = createViewer(mainParent);
-		control.setLayoutData(GridDataFactory.fillDefaults().minSize(300, 300).grab(true, true).create());
+
+		control.setLayoutData(GridDataFactory.fillDefaults().minSize(0, 0).grab(true, true).create());
 	}
 
 	private Control createViewer(final Composite parent) {
@@ -133,6 +133,7 @@ public class MainTableComponent {
 		createDischargeSlotColumn(tableViewer.getGrid());
 		createNextEventColumn(tableViewer.getGrid());
 
+		final Color backgroundColour = localResourceManager.createColor(new RGB(245, 245, 245));
 		Consumer<MarketabilityModel> refreshDynamicColumns = (m) -> {
 			dynamicColumns.forEach(Item::dispose);
 			dynamicColumns.clear();
@@ -143,23 +144,20 @@ public class MainTableComponent {
 							.toList();
 
 			int i = 0;
-			;
-
 			for (final SpotMarket sm : markets) {
 
 				final GridColumnGroup datesGroup = new GridColumnGroup(tableViewer.getGrid(), SWT.CENTER | SWT.WRAP);
 				GridViewerHelper.configureLookAndFeel(datesGroup);
 				datesGroup.setText(sm.getName());
 				datesGroup.setData(sm);
-				final boolean isBackgroundBlue = i % 2 == 0;
-				final Color highlightColour = localResourceManager.createColor(new RGB(240, 240, 240));
-				var earliestColumn = createChildColumn(tableViewer, new CellLabelProvider() {
+				final boolean hasColouredBackground = i % 2 == 0;
+				var earliestColumn = createSortableChildColumn(tableViewer, new CellLabelProvider() {
 
 					@Override
 					public void update(ViewerCell cell) {
 						cell.setText("");
-						if (isBackgroundBlue) {
-							cell.setBackground(highlightColour);
+						if (hasColouredBackground) {
+							cell.setBackground(backgroundColour);
 						}
 						// cell.setBackground()
 						if (cell.getElement() instanceof MarketabilityRow row) {
@@ -172,15 +170,21 @@ public class MainTableComponent {
 							}
 						}
 					}
+				}, row -> {
+					return row.getResult().getRhsResults().stream()//
+							.filter(res -> res.getTarget() == sm && res.getEarliestETA() != null)//
+							.map(x -> x.getEarliestETA().toLocalDateTime())//
+							.findAny()//
+							.orElse(LocalDateTime.MIN);
 				}, "Earliest", datesGroup);
 
-				var latestColumn = createChildColumn(tableViewer, new CellLabelProvider() {
+				var latestColumn = createSortableChildColumn(tableViewer, new CellLabelProvider() {
 
 					@Override
 					public void update(ViewerCell cell) {
 						cell.setText("");
-						if (isBackgroundBlue) {
-							cell.setBackground(highlightColour);
+						if (hasColouredBackground) {
+							cell.setBackground(backgroundColour);
 						}
 						if (cell.getElement() instanceof MarketabilityRow row) {
 							for (var result : row.getResult().getRhsResults()) {
@@ -193,6 +197,12 @@ public class MainTableComponent {
 						}
 
 					}
+				}, row -> {
+					return row.getResult().getRhsResults().stream()//
+							.filter(res -> res.getTarget() == sm && res.getLatestETA() != null)//
+							.map(x -> x.getLatestETA().toLocalDateTime())//
+							.findAny()//
+							.orElse(LocalDateTime.MIN);
 				}, "Latest", datesGroup);
 
 				dynamicColumns.add(earliestColumn.getColumn());
@@ -215,7 +225,7 @@ public class MainTableComponent {
 	}
 
 	private void createVesselColumn() {
-		createColumn(tableViewer, "Vessel", new BaseFormatter() {
+		createSortableColumn(tableViewer, "Vessel", new BaseFormatter() {
 			@Override
 			public @Nullable String render(Object object) {
 				if (object instanceof MarketabilityRow row) {
@@ -236,6 +246,11 @@ public class MainTableComponent {
 					}
 				}
 				return "";
+			}
+
+			@Override
+			public Comparable<?> getComparable(Object object) {
+				return render(object);
 			}
 		}, false);
 
@@ -456,6 +471,33 @@ public class MainTableComponent {
 		return gvc;
 	}
 
+	protected GridViewerColumn createSortableColumn(final EObjectTableViewer viewer, CellLabelProvider labelProvider, final String name, final ICellRenderer renderer, final boolean isTree,
+			final ETypedElement... pathObjects) {
+
+		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
+		gvc.getColumn().setTree(isTree);
+		GridViewerHelper.configureLookAndFeel(gvc);
+		gvc.getColumn().setText(name);
+		gvc.getColumn().setWidth(250);
+		gvc.getColumn().setDetail(true);
+		gvc.getColumn().setSummary(true);
+		gvc.setLabelProvider(labelProvider);
+
+		gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		gvc.getColumn().setWidth(120);
+
+		gvc.getColumn().setCellRenderer(new DefaultCellRenderer());
+		gvc.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
+		gvc.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, renderer);
+		viewer.getSortingSupport().addSortableColumn(viewer, gvc, gvc.getColumn());
+		return gvc;
+	}
+
+	protected GridViewerColumn createSortableColumn(final EObjectTableViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {
+
+		return createSortableColumn(viewer, createLabelProvider(name, renderer, pathObjects), name, renderer, isTree, pathObjects);
+	}
+
 	protected GridViewerColumn createChildColumn(final GridTreeViewer viewer, CellLabelProvider provider, final String name, final GridColumnGroup parent) {
 
 		final GridColumn gc = new GridColumn(parent, SWT.CENTER | SWT.WRAP);
@@ -474,18 +516,7 @@ public class MainTableComponent {
 
 	protected GridViewerColumn createSortableChildColumn(final EObjectTableViewer viewer, final String name, final GridColumnGroup parent, Function<MarketabilityRow, String> labelFunction,
 			Function<MarketabilityRow, Comparable<?>> comparer) {
-		GridViewerColumn childColumn = createChildColumn(viewer, new CellLabelProvider() {
-
-			@Override
-			public void update(ViewerCell cell) {
-				if (cell.getElement() instanceof MarketabilityRow row) {
-					cell.setText(labelFunction.apply(row));
-				}
-
-			}
-		}, name, parent);
-
-		ICellRenderer renderer = new ICellRenderer() {
+		return createSortableChildColumn(viewer, name, parent, new ICellRenderer() {
 
 			@Override
 			public @Nullable Object getFilterValue(Object object) {
@@ -517,7 +548,17 @@ public class MainTableComponent {
 			public @Nullable Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
 				return null;
 			}
-		};
+		});
+	}
+
+	protected GridViewerColumn createSortableChildColumn(final EObjectTableViewer viewer, final String name, final GridColumnGroup parent, ICellRenderer renderer) {
+		GridViewerColumn childColumn = createChildColumn(viewer, new CellLabelProvider() {
+
+			@Override
+			public void update(ViewerCell cell) {
+				cell.setText(renderer.render(cell.getElement()));
+			}
+		}, name, parent);
 
 		childColumn.getColumn().setCellRenderer(new DefaultCellRenderer());
 		childColumn.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
@@ -525,6 +566,59 @@ public class MainTableComponent {
 
 		viewer.getSortingSupport().addSortableColumn(viewer, childColumn, childColumn.getColumn());
 		return childColumn;
+	}
+
+	protected GridViewerColumn createSortableChildColumn(final EObjectTableViewer viewer, CellLabelProvider labelProvider, Function<MarketabilityRow, Comparable<?>> comparer, final String name,
+			final GridColumnGroup parent, final ETypedElement... pathObjects) {
+
+		final GridColumn gc = new GridColumn(parent, SWT.CENTER | SWT.WRAP);
+
+		final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+		gvc.getColumn().setTree(false);
+		GridViewerHelper.configureLookAndFeel(gvc);
+		gvc.getColumn().setText(name);
+		gvc.getColumn().setWidth(250);
+		gvc.getColumn().setDetail(true);
+		gvc.getColumn().setSummary(true);
+		gvc.setLabelProvider(labelProvider);
+
+		gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
+		gvc.getColumn().setWidth(120);
+		final ICellRenderer renderer = new ICellRenderer() {
+
+			@Override
+			public @Nullable Object getFilterValue(Object object) {
+				return null;
+			}
+
+			@Override
+			public Comparable<?> getComparable(Object object) {
+				if (object instanceof MarketabilityRow row) {
+					return comparer.apply(row);
+				}
+				return null;
+			}
+
+			@Override
+			public @Nullable String render(Object object) {
+				return null;
+			}
+
+			@Override
+			public boolean isValueUnset(Object object) {
+				return false;
+			}
+
+			@Override
+			public @Nullable Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+				return null;
+			}
+		};
+
+		gvc.getColumn().setCellRenderer(new DefaultCellRenderer());
+		gvc.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, renderer);
+		viewer.getSortingSupport().addSortableColumn(viewer, gvc, gvc.getColumn());
+		return gvc;
 	}
 
 	protected GridViewerColumn createChildColumn(final GridTreeViewer viewer, final String name, final GridColumnGroup parent, Function<MarketabilityRow, String> labelFunction) {
