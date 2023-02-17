@@ -316,8 +316,8 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setText("+ Sales");
 
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(
-					createDeltaLabelProvider(true, false, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+			gvc.setLabelProvider(createLambdaLabelProvider(true, false, true, false, row -> ChangeSetKPIUtil.getSalesRevenue(row, ResultType.Before),
+					row -> ChangeSetKPIUtil.getSalesRevenue(row, ResultType.After)));
 			createWordWrapRenderer(gvc, 75);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -329,8 +329,8 @@ public class ChangeSetViewColumnHelper {
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setText("- Purchase");
 			gvc.getColumn().setWidth(70);
-			gvc.setLabelProvider(
-					createDeltaLabelProvider(true, true, true, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
+			gvc.setLabelProvider(createLambdaLabelProvider(true, true, true, false, row -> ChangeSetKPIUtil.getPurchaseCost(row, ResultType.Before),
+					row -> ChangeSetKPIUtil.getPurchaseCost(row, ResultType.After)));
 			createWordWrapRenderer(gvc, 70);
 			gvc.getColumn().setCellRenderer(createCellRenderer());
 			gvc.getColumn().setDetail(true);
@@ -524,8 +524,12 @@ public class ChangeSetViewColumnHelper {
 			this.column_LoadVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_LoadVolume.getColumn().setText("tBtu");
 			this.column_LoadVolume.getColumn().setWidth(55);
-			this.column_LoadVolume.setLabelProvider(
-					createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+			
+			this.column_LoadVolume.setLabelProvider(createLambdaLabelProvider(true, false, false, false, row -> ChangeSetKPIUtil.getPurchaseVolume(row, ResultType.Before),
+					row -> ChangeSetKPIUtil.getPurchaseVolume(row, ResultType.After)));
+			
+//			this.column_LoadVolume.setLabelProvider(
+//					createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			this.column_LoadVolume.getColumn().setCellRenderer(createCellRenderer());
 
 			this.column_LoadVolume.getColumn().setVisible(showCompareColumns);
@@ -581,8 +585,12 @@ public class ChangeSetViewColumnHelper {
 			this.column_DischargeVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_DischargeVolume.getColumn().setText("tBtu");
 			this.column_DischargeVolume.getColumn().setWidth(55);
-			this.column_DischargeVolume.setLabelProvider(createDeltaLabelProvider(true, false, false, false, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+			
+			this.column_DischargeVolume.setLabelProvider(createLambdaLabelProvider(true, false, false, false, row -> ChangeSetKPIUtil.getSalesVolume(row, ResultType.Before),
+					row -> ChangeSetKPIUtil.getSalesVolume(row, ResultType.After)));
+			
+//			this.column_DischargeVolume.setLabelProvider(createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
+//					SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 			this.column_DischargeVolume.getColumn().setCellRenderer(createCellRenderer());
 			this.column_DischargeVolume.getColumn().setVisible(showCompareColumns);
 		}
@@ -666,8 +674,7 @@ public class ChangeSetViewColumnHelper {
 				return true;
 
 			}
-			if (obj instanceof VesselData) {
-				final VesselData other = (VesselData) obj;
+			if (obj instanceof VesselData other) {
 
 				return type == other.type //
 						&& Objects.equals(shortName, other.shortName) //
@@ -867,10 +874,10 @@ public class ChangeSetViewColumnHelper {
 								}
 							}
 							if (renderMode == SlotIDRenderMode.RHS_IN_TARGET) {
-								if (changeSetTableRow.getRhsAfter() != null) {
-									if (viewState.allTargetElements.contains(changeSetTableRow.getRhsAfter().getDischargeSlot())) {
+								if (changeSetTableRow.getCurrentRhsAfter() != null) {
+									if (viewState.allTargetElements.contains(changeSetTableRow.getCurrentRhsAfter().getDischargeSlot())) {
 										found = true;
-										if (changeSetTableRow.getRhsAfter().getDischargeSlot() == viewState.lastTargetElement) {
+										if (changeSetTableRow.getCurrentRhsAfter().getDischargeSlot() == viewState.lastTargetElement) {
 											foundTarget = true;
 										}
 									}
@@ -992,16 +999,15 @@ public class ChangeSetViewColumnHelper {
 				final Object element = cell.getElement();
 				cell.setText("");
 
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow d = (ChangeSetTableRow) element;
+				if (element instanceof ChangeSetTableRow d) {
 					if (lhs) {
 						if (d.getLhsName() != null && !d.getLhsName().isEmpty()) {
 							cell.setText((String) d.getLhsName());
 							return;
 						}
 					} else {
-						if (d.getRhsName() != null && !d.getRhsName().isEmpty()) {
-							cell.setText((String) d.getRhsName());
+						if (d.getCurrentRhsName() != null && !d.getCurrentRhsName().isEmpty()) {
+							cell.setText((String) d.getCurrentRhsName());
 							return;
 						}
 					}
@@ -1011,8 +1017,7 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public String getToolTipText(final Object element) {
 
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
+				if (element instanceof ChangeSetTableRow tableRow) {
 
 					final StringBuilder sb = new StringBuilder();
 
@@ -1024,8 +1029,8 @@ public class ChangeSetViewColumnHelper {
 					} else {
 						// Unlike other RHS colums where we want to diff against the old and new slot
 						// linked to the cargo, we want to show the date diff for this slot.
-						originalAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
-						newAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+						originalAllocation = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getDischargeAllocation() : null;
+						newAllocation = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getDischargeAllocation() : null;
 					}
 
 					Slot s = null;
@@ -1065,8 +1070,7 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public String getToolTipText(final Object element) {
 
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
+				if (element instanceof ChangeSetTableRow tableRow) {
 
 					final StringBuilder sb = new StringBuilder();
 					sb.append("Scheduled dates:\n");
@@ -1079,8 +1083,8 @@ public class ChangeSetViewColumnHelper {
 					} else {
 						// Unlike other RHS colums where we want to diff against the old and new slot
 						// linked to the cargo, we want to show the date diff for this slot.
-						originalAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
-						newAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+						originalAllocation = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getDischargeAllocation() : null;
+						newAllocation = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getDischargeAllocation() : null;
 					}
 
 					boolean hasDate = false;
@@ -1145,8 +1149,8 @@ public class ChangeSetViewColumnHelper {
 								hasDate = true;
 							}
 						} else {
-							final Event beforeRHSEvent = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getLhsEvent() : null;
-							final Event afterRHSEvent = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getLhsEvent() : null;
+							final Event beforeRHSEvent = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getLhsEvent() : null;
+							final Event afterRHSEvent = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getLhsEvent() : null;
 
 							// Check start times are non-null as well, can happen for grouped events
 							if (beforeRHSEvent != null && beforeRHSEvent.getStart() != null) {
@@ -1180,9 +1184,7 @@ public class ChangeSetViewColumnHelper {
 				cell.setText("");
 				cell.setImage(null);
 				cell.setFont(null);
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow tableRow = (ChangeSetTableRow) element;
-
+				if (element instanceof ChangeSetTableRow tableRow) {
 					boolean isSpot = false;
 					LocalDate windowStart = null;
 					boolean isDelta = false;
@@ -1245,8 +1247,8 @@ public class ChangeSetViewColumnHelper {
 									}
 								}
 							} else {
-								final Event beforeRHSEvent = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getLhsEvent() : null;
-								final Event afterRHSEvent = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getLhsEvent() : null;
+								final Event beforeRHSEvent = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getLhsEvent() : null;
+								final Event afterRHSEvent = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getLhsEvent() : null;
 
 								if (afterRHSEvent != null) {
 									windowStart = dateFunc.apply(afterRHSEvent);
@@ -1304,9 +1306,9 @@ public class ChangeSetViewColumnHelper {
 					} else {
 						// Unlike other RHS colums where we want to diff against the old and new slot
 						// linked to the cargo, we want to show the date diff for this slot.
-						final SlotAllocation originalDischargeAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
-						final SlotAllocation newDischargeAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
-						isSpot = tableRow.isRhsSpot();
+						final SlotAllocation originalDischargeAllocation = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getDischargeAllocation() : null;
+						final SlotAllocation newDischargeAllocation = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getDischargeAllocation() : null;
+						isSpot = tableRow.isCurrentRhsSpot();
 
 						if (newDischargeAllocation != null) {
 							final Slot<?> slot = newDischargeAllocation.getSlot();
@@ -1362,10 +1364,19 @@ public class ChangeSetViewColumnHelper {
 	protected CellLabelProvider createDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field,
 			final EStructuralFeature attrib) {
 
-		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE;
-		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER;
+		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__PREVIOUS_RHS_BEFORE;
+		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__CURRENT_RHS_AFTER;
 
 		return createLambdaLabelProvider(asInt, asCost, withColour, false, change -> getNumber(from, field, attrib, change), change -> getNumber(to, field, attrib, change));
+	}
+
+	protected CellLabelProvider createCargoDeltaLabelProvider(final boolean asInt, final boolean asCost, final boolean withColour, final boolean isLHS, final EStructuralFeature field,
+			final EStructuralFeature attrib) {
+
+		final EReference from = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__PREVIOUS_RHS_BEFORE;
+		final EReference to = isLHS ? ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER : ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__CURRENT_RHS_AFTER;
+
+		return createLambdaLabelProvider(asInt, asCost, withColour, false, change -> getNumberSum(from, field, attrib, change), change -> getNumberSum(to, field, attrib, change));
 	}
 
 	@NonNull
@@ -1384,6 +1395,27 @@ public class ChangeSetViewColumnHelper {
 
 		}
 		return n;
+
+	}
+
+	@NonNull
+	private Number getNumberSum(final EReference from, final EStructuralFeature field, final EStructuralFeature attrib, final ChangeSetTableRow row) {
+		try {
+			final ChangeSetRowData change = (ChangeSetRowData) row.eGet(from);
+			if (change != null) {
+				long sum = 0L;
+				for (var rd : change.getRowDataGroup().getMembers()) {
+					Number n = getNumberInt(field, attrib, rd);
+					if (n != null) {
+						sum += n.longValue();
+					}
+				}
+				return sum;
+			}
+		} catch (final Exception e) {
+			final int ii = 0;
+		}
+		return Long.valueOf(0L);
 
 	}
 
@@ -1411,11 +1443,9 @@ public class ChangeSetViewColumnHelper {
 				cell.setImage(null);
 				cell.setFont(null);
 
-				if (element instanceof ChangeSetTableGroup) {
+				if (element instanceof ChangeSetTableGroup changeSet) {
 
 					cell.setFont(boldFont);
-
-					ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
 					if (showAlt) {
 						changeSet = changeSet.getLinkedGroup();
 					}
@@ -1446,14 +1476,13 @@ public class ChangeSetViewColumnHelper {
 						}
 					}
 				}
-				if (element instanceof ChangeSetTableRow) {
-					ChangeSetTableRow change = (ChangeSetTableRow) element;
-					if (showAlt && change.eContainer() instanceof ChangeSetTableGroup) {
-						final ChangeSetTableGroup thisGroup = (ChangeSetTableGroup) change.eContainer();
+				if (element instanceof ChangeSetTableRow change) {
+					if (showAlt && change.getTableGroup() != null) {
+						final ChangeSetTableGroup thisGroup = change.getTableGroup();
 						final ChangeSetTableGroup altGroup = thisGroup.getLinkedGroup();
 						if (altGroup != null) {
 							final boolean checkLHS = change.getLhsName() != null && change.getLhsName().isEmpty();
-							final String name = checkLHS ? change.getLhsName() : change.getRhsName();
+							final String name = checkLHS ? change.getLhsName() : change.getCurrentRhsName();
 							change = null;
 							if (name != null) {
 								for (final ChangeSetTableRow row : altGroup.getRows()) {
@@ -1463,7 +1492,7 @@ public class ChangeSetViewColumnHelper {
 											break;
 										}
 									} else {
-										if (name.equals(row.getRhsName())) {
+										if (name.equals(row.getCurrentRhsName())) {
 											change = row;
 											break;
 										}
@@ -1517,11 +1546,10 @@ public class ChangeSetViewColumnHelper {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+				if (element instanceof ChangeSetTableRow change) {
 					String latenessTooltip = "";
 					final String lhsLateness = getLatenessDetailForSlot(change, change.getLhsName());
-					final String rhsLateness = getLatenessDetailForSlot(change, change.getRhsName());
+					final String rhsLateness = getLatenessDetailForSlot(change, change.getCurrentRhsName());
 					if (lhsLateness != null) {
 						latenessTooltip = lhsLateness;
 					}
@@ -1712,8 +1740,8 @@ public class ChangeSetViewColumnHelper {
 	}
 
 	private IScenarioDataProvider getScenarioDataProvider(final ChangeSetTableRow change) {
-		if (change.eContainer() instanceof ChangeSetTableGroup) {
-			return getScenarioDataProvider((ChangeSetTableGroup) change.eContainer());
+		if (change.getTableGroup() != null) {
+			return getScenarioDataProvider(change.getTableGroup());
 		} else {
 			return null;
 		}
@@ -1751,7 +1779,7 @@ public class ChangeSetViewColumnHelper {
 	private String getNominationBreaksDetail(final IScenarioDataProvider sdp, final ChangeSetTableRow change) {
 		final StringBuilder sb = new StringBuilder();
 		addNominations(sdp, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter(), sb);
-		addNominations(sdp, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter(), sb);
+		addNominations(sdp, change.getCurrentRhsName(), change.getCurrentRhsBefore(), change.getCurrentRhsAfter(), sb);
 		if (sb.length() == 0) {
 			return null;
 		} else {
@@ -1783,8 +1811,8 @@ public class ChangeSetViewColumnHelper {
 
 	private List<AbstractNomination> getAffectedNominations(final IScenarioDataProvider sdp, final ChangeSetTableRow change) {
 		final List<AbstractNomination> lhsNoms = getAffectedNominations(sdp, change.getLhsName(), change.getLhsBefore(), change.getLhsAfter());
-		final List<AbstractNomination> rhsNoms = getAffectedNominations(sdp, change.getRhsName(), change.getRhsBefore(), change.getRhsAfter());
-		final List<AbstractNomination> affectedNoms = new ArrayList<AbstractNomination>(lhsNoms.size() + rhsNoms.size());
+		final List<AbstractNomination> rhsNoms = getAffectedNominations(sdp, change.getCurrentRhsName(), change.getCurrentRhsBefore(), change.getCurrentRhsAfter());
+		final List<AbstractNomination> affectedNoms = new ArrayList<>(lhsNoms.size() + rhsNoms.size());
 		affectedNoms.addAll(lhsNoms);
 		affectedNoms.addAll(rhsNoms);
 		return affectedNoms;
@@ -2307,30 +2335,27 @@ public class ChangeSetViewColumnHelper {
 				cell.setText("");
 				cell.setImage(null);
 				cell.setFont(null);
-				if (element instanceof ChangeSetTableGroup) {
-					// ChangeSetNode changeSetNode = (ChangeSetNode) element;
-					final ChangeSetTableGroup changeSet = (ChangeSetTableGroup) element;
+				if (element instanceof ChangeSetTableGroup group) {
 					cell.setFont(null);
-					if (insertionPlanFilter.isUnexpandedInsertionGroup(changeSet)) {
+					if (insertionPlanFilter.isUnexpandedInsertionGroup(group)) {
 						cell.setFont(boldFont);
 					} else {
 						// cell.setFont(boldFont);
 					}
 					// cell.setFont(boldFont);
-					final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSet.eContainer();
+					final ChangeSetTableRoot root = group.getTableRoot();
 					int idx = 0;
 					if (root != null) {
-						idx = root.getGroups().indexOf(changeSet);
+						idx = root.getGroups().indexOf(group);
 					}
 
-					final String text = changeSetColumnLabelProvider.apply(changeSet, idx);
+					final String text = changeSetColumnLabelProvider.apply(group, idx);
 					cell.setText(text);
 					// }
 					// if (element instanceof ChangeSetTableGroup) {
 
-				} else if (false && element instanceof ChangeSetTableRow) {
+				} else if (false && element instanceof ChangeSetTableRow change) {
 					// DEBUG helper, show P&L sums in label
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 
 					final long pnl = ChangeSetKPIUtil.getPNL(change, ResultType.After) - ChangeSetKPIUtil.getPNL(change, ResultType.Before);
 					final long purchase = ChangeSetKPIUtil.getPurchaseCost(change, ResultType.After) - ChangeSetKPIUtil.getPurchaseCost(change, ResultType.Before);
@@ -2413,8 +2438,8 @@ public class ChangeSetViewColumnHelper {
 							if (changeSetRow.isLhsSlot()) {
 								left = changeSetRow.isLhsNonShipped() ? "○" : "●";
 							}
-							if (changeSetRow.isRhsSlot()) {
-								right = !changeSetRow.isRhsNonShipped() ? "○" : "●";
+							if (changeSetRow.isCurrentRhsSlot()) {
+								right = !changeSetRow.isCurrentRhsNonShipped() ? "○" : "●";
 							}
 
 							if (left.isEmpty() && right.isEmpty()) {
@@ -2510,9 +2535,8 @@ public class ChangeSetViewColumnHelper {
 				cell.setImage(null);
 				cell.setFont(null);
 				double delta = 0;
-				if (element instanceof ChangeSetTableGroup) {
+				if (element instanceof ChangeSetTableGroup group) {
 					cell.setFont(boldFont);
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
 					final List<ChangeSetTableRow> rows = group.getRows();
 					if (rows != null) {
 						for (final ChangeSetTableRow change : rows) {
@@ -2523,9 +2547,7 @@ public class ChangeSetViewColumnHelper {
 							}
 						}
 					}
-				} else if (element instanceof ChangeSetTableRow) {
-
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+				} else if (element instanceof ChangeSetTableRow change) {
 					if (asInt) {
 						delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
 					} else {
@@ -2653,17 +2675,15 @@ public class ChangeSetViewColumnHelper {
 				cell.setFont(null);
 				cell.setImage(null);
 				long delta = 0;
-				if (element instanceof ChangeSetTableGroup) {
+				if (element instanceof ChangeSetTableGroup group) {
 					cell.setFont(boldFont);
-					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
 					final List<ChangeSetTableRow> rows = group.getRows();
 					if (rows != null) {
 						for (final ChangeSetTableRow change : rows) {
 							delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
 						}
 					}
-				} else if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+				} else if (element instanceof ChangeSetTableRow change) {
 					delta += deltaIntegerUpdater.applyAsInt(calcF.apply(change), calcT.apply(change));
 				}
 
@@ -2707,15 +2727,11 @@ public class ChangeSetViewColumnHelper {
 		final Function<ChangeSetTableRow, Number> calcF;
 		final Function<ChangeSetTableRow, Number> calcT;
 		if (isLoad) {
-			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcF = row -> ChangeSetKPIUtil.getPurchasePrice(row, ResultType.Before);
+			calcT = row -> ChangeSetKPIUtil.getPurchasePrice(row, ResultType.After);
 		} else {
-			calcF = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_BEFORE, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
-			calcT = change -> getNumber(ChangesetPackage.Literals.CHANGE_SET_TABLE_ROW__LHS_AFTER, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
-					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE, change);
+			calcF = row -> ChangeSetKPIUtil.getSalesPrice(row, ResultType.Before);
+			calcT = row -> ChangeSetKPIUtil.getSalesPrice(row, ResultType.After);
 		}
 		final ToDoubleBiFunction<Number, Number> deltaDoubleUpdater = (f, t) -> {
 			double delta = 0.0;
@@ -2764,7 +2780,7 @@ public class ChangeSetViewColumnHelper {
 							}
 						}
 					} else {
-						final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
+						final SlotAllocation allocation = change.getCurrentRhsAfter() != null ? change.getCurrentRhsAfter().getDischargeAllocation() : null;
 						if (allocation != null) {
 							final Slot slot = allocation.getSlot();
 							if (slot != null) {
@@ -2837,7 +2853,7 @@ public class ChangeSetViewColumnHelper {
 						}
 					} else {
 						{
-							final SlotAllocation allocation = change.getRhsBefore() != null ? change.getRhsBefore().getDischargeAllocation() : null;
+							final SlotAllocation allocation = change.getCurrentRhsBefore() != null ? change.getCurrentRhsBefore().getDischargeAllocation() : null;
 							if (allocation != null) {
 								final Slot slot = allocation.getSlot();
 								if (slot != null) {
@@ -2867,7 +2883,7 @@ public class ChangeSetViewColumnHelper {
 							}
 						}
 						{
-							final SlotAllocation allocation = change.getRhsAfter() != null ? change.getRhsAfter().getDischargeAllocation() : null;
+							final SlotAllocation allocation = change.getCurrentRhsAfter() != null ? change.getCurrentRhsAfter().getDischargeAllocation() : null;
 							if (allocation != null) {
 								final Slot slot = allocation.getSlot();
 								if (slot != null) {

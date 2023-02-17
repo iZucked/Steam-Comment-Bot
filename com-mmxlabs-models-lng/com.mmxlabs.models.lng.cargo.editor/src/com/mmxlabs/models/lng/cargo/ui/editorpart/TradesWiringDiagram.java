@@ -183,7 +183,13 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		// draw paths
 		for (final GroupData groupData : root.getGroups()) {
 			for (final WireData wire : groupData.getWires()) {
-				final int unsortedSource = root.getRows().indexOf(wire.loadRowData);
+				final int unsortedSource;
+				if (wire.isBracket) {
+					unsortedSource = root.getRows().indexOf(wire.sourceDischargeRowData);
+				} else {
+					unsortedSource = root.getRows().indexOf(wire.loadRowData);
+				}
+
 				final int unsortedDestination = root.getRows().indexOf(wire.dischargeRowData);
 				if (unsortedSource < 0 || unsortedDestination < 0) {
 					// Error?
@@ -209,22 +215,37 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 				final float startMid = terminalPositions.get(sortedSource);
 				final float endMid = terminalPositions.get(sortedDestination);
+				if (wire.isBracket) {
+					// draw LDD bracket
 
-				// Draw wire - offset by ca.x to as x pos is relative to left hand side
-				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
+					// graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
 
-				graphics.setForeground(wire.colour);
-
-				if (wire.dashed) {
-					graphics.setLineDash(new int[] { 2, 3 });
+					int x1 = Math.round(ca.x + 1.5f * terminalSize);
+					int x2 = Math.round(ca.x + ca.width - 2 * terminalSize);
+					int x1a = x1 + ((x2 - x1) * 3 / 4);
+					if (startMid != endMid) {
+						graphics.drawLine(x1a, Math.round(startMid), x2, Math.round(startMid));
+						graphics.drawLine(x1a, Math.round(startMid), x1a, Math.round(endMid));
+					}
+					graphics.drawLine(x1a, Math.round(endMid), x2, Math.round(endMid));
 				} else {
+					// Draw wire - offset by ca.x to as x pos is relative to left hand side
+					final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
+
+					graphics.setForeground(wire.colour);
+
+					if (wire.dashed) {
+						graphics.setLineDash(new int[] { 2, 3 });
+					} else {
+						graphics.setLineDash(null);
+					}
+
+					graphics.drawPath(path);
+					path.dispose();
+
 					graphics.setLineDash(null);
+
 				}
-
-				graphics.drawPath(path);
-				path.dispose();
-
-				graphics.setLineDash(null);
 			}
 		}
 		// Draw lines for keep-open slots
@@ -331,7 +352,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		}
 	}
 
-	private void drawTerminal(final boolean isLeft, final boolean hollow, Color terminalColour, final boolean isOptional, final boolean isSpot, final Rectangle ca, final GC graphics, final float midpoint) {
+	private void drawTerminal(final boolean isLeft, final boolean hollow, Color terminalColour, final boolean isOptional, final boolean isSpot, final Rectangle ca, final GC graphics,
+			final float midpoint) {
 		Color outlineColour = Green;
 		Color fillColour = terminalColour;
 		// make non-shipped a bit bigger, but hollow

@@ -27,6 +27,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 //import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView.SortData;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -184,6 +185,46 @@ public class SlotTypePainter implements PaintListener {
 					if (dischargeSlot.isCancelled()) {
 						drawDiagonalCross(Black, ca, graphics, midpoint);
 					}
+
+					// LDD lines
+					if (dischargeSlot.getCargo() != null) {
+						DischargeSlot d1 = null;
+						Cargo cargo = dischargeSlot.getCargo();
+						for (var slot : cargo.getSortedSlots()) {
+							if (slot instanceof DischargeSlot d) {
+								d1 = d;
+								break;
+							}
+						}
+						if (d1 != null && d1 != dischargeSlot) {
+							int idx = 0;
+
+							for (GridItem itm2 : rootItems) {
+								Object o2 = itm2.getData();
+								final Row row2 = (Row) o2;
+								if (row2.getDischargeSlot() == d1) {
+
+									final float startMid = terminalPositions.get(idx);
+									final float endMid = midpoint;
+									graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+
+									// LHS of of circle
+									int x2 = ca.x + (ca.width / 2) - (terminalSize / 2);
+									int x1a = x2 - 13;
+									if (startMid != endMid) {
+										graphics.drawLine(x1a, Math.round(startMid), x2, Math.round(startMid));
+										graphics.drawLine(x1a, Math.round(startMid), x1a, Math.round(endMid));
+									}
+									graphics.drawLine(x1a, Math.round(endMid), x2, Math.round(endMid));
+
+									break;
+								}
+								idx++;
+							}
+
+						}
+					}
+
 				}
 			}
 			rawI++;

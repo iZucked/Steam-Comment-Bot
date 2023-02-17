@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 
@@ -26,8 +27,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -51,13 +52,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getGroupSortValue <em>Group Sort Value</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getGroupObject <em>Group Object</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#isGroupAlternative <em>Group Alternative</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableGroupImpl#getTableRoot <em>Table Root</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implements ChangeSetTableGroup {
 	/**
-	 * The cached value of the '{@link #getRows() <em>Rows</em>}' containment reference list.
+	 * The cached value of the '{@link #getRows() <em>Rows</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRows()
@@ -293,7 +295,7 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	@Override
 	public EList<ChangeSetTableRow> getRows() {
 		if (rows == null) {
-			rows = new EObjectContainmentEList<ChangeSetTableRow>(ChangeSetTableRow.class, this, ChangesetPackage.CHANGE_SET_TABLE_GROUP__ROWS);
+			rows = new EObjectWithInverseResolvingEList<ChangeSetTableRow>(ChangeSetTableRow.class, this, ChangesetPackage.CHANGE_SET_TABLE_GROUP__ROWS, ChangesetPackage.CHANGE_SET_TABLE_ROW__TABLE_GROUP);
 		}
 		return rows;
 	}
@@ -658,6 +660,68 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 	 * @generated
 	 */
 	@Override
+	public ChangeSetTableRoot getTableRoot() {
+		if (eContainerFeatureID() != ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT) return null;
+		return (ChangeSetTableRoot)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetTableRoot(ChangeSetTableRoot newTableRoot, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newTableRoot, ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTableRoot(ChangeSetTableRoot newTableRoot) {
+		if (newTableRoot != eInternalContainer() || (eContainerFeatureID() != ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT && newTableRoot != null)) {
+			if (EcoreUtil.isAncestor(this, newTableRoot))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newTableRoot != null)
+				msgs = ((InternalEObject)newTableRoot).eInverseAdd(this, ChangesetPackage.CHANGE_SET_TABLE_ROOT__GROUPS, ChangeSetTableRoot.class, msgs);
+			msgs = basicSetTableRoot(newTableRoot, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT, newTableRoot, newTableRoot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__ROWS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRows()).basicAdd(otherEnd, msgs);
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetTableRoot((ChangeSetTableRoot)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__ROWS:
@@ -666,8 +730,24 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return basicSetDeltaMetrics(null, msgs);
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__CURRENT_METRICS:
 				return basicSetCurrentMetrics(null, msgs);
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT:
+				return basicSetTableRoot(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT:
+				return eInternalContainer().eInverseRemove(this, ChangesetPackage.CHANGE_SET_TABLE_ROOT__GROUPS, ChangeSetTableRoot.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -706,6 +786,8 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return getGroupObject();
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
 				return isGroupAlternative();
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT:
+				return getTableRoot();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -759,6 +841,9 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
 				setGroupAlternative((Boolean)newValue);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT:
+				setTableRoot((ChangeSetTableRoot)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -810,6 +895,9 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
 				setGroupAlternative(GROUP_ALTERNATIVE_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT:
+				setTableRoot((ChangeSetTableRoot)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -848,6 +936,8 @@ public class ChangeSetTableGroupImpl extends MinimalEObjectImpl.Container implem
 				return GROUP_OBJECT_EDEFAULT == null ? groupObject != null : !GROUP_OBJECT_EDEFAULT.equals(groupObject);
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE:
 				return groupAlternative != GROUP_ALTERNATIVE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT:
+				return getTableRoot() != null;
 		}
 		return super.eIsSet(featureID);
 	}

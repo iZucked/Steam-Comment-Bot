@@ -171,8 +171,7 @@ public class ChangeSetView extends ViewPart {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	/**
-	 * This is used to avoid the re-entrant code when we change the selected
-	 * ScenarioResults in this view so it is not treated as a pin/diff update.
+	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
 	 */
 	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
@@ -192,8 +191,8 @@ public class ChangeSetView extends ViewPart {
 			// If both rows of the same parent group..
 			if (e1 instanceof ChangeSetTableRow r1 && e2 instanceof ChangeSetTableRow r2) {
 				// Retain original ordering in the datamodel
-				if (r1.eContainer() == r2.eContainer()) {
-					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
+				if (r1.getTableGroup() == r2.getTableGroup()) {
+					final ChangeSetTableGroup g = r1.getTableGroup();
 					if (sortByVesselAndDate) {
 						final Pair<String, Integer> r1Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r1));
 						final Pair<String, Integer> r2Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r2));
@@ -264,10 +263,10 @@ public class ChangeSetView extends ViewPart {
 				slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getDischargeAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getDischargeAllocation() : null;
 			}
 			if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
 				return slotAllocation.getSlotVisit().getStart();
@@ -524,8 +523,8 @@ public class ChangeSetView extends ViewPart {
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
 						final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, null, SortMode.BY_GROUP);
-						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, null, SortMode.BY_GROUP);
+						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, SortMode.BY_GROUP);
+						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, SortMode.BY_GROUP);
 						changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
 						newViewState.postProcess.accept(tableRootDefault);
@@ -696,7 +695,7 @@ public class ChangeSetView extends ViewPart {
 						while (itr.hasNext()) {
 							Object o = itr.next();
 							if (o instanceof ChangeSetTableRow row) {
-								o = row.eContainer();
+								o = row.getTableGroup();
 							}
 							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
 
@@ -747,19 +746,33 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 				if (!showMinorChanges) {
-					if (element instanceof ChangeSetTableRow row) {
-						if (!row.isMajorChange()) {
-							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
-							long totalPNLDelta = 0;
-							if (parentElement instanceof ChangeSetTableGroup changeSet) {
-								totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
-							}
-							if (Math.abs(delta) < 250_000L) {
-								// Exclude if less than 10% of PNL change.
-								if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
-									return false;
+					if (element instanceof ChangeSetTableRow r) {
+						if (!r.isMajorChange()) {
+
+							Collection<ChangeSetTableRow> rows = r.getWiringGroup().getRows();
+//							if (r.getCargoGroup() != null) {
+//								rows = r.getCargoGroup().getRows();
+//							} else {
+//								rows = Collections.singleton(r);
+//							}
+
+							int small = 0;
+							for (var row : rows) {
+								final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
+										- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+								long totalPNLDelta = 0;
+								if (parentElement instanceof ChangeSetTableGroup changeSet) {
+									totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
 								}
+								if (Math.abs(delta) < 250_000L) {
+									// Exclude if less than 10% of PNL change.
+									if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
+										++small;
+									}
+								}
+							}
+							if (small == rows.size()) {
+								return false;
 							}
 						}
 					}
@@ -864,20 +877,19 @@ public class ChangeSetView extends ViewPart {
 					final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 					Object element = selection.getFirstElement();
 					if (element instanceof ChangeSetTableRow) {
-						element = ((ChangeSetTableRow) element).eContainer();
+						element = ((ChangeSetTableRow) element).getTableGroup();
 					}
 					int idx = 0;
 					ChangeSetTableGroup changeSetTableGroup = null;
 					if (element instanceof ChangeSetTableGroup) {
 						changeSetTableGroup = (ChangeSetTableGroup) element;
-						final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+						final ChangeSetTableRoot root = changeSetTableGroup.getTableRoot();
 						if (root != null) {
 							idx = root.getGroups().indexOf(changeSetTableGroup);
 						}
 						element = changeSetTableGroup.getChangeSet();
 					}
-					if (element instanceof ChangeSet) {
-						final ChangeSet changeSet = (ChangeSet) element;
+					if (element instanceof ChangeSet changeSet) {
 
 						final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
 
@@ -1064,12 +1076,12 @@ public class ChangeSetView extends ViewPart {
 		} else {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			final Shell activeShell = display.getActiveShell();
-			final ICoreRunnable runnable = (monitor) -> {
+			final ICoreRunnable runnable = monitor -> {
 				try {
 					final ViewState newViewState = action.apply(monitor, targetSlotId);
 					final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-					newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetElement, newViewState.displaySortMode);
-					newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetElement, newViewState.displaySortMode);
+					newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.displaySortMode);
+					newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.displaySortMode);
 
 					changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
@@ -1183,6 +1195,9 @@ public class ChangeSetView extends ViewPart {
 
 			@Override
 			public Object getParent(final Object element) {
+				if (element instanceof ChangeSetTableRow row) {
+					return row.getTableGroup();
+				}
 				if (element instanceof EObject eObject) {
 					return eObject.eContainer();
 				}
@@ -1362,11 +1377,11 @@ public class ChangeSetView extends ViewPart {
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
 
-					if (obj instanceof ChangeSetTableGroup) {
-						selectedSets.add((ChangeSetTableGroup) obj);
-						directSelectedGroups.add((ChangeSetTableGroup) obj);
+					if (obj instanceof ChangeSetTableGroup  group) {
+						selectedSets.add(group);
+						directSelectedGroups.add(group);
 					} else if (obj instanceof ChangeSetTableRow changeSetRow) {
-						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
+						selectedSets.add(changeSetRow.getTableGroup());
 						directSelectedRows.add(changeSetRow);
 					}
 				}
@@ -1526,7 +1541,7 @@ public class ChangeSetView extends ViewPart {
 			if (canExportChangeSet) {
 				final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
 				int idx = 0;
-				final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+				final ChangeSetTableRoot root = changeSetTableGroup.getTableRoot();
 				if (root != null) {
 					idx = root.getGroups().indexOf(changeSetTableGroup);
 				}
@@ -1930,8 +1945,8 @@ public class ChangeSetView extends ViewPart {
 		selectedElements.add(tableRow);
 		selectRow(selectedElements, tableRow.getLhsBefore());
 		selectRow(selectedElements, tableRow.getLhsAfter());
-		selectRow(selectedElements, tableRow.getRhsBefore());
-		selectRow(selectedElements, tableRow.getRhsAfter());
+		selectRow(selectedElements, tableRow.getCurrentRhsBefore());
+		selectRow(selectedElements, tableRow.getCurrentRhsAfter());
 	}
 
 	private void selectAfterRows(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
@@ -1939,7 +1954,7 @@ public class ChangeSetView extends ViewPart {
 		// selectRow(selectedElements, tableRow.getLhsBefore());
 		selectRow(selectedElements, tableRow.getLhsAfter());
 		// selectRow(selectedElements, tableRow.getRhsBefore());
-		selectRow(selectedElements, tableRow.getRhsAfter());
+		selectRow(selectedElements, tableRow.getCurrentRhsAfter());
 	}
 
 	private void selectRow(final Set<Object> selectedElements, final ChangeSetRowData rowData) {

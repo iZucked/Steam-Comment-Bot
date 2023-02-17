@@ -11,12 +11,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 
 /**
  * <!-- begin-user-doc -->
@@ -95,8 +89,8 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 				return createChangeSetRowDataGroupAdapter();
 			}
 			@Override
-			public Adapter caseChangeSetRow(ChangeSetRow object) {
-				return createChangeSetRowAdapter();
+			public Adapter caseChangeSetWiringGroup(ChangeSetWiringGroup object) {
+				return createChangeSetWiringGroupAdapter();
 			}
 			@Override
 			public Adapter caseChangeSetRowData(ChangeSetRowData object) {
@@ -205,16 +199,16 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow <em>Change Set Row</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup <em>Change Set Wiring Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup
 	 * @generated
 	 */
-	public Adapter createChangeSetRowAdapter() {
+	public Adapter createChangeSetWiringGroupAdapter() {
 		return null;
 	}
 

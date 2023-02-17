@@ -354,8 +354,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									}
 								}
 								{
-									final SlotAllocation oldAllocation = csRow.getRhsBefore() != null ? csRow.getRhsBefore().getDischargeAllocation() : null;
-									final SlotAllocation newAllocation = csRow.getRhsAfter() != null ? csRow.getRhsAfter().getDischargeAllocation() : null;
+									final SlotAllocation oldAllocation = csRow.getCurrentRhsBefore() != null ? csRow.getCurrentRhsBefore().getDischargeAllocation() : null;
+									final SlotAllocation newAllocation = csRow.getCurrentRhsAfter() != null ? csRow.getCurrentRhsAfter().getDischargeAllocation() : null;
 
 									if (oldAllocation != null && newAllocation != null) {
 										if (differentSequenceChecker.test(oldAllocation, newAllocation)) {

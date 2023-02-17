@@ -287,7 +287,7 @@ public class OptimisationTestRunner {
 
 			final List<DynamicNode> childCases = new LinkedList<>();
 
-			childCases.add(DynamicTest.dynamicTest("Base", () -> {
+			childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Base", () -> {
 				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 
 					final File resultsFolder = new File(scenarioFile.getParentFile(), "results");

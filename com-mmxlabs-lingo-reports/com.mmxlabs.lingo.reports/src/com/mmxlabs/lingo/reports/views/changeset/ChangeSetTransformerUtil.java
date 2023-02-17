@@ -30,11 +30,11 @@ import com.mmxlabs.common.time.Days;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.FlexType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
@@ -181,8 +181,7 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Given a list of target {@link EObject}s, generate a {@link MappingModel}
-	 * which can be used to compare against other {@link MappingModel}s
+	 * Given a list of target {@link EObject}s, generate a {@link MappingModel} which can be used to compare against other {@link MappingModel}s
 	 * 
 	 * @param targets
 	 * @return
@@ -212,11 +211,11 @@ public final class ChangeSetTransformerUtil {
 			row.setLhsName(eventName);
 			row.setLhsEvent(event);
 
-			if (event instanceof ProfitAndLossContainer) {
-				row.setLhsGroupProfitAndLoss((ProfitAndLossContainer) event);
+			if (event instanceof final ProfitAndLossContainer plc) {
+				row.setLhsGroupProfitAndLoss(plc);
 			}
-			if (event instanceof EventGrouping) {
-				row.setEventGrouping((EventGrouping) event);
+			if (event instanceof final EventGrouping eg) {
+				row.setEventGrouping(eg);
 			}
 			final Sequence sequence = event.getSequence();
 			row.setVesselName(ChangeSetTransformerUtil.getName(sequence));
@@ -225,9 +224,9 @@ public final class ChangeSetTransformerUtil {
 			row.setVesselCharterNumber(ChangeSetTransformerUtil.getCharterNumber(sequence));
 		};
 		for (final EObject target : targets) {
-			if (target instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) target;
+			if (target instanceof final CargoAllocation cargoAllocation) {
 
+				// The group data - for LDD an other complex cargoes this stores the relationship between ChangeSetRowData's
 				final ChangeSetRowDataGroup group = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
 				mappingModel.groups.add(group);
 
@@ -268,18 +267,23 @@ public final class ChangeSetTransformerUtil {
 						// SlotAllocationType. The purchase type appears to be used as default.
 						// We should add in migration into the relevant place to add it in (NOT CURRENT
 						// MIGRATION).
-						final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
+						final LoadSlot ls = (LoadSlot) loadAllocation.getSlot();
 
 						final String key = ChangeSetTransformerUtil.getKeyName(loadAllocation);
-						final String name = ChangeSetTransformerUtil.getRowName(slot);
+						final String name = ChangeSetTransformerUtil.getRowName(ls);
 
 						row.setLhsName(name);
 						row.setLoadAllocation(loadAllocation);
-						row.setLoadSlot(slot);
+						row.setLoadSlot(ls);
 
-						if (slot instanceof SpotLoadSlot) {
-							final String mKey = getMarketSlotKey((SpotLoadSlot) slot);
+						row.setLhsSlot(true);
+						row.setLhsOptional(ls.isOptional());
+						row.setLhsNonShipped(ls.isDESPurchase());
+
+						if (ls instanceof final SpotLoadSlot spotSlot) {
+							final String mKey = getMarketSlotKey(spotSlot);
 							mappingModel.lhsRowMarketMap.computeIfAbsent(mKey, k -> new LinkedList<>()).add(row);
+							row.setLhsSpot(true);
 						}
 						mappingModel.lhsRowMap.put(key, row);
 
@@ -287,25 +291,31 @@ public final class ChangeSetTransformerUtil {
 					SlotAllocation dischargeAllocation = null;
 					if (i < dischargeAllocations.size()) {
 						dischargeAllocation = dischargeAllocations.get(i);
-						final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
+						final DischargeSlot ds = (DischargeSlot) dischargeAllocation.getSlot();
 
 						final String key = ChangeSetTransformerUtil.getKeyName(dischargeAllocation);
-						final String name = ChangeSetTransformerUtil.getRowName(slot);
+						final String name = ChangeSetTransformerUtil.getRowName(ds);
 
 						row.setRhsName(name);
 						row.setDischargeAllocation(dischargeAllocation);
-						row.setDischargeSlot(slot);
-						if (slot instanceof SpotDischargeSlot) {
-							final String mKey = getMarketSlotKey((SpotDischargeSlot) slot);
+						row.setDischargeSlot(ds);
+
+						row.setRhsSlot(true);
+						row.setRhsOptional(ds.isOptional());
+						row.setRhsNonShipped(ds.isFOBSale());
+
+						if (ds instanceof final SpotDischargeSlot spotSlot) {
+							final String mKey = getMarketSlotKey(spotSlot);
 							mappingModel.rhsRowMarketMap.computeIfAbsent(mKey, k -> new LinkedList<>()).add(row);
+
+							row.setRhsSpot(true);
 						}
 						mappingModel.rhsRowMap.put(key, row);
 
 					}
 
 				}
-			} else if (target instanceof OpenSlotAllocation) {
-				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) target;
+			} else if (target instanceof final OpenSlotAllocation openSlotAllocation) {
 				final ChangeSetRowDataGroup group = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
 				mappingModel.groups.add(group);
 
@@ -316,47 +326,55 @@ public final class ChangeSetTransformerUtil {
 
 				final String key = ChangeSetTransformerUtil.getKeyName(openSlotAllocation);
 				final String name = ChangeSetTransformerUtil.getRowName(slot);
-				if (slot instanceof LoadSlot) {
+				if (slot instanceof final LoadSlot ls) {
 					row.setLhsName(name);
 					row.setOpenLoadAllocation(openSlotAllocation);
-					row.setLoadSlot((LoadSlot) slot);
+					row.setLoadSlot(ls);
 					row.setLhsGroupProfitAndLoss(openSlotAllocation);
 
-					if (slot instanceof SpotLoadSlot) {
-						final String mKey = getMarketSlotKey((SpotLoadSlot) slot);
+					row.setLhsSlot(true);
+					row.setLhsOptional(ls.isOptional());
+					row.setLhsNonShipped(ls.isDESPurchase());
+
+					if (slot instanceof final SpotLoadSlot spotSlot) {
+						final String mKey = getMarketSlotKey(spotSlot);
 						mappingModel.lhsRowMarketMap.computeIfAbsent(mKey, k -> new LinkedList<>()).add(row);
+
+						row.setLhsSpot(true);
 					}
 					mappingModel.lhsRowMap.put(key, row);
 
-				} else if (slot instanceof DischargeSlot) {
+				} else if (slot instanceof final DischargeSlot ds) {
 					row.setRhsName(name);
 					row.setOpenDischargeAllocation(openSlotAllocation);
-					row.setDischargeSlot((DischargeSlot) slot);
+					row.setDischargeSlot(ds);
 					row.setRhsGroupProfitAndLoss(openSlotAllocation);
 
-					if (slot instanceof SpotDischargeSlot) {
-						final String mKey = getMarketSlotKey((SpotDischargeSlot) slot);
+					row.setRhsSlot(true);
+					row.setRhsOptional(ds.isOptional());
+					row.setRhsNonShipped(ds.isFOBSale());
+					if (slot instanceof final SpotDischargeSlot spotSlot) {
+						final String mKey = getMarketSlotKey(spotSlot);
 						mappingModel.rhsRowMarketMap.computeIfAbsent(mKey, k -> new LinkedList<>()).add(row);
+						row.setRhsSpot(true);
 					}
+
 					mappingModel.rhsRowMap.put(key, row);
 				}
-			} else if (target instanceof Event) {
-				final Event event = (Event) target;
-				if (event instanceof CharterLengthEvent) {
+			} else if (target instanceof final Event event) {
+				if (event instanceof final CharterLengthEvent charterLengthEvent) {
 					// Record these events so we can group them up later
-					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
-					extraLengthEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents()
+					extraLengthEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent())
+							.getEvents()
 							.addAll(charterLengthEvent.getEvents());
-				} else if (event instanceof GeneratedCharterOut) {
+				} else if (event instanceof final GeneratedCharterOut charterLengthEvent) {
 					// Record these events so we can group them up later
-					final GeneratedCharterOut charterLengthEvent = (GeneratedCharterOut) event;
 					extraGCOEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterOutEvent()).getEvents().addAll(charterLengthEvent.getEvents());
 
 				} else {
 					eventMapper.accept(event);
 				}
-			} else if (target instanceof PaperDealAllocation) {
-				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) target;
+			} else if (target instanceof final PaperDealAllocation paperDealAllocation) {
 				final PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
 				final ChangeSetRowDataGroup group = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
 				mappingModel.groups.add(group);
@@ -376,12 +394,10 @@ public final class ChangeSetTransformerUtil {
 			long pnl1 = 0L;
 			long pnl2 = 0L;
 			for (final Event e : cle.getEvents()) {
-				if (e instanceof CharterLengthEvent) {
-					final CharterLengthEvent c = (CharterLengthEvent) e;
+				if (e instanceof final CharterLengthEvent c) {
 					cle.setLinkedSequence(c.getSequence());
 				}
-				if (e instanceof ProfitAndLossContainer) {
-					final ProfitAndLossContainer c = (ProfitAndLossContainer) e;
+				if (e instanceof final ProfitAndLossContainer c) {
 					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
 					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
 				}
@@ -398,12 +414,10 @@ public final class ChangeSetTransformerUtil {
 			long pnl1 = 0L;
 			long pnl2 = 0L;
 			for (final Event e : cle.getEvents()) {
-				if (e instanceof GeneratedCharterOut) {
-					final GeneratedCharterOut c = (GeneratedCharterOut) e;
+				if (e instanceof final GeneratedCharterOut c) {
 					cle.setLinkedSequence(c.getSequence());
 				}
-				if (e instanceof ProfitAndLossContainer) {
-					final ProfitAndLossContainer c = (ProfitAndLossContainer) e;
+				if (e instanceof final ProfitAndLossContainer c) {
 					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
 					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
 				}
@@ -420,21 +434,20 @@ public final class ChangeSetTransformerUtil {
 		return mappingModel;
 	}
 
-	public static @NonNull List<ChangeSetRow> generateChangeSetRows(final @NonNull MappingModel beforeMapping, final @NonNull MappingModel afterMapping) {
+	public static @NonNull List<ChangeSetTableRow> generateChangeSetRows(final @NonNull MappingModel beforeMapping, final @NonNull MappingModel afterMapping) {
 
-		// Now start to generate the ChangeSetRows. There should be one for each Cargo,
-		// open position or other Vessel event.
-
+		// Link together ChangeSetRowData between the before and after cases.
+		// This may add new data to account for elements existing on one side only
 		generateSimpleBindings(beforeMapping, afterMapping);
+
+		// Now start to generate the ChangeSetTableRows. There should be one for each Cargo,
+		// open position or other Vessel event or paper deal.
 		return generateRowData(beforeMapping, afterMapping);
 	}
 
 	/**
-	 * Bind the before and after state based on identical keys. For spot market
-	 * slots which are not identical, but have exactly one free equivalent, bind
-	 * them. (For example DES Sale market in Feb 2017 may use in stance 1 in the
-	 * before state and instance 2 in the after state. This should be considered the
-	 * same). This method sets the LHS/RHS links
+	 * Bind the before and after state based on identical keys. For spot market slots which are not identical, but have exactly one free equivalent, bind them. (For example DES Sale market in Feb 2017
+	 * may use in stance 1 in the before state and instance 2 in the after state. This should be considered the same). This method sets the LHS/RHS links
 	 * 
 	 * @param beforeMapping
 	 * @param afterMapping
@@ -443,11 +456,11 @@ public final class ChangeSetTransformerUtil {
 	 */
 	private static void generateSimpleBindings(final MappingModel beforeMapping, final MappingModel afterMapping) {
 		// Bind the "simple" stuff together
-		final Set<String> lhsKeys = new HashSet<>();
+		final Set<String> lhsKeys = new LinkedHashSet<>();
 		lhsKeys.addAll(beforeMapping.lhsRowMap.keySet());
 		lhsKeys.addAll(afterMapping.lhsRowMap.keySet());
 
-		final Set<String> rhsKeys = new HashSet<>();
+		final Set<String> rhsKeys = new LinkedHashSet<>();
 		rhsKeys.addAll(beforeMapping.rhsRowMap.keySet());
 		rhsKeys.addAll(afterMapping.rhsRowMap.keySet());
 
@@ -456,12 +469,12 @@ public final class ChangeSetTransformerUtil {
 		// happen if the before used instance 1 and
 		// the after used instance 2.
 		// Note - this should part should be a second pass.
-		final Set<String> tmp_lhsKeys = new HashSet<>(lhsKeys);
+		final Set<String> tmpLhsKeys = new HashSet<>(lhsKeys);
 
 		// Pass 0: bind the identical values.
 		// Pass 1: search for the equivalent spot market slots.
 		for (int pass = 0; pass < 2; ++pass) {
-			final Iterator<String> itr = tmp_lhsKeys.iterator();
+			final Iterator<String> itr = tmpLhsKeys.iterator();
 			while (itr.hasNext()) {
 				final String lhsKey = itr.next();
 				final ChangeSetRowData fromData = beforeMapping.lhsRowMap.get(lhsKey);
@@ -470,13 +483,13 @@ public final class ChangeSetTransformerUtil {
 					fromData.setLhsLink(toData);
 					toData.setLhsLink(fromData);
 
-					if (fromData.getLoadSlot() instanceof SpotLoadSlot) {
+					if (fromData.getLoadSlot() instanceof final SpotLoadSlot spotSlot) {
 						{
-							final String mKey = getMarketSlotKey((SpotLoadSlot) fromData.getLoadSlot());
+							final String mKey = getMarketSlotKey(spotSlot);
 							beforeMapping.lhsRowMarketMap.get(mKey).remove(fromData);
 						}
-						if (toData.getLoadSlot() instanceof SpotLoadSlot) {
-							final String mKey = getMarketSlotKey((SpotLoadSlot) toData.getLoadSlot());
+						if (toData.getLoadSlot() instanceof final SpotLoadSlot spotSlot2) {
+							final String mKey = getMarketSlotKey(spotSlot2);
 							afterMapping.lhsRowMarketMap.get(mKey).remove(toData);
 						} else {
 							assert false; // Both slots should be spot
@@ -488,9 +501,12 @@ public final class ChangeSetTransformerUtil {
 						// Should be a spot already linked from a previous iteration
 						continue;
 					}
-					boolean foundSpotMatch = false;
-					if (toData.getLoadSlot() instanceof SpotLoadSlot) {
-						final String mKey = getMarketSlotKey((SpotLoadSlot) toData.getLoadSlot());
+					// No record found. Either we are looking at a spot slot OR the position only exists in one of the schedules
+
+					boolean foundMatch = false;
+					// Before we create a new record, is there a spare spot slot record we can use?
+					if (toData.getLoadSlot() instanceof final SpotLoadSlot spotSlot) {
+						final String mKey = getMarketSlotKey(spotSlot);
 						final List<ChangeSetRowData> beforeDataList = beforeMapping.lhsRowMarketMap.get(mKey);
 						final List<ChangeSetRowData> afterDataList = afterMapping.lhsRowMarketMap.get(mKey);
 
@@ -503,13 +519,14 @@ public final class ChangeSetTransformerUtil {
 							afterDataList.remove(afterData);
 							beforeDataList.remove(beforeData);
 
-							foundSpotMatch = true;
+							foundMatch = true;
 						}
-						if (!foundSpotMatch && pass == 0) {
+						if (!foundMatch && pass == 0) {
 							continue;
 						}
 					}
-					if (!foundSpotMatch) {
+					if (!foundMatch) {
+						// No matching record, so create one so we have a before and after case.
 						final ChangeSetRowData d = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 						beforeMapping.lhsRowMap.put(lhsKey, d);
 						d.setPrimaryRecord(toData.isPrimaryRecord());
@@ -517,15 +534,27 @@ public final class ChangeSetTransformerUtil {
 						d.setRowDataGroup(ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup());
 						d.setLhsLink(toData);
 						toData.setLhsLink(d);
+
+						// Copy across attributes
+						d.setLhsSlot(toData.isLhsSlot());
+						d.setLhsSpot(toData.isLhsSpot());
+						d.setLhsOptional(toData.isLhsOptional());
+						d.setLhsNonShipped(toData.isLhsNonShipped());
+
+						beforeMapping.groups.add(d.getRowDataGroup());
+
 					}
 				} else if (toData == null) {
 					if (fromData.getLhsLink() != null) {
 						// Should be a spot already linked from a previous iteration
 						continue;
 					}
+
+					// No record found. Either we are looking at a spot slot OR the position only exists in one of the schedules
+
 					boolean foundSpotMatch = false;
-					if (fromData.getLoadSlot() instanceof SpotLoadSlot) {
-						final String mKey = getMarketSlotKey((SpotLoadSlot) fromData.getLoadSlot());
+					if (fromData.getLoadSlot() instanceof final SpotLoadSlot spotSlot) {
+						final String mKey = getMarketSlotKey(spotSlot);
 						final List<ChangeSetRowData> beforeDataList = beforeMapping.lhsRowMarketMap.get(mKey);
 						final List<ChangeSetRowData> afterDataList = afterMapping.lhsRowMarketMap.get(mKey);
 
@@ -551,18 +580,26 @@ public final class ChangeSetTransformerUtil {
 						d.setLhsName(fromData.getLhsName());
 						d.setRowDataGroup(ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup());
 						d.setLhsLink(fromData);
+
+						d.setLhsSlot(fromData.isLhsSlot());
+						d.setLhsSpot(fromData.isLhsSpot());
+						d.setLhsOptional(fromData.isLhsOptional());
+						d.setLhsNonShipped(fromData.isLhsNonShipped());
+
 						fromData.setLhsLink(d);
+						afterMapping.groups.add(d.getRowDataGroup());
+
 					}
 				}
 				itr.remove();
 			}
 		}
 
-		final Set<String> tmp_rhsKeys = new HashSet<>(rhsKeys);
+		final Set<String> tmpRhsKeys = new HashSet<>(rhsKeys);
 		// Pass 0: bind the identical values.
 		// Pass 1: search for the equivalent spot market slots.
 		for (int pass = 0; pass < 2; ++pass) {
-			final Iterator<String> itr = tmp_rhsKeys.iterator();
+			final Iterator<String> itr = tmpRhsKeys.iterator();
 			LOOP_MAIN: while (itr.hasNext()) {
 				final String rhsKey = itr.next();
 				final ChangeSetRowData fromData = beforeMapping.rhsRowMap.get(rhsKey);
@@ -571,13 +608,13 @@ public final class ChangeSetTransformerUtil {
 					fromData.setRhsLink(toData);
 					toData.setRhsLink(fromData);
 
-					if (fromData.getDischargeSlot() instanceof SpotDischargeSlot) {
+					if (fromData.getDischargeSlot() instanceof final SpotDischargeSlot spotSlot) {
 						{
-							final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
+							final String mKey = getMarketSlotKey(spotSlot);
 							beforeMapping.rhsRowMarketMap.get(mKey).remove(fromData);
 						}
-						if (toData.getDischargeSlot() instanceof SpotDischargeSlot) {
-							final String mKey = getMarketSlotKey((SpotDischargeSlot) toData.getDischargeSlot());
+						if (toData.getDischargeSlot() instanceof final SpotDischargeSlot spotSlot2) {
+							final String mKey = getMarketSlotKey(spotSlot2);
 							afterMapping.rhsRowMarketMap.get(mKey).remove(toData);
 						} else {
 							assert false; // Both slots should be spot
@@ -589,9 +626,10 @@ public final class ChangeSetTransformerUtil {
 						// Should be a spot already linked from a previous iteration
 						continue;
 					}
+					// No record found. Either we are looking at a spot slot OR the position only exists in one of the schedules
 					boolean foundSpotMatch = false;
-					if (toData.getDischargeSlot() instanceof SpotDischargeSlot) {
-						final String mKey = getMarketSlotKey((SpotDischargeSlot) toData.getDischargeSlot());
+					if (toData.getDischargeSlot() instanceof final SpotDischargeSlot spotSlot) {
+						final String mKey = getMarketSlotKey(spotSlot);
 						final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
 						final List<ChangeSetRowData> afterDataList = afterMapping.rhsRowMarketMap.get(mKey);
 
@@ -619,15 +657,24 @@ public final class ChangeSetTransformerUtil {
 						d.setRowDataGroup(ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup());
 						d.setRhsLink(toData);
 						toData.setRhsLink(d);
+
+						d.setRhsSlot(toData.isRhsSlot());
+						d.setRhsSpot(toData.isRhsSpot());
+						d.setRhsOptional(toData.isRhsOptional());
+						d.setRhsNonShipped(toData.isRhsNonShipped());
+
+						beforeMapping.groups.add(d.getRowDataGroup());
+
 					}
 				} else if (toData == null) {
 					if (fromData.getRhsLink() != null) {
 						// Should be a spot already linked from a previous iteration
 						continue;
 					}
+					// No record found. Either we are looking at a spot slot OR the position only exists in one of the schedules
 					boolean foundSpotMatch = false;
-					if (fromData.getDischargeSlot() instanceof SpotDischargeSlot) {
-						final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
+					if (fromData.getDischargeSlot() instanceof final SpotDischargeSlot spotSlot) {
+						final String mKey = getMarketSlotKey(spotSlot);
 						final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
 						final List<ChangeSetRowData> afterDataList = afterMapping.rhsRowMarketMap.get(mKey);
 
@@ -653,8 +700,8 @@ public final class ChangeSetTransformerUtil {
 						// matching)
 						// This case can occur if we have two wiring groups both involving the same spot
 						// market/month combio
-						if (fromData.getDischargeSlot() instanceof SpotDischargeSlot) {
-							final String mKey = getMarketSlotKey((SpotDischargeSlot) fromData.getDischargeSlot());
+						if (fromData.getDischargeSlot() instanceof final SpotDischargeSlot spotSlot) {
+							final String mKey = getMarketSlotKey(spotSlot);
 							final List<ChangeSetRowData> beforeDataList = beforeMapping.rhsRowMarketMap.get(mKey);
 							final List<ChangeSetRowData> afterDataList = afterMapping.rhsRowMarketMap.get(mKey);
 
@@ -700,6 +747,13 @@ public final class ChangeSetTransformerUtil {
 						d.setRowDataGroup(ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup());
 						d.setRhsLink(fromData);
 						fromData.setRhsLink(d);
+
+						d.setRhsSlot(fromData.isRhsSlot());
+						d.setRhsSpot(fromData.isRhsSpot());
+						d.setRhsOptional(fromData.isRhsOptional());
+						d.setRhsNonShipped(fromData.isRhsNonShipped());
+
+						afterMapping.groups.add(d.getRowDataGroup());
 					}
 				}
 				itr.remove();
@@ -708,215 +762,147 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Given the rows with the correct LHS/RHS links, generate the ChangeSetRows
+	 * Given the rows with the correct LHS/RHS links, generate the ChangeSetTablesRows
 	 * 
 	 * @param beforeMapping
 	 * @param afterMapping
 	 * @param rows
 	 * @param seenRows
 	 */
-	private static @NonNull List<ChangeSetRow> generateRowData(final MappingModel beforeMapping, final MappingModel afterMapping) {
-		final List<ChangeSetRow> rows = new LinkedList<>();
+	private static @NonNull List<ChangeSetTableRow> generateRowData(final MappingModel beforeMapping, final MappingModel afterMapping) {
+		final List<ChangeSetTableRow> rows = new LinkedList<>();
 
-		final Set<String> lhsKeys = new LinkedHashSet<>();
-		lhsKeys.addAll(beforeMapping.lhsRowMap.keySet());
-		lhsKeys.addAll(afterMapping.lhsRowMap.keySet());
+		final Map<ChangeSetRowData, List<ChangeSetTableRow>> lm = new HashMap<>();
+		final Map<ChangeSetRowData, List<ChangeSetTableRow>> rm = new HashMap<>();
 
-		final Set<String> rhsKeys = new LinkedHashSet<>();
-		rhsKeys.addAll(beforeMapping.rhsRowMap.keySet());
-		rhsKeys.addAll(afterMapping.rhsRowMap.keySet());
+		// The after case is the main case we want to see, so loop through the after groups and generate the rows.
+		// We will also record a mapping to the before links so the before loops can attach to the correct row.
 
-		// First pass - generate rows data based on LHS After state
-		{
-			final Iterator<String> lhsIterator = lhsKeys.iterator();
-			while (lhsIterator.hasNext()) {
-				final String key = lhsIterator.next();
+		for (final ChangeSetRowDataGroup afterGroup : afterMapping.groups) {
+			// For LDD we automatically link the rows into the same wiring group.
+			ChangeSetWiringGroup group = ChangesetFactory.eINSTANCE.createChangeSetWiringGroup();
+			ChangeSetRowData firstData = null;
+			for (final var afterData : afterGroup.getMembers()) {
+				if (firstData == null) {
+					firstData = afterData;
+				}
+				final ChangeSetTableRow changeSetTableRow = ChangesetFactory.eINSTANCE.createChangeSetTableRow();
+				changeSetTableRow.setWiringGroup(group);
 
-				final ChangeSetRowData afterData = afterMapping.lhsRowMap.get(key);
-				if (afterData != null && afterData.isPrimaryRecord()) {
-					final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-					row.setAfterData(afterData.getRowDataGroup());
-
-					// If there is a before record, link it.
+				// Is there a LHS event?
+				if (ChangeSetTransformerUtil.isSet(afterData.getLhsName())) {
+					changeSetTableRow.setLhsAfter(afterData);
+					// Set link to before LHS data.
 					if (afterData.getLhsLink() != null) {
-						row.setBeforeData(afterData.getLhsLink().getRowDataGroup());
-					} else {
-						row.setBeforeData(ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup());
+						changeSetTableRow.setLhsBefore(afterData.getLhsLink());
+						// Record the LHS before key to this row for the before loop.
+						lm.computeIfAbsent(afterData.getLhsLink(), k -> new LinkedList<>()).add(changeSetTableRow);
+					}
+					// Valid can only be set for the after case. If there is no slot (i.e. slot exists in before case only) then valid is false.
+					// Valid is only checked for slots currently
+					// TODO: Should we do this for events too? Or rename the is LhsSlotValid?
+					if (afterData.getLoadSlot() != null) {
+						changeSetTableRow.setLhsValid(afterData.getLoadAllocation() != null || afterData.getLoadSlot().isOptional());
+					}
+				} else {
+					// Secondary row, add to the list so we can patch up the before case properly for the second D.
+					if (ChangeSetTransformerUtil.isSet(firstData.getLhsName())) {
+						// Set link to before LHS data.
+						if (firstData.getLhsLink() != null) {
+							// Record the LHS before key to this row for the before loop.
+							lm.computeIfAbsent(firstData.getLhsLink(), k -> new LinkedList<>()).add(changeSetTableRow);
+						}
+					}
+				}
+				// Is there a RHS event?
+				if (ChangeSetTransformerUtil.isSet(afterData.getRhsName())) {
+					rm.computeIfAbsent(afterData.getRhsLink(), k -> new LinkedList<>()).add(changeSetTableRow);
+					changeSetTableRow.setCurrentRhsAfter(afterData);
+					if (afterData.getRhsLink() != null) {
+						// Here we link the previous data for the discharge. I.e. this is the load the discharge was linked to in the before case.
+						changeSetTableRow.setCurrentRhsBefore(afterData.getRhsLink());
 					}
 
-					rows.add(row);
+					if (afterData.getDischargeSlot() != null) {
+						changeSetTableRow.setCurrentRhsValid(afterData.getDischargeAllocation() != null || afterData.getDischargeSlot().isOptional());
+					}
 				}
+
+				rows.add(changeSetTableRow);
 			}
 		}
 
-		// TODO: I;ve fixed how the view looks. We need to test it. Make sure existing
-		// tests are not broken.
-		// Also need to update tests and make sure the output is as expected -
+		// Run through the before cases and link up.
+		for (final ChangeSetRowDataGroup beforeGroup : beforeMapping.groups) {
 
-		// Pass two - look for RHS cases not covered before. I.e. open discharges
-		{
-			final Iterator<String> rhsIterator = rhsKeys.iterator();
-			while (rhsIterator.hasNext()) {
-				final String key = rhsIterator.next();
-				// Check the before state
+			// The wiring group to use. There should always be one of LHS or a RHS after row data mappings.
+			ChangeSetWiringGroup group = null;
+			for (final var before : beforeGroup.getMembers()) {
 				{
-					final ChangeSetRowData data = beforeMapping.rhsRowMap.get(key);
-					if (data != null && data.isPrimaryRecord() && data.getLhsName() == null) {
-						boolean handled = false;
-						final ChangeSetRowData rhsLink = data.getRhsLink();
-						if (rhsLink != null) {
-							// LDD? Merge before records)
-							if (!rhsLink.isPrimaryRecord()) {
-								final ChangeSetRowDataGroup rowDataGroup = rhsLink.getRowDataGroup().getMembers().get(0).getLhsLink().getRowDataGroup();
-								data.setRowDataGroup(rowDataGroup);
-								handled = true;
-							}
-						}
-						if (!handled) {
-							final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-							row.setBeforeData(data.getRowDataGroup());
+					// Do we have an equivalent after case for the LHS?
+					// Special handling for LDD. Need to handle LDD to new LDD, LD to LDD and LDD to LD. We want to match the before and after rows by index. If one if larger than the other, we ignore
+					// the excess.
+					final List<ChangeSetTableRow> changeSetTableRows = lm.get(beforeGroup.getMembers().get(0));
+					if (changeSetTableRows != null) {
+						for (int idx = beforeGroup.getMembers().indexOf(before); idx < Math.min(changeSetTableRows.size(), beforeGroup.getMembers().size()); ++idx) {
+							var changeSetTableRow = changeSetTableRows.get(idx);
 
-							if (rhsLink != null && rhsLink.getLhsName() == null) {
-								final ChangeSetRowDataGroup rowDataGroup = rhsLink.getRowDataGroup();
-								row.setAfterData(rowDataGroup);
+							// Merge wiring groups for all members of the before case.
+							if (group == null) {
+								group = changeSetTableRow.getWiringGroup();
 							} else {
-								row.setAfterData(ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup());
+								final var groupA = group;
+								final var groupB = changeSetTableRow.getWiringGroup();
+								if (groupA != groupB) {
+									for (final var b : new ArrayList<>(groupB.getRows())) {
+										// Bi-directional reference will also move b out of groupB
+										b.setWiringGroup(groupA);
+									}
+								}
 							}
-							rows.add(row);
-						}
-					}
-				}
-				// Check the after state
-				{
-					final ChangeSetRowData data = afterMapping.rhsRowMap.get(key);
-					if (data != null && !data.isPrimaryRecord()) {
-						continue;
-					}
-					if (data != null && data.getLhsName() == null) {
-						boolean handled = false;
-						final ChangeSetRowData rhsLink = data.getRhsLink();
-						if (rhsLink != null) {
-							// LDD? Merge after records)
-							if (!rhsLink.isPrimaryRecord()) {
-								final ChangeSetRowDataGroup rowDataGroup2 = rhsLink.getRowDataGroup();
-								final ChangeSetRowData changeSetRowData = rowDataGroup2.getMembers().get(0);
-								final ChangeSetRowData lhsLink = changeSetRowData.getLhsLink();
-								if (lhsLink != null) {
-									// TODO: Why is it null in sandbox?
-									final ChangeSetRowDataGroup rowDataGroup = lhsLink.getRowDataGroup();
-									data.setRowDataGroup(rowDataGroup);
-									handled = true;
+							// Here we link wiring change rows. I.e. we record the discharge the load was paired to in the before case.
+							if (ChangeSetTransformerUtil.isSet(before.getRhsName())) {
+								changeSetTableRow.setPreviousRhsBefore(before);
+								if (before.getRhsLink() != null) {
+									changeSetTableRow.setPreviousRhsAfter(before.getRhsLink());
 								}
 							}
 						}
-						if (!handled) {
-							final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-							row.setAfterData(data.getRowDataGroup());
+					}
+				}
+				{
+					// Do we have an equivalent after case for the RHS?
+					// Just merge wiring groups
+					final List<ChangeSetTableRow> changeSetTableRows = rm.get(before);
+					if (changeSetTableRows != null) {
+						for (var changeSetTableRow : changeSetTableRows) {
 
-							if (data.getRhsLink() != null && data.getRhsLink().getLhsName() == null) {
-								row.setBeforeData(data.getRhsLink().getRowDataGroup());
+							if (group == null) {
+								group = changeSetTableRow.getWiringGroup();
 							} else {
-								row.setBeforeData(ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup());
+								final var groupA = group;
+								final var groupB = changeSetTableRow.getWiringGroup();
+								if (groupA != groupB) {
+									for (final var b : new ArrayList<>(groupB.getRows())) {
+										// Bi-directional reference will also move b out of groupB
+										b.setWiringGroup(groupA);
+									}
+								}
 							}
-							rows.add(row);
 						}
+						// // Here we link wiring change rows. I.e. we record the discharge the load was paired to in the before case.
+						// if (ChangeSetTransformerUtil.isSet(before.getRhsName())) {
+						// changeSetTableRow.setPreviousRhsBefore(before);
+						// if (before.getRhsLink() != null) {
+						// changeSetTableRow.setPreviousRhsAfter(before.getRhsLink());
+						// }
+						// }
 					}
 				}
 			}
-
 		}
+
 		return rows;
-	}
-
-	public static void convertToSortedGroups(@NonNull final Map<ChangeSetTableRow, Collection<ChangeSetTableRow>> rowToGroups) {
-
-		for (final Map.Entry<ChangeSetTableRow, Collection<ChangeSetTableRow>> entry : rowToGroups.entrySet()) {
-			final Collection<ChangeSetTableRow> value = entry.getValue();
-			if (value.size() < 2) {
-				continue;
-			}
-			if (value instanceof Set<?>) {
-				if (true) {
-					// Convert to list and sort.
-					final List<ChangeSetTableRow> newGroup = new ArrayList<>(value.size());
-
-					ChangeSetTableRow firstAlphabetically = null;
-					ChangeSetTableRow head = null;
-					for (final ChangeSetTableRow r : value) {
-						if (r.getNextLHS() == null) {
-							head = r;
-							break;
-						}
-						if (firstAlphabetically == null && r.getLhsName() != null) {
-							firstAlphabetically = r;
-						} else if (firstAlphabetically != null && r.getLhsName() != null) {
-							if (firstAlphabetically.getLhsName().compareTo(r.getLhsName()) > 0) {
-								firstAlphabetically = r;
-							}
-						}
-					}
-					if (head == null) {
-						head = firstAlphabetically;
-					}
-					while (head != null && !newGroup.contains(head)) {
-						newGroup.add(head);
-						head = head.getPreviousRHS();
-					}
-
-					entry.setValue(newGroup);
-				}
-
-			}
-		}
-
-	}
-
-	public static void updateRowGroups(@NonNull final ChangeSetTableRow row, @NonNull final Map<ChangeSetTableRow, Collection<ChangeSetTableRow>> rowToGroups) {
-		if (rowToGroups.containsKey(row)) {
-			return;
-		}
-		// Try and find an existing group.
-		Collection<ChangeSetTableRow> group = null;
-		if (row.getNextLHS() != null) {
-			if (rowToGroups.containsKey(row.getNextLHS())) {
-				group = rowToGroups.get(row.getNextLHS());
-			}
-		} else if (row.getPreviousRHS() != null) {
-			if (rowToGroups.containsKey(row.getPreviousRHS())) {
-				group = rowToGroups.get(row.getPreviousRHS());
-			}
-		}
-		// Create new group if required.
-		if (group == null) {
-			group = new LinkedHashSet<>();
-		}
-		rowToGroups.put(row, group);
-		// Add to group
-		group.add(row);
-		// Merge existing groups if required.
-		if (row.getNextLHS() != null) {
-			if (rowToGroups.containsKey(row.getNextLHS())) {
-				final Collection<ChangeSetTableRow> otherGroup = rowToGroups.get(row.getNextLHS());
-				if (otherGroup != null && group != otherGroup) {
-					group.addAll(otherGroup);
-					for (final ChangeSetTableRow r : otherGroup) {
-						rowToGroups.put(r, group);
-					}
-				}
-			}
-		}
-		if (row.getPreviousRHS() != null) {
-			if (rowToGroups.containsKey(row.getPreviousRHS())) {
-				final Collection<ChangeSetTableRow> otherGroup = rowToGroups.get(row.getPreviousRHS());
-				if (otherGroup != null && group != otherGroup) {
-					group.addAll(otherGroup);
-					for (final ChangeSetTableRow r : otherGroup) {
-						rowToGroups.put(r, group);
-					}
-				}
-			}
-		}
-		assert rowToGroups.containsKey(row);
 	}
 
 	@NonNull
@@ -965,8 +951,8 @@ public final class ChangeSetTransformerUtil {
 
 	@NonNull
 	public static String getShortName(@Nullable final VesselAssignmentType t) {
-		if (t instanceof VesselCharter) {
-			final Vessel vessel = ((VesselCharter) t).getVessel();
+		if (t instanceof final VesselCharter vc) {
+			final Vessel vessel = vc.getVessel();
 			if (vessel != null) {
 				return vessel.getShortenedName();
 			} else {
@@ -986,22 +972,19 @@ public final class ChangeSetTransformerUtil {
 
 	@NonNull
 	public static Integer getCharterNumber(@Nullable final VesselAssignmentType t) {
-		if (t instanceof VesselCharter) {
-			return ((VesselCharter) t).getCharterNumber();
+		if (t instanceof final VesselCharter vc) {
+			return vc.getCharterNumber();
 		}
 		throw new NullPointerException();
 	}
 
 	@Nullable
-	public static String getRowName(@Nullable final Slot slot) {
-		if (true) {
-			// return getKeyName(slot);
-		}
+	public static String getRowName(@Nullable final Slot<?> slot) {
 		if (slot == null) {
 			return null;
 		}
-		if (slot instanceof SpotSlot) {
-			final SpotMarket market = ((SpotSlot) slot).getMarket();
+		if (slot instanceof final SpotSlot spotSlot) {
+			final SpotMarket market = spotSlot.getMarket();
 			final int windowSize = slot.getWindowSize();
 			String formattedWindowStart = format(slot.getWindowStart());
 			if (windowSize > 1 && slot.getWindowSizeUnits() == TimePeriod.MONTHS) {
@@ -1019,7 +1002,7 @@ public final class ChangeSetTransformerUtil {
 		if (slotAllocation == null) {
 			return null;
 		}
-		final Slot slot = slotAllocation.getSlot();
+		final Slot<?> slot = slotAllocation.getSlot();
 		if (slot == null) {
 			return null;
 		}
@@ -1029,7 +1012,7 @@ public final class ChangeSetTransformerUtil {
 			final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 			if (cargoAllocation != null) {
 				for (final SlotAllocation slotAllocation2 : cargoAllocation.getSlotAllocations()) {
-					final Slot slot2 = slotAllocation2.getSlot();
+					final Slot<?> slot2 = slotAllocation2.getSlot();
 					if (slotAllocation == slotAllocation2) {
 						sb.append(key);
 					} else {
@@ -1051,7 +1034,7 @@ public final class ChangeSetTransformerUtil {
 		if (slotAllocation == null) {
 			return null;
 		}
-		final Slot slot = slotAllocation.getSlot();
+		final Slot<?> slot = slotAllocation.getSlot();
 		if (slot == null) {
 			return null;
 		}
@@ -1094,106 +1077,166 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	public static void sortRows(@NonNull final List<ChangeSetTableRow> rows, @Nullable final NamedObject targetToSortFirst) {
-		// Sort into wiring groups.
-		final Map<ChangeSetTableRow, Collection<ChangeSetTableRow>> rowToRowGroup = new HashMap<>();
-		for (final ChangeSetTableRow row : rows) {
-			if (row != null) {
-				ChangeSetTransformerUtil.updateRowGroups(row, rowToRowGroup);
-			}
+
+		// Perform a multi-stage sort process.
+
+		// Stage 1 - sort the rows within a wiring group. Sometimes there is a natural start to end in the chain (for simple LD cargoes).
+		// Sometimes there is a circular wiring change where we find the first load alphabetically as the starting point.
+
+		// Collect the unique groups. There is a many-to-one relationship between rows and groups
+		final Set<ChangeSetWiringGroup> groups = new HashSet<>();
+		for (final ChangeSetTableRow rowA : rows) {
+			groups.add(rowA.getWiringGroup());
 		}
 
-		ChangeSetTransformerUtil.convertToSortedGroups(rowToRowGroup);
-		for (final ChangeSetTableRow row : rows) {
-			assert rowToRowGroup.containsKey(row);
-			// updateRowGroups(row, rowToRowGroup);
+		// Sort each group
+		for (final var group : groups) {
+			final List<ChangeSetTableRow> rows2 = group.getRows();
+			// No need to sort single element groups
+			if (rows2.size() < 2) {
+				continue;
+			}
+
+			// The way the group is created should generally mean the head is the first row (unless it is a circular group) and rows are sorted according to the change chain. If this is a non-circular
+			// group, then skip it.
+			final ChangeSetTableRow firstElement = rows2.get(0);
+			final ChangeSetRowData feRhsAfter = firstElement.getCurrentRhsAfter();
+			if (feRhsAfter != null) {
+				final var link = feRhsAfter.getRhsLink();
+				if (link == null || link.getLhsName() == null) {
+					continue;
+				}
+			}
+
+			// This should be a circular group, find the first load alphabetically
+			// Find the first element alphabetically
+			ChangeSetTableRow firstAlphabetically = null;
+			for (final ChangeSetTableRow r : rows2) {
+				if (firstAlphabetically == null && r.getLhsName() != null) {
+					firstAlphabetically = r;
+				} else if (firstAlphabetically != null && r.getLhsName() != null) {
+					if (firstAlphabetically.getLhsName().compareTo(r.getLhsName()) > 0) {
+						firstAlphabetically = r;
+					}
+				}
+			}
+
+			// Take a copy of the data as the underlying EList can break with Collections operations
+			final List<ChangeSetTableRow> value = new ArrayList<>(rows2);
+			// Shift the list element to retain the order, but with the new starting point
+			Collections.rotate(value, -value.indexOf(firstAlphabetically));
+			// Clear and re-add data to the datamodel in new order
+			group.getRows().clear();
+			group.getRows().addAll(value);
+
 		}
+
+		// Stage 2 - sort first by change type then (wiring, vessel, date, other) then use the pre-determined group order if part of the same wiring group otherwise alphabetically.
 		Collections.sort(rows, new Comparator<ChangeSetTableRow>() {
 
 			@Override
 			public int compare(final ChangeSetTableRow o1, final ChangeSetTableRow o2) {
 
 				// Sort wiring changes first
-				if (o1.isWiringChange() != o2.isWiringChange()) {
-					if (o1.isWiringChange()) {
-						return -1;
-					} else {
-						return 1;
-					}
-				} else if (o1.isWiringChange() && o2.isWiringChange()) {
-					// If wiring change, sort related blocks together
+				ChangeSetWiringGroup g1 = o1.getWiringGroup();
+				ChangeSetWiringGroup g2 = o2.getWiringGroup();
+				if (g1 == g2) {
+					// Related elements, sort together.
+					final List<ChangeSetTableRow> group = g1.getRows();
 
-					if (rowToRowGroup.containsKey(o1) && rowToRowGroup.get(o1).contains(o2)) {
-						// Related elements, sort together.
-						// Are these elements related?
-						final Collection<ChangeSetTableRow> group = rowToRowGroup.get(o1);
-						// Start from the first element in the sorted group
-						ChangeSetTableRow link = group.iterator().next();
-						while (link != null) {
-							if (link == o1) {
+					// Group order should be the desired order
+					return Integer.compare(group.indexOf(o1), group.indexOf(o2));
+				} else {
+					if (g1.isWiringChange() != g2.isWiringChange()) {
+						if (g1.isWiringChange()) {
+							return -1;
+						} else {
+							return 1;
+						}
+					}
+					if (!g1.isWiringChange()) {
+						// // Sort vessel changes above anything else.
+						if (g1.isVesselChange() != g2.isVesselChange()) {
+							if (g1.isVesselChange()) {
 								return -1;
-							}
-							if (link == o2) {
+							} else {
 								return 1;
 							}
-							link = link.getPreviousRHS();
 						}
-						assert false;
-					} else {
-						final Collection<ChangeSetTableRow> group1 = rowToRowGroup.get(o1);
-						final Collection<ChangeSetTableRow> group2 = rowToRowGroup.get(o2);
+						// // Sort by date.
+						if (g1.isDateChange() != g2.isDateChange()) {
+							if (g1.isDateChange()) {
+								return -1;
+							} else {
+								return 1;
+							}
+						}
+					}
+					final Collection<ChangeSetTableRow> group1 = g1.getRows();
+					final Collection<ChangeSetTableRow> group2 = g2.getRows();
 
-						// Sort on head element ID
-						return ("" + group1.iterator().next().getLhsName()).compareTo("" + group2.iterator().next().getLhsName());
-					}
+					// Sort on head element ID
+					return ("" + group1.iterator().next().getLhsName()).compareTo("" + group2.iterator().next().getLhsName());
 				}
-				// Sort vessel changes above anything else.
-				if (o1.isVesselChange() != o2.isVesselChange()) {
-					if (o1.isVesselChange()) {
-						return -1;
-					} else {
-						return 1;
-					}
-				}
-				// Sort by date.
-				if (o1.isDateChange() != o2.isDateChange()) {
-					if (o1.isDateChange()) {
-						return -1;
-					} else {
-						return 1;
-					}
-				}
-
-				// Compare name
-				return ("" + o1.getLhsName()).compareTo("" + o2.getLhsName());
 			}
 		});
+
+		// Stage 3 - for e.g. an optionise result we want a particular element to be first if present regardless of change type.
 		if (targetToSortFirst != null) {
+			// Find the row with the target
 			ChangeSetTableRow targetRow = null;
 			for (final ChangeSetTableRow row : rows) {
-				if (targetToSortFirst instanceof VesselEvent && !row.isLhsSlot() && targetToSortFirst.getName().equals(row.getLhsName())) {
+				if (targetToSortFirst instanceof VesselEvent && !row.getLHSAfterOrBefore().isLhsSlot() && targetToSortFirst.getName().equals(row.getLhsName())) {
 					targetRow = row;
 					break;
 				}
-				if (targetToSortFirst instanceof LoadSlot && row.isLhsSlot() && targetToSortFirst.getName().equals(row.getLhsName())) {
+				if (targetToSortFirst instanceof LoadSlot && row.getLHSAfterOrBefore() != null && row.getLHSAfterOrBefore().isLhsSlot()
+						&& targetToSortFirst.getName().equals(row.getLHSAfterOrBefore().getLhsName())) {
 					targetRow = row;
 					break;
 				}
-				if (targetToSortFirst instanceof DischargeSlot && row.isRhsSlot() && targetToSortFirst.getName().equals(row.getRhsName())) {
+				if (targetToSortFirst instanceof DischargeSlot && row.getCurrentRHSAfterOrBefore() != null && row.getCurrentRHSAfterOrBefore().isRhsSlot()
+						&& targetToSortFirst.getName().equals(row.getCurrentRHSAfterOrBefore().getRhsName())) {
 					targetRow = row;
 					break;
 				}
 			}
 
 			if (targetRow != null) {
-				final Collection<ChangeSetTableRow> collection = rowToRowGroup.get(targetRow);
+				// Grab the wiring group
+				final Collection<ChangeSetTableRow> collection = targetRow.getWiringGroup().getRows();
+				// Create a copy so we can mutate it
 				final List<ChangeSetTableRow> l = new LinkedList<>(collection);
-				Collections.rotate(l, -l.indexOf(targetRow));
+				if (collection.size() > 1) {
+					// re-order the wiring group list so the target is first
+					Collections.rotate(l, -l.indexOf(targetRow));
+				}
 
+				// Remove the whole wiring group from the full change set rows list
 				rows.removeAll(l);
-				l.addAll(rows);
+				// Insert the wiring group at the head of the list in the new order.
+				rows.addAll(0, l);
+			}
+		}
 
-				rows.clear();
-				rows.addAll(l);
+		if (false) {
+			// Debug code - prefix wiring group ID and w if the row has the wiring change flag set
+			final List<Object> seen = new LinkedList<>();
+			for (final var v : rows) {
+
+				if (!seen.contains(v.getWiringGroup())) {
+					seen.add(v.getWiringGroup());
+				}
+
+				final String s = v.getLhsName();
+				final String s2 = v.getCurrentRhsName();
+				if (v.getLHSAfterOrBefore() != null) {
+					v.getLHSAfterOrBefore().setLhsName(seen.indexOf(v.getWiringGroup()) + (v.isWiringChange() ? "w" : "") + "-" + s);
+				}
+
+				if (v.getCurrentRHSAfterOrBefore() != null) {
+					v.getCurrentRHSAfterOrBefore().setRhsName(seen.indexOf(v.getWiringGroup()) + (v.isWiringChange() ? "w" : "") + "-" + s2);
+				}
 			}
 		}
 
@@ -1209,14 +1252,14 @@ public final class ChangeSetTransformerUtil {
 		if (toSchedule != null) {
 			for (final Sequence sequence : toSchedule.getSequences()) {
 				for (final Event event : sequence.getEvents()) {
-					if (event instanceof ProfitAndLossContainer profitAndLossContainer) {
+					if (event instanceof final ProfitAndLossContainer profitAndLossContainer) {
 						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
 					}
 
-					if (event instanceof SlotVisit slotVisit) {
+					if (event instanceof final SlotVisit slotVisit) {
 						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
@@ -1228,7 +1271,7 @@ public final class ChangeSetTransformerUtil {
 						}
 					}
 
-					if (event instanceof EventGrouping eventGrouping) {
+					if (event instanceof final EventGrouping eventGrouping) {
 						lateness += LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						violations += ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 					}
@@ -1262,13 +1305,13 @@ public final class ChangeSetTransformerUtil {
 		if (fromSchedule != null) {
 			for (final Sequence sequence : fromSchedule.getSequences()) {
 				for (final Event event : sequence.getEvents()) {
-					if (event instanceof ProfitAndLossContainer profitAndLossContainer) {
+					if (event instanceof final ProfitAndLossContainer profitAndLossContainer) {
 						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl -= groupProfitAndLoss.getProfitAndLoss();
 						}
 					}
-					if (event instanceof SlotVisit slotVisit) {
+					if (event instanceof final SlotVisit slotVisit) {
 						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
@@ -1280,7 +1323,7 @@ public final class ChangeSetTransformerUtil {
 						}
 					}
 
-					if (event instanceof EventGrouping eventGrouping) {
+					if (event instanceof final EventGrouping eventGrouping) {
 						lateness -= LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						violations -= ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 					}
@@ -1317,14 +1360,46 @@ public final class ChangeSetTransformerUtil {
 		return str != null && !str.isEmpty();
 	}
 
-	public static void setRowFlags(@NonNull final List<ChangeSetRow> rows) {
-		for (final ChangeSetRow row : rows) {
+	public static void setRowFlags(@NonNull final List<ChangeSetTableRow> rows) {
+		for (final ChangeSetTableRow row : rows) {
 
-			final ChangeSetRowDataGroup beforeGroup = row.getBeforeData();
-			final ChangeSetRowDataGroup afterGroup = row.getAfterData();
+			// For LD cargoes, multiple rows in the wiring group implies a wiring change.
+			// However, for LDD cargoes multiple rows in the wiring group does not necessarily mean there is a wiring change. We need to see if there are multiple cargoes present in the collection.
+			if (row.getWiringGroup().getRows().size() > 1) {
+				for (var rowA : row.getWiringGroup().getRows()) {
+					for (var rowB : row.getWiringGroup().getRows()) {
+						// Skip identity
+						if (rowA == rowB) {
+							continue;
+						}
+						// Does one row have a D and other does not D? Assume this must be a wiring change.
+						// E.g. one row is an open Load
+						if ((rowA.getCurrentRhsAfter() == null) != (rowB.getCurrentRhsAfter() == null)) {
+							row.setWiringChange(true);
+						}
+						// Are the two discharges part of a different cargo?
+						if (rowA.getCurrentRhsAfter() != null && rowB.getCurrentRhsAfter() != null) {
+							final Set<ChangeSetRowData> a = new HashSet<>(rowA.getCurrentRhsAfter().getRowDataGroup().getMembers());
+							final Set<ChangeSetRowData> b = new HashSet<>(rowB.getCurrentRhsAfter().getRowDataGroup().getMembers());
+							if (!a.equals(b)) {
+								row.setWiringChange(true);
+							}
+						}
+					}
+				}
+			}
+
+			final ChangeSetRowDataGroup beforeGroup = row.getLhsBefore() == null ? null : row.getLhsBefore().getRowDataGroup();
+			final ChangeSetRowDataGroup afterGroup = row.getLhsAfter() == null ? null : row.getLhsAfter().getRowDataGroup();
+
+			// Does the element only appear on the before or the after case?
+			if ((beforeGroup == null) != (afterGroup == null)) {
+				row.setWiringChange(true);
+			}
 
 			if (beforeGroup != null && afterGroup != null) {
 				if (beforeGroup.getMembers().size() != afterGroup.getMembers().size()) {
+					// A different number of members means e.g. LD to LDD change.
 					row.setWiringChange(true);
 				} else {
 					if (beforeGroup.getMembers().size() == 1) {
@@ -1334,11 +1409,11 @@ public final class ChangeSetTransformerUtil {
 						// Mark up lateness over 24 hours as a major change.
 						{
 							long beforeLateness = 0L;
-							for (final ChangeSetRowData data : row.getBeforeData().getMembers()) {
+							for (final ChangeSetRowData data : beforeGroup.getMembers()) {
 								beforeLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
 							}
 							long afterLateness = 0L;
-							for (final ChangeSetRowData data : row.getAfterData().getMembers()) {
+							for (final ChangeSetRowData data : afterGroup.getMembers()) {
 								afterLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
 							}
 							if (Math.abs(beforeLateness - afterLateness) > 24) {
@@ -1466,43 +1541,65 @@ public final class ChangeSetTransformerUtil {
 				}
 			}
 		}
-	}
 
-	public static void filterRows(final List<ChangeSetTableRow> rows) {
-		final Iterator<ChangeSetTableRow> itr = rows.iterator();
-		// TEMP FILTERING _ DOES NOT WORK WITH LDD - we filter the wrong stuff...
-		final int size = 1;
-		while (itr.hasNext()) {
-			final ChangeSetTableRow changeSetTableRow = itr.next();
-
-			if (size == 1) {
-				if (!changeSetTableRow.isMajorChange()) {
-					long a = ChangeSetKPIUtil.getPNL(changeSetTableRow, ResultType.Before);
-					long b = ChangeSetKPIUtil.getPNL(changeSetTableRow, ResultType.After);
-					if (a == b) {
-						a = ChangeSetKPIUtil.getViolations(changeSetTableRow, ResultType.Before);
-						b = ChangeSetKPIUtil.getViolations(changeSetTableRow, ResultType.After);
-						if (a == b) {
-							a = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.Before)[FlexType.TotalIfFlexInsufficient.ordinal()];
-							b = ChangeSetKPIUtil.getLateness(changeSetTableRow, ResultType.After)[FlexType.TotalIfFlexInsufficient.ordinal()];
-							if (a == b) {
-								itr.remove();
-							}
-						}
-					}
+		// Post process - ensure if one row in a wiring group is flagged as a wiring change, then all rows are.
+		// The above loop doesn't pick up LDD changes where there is a D row with no LHS data before or after
+		for (final ChangeSetTableRow row : rows) {
+			if (row.getWiringGroup().getRows().size() > 1) {
+				// Check state
+				boolean hasWiring = false;
+				for (final var r2 : row.getWiringGroup().getRows()) {
+					hasWiring |= r2.isWiringChange();
+				}
+				// Apply state
+				for (final var r2 : row.getWiringGroup().getRows()) {
+					r2.setWiringChange(hasWiring);
 				}
 			}
 		}
 	}
 
-	public static <T extends SpotSlot & Slot> String getMarketSlotKey(final T slot) {
+	public static void filterRows(final List<ChangeSetTableRow> rows) {
+		final Iterator<ChangeSetTableRow> itr = rows.iterator();
+		while (itr.hasNext()) {
+			final ChangeSetTableRow changeSetTableRow = itr.next();
+
+			int toRemove = 0;
+			final var cargoGroup = changeSetTableRow.getWiringGroup();
+			final Collection<ChangeSetTableRow> loopRows = cargoGroup == null ? Collections.singleton(changeSetTableRow) : cargoGroup.getRows();
+			// Determine how many rows we want to remove
+			for (final var r : loopRows) {
+				if (!r.isMajorChange()) {
+					long a = ChangeSetKPIUtil.getPNL(r, ResultType.Before);
+					long b = ChangeSetKPIUtil.getPNL(r, ResultType.After);
+					if (a == b) {
+						a = ChangeSetKPIUtil.getViolations(r, ResultType.Before);
+						b = ChangeSetKPIUtil.getViolations(r, ResultType.After);
+						if (a == b) {
+							a = ChangeSetKPIUtil.getLateness(r, ResultType.Before)[FlexType.TotalIfFlexInsufficient.ordinal()];
+							b = ChangeSetKPIUtil.getLateness(r, ResultType.After)[FlexType.TotalIfFlexInsufficient.ordinal()];
+							if (a == b) {
+								++toRemove;
+							}
+						}
+					}
+				}
+			}
+			// Only remove this row if we will remove all rows in the group. (otherwise e.g. we may keep the LD row and not the D row from a LDD cargo)
+			if (toRemove == loopRows.size()) {
+				itr.remove();
+			}
+		}
+	}
+
+	public static <T extends SpotSlot & Slot<?>> String getMarketSlotKey(final T slot) {
 		final SpotMarket market = slot.getMarket();
 		return String.format("%s-%s-%04d-%02d", getSlotTypePrefix(slot), market.getName(), slot.getWindowStart().getYear(), slot.getWindowStart().getMonthValue());
 	}
 
-	protected static @NonNull String getSlotTypePrefix(final Slot slot) {
+	protected static @NonNull String getSlotTypePrefix(final Slot<?> slot) {
 		String prefix;
-		if (slot instanceof LoadSlot loadSlot) {
+		if (slot instanceof final LoadSlot loadSlot) {
 			if (loadSlot.isDESPurchase()) {
 				prefix = "des-purchase";
 			} else {

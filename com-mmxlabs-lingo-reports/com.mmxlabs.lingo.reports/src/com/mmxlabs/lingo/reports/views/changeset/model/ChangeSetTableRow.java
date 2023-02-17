@@ -17,35 +17,19 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsName <em>Lhs Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsName <em>Rhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsBefore <em>Lhs Before</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsAfter <em>Lhs After</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsBefore <em>Rhs Before</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsAfter <em>Rhs After</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselName <em>Before Vessel Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselShortName <em>Before Vessel Short Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselName <em>After Vessel Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselShortName <em>After Vessel Short Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsValid <em>Lhs Valid</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsBefore <em>Current Rhs Before</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsAfter <em>Current Rhs After</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsBefore <em>Previous Rhs Before</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsAfter <em>Previous Rhs After</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsValid <em>Current Rhs Valid</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isWiringChange <em>Wiring Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isVesselChange <em>Vessel Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isDateChange <em>Date Change</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS <em>Previous RHS</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getNextLHS <em>Next LHS</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSlot <em>Lhs Slot</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSpot <em>Lhs Spot</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsOptional <em>Lhs Optional</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsValid <em>Lhs Valid</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsNonShipped <em>Lhs Non Shipped</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSlot <em>Rhs Slot</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSpot <em>Rhs Spot</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsOptional <em>Rhs Optional</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsValid <em>Rhs Valid</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsNonShipped <em>Rhs Non Shipped</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType <em>Before Vessel Type</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType <em>After Vessel Type</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber <em>Before Vessel Charter Number</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber <em>After Vessel Charter Number</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getWiringGroup <em>Wiring Group</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getTableGroup <em>Table Group</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow()
@@ -53,58 +37,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface ChangeSetTableRow extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Lhs Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Name</em>' attribute.
-	 * @see #setLhsName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_LhsName()
-	 * @model
-	 * @generated
-	 */
-	String getLhsName();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsName <em>Lhs Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Name</em>' attribute.
-	 * @see #getLhsName()
-	 * @generated
-	 */
-	void setLhsName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Rhs Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Name</em>' attribute.
-	 * @see #setRhsName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsName()
-	 * @model
-	 * @generated
-	 */
-	String getRhsName();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsName <em>Rhs Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Name</em>' attribute.
-	 * @see #getRhsName()
-	 * @generated
-	 */
-	void setRhsName(String value);
-
 	/**
 	 * Returns the value of the '<em><b>Lhs Before</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -156,162 +88,6 @@ public interface ChangeSetTableRow extends EObject {
 	 * @generated
 	 */
 	void setLhsAfter(ChangeSetRowData value);
-
-	/**
-	 * Returns the value of the '<em><b>Rhs Before</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Before</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Before</em>' reference.
-	 * @see #setRhsBefore(ChangeSetRowData)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsBefore()
-	 * @model
-	 * @generated
-	 */
-	ChangeSetRowData getRhsBefore();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsBefore <em>Rhs Before</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Before</em>' reference.
-	 * @see #getRhsBefore()
-	 * @generated
-	 */
-	void setRhsBefore(ChangeSetRowData value);
-
-	/**
-	 * Returns the value of the '<em><b>Rhs After</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs After</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs After</em>' reference.
-	 * @see #setRhsAfter(ChangeSetRowData)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsAfter()
-	 * @model
-	 * @generated
-	 */
-	ChangeSetRowData getRhsAfter();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsAfter <em>Rhs After</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs After</em>' reference.
-	 * @see #getRhsAfter()
-	 * @generated
-	 */
-	void setRhsAfter(ChangeSetRowData value);
-
-	/**
-	 * Returns the value of the '<em><b>Before Vessel Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Before Vessel Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Before Vessel Name</em>' attribute.
-	 * @see #setBeforeVesselName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_BeforeVesselName()
-	 * @model
-	 * @generated
-	 */
-	String getBeforeVesselName();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselName <em>Before Vessel Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Before Vessel Name</em>' attribute.
-	 * @see #getBeforeVesselName()
-	 * @generated
-	 */
-	void setBeforeVesselName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Before Vessel Short Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Before Vessel Short Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Before Vessel Short Name</em>' attribute.
-	 * @see #setBeforeVesselShortName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_BeforeVesselShortName()
-	 * @model
-	 * @generated
-	 */
-	String getBeforeVesselShortName();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselShortName <em>Before Vessel Short Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Before Vessel Short Name</em>' attribute.
-	 * @see #getBeforeVesselShortName()
-	 * @generated
-	 */
-	void setBeforeVesselShortName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>After Vessel Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>After Vessel Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>After Vessel Name</em>' attribute.
-	 * @see #setAfterVesselName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_AfterVesselName()
-	 * @model
-	 * @generated
-	 */
-	String getAfterVesselName();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselName <em>After Vessel Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>After Vessel Name</em>' attribute.
-	 * @see #getAfterVesselName()
-	 * @generated
-	 */
-	void setAfterVesselName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>After Vessel Short Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>After Vessel Short Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>After Vessel Short Name</em>' attribute.
-	 * @see #setAfterVesselShortName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_AfterVesselShortName()
-	 * @model
-	 * @generated
-	 */
-	String getAfterVesselShortName();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselShortName <em>After Vessel Short Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>After Vessel Short Name</em>' attribute.
-	 * @see #getAfterVesselShortName()
-	 * @generated
-	 */
-	void setAfterVesselShortName(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Wiring Change</b></em>' attribute.
@@ -388,140 +164,6 @@ public interface ChangeSetTableRow extends EObject {
 	void setDateChange(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Previous RHS</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getNextLHS <em>Next LHS</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Previous RHS</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Previous RHS</em>' reference.
-	 * @see #setPreviousRHS(ChangeSetTableRow)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_PreviousRHS()
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getNextLHS
-	 * @model opposite="nextLHS"
-	 * @generated
-	 */
-	ChangeSetTableRow getPreviousRHS();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS <em>Previous RHS</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Previous RHS</em>' reference.
-	 * @see #getPreviousRHS()
-	 * @generated
-	 */
-	void setPreviousRHS(ChangeSetTableRow value);
-
-	/**
-	 * Returns the value of the '<em><b>Next LHS</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS <em>Previous RHS</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Next LHS</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Next LHS</em>' reference.
-	 * @see #setNextLHS(ChangeSetTableRow)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_NextLHS()
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS
-	 * @model opposite="previousRHS"
-	 * @generated
-	 */
-	ChangeSetTableRow getNextLHS();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getNextLHS <em>Next LHS</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Next LHS</em>' reference.
-	 * @see #getNextLHS()
-	 * @generated
-	 */
-	void setNextLHS(ChangeSetTableRow value);
-
-	/**
-	 * Returns the value of the '<em><b>Lhs Slot</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Slot</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Slot</em>' attribute.
-	 * @see #setLhsSlot(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_LhsSlot()
-	 * @model
-	 * @generated
-	 */
-	boolean isLhsSlot();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSlot <em>Lhs Slot</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Slot</em>' attribute.
-	 * @see #isLhsSlot()
-	 * @generated
-	 */
-	void setLhsSlot(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Lhs Spot</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Spot</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Spot</em>' attribute.
-	 * @see #setLhsSpot(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_LhsSpot()
-	 * @model
-	 * @generated
-	 */
-	boolean isLhsSpot();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSpot <em>Lhs Spot</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Spot</em>' attribute.
-	 * @see #isLhsSpot()
-	 * @generated
-	 */
-	void setLhsSpot(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Lhs Optional</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Optional</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Optional</em>' attribute.
-	 * @see #setLhsOptional(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_LhsOptional()
-	 * @model
-	 * @generated
-	 */
-	boolean isLhsOptional();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsOptional <em>Lhs Optional</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Optional</em>' attribute.
-	 * @see #isLhsOptional()
-	 * @generated
-	 */
-	void setLhsOptional(boolean value);
-
-	/**
 	 * Returns the value of the '<em><b>Lhs Valid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -548,262 +190,162 @@ public interface ChangeSetTableRow extends EObject {
 	void setLhsValid(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Lhs Non Shipped</b></em>' attribute.
+	 * Returns the value of the '<em><b>Current Rhs Before</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Non Shipped</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Non Shipped</em>' attribute.
-	 * @see #setLhsNonShipped(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_LhsNonShipped()
+	 * @return the value of the '<em>Current Rhs Before</em>' reference.
+	 * @see #setCurrentRhsBefore(ChangeSetRowData)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_CurrentRhsBefore()
 	 * @model
 	 * @generated
 	 */
-	boolean isLhsNonShipped();
+	ChangeSetRowData getCurrentRhsBefore();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsNonShipped <em>Lhs Non Shipped</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsBefore <em>Current Rhs Before</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Non Shipped</em>' attribute.
-	 * @see #isLhsNonShipped()
+	 * @param value the new value of the '<em>Current Rhs Before</em>' reference.
+	 * @see #getCurrentRhsBefore()
 	 * @generated
 	 */
-	void setLhsNonShipped(boolean value);
+	void setCurrentRhsBefore(ChangeSetRowData value);
 
 	/**
-	 * Returns the value of the '<em><b>Rhs Slot</b></em>' attribute.
+	 * Returns the value of the '<em><b>Current Rhs After</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Slot</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Slot</em>' attribute.
-	 * @see #setRhsSlot(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsSlot()
+	 * @return the value of the '<em>Current Rhs After</em>' reference.
+	 * @see #setCurrentRhsAfter(ChangeSetRowData)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_CurrentRhsAfter()
 	 * @model
 	 * @generated
 	 */
-	boolean isRhsSlot();
+	ChangeSetRowData getCurrentRhsAfter();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSlot <em>Rhs Slot</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsAfter <em>Current Rhs After</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Slot</em>' attribute.
-	 * @see #isRhsSlot()
+	 * @param value the new value of the '<em>Current Rhs After</em>' reference.
+	 * @see #getCurrentRhsAfter()
 	 * @generated
 	 */
-	void setRhsSlot(boolean value);
+	void setCurrentRhsAfter(ChangeSetRowData value);
 
 	/**
-	 * Returns the value of the '<em><b>Rhs Spot</b></em>' attribute.
+	 * Returns the value of the '<em><b>Previous Rhs Before</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Spot</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Spot</em>' attribute.
-	 * @see #setRhsSpot(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsSpot()
+	 * @return the value of the '<em>Previous Rhs Before</em>' reference.
+	 * @see #setPreviousRhsBefore(ChangeSetRowData)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_PreviousRhsBefore()
 	 * @model
 	 * @generated
 	 */
-	boolean isRhsSpot();
+	ChangeSetRowData getPreviousRhsBefore();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSpot <em>Rhs Spot</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsBefore <em>Previous Rhs Before</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Spot</em>' attribute.
-	 * @see #isRhsSpot()
+	 * @param value the new value of the '<em>Previous Rhs Before</em>' reference.
+	 * @see #getPreviousRhsBefore()
 	 * @generated
 	 */
-	void setRhsSpot(boolean value);
+	void setPreviousRhsBefore(ChangeSetRowData value);
 
 	/**
-	 * Returns the value of the '<em><b>Rhs Optional</b></em>' attribute.
+	 * Returns the value of the '<em><b>Previous Rhs After</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Optional</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Optional</em>' attribute.
-	 * @see #setRhsOptional(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsOptional()
+	 * @return the value of the '<em>Previous Rhs After</em>' reference.
+	 * @see #setPreviousRhsAfter(ChangeSetRowData)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_PreviousRhsAfter()
 	 * @model
 	 * @generated
 	 */
-	boolean isRhsOptional();
+	ChangeSetRowData getPreviousRhsAfter();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsOptional <em>Rhs Optional</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsAfter <em>Previous Rhs After</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Optional</em>' attribute.
-	 * @see #isRhsOptional()
+	 * @param value the new value of the '<em>Previous Rhs After</em>' reference.
+	 * @see #getPreviousRhsAfter()
 	 * @generated
 	 */
-	void setRhsOptional(boolean value);
+	void setPreviousRhsAfter(ChangeSetRowData value);
 
 	/**
-	 * Returns the value of the '<em><b>Rhs Valid</b></em>' attribute.
+	 * Returns the value of the '<em><b>Current Rhs Valid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Valid</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Valid</em>' attribute.
-	 * @see #setRhsValid(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsValid()
+	 * @return the value of the '<em>Current Rhs Valid</em>' attribute.
+	 * @see #setCurrentRhsValid(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_CurrentRhsValid()
 	 * @model
 	 * @generated
 	 */
-	boolean isRhsValid();
+	boolean isCurrentRhsValid();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsValid <em>Rhs Valid</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsValid <em>Current Rhs Valid</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Valid</em>' attribute.
-	 * @see #isRhsValid()
+	 * @param value the new value of the '<em>Current Rhs Valid</em>' attribute.
+	 * @see #isCurrentRhsValid()
 	 * @generated
 	 */
-	void setRhsValid(boolean value);
+	void setCurrentRhsValid(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Rhs Non Shipped</b></em>' attribute.
+	 * Returns the value of the '<em><b>Wiring Group</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#getRows <em>Rows</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Non Shipped</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Non Shipped</em>' attribute.
-	 * @see #setRhsNonShipped(boolean)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_RhsNonShipped()
-	 * @model
+	 * @return the value of the '<em>Wiring Group</em>' reference.
+	 * @see #setWiringGroup(ChangeSetWiringGroup)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_WiringGroup()
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#getRows
+	 * @model opposite="rows"
 	 * @generated
 	 */
-	boolean isRhsNonShipped();
+	ChangeSetWiringGroup getWiringGroup();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsNonShipped <em>Rhs Non Shipped</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getWiringGroup <em>Wiring Group</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Non Shipped</em>' attribute.
-	 * @see #isRhsNonShipped()
+	 * @param value the new value of the '<em>Wiring Group</em>' reference.
+	 * @see #getWiringGroup()
 	 * @generated
 	 */
-	void setRhsNonShipped(boolean value);
+	void setWiringGroup(ChangeSetWiringGroup value);
 
 	/**
-	 * Returns the value of the '<em><b>Before Vessel Type</b></em>' attribute.
-	 * The literals are from the enumeration {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType}.
+	 * Returns the value of the '<em><b>Table Group</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getRows <em>Rows</em>}'.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Before Vessel Type</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Before Vessel Type</em>' attribute.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
-	 * @see #setBeforeVesselType(ChangeSetVesselType)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_BeforeVesselType()
-	 * @model
+	 * @return the value of the '<em>Table Group</em>' reference.
+	 * @see #setTableGroup(ChangeSetTableGroup)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_TableGroup()
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getRows
+	 * @model opposite="rows"
 	 * @generated
 	 */
-	ChangeSetVesselType getBeforeVesselType();
+	ChangeSetTableGroup getTableGroup();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType <em>Before Vessel Type</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getTableGroup <em>Table Group</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Before Vessel Type</em>' attribute.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
-	 * @see #getBeforeVesselType()
+	 * @param value the new value of the '<em>Table Group</em>' reference.
+	 * @see #getTableGroup()
 	 * @generated
 	 */
-	void setBeforeVesselType(ChangeSetVesselType value);
-
-	/**
-	 * Returns the value of the '<em><b>After Vessel Type</b></em>' attribute.
-	 * The literals are from the enumeration {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>After Vessel Type</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>After Vessel Type</em>' attribute.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
-	 * @see #setAfterVesselType(ChangeSetVesselType)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_AfterVesselType()
-	 * @model
-	 * @generated
-	 */
-	ChangeSetVesselType getAfterVesselType();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType <em>After Vessel Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>After Vessel Type</em>' attribute.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType
-	 * @see #getAfterVesselType()
-	 * @generated
-	 */
-	void setAfterVesselType(ChangeSetVesselType value);
-
-	/**
-	 * Returns the value of the '<em><b>Before Vessel Charter Number</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Before Vessel Charter Number</em>' attribute.
-	 * @see #setBeforeVesselCharterNumber(int)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_BeforeVesselCharterNumber()
-	 * @model
-	 * @generated
-	 */
-	int getBeforeVesselCharterNumber();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber <em>Before Vessel Charter Number</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Before Vessel Charter Number</em>' attribute.
-	 * @see #getBeforeVesselCharterNumber()
-	 * @generated
-	 */
-	void setBeforeVesselCharterNumber(int value);
-
-	/**
-	 * Returns the value of the '<em><b>After Vessel Charter Number</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>After Vessel Charter Number</em>' attribute.
-	 * @see #setAfterVesselCharterNumber(int)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_AfterVesselCharterNumber()
-	 * @model
-	 * @generated
-	 */
-	int getAfterVesselCharterNumber();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber <em>After Vessel Charter Number</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>After Vessel Charter Number</em>' attribute.
-	 * @see #getAfterVesselCharterNumber()
-	 * @generated
-	 */
-	void setAfterVesselCharterNumber(int value);
+	void setTableGroup(ChangeSetTableGroup value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -813,6 +355,166 @@ public interface ChangeSetTableRow extends EObject {
 	 */
 	boolean isMajorChange();
 	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	ChangeSetRowData getLHSAfterOrBefore();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	ChangeSetRowData getCurrentRHSAfterOrBefore();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getLhsName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getCurrentRhsName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getBeforeVesselCharterNumber();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getBeforeVesselName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getBeforeVesselShortName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	ChangeSetVesselType getBeforeVesselType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getAfterVesselCharterNumber();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getAfterVesselName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getAfterVesselShortName();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	ChangeSetVesselType getAfterVesselType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isLhsSlot();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isCurrentRhsSlot();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isLhsSpot();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isCurrentRhsOptional();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isLhsOptional();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isCurrentRhsSpot();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isLhsNonShipped();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isCurrentRhsNonShipped();
+
 	boolean isWiringOrVesselChange();
 
 } // ChangeSetTableRow

@@ -109,7 +109,6 @@ import com.mmxlabs.lingo.reports.views.changeset.actions.ExportChangeAction;
 import com.mmxlabs.lingo.reports.views.changeset.actions.UpdateSandboxFromRowsAction;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
@@ -186,8 +185,7 @@ public class CargoDiffView extends ChangeSetView {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	/**
-	 * This is used to avoid the re-entrant code when we change the selected
-	 * ScenarioResults in this view so it is not treated as a pin/diff update.
+	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
 	 */
 	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
@@ -207,8 +205,8 @@ public class CargoDiffView extends ChangeSetView {
 			// If both rows of the same parent group..
 			if (e1 instanceof ChangeSetTableRow r1 && e2 instanceof ChangeSetTableRow r2) {
 				// Retain original ordering in the datamodel
-				if (r1.eContainer() == r2.eContainer()) {
-					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
+				if (r1.getTableGroup() == r2.getTableGroup()) {
+					final ChangeSetTableGroup g = r1.getTableGroup();
 					if (sortByVesselAndDate) {
 						final Pair<String, Integer> r1Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r1));
 						final Pair<String, Integer> r2Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r2));
@@ -278,10 +276,10 @@ public class CargoDiffView extends ChangeSetView {
 				slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getDischargeAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getDischargeAllocation() : null;
 			}
 			if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
 				return slotAllocation.getSlotVisit().getStart();
@@ -326,7 +324,7 @@ public class CargoDiffView extends ChangeSetView {
 		final MappingModel beforeDifferences = generateMappingModel(beforeCargoes);
 		final MappingModel afterDifferences = generateMappingModel(afterCargoes);
 
-		final List<ChangeSetRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
 
 		if (isAlternative) {
 			changeSet.getChangeSetRowsToAlternativeBase().addAll(rows);
@@ -596,8 +594,8 @@ public class CargoDiffView extends ChangeSetView {
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
 						final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, null, SortMode.BY_GROUP);
-						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, null, SortMode.BY_GROUP);
+						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, SortMode.BY_GROUP);
+						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, SortMode.BY_GROUP);
 						changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
 						newViewState.postProcess.accept(tableRootDefault);
@@ -756,7 +754,7 @@ public class CargoDiffView extends ChangeSetView {
 						while (itr.hasNext()) {
 							Object o = itr.next();
 							if (o instanceof ChangeSetTableRow row) {
-								o = row.eContainer();
+								o = row.getTableGroup();
 							}
 							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
 
@@ -808,15 +806,6 @@ public class CargoDiffView extends ChangeSetView {
 				}
 
 				if (element instanceof ChangeSetTableRow row) {
-					if (!row.isWiringOrVesselChange()) {
-
-						return false;
-
-					}
-
-				}
-
-				if (element instanceof ChangeSetRow row) {
 					if (!row.isWiringOrVesselChange()) {
 						return false;
 					}
@@ -923,13 +912,13 @@ public class CargoDiffView extends ChangeSetView {
 					final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 					Object element = selection.getFirstElement();
 					if (element instanceof ChangeSetTableRow) {
-						element = ((ChangeSetTableRow) element).eContainer();
+						element = ((ChangeSetTableRow) element).getTableGroup();
 					}
 					int idx = 0;
 					ChangeSetTableGroup changeSetTableGroup = null;
 					if (element instanceof ChangeSetTableGroup) {
 						changeSetTableGroup = (ChangeSetTableGroup) element;
-						final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+						final ChangeSetTableRoot root = changeSetTableGroup.getTableRoot();
 						if (root != null) {
 							idx = root.getGroups().indexOf(changeSetTableGroup);
 						}
@@ -1078,8 +1067,11 @@ public class CargoDiffView extends ChangeSetView {
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof EObject eObject) {
-					return eObject.eContainer();
+				if (element instanceof ChangeSetTableGroup eObject) {
+					return eObject.getTableRoot();
+				}
+				if (element instanceof ChangeSetTableRow eObject) {
+					return eObject.getTableGroup();
 				}
 				return null;
 			}
@@ -1261,7 +1253,7 @@ public class CargoDiffView extends ChangeSetView {
 						selectedSets.add((ChangeSetTableGroup) obj);
 						directSelectedGroups.add((ChangeSetTableGroup) obj);
 					} else if (obj instanceof ChangeSetTableRow changeSetRow) {
-						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
+						selectedSets.add(changeSetRow.getTableGroup());
 						directSelectedRows.add(changeSetRow);
 					}
 				}
@@ -1387,7 +1379,7 @@ public class CargoDiffView extends ChangeSetView {
 			if (canExportChangeSet) {
 				final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
 				int idx = 0;
-				final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+				final ChangeSetTableRoot root = changeSetTableGroup.getTableRoot();
 				if (root != null) {
 					idx = root.getGroups().indexOf(changeSetTableGroup);
 				}
@@ -1785,14 +1777,14 @@ public class CargoDiffView extends ChangeSetView {
 		selectedElements.add(tableRow);
 		selectRow(selectedElements, tableRow.getLhsBefore());
 		selectRow(selectedElements, tableRow.getLhsAfter());
-		selectRow(selectedElements, tableRow.getRhsBefore());
-		selectRow(selectedElements, tableRow.getRhsAfter());
+		selectRow(selectedElements, tableRow.getCurrentRhsBefore());
+		selectRow(selectedElements, tableRow.getCurrentRhsAfter());
 	}
 
 	private void selectAfterRows(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
 		selectedElements.add(tableRow);
 		selectRow(selectedElements, tableRow.getLhsAfter());
-		selectRow(selectedElements, tableRow.getRhsAfter());
+		selectRow(selectedElements, tableRow.getCurrentRhsAfter());
 	}
 
 	private void selectRow(final Set<Object> selectedElements, final ChangeSetRowData rowData) {

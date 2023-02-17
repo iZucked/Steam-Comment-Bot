@@ -10,12 +10,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 
 /**
  * <!-- begin-user-doc -->
@@ -104,9 +98,9 @@ public class ChangesetSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ChangesetPackage.CHANGE_SET_ROW: {
-				ChangeSetRow changeSetRow = (ChangeSetRow)theEObject;
-				T result = caseChangeSetRow(changeSetRow);
+			case ChangesetPackage.CHANGE_SET_WIRING_GROUP: {
+				ChangeSetWiringGroup changeSetWiringGroup = (ChangeSetWiringGroup)theEObject;
+				T result = caseChangeSetWiringGroup(changeSetWiringGroup);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -214,17 +208,17 @@ public class ChangesetSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Change Set Row</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Change Set Wiring Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Change Set Row</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Change Set Wiring Group</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseChangeSetRow(ChangeSetRow object) {
+	public T caseChangeSetWiringGroup(ChangeSetWiringGroup object) {
 		return null;
 	}
 
