@@ -57,6 +57,7 @@ public class NotionalJourneyBallastBonusTermItemProvider extends BallastBonusTer
 			addLumpSumPriceExpressionPropertyDescriptor(object);
 			addPriceOnLastLNGPricePropertyDescriptor(object);
 			addReturnPortsPropertyDescriptor(object);
+			addIsFirstLoadPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -238,6 +239,28 @@ public class NotionalJourneyBallastBonusTermItemProvider extends BallastBonusTer
 	}
 
 	/**
+	 * This adds a property descriptor for the Is First Load Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIsFirstLoadPortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalJourneyBallastBonusTerm_isFirstLoadPort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalJourneyBallastBonusTerm_isFirstLoadPort_feature", "_UI_NotionalJourneyBallastBonusTerm_type"),
+				 CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns NotionalJourneyBallastBonusTerm.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -280,6 +303,7 @@ public class NotionalJourneyBallastBonusTermItemProvider extends BallastBonusTer
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL_TIME:
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION:
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__PRICE_ON_LAST_LNG_PRICE:
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
