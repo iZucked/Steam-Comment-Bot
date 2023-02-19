@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm#getReturnPorts <em>Return Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm#isIsFirstLoadPort <em>Is First Load Port</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyBallastBonusTerm()
@@ -40,5 +41,27 @@ public interface NotionalJourneyBallastBonusTerm extends BallastBonusTerm, Notio
 	 * @generated
 	 */
 	EList<APortSet<Port>> getReturnPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Is First Load Port</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Is First Load Port</em>' attribute.
+	 * @see #setIsFirstLoadPort(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyBallastBonusTerm_IsFirstLoadPort()
+	 * @model
+	 * @generated
+	 */
+	boolean isIsFirstLoadPort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm#isIsFirstLoadPort <em>Is First Load Port</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Is First Load Port</em>' attribute.
+	 * @see #isIsFirstLoadPort()
+	 * @generated
+	 */
+	void setIsFirstLoadPort(boolean value);
 
 } // NotionalJourneyBallastBonusTerm

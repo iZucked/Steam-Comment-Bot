@@ -212,7 +212,7 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				final ICurve fuelCurve = t.isPriceOnLastLNGPrice() ? new ConstantValueCurve(0) : getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
 
 				tt = new DefaultNotionalJourneyBallastBonusContractTerm(redeliveryPorts, lumpSumCurve, fuelCurve, fuelCalculationMode, //
-						charterCurve, returnPorts, t.isIncludeCanal(), includeCanalTime, speed);
+						charterCurve, returnPorts, t.isIsFirstLoadPort(), t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax support.");
 			}

@@ -21,9 +21,8 @@ public class GenericCharterContractValueProviderFactory implements IReferenceVal
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 
-		if (rootObject instanceof LNGScenarioModel) {
+		if (rootObject instanceof final LNGScenarioModel lngScenarioModel) {
 
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
