@@ -136,22 +136,18 @@ public class CharterContractValidationUtils {
 		boolean atLeastOneProblem = false;
 		for (final BallastBonusTerm ballastBonusTerm : ballastBonusContainer.getTerms()) {
 			if (ballastBonusTerm instanceof LumpSumTerm) {
-				if (!lumpSumValidation(ctx, extraContext, failures, topFeatureMessage, (LumpSumTerm) ballastBonusTerm)) {
-					atLeastOneProblem = true;
-				}
+				atLeastOneProblem = !lumpSumValidation(ctx, extraContext, failures, topFeatureMessage, (LumpSumTerm) ballastBonusTerm);
 			} else if (ballastBonusTerm instanceof NotionalJourneyBallastBonusTerm) {
-				if (!notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, (NotionalJourneyTerm) ballastBonusTerm)) {
-					atLeastOneProblem = true;
-				}
+				atLeastOneProblem = !notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, (NotionalJourneyTerm) ballastBonusTerm);
 			}
 		}
 
-		if (atLeastOneProblem) {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a ballast bonus containter with at least one error", topFeatureMessage)));
-			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
-			failures.add(dcsd);
-		}
+//		if (atLeastOneProblem) {
+//			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+//					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a ballast bonus with at least one error", topFeatureMessage)));
+//			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+//			failures.add(dcsd);
+//		}
 	}
 
 	public static boolean originPortValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, final OriginPortRepositioningFeeTerm term) {
@@ -188,27 +184,23 @@ public class CharterContractValidationUtils {
 						}
 					}
 				}
-				if (!lumpSumValidation(ctx, extraContext, failures, topFeatureMessage, (LumpSumTerm) repositioningFeeTerm)) {
-					atLeastOneProblem = true;
-				}
+				atLeastOneProblem = !lumpSumValidation(ctx, extraContext, failures, topFeatureMessage, (LumpSumTerm) repositioningFeeTerm);
 				if (repositioningFeeTerm.getStartPorts().isEmpty()) {
 					lsAnyPort++;
 				}
 			} else if (repositioningFeeTerm instanceof OriginPortRepositioningFeeTerm term) {
-				if (!notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, term)) {
-					atLeastOneProblem = true;
-				}
+				atLeastOneProblem = !notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, term);
 				if (repositioningFeeTerm.getStartPorts().isEmpty()) {
 					lsAnyPort++;
 				}
 			}
 		}
-		if (atLeastOneProblem) {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a repositioning fee containter with at least one error", topFeatureMessage)));
-			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
-			failures.add(dcsd);
-		}
+//		if (atLeastOneProblem) {
+//			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+//					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a repositioning fee with at least one error", topFeatureMessage)));
+//			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+//			failures.add(dcsd);
+//		}
 		if (lsAnyPort > 1) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Only one lump sum repositioning fee rule with no defined start ports is allowed", topFeatureMessage)));
