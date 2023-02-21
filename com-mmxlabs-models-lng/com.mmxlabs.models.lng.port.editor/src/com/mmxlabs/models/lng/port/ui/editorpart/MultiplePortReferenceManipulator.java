@@ -37,7 +37,7 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 	private static final int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
 
-	private final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
+	protected final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
 	private final EAttribute nameAttribute;
 
 	public MultiplePortReferenceManipulator(final EStructuralFeature field, final ICommandHandler commandHandler, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {

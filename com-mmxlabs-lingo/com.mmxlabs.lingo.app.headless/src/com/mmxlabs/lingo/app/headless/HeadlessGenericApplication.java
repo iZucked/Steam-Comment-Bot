@@ -68,7 +68,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	/** New exception type for scenario types that can't be handled */
 	@SuppressWarnings("serial")
 	public static class UnhandledScenarioTypeException extends RuntimeException {
-		public UnhandledScenarioTypeException(@NonNull String message) {
+		public UnhandledScenarioTypeException(@NonNull final String message) {
 			super(message);
 		}
 	}
@@ -113,9 +113,9 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		List<HeadlessApplicationOptions> optionsList = getHeadlessOptions();
+		final List<HeadlessApplicationOptions> optionsList = getHeadlessOptions();
 
-		for (HeadlessApplicationOptions hOptions : optionsList) {
+		for (final HeadlessApplicationOptions hOptions : optionsList) {
 			runScenarioMultipleTimes(hOptions);
 		}
 
@@ -127,7 +127,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	 * 
 	 * @param hOptions
 	 */
-	protected void runScenarioMultipleTimes(HeadlessApplicationOptions hOptions) {
+	protected void runScenarioMultipleTimes(final HeadlessApplicationOptions hOptions) {
 		hOptions.validate();
 		final String scenarioFilename = hOptions.scenarioFileName;
 
@@ -136,7 +136,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 			return;
 		}
 
-		File scenarioFile = new File(scenarioFilename);
+		final File scenarioFile = new File(scenarioFilename);
 
 		if (scenarioFile.exists() == false) {
 			System.err.println(String.format("Scenario file %s does not exist.", scenarioFilename));
@@ -144,7 +144,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		}
 
 		try {
-			int numRuns = hOptions.numRuns;
+			final int numRuns = hOptions.numRuns;
 
 			for (int run = 1; run <= numRuns; run++) {
 
@@ -155,10 +155,10 @@ public abstract class HeadlessGenericApplication implements IApplication {
 				}
 
 				try {
-					int threads = 1; // we don't try anything complex with multiple threads
+					final int threads = 1; // we don't try anything complex with multiple threads
 					runAndWriteResults(run, hOptions, scenarioFile, outFile, threads);
 					System.out.println(String.format("Results written to file %s", outFile.getName()));
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					if (outFile != null) {
 						outFile.delete(); // clean up output file if anything went wrong
 					}
@@ -166,7 +166,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 					writeRunFailure(hOptions, run, e);
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -174,7 +174,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 
 	protected abstract String getAlgorithmName();
 
-	protected void writeMetaFields(HeadlessGenericJSON<?, ?> json, File scenarioFile, HeadlessApplicationOptions hOptions, int threads) {
+	protected void writeMetaFields(final HeadlessGenericJSON<?, ?> json, final File scenarioFile, final HeadlessApplicationOptions hOptions, final int threads) {
 		json.getMeta().setCheckSum(HeadlessUtils.mD5Checksum(scenarioFile));
 		json.getMeta().setUseCase(hOptions.useCase);
 		json.getMeta().setClient(clientCode);
@@ -185,8 +185,8 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		json.getParams().setCores(threads);
 	}
 
-	protected Meta writeMetaFields(File scenarioFile, HeadlessApplicationOptions hOptions) {
-		Meta meta = new Meta();
+	protected Meta writeMetaFields(final File scenarioFile, final HeadlessApplicationOptions hOptions) {
+		final Meta meta = new Meta();
 		meta.setDate(LocalDateTime.now());
 		meta.setCheckSum(HeadlessUtils.mD5Checksum(scenarioFile));
 		meta.setUseCase(hOptions.useCase);
@@ -200,28 +200,34 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		return meta;
 	}
 
-	private void writeRunFailure(HeadlessApplicationOptions hOptions, int run, Exception e) {
+	private void writeRunFailure(final HeadlessApplicationOptions hOptions, final int run, final Exception e) {
 		if (hOptions.outputLoggingFolder != null) {
-			StringWriter sw = new StringWriter();
+			final StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
 
-			String escapedStackTrace = String.valueOf(new JsonStringEncoder().quoteAsString(sw.toString()));
+			final JSONObject errorObject = new JSONObject();
+			errorObject.put("type", getAlgorithmName());
+			errorObject.put("run", run);
+			final JSONObject metaObject = new JSONObject();
 
-			// ugly hack: hardcode failure log
-			String resultFmt = "{\n" + "  \"type\" : \"%s\",\n" + "  \"run\" : \"%d\",\n" + "  \"meta\" : {\n" + "    \"machineType\" : \"%s\",\n" + "    \"scenario\" : \"%s\",\n"
-					+ "    \"date\" : \"%s\",\n" + "    \"version\" : \"%s\",\n" + "    \"client\" : \"%s\"\n" + "  },\n" + "  \"error\" : \"%s\"" + "}";
+			metaObject.put("machineType", machineInfo);
+			metaObject.put("scenario", hOptions.scenarioFileName);
+			metaObject.put("date", LocalDateTime.now().toString());
+			metaObject.put("version", buildVersion);
+			metaObject.put("client", clientCode);
+			errorObject.put("meta", metaObject);
+			errorObject.put("error", sw.toString());
 
-			String result = String.format(resultFmt, getAlgorithmName(), run, machineInfo, hOptions.scenarioFileName, LocalDateTime.now().toString(), buildVersion, clientCode, escapedStackTrace);
-
-			new File(hOptions.outputLoggingFolder).mkdirs(); // create directory if necessary
-			File outFile = new File(hOptions.outputLoggingFolder + "/" + UUID.randomUUID().toString() + ".json"); // create output log
+			final File logFolder = new File(hOptions.outputLoggingFolder);
+			logFolder.mkdirs(); // create directory if necessary
+			final File outFile = new File(logFolder, UUID.randomUUID().toString() + ".json"); // create output log
 
 			try {
 				pw = new PrintWriter(outFile);
-				pw.print(result);
+				pw.print(errorObject);
 				pw.close();
-			} catch (FileNotFoundException e1) {
+			} catch (final FileNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -287,12 +293,12 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		// merge the machine info from a file specified in the command line
 		if (commandLine.hasOption(MACHINE_INFO)) {
 			try {
-				String infoStr = Files.readString(Path.of(commandLine.getOptionValue(MACHINE_INFO)), StandardCharsets.UTF_8);
-				JSONObject parsed = (JSONObject) new JSONParser().parse(infoStr);
-				for (var key : parsed.keySet()) {
+				final String infoStr = Files.readString(Path.of(commandLine.getOptionValue(MACHINE_INFO)), StandardCharsets.UTF_8);
+				final JSONObject parsed = (JSONObject) new JSONParser().parse(infoStr);
+				for (final var key : parsed.keySet()) {
 					machineInfo.put(key.toString(), parsed.get(key.toString()));
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -305,11 +311,11 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	 * @throws IOException
 	 */
 	protected List<HeadlessApplicationOptions> getHeadlessOptions() throws IOException {
-		List<HeadlessApplicationOptions> optionsList = new LinkedList<>();
+		final List<HeadlessApplicationOptions> optionsList = new LinkedList<>();
 		if (commandLine.hasOption(BATCH_FILE)) {
 			// add list of options from batch file; these can be overridden by command-line
 			// options
-			ObjectMapper mapper = new ObjectMapper();
+			final ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
 			mapper.registerModule(new EMFJacksonModule());
@@ -323,7 +329,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		}
 
 		// override batch file options with command line options
-		for (HeadlessApplicationOptions options : optionsList) {
+		for (final HeadlessApplicationOptions options : optionsList) {
 			overwriteCustomInfo(options.customInfo);
 			options.outputLoggingFolder = HeadlessUtils.commandLineParameterOrValue(commandLine, OUTPUT_FOLDER, options.outputLoggingFolder);
 			options.outputScenarioFileName = HeadlessUtils.commandLineParameterOrValue(commandLine, OUTPUT_SCENARIO, options.outputScenarioFileName);
@@ -336,24 +342,24 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		return optionsList;
 	}
 
-	protected void overwriteCustomInfo(Map<String, String> info) {
-		String[] customValues = commandLine.getOptionValues(CUSTOM_INFO);
+	protected void overwriteCustomInfo(final Map<String, String> info) {
+		final String[] customValues = commandLine.getOptionValues(CUSTOM_INFO);
 
 		if (customValues != null) {
-			for (String custom : customValues) {
-				String[] fields = custom.split("=");
+			for (final String custom : customValues) {
+				final String[] fields = custom.split("=");
 
 				if (fields.length != 2) {
 					throw new IllegalArgumentException(String.format("Custom argument '%s' needs to be in 'key=val' format", custom));
 				}
 
-				String key = fields[0];
-				String val = fields[1];
+				final String key = fields[0];
+				final String val = fields[1];
 
 				if (info.containsKey(key)) {
-					String oldValue = info.get(key);
+					final String oldValue = info.get(key);
 					if (oldValue.equals(val) == false) {
-						String overrideWarning = "Overriding existing custom field '%s' with command line value: '%s' -> '%s'";
+						final String overrideWarning = "Overriding existing custom field '%s' with command line value: '%s' -> '%s'";
 						System.err.println(String.format(overrideWarning, key, info.get(key), val));
 					}
 				}
@@ -370,15 +376,15 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	 * @param filename
 	 * @return
 	 */
-	protected <T> T getAlgorithmOptionsFromJSON(String filename, Class<T> clazz) {
-		ObjectMapper mapper = new ObjectMapper();
+	protected <T> T getAlgorithmOptionsFromJSON(final String filename, final Class<T> clazz) {
+		final ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		mapper.registerModule(new Jdk8Module());
 		mapper.enable(Feature.ALLOW_COMMENTS);
 
 		try {
 			return mapper.readValue(new File(filename), clazz);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -426,20 +432,20 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		}
 	}
 
-	public static void writeRunFailure(File loggingFolder, Throwable e) {
+	public static void writeRunFailure(final File loggingFolder, final Throwable e) {
 		if (loggingFolder != null) {
 			try (StringWriter sw = new StringWriter()) {
 				try (PrintWriter pw = new PrintWriter(sw)) {
 					e.printStackTrace(pw);
 				}
 
-				File outFile = new File(loggingFolder, "failure.json"); // create output log
-				JSONObject obj = new JSONObject();
+				final File outFile = new File(loggingFolder, "failure.json"); // create output log
+				final JSONObject obj = new JSONObject();
 				obj.put("error", sw.toString());
 				try (PrintWriter pw = new PrintWriter(outFile)) {
 					obj.writeJSONString(pw);
 				}
-			} catch (Exception e1) {
+			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
 		}

@@ -28,7 +28,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.lingo.app.headless.HeadlessGenericApplication.InvalidCommandLineException;
@@ -278,23 +277,25 @@ public class HeadlessBenchmarkApplication implements IApplication {
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
 
-		final String escapedStackTrace = String.valueOf(new JsonStringEncoder().quoteAsString(sw.toString()));
+		final JSONObject errorObject = new JSONObject();
+		errorObject.put("type", jobType);
+		errorObject.put("run", run);
+		final JSONObject metaObject = new JSONObject();
 
-		// ugly hack: hardcode failure log
-		final String resultFmt = "{\n" + "  \"type\" : \"%s\",\n" + "  \"run\" : \"%d\",\n" + "  \"meta\" : {\n" + "    \"machineType\" : \"%s\",\n" + "    \"scenario\" : \"%s\",\n"
-				+ "    \"date\" : \"%s\",\n" + "    \"version\" : \"%s\",\n" + "    \"client\" : \"%s\"\n" + "  },\n" + "  \"error\" : \"%s\"" + "}";
-
-		final String result = String.format(resultFmt, jobType, run, machineInfo, scenarioName, LocalDateTime.now().toString(), buildVersion, clientCode, escapedStackTrace);
+		metaObject.put("machineType", machineInfo);
+		metaObject.put("scenario", scenarioName);
+		metaObject.put("date", LocalDateTime.now().toString());
+		metaObject.put("version", buildVersion);
+		metaObject.put("client", clientCode);
+		errorObject.put("meta", metaObject);
+		errorObject.put("error", sw.toString());
 
 		try {
 			pw = new PrintWriter(outFile);
-			pw.print(result);
+			pw.print(errorObject);
 			pw.close();
 		} catch (final FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 	}
-
 }

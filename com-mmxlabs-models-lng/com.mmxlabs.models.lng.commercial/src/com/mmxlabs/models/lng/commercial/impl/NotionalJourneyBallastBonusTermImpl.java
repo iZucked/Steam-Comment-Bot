@@ -42,6 +42,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#isPriceOnLastLNGPrice <em>Price On Last LNG Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#getReturnPorts <em>Return Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl#isIsFirstLoadPort <em>Is First Load Port</em>}</li>
  * </ul>
  *
  * @generated
@@ -196,6 +197,26 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 	 * @ordered
 	 */
 	protected EList<APortSet<Port>> returnPorts;
+
+	/**
+	 * The default value of the '{@link #isIsFirstLoadPort() <em>Is First Load Port</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsFirstLoadPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_FIRST_LOAD_PORT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isIsFirstLoadPort() <em>Is First Load Port</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsFirstLoadPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean isFirstLoadPort = IS_FIRST_LOAD_PORT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -396,6 +417,29 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 	 * @generated
 	 */
 	@Override
+	public boolean isIsFirstLoadPort() {
+		return isFirstLoadPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setIsFirstLoadPort(boolean newIsFirstLoadPort) {
+		boolean oldIsFirstLoadPort = isFirstLoadPort;
+		isFirstLoadPort = newIsFirstLoadPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT, oldIsFirstLoadPort, isFirstLoadPort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__SPEED:
@@ -414,6 +458,8 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				return isPriceOnLastLNGPrice();
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS:
 				return getReturnPorts();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT:
+				return isIsFirstLoadPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -452,6 +498,9 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				getReturnPorts().clear();
 				getReturnPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT:
+				setIsFirstLoadPort((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -488,6 +537,9 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS:
 				getReturnPorts().clear();
 				return;
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT:
+				setIsFirstLoadPort(IS_FIRST_LOAD_PORT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -516,6 +568,8 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 				return priceOnLastLNGPrice != PRICE_ON_LAST_LNG_PRICE_EDEFAULT;
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS:
 				return returnPorts != null && !returnPorts.isEmpty();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT:
+				return isFirstLoadPort != IS_FIRST_LOAD_PORT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -588,6 +642,8 @@ public class NotionalJourneyBallastBonusTermImpl extends BallastBonusTermImpl im
 		result.append(lumpSumPriceExpression);
 		result.append(", priceOnLastLNGPrice: ");
 		result.append(priceOnLastLNGPrice);
+		result.append(", isFirstLoadPort: ");
+		result.append(isFirstLoadPort);
 		result.append(')');
 		return result.toString();
 	}
