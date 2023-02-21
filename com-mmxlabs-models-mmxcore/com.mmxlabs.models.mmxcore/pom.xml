@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
 		<groupId>com.mmxlabs.models.mmxcore</groupId>
-		<version>6.2.4.RELEASE</version>
+		<version>6.2.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.mmxcore</artifactId>
