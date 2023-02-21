@@ -14,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -28,6 +30,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -78,7 +81,8 @@ public class MainTableComponent {
 	private EObjectTableViewer tableViewer;
 	private Text vesselSpeedText;
 	private LocalResourceManager localResourceManager;
-	
+	private ISelectionChangedListener tableSelectionChangedListener;
+
 	public GridTreeViewer getViewer() {
 		return this.tableViewer;
 	}
@@ -87,13 +91,12 @@ public class MainTableComponent {
 		return inputWants;
 	}
 
-	@Nullable
-	public Integer getVesselSpeed() {
+	public @NonNull Optional<Integer> getVesselSpeed() {
 		String speed = vesselSpeedText.getText();
 		try {
-			return Integer.parseInt(speed);
+			return Optional.of(Integer.parseInt(speed));
 		} catch (NumberFormatException e) {
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -111,20 +114,20 @@ public class MainTableComponent {
 		vesselSpeedText.setData(vesselSpeedText.getText());
 
 		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
-
 		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
 		knotsLabel.setText("kts");
 		Control control = createViewer(mainParent);
 
 		control.setLayoutData(GridDataFactory.fillDefaults().minSize(0, 0).grab(true, true).create());
-		
+
 		final ESelectionService service = marketabilityModellerView.getSite().getService(ESelectionService.class);
-		tableViewer.addSelectionChangedListener(x -> {
+		tableSelectionChangedListener = x -> {
 			Object obj = x.getStructuredSelection().getFirstElement();
-			if(obj instanceof MarketabilityRow row && row.getBuyOption() instanceof BuyReference br) {
+			if (obj instanceof MarketabilityRow row && row.getBuyOption() instanceof BuyReference br) {
 				service.setPostSelection(br.getSlot());
 			}
-		});
+		};
+		tableViewer.addSelectionChangedListener(tableSelectionChangedListener);
 	}
 
 	private Control createViewer(final Composite parent) {
@@ -132,7 +135,7 @@ public class MainTableComponent {
 		tableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tableViewer.init(new MarketabilityModelContentProvider(), null);
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
-		
+
 		assert tableViewer != null;
 		GridViewerHelper.configureLookAndFeel(tableViewer);
 		tableViewer.getGrid().setHeaderVisible(true);
@@ -143,7 +146,6 @@ public class MainTableComponent {
 		createDischargeSlotColumn(tableViewer.getGrid());
 		createNextEventColumn(tableViewer.getGrid());
 
-		final Color backgroundColour = localResourceManager.createColor(new RGB(245, 245, 245));
 		Consumer<MarketabilityModel> refreshDynamicColumns = (m) -> {
 			dynamicColumns.forEach(Item::dispose);
 			dynamicColumns.clear();
@@ -160,7 +162,9 @@ public class MainTableComponent {
 				GridViewerHelper.configureLookAndFeel(datesGroup);
 				datesGroup.setText(sm.getName());
 				datesGroup.setData(sm);
+				final Color backgroundColour = localResourceManager.createColor(new RGB(245, 245, 245));
 				final boolean hasColouredBackground = i % 2 == 0;
+				@SuppressWarnings("null")
 				var earliestColumn = createSortableChildColumn(tableViewer, new CellLabelProvider() {
 
 					@Override
@@ -169,7 +173,6 @@ public class MainTableComponent {
 						if (hasColouredBackground) {
 							cell.setBackground(backgroundColour);
 						}
-						// cell.setBackground()
 						if (cell.getElement() instanceof MarketabilityRow row) {
 							for (var result : row.getResult().getRhsResults()) {
 								if (result.getTarget() == sm && result.getEarliestETA() != null) {
@@ -180,14 +183,13 @@ public class MainTableComponent {
 							}
 						}
 					}
-				}, row -> {
-					return row.getResult().getRhsResults().stream()//
-							.filter(res -> res.getTarget() == sm && res.getEarliestETA() != null)//
-							.map(x -> x.getEarliestETA().toLocalDateTime())//
-							.findAny()//
-							.orElse(LocalDateTime.MIN);
-				}, "Earliest", datesGroup);
+				}, row -> row.getResult().getRhsResults().stream()//
+						.filter(res -> res.getTarget() == sm && res.getEarliestETA() != null)//
+						.map(x -> x.getEarliestETA().toLocalDateTime())//
+						.findAny()//
+						.orElse(LocalDateTime.MIN), "Earliest", datesGroup);
 
+				@SuppressWarnings("null")
 				var latestColumn = createSortableChildColumn(tableViewer, new CellLabelProvider() {
 
 					@Override
@@ -207,13 +209,11 @@ public class MainTableComponent {
 						}
 
 					}
-				}, row -> {
-					return row.getResult().getRhsResults().stream()//
-							.filter(res -> res.getTarget() == sm && res.getLatestETA() != null)//
-							.map(x -> x.getLatestETA().toLocalDateTime())//
-							.findAny()//
-							.orElse(LocalDateTime.MIN);
-				}, "Latest", datesGroup);
+				}, row -> row.getResult().getRhsResults().stream()//
+						.filter(res -> res.getTarget() == sm && res.getLatestETA() != null)//
+						.map(x -> x.getLatestETA().toLocalDateTime())//
+						.findAny()//
+						.orElse(LocalDateTime.MIN), "Latest", datesGroup);
 
 				dynamicColumns.add(earliestColumn.getColumn());
 				dynamicColumns.add(latestColumn.getColumn());
@@ -284,13 +284,11 @@ public class MainTableComponent {
 			}
 			return "";
 		}, row -> {
-			if (row.getSellOption() != null) {
-				if (row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
-					if (assignable.getElement() instanceof VesselEvent event) {
-						return (event.getName());
-					} else if (assignable.getElement() instanceof Cargo cargo) {
-						return (cargo.getLoadName());
-					}
+			if (row.getSellOption() != null && row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
+				if (assignable.getElement() instanceof VesselEvent event) {
+					return (event.getName());
+				} else if (assignable.getElement() instanceof Cargo cargo) {
+					return (cargo.getLoadName());
 				}
 			}
 			return "";
@@ -298,46 +296,39 @@ public class MainTableComponent {
 
 		createSortableChildColumn(tableViewer, "Port", nextEventColumn, row -> {
 
-			if (row.getSellOption() != null) {
-				if (row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
-					Port p = null;
-					if (assignable.getElement() instanceof VesselEvent event) {
-						p = event.getPort();
-					} else if (assignable.getElement() instanceof Cargo cargo) {
-						p = cargo.getSortedSlots().get(0).getPort();
-					}
-					return (p != null) ? p.getName() : "";
+			if (row.getSellOption() != null && row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
+				Port p = null;
+				if (assignable.getElement() instanceof VesselEvent event) {
+					p = event.getPort();
+				} else if (assignable.getElement() instanceof Cargo cargo) {
+					p = cargo.getSortedSlots().get(0).getPort();
 				}
+				return (p != null) ? p.getName() : "";
 			}
 			return "";
 		}, row -> {
-			if (row.getSellOption() != null) {
-				if (row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
-					Port p = null;
-					if (assignable.getElement() instanceof VesselEvent event) {
-						p = event.getPort();
-					} else if (assignable.getElement() instanceof Cargo cargo) {
-						p = cargo.getSortedSlots().get(0).getPort();
-					}
-					return (p != null) ? p.getName() : "";
+			if (row.getSellOption() != null && row.getResult().getNextEvent() instanceof MarketabilityAssignableElement assignable) {
+				Port p = null;
+				if (assignable.getElement() instanceof VesselEvent event) {
+					p = event.getPort();
+				} else if (assignable.getElement() instanceof Cargo cargo) {
+					p = cargo.getSortedSlots().get(0).getPort();
 				}
+				return (p != null) ? p.getName() : "";
 			}
+
 			return "";
 		});
 
 		createSortableChildColumn(tableViewer, "Date", nextEventColumn, row -> {
 
-			if (row.getSellOption() != null && row.getResult() != null) {
-				if (row.getResult().getNextEvent() != null) {
-					return formatDate(row.getResult().getNextEvent().getStart().toLocalDate());
-				}
+			if (row.getSellOption() != null && row.getResult() != null && row.getResult().getNextEvent() != null) {
+				return formatDate(row.getResult().getNextEvent().getStart().toLocalDate());
 			}
 			return "";
 		}, row -> {
-			if (row.getSellOption() != null && row.getResult() != null) {
-				if (row.getResult().getNextEvent() != null) {
-					return row.getResult().getNextEvent().getStart();
-				}
+			if (row.getSellOption() != null && row.getResult() != null && row.getResult().getNextEvent() != null) {
+				return row.getResult().getNextEvent().getStart();
 			}
 			return LocalDateTime.MIN;
 		});
@@ -413,7 +404,7 @@ public class MainTableComponent {
 			return "";
 		}, row -> {
 			if (row.getSellOption() instanceof SellReference sr) {
-				return sr.getSlot().getSlotOrDelegateCounterparty();
+				return Objects.requireNonNullElse(sr.getSlot().getSlotOrDelegateCounterparty(), "");
 			}
 			return "";
 		});
@@ -671,6 +662,12 @@ public class MainTableComponent {
 				super.dispose();
 			}
 		};
+	}
+
+	public void dispose() {
+		localResourceManager.dispose();
+		tableViewer.removeSelectionChangedListener(tableSelectionChangedListener);
+		tableViewer.dispose();
 	}
 
 	public void setFocus() {

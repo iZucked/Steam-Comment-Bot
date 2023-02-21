@@ -5,10 +5,13 @@
 package com.mmxlabs.models.lng.analytics.ui.views.marketability;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement;
+import com.mmxlabs.models.lng.analytics.MarketabilityEndEvent;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
@@ -22,6 +25,12 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
+import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
@@ -102,6 +111,47 @@ public final class MarketabilityUtils {
 		}
 
 		return model;
+	}
+	
+
+
+	public static @Nullable CanalJourneyEvent findNextPanama(final @NonNull Event start) {
+		Event nextEvent = start.getNextEvent();
+		while (!(nextEvent == null || nextEvent instanceof SlotVisit)) {
+			if (nextEvent instanceof Journey journey && journey.getCanalJourneyEvent() != null) {
+				return journey.getCanalJourneyEvent();
+			}
+			nextEvent = nextEvent.getNextEvent();
+		}
+		return null;
+	}
+
+	public static void addNextEventToRow(final @NonNull MarketabilityResultContainer container, final @NonNull Event start) {
+		Event nextEvent = start.getNextEvent();
+		while (nextEvent != null) {
+			if (nextEvent instanceof VesselEventVisit vesselEventVisit) {
+				MarketabilityAssignableElement marketabilityEvent = AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement();
+				marketabilityEvent.setStart(nextEvent.getStart());
+				marketabilityEvent.setElement(vesselEventVisit.getVesselEvent());
+				container.setNextEvent(marketabilityEvent);
+				return;
+			} else if (nextEvent instanceof SlotVisit slotVisit) {
+				MarketabilityAssignableElement marketabilityEvent = AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement();
+				marketabilityEvent.setStart(nextEvent.getStart());
+				marketabilityEvent.setElement(slotVisit.getSlotAllocation().getSlot().getCargo());
+				container.setNextEvent(marketabilityEvent);
+				return;
+			} else if (nextEvent instanceof EndEvent e) {
+				MarketabilityEndEvent marketabilityEndEvent = AnalyticsFactory.eINSTANCE.createMarketabilityEndEvent();
+				marketabilityEndEvent.setStart(nextEvent.getStart());
+				
+				container.setNextEvent(marketabilityEndEvent);
+				return;
+
+			} else {
+				nextEvent = nextEvent.getNextEvent();
+			}
+		}
 	}
 
 }

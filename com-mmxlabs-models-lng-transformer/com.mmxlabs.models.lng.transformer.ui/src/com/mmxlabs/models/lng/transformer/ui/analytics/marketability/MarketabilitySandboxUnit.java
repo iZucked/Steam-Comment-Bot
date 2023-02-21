@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.MarketabilityResultContainer;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.marketability.MarketabilityUtils;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -252,8 +253,8 @@ public class MarketabilitySandboxUnit {
 			SlotVisit dischargeSlotVisit = schedule.getSlotAllocations().stream().filter(x -> x.getSlot() == dischargeSlot).map(SlotAllocation::getSlotVisit).findAny().orElseThrow();
 			assert loadSlotVisit != null;
 			assert dischargeSlotVisit != null;
-			CanalJourneyEvent ladenPanama = findNextPanama(loadSlotVisit);
-			CanalJourneyEvent ballastPanama = findNextPanama(dischargeSlotVisit);
+			CanalJourneyEvent ladenPanama = MarketabilityUtils.findNextPanama(loadSlotVisit);
+			CanalJourneyEvent ballastPanama = MarketabilityUtils.findNextPanama(dischargeSlotVisit);
 			container.setBuyDate(loadSlotVisit.getStart().toLocalDateTime());
 			container.setSellDate(dischargeSlotVisit.getStart().toLocalDateTime());
 			if (ladenPanama != null) {
@@ -262,51 +263,12 @@ public class MarketabilitySandboxUnit {
 			if (ballastPanama != null) {
 				container.setBallastPanama(ballastPanama.getStart().toLocalDateTime());
 			}
-			addNextEventToRow(container, dischargeSlotVisit);
+			MarketabilityUtils.addNextEventToRow(container, dischargeSlotVisit);
 		}
 		return schedule;
 	}
 
-	private @Nullable CanalJourneyEvent findNextPanama(final @NonNull Event start) {
-		Event nextEvent = start.getNextEvent();
-		while (!(nextEvent == null || nextEvent instanceof SlotVisit)) {
-			if (nextEvent instanceof Journey journey && journey.getCanalJourneyEvent() != null) {
-				return journey.getCanalJourneyEvent();
-			}
-			nextEvent = nextEvent.getNextEvent();
-		}
-		return null;
-	}
-
-	private void addNextEventToRow(final @NonNull MarketabilityResultContainer container, final @NonNull Event start) {
-
-		Event nextEvent = start.getNextEvent();
-		while (nextEvent != null) {
-			if (nextEvent instanceof VesselEventVisit vesselEventVisit) {
-				MarketabilityAssignableElement marketabilityEvent = AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement();
-				marketabilityEvent.setStart(nextEvent.getStart());
-				marketabilityEvent.setElement(vesselEventVisit.getVesselEvent());
-				container.setNextEvent(marketabilityEvent);
-				return;
-			} else if (nextEvent instanceof SlotVisit slotVisit) {
-				MarketabilityAssignableElement marketabilityEvent = AnalyticsFactory.eINSTANCE.createMarketabilityAssignableElement();
-				marketabilityEvent.setStart(nextEvent.getStart());
-				marketabilityEvent.setElement(slotVisit.getSlotAllocation().getSlot().getCargo());
-				container.setNextEvent(marketabilityEvent);
-				return;
-			} else if (nextEvent instanceof EndEvent endEvent) {
-				MarketabilityEndEvent marketabilityEndEvent = AnalyticsFactory.eINSTANCE.createMarketabilityEndEvent();
-				marketabilityEndEvent.setStart(nextEvent.getStart());
-				container.setNextEvent(marketabilityEndEvent);
-
-				return;
-
-			} else {
-				nextEvent = nextEvent.getNextEvent();
-			}
-		}
-
-	}
+	
 
 	private void createFutureJobs(final Schedule schedule, final MarketabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap,
 			final IProgressMonitor monitor, final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {

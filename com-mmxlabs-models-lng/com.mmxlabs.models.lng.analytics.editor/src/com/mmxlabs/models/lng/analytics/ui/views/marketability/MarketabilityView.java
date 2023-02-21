@@ -9,6 +9,7 @@ import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -112,7 +113,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			if (modelRecord != null) {
 				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
 					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-					final Integer vesselSpeed = mainTableComponent.getVesselSpeed();
+					final Optional<Integer> vesselSpeed = mainTableComponent.getVesselSpeed();
 					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
 						try {
 							dialog.run(true, false, m -> {
@@ -129,7 +130,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 									final ExecutorService executor = Executors.newFixedThreadPool(1);
 									try {
 										executor.submit(() -> {
-											final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket", vesselSpeed);
+											final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket", vesselSpeed.orElse(null));
 											MarketabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m);
 
 											RunnerHelper.asyncExec(() -> {
@@ -380,7 +381,8 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			service.removePostSelectionListener(selectionListener);
 			selectionListener = null;
 		}
-
+		
+		mainTableComponent.dispose();
 		super.dispose();
 	}
 
@@ -457,6 +459,9 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			final LoadSlot validSlot = MarketabilityView.this.processSelection(e3part, selection);
 		};
 		service.addPostSelectionListener(selectionListener);
+	}
+	public ESelectionService getSelectionService() {
+		return service;
 	}
 
 	/*
