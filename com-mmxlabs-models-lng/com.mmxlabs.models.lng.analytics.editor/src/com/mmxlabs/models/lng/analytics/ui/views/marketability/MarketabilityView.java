@@ -233,85 +233,10 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 			if (model != this.currentModel) {
 				update = true;
-				if (model != null) {
-					// extractPlainForTest(model);
-				}
 			}
 		}
 		if (update) {
 			setInput(model);
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void extractForTest(final MarketabilityModel model) {
-		// for tests
-		if (model != null) {
-			for (final MarketabilityRow row : model.getRows()) {
-				for (final BuyOption bo : model.getBuys()) {
-					final BuyReference br = (BuyReference) bo;
-					final String line1 = "//" + br.getSlot().getName();
-
-					String vesselName = "//";
-
-					final ShippingOption so = row.getShipping();
-					if (so instanceof ExistingVesselCharterOption) {
-						final VesselCharter va = ((ExistingVesselCharterOption) so).getVesselCharter();
-						vesselName += va.getVessel().getName();
-					}
-
-					for (final MarketabilityResult vr : row.getResult().getRhsResults()) {
-						if (vr.getEarliestETA() == null) {
-							continue;
-						}
-						System.out.println(line1);
-						System.out.println(vesselName);
-						final String line2 = "vls.add(createResult(findMarketByName(spotModel, \"" + vr.getTarget().getName() + "\"), //\n" + vr.getEarliestVolume() + "," + vr.getLatestVolume()
-								+ ",\n" + vr.getEarliestPrice() + ", " + vr.getLatestPrice() + ",\n" + "LocalDate.of(" + vr.getEarliestETA().getYear() + "," + vr.getEarliestETA().getMonthValue() + ","
-								+ vr.getEarliestETA().getDayOfMonth() + ")," + "LocalDate.of(" + vr.getLatestETA().getYear() + "," + vr.getLatestETA().getMonthValue() + ","
-								+ vr.getLatestETA().getDayOfMonth() + ")));\n";
-						System.out.print(line2);
-						System.out.println(line1);
-					}
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void extractPlainForTest(final MarketabilityModel model) {
-		// for tests
-		if (model != null) {
-			for (final MarketabilityRow row : model.getRows()) {
-				for (final BuyOption bo : model.getBuys()) {
-					final BuyReference br = (BuyReference) bo;
-					final String line1 = "//" + br.getSlot().getName();
-
-					String vesselName = "//";
-
-					final ShippingOption so = row.getShipping();
-					if (so instanceof ExistingVesselCharterOption) {
-						final VesselCharter va = ((ExistingVesselCharterOption) so).getVesselCharter();
-						vesselName += va.getVessel().getName();
-					}
-					if (so instanceof RoundTripShippingOption) {
-						final Vessel v = ((RoundTripShippingOption) so).getVessel();
-						vesselName += v.getName();
-					}
-
-					for (final MarketabilityResult vr : row.getResult().getRhsResults()) {
-						if (vr.getEarliestETA() == null) {
-							continue;
-						}
-						System.out.println(line1);
-						System.out.println(vesselName);
-						final String line2 = vr.getTarget().getName() + "\n" + vr.getEarliestVolume() + "," + vr.getLatestVolume() + ",\n" + vr.getEarliestPrice() + ", " + vr.getLatestPrice() + ",\n"
-								+ vr.getEarliestETA().toString() + ",\n" + vr.getLatestETA().toString() + "\n";
-						System.out.print(line2);
-						System.out.println(line1);
-					}
-				}
-			}
 		}
 	}
 
