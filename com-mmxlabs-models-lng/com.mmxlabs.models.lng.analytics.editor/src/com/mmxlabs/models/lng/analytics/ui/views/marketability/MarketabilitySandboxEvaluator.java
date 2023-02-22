@@ -169,29 +169,6 @@ public class MarketabilitySandboxEvaluator {
 				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
 			}
 		}
-		for (final SpotMarket market : spotMarketsModel.getFobSalesSpotMarket().getMarkets()) {
-			for (final YearMonth date : loadDates) {
-				final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
-				m.setMarket(market);
-				final DischargeSlot slot_original = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
-				final DischargeSlot slot_breakEven = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
-				final DischargeSlot slot_changable = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT, usedIDs);
-
-				slot_original.setWindowStart(date.atDay(1));
-				slot_original.setWindowSize(1);
-				slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_breakEven.setWindowStart(date.atDay(1));
-				slot_breakEven.setWindowSize(1);
-				slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_changable.setWindowStart(date.atDay(1));
-				slot_changable.setWindowSize(1);
-				slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
-			}
-		}
 
 		return shippingMap;
 	}
