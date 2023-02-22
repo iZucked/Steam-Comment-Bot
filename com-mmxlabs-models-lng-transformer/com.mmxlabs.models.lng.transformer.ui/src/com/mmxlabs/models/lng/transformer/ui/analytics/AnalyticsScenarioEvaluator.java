@@ -380,14 +380,11 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
 
-		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
-
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final MarketabilitySandboxUnit unit = new MarketabilitySandboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
-			/* Command cmd = */
 			unit.run(model, mapper, shippingMap, progressMonitor, bridge);
 		});
 
