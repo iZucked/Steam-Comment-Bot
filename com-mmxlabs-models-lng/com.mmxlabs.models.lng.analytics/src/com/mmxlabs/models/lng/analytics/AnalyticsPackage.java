@@ -5634,49 +5634,13 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_RESULT__LATEST_ETA = 2;
 
 	/**
-	 * The feature id for the '<em><b>Earliest Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__EARLIEST_VOLUME = 3;
-
-	/**
-	 * The feature id for the '<em><b>Latest Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__LATEST_VOLUME = 4;
-
-	/**
-	 * The feature id for the '<em><b>Earliest Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__EARLIEST_PRICE = 5;
-
-	/**
-	 * The feature id for the '<em><b>Latest Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKETABILITY_RESULT__LATEST_PRICE = 6;
-
-	/**
 	 * The number of structural features of the '<em>Marketability Result</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKETABILITY_RESULT_FEATURE_COUNT = 7;
+	int MARKETABILITY_RESULT_FEATURE_COUNT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Results</b></em>' containment reference list.
@@ -8177,50 +8141,6 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getMarketabilityResult_LatestETA();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult#getEarliestVolume <em>Earliest Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Earliest Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResult#getEarliestVolume()
-	 * @see #getMarketabilityResult()
-	 * @generated
-	 */
-	EAttribute getMarketabilityResult_EarliestVolume();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult#getLatestVolume <em>Latest Volume</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Latest Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResult#getLatestVolume()
-	 * @see #getMarketabilityResult()
-	 * @generated
-	 */
-	EAttribute getMarketabilityResult_LatestVolume();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult#getEarliestPrice <em>Earliest Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Earliest Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResult#getEarliestPrice()
-	 * @see #getMarketabilityResult()
-	 * @generated
-	 */
-	EAttribute getMarketabilityResult_EarliestPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult#getLatestPrice <em>Latest Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Latest Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResult#getLatestPrice()
-	 * @see #getMarketabilityResult()
-	 * @generated
-	 */
-	EAttribute getMarketabilityResult_LatestPrice();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ViabilityRow <em>Viability Row</em>}'.
@@ -11546,38 +11466,6 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute MARKETABILITY_RESULT__LATEST_ETA = eINSTANCE.getMarketabilityResult_LatestETA();
-
-		/**
-		 * The meta object literal for the '<em><b>Earliest Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_RESULT__EARLIEST_VOLUME = eINSTANCE.getMarketabilityResult_EarliestVolume();
-
-		/**
-		 * The meta object literal for the '<em><b>Latest Volume</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_RESULT__LATEST_VOLUME = eINSTANCE.getMarketabilityResult_LatestVolume();
-
-		/**
-		 * The meta object literal for the '<em><b>Earliest Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_RESULT__EARLIEST_PRICE = eINSTANCE.getMarketabilityResult_EarliestPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Latest Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKETABILITY_RESULT__LATEST_PRICE = eINSTANCE.getMarketabilityResult_LatestPrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl <em>Viability Row</em>}' class.

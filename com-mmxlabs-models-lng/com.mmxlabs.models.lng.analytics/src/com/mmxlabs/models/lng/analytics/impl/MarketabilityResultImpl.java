@@ -30,10 +30,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl#getTarget <em>Target</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl#getEarliestETA <em>Earliest ETA</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl#getLatestETA <em>Latest ETA</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl#getEarliestVolume <em>Earliest Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl#getLatestVolume <em>Latest Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl#getEarliestPrice <em>Earliest Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl#getLatestPrice <em>Latest Price</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,86 +84,6 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @ordered
 	 */
 	protected ZonedDateTime latestETA = LATEST_ETA_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getEarliestVolume() <em>Earliest Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEarliestVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int EARLIEST_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getEarliestVolume() <em>Earliest Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEarliestVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int earliestVolume = EARLIEST_VOLUME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getLatestVolume() <em>Latest Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLatestVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int LATEST_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getLatestVolume() <em>Latest Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLatestVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int latestVolume = LATEST_VOLUME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getEarliestPrice() <em>Earliest Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEarliestPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double EARLIEST_PRICE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getEarliestPrice() <em>Earliest Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEarliestPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected double earliestPrice = EARLIEST_PRICE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getLatestPrice() <em>Latest Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLatestPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double LATEST_PRICE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getLatestPrice() <em>Latest Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLatestPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected double latestPrice = LATEST_PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -280,98 +196,6 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 	 * @generated
 	 */
 	@Override
-	public int getEarliestVolume() {
-		return earliestVolume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setEarliestVolume(int newEarliestVolume) {
-		int oldEarliestVolume = earliestVolume;
-		earliestVolume = newEarliestVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_VOLUME, oldEarliestVolume, earliestVolume));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getLatestVolume() {
-		return latestVolume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setLatestVolume(int newLatestVolume) {
-		int oldLatestVolume = latestVolume;
-		latestVolume = newLatestVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT__LATEST_VOLUME, oldLatestVolume, latestVolume));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getEarliestPrice() {
-		return earliestPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setEarliestPrice(double newEarliestPrice) {
-		double oldEarliestPrice = earliestPrice;
-		earliestPrice = newEarliestPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_PRICE, oldEarliestPrice, earliestPrice));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getLatestPrice() {
-		return latestPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setLatestPrice(double newLatestPrice) {
-		double oldLatestPrice = latestPrice;
-		latestPrice = newLatestPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.MARKETABILITY_RESULT__LATEST_PRICE, oldLatestPrice, latestPrice));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.MARKETABILITY_RESULT__TARGET:
@@ -381,14 +205,6 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 				return getEarliestETA();
 			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_ETA:
 				return getLatestETA();
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_VOLUME:
-				return getEarliestVolume();
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_VOLUME:
-				return getLatestVolume();
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_PRICE:
-				return getEarliestPrice();
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_PRICE:
-				return getLatestPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -409,18 +225,6 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 				return;
 			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_ETA:
 				setLatestETA((ZonedDateTime)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_VOLUME:
-				setEarliestVolume((Integer)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_VOLUME:
-				setLatestVolume((Integer)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_PRICE:
-				setEarliestPrice((Double)newValue);
-				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_PRICE:
-				setLatestPrice((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -443,18 +247,6 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_ETA:
 				setLatestETA(LATEST_ETA_EDEFAULT);
 				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_VOLUME:
-				setEarliestVolume(EARLIEST_VOLUME_EDEFAULT);
-				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_VOLUME:
-				setLatestVolume(LATEST_VOLUME_EDEFAULT);
-				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_PRICE:
-				setEarliestPrice(EARLIEST_PRICE_EDEFAULT);
-				return;
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_PRICE:
-				setLatestPrice(LATEST_PRICE_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -473,14 +265,6 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 				return EARLIEST_ETA_EDEFAULT == null ? earliestETA != null : !EARLIEST_ETA_EDEFAULT.equals(earliestETA);
 			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_ETA:
 				return LATEST_ETA_EDEFAULT == null ? latestETA != null : !LATEST_ETA_EDEFAULT.equals(latestETA);
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_VOLUME:
-				return earliestVolume != EARLIEST_VOLUME_EDEFAULT;
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_VOLUME:
-				return latestVolume != LATEST_VOLUME_EDEFAULT;
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_PRICE:
-				return earliestPrice != EARLIEST_PRICE_EDEFAULT;
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_PRICE:
-				return latestPrice != LATEST_PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -499,14 +283,6 @@ public class MarketabilityResultImpl extends EObjectImpl implements Marketabilit
 		result.append(earliestETA);
 		result.append(", latestETA: ");
 		result.append(latestETA);
-		result.append(", earliestVolume: ");
-		result.append(earliestVolume);
-		result.append(", latestVolume: ");
-		result.append(latestVolume);
-		result.append(", earliestPrice: ");
-		result.append(earliestPrice);
-		result.append(", latestPrice: ");
-		result.append(latestPrice);
 		result.append(')');
 		return result.toString();
 	}

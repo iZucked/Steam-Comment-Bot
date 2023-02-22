@@ -95,29 +95,19 @@ public class MarketabilitySandboxUnit {
 
 	static class SingleResult {
 		int arrivalTime = Integer.MAX_VALUE;
-		int price;
-		long volume;
 	}
 
 	static class InternalResult {
 		int earliestTime = Integer.MAX_VALUE;
 		int latestTime = Integer.MIN_VALUE;
-		int earliestPrice;
-		int latestPrice;
-		long earliestVolume;
-		long latestVolume;
 
 		public void merge(@Nullable final InternalResult other) {
 			if (other != null) {
 				if (other.earliestTime < this.earliestTime) {
 					this.earliestTime = other.earliestTime;
-					this.earliestPrice = other.earliestPrice;
-					this.earliestVolume = other.earliestVolume;
 				}
 				if (other.latestTime > this.latestTime) {
 					this.latestTime = other.latestTime;
-					this.latestPrice = other.latestPrice;
-					this.latestVolume = other.latestVolume;
 				}
 			}
 		}
@@ -126,13 +116,9 @@ public class MarketabilitySandboxUnit {
 			if (other != null) {
 				if (other.arrivalTime < this.earliestTime) {
 					this.earliestTime = other.arrivalTime;
-					this.earliestPrice = other.price;
-					this.earliestVolume = other.volume;
 				}
 				if (other.arrivalTime > this.latestTime) {
 					this.latestTime = other.arrivalTime;
-					this.latestPrice = other.price;
-					this.latestVolume = other.volume;
 				}
 			}
 		}
@@ -360,10 +346,6 @@ public class MarketabilitySandboxUnit {
 		if (ret != null && ret.earliestTime != Integer.MAX_VALUE) {
 			marketabilityResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.earliestTime, timeZone));
 			marketabilityResult.setLatestETA(modelEntityMap.getDateFromHours(ret.latestTime, timeZone));
-			marketabilityResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.earliestVolume));
-			marketabilityResult.setLatestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.latestVolume));
-			marketabilityResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.earliestPrice));
-			marketabilityResult.setLatestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.latestPrice));
 		}
 		return marketabilityResult;
 	}

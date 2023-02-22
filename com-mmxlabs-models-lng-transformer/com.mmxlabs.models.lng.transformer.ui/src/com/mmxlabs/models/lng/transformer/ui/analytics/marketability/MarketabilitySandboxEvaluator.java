@@ -55,40 +55,19 @@ public class MarketabilitySandboxEvaluator {
 		if (p1 == null) {
 			return null;
 		}
-		
+
 		final ProfitAndLossSequences profitAndLossSequences = evaluationHelper.evaluateSequences(currentFullSequences, p1);
 		assert profitAndLossSequences != null;
 
 		final VolumeAllocatedSequence scheduledSequence = profitAndLossSequences.getScheduledSequenceForResource(resource);
 		VoyagePlanRecord vpr = scheduledSequence.getVoyagePlanRecord(target);
-		final ICargoValueAnnotation cargoValueAnnotation = vpr.getCargoValueAnnotation();
 		final int arrivalTime = vpr.getPortTimesRecord().getSlotTime(target);
-		final long volume = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(target);
-
-		if (target instanceof LoadOption loadOption) {
-			final ILoadPriceCalculator loadPriceCalculator = loadOption.getLoadPriceCalculator();
-			if (loadPriceCalculator instanceof BreakEvenLoadPriceCalculator beCalc) {
-				return saveResult(beCalc.getPrice(), arrivalTime, volume);
-			}
-		}
-		if (target instanceof DischargeOption dischargeOption) {
-			final ISalesPriceCalculator salesPriceCalculator = dischargeOption.getDischargePriceCalculator();
-			if (salesPriceCalculator instanceof BreakEvenSalesPriceCalculator beCalc) {
-				return saveResult(beCalc.getPrice(), arrivalTime, volume);
-			}
-		}
-
-		if (cargoValueAnnotation != null) {
-			return saveResult(cargoValueAnnotation.getSlotPricePerMMBTu(target), arrivalTime, volume);
-		}
-		return null;
+		return saveResult(arrivalTime);
 	}
 
-	private SingleResult saveResult(final int price, final int arrivalTime, final long volume) {
+	private SingleResult saveResult(final int arrivalTime) {
 		final SingleResult result = new SingleResult();
-		result.price = price;
 		result.arrivalTime = arrivalTime;
-		result.volume = volume;
 		return result;
 	}
 

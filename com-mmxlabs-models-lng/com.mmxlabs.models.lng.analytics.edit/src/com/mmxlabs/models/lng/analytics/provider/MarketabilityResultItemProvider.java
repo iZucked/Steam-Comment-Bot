@@ -68,10 +68,6 @@ public class MarketabilityResultItemProvider
 			addTargetPropertyDescriptor(object);
 			addEarliestETAPropertyDescriptor(object);
 			addLatestETAPropertyDescriptor(object);
-			addEarliestVolumePropertyDescriptor(object);
-			addLatestVolumePropertyDescriptor(object);
-			addEarliestPricePropertyDescriptor(object);
-			addLatestPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -143,94 +139,6 @@ public class MarketabilityResultItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Earliest Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEarliestVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityResult_earliestVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResult_earliestVolume_feature", "_UI_MarketabilityResult_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT__EARLIEST_VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Latest Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLatestVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityResult_latestVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResult_latestVolume_feature", "_UI_MarketabilityResult_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT__LATEST_VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Earliest Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEarliestPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityResult_earliestPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResult_earliestPrice_feature", "_UI_MarketabilityResult_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT__EARLIEST_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Latest Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLatestPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MarketabilityResult_latestPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketabilityResult_latestPrice_feature", "_UI_MarketabilityResult_type"),
-				 AnalyticsPackage.Literals.MARKETABILITY_RESULT__LATEST_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns MarketabilityResult.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -271,10 +179,6 @@ public class MarketabilityResultItemProvider
 		switch (notification.getFeatureID(MarketabilityResult.class)) {
 			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_ETA:
 			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_ETA:
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_VOLUME:
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_VOLUME:
-			case AnalyticsPackage.MARKETABILITY_RESULT__EARLIEST_PRICE:
-			case AnalyticsPackage.MARKETABILITY_RESULT__LATEST_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
