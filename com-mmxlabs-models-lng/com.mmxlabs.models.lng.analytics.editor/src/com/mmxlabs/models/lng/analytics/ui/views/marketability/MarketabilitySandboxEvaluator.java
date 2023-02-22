@@ -324,7 +324,7 @@ public class MarketabilitySandboxEvaluator {
 			final MarketabilityModel model, final IProgressMonitor progressMonitor) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final IMapperClass mapper = new Mapper(optimiserScenario, true);
+		final IMapperClass mapper = new Mapper(optimiserScenario, false);
 		final Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(optimiserScenario, model, mapper);
 
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();

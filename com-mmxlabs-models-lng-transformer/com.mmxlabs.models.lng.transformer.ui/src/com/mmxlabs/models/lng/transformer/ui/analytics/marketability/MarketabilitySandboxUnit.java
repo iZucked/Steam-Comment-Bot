@@ -365,6 +365,6 @@ public class MarketabilitySandboxUnit {
 		if (market instanceof FOBSalesMarket || load.isDESPurchase()) {
 			throw new IllegalArgumentException("Marketablility cargoes must be shipped");
 		}
-		return mapper.getSalesMarketBreakEven(market, YearMonth.from(load.getWindowStart().plusMonths(month)));
+		return mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart().plusMonths(month)));
 	}
 }
