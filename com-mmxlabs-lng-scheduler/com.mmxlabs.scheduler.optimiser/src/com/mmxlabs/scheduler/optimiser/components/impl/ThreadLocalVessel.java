@@ -13,11 +13,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 
 public class ThreadLocalVessel implements IVessel {
 
-	ThreadLocal<Vessel> reference = new ThreadLocal<>();
-	ThreadLocal<Integer> minSpeed = new ThreadLocal<>();
-	ThreadLocal<Integer> maxSpeed = new ThreadLocal<>();
+	private final ThreadLocal<Vessel> reference = new ThreadLocal<>();
+	private final ThreadLocal<Integer> minSpeed = new ThreadLocal<>();
+	private final ThreadLocal<Integer> maxSpeed = new ThreadLocal<>();
 	@NonNull
-	Vessel globalReference;
+	private final Vessel globalReference;
 
 	public ThreadLocalVessel(@NonNull Vessel vessel) {
 		globalReference = vessel;
@@ -32,14 +32,6 @@ public class ThreadLocalVessel implements IVessel {
 
 	}
 
-	public void setMinBaseFuelConsumptionInMTPerDay(final int minBaseFuelConsumptionInMTPerDay) {
-		if (reference.get() != null) {
-			reference.get().setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionInMTPerDay);
-		} else {
-			globalReference.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionInMTPerDay);
-		}
-	}
-
 	public void setMinSpeed(final int minSpeed) {
 		this.minSpeed.set(minSpeed);
 	}
@@ -47,28 +39,31 @@ public class ThreadLocalVessel implements IVessel {
 	public void setMaxSpeed(final int maxSpeed) {
 		this.maxSpeed.set(maxSpeed);
 	}
-	
+
 	@Override
 	public int getMaxSpeed() {
 		Integer ms = maxSpeed.get();
-		if(ms != null) {
+		if (ms != null) {
 			return ms;
 		} else {
 			return globalReference.getMaxSpeed();
 		}
 	}
+
 	@Override
 	public int getMinSpeed() {
 		Integer ms = minSpeed.get();
-		if(ms != null) {
+		if (ms != null) {
 			return ms;
 		} else {
 			return globalReference.getMinSpeed();
 		}
 	}
 
-	/**
-	 */
+	public void setMinBaseFuelConsumptionInMTPerDay(final int minBaseFuelConsumptionInMTPerDay) {
+		getUnderlyingVessel().setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionInMTPerDay);
+	}
+
 	public void setServiceSpeed(final VesselState vesselState, final int serviceSpeed) {
 		getUnderlyingVessel().setServiceSpeed(vesselState, serviceSpeed);
 	}
@@ -164,7 +159,6 @@ public class ThreadLocalVessel implements IVessel {
 	public long getSafetyHeel() {
 		return getUnderlyingVessel().getSafetyHeel();
 	}
-
 
 	@Override
 	public int getServiceSpeed(@NonNull VesselState vesselState) {
@@ -296,9 +290,10 @@ public class ThreadLocalVessel implements IVessel {
 	public @NonNull Collection<@NonNull FuelKey> getAllFuelKeys() {
 		return getUnderlyingVessel().getAllFuelKeys();
 	}
-	
+
+	@SuppressWarnings("null")
 	private @NonNull Vessel getUnderlyingVessel() {
-		if(reference.get() != null) {
+		if (reference.get() != null) {
 			return reference.get();
 		}
 		return globalReference;
