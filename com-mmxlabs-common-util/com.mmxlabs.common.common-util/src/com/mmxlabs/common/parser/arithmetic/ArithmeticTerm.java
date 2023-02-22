@@ -33,7 +33,6 @@ public class ArithmeticTerm implements ArithmeticExpression {
 
 	@Override
 	public boolean canEvaluate() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }
