@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -36,47 +38,54 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 @RequireFeature({ KnownFeatures.FEATURE_MARKETABLE_WINDOWS })
 
 public class MarketabilityTest extends AbstractMarketablilityTest {
+	private Vessel vTDFE160;
+
+	private Port pKarratha;
+	private Port pBonny;
+	private Port pPecem;
+	private Port pBarcelona;
+	private Port pDragon;
+	private Port pAltamira;
+
+	@BeforeEach
+	private void initialiseVesselsAndPorts() {
+		vTDFE160 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
+		pKarratha = portFinder.findPortById(InternalDataConstants.PORT_KARRATHA);
+		pBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		pPecem = portFinder.findPortById(InternalDataConstants.PORT_PECEM);
+		pBarcelona = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
+		pDragon = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
+		pAltamira = portFinder.findPortById(InternalDataConstants.PORT_ALTAMIRA);
+	}
+
+	@SuppressWarnings("null")
+	private void createDefaultScenario(@NonNull VesselCharter vesselCharter) {
+		cargoModelBuilder.makeCargo()//
+				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1")//
+				.with(x -> x.setWindowSize(1)).with(x -> x.setWindowSizeUnits(TimePeriod.MONTHS)).build()//
+				.makeDESSale("D1", LocalDate.of(2023, 1, 19), pBarcelona, null, entity, "1")//
+				.with(x -> x.setWindowSize(10)).with(x -> x.setWindowSizeUnits(TimePeriod.DAYS)).build()//
+				.withVesselAssignment(vesselCharter, 1)//
+				.build();
+		cargoModelBuilder.makeCargo()//
+				.makeFOBPurchase("L2", LocalDate.of(2023, 2, 18), pKarratha, null, entity, "1")//
+				.with(x -> x.setWindowSize(1)).with(x -> x.setWindowSizeUnits(TimePeriod.MONTHS)).build()//
+				.makeDESSale("D2", LocalDate.of(2023, 3, 10), pDragon, null, entity, "1")//
+				.with(x -> x.setWindowSize(6)).with(x -> x.setWindowSizeUnits(TimePeriod.DAYS)).build()//
+				.withVesselAssignment(vesselCharter, 1)//
+				.build();
+	}
 
 	@SuppressWarnings("null")
 	@Test
 	public void testEarliestDateValid() {
 
-		final Vessel vTDFE160 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-
-		final Port pKarratha = portFinder.findPortById(InternalDataConstants.PORT_KARRATHA);
-		final Port pBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
-		final Port pPecem = portFinder.findPortById(InternalDataConstants.PORT_PECEM);
-		final Port pBarcelona = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
-		final Port pDragon = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
-
-		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vTDFE160, entity).build();
-		vesselCharter.setStartBy(LocalDateTime.of(2013, 1, 1, 0, 0));
-		vesselCharter.setStartAfter(LocalDateTime.of(2013, 1, 1, 0, 0));
-		final DESSalesMarket dsBrazil =  spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
-
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D1", LocalDate.of(2023, 1, 19), pBarcelona, null, entity, "1")//
-				.with(x -> x.setWindowSize(10))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
+		initialiseVesselsAndPorts();
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vTDFE160, entity).withStartWindow(LocalDateTime.of(2013, 1, 1, 0, 0)).withEndWindow(LocalDateTime.of(2013, 1, 1, 0, 0))
 				.build();
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2023, 2, 18), pKarratha, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D2", LocalDate.of(2023, 3, 10), pDragon, null, entity, "1")//
-				.with(x -> x.setWindowSize(6))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
-				.build();
+		final DESSalesMarket dsBrazil = spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
 
+		createDefaultScenario(vesselCharter);
 		final @NonNull MarketabilityModel model = MarketabilityUtils.createModelFromScenario(lngScenarioModel, "marketablilityModel", null);
 
 		evaluateMarketabilityModel(model);
@@ -125,50 +134,20 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 		d2.setWindowSize(0);
 		evaluateTest();
 		SlotVisit visit = MicroTestUtils.findSlotVisit(l2, lngScenarioModel);
-		
+
 		final PortVisitLateness lateness = visit.getLateness();
 		Assertions.assertNull(lateness);
-	
+
 	}
-	
+
 	@Test
 	public void testLatestDateValid() {
-
-		final Vessel vTDFE160 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-
-		final Port pKarratha = portFinder.findPortById(InternalDataConstants.PORT_KARRATHA);
-		final Port pBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
-		final Port pPecem = portFinder.findPortById(InternalDataConstants.PORT_PECEM);
-		final Port pBarcelona = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
-		final Port pDragon = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
-
 		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vTDFE160, entity).build();
 		vesselCharter.setStartBy(LocalDateTime.of(2013, 1, 1, 0, 0));
 		vesselCharter.setStartAfter(LocalDateTime.of(2013, 1, 1, 0, 0));
-		final DESSalesMarket dsBrazil =  spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
+		final DESSalesMarket dsBrazil = spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
 
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D1", LocalDate.of(2023, 1, 19), pBarcelona, null, entity, "1")//
-				.with(x -> x.setWindowSize(10))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
-				.build();
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2023, 2, 18), pKarratha, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D2", LocalDate.of(2023, 3, 10), pDragon, null, entity, "1")//
-				.with(x -> x.setWindowSize(6))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
-				.build();
+		createDefaultScenario(vesselCharter);
 
 		@SuppressWarnings("null")
 		final @NonNull MarketabilityModel model = MarketabilityUtils.createModelFromScenario(lngScenarioModel, "marketablilityModel", null);
@@ -219,50 +198,21 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 		d2.setWindowSize(0);
 		evaluateTest();
 		SlotVisit visit = MicroTestUtils.findSlotVisit(l2, lngScenarioModel);
-		
+
 		final PortVisitLateness lateness = visit.getLateness();
 		Assertions.assertNull(lateness);
-	
+
 	}
-	
+
 	@Test
 	public void testInvalidBeforeEarliestDate() {
-
-		final Vessel vTDFE160 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-
-		final Port pKarratha = portFinder.findPortById(InternalDataConstants.PORT_KARRATHA);
-		final Port pBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
-		final Port pPecem = portFinder.findPortById(InternalDataConstants.PORT_PECEM);
-		final Port pBarcelona = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
-		final Port pDragon = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
-
+		initialiseVesselsAndPorts();
 		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vTDFE160, entity).build();
 		vesselCharter.setStartBy(LocalDateTime.of(2013, 1, 1, 0, 0));
 		vesselCharter.setStartAfter(LocalDateTime.of(2013, 1, 1, 0, 0));
-		final DESSalesMarket dsBrazil =  spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
+		final DESSalesMarket dsBrazil = spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
 
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D1", LocalDate.of(2023, 1, 19), pBarcelona, null, entity, "1")//
-				.with(x -> x.setWindowSize(10))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
-				.build();
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2023, 2, 18), pKarratha, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D2", LocalDate.of(2023, 3, 19), pDragon, null, entity, "1")//
-				.with(x -> x.setWindowSize(20))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
-				.build();
+		createDefaultScenario(vesselCharter);
 
 		@SuppressWarnings("null")
 		final @NonNull MarketabilityModel model = MarketabilityUtils.createModelFromScenario(lngScenarioModel, "marketablilityModel", null);
@@ -313,50 +263,21 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 		d2.setWindowSize(0);
 		evaluateTest();
 		SlotVisit visit = MicroTestUtils.findSlotVisit(d1, lngScenarioModel);
-		
+
 		final PortVisitLateness lateness = visit.getLateness();
 		Assertions.assertNotNull(lateness);
 		Assertions.assertEquals(1, lateness.getLatenessInHours());
 	}
-	
+
 	@Test
 	public void testInvalidAfterLatestDate() {
-
-		final Vessel vTDFE160 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-
-		final Port pKarratha = portFinder.findPortById(InternalDataConstants.PORT_KARRATHA);
-		final Port pBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
-		final Port pPecem = portFinder.findPortById(InternalDataConstants.PORT_PECEM);
-		final Port pBarcelona = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
-		final Port pDragon = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
 
 		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vTDFE160, entity).build();
 		vesselCharter.setStartBy(LocalDateTime.of(2013, 1, 1, 0, 0));
 		vesselCharter.setStartAfter(LocalDateTime.of(2013, 1, 1, 0, 0));
-		final DESSalesMarket dsBrazil =  spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
+		final DESSalesMarket dsBrazil = spotMarketsModelBuilder.makeDESSaleMarket("DS-BRAZIL", pPecem, entity, "1").withEnabled(true).build();
 
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D1", LocalDate.of(2023, 1, 19), pBarcelona, null, entity, "1")//
-				.with(x -> x.setWindowSize(10))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
-				.build();
-		cargoModelBuilder.makeCargo()//
-				.makeFOBPurchase("L2", LocalDate.of(2023, 2, 18), pKarratha, null, entity, "1")//
-				.with(x -> x.setWindowSize(1))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.MONTHS))
-				.build()//
-				.makeDESSale("D2", LocalDate.of(2023, 3, 10), pDragon, null, entity, "1")//
-				.with(x -> x.setWindowSize(6))
-				.with(x-> x.setWindowSizeUnits(TimePeriod.DAYS))
-				.build()//
-				.withVesselAssignment(vesselCharter, 1)//
-				.build();
+		createDefaultScenario(vesselCharter);
 
 		@SuppressWarnings("null")
 		final @NonNull MarketabilityModel model = MarketabilityUtils.createModelFromScenario(lngScenarioModel, "marketablilityModel", null);
@@ -407,33 +328,35 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 		d2.setWindowSize(0);
 		evaluateTest();
 		SlotVisit visit = MicroTestUtils.findSlotVisit(l2, lngScenarioModel);
-		
+
 		final PortVisitLateness lateness = visit.getLateness();
 		Assertions.assertNotNull(lateness);
 		Assertions.assertEquals(1, lateness.getLatenessInHours());
 	}
 
-
-
 	@Test
 	public void testForNoMarketableWindow() {
-		final Vessel vTDFE160 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
-
-		final Port pKarratha = portFinder.findPortById(InternalDataConstants.PORT_KARRATHA);
-		final Port pBonny = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
-		final Port pAltamira = portFinder.findPortById(InternalDataConstants.PORT_ALTAMIRA);
-		final Port pDragon = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
-		final Port pBarcelona = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
+		initialiseVesselsAndPorts();
 
 		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vTDFE160, entity).build();
 		vesselCharter.setStartBy(LocalDateTime.of(2013, 1, 1, 0, 0));
 		vesselCharter.setStartAfter(LocalDateTime.of(2013, 1, 1, 0, 0));
 
 		spotMarketsModelBuilder.makeDESSaleMarket("DES MEXICO", pAltamira, entity, "1");
-		cargoModelBuilder.makeCargo().makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1").build().makeDESSale("D1", LocalDate.of(2023, 1, 19), pBarcelona, null, entity, "1")
-				.build().withVesselAssignment(vesselCharter, 1).build();
-		cargoModelBuilder.makeCargo().makeFOBPurchase("L2", LocalDate.of(2023, 2, 9), pKarratha, null, entity, "1").build().makeDESSale("D2", LocalDate.of(2023, 3, 15), pDragon, null, entity, "1")
-				.build().withVesselAssignment(vesselCharter, 1).build();
+		cargoModelBuilder.makeCargo()//
+				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1")//
+				.build()//
+				.makeDESSale("D1", LocalDate.of(2023, 1, 19), pBarcelona, null, entity, "1")//
+				.build()//
+				.withVesselAssignment(vesselCharter, 1)//
+				.build();
+		cargoModelBuilder.makeCargo()//
+				.makeFOBPurchase("L2", LocalDate.of(2023, 2, 9), pKarratha, null, entity, "1")//
+				.build()//
+				.makeDESSale("D2", LocalDate.of(2023, 3, 15), pDragon, null, entity, "1")//
+				.build()//
+				.withVesselAssignment(vesselCharter, 1)//
+				.build();
 		Slot<?> l1 = cargoModelFinder.findSlot("L1");
 		l1.setWindowSize(1);
 		l1.setWindowSizeUnits(TimePeriod.MONTHS);
@@ -468,25 +391,25 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 		Assertions.assertEquals(0, row.getResult().getRhsResults().size());
 
 	}
-	
+
 	private LocalDateTime getArrivalDate(MarketabilityModel model, Slot<?> slot) {
 		@SuppressWarnings("null")
-		Optional<LocalDateTime> date = model.getRows().stream().map( x -> {
-			if(x.getBuyOption() instanceof BuyReference br) {
+		Optional<LocalDateTime> date = model.getRows().stream().map(x -> {
+			if (x.getBuyOption() instanceof BuyReference br) {
 				LocalDateTime buyDate = x.getResult().getBuyDate();
 				if (br.getSlot() == slot) {
 					return buyDate;
 				}
 			}
-			if(x.getSellOption() instanceof SellReference sr) {
+			if (x.getSellOption() instanceof SellReference sr) {
 				LocalDateTime sellDate = x.getResult().getSellDate();
 				if (sr.getSlot() == slot) {
 					return sellDate;
 				}
 			}
 			return null;
-			
-			}).filter(Objects::nonNull).findAny();
+
+		}).filter(Objects::nonNull).findAny();
 		Assertions.assertTrue(date.isPresent(), "Slot is not in marketability model");
 		return date.get();
 	}
