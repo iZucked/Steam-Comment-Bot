@@ -4,9 +4,17 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -21,9 +29,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -31,21 +41,28 @@ import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.IBallastBonus;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
+import com.mmxlabs.models.lng.port.ui.editorpart.PortPickerDialog;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class BallastBonusTermsTableCreator {
+	
+	private static final String FIRST_LOAD_PORT = "<First Load Port>";
+	
 	public static EObjectTableViewer createBallastBonusTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
@@ -71,6 +88,7 @@ public class BallastBonusTermsTableCreator {
 				CommercialPackage.eINSTANCE.getLumpSumTerm_PriceExpression(),
 				commandHandler) {
 
+			@Override
 			protected EAttribute getAttribute(Object object) {
 				if (object instanceof LumpSumBallastBonusTerm) {
 					return CommercialPackage.eINSTANCE.getLumpSumTerm_PriceExpression();
@@ -150,47 +168,88 @@ public class BallastBonusTermsTableCreator {
 			}
 
 		});
-
-		eViewer.addTypicalColumn("Notional return ports", new MultipleReferenceManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusTerm_ReturnPorts(),
-				sel.getReferenceValueProviderCache(), commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-
+		
+		eViewer.addTypicalColumn("Notional return ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusTerm_ReturnPorts(), sel.getReferenceValueProviderCache(),
+				commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+			
+			private boolean isFirstLoadPort = false;
+			
 			@Override
-			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusTerm) {
-					super.runSetCommand(object, value);
-
-					dialogContext.getDialogController().validate();
-					eViewer.refresh();
+			public void doSetValue(final Object object, final Object value) {
+				runCustomSetCommand(object, isFirstLoadPort);
+				if (!isFirstLoadPort) {
+					super.doSetValue(object, value);
 				}
 			}
-
-			@Override
-			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusTerm) {
-					return super.canEdit(object);
-				} else {
-					return false;
+			
+			private void runCustomSetCommand(final Object object, boolean isFirstLoadPort) {
+				CompoundCommand cmd = new CompoundCommand();
+				EditingDomain editingDomain = commandHandler.getEditingDomain();
+				if (isFirstLoadPort) {
+					cmd.append(SetCommand.create(editingDomain, object, field, Collections.emptyList()));
 				}
+				cmd.append(SetCommand.create(editingDomain, object, CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusTerm_IsFirstLoadPort(), isFirstLoadPort));
+				
+				commandHandler.handleCommand(cmd, (EObject) object, field);
 			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
+				final List<Pair<String, EObject>> options = valueProvider.getAllowedValues((EObject) object, field);
 
+				if ((!options.isEmpty()) && (options.get(0).getSecond() == null)) {
+					options.remove(0);
+				}
+				
+				Port port = PortFactory.eINSTANCE.createPort();
+				port.setName(FIRST_LOAD_PORT);
+				if (!options.isEmpty() && !FIRST_LOAD_PORT.equalsIgnoreCase(options.get(0).getFirst())) {
+					options.add(0, new Pair(FIRST_LOAD_PORT, port));
+				}
+				
+				PortPickerDialog picker = new PortPickerDialog(cellEditorWindow.getShell(), options.toArray());
+				
+				final List<EObject> selectedValues = (List<EObject>) getValue(object);
+				if (selectedValues != null && isFirstLoadPort) {
+					selectedValues.add(options.get(0).getSecond());
+				}
+				
+				final List<EObject> list = picker.pick(options, selectedValues, (EReference) field);
+				if (list != null && !list.isEmpty()) {
+					EObject td = null;
+					for (final EObject eo : list) {
+						if (eo instanceof NamedObject no && FIRST_LOAD_PORT.equalsIgnoreCase(no.getName())) {
+							isFirstLoadPort = true;
+							td = eo;
+							break;
+						}
+						isFirstLoadPort = false;
+					}
+					if (td != null) {
+						list.remove(td);
+						port = null;
+					}
+				}
+				
+				return list;
+			}
+			
+			@Override
+			protected String renderValue(final Object value) {
+				if (isFirstLoadPort) {			
+					return FIRST_LOAD_PORT;
+				}
+				return super.renderValue(value);
+			}
+			
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusTerm) {
-					return super.getValue(object);
-				} else {
-					return null;
+				if (object instanceof NotionalJourneyBallastBonusTerm njbbt && njbbt.isIsFirstLoadPort()) {
+					isFirstLoadPort = true;
 				}
+				return super.getValue(object);
 			}
-
-			@Override
-			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusTerm) {
-					return super.render(object);
-				} else {
-					return "-";
-				}
-			}
-
 		}).getColumn().setHeaderTooltip("The set of ports used for the notional ballast calcuations. The port resulting in the lowest cost will be used.");
 
 		var fuelCostCol = eViewer.addTypicalColumn("Fuel Cost ($/MT)",
@@ -372,7 +431,7 @@ public class BallastBonusTermsTableCreator {
 		eViewer.getGrid().recalculateHeader();
 
 		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getSimpleBallastBonusContainer_Terms());
-		eViewer.setInput(getBallastBonusContainer(commandHandler, charterContract));
+		eViewer.setInput(getBallastBonusContainer(charterContract));
 
 		final GridData gridData = GridDataFactory.fillDefaults().grab(true, true).create();
 		gridData.minimumHeight = 150;
@@ -398,7 +457,7 @@ public class BallastBonusTermsTableCreator {
 		addLumpSum.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				IBallastBonus ballastBonus = getBallastBonusContainer(commandHandler, charterContract);
+				IBallastBonus ballastBonus = getBallastBonusContainer(charterContract);
 				
 				final LumpSumBallastBonusTerm newLine = CommercialFactory.eINSTANCE.createLumpSumBallastBonusTerm();
 				commandHandler.handleCommand(
@@ -416,7 +475,7 @@ public class BallastBonusTermsTableCreator {
 		addNotional.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				IBallastBonus ballastBonus = getBallastBonusContainer(commandHandler, charterContract);
+				IBallastBonus ballastBonus = getBallastBonusContainer(charterContract);
 				final NotionalJourneyBallastBonusTerm newLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusTerm();
 				
 				commandHandler.handleCommand(
@@ -458,12 +517,23 @@ public class BallastBonusTermsTableCreator {
 		eViewer.refresh();
 		sizeChangedAction.run();
 		return eViewer;
-	}	
+	}
 	
-	private static IBallastBonus getBallastBonusContainer(final ICommandHandler commandHandler, final GenericCharterContract charterContract) {
+	private static IBallastBonus getBallastBonusContainer(final GenericCharterContract charterContract) {
 		if (charterContract.getBallastBonusTerms() == null) {
 			charterContract.setBallastBonusTerms(CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer());
 		}
 		return charterContract.getBallastBonusTerms();
+	}
+	
+	private static NotionalJourneyBallastBonusTerm getNotionalJourneyBallastBonusTerm(final GenericCharterContract charterContract) {
+		final IBallastBonus ibb = getBallastBonusContainer(charterContract);
+		if (ibb instanceof SimpleBallastBonusContainer sBBC) {
+			if (sBBC.getTerms() != null && !sBBC.getTerms().isEmpty()) {
+				
+			}
+		}
+		
+		return null;
 	}
 }

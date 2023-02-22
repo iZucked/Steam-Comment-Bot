@@ -1504,6 +1504,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getNotionalJourneyBallastBonusTerm_IsFirstLoadPort() {
+		return (EAttribute)notionalJourneyBallastBonusTermEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMonthlyBallastBonusTerm() {
 		return monthlyBallastBonusTermEClass;
 	}
@@ -1943,6 +1953,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		notionalJourneyBallastBonusTermEClass = createEClass(NOTIONAL_JOURNEY_BALLAST_BONUS_TERM);
 		createEReference(notionalJourneyBallastBonusTermEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS);
+		createEAttribute(notionalJourneyBallastBonusTermEClass, NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT);
 
 		monthlyBallastBonusTermEClass = createEClass(MONTHLY_BALLAST_BONUS_TERM);
 		createEAttribute(monthlyBallastBonusTermEClass, MONTHLY_BALLAST_BONUS_TERM__MONTH);
@@ -2208,6 +2219,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getNotionalJourneyBallastBonusTerm_ReturnPorts(), g1, null, "returnPorts", null, 0, -1, NotionalJourneyBallastBonusTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalJourneyBallastBonusTerm_IsFirstLoadPort(), ecorePackage.getEBoolean(), "isFirstLoadPort", null, 0, 1, NotionalJourneyBallastBonusTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(monthlyBallastBonusTermEClass, MonthlyBallastBonusTerm.class, "MonthlyBallastBonusTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMonthlyBallastBonusTerm_Month(), theDateTimePackage.getYearMonth(), "month", null, 0, 1, MonthlyBallastBonusTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

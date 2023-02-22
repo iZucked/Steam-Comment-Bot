@@ -2240,13 +2240,22 @@ public interface CommercialPackage extends EPackage {
 	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS = BALLAST_BONUS_TERM_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Is First Load Port</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT = BALLAST_BONUS_TERM_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Notional Journey Ballast Bonus Term</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT = BALLAST_BONUS_TERM_FEATURE_COUNT + 8;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT = BALLAST_BONUS_TERM_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusTermImpl <em>Monthly Ballast Bonus Term</em>}' class.
@@ -2338,6 +2347,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int MONTHLY_BALLAST_BONUS_TERM__RETURN_PORTS = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Is First Load Port</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT;
 
 	/**
 	 * The feature id for the '<em><b>Month</b></em>' attribute.
@@ -3935,6 +3953,17 @@ public interface CommercialPackage extends EPackage {
 	EReference getNotionalJourneyBallastBonusTerm_ReturnPorts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm#isIsFirstLoadPort <em>Is First Load Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is First Load Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm#isIsFirstLoadPort()
+	 * @see #getNotionalJourneyBallastBonusTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyBallastBonusTerm_IsFirstLoadPort();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm <em>Monthly Ballast Bonus Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5180,6 +5209,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS = eINSTANCE.getNotionalJourneyBallastBonusTerm_ReturnPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Is First Load Port</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__IS_FIRST_LOAD_PORT = eINSTANCE.getNotionalJourneyBallastBonusTerm_IsFirstLoadPort();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusTermImpl <em>Monthly Ballast Bonus Term</em>}' class.

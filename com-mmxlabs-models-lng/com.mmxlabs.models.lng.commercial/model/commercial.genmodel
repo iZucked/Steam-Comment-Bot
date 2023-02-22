@@ -176,6 +176,7 @@
     <genClasses ecoreClass="commercial.ecore#//LumpSumBallastBonusTerm"/>
     <genClasses ecoreClass="commercial.ecore#//NotionalJourneyBallastBonusTerm">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalJourneyBallastBonusTerm/returnPorts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusTerm/isFirstLoadPort"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusTerm">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusTerm/month"/>

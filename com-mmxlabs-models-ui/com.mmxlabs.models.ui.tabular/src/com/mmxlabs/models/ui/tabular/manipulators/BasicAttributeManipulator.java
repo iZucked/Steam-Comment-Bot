@@ -79,7 +79,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 		// if the object for some reason does not support the field (e.g. it's a placeholder row in a table)
 		// ignore it
-		if (object instanceof EObject && !((EObject) object).eClass().getEAllStructuralFeatures().contains(field)) {
+		if (object instanceof EObject eo && !eo.eClass().getEAllStructuralFeatures().contains(field)) {
 			return null;
 		}
 
