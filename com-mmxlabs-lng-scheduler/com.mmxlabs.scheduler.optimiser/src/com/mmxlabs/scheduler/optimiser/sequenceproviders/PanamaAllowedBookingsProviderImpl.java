@@ -13,9 +13,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 @NotInjectedScope
-public final class PanamaAllowedBookingsProviderImpl implements IPanamaAllowedBookingsProvider {
+public class PanamaAllowedBookingsProviderImpl implements IPanamaAllowedBookingsProvider {
 
-	Set<IRouteOptionBooking> allowedBookings = new HashSet<>();
+	private final Set<IRouteOptionBooking> allowedBookings = new HashSet<>();
 	
 	@Override
 	public boolean isPanamaBookingAllowed(IRouteOptionBooking booking) {
