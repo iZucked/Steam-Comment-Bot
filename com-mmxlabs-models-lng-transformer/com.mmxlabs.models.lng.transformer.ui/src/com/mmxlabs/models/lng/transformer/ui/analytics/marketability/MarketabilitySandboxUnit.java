@@ -60,7 +60,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
-import com.mmxlabs.models.lng.transformer.ui.analytics.InsertCargoSequencesGenerator;
+import com.mmxlabs.models.lng.transformer.ui.analytics.MarketabilityCargoSequenceGenerator;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
@@ -73,10 +73,8 @@ import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.moves.util.IMoveHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.MoveHelper;
-import com.mmxlabs.scheduler.optimiser.moves.util.impl.LazyFollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
@@ -143,10 +141,7 @@ public class MarketabilitySandboxUnit {
 				bind(boolean.class).annotatedWith(Names.named(MoveHelper.LEGACY_CHECK_RESOURCE)).toInstance(Boolean.FALSE);
 				bind(MoveHelper.class).in(Singleton.class);
 				bind(IMoveHelper.class).to(MoveHelper.class);
-				bind(InsertCargoSequencesGenerator.class);
-
-				bind(LazyFollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-				bind(IFollowersAndPreceders.class).to(LazyFollowersAndPrecedersProviderImpl.class);
+				bind(MarketabilityCargoSequenceGenerator.class);
 			}
 
 			@Provides
@@ -352,8 +347,8 @@ public class MarketabilitySandboxUnit {
 		final IPortSlot portSlot = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(target, IPortSlot.class);
 
 		final MarketabilitySandboxEvaluator evaluator = injector.getInstance(MarketabilitySandboxEvaluator.class);
-		final InsertCargoSequencesGenerator generator = injector.getInstance(InsertCargoSequencesGenerator.class);
-		generator.generateOptionsTemp(schedule, initialSequences, cargoSegment, resource, portSlot, vesselSpeed, (solution) -> {
+		final MarketabilityCargoSequenceGenerator generator = injector.getInstance(MarketabilityCargoSequenceGenerator.class);
+		generator.generateOptions(schedule, initialSequences, cargoSegment, resource, portSlot, vesselSpeed, (solution) -> {
 			final SingleResult result = evaluator.evaluate(resource, solution, portSlot);
 			ret.merge(result);
 			return result != null;
