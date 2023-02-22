@@ -968,7 +968,7 @@ public class Lexer implements java_cup.runtime.Scanner, ParserSymbols {
             }
           case 75: break;
           case 25: 
-            { return symbol("var", VAR, new String(yytext()).replace("#","") );
+            { return symbol("var", VAR, yytext().replace("#","") );
             }
           case 76: break;
           case 26: 
@@ -984,7 +984,7 @@ public class Lexer implements java_cup.runtime.Scanner, ParserSymbols {
             }
           case 79: break;
           case 29: 
-            { return symbol("param", PARAM, new String(yytext()).replace("@","") );
+            { return symbol("param", PARAM, yytext().replace("@","") );
             }
           case 80: break;
           case 30: 
