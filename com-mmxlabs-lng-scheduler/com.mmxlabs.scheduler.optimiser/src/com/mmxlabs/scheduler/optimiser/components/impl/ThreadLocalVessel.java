@@ -14,6 +14,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 public class ThreadLocalVessel implements IVessel {
 
 	private final ThreadLocal<Vessel> reference = new ThreadLocal<>();
+	private final ThreadLocal<Integer> minSpeed = new ThreadLocal<>();
+	private final ThreadLocal<Integer> maxSpeed = new ThreadLocal<>();
 	@NonNull
 	private final Vessel globalReference;
 
@@ -31,21 +33,31 @@ public class ThreadLocalVessel implements IVessel {
 	}
 
 	public void setMinSpeed(final int minSpeed) {
-		getUnderlyingVessel().setMinSpeed(minSpeed);
+		this.minSpeed.set(minSpeed);
 	}
 
 	public void setMaxSpeed(final int maxSpeed) {
-		getUnderlyingVessel().setMaxSpeed(maxSpeed);
+		this.maxSpeed.set(maxSpeed);
 	}
 
 	@Override
 	public int getMaxSpeed() {
-		return getUnderlyingVessel().getMaxSpeed();
+		Integer ms = maxSpeed.get();
+		if (ms != null) {
+			return ms;
+		} else {
+			return globalReference.getMaxSpeed();
+		}
 	}
 
 	@Override
 	public int getMinSpeed() {
-		return getUnderlyingVessel().getMinSpeed();
+		Integer ms = minSpeed.get();
+		if (ms != null) {
+			return ms;
+		} else {
+			return globalReference.getMinSpeed();
+		}
 	}
 
 	public void setMinBaseFuelConsumptionInMTPerDay(final int minBaseFuelConsumptionInMTPerDay) {
