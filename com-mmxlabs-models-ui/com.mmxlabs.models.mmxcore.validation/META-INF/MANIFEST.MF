@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.ui.validation;bundle-version="[6.2.5,7.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[6.2.5,7.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.rcp.common;bundle-version="6.2.5"
+ com.mmxlabs.rcp.common;bundle-version="6.2.5",
+ com.mmxlabs.models.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.mmxcore.validation
