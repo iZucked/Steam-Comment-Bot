@@ -288,17 +288,18 @@ public class MarketabilitySandboxEvaluator {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
-			final MarketabilityModel model, final IProgressMonitor progressMonitor) {
+	public static boolean evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final MarketabilityModel model, final IProgressMonitor progressMonitor, boolean validateScenario) {
 		final long timeBefore = System.currentTimeMillis();
-		singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor);
+		boolean successful = singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor, validateScenario);
 		final long timeAfter = System.currentTimeMillis();
 
 		System.out.printf("Eval %d\n", timeAfter - timeBefore);
+		return successful;
 	}
 
-	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
-			final MarketabilityModel model, final IProgressMonitor progressMonitor) {
+	private static boolean singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final MarketabilityModel model, final IProgressMonitor progressMonitor, boolean validateScenario) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final IMapperClass mapper = new Mapper(optimiserScenario, false);
@@ -309,10 +310,11 @@ public class MarketabilitySandboxEvaluator {
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
+		boolean[] successful = new boolean[1];
 		ServiceHelper.<IAnalyticsScenarioEvaluator>withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
-			evaluator.evaluateMarketabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap, progressMonitor);
+			successful[0] = evaluator.evaluateMarketabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap, progressMonitor, validateScenario );
 		});
+		return successful[0];
 	}
 
 	

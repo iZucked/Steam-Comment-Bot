@@ -224,7 +224,10 @@ public class MainTableComponent {
 		};
 		inputWants.add(refreshDynamicColumns);
 		tableViewer.setContentProvider(new MarketabilityModelContentProvider());
-		inputWants.add(model -> tableViewer.setInput(model));
+		inputWants.add(model -> {
+			tableViewer.setInput(model);
+			tableViewer.refresh();
+		});
 		return tableViewer.getGrid();
 	}
 
