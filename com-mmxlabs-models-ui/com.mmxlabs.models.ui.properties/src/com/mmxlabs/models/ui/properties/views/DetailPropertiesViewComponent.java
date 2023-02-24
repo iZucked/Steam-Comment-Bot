@@ -9,10 +9,8 @@ import java.util.Collections;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
@@ -120,8 +118,7 @@ public abstract class DetailPropertiesViewComponent {
 	}
 
 	protected Collection<?> adaptSelection(final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+		if (selection instanceof IStructuredSelection structuredSelection) {
 			return structuredSelection.toList();
 		}
 		return Collections.emptySet();
