@@ -23,6 +23,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters;
 import com.mmxlabs.models.lng.commercial.VolumeTierSlotParams;
 import com.mmxlabs.models.lng.commercial.validation.VolumeTierContractConstraint;
 import com.mmxlabs.models.lng.commercial.validation.VolumeTierSlotParamsConstraint;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
@@ -54,9 +56,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class VolumeTierContractTests extends AbstractMicroTestCase {
 
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount, but same price for
-	 * each side of the tier. We expect the blended price to be the same as the
-	 * inputs
+	 * Basic test. Purchase contract loading 2x threshold amount, but same price for each side of the tier. We expect the blended price to be the same as the inputs
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -210,8 +210,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount. Different prices
-	 * with equal volume weighting.
+	 * Basic test. Purchase contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -249,8 +248,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount. Different prices
-	 * with equal volume weighting.
+	 * Basic test. Purchase contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -288,8 +286,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount. Different prices
-	 * with equal volume weighting.
+	 * Basic test. Purchase contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -336,8 +333,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount. Different prices
-	 * with equal volume weighting.
+	 * Basic test. Purchase contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -384,9 +380,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Sales contract loading 2x threshold amount, but same price for
-	 * each side of the tier. We expect the blended price to be the same as the
-	 * inputs
+	 * Basic test. Sales contract loading 2x threshold amount, but same price for each side of the tier. We expect the blended price to be the same as the inputs
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -425,8 +419,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Sales contract loading 2x threshold amount. Different prices with
-	 * equal volume weighting.
+	 * Basic test. Sales contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -464,8 +457,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount. Different prices
-	 * with equal volume weighting.
+	 * Basic test. Purchase contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -502,9 +494,84 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 		Assertions.assertEquals(expectedPrice, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.01);
 	}
 
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testShippedPurchaseContract1() {
+
+		Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_150);
+		VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity).build();
+		final PurchaseContract purchaseContract = commercialModelBuilder.makeVolumeTierPurchaseContract("vt1", entity, "1", "1", 70000, VolumeUnits.M3);
+
+		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
+				.makeFOBPurchase("F1", LocalDate.of(2018, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "1", 22.8)//
+				.withWindowStartTime(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withVolumeLimits(140_000, 140_000, VolumeUnits.M3) //
+				//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, "5") //
+				.build() //
+				.withVesselAssignment(vesselCharter, 1) //
+
+				//
+				.build();
+
+		final Slot<?> load = testCargo.getSlots().get(0);
+		final Slot<?> discharge = testCargo.getSlots().get(1);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		runnerBuilder.evaluateInitialState();
+
+		final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
+		final SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
+		Assertions.assertEquals(1, simpleCargoAllocation.getLoadAllocation().getPrice(), 0.0001);
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testShippedSalesContract() {
+
+		Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_150);
+		VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity).build();
+
+		final SalesContract salesContract = commercialModelBuilder.makeVolumeTierSalesContract("vt1", entity, "5", "10", 70000, VolumeUnits.M3);
+
+		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
+				.makeFOBPurchase("F1", LocalDate.of(2018, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_BONNY), null, entity, "1", 22.8)//
+				.withWindowStartTime(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				//
+				.build() //
+
+				.makeDESSale("D1", LocalDate.of(2018, 6, 1), portFinder.findPortById(InternalDataConstants.PORT_CHITA), salesContract, entity, null) //
+				.withVolumeLimits(105_000, 105_000, VolumeUnits.M3) //
+				.build() //
+
+				.withVesselAssignment(vesselCharter, 1) //
+				//
+				.build();
+
+		final Slot<?> load = testCargo.getSlots().get(0);
+		final Slot<?> discharge = testCargo.getSlots().get(1);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		runnerBuilder.evaluateInitialState();
+
+		final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
+		final SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
+		final double expectedPrice = (5.0 * 70_000.0 + 10.0 * 35_000.0) / 105_000.0;
+		Assertions.assertEquals(expectedPrice, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.01);
+	}
+
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount. Different prices
-	 * with equal volume weighting.
+	 * Basic test. Purchase contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -551,8 +618,7 @@ public class VolumeTierContractTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Basic test. Purchase contract loading 2x threshold amount. Different prices
-	 * with equal volume weighting.
+	 * Basic test. Purchase contract loading 2x threshold amount. Different prices with equal volume weighting.
 	 */
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
