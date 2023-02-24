@@ -29,6 +29,9 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -108,14 +111,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				int numDischarges = 0;
 				
 				if (target instanceof final CargoAllocation cargoAllocation) {
-					final Sequence sequence = cargoAllocation.getSequence();
-					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
-						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
+					containsInCharterBallastBonus = hasBallastBonus(cargoAllocation.getSequence());
+					containsInCharterRepositioning = hasRepositioningFee(cargoAllocation.getSequence());
 					containsCargo = true;
 					complexCargo |= cargoAllocation.getSlotAllocations().size() > 2;
 
@@ -160,39 +157,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (target instanceof final StartEvent evt) {
 					ballastLegs = Math.max(ballastLegs, 1);
 					containsStartEvent = true;
-					final Sequence sequence = evt.getSequence();
-					if (sequence != null && sequence.getVesselCharter() != null) {
-						final GenericCharterContract genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
-					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() >= 0) {
-						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
+					containsInCharterRepositioning = hasRepositioningFee(evt.getSequence());
 				}
 				if (target instanceof final EndEvent evt) {
 					containsEndEvent = true;
-					final Sequence sequence = evt.getSequence();
-					if (sequence != null && sequence.getVesselCharter() != null) {
-						final GenericCharterContract genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
-					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() >= 0) {
-						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
+					containsInCharterBallastBonus = hasBallastBonus(evt.getSequence());
 				}
 				if (target instanceof final VesselEventVisit vesselEventVisit) {
 					ballastLegs = Math.max(ballastLegs, 1);
@@ -1239,32 +1208,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			}
 		}
 
-		if (sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
-
-			if (object instanceof final CargoAllocation cargoAllocation) {
-
-				final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-				if (genericCharterContract != null) {
-					for (final var d : cargoAllocation.getGeneralPNLDetails()) {
-						if (d instanceof final CharterContractFeeDetails feeDetails) {
-							if (feeDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails
-									|| feeDetails.getMatchingContractDetails() instanceof LumpSumBallastBonusTermDetails) {
-								// Revenue
-								shippingCost -= feeDetails.getFee();
-							}
-
-//							cehck cost or revenue?
-
-							if (feeDetails.getMatchingContractDetails() instanceof OriginPortRepositioningFeeTermDetails
-									|| feeDetails.getMatchingContractDetails() instanceof LumpSumRepositioningFeeTermDetails) {
-								shippingCost += feeDetails.getFee();
-							}
-						}
-					}
-				}
-
-			}
-
+		final GenericCharterContract genericCharterContract = getCharterContract(sequence);
+		
+		if (genericCharterContract != null) {
+			shippingCost = getCharterContractCost(object, shippingCost);
 		}
 
 		// Add on chartering costs
@@ -1273,6 +1220,53 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		return shippingCost;
 
+	}
+
+	protected static int getCharterContractCost(final Object object, int shippingCost) {
+		final EList<GeneralPNLDetails> generalPNLDetails;
+		if (object instanceof final ProfitAndLossContainer pnlContainer) {
+			generalPNLDetails = pnlContainer.getGeneralPNLDetails();
+		} else {
+			generalPNLDetails = null;
+		}
+		if (generalPNLDetails != null) {
+
+			for (final GeneralPNLDetails d : generalPNLDetails) {
+				if (d instanceof final CharterContractFeeDetails feeDetails) {
+					if (feeDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails
+							|| feeDetails.getMatchingContractDetails() instanceof LumpSumBallastBonusTermDetails) {
+						// Revenue
+						shippingCost -= feeDetails.getFee();
+					}
+
+					if (feeDetails.getMatchingContractDetails() instanceof OriginPortRepositioningFeeTermDetails
+							|| feeDetails.getMatchingContractDetails() instanceof LumpSumRepositioningFeeTermDetails) {
+						shippingCost += feeDetails.getFee();
+					}
+				}
+			}
+		}
+		return shippingCost;
+	}
+
+	private static GenericCharterContract getCharterContract(final Sequence sequence) {
+		final GenericCharterContract genericCharterContract;
+		if (sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
+			genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
+		} else if (sequence.getVesselCharter() != null) {
+			if (sequence.getVesselCharter().getContainedCharterContract() != null) {
+				genericCharterContract = sequence.getVesselCharter().getContainedCharterContract();
+			} else if (sequence.getVesselCharter().getCharterOrDelegateCharterContract() != null) {
+				genericCharterContract = sequence.getVesselCharter().getCharterOrDelegateCharterContract();
+			} else if (sequence.getVesselCharter().getGenericCharterContract() != null) {
+				genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
+			} else {
+				genericCharterContract = null;
+			}
+		} else {
+			genericCharterContract = null;
+		}
+		return genericCharterContract;
 	}
 
 	private static Integer getEquityPNLValue(final Object object) {
@@ -1504,5 +1498,29 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		}
 		return null;
+	}
+	
+	private static boolean hasRepositioningFee(final Sequence sequence) {
+		boolean result = false;
+		if (sequence != null) {
+			final GenericCharterContract genericCharterContract = getCharterContract(sequence);
+			if (genericCharterContract != null && genericCharterContract.getRepositioningFeeTerms() instanceof final SimpleRepositioningFeeContainer rfc && !rfc.getTerms().isEmpty()) {
+					result = true;
+			}
+		}
+		return result;
+	}
+	
+	private static boolean hasBallastBonus(final Sequence sequence) {
+		boolean result = false;
+		if (sequence != null) {
+			final GenericCharterContract genericCharterContract = getCharterContract(sequence);
+			if (genericCharterContract != null 
+					&& ((genericCharterContract.getBallastBonusTerms() instanceof final SimpleBallastBonusContainer sbbc && !sbbc.getTerms().isEmpty()) 
+							|| (genericCharterContract.getBallastBonusTerms() instanceof final MonthlyBallastBonusContainer mbbc && !mbbc.getTerms().isEmpty()))) {
+				result = true;
+			}
+		}
+		return result;
 	}
 }
