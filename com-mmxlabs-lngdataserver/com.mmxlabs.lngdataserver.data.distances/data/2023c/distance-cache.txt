@@ -1,3 +1,8 @@
+====
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
+    All rights reserved.
+====
+
 {"version":"v1.2.1021","from":"NL0017","to":"DZ0004","distance":1918.788,"errorCode":null,"antiPiracy":true}
 {"version":"v1.2.1021","from":"DZ0004","to":"NL0017","distance":1882.667,"errorCode":null,"antiPiracy":true}
 {"version":"v1.2.1021","from":"NL0017","to":"AO0061","distance":5121.347,"errorCode":null,"antiPiracy":true}
