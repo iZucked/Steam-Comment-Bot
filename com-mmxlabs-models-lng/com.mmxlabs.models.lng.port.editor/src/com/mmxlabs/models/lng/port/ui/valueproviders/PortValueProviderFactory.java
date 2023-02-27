@@ -26,9 +26,7 @@ public class PortValueProviderFactory implements IReferenceValueProviderFactory 
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		final EClass referenceClass = reference.getEReferenceType();
 
-		if (rootObject instanceof LNGScenarioModel) {
-
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 			final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			if (referenceClass == PortPackage.eINSTANCE.getPort()) {
 				return new SimpleReferenceValueProvider(portModel, PortPackage.eINSTANCE.getPortModel_Ports());
