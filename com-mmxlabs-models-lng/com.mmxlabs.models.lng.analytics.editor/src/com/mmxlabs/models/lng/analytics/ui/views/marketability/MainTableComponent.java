@@ -30,7 +30,9 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -61,6 +63,7 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -132,7 +135,7 @@ public class MainTableComponent {
 
 	private Control createViewer(final Composite parent) {
 		localResourceManager = new LocalResourceManager(JFaceResources.getResources(), parent);
-		tableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tableViewer = new EObjectTableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		tableViewer.init(new MarketabilityModelContentProvider(), null);
 		ColumnViewerToolTipSupport.enableFor(tableViewer);
 
@@ -438,6 +441,19 @@ public class MainTableComponent {
 		return portColumn;
 	}
 
+	
+	public void selectRowWithLoad(LoadSlot slot) {
+		Object input = tableViewer.getInput();
+		if(input instanceof MarketabilityModel model) {
+			Optional<@NonNull MarketabilityRow> loadRow = model.getRows().stream().filter(x -> 
+				x.getBuyOption() instanceof BuyReference br && br.getSlot() == slot
+			).findAny();
+			if(loadRow.isPresent()) {
+				tableViewer.setSelection(new StructuredSelection(loadRow.get()), true);
+			}
+		}
+			//tableViewer.setSelection(null, false);
+	}
 	@SuppressWarnings("null")
 	private @NonNull String formatDate(final LocalDate date) {
 		if (date == null) {

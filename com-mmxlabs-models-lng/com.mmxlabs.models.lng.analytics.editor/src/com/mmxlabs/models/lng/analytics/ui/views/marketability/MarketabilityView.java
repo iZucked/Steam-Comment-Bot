@@ -15,7 +15,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -87,6 +89,17 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	private MainTableComponent mainTableComponent;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MarketabilityView.class);
+	
+	private ISelectionListener listener = new ISelectionListener() {
+		
+		@Override
+		public void selectionChanged(MPart part, Object selection) {
+			// TODO Auto-generated method stub
+		
+			mainTableComponent.getViewer().setSelection(null, isListenerAttached());
+			
+		}
+	};
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -194,6 +207,8 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 		service = getSite().getService(ESelectionService.class);
+		
+		service.addSelectionListener(listener);
 		listenToSelectionsFrom();
 
 		listenToScenarioSelection();
@@ -370,6 +385,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 			// Find valid, selected objects
 			final LoadSlot validSlot = MarketabilityView.this.processSelection(e3part, selection);
+			mainTableComponent.selectRowWithLoad(validSlot);
 		};
 		service.addPostSelectionListener(selectionListener);
 	}
