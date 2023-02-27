@@ -19,6 +19,8 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -28,9 +30,9 @@ import com.mmxlabs.common.CumulativeMap;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContentsGenerators;
-import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.ColumnManager;
+import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -51,6 +53,12 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 	public final Set<YearMonth> overallIncomeMonths = new HashSet<>();
 
+	protected enum DateAggregationMode {
+		DISPLAY_BY_CALENDAR_YEAR, DISPLAY_BY_MONTH
+	}
+
+	protected DateAggregationMode dateAggregationMode = DateAggregationMode.DISPLAY_BY_MONTH;
+
 	protected AbstractIncomeStatement(final String helpContextId) {
 		super(helpContextId);
 	}
@@ -61,7 +69,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof IncomeStatementData isd) {
+				if (element instanceof final IncomeStatementData isd) {
 					return isd.parent;
 				}
 				return super.getParent(element);
@@ -69,7 +77,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof IncomeStatementData isd) {
+				if (parentElement instanceof final IncomeStatementData isd) {
 					return isd.children.toArray();
 				}
 				return super.getChildren(parentElement);
@@ -77,7 +85,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 			@Override
 			public boolean hasChildren(final Object element) {
-				if (element instanceof IncomeStatementData isd) {
+				if (element instanceof final IncomeStatementData isd) {
 					return !isd.children.isEmpty();
 				}
 				return super.hasChildren(element);
@@ -91,8 +99,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 		return new AbstractSimpleTabularReportTransformer<IncomeStatementData>() {
 
 			/**
-			 * Returns the list of year / month labels for the entire known exposure data
-			 * range. This may conceivably include months in which no transactions occur.
+			 * Returns the list of year / month labels for the entire known exposure data range. This may conceivably include months in which no transactions occur.
 			 * 
 			 * @return
 			 */
@@ -149,7 +156,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 						}
 
 						@Override
-						public Image getColumnImage(IncomeStatementData data) {
+						public Image getColumnImage(final IncomeStatementData data) {
 							final ScenarioResult scenarioResult = data.scenarioResult;
 							if (selectedDataProvider.getPinnedScenarioResult() == scenarioResult) {
 								return pinImage;
@@ -203,11 +210,23 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				final List<YearMonth> currentYear = new ArrayList<>(12);
 				for (final YearMonth date : dateRange()) {
 					currentYear.add(date);
-					result.add(createMonthColumn(date));
-					// Add Year totals -- Month here starts at 1
-					if (date.getMonthValue() == Calendar.DECEMBER + 1) {
-						result.add(createYearTotalColumn(currentYear));
-						currentYear.clear();
+					if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_MONTH) {
+
+						result.add(createMonthColumn(date));
+
+						// Add Year totals -- Month here starts at 1
+						if (date.getMonthValue() == Calendar.DECEMBER + 1) {
+							result.add(createYearTotalColumn(currentYear));
+							currentYear.clear();
+						}
+					}
+					if (dateAggregationMode == DateAggregationMode.DISPLAY_BY_CALENDAR_YEAR) {
+
+						// Add Year totals -- Month here starts at 1
+						if (date.getMonthValue() == Calendar.DECEMBER + 1) {
+							result.add(createYearTotalColumn(currentYear));
+							currentYear.clear();
+						}
 					}
 				}
 
@@ -227,14 +246,41 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				return new ColumnManager<IncomeStatementData>(String.format("%d-%02d", date.getYear(), date.getMonthValue())) {
 					@Override
 					public String getColumnText(final IncomeStatementData data) {
-						final double result = data.valuesByMonth.containsKey(date) ? data.valuesByMonth.get(date) : 0;
+						double result = data.valuesByMonth.containsKey(date) ? data.valuesByMonth.get(date) : 0;
+						if (data.valuesByMonth2 != null) {
+							final double resultB = data.valuesByMonth2.containsKey(date) ? data.valuesByMonth2.get(date) : 0;
+							if (resultB != 0.0) {
+								result = result / resultB;
+							} else {
+								result = 0.0;
+							}
+						}
 						return String.format("%,.01f", result);
 					}
 
 					@Override
 					public int compare(final IncomeStatementData o1, final IncomeStatementData o2) {
-						final double result1 = o1.valuesByMonth.containsKey(date) ? o1.valuesByMonth.get(date) : 0;
-						final double result2 = o2.valuesByMonth.containsKey(date) ? o2.valuesByMonth.get(date) : 0;
+						double result1 = o1.valuesByMonth.containsKey(date) ? o1.valuesByMonth.get(date) : 0;
+						double result2 = o2.valuesByMonth.containsKey(date) ? o2.valuesByMonth.get(date) : 0;
+
+						if (o1.valuesByMonth2 != null) {
+							final double resultB = o1.valuesByMonth2.containsKey(date) ? o1.valuesByMonth2.get(date) : 0;
+							if (resultB != 0.0) {
+								result1 = result1 / resultB;
+							} else {
+								result1 = 0.0;
+							}
+						}
+
+						if (o2.valuesByMonth2 != null) {
+							final double resultB = o2.valuesByMonth2.containsKey(date) ? o2.valuesByMonth2.get(date) : 0;
+							if (resultB != 0.0) {
+								result2 = result2 / resultB;
+							} else {
+								result2 = 0.0;
+							}
+						}
+
 						return Double.compare(result1, result2);
 					}
 
@@ -251,9 +297,21 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 
 					@Override
 					public String getColumnText(final IncomeStatementData data) {
+
 						double result = 0.0;
 						for (final YearMonth my : thisYear) {
 							result += data.valuesByMonth.containsKey(my) ? data.valuesByMonth.get(my) : 0;
+						}
+						if (data.valuesByMonth2 != null) {
+							double resultB = 0.0;
+							for (final YearMonth my : thisYear) {
+								resultB += data.valuesByMonth2.containsKey(my) ? data.valuesByMonth2.get(my) : 0;
+							}
+							if (resultB != 0.0) {
+								result = result / resultB;
+							} else {
+								result = 0.0;
+							}
 						}
 						return String.format("%,.01f", result);
 					}
@@ -266,6 +324,31 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 							result1 += o1.valuesByMonth.containsKey(my) ? o1.valuesByMonth.get(my) : 0;
 							result2 += o2.valuesByMonth.containsKey(my) ? o2.valuesByMonth.get(my) : 0;
 						}
+
+						if (o1.valuesByMonth2 != null) {
+							double resultB = 0.0;
+							for (final YearMonth my : thisYear) {
+
+								resultB += o1.valuesByMonth2.containsKey(my) ? o1.valuesByMonth2.get(my) : 0;
+							}
+							if (resultB != 0.0) {
+								result1 = result1 / resultB;
+							} else {
+								result1 = 0.0;
+							}
+						}
+						if (o2.valuesByMonth2 != null) {
+							double resultB = 0.0;
+							for (final YearMonth my : thisYear) {
+								resultB += o2.valuesByMonth2.containsKey(my) ? o2.valuesByMonth2.get(my) : 0;
+							}
+							if (resultB != 0.0) {
+								result2 = result2 / resultB;
+							} else {
+								result2 = 0.0;
+							}
+						}
+
 						return Double.compare(result1, result2);
 					}
 
@@ -299,79 +382,84 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				final List<IncomeStatementData> output = new ArrayList<>();
 
 				IncomeStatementData shippingCostItem = null;
-				EnumMap<LineItems, IncomeStatementData> m = new EnumMap<>(LineItems.class);
+				final EnumMap<LineItems, IncomeStatementData> m = new EnumMap<>(LineItems.class);
 				for (final LineItems lineItem : LineItems.values()) {
 					if (lineItem == LineItems.AvgSalesPrice || lineItem == LineItems.AvgPurchasePrice) {
 						// Skip these, derived later
 						continue;
 					}
 
-					final IncomeStatementData exposures = getIncomeByMonth(scenarioResult, schedule, lineItem);
-					m.put(lineItem, exposures);
+					final IncomeStatementData data = getIncomeByMonth(scenarioResult, schedule, lineItem);
+					m.put(lineItem, data);
 					if (lineItem == LineItems.ShippingCosts) {
-						shippingCostItem = exposures;
-						output.add(exposures);
+						shippingCostItem = data;
+						output.add(data);
 					} else if (lineItem == LineItems.Hire || lineItem == LineItems.PortCharges || lineItem == LineItems.VariableCosts) {
 						assert shippingCostItem != null;
-						shippingCostItem.children.add(exposures);
-						exposures.parent = shippingCostItem;
+						shippingCostItem.children.add(data);
+						data.parent = shippingCostItem;
 					} else {
-						output.add(exposures);
+						output.add(data);
 					}
 
-					for (final YearMonth key : exposures.valuesByMonth.keySet()) {
+					for (final YearMonth key : data.valuesByMonth.keySet()) {
 						overallIncomeMonths.add(key);
 					}
 				}
+
 				// Avg Purchase Price;
-				computeAvgPrice(schedule, scenarioResult, output, m, LineItems.AvgPurchasePrice, LineItems.PurchaseVolume, LineItems.Costs);
+				gatherAvgPriceData(schedule, scenarioResult, output, m, LineItems.AvgPurchasePrice, LineItems.PurchaseVolume, LineItems.Costs);
 				// Avg Sales Price;
-				computeAvgPrice(schedule, scenarioResult, output, m, LineItems.AvgSalesPrice, LineItems.SalesVolume, LineItems.Revenues);
+				gatherAvgPriceData(schedule, scenarioResult, output, m, LineItems.AvgSalesPrice, LineItems.SalesVolume, LineItems.Revenues);
 
 				return output;
 			}
 
-			private void computeAvgPrice(final Schedule schedule, final ScenarioResult scenarioResult, final List<IncomeStatementData> output, EnumMap<LineItems, IncomeStatementData> m,
-					LineItems avgDataKey, LineItems volumeData, LineItems valueData) {
+			private void gatherAvgPriceData(final Schedule schedule, final ScenarioResult scenarioResult, final List<IncomeStatementData> output, final EnumMap<LineItems, IncomeStatementData> m,
+					final LineItems avgDataKey, final LineItems volumeData, final LineItems valueData) {
 				{
 
 					// Step 1, compute the totals
-					IncomeStatementData volsInMMBTU = m.get(volumeData);
-					IncomeStatementData valuesInDollars = m.get(valueData);
+					final IncomeStatementData volsInMMBTU = m.get(volumeData);
+					final IncomeStatementData valuesInDollars = m.get(valueData);
 
-					final Map<YearMonth, Double> exposuresByMonth = new HashMap<>();
-					for (YearMonth key : overallIncomeMonths) {
-						Double volume = volsInMMBTU.valuesByMonth.get(key);
-						Double value = valuesInDollars.valuesByMonth.get(key);
+					final Map<YearMonth, Double> valuesByMonth = new HashMap<>();
+					final Map<YearMonth, Double> volumesByMonth = new HashMap<>();
+					for (final YearMonth key : overallIncomeMonths) {
+						final Double volume = volsInMMBTU.valuesByMonth.get(key);
+						final Double value = valuesInDollars.valuesByMonth.get(key);
 
 						if (volume != null && value != null) {
 							if (volume != 0.0) {
-								exposuresByMonth.put(key, value / volume);
+								valuesByMonth.put(key, value);
+								volumesByMonth.put(key, volume);
 							}
 						}
 					}
 
-					IncomeStatementData data = new IncomeStatementData(scenarioResult, schedule, avgDataKey, exposuresByMonth);
+					final IncomeStatementData data = new IncomeStatementData(scenarioResult, schedule, avgDataKey, valuesByMonth, volumesByMonth);
 					output.add(data);
 
 					// Step 2, compute the contract sub-totals
-					for (IncomeStatementData dVols : volsInMMBTU.children) {
-						for (IncomeStatementData dValues : valuesInDollars.children) {
+					for (final IncomeStatementData dVols : volsInMMBTU.children) {
+						for (final IncomeStatementData dValues : valuesInDollars.children) {
 							if (dVols.key == dValues.key) {
 
-								final Map<YearMonth, Double> dExposuresByMonth = new HashMap<>();
+								final Map<YearMonth, Double> dvaluesByMonth = new HashMap<>();
+								final Map<YearMonth, Double> dvolumesByMonth = new HashMap<>();
 
-								for (YearMonth key : overallIncomeMonths) {
+								for (final YearMonth key : overallIncomeMonths) {
 
-									Double volume = dVols.valuesByMonth.get(key);
-									Double value = dValues.valuesByMonth.get(key);
+									final Double volume = dVols.valuesByMonth.get(key);
+									final Double value = dValues.valuesByMonth.get(key);
 									if (volume != null && value != null) {
 										if (volume != 0.0) {
-											dExposuresByMonth.put(key, value / volume);
+											dvaluesByMonth.put(key, value);
+											dvolumesByMonth.put(key, volume);
 										}
 									}
 								}
-								IncomeStatementData data2 = new IncomeStatementData(scenarioResult, schedule, dVols.key, dExposuresByMonth);
+								final IncomeStatementData data2 = new IncomeStatementData(scenarioResult, schedule, dVols.key, dvaluesByMonth, dvolumesByMonth);
 								data.children.add(data2);
 							}
 						}
@@ -392,7 +480,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			switch (lineItem) {
 			case BOG:
 				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof FuelUsage fuelUsage) {
+					if (event instanceof final FuelUsage fuelUsage) {
 						total += ScheduleModelKPIUtils.getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 					}
 				}
@@ -497,7 +585,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			T subType = null;
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 				final Slot<?> slot = slotAllocation.getSlot();
-				if (slot instanceof DischargeSlot dischargeSlot) {
+				if (slot instanceof final DischargeSlot dischargeSlot) {
 					dischargeDate = slotAllocation.getSlotVisit().getStart();
 					subType = getSubType(dischargeSlot);
 				}
@@ -540,7 +628,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			return null;
 		}
 
-		long shippingCost = ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.ALL) //
+		final long shippingCost = ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.ALL) //
 				// Take off cost items tallied separately.
 				- ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.HIRE_COSTS) //
 				- ScheduleModelKPIUtils.calculateEventShippingCost(cargoAllocation, false, false, ShippingCostType.PORT_COSTS) //
@@ -551,8 +639,8 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 	}
 
 	private Color getForeground(final Object element) {
-		if (element instanceof IncomeStatementData incomeStatementData) {
-			if (incomeStatementData.key instanceof LineItems lineItems) {
+		if (element instanceof final IncomeStatementData incomeStatementData) {
+			if (incomeStatementData.key instanceof final LineItems lineItems) {
 				if (lineItems == LineItems.BOG) {
 					return PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_GRAY);
 				}
@@ -562,6 +650,24 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 		}
 
 		return null;
+	}
+
+	private void setDateAggregationModeActionText(final Action a, final DateAggregationMode mode) {
+		String modeStr = null;
+		switch (mode) {
+		case DISPLAY_BY_CALENDAR_YEAR:
+			modeStr = "Calendar Year";
+			break;
+		case DISPLAY_BY_MONTH:
+			modeStr = "Monthly";
+			break;
+		default:
+			assert false;
+			break;
+
+		}
+		assert modeStr != null;
+		a.setText("Show: " + modeStr);
 	}
 
 	protected abstract void resetData();
@@ -578,6 +684,30 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 		return super.getAdapter(adapter);
+	}
+
+	@Override
+	protected void makeActions() {
+		super.makeActions();
+
+		final Action displayModeToggle = new Action("Show:", IAction.AS_PUSH_BUTTON) {
+
+			@Override
+			public void run() {
+
+				final int modeIdx = (dateAggregationMode.ordinal() + 1) % DateAggregationMode.values().length;
+				dateAggregationMode = DateAggregationMode.values()[modeIdx];
+				setDateAggregationModeActionText(this, dateAggregationMode);
+				getViewSite().getActionBars().updateActionBars();
+				AbstractIncomeStatement.this.refresh();
+
+			}
+		};
+		setDateAggregationModeActionText(displayModeToggle, dateAggregationMode);
+
+		getViewSite().getActionBars().getToolBarManager().add(displayModeToggle);
+
+		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
 }
