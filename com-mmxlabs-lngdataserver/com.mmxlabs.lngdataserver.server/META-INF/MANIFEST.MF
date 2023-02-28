@@ -37,5 +37,3 @@ Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.lngdataserver.server
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.7.0"
-Bundle-ClassPath: web_files/,
- .
