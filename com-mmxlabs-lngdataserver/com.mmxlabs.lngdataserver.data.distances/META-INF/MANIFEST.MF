@@ -10,10 +10,25 @@ Require-Bundle: org.eclipse.osgi,
  com.mmxlabs.hub,
  com.googlecode.json-simple,
  org.eclipse.ui;bundle-version="3.109.0",
- org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.fasterxml.jackson.core.jackson-core,
+ com.fasterxml.jackson.core.jackson-annotations,
+ com.fasterxml.jackson.core.jackson-databind,
+ com.mmxlabs.lngdataserver.commons,
+ com.mmxlabs.common.common-util,
+ com.google.inject;bundle-version="5.1.0",
+ org.apache.httpcomponents.httpclient;bundle-version="4.5.13",
+ org.apache.httpcomponents.httpcore;bundle-version="4.4.14",
+ org.apache.commons.lang,
+ com.google.guava.failureaccess;bundle-version="1.0.1",
+ org.apache.commons.logging;bundle-version="1.2.0",
+ com.fasterxml.jackson.datatype.jackson-datatype-jsr310,
+ com.mmxlabs.lngdataserver.lng.importers;bundle-version="6.2.5"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.data.distances.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.lngdataserver.data.distances
 Bundle-ClassPath: data/,
  .
+Import-Package: javax.inject;version="1.0.0",
+ org.slf4j
