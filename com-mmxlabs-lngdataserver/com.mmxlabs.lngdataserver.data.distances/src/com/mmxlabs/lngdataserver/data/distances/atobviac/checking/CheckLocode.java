@@ -49,21 +49,33 @@ public class CheckLocode {
 					mapper.writerWithDefaultPrettyPrinter().writeValue(portCache, upstreamPorts);
 				}
 
-				for (var l : version.getLocations()) {
+				LOOP_LOCATIONS: for (var l : version.getLocations()) {
 
 					Set<String> locodes = new HashSet<>();
-
+					String countryCode = null;
 					for (final var upstreamPort : upstreamPorts) {
 						if (l.getUpstreamID().equals(upstreamPort.getCode())) {
-							locodes.add(upstreamPort.getLocode());
+							// Do the codes already match?
+							if (l.getLocode() != null && !l.getLocode().isBlank() && upstreamPort.getLocode() != null && !upstreamPort.getLocode().isBlank()) {
+								if (l.getLocode().replaceAll(" ", "").equals(upstreamPort.getLocode().replaceAll(" ", ""))) {
+									continue LOOP_LOCATIONS;
+								}
+							}
+							if (upstreamPort.getLocode() != null && !upstreamPort.getLocode().isBlank()) {
+								locodes.add(upstreamPort.getLocode().replaceAll(" ", ""));
+							}
+							countryCode = upstreamPort.getCountryCode();
 							break;
 						}
 					}
 					for (final var upstreamPort : upstreamPorts) {
 						if (!l.getUpstreamID().equals(upstreamPort.getCode())) {
-							var d = Util.distance(l.getGeographicPoint().getLon(), l.getGeographicPoint().getLat(), upstreamPort.getLon(), upstreamPort.getLatGeodetic(), 'M');
-							if (d < threshold) {
-								locodes.add(upstreamPort.getLocode().replaceAll(" ", ""));
+							// Make sure we are looking in the same country
+							if (countryCode.equals(upstreamPort.getCountryCode())) {
+								var d = Util.distance(l.getGeographicPoint().getLon(), l.getGeographicPoint().getLat(), upstreamPort.getLon(), upstreamPort.getLatGeodetic(), 'M');
+								if (d < threshold) {
+									locodes.add(upstreamPort.getLocode().replaceAll(" ", ""));
+								}
 							}
 						}
 					}
