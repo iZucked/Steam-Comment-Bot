@@ -10,7 +10,6 @@ import java.util.concurrent.Future;
 
 import javax.inject.Named;
 
-import org.apache.commons.lang.NumberUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.util.EntityUtils;

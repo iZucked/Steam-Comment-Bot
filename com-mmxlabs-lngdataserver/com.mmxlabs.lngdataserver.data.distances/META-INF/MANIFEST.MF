@@ -27,7 +27,9 @@ Require-Bundle: org.eclipse.osgi,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.data.distances.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: com.mmxlabs.lngdataserver.data.distances
+Export-Package: com.mmxlabs.lngdataserver.data.distances,
+ com.mmxlabs.lngdataserver.data.distances.atobviac,
+ com.mmxlabs.lngdataserver.data.distances.atobviac.impl
 Bundle-ClassPath: data/,
  .
 Import-Package: javax.inject;version="1.0.0",

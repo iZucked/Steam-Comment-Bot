@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.FileLocator;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lngdataserver.data.distances.atobviac.analysis.CompareDistanceSets;

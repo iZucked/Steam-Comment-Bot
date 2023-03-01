@@ -17,8 +17,6 @@ import javax.inject.Named;
 import org.apache.http.HttpHost;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.eclipse.swt.custom.StyledTextDropTargetEffect;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.io.Files;
 import com.google.inject.AbstractModule;
@@ -27,7 +25,6 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
-import com.mmxlabs.common.parser.astnodes.SCurveFunctionASTNode;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.lngdataserver.data.distances.atobviac.impl.AtoBViaCUpdateService;
 import com.mmxlabs.lngdataserver.data.distances.atobviac.impl.AtoBviaCAdapter;
