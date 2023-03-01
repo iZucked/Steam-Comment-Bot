@@ -5,6 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lngdataserver.data.distances.atobviac.AddDistanceForNewPorts;
@@ -20,9 +25,14 @@ import com.mmxlabs.lngdataserver.data.distances.atobviac.model.PortDistanceVersi
  */
 public class CheckPortTimeZones {
 
+	private static final String API_KEY = "39XADZRH0R2R"; // API Key from Ryan?
+
 	public static void main(final String[] args) {
 
-		final String sourceData = "2023b";
+		boolean use_atobvaic = false;
+		boolean use_timezonedb_com = true; // External service, rate limited
+
+		final String sourceData = "2023d";
 
 		Util.withService(service -> {
 			final ObjectMapper mapper = new ObjectMapper();
@@ -47,16 +57,45 @@ public class CheckPortTimeZones {
 					mapper.writerWithDefaultPrettyPrinter().writeValue(portCache, upstreamPorts);
 				}
 
-				for (var l : version.getLocations()) {
-					for (final var upstreamPort : upstreamPorts) {
-						if (l.getUpstreamID().equals(upstreamPort.getCode())) {
+				try (CloseableHttpClient client = HttpClients.createDefault()) {
+					for (var l : version.getLocations()) {
+						for (final var upstreamPort : upstreamPorts) {
+							if (l.getUpstreamID().equals(upstreamPort.getCode())) {
 
-							String ours = l.getGeographicPoint().getTimeZone();
-							String theirs = upstreamPort.getTimezone().getTimezoneId();
-							if (!ours.equals(theirs)) {
-								System.out.println("Timezone mismatch for " + l.getName() + ": " + ours + " <-> " + theirs);
+								String ours = l.getGeographicPoint().getTimeZone();
+								if (use_atobvaic) {
+									String theirs = upstreamPort.getTimezone().getTimezoneId();
+									if (!ours.equals(theirs)) {
+										System.out.println("Timezone mismatch for " + l.getName() + ": " + ours + " <-> " + theirs);
+									}
+								}
+
+								if (use_timezonedb_com) {
+									HttpGet request = new HttpGet(String.format("https://api.timezonedb.com/2.1/get-time-zone?key=%s&format=json&by=position&lat=%f&lng=%f", //
+											API_KEY, 
+											l.getGeographicPoint().getLat(), //
+											l.getGeographicPoint().getLon()));
+
+									try (var response = client.execute(request)) {
+										// Limited to one request a second
+										Thread.sleep(2_000);
+										// Threas.sleep(1_000)
+										String str = EntityUtils.toString(response.getEntity());
+										try {
+											var respo = mapper.readValue(str, TZResponse.class);
+											String theirs = respo.zoneName;
+											if (!ours.equals(theirs)) {
+												System.out.println("DB Timezone mismatch for " + l.getName() + ": " + ours + " <-> " + theirs);
+											}
+										} catch (Exception e) {
+											int ii = 0;
+										}
+									}
+
+								}
+
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -64,5 +103,23 @@ public class CheckPortTimeZones {
 				e.printStackTrace();
 			}
 		});
+	}
+
+	static class TZResponse {
+		public String status;
+		public String message;
+		public String countryCode;
+		public String countryName;
+		public String regionName;
+		public String cityName;
+		public String zoneName;
+		public String abbreviation;
+		public int gmtOffset;
+		public int dst;
+		public Long zoneStart;
+		public Long zoneEnd;
+		public String nextAbbreviation;
+		public long timestamp;
+		public String formatted;
 	}
 }

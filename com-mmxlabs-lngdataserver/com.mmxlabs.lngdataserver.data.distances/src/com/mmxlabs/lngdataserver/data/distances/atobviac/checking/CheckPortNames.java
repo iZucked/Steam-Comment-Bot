@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -55,7 +56,14 @@ public class CheckPortNames {
 							String theirs = upstreamPort.getName();
 							if (!ours.equals(theirs)) {
 								if (l.getAliases() == null || !l.getAliases().contains(theirs)) {
-									System.out.println("Port name mismatch: " + ours + " <-> " + theirs);
+									String aliasStr = "";
+									if (l.getAliases() != null && !l.getAliases().isEmpty()) {
+										aliasStr = " Our aliases are " + l.getAliases().stream().collect(Collectors.joining(", "));
+									}
+									if (upstreamPort.getAliases() != null && !upstreamPort.getAliases().isEmpty()) {
+										aliasStr += " Their aliases are " + upstreamPort.getAliases().stream().collect(Collectors.joining(", "));
+									}
+									System.out.println("Port name mismatch: " + ours + " <-> " + theirs + aliasStr);
 								}
 							}
 							break;

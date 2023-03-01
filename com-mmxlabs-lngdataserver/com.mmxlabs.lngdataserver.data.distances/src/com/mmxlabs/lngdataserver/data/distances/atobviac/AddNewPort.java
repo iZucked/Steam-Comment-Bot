@@ -69,7 +69,9 @@ public class AddNewPort {
 						newLocation.getGeographicPoint().setLon(upstreamPort.getLon());
 						newLocation.getGeographicPoint().setTimeZone(upstreamPort.getTimezone().getTimezoneId());
 						if (upstreamPort.getLocode() != null && !upstreamPort.getLocode().isEmpty()) {
-							newLocation.setLocode(String.format("%s  %s", upstreamPort.getLocode().substring(0, 2), upstreamPort.getLocode().substring(2)));
+							// Most, but not all locodes have no spacing after the country code. Strip out spaces in case of noisy data
+							String lc = upstreamPort.getLocode().replaceAll(" ", "");
+							newLocation.setLocode(String.format("%s  %s", lc.substring(0, 2), lc.substring(2)));
 						}
 						if (!Util.COUNTRY_CODE_MAP.containsKey(upstreamPort.getCountryCode())) {
 							throw new IllegalStateException("No country code mapping for " + upstreamPort.getCountryCode());
