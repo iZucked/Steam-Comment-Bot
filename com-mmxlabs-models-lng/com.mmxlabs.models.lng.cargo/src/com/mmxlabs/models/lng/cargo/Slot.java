@@ -2060,6 +2060,14 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model kind="operation"
 	 * @generated
 	 */
+	EList<APortSet<Port>> getSlotOrDelegateAllowedPorts();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
 	BusinessUnit getSlotOrDelegateBusinessUnit();
 
 } // end of  Slot

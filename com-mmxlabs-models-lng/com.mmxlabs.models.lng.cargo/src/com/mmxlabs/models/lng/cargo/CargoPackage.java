@@ -1222,13 +1222,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 21;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
+	int SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
 
 	/**
 	 * The number of operations of the '<em>Slot</em>' class.
@@ -1237,7 +1246,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1958,6 +1967,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
@@ -2714,6 +2732,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
@@ -3562,6 +3589,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = LOAD_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4325,6 +4361,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
@@ -8427,6 +8472,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegateDaysBuffer();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateAllowedPorts() <em>Get Slot Or Delegate Allowed Ports</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Allowed Ports</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateAllowedPorts()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateAllowedPorts();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateBusinessUnit() <em>Get Slot Or Delegate Business Unit</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11250,6 +11305,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER = eINSTANCE.getSlot__GetSlotOrDelegateDaysBuffer();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Allowed Ports</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = eINSTANCE.getSlot__GetSlotOrDelegateAllowedPorts();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Business Unit</b></em>' operation.

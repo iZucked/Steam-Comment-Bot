@@ -98,8 +98,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getBusinessUnit <em>Business Unit</em>}</li>
  * </ul>
@@ -3715,6 +3713,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSchedulingTimeWindow();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER:
 				return getSlotOrDelegateDaysBuffer();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS:
+				return getSlotOrDelegateAllowedPorts();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT:
 				return getSlotOrDelegateBusinessUnit();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
