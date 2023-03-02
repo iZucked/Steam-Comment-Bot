@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
 
-public class MigrateToV173 extends AbstractMigrationUnit {
+public class MigrateToV176 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -19,12 +19,12 @@ public class MigrateToV173 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 172;
+		return 175;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 173;
+		return 176;
 	}
 
 	@Override
