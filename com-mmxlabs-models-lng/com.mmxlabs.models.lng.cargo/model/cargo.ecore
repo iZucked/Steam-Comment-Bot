@@ -584,6 +584,12 @@
         upperBound="-1" eType="#//NonShippedCargoSpecification" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="openEvents" upperBound="-1"
         eType="#//ScheduleSpecificationEvent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preSequences" upperBound="-1"
+        eType="#//PreSequenceGroup" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PreSequenceGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" upperBound="-1"
+        eType="#//ScheduleSpecificationEvent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NonShippedCargoSpecification">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotSpecifications" upperBound="-1"

@@ -39,6 +39,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -106,7 +107,7 @@ public class LightWeightSchedulerOptimiser {
 
 		final ModifiableSequences rawSequences1 = new ModifiableSequences(initialSequences);
 		AbstractOptimiserHelper.moveElementsToUnusedList(rawSequences1, portSlotProvider);
-		final ModifiableSequences rawSequences = new ModifiableSequences(initialSequences.getResources());
+		final ModifiableSequences rawSequences = new ModifiableSequences(initialSequences.getResources(), new SequencesAttributesProviderImpl());
 		rawSequences.getModifiableUnusedElements().addAll(rawSequences1.getUnusedElements());
 
 		// (a) update shipped

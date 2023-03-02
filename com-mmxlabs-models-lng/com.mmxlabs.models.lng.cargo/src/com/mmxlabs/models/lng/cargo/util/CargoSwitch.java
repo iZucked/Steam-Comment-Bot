@@ -313,6 +313,12 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.PRE_SEQUENCE_GROUP: {
+				PreSequenceGroup preSequenceGroup = (PreSequenceGroup)theEObject;
+				T1 result = casePreSequenceGroup(preSequenceGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case CargoPackage.NON_SHIPPED_CARGO_SPECIFICATION: {
 				NonShippedCargoSpecification nonShippedCargoSpecification = (NonShippedCargoSpecification)theEObject;
 				T1 result = caseNonShippedCargoSpecification(nonShippedCargoSpecification);
@@ -752,6 +758,21 @@ public class CargoSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseScheduleSpecification(ScheduleSpecification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Pre Sequence Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Pre Sequence Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePreSequenceGroup(PreSequenceGroup object) {
 		return null;
 	}
 

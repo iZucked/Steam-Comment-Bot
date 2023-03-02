@@ -74,7 +74,7 @@ public class OptimiserTestUtil {
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(res, makeSequence(elements));
 
 		@SuppressWarnings("null")
-		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(res), map);
+		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(res), map, new SequencesAttributesProviderImpl());
 
 		return sequences;
 	}
@@ -85,7 +85,7 @@ public class OptimiserTestUtil {
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(res, makeSequence(elements));
 
 		@SuppressWarnings("null")
-		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(res), map);
+		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(res), map, new SequencesAttributesProviderImpl());
 
 		return sequences;
 	}

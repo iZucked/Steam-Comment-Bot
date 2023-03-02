@@ -32,6 +32,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -48,13 +49,13 @@ public class SequenceHelper {
 
 	public static @NonNull IModifiableSequences createSequences(@NonNull final Injector injector) {
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		return sequences;
 	}
 
 	public static @NonNull IModifiableSequences createSequences(@NonNull final IOptimisationData optimisationData) {
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		return sequences;
 	}
@@ -394,7 +395,7 @@ public class SequenceHelper {
 	public static @NonNull ISequences createFOBDESSequences(final @NonNull Injector injector, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 		@NonNull
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
@@ -462,7 +463,7 @@ public class SequenceHelper {
 		}
 
 		assert o_resource != null;
-		final ModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(o_resource));
+		final ModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(o_resource), new SequencesAttributesProviderImpl());
 
 		@NonNull
 		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
@@ -608,7 +609,7 @@ public class SequenceHelper {
 	}
 
 	public static @NonNull IModifiableSequences createEmptySequences(final @NonNull Injector injector, @NonNull final List<@NonNull IResource> resources) {
-		final ModifiableSequences sequences = new ModifiableSequences(resources);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, new SequencesAttributesProviderImpl());
 
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
 

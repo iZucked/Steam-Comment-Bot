@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.port.RouteOption;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.time.LocalDateTime;
 import org.eclipse.emf.common.notify.Notification;
 
@@ -38,7 +39,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class BaseCaseRowOptionsImpl extends EObjectImpl implements BaseCaseRowOptions {
+public class BaseCaseRowOptionsImpl extends UUIDObjectImpl implements BaseCaseRowOptions {
 	/**
 	 * The default value of the '{@link #getLadenRoute() <em>Laden Route</em>}' attribute.
 	 * <!-- begin-user-doc -->

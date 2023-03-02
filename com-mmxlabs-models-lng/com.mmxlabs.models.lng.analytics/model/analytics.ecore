@@ -161,7 +161,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRow">
+  <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRow" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOption" eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEventOption" eType="#//VesselEventOption"/>
@@ -170,8 +170,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//BaseCaseRowOptions"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="freeze" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//BaseCaseRowGroup"
+        eOpposite="#//BaseCaseRowGroup/rows"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRowOptions">
+  <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRowGroup" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//BaseCaseRow"
+        eOpposite="#//BaseCaseRow/group"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRowOptions" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenRoute" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastRoute" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"
@@ -185,7 +191,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargeDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
         unsettable="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRow">
+  <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRow" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOptions" upperBound="-1"
         eType="#//BuyOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOptions" upperBound="-1"
@@ -198,8 +204,14 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="commodityCurveOptions"
         upperBound="-1" eType="#//CommodityCurveOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//PartialCaseRowGroup"
+        eOpposite="#//PartialCaseRowGroup/rows"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRowOptions">
+  <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRowGroup" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//PartialCaseRow"
+        eOpposite="#//PartialCaseRow/group"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRowOptions" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenRoutes" upperBound="-1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastRoutes" upperBound="-1"
@@ -301,11 +313,15 @@
         eType="#//BaseCaseRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="keepExistingScenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//BaseCaseRowGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PartialCase">
     <eStructuralFeatures xsi:type="ecore:EReference" name="partialCase" upperBound="-1"
         eType="#//PartialCaseRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="keepExistingScenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//PartialCaseRowGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="VolumeMode">
     <eLiterals name="NOT_SPECIFIED"/>

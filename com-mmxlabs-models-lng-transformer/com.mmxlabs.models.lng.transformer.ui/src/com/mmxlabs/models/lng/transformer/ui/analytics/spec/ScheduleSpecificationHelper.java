@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilityWindowTrimmer;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -203,7 +204,7 @@ public class ScheduleSpecificationHelper {
 
 		final List<Module> modules = new LinkedList<>();
 		//
-		ISequences emptySequences = new ModifiableSequences(new LinkedList<>());
+		ISequences emptySequences = new ModifiableSequences(new LinkedList<>(), new SequencesAttributesProviderImpl());
 		modules.add(new InitialSequencesModule(emptySequences));
 		modules.add(new InputSequencesModule(emptySequences));
 		modules.add(new InitialPhaseOptimisationDataModule());
@@ -220,11 +221,9 @@ public class ScheduleSpecificationHelper {
 
 	public static SlotType getSlotType(final Slot slot) {
 
-		if (slot instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) slot;
+		if (slot instanceof LoadSlot loadSlot) {
 			return loadSlot.isDESPurchase() ? SlotType.DES_PURCHASE : SlotType.FOB_PURCHASE;
-		} else if (slot instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+		} else if (slot instanceof DischargeSlot dischargeSlot) {
 			return dischargeSlot.isFOBSale() ? SlotType.FOB_SALE : SlotType.DES_SALE;
 
 		}

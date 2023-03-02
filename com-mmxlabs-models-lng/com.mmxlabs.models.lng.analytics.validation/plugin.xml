@@ -168,6 +168,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.BaseCaseRowGroupConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.BaseCaseRowGroupConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="BaseCaseRowGroupConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="BaseCaseRowGroup">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowConstraint"
                   id="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowConstraint"
                   isEnabledByDefault="true"
@@ -183,6 +199,22 @@
                      class="PartialCaseRow">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowGroupConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowGroupConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="PartialCaseRowGroupConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PartialCaseRowGroup">
+               </target>
+            </constraint>            
             <constraint
                   class="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowBuyToSellConstraint"
                   id="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowBuyToSellConstraint"

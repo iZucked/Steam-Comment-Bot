@@ -111,7 +111,8 @@ public abstract class AbstractModellerComponent<T, U> {
 
 	protected void hookDragSource(final GridTreeViewer viewer) {
 
-		final DragSource source = new DragSource(viewer.getGrid(), DND.DROP_LINK);
+//		final DragSource source = new DragSource(viewer.getGrid(),  DND.DROP_DEFAULT  | DND.DROP_LINK | DND.DROP_COPY | DND.DROP_MOVE);
+		final DragSource source = new DragSource(viewer.getGrid(), DND.DROP_LINK | DND.DROP_COPY | DND.DROP_MOVE);
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 		source.setTransfer(types);
 
@@ -124,7 +125,7 @@ public abstract class AbstractModellerComponent<T, U> {
 					event.doit = false;
 					event.detail = DND.DROP_NONE;
 				} else {
-					event.detail = DND.DROP_LINK;
+					event.detail = DND.DROP_MOVE;
 				}
 			}
 		});

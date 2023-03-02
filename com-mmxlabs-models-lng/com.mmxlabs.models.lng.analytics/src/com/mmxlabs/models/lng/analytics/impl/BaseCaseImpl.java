@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl#getBaseCase <em>Base Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl#getProfitAndLoss <em>Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl#isKeepExistingScenario <em>Keep Existing Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseImpl#getGroups <em>Groups</em>}</li>
  * </ul>
  *
  * @generated
@@ -91,6 +93,16 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * @ordered
 	 */
 	protected boolean keepExistingScenario = KEEP_EXISTING_SCENARIO_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getGroups() <em>Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<BaseCaseRowGroup> groups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -176,10 +188,25 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 	 * @generated
 	 */
 	@Override
+	public EList<BaseCaseRowGroup> getGroups() {
+		if (groups == null) {
+			groups = new EObjectContainmentEList<BaseCaseRowGroup>(BaseCaseRowGroup.class, this, AnalyticsPackage.BASE_CASE__GROUPS);
+		}
+		return groups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.BASE_CASE__BASE_CASE:
 				return ((InternalEList<?>)getBaseCase()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.BASE_CASE__GROUPS:
+				return ((InternalEList<?>)getGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -198,6 +225,8 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 				return getProfitAndLoss();
 			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
 				return isKeepExistingScenario();
+			case AnalyticsPackage.BASE_CASE__GROUPS:
+				return getGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -221,6 +250,10 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
 				setKeepExistingScenario((Boolean)newValue);
 				return;
+			case AnalyticsPackage.BASE_CASE__GROUPS:
+				getGroups().clear();
+				getGroups().addAll((Collection<? extends BaseCaseRowGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -242,6 +275,9 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
 				setKeepExistingScenario(KEEP_EXISTING_SCENARIO_EDEFAULT);
 				return;
+			case AnalyticsPackage.BASE_CASE__GROUPS:
+				getGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -260,6 +296,8 @@ public class BaseCaseImpl extends EObjectImpl implements BaseCase {
 				return profitAndLoss != PROFIT_AND_LOSS_EDEFAULT;
 			case AnalyticsPackage.BASE_CASE__KEEP_EXISTING_SCENARIO:
 				return keepExistingScenario != KEEP_EXISTING_SCENARIO_EDEFAULT;
+			case AnalyticsPackage.BASE_CASE__GROUPS:
+				return groups != null && !groups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

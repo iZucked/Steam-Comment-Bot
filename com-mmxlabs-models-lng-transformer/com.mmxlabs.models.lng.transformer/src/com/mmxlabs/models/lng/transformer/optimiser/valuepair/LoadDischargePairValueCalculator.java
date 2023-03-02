@@ -33,6 +33,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -218,7 +219,7 @@ public class LoadDischargePairValueCalculator {
 	}
 
 	private ISequences createSequences(final ILoadOption load, final IDischargeOption discharge, final IVesselCharter vesselCharter) {
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 		final IResource target_resource = vesselProvider.getResource(vesselCharter);
 
 		boolean foundTarget = false;

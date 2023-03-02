@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCase#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCase#isKeepExistingScenario <em>Keep Existing Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCase#getGroups <em>Groups</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCase()
@@ -69,5 +70,17 @@ public interface PartialCase extends EObject {
 	 * @generated
 	 */
 	void setKeepExistingScenario(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.PartialCaseRowGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Groups</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCase_Groups()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PartialCaseRowGroup> getGroups();
 
 } // PartialCase

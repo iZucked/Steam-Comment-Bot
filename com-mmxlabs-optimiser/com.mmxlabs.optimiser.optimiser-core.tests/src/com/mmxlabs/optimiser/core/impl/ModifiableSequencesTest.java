@@ -31,7 +31,7 @@ public class ModifiableSequencesTest {
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -65,7 +65,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -96,7 +96,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences initialSequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences initialSequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Mockito.when(sequence1.iterator()).thenReturn(Mockito.mock(Iterator.class));
 		Mockito.when(sequence2.iterator()).thenReturn(Mockito.mock(Iterator.class));
@@ -129,7 +129,7 @@ public class ModifiableSequencesTest {
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -154,7 +154,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -179,7 +179,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -204,7 +204,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -232,7 +232,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -260,7 +260,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 	}
@@ -280,7 +280,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -305,7 +305,7 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -336,14 +336,14 @@ public class ModifiableSequencesTest {
 
 		final Map<IResource, IModifiableSequence> map5 = CollectionsUtil.makeHashMap(resource1, sequence2, resource2, sequence1);
 
-		final ModifiableSequences s1 = new ModifiableSequences(resources1, map1);
-		final ModifiableSequences s2 = new ModifiableSequences(resources1, map1);
-		final ModifiableSequences s3 = new ModifiableSequences(resources2, map2);
+		final ModifiableSequences s1 = new ModifiableSequences(resources1, map1, new SequencesAttributesProviderImpl());
+		final ModifiableSequences s2 = new ModifiableSequences(resources1, map1, new SequencesAttributesProviderImpl());
+		final ModifiableSequences s3 = new ModifiableSequences(resources2, map2, new SequencesAttributesProviderImpl());
 
-		final ModifiableSequences s4 = new ModifiableSequences(resources3, map3);
-		final ModifiableSequences s5 = new ModifiableSequences(resources4, map4);
+		final ModifiableSequences s4 = new ModifiableSequences(resources3, map3, new SequencesAttributesProviderImpl());
+		final ModifiableSequences s5 = new ModifiableSequences(resources4, map4, new SequencesAttributesProviderImpl());
 
-		final ModifiableSequences s6 = new ModifiableSequences(resources1, map5);
+		final ModifiableSequences s6 = new ModifiableSequences(resources1, map5, new SequencesAttributesProviderImpl());
 
 		Assertions.assertTrue(s1.equals(s1));
 		Assertions.assertTrue(s1.equals(s2));

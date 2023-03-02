@@ -52,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstrain
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PreSequencedElementsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
@@ -366,6 +367,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(TravelTimeConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(VirtualVesselConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(TimeSortConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(PreSequencedElementsConstraintCheckerFactory.NAME, true));
 
 			// BugzId: 1597 - Disable as this causes problems with optimisation performance.
 			// constraints.add(createConstraint(parametersFactory,

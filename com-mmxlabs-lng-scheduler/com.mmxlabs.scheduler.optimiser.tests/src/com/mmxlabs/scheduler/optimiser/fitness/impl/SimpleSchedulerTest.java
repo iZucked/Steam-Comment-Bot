@@ -52,6 +52,7 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
@@ -299,7 +300,7 @@ public class SimpleSchedulerTest {
 		List<ICargo> cargoes = new LinkedList<>();
 		final IOptimisationData data = createProblem(parentInjector, cargoes);
 		final IPhaseOptimisationData pData = createPhaseOptimisationData(parentInjector, data);
-		IModifiableSequences sequences = new ModifiableSequences(data.getResources());
+		IModifiableSequences sequences = new ModifiableSequences(data.getResources(), new SequencesAttributesProviderImpl());
 		{
 			final IStartEndRequirementProvider startEndRequirementProvider = parentInjector.getInstance(IStartEndRequirementProvider.class);
 			final IPortSlotProvider portSlotProvider = parentInjector.getInstance(IPortSlotProvider.class);

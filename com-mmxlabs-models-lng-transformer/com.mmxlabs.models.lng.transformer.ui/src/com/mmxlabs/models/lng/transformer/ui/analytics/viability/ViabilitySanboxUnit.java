@@ -67,6 +67,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -329,7 +330,7 @@ public class ViabilitySanboxUnit {
 
 	private InternalResult doUnshipped(final LoadSlot load, final DischargeSlot discharge, final Slot<?> target) {
 		final IResource resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
-		final IModifiableSequences solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
+		final IModifiableSequences solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource), new SequencesAttributesProviderImpl());
 		SequenceHelper.addFOBDESSequence(solution, dataTransformer, load, discharge);
 		assert solution != null;
 		final ViabilitySandboxEvaluator evaluator = injector.getInstance(ViabilitySandboxEvaluator.class);

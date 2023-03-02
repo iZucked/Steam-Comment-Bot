@@ -66,6 +66,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -427,11 +428,11 @@ public class MTMSanboxUnit {
 		final IResource resource;
 		if (!shipped) {
 			resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
-			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
+			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource), new SequencesAttributesProviderImpl());
 			SequenceHelper.addFOBDESSequence(solution, dataTransformer, load, discharge);
 		} else {
 			resource = SequenceHelper.getResource(dataTransformer, charterInMarket, -1);
-			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
+			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource), new SequencesAttributesProviderImpl());
 			SequenceHelper.addSequence(solution, injector, charterInMarket, -1, load, discharge);
 		}
 		final MTMSandboxEvaluator evaluator = injector.getInstance(MTMSandboxEvaluator.class);

@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.cargo.impl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
+import com.mmxlabs.models.lng.cargo.PreSequenceGroup;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl#getVesselScheduleSpecifications <em>Vessel Schedule Specifications</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl#getNonShippedCargoSpecifications <em>Non Shipped Cargo Specifications</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl#getOpenEvents <em>Open Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl#getPreSequences <em>Pre Sequences</em>}</li>
  * </ul>
  *
  * @generated
@@ -71,6 +73,16 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 	 * @ordered
 	 */
 	protected EList<ScheduleSpecificationEvent> openEvents;
+
+	/**
+	 * The cached value of the '{@link #getPreSequences() <em>Pre Sequences</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPreSequences()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PreSequenceGroup> preSequences;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -136,6 +148,19 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 	 * @generated
 	 */
 	@Override
+	public EList<PreSequenceGroup> getPreSequences() {
+		if (preSequences == null) {
+			preSequences = new EObjectContainmentEList.Resolving<PreSequenceGroup>(PreSequenceGroup.class, this, CargoPackage.SCHEDULE_SPECIFICATION__PRE_SEQUENCES);
+		}
+		return preSequences;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CargoPackage.SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS:
@@ -144,6 +169,8 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 				return ((InternalEList<?>)getNonShippedCargoSpecifications()).basicRemove(otherEnd, msgs);
 			case CargoPackage.SCHEDULE_SPECIFICATION__OPEN_EVENTS:
 				return ((InternalEList<?>)getOpenEvents()).basicRemove(otherEnd, msgs);
+			case CargoPackage.SCHEDULE_SPECIFICATION__PRE_SEQUENCES:
+				return ((InternalEList<?>)getPreSequences()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -162,6 +189,8 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 				return getNonShippedCargoSpecifications();
 			case CargoPackage.SCHEDULE_SPECIFICATION__OPEN_EVENTS:
 				return getOpenEvents();
+			case CargoPackage.SCHEDULE_SPECIFICATION__PRE_SEQUENCES:
+				return getPreSequences();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -187,6 +216,10 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 				getOpenEvents().clear();
 				getOpenEvents().addAll((Collection<? extends ScheduleSpecificationEvent>)newValue);
 				return;
+			case CargoPackage.SCHEDULE_SPECIFICATION__PRE_SEQUENCES:
+				getPreSequences().clear();
+				getPreSequences().addAll((Collection<? extends PreSequenceGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -208,6 +241,9 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 			case CargoPackage.SCHEDULE_SPECIFICATION__OPEN_EVENTS:
 				getOpenEvents().clear();
 				return;
+			case CargoPackage.SCHEDULE_SPECIFICATION__PRE_SEQUENCES:
+				getPreSequences().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -226,6 +262,8 @@ public class ScheduleSpecificationImpl extends EObjectImpl implements ScheduleSp
 				return nonShippedCargoSpecifications != null && !nonShippedCargoSpecifications.isEmpty();
 			case CargoPackage.SCHEDULE_SPECIFICATION__OPEN_EVENTS:
 				return openEvents != null && !openEvents.isEmpty();
+			case CargoPackage.SCHEDULE_SPECIFICATION__PRE_SEQUENCES:
+				return preSequences != null && !preSequences.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -37,7 +37,7 @@ public class Move4over1Test {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		final Move4over1 move = new Move4over1();
 
@@ -71,7 +71,7 @@ public class Move4over1Test {
 
 		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap, new SequencesAttributesProviderImpl());
 
 		final Move4over1 move = new Move4over1();
 
@@ -109,7 +109,7 @@ public class Move4over1Test {
 
 		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1);
 
-		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap, new SequencesAttributesProviderImpl());
 
 		final Move4over1 move = new Move4over1();
 

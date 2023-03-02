@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
@@ -204,6 +206,8 @@ public class UpdateSandboxFromRowsAction extends Action {
 
 			for (final ChangeSetTableRow row : selectedRows) {
 				final BaseCaseRow bRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+				final BaseCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+				bRow.setGroup(grp);
 				if (row.isWiringChange() || row.isVesselChange()) {
 					// Date only changes not required for sandbox as they are derived values
 					{
@@ -277,6 +281,7 @@ public class UpdateSandboxFromRowsAction extends Action {
 						}
 						if (!foundExisting) {
 							cc.append(AddCommand.create(editingDomain, existingModel.getBaseCase(), AnalyticsPackage.BASE_CASE__BASE_CASE, bRow));
+							cc.append(AddCommand.create(editingDomain, existingModel.getBaseCase(), AnalyticsPackage.BASE_CASE__GROUPS, grp));
 						}
 					}
 				}
@@ -285,6 +290,8 @@ public class UpdateSandboxFromRowsAction extends Action {
 
 			for (final ChangeSetTableRow row : selectedRows) {
 				final PartialCaseRow pRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+				final PartialCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+				pRow.setGroup(grp);
 				if (row.isWiringChange() || row.isVesselChange()) {
 					{
 						final ChangeSetRowData lhsData = row.getLhsAfter();
@@ -363,6 +370,7 @@ public class UpdateSandboxFromRowsAction extends Action {
 						}
 						if (!foundExisting) {
 							cc.append(AddCommand.create(editingDomain, existingModel.getPartialCase(), AnalyticsPackage.PARTIAL_CASE__PARTIAL_CASE, pRow));
+							cc.append(AddCommand.create(editingDomain, existingModel.getPartialCase(), AnalyticsPackage.PARTIAL_CASE__GROUPS, grp));
 						}
 					}
 				}

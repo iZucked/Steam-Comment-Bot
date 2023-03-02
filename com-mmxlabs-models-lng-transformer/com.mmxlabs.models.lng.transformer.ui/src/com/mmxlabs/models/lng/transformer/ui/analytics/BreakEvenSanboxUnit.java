@@ -65,6 +65,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -583,15 +584,15 @@ public class BreakEvenSanboxUnit {
 		IModifiableSequences solution = null;
 		if (!shipped) {
 			resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
-			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
+			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource), new SequencesAttributesProviderImpl());
 			SequenceHelper.addFOBDESSequence(solution, dataTransformer, load, discharge);
 		} else if (vesselAssignment instanceof VesselCharter) {
 			resource = SequenceHelper.getResource(dataTransformer, (VesselCharter) vesselAssignment);
-			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
+			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource), new SequencesAttributesProviderImpl());
 			SequenceHelper.addSequence(solution, dataTransformer.getInjector(), (VesselCharter) vesselAssignment, load, discharge);
 		} else if (vesselAssignment instanceof CharterInMarket) {
 			resource = SequenceHelper.getResource(dataTransformer, (CharterInMarket) vesselAssignment, -1);
-			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
+			solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource), new SequencesAttributesProviderImpl());
 			SequenceHelper.addSequence(solution, dataTransformer.getInjector(), (CharterInMarket) vesselAssignment, -1, load, discharge);
 		} else {
 			return null;

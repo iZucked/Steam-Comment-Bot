@@ -24,8 +24,8 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
-import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -35,6 +35,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IPreSequencedSegmentProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.PreSequencedSegmentProviderImpl;
 
 @SuppressWarnings("null")
 public class PortTypeConstraintCheckerTest {
@@ -226,7 +228,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}
@@ -248,7 +250,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -271,7 +273,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -300,7 +302,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -335,7 +337,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6, o7));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}
@@ -368,7 +370,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -377,7 +379,7 @@ public class PortTypeConstraintCheckerTest {
 	 * Test two discharges fails
 	 */
 	@Test
-	public void testCheckSequence7() {
+	public void testCheckSequence7a() {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
@@ -401,9 +403,87 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
+	}
+
+	/**
+	 * Test two discharges accepted due to ordered sequence constraint
+	 */
+	@Test
+	public void testCheckSequence7b() {
+
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final OrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
+
+		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
+		final ISequenceElement o2 = Mockito.mock(ISequenceElement.class, "2");
+		final ISequenceElement o3 = Mockito.mock(ISequenceElement.class, "3");
+		final ISequenceElement o4 = Mockito.mock(ISequenceElement.class, "4");
+		final ISequenceElement o5 = Mockito.mock(ISequenceElement.class, "5");
+		final ISequenceElement o6 = Mockito.mock(ISequenceElement.class, "6");
+
+		orderedSequenceElementsProvider.setElementOrder(o3, o4);
+		orderedSequenceElementsProvider.setElementOrder(o4, o5);
+
+		portTypeProvider.setPortType(o1, PortType.Start);
+		portTypeProvider.setPortType(o2, PortType.Waypoint);
+		portTypeProvider.setPortType(o3, PortType.Load);
+		portTypeProvider.setPortType(o4, PortType.Discharge);
+		portTypeProvider.setPortType(o5, PortType.Discharge);
+		portTypeProvider.setPortType(o6, PortType.End);
+
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
+
+		final List<String> messages = new ArrayList<String>(1);
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
+
+		Assertions.assertEquals(0, messages.size());
+	}
+
+	/**
+	 * Test two discharges fails
+	 */
+	@Test
+	public void testCheckSequence7c() {
+
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
+
+		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
+		final ISequenceElement o2 = Mockito.mock(ISequenceElement.class, "2");
+		final ISequenceElement o3 = Mockito.mock(ISequenceElement.class, "3");
+		final ISequenceElement o4 = Mockito.mock(ISequenceElement.class, "4");
+		final ISequenceElement o5 = Mockito.mock(ISequenceElement.class, "5");
+		final ISequenceElement o6 = Mockito.mock(ISequenceElement.class, "6");
+
+		PreSequencedSegmentProviderImpl provider = new PreSequencedSegmentProviderImpl();
+		provider.setSequence(o3, o4);
+		provider.setSequence(o4, o5);
+		
+		
+		portTypeProvider.setPortType(o1, PortType.Start);
+		portTypeProvider.setPortType(o2, PortType.Waypoint);
+		portTypeProvider.setPortType(o3, PortType.Load);
+		portTypeProvider.setPortType(o4, PortType.Discharge);
+		portTypeProvider.setPortType(o5, PortType.Discharge);
+		portTypeProvider.setPortType(o6, PortType.End);
+
+		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
+
+		final List<String> messages = new ArrayList<String>(1);
+		
+		SequencesAttributesProviderImpl sap = new SequencesAttributesProviderImpl();
+		sap.addProvider(IPreSequencedSegmentProvider.class, provider);
+		
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, sap));
+
+		Assertions.assertEquals(0, messages.size());
 	}
 
 	/**
@@ -432,7 +512,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -463,7 +543,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -496,7 +576,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}
@@ -529,7 +609,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}
@@ -562,7 +642,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -595,7 +675,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -626,7 +706,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -659,7 +739,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.FLEET, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}
@@ -702,7 +782,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.SPOT_CHARTER, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.SPOT_CHARTER, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}
@@ -720,7 +800,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.SPOT_CHARTER, false));
+		Assertions.assertFalse(checker.checkSequence(sequence, messages, VesselInstanceType.SPOT_CHARTER, null));
 
 		Assertions.assertEquals(1, messages.size());
 	}
@@ -735,7 +815,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(java.util.Collections.emptyList());
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.ROUND_TRIP, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.ROUND_TRIP, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}
@@ -758,7 +838,7 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3));
 
 		final List<String> messages = new ArrayList<String>(1);
-		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.ROUND_TRIP, false));
+		Assertions.assertTrue(checker.checkSequence(sequence, messages, VesselInstanceType.ROUND_TRIP, null));
 
 		Assertions.assertEquals(0, messages.size());
 	}

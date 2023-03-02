@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics;
 
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -25,13 +26,14 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getCommodityCurveOptions <em>Commodity Curve Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getGroup <em>Group</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow()
  * @model
  * @generated
  */
-public interface PartialCaseRow extends EObject {
+public interface PartialCaseRow extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Buy Options</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.BuyOption}.
@@ -129,5 +131,29 @@ public interface PartialCaseRow extends EObject {
 	 * @generated
 	 */
 	EList<CommodityCurveOption> getCommodityCurveOptions();
+
+	/**
+	 * Returns the value of the '<em><b>Group</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowGroup#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Group</em>' reference.
+	 * @see #setGroup(PartialCaseRowGroup)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow_Group()
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowGroup#getRows
+	 * @model opposite="rows"
+	 * @generated
+	 */
+	PartialCaseRowGroup getGroup();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getGroup <em>Group</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Group</em>' reference.
+	 * @see #getGroup()
+	 * @generated
+	 */
+	void setGroup(PartialCaseRowGroup value);
 
 } // PartialCaseRow

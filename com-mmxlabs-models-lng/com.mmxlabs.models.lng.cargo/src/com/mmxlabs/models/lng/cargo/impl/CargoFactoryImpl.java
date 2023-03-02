@@ -112,6 +112,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.CANAL_BOOKING_SLOT: return createCanalBookingSlot();
 			case CargoPackage.CANAL_BOOKINGS: return createCanalBookings();
 			case CargoPackage.SCHEDULE_SPECIFICATION: return createScheduleSpecification();
+			case CargoPackage.PRE_SEQUENCE_GROUP: return createPreSequenceGroup();
 			case CargoPackage.NON_SHIPPED_CARGO_SPECIFICATION: return createNonShippedCargoSpecification();
 			case CargoPackage.VESSEL_SCHEDULE_SPECIFICATION: return createVesselScheduleSpecification();
 			case CargoPackage.SCHEDULE_SPECIFICATION_EVENT: return createScheduleSpecificationEvent();
@@ -381,6 +382,17 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public ScheduleSpecification createScheduleSpecification() {
 		ScheduleSpecificationImpl scheduleSpecification = new ScheduleSpecificationImpl();
 		return scheduleSpecification;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PreSequenceGroup createPreSequenceGroup() {
+		PreSequenceGroupImpl preSequenceGroup = new PreSequenceGroupImpl();
+		return preSequenceGroup;
 	}
 
 	/**

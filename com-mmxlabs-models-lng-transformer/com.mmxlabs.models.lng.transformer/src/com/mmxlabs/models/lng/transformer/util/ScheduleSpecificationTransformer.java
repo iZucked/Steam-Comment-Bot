@@ -21,6 +21,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
+import com.mmxlabs.models.lng.cargo.PreSequenceGroup;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -57,7 +58,9 @@ import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IPreSequencedSegmentProvider;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.PreSequencedSegmentProviderImpl;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.VoyageSpecificationProviderImpl;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
@@ -99,6 +102,7 @@ public class ScheduleSpecificationTransformer {
 		final Map<IResource, IModifiableSequence> sequences = new HashMap<>();
 
 		final VoyageSpecificationProviderImpl voyageSpecificationProvider = new VoyageSpecificationProviderImpl();
+		final PreSequencedSegmentProviderImpl preSequencedSegmentProviderImpl = new PreSequencedSegmentProviderImpl();
 
 		for (final VesselScheduleSpecification vesselSpecificiation : scheduleSpecification.getVesselScheduleSpecifications()) {
 			final VesselAssignmentType vesselAllocation = vesselSpecificiation.getVesselAllocation();
@@ -276,7 +280,7 @@ public class ScheduleSpecificationTransformer {
 
 		for (final ScheduleSpecificationEvent event : scheduleSpecification.getOpenEvents()) {
 			if (event instanceof SlotSpecification slotSpecification) {
-				final Slot e_slot = slotSpecification.getSlot();
+				final Slot<?> e_slot = slotSpecification.getSlot();
 				final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				unusedElements.add(e);
@@ -298,8 +302,7 @@ public class ScheduleSpecificationTransformer {
 					sequences.put(resource, new ListModifiableSequence(elements));
 				}
 
-			} else if (event instanceof VesselEventSpecification) {
-				final VesselEventSpecification vesselEventSpecification = (VesselEventSpecification) event;
+			} else if (event instanceof VesselEventSpecification vesselEventSpecification) {
 				final VesselEvent e_vesselEvent = vesselEventSpecification.getVesselEvent();
 				final IVesselEventPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_vesselEvent, IVesselEventPortSlot.class);
 				unusedElements.addAll(o_slot.getEventSequenceElements());
@@ -338,6 +341,33 @@ public class ScheduleSpecificationTransformer {
 				}
 			}
 		}
+		{
+
+			for (PreSequenceGroup preSequenceGroup : scheduleSpecification.getPreSequences()) {
+				ISequenceElement lastPresequencedElement = null;
+				for (var event : preSequenceGroup.getSequence()) {
+					if (event instanceof SlotSpecification slotSpecification) {
+						final Slot<?> e_slot = slotSpecification.getSlot();
+						final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
+						final ISequenceElement e = portSlotProvider.getElement(o_slot);
+						if (lastPresequencedElement != null) {
+							preSequencedSegmentProviderImpl.setSequence(lastPresequencedElement, e);
+						}
+						lastPresequencedElement = e;
+					} else if (event instanceof VesselEventSpecification vesselEventSpecification) {
+						final VesselEvent e_vesselEvent = vesselEventSpecification.getVesselEvent();
+						final IVesselEventPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_vesselEvent, IVesselEventPortSlot.class);
+
+						for (var e : o_slot.getEventSequenceElements()) {
+							if (lastPresequencedElement != null) {
+								preSequencedSegmentProviderImpl.setSequence(lastPresequencedElement, e);
+							}
+							lastPresequencedElement = e;
+						}
+					}
+				}
+			}
+		}
 
 		// Reproduce original sort order - By type, then by speed.
 		Collections.sort(orderedResources, (o1, o2) -> {
@@ -358,6 +388,7 @@ public class ScheduleSpecificationTransformer {
 
 		final SequencesAttributesProviderImpl providers = new SequencesAttributesProviderImpl();
 		providers.addProvider(IVoyageSpecificationProvider.class, voyageSpecificationProvider);
+		providers.addProvider(IPreSequencedSegmentProvider.class, preSequencedSegmentProviderImpl);
 
 		final ModifiableSequences seq = new ModifiableSequences(orderedResources, sequences, unusedElements, providers);
 		assert SequencesHitchHikerHelper.checkValidSequences(seq);

@@ -27,8 +27,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 
 /**
- * Default implementation of {@link IModifiableSequences}. Uses
- * {@link ListModifiableSequence} instances when required.
+ * Default implementation of {@link IModifiableSequences}. Uses {@link ListModifiableSequence} instances when required.
  * 
  * 
  * @author Simon Goodall
@@ -46,44 +45,35 @@ public class ModifiableSequences implements IModifiableSequences {
 	private ISequencesAttributesProvider providers;
 
 	/**
-	 * Constructor taking a list of {@link IResource} instances. The
-	 * {@link IModifiableSequence} instances will be created automatically. The
-	 * resources list is copied to maintain internal consistency with the sequence
-	 * map.
+	 * Constructor taking a list of {@link IResource} instances. The {@link IModifiableSequence} instances will be created automatically. The resources list is copied to maintain internal consistency
+	 * with the sequence map.
 	 * 
 	 * @param resources
 	 */
-	public ModifiableSequences(final List<IResource> resources) {
+	public ModifiableSequences(final List<IResource> resources, final ISequencesAttributesProvider providers) {
 		// Copy the list as we do not track changes
 		this.resources = new ArrayList<>(resources);
 		sequenceMap = new LinkedHashMap<>();
 		for (final IResource resource : resources) {
 			sequenceMap.put(resource, new ListModifiableSequence(new LinkedList<>()));
 		}
-		this.providers = new SequencesAttributesProviderImpl();
+		this.providers = providers;
 	}
 
 	/**
-	 * Constructor taking both the ordered list of resources and a {@link Map}
-	 * containing the initial sequences. References are maintained to both objects.
+	 * Constructor taking both the ordered list of resources and a {@link Map} containing the initial sequences. References are maintained to both objects.
 	 * 
 	 * @param resources
 	 * @param sequenceMap
 	 */
-	public ModifiableSequences(final List<IResource> resources, final Map<IResource, IModifiableSequence> sequenceMap) {
+	public ModifiableSequences(final List<IResource> resources, final Map<IResource, IModifiableSequence> sequenceMap, final ISequencesAttributesProvider providers) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
-		this.providers = new SequencesAttributesProviderImpl();
+		this.providers = providers;
 	}
 
-	public ModifiableSequences(final List<IResource> resources, final Map<IResource, IModifiableSequence> sequenceMap, final List<ISequenceElement> unusedElements) {
-		this.resources = resources;
-		this.sequenceMap = sequenceMap;
-		this.unusedElements.addAll(unusedElements);
-		this.providers = new SequencesAttributesProviderImpl();
-	}
-
-	public ModifiableSequences(final List<IResource> resources, final Map<IResource, IModifiableSequence> sequenceMap, final List<ISequenceElement> unusedElements, ISequencesAttributesProvider providers) {
+	public ModifiableSequences(final List<IResource> resources, final Map<IResource, IModifiableSequence> sequenceMap, final List<ISequenceElement> unusedElements,
+			ISequencesAttributesProvider providers) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
 		this.unusedElements.addAll(unusedElements);
@@ -91,10 +81,10 @@ public class ModifiableSequences implements IModifiableSequences {
 	}
 
 	/**
-	 * Constructor which creates a modifiable copy of the input {@link ISequences}
-	 * object.
+	 * Constructor which creates a modifiable copy of the input {@link ISequences} object.
 	 * 
-	 * @param sequences Source {@link ISequences} object
+	 * @param sequences
+	 *            Source {@link ISequences} object
 	 */
 	public ModifiableSequences(final ISequences sequences) {
 
@@ -142,7 +132,7 @@ public class ModifiableSequences implements IModifiableSequences {
 	public List<IResource> getResources() {
 		return Collections.unmodifiableList(resources);
 	}
-	
+
 	@Override
 	@NonNull
 	public ISequence getSequence(final IResource resource) {
