@@ -60,9 +60,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
-import com.mmxlabs.scheduler.optimiser.sequenceproviders.IPanamaAllowedBookingsProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IAllowedPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
-import com.mmxlabs.scheduler.optimiser.sequenceproviders.PanamaAllowedBookingsProviderImpl;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.AllowedPanamaBookingsProviderImpl;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.VoyageSpecificationProviderImpl;
 
 public class MarketabilityCargoSequenceGenerator {
@@ -182,7 +182,7 @@ public class MarketabilityCargoSequenceGenerator {
 	@NonNullByDefault
 	private void setAllowedPanamaBookings(SequencesAttributesProviderImpl providers, Schedule schedule, IPortSlot load, IPortSlot nextEvent, IResource resource) {
 
-		final PanamaAllowedBookingsProviderImpl panamaAllowedBookingsProvider = new PanamaAllowedBookingsProviderImpl();
+		final AllowedPanamaBookingsProviderImpl panamaAllowedBookingsProvider = new AllowedPanamaBookingsProviderImpl();
 		Set<IRouteOptionBooking> otherCargoBookings = new HashSet<>();
 
 		for (Sequence evaluatedSequence : schedule.getSequences()) {
@@ -236,7 +236,7 @@ public class MarketabilityCargoSequenceGenerator {
 
 		panamaAllowedBookingsProvider.setAllowedBookings(mappedBookings);
 
-		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
+		providers.addProvider(IAllowedPanamaBookingsProvider.class, panamaAllowedBookingsProvider);
 	}
 
 	@NonNullByDefault

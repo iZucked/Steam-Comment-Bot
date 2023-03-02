@@ -10,7 +10,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.NotInjectedScope;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 @NotInjectedScope
-public class PanamaAllowedBookingsProviderImpl implements IPanamaAllowedBookingsProvider {
+public class AllowedPanamaBookingsProviderImpl implements IAllowedPanamaBookingsProvider {
 
 	private final @NonNull Set<@NonNull IRouteOptionBooking> allowedBookings = new HashSet<>();
 

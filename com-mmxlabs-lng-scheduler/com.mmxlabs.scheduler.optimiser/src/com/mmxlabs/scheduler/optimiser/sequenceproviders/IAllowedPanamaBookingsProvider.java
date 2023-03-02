@@ -9,6 +9,6 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 
 @NotInjectedScope
 @NonNullByDefault
-public interface IPanamaAllowedBookingsProvider {
+public interface IAllowedPanamaBookingsProvider {
 	Collection<IRouteOptionBooking> getAllowedPanamaBookings();
 }
