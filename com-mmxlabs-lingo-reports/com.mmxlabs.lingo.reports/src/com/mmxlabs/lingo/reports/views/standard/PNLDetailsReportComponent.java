@@ -21,6 +21,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -55,50 +56,33 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 
 	@Override
 	protected Collection<?> adaptSelection(final ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
+		if (selection instanceof final IStructuredSelection iss) {
 
-			final Iterator<?> itr = ((IStructuredSelection) selection).iterator();
+			final Iterator<?> itr = iss.iterator();
 			final Set<Object> adaptedObjects = new HashSet<>();
 			while (itr.hasNext()) {
-				final Object a = itr.next();
+				final Object adaptedObject = itr.next();
 
 				// map to events
-				if (a instanceof CargoAllocation) {
-					adaptedObjects.add(a);
-				} else if (a instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) a;
+				if (adaptedObject instanceof CargoAllocation || adaptedObject instanceof OpenSlotAllocation || adaptedObject instanceof VesselEventVisit //
+						|| adaptedObject instanceof StartEvent || adaptedObject instanceof EndEvent || adaptedObject instanceof GeneratedCharterOut //
+						|| adaptedObject instanceof CharterLengthEvent) {
+					adaptedObjects.add(adaptedObject);
+				} else if (adaptedObject instanceof final SlotAllocation slotAllocation) {
 					adaptedObjects.add(slotAllocation.getCargoAllocation());
-				} else if (a instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) a;
+				} else if (adaptedObject instanceof SlotVisit slotVisit) {
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					if (slotAllocation.getCargoAllocation() != null) {
 						adaptedObjects.add(slotAllocation.getCargoAllocation());
 					} else if (slotAllocation.getMarketAllocation() != null) {
 						adaptedObjects.add(slotAllocation.getMarketAllocation());
 					}
-				} else if (a instanceof OpenSlotAllocation) {
-					adaptedObjects.add(a);
-				} else if (a instanceof VesselEventVisit) {
-					adaptedObjects.add(a);
-				} else if (a instanceof StartEvent) {
-					adaptedObjects.add(a);
-				} else if (a instanceof EndEvent) {
-					adaptedObjects.add(a);
-				} else if (a instanceof Cargo) {
-					findSelectionElement((Cargo) a, adaptedObjects);
-				} else if (a instanceof Slot) {
-					findSelectionElement((Slot) a, adaptedObjects);
-				} else if (a instanceof VesselEvent) {
-					findSelectionElement((VesselEvent) a, adaptedObjects);
-				} else if (a instanceof GeneratedCharterOut) {
-					adaptedObjects.add(a);
-				} else if (a instanceof CharterLengthEvent) {
-					adaptedObjects.add(a);
-				} else if (a instanceof GroupedCharterLengthEvent) {
-					GroupedCharterLengthEvent groupedCharterLengthEvent = (GroupedCharterLengthEvent) a;
+				} else if (adaptedObject instanceof Cargo || adaptedObject instanceof Slot //
+						|| adaptedObject instanceof VesselEvent || adaptedObject instanceof VesselCharter) {
+					findSelectionElement((EObject) adaptedObject, adaptedObjects);
+				} else if (adaptedObject instanceof GroupedCharterLengthEvent groupedCharterLengthEvent) {
 					adaptedObjects.addAll(groupedCharterLengthEvent.getEvents());
-				} else if (a instanceof GroupedCharterOutEvent) {
-					GroupedCharterOutEvent groupedCharterOutEvent = (GroupedCharterOutEvent) a;
+				} else if (adaptedObject instanceof GroupedCharterOutEvent groupedCharterOutEvent) {
 					adaptedObjects.addAll(groupedCharterOutEvent.getEvents());
 				}
 			}
@@ -108,94 +92,84 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 		return Collections.emptySet();
 	}
 
-	private void findSelectionElement(final EObject a, final Collection<Object> adaptedObject) {
-		if (a instanceof Cargo) {
-			final Cargo cargo = (Cargo) a;
-			final EObject eContainer = cargo.eContainer();
-			if (eContainer instanceof CargoModel) {
-				final CargoModel cargoModel = (CargoModel) eContainer;
-				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(cargoModel);
-				if (scenarioModel != null) {
-					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
-					if (scheduleModel != null) {
-						final Schedule schedule = scheduleModel.getSchedule();
-						if (scheduleModel.getSchedule() != null) {
-							for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-								if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
-									adaptedObject.add(cargoAllocation);
-									return;
-								}
-							}
-						}
+	private void findSelectionElement(final EObject eObj, final Collection<Object> adaptedObject) {
+		if (eObj instanceof final Cargo cargo) {
+			final Schedule schedule = getScheduleFromEContainer(cargo.eContainer());
+			if (schedule != null) {
+				for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+					if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
+						adaptedObject.add(cargoAllocation);
+						return;
 					}
 				}
 			}
 
-		} else if (a instanceof Slot) {
-			final Slot slot = (Slot) a;
-			final EObject eContainer = slot.eContainer();
-			if (eContainer instanceof CargoModel) {
-				final CargoModel cargoModel = (CargoModel) eContainer;
-				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(cargoModel);
-				if (scenarioModel != null) {
-					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
-					if (scheduleModel != null) {
-						final Schedule schedule = scheduleModel.getSchedule();
-						if (scheduleModel.getSchedule() != null) {
-							if (slot.getCargo() != null) {
-								final Cargo cargo = slot.getCargo();
-								for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-									if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
-										adaptedObject.add(cargoAllocation);
-										return;
-									}
-								}
-							} else {
-								for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-									if (slot.equals(openSlotAllocation.getSlot())) {
-										adaptedObject.add(openSlotAllocation);
-										return;
-									}
-								}
-								for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
-									if (slot.equals(marketAllocation.getSlot())) {
-										adaptedObject.add(marketAllocation);
-										return;
-									}
-								}
-							}
+		} else if (eObj instanceof final Slot slot) {
+			final Schedule schedule = getScheduleFromEContainer(slot.eContainer());
+			if (schedule != null) {
+				if (slot.getCargo() != null) {
+					final Cargo cargo = slot.getCargo();
+					for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+						if (ScheduleModelUtils.matchingSlots(cargo, cargoAllocation)) {
+							adaptedObject.add(cargoAllocation);
+							return;
+						}
+					}
+				} else {
+					for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+						if (slot.equals(openSlotAllocation.getSlot())) {
+							adaptedObject.add(openSlotAllocation);
+							return;
+						}
+					}
+					for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+						if (slot.equals(marketAllocation.getSlot())) {
+							adaptedObject.add(marketAllocation);
+							return;
 						}
 					}
 				}
 			}
-		} else if (a instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) a;
-			final EObject eContainer = vesselEvent.eContainer();
-			if (eContainer instanceof CargoModel) {
-				final CargoModel cargoModel = (CargoModel) eContainer;
-				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(cargoModel);
-				if (scenarioModel != null) {
-					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
-					if (scheduleModel != null) {
-						final Schedule schedule = scheduleModel.getSchedule();
-						if (scheduleModel.getSchedule() != null) {
-
-							for (final Sequence sequence : schedule.getSequences()) {
-								for (final Event event : sequence.getEvents()) {
-									if (event instanceof VesselEventVisit) {
-										final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-										if (vesselEvent.equals(vesselEventVisit.getVesselEvent())) {
-											adaptedObject.add(vesselEventVisit);
-											return;
-										}
-									}
-								}
-							}
+		} else if (eObj instanceof final VesselEvent vesselEvent) {
+			final Schedule schedule = getScheduleFromEContainer(vesselEvent.eContainer());
+			if (schedule != null) {
+				for (final Sequence sequence : schedule.getSequences()) {
+					for (final Event event : sequence.getEvents()) {
+						if (event instanceof final VesselEventVisit vesselEventVisit && vesselEvent.equals(vesselEventVisit.getVesselEvent())) {
+							adaptedObject.add(vesselEventVisit);
+							return;
+						}
+					}
+				}
+			}
+		} else if (eObj instanceof final VesselCharter vesselCharter) {
+			final Schedule schedule = getScheduleFromEContainer(vesselCharter.eContainer());
+			if (schedule != null) {
+				for (final Sequence seq : schedule.getSequences()) {
+					if (!seq.getEvents().isEmpty() && seq.getVesselCharter() == vesselCharter) {
+						if (seq.getEvents().get(0) instanceof final StartEvent se){
+							adaptedObject.add(se);
+						}
+						if (seq.getEvents().get(seq.getEvents().size() - 1) instanceof final EndEvent ee) {
+							adaptedObject.add(ee);
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	private Schedule getScheduleFromEContainer(final EObject eContainer) {
+		if (eContainer instanceof final CargoModel cargoModel) {
+			final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(cargoModel);
+			if (scenarioModel != null) {
+				final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+				if (scheduleModel != null) {
+					return scheduleModel.getSchedule();
+				}
+			}
+		}
+		return null;
 	}
 
 	public void rebuild(final ISelectedDataProvider selectedDataProvider, boolean block) {

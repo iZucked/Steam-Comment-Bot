@@ -47,6 +47,12 @@
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
 			
 		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.EndHeelOptions"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.EndHeelOptions" />
+			
+		<componentHelper
 			id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
 			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
 			inheritable="false"

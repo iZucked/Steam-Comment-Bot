@@ -145,6 +145,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.IGNORE_HEDGE_PNL_AT_OPTI)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.FALSE);
@@ -160,7 +161,6 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)).toInstance(CacheMode.Off);
-		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.HINT_DISABLE_CACHES)).toInstance(Boolean.FALSE);
 
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);

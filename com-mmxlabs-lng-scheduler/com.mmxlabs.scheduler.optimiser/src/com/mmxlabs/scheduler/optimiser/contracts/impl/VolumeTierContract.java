@@ -96,7 +96,7 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(@NonNull IVessel vessel, @NonNull IDischargeOption dischargeOption, @NonNull IPortTimesRecord portTimesRecord) {
+	public int estimateSalesUnitPrice(@NonNull final IVessel vessel, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
@@ -116,8 +116,8 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(@NonNull IVesselCharter vesselCharter, @NonNull IDischargeOption dischargeOption, @NonNull IAllocationAnnotation allocationAnnotation,
-			@NonNull VoyagePlan voyagePlan, @Nullable IDetailTree annotations) {
+	public int calculateSalesUnitPrice(@NonNull final IVesselCharter vesselCharter, @NonNull final IDischargeOption dischargeOption, @NonNull final IAllocationAnnotation allocationAnnotation,
+			@NonNull final VoyagePlan voyagePlan, @Nullable final IDetailTree annotations) {
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
@@ -205,10 +205,11 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 			}
 		}
 
-		Map<String, String> params = paramsHelper.buildParameters(slot, null, allocationAnnotation);
-		if (volume <= parameters.threshold()) {
+		final Map<String, String> params = paramsHelper.buildParameters(slot, null, allocationAnnotation);
+		if (volume == Long.MAX_VALUE || volume <= parameters.threshold()) {
+			// Volume is under threshold or we are in the estimate code path where we do not have a volume yet.
 
-			VolumeTierAnnotation annotation = new VolumeTierAnnotation();
+			final VolumeTierAnnotation annotation = new VolumeTierAnnotation();
 			annotation.lowPrice = parameters.lowExpressionCurve.curve().getValueAtPoint(pricingTime, params);
 			annotation.lowVolume = volume;
 
@@ -218,10 +219,10 @@ public class VolumeTierContract implements ISalesPriceCalculator, ILoadPriceCalc
 
 			return annotation.lowPrice;
 		} else {
-			// Blend the
+			// Blend the price according to volumes
 			assert allocationAnnotation != null;
 
-			VolumeTierAnnotation annotation = new VolumeTierAnnotation();
+			final VolumeTierAnnotation annotation = new VolumeTierAnnotation();
 			annotation.lowPrice = parameters.lowExpressionCurve.curve().getValueAtPoint(pricingTime, params);
 			annotation.highPrice = parameters.highExpressionCurve.curve().getValueAtPoint(pricingTime, params);
 

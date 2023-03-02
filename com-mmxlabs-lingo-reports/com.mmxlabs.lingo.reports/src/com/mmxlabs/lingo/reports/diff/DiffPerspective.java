@@ -39,6 +39,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		changeSetArea.addView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID);
 		changeSetArea.addView(ReportsConstants.VIEW_DATA_DIFF_SCENARIOS_ID);;
 		vesselSummaryReportArea.addView(ConfigurableVesselSummaryReport.ID);
+		vesselSummaryReportArea.addView("org.eclipse.pde.runtime.LogView");
 
 		ganttArea.addView(ScheduleSummaryReport.ID);
 		ganttArea.addView("com.mmxlabs.scheduleview.views.SchedulerView");

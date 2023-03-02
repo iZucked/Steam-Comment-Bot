@@ -68,7 +68,7 @@ public class HeadlessCloudOptimiserApplication extends HeadlessGenericApplicatio
 		readCommandLine();
 		setupBasicFields();
 		// check the license
-		doCheckLicense();
+		HeadlessUtils.doCheckLicense();
 
 		// log the user in and initialise related features
 		HeadlessUtils.initAccessControl();

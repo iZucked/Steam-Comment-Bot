@@ -22,10 +22,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -35,7 +33,6 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchActionConstants;
 
@@ -53,7 +50,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
-import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.ui.util.CargoTransferUtil;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
@@ -91,7 +87,6 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
  */
@@ -105,8 +100,6 @@ public class CargoEditorMenuHelper {
 
 	private static final String NO_EXPOSURES = "No exposures";
 
-	private final Shell shell;
-
 	private final IScenarioEditingLocation scenarioEditingLocation;
 
 	private final CargoEditingCommands cec;
@@ -118,11 +111,12 @@ public class CargoEditorMenuHelper {
 	/**
 	 */
 	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel) {
-		this.shell = shell;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.scenarioModel = scenarioModel;
 		this.helper = new CargoEditingHelper(scenarioEditingLocation.getEditingDomain(), scenarioModel);
-		cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, ScenarioModelUtil.getCargoModel(scenarioModel), ScenarioModelUtil.getCommercialModel(scenarioModel),
+		this.cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, //
+				ScenarioModelUtil.getCargoModel(scenarioModel), //
+				ScenarioModelUtil.getCommercialModel(scenarioModel), //
 				Activator.getDefault().getModelFactoryRegistry());
 	}
 
@@ -140,28 +134,15 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private final class EditLDDAction extends Action {
-		private final EObject target;
-
-		private EditLDDAction(final String text, final EObject target) {
-			super(text);
-			this.target = target;
-		}
-
-		@Override
-		public void run() {
-
-			if (target instanceof Cargo) {
-				editLDDCargo((Cargo) target, false);
-			}
-
-		}
-	}
-	
 	/**
+<<<<<<< HEAD
 	 * For a given transfer agreement creates an action
 	 * which allows creation of the new transfer record
 	 * for a list of slots
+=======
+	 * For a given transfer agreement creates an action which allows creation of the new transfer record
+	 * 
+>>>>>>> origin/master
 	 * @author FM
 	 *
 	 */
@@ -184,7 +165,7 @@ public class CargoEditorMenuHelper {
 
 		}
 	}
-	
+
 	private final class CreateEditTransferRecordAction extends Action {
 		private final Slot<?> slot;
 
@@ -320,12 +301,17 @@ public class CargoEditorMenuHelper {
 				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, " market");
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
+<<<<<<< HEAD
 				
 				createAddTransferRecordsMenu(manager, Collections.singletonList(dischargeSlot));
+=======
+
+				createAddTransferRecordMenu(manager, dischargeSlot);
+>>>>>>> origin/master
 				createEditTransferRecordMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
-//					createPanamaAssignmentMenus(manager, dischargeSlot);
+					// createPanamaAssignmentMenus(manager, dischargeSlot);
 				} else if (dischargeSlot.getCargo() != null) {
 
 					boolean foundDESPurchase = false;
@@ -360,13 +346,13 @@ public class CargoEditorMenuHelper {
 				}
 
 				if (cargoModel.getCanalBookings() != null) {
-//					panamaAssignmentMenu(manager, dischargeSlot);
+					// panamaAssignmentMenu(manager, dischargeSlot);
 				}
 			}
 
 		};
 	}
-	
+
 	public void createLightEditorMenuListener(final IMenuManager manager, final Set<Cargo> cargoes) {
 		final CargoModel cm = scenarioModel.getCargoModel();
 		if (cargoes.size() == 1) {
@@ -382,7 +368,7 @@ public class CargoEditorMenuHelper {
 					manager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForCargoAssignment(ALLOW_HEDGING, cm, true, cargoes)));
 				}
 			});
-		} else if (cargoes.size() > 1){
+		} else if (cargoes.size() > 1) {
 			manager.add(new RunnableAction(ALLOW_EXPOSURES, () -> helper.setExposuresForCargoAssignment(ALLOW_EXPOSURES, cm, true, cargoes)));
 			manager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForCargoAssignment(ALLOW_HEDGING, cm, true, cargoes)));
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -398,13 +384,7 @@ public class CargoEditorMenuHelper {
 			newMenuManager.add(new EditAction("Edit Contract", contract));
 		}
 		if (cargo != null) {
-			if (cargo.getSlots().size() > 2) {
-				if (LicenseFeatures.isPermitted("features:complex-cargo")) {
-					newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
-				}
-			} else {
-				newMenuManager.add(new EditAction("Edit Cargo", cargo));
-			}
+			newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
 	}
 
@@ -429,8 +409,9 @@ public class CargoEditorMenuHelper {
 				}
 			}
 
-			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(CargoPackage.eINSTANCE.getSlot(),
-					CargoPackage.eINSTANCE.getSlot_NominatedVessel());
+			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault()
+					.getReferenceValueProviderFactoryRegistry()
+					.getValueProviderFactory(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel());
 
 			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel(),
 					scenarioModel);
@@ -508,7 +489,8 @@ public class CargoEditorMenuHelper {
 			boolean marketMenuUsed = false;
 			boolean nominalMenuUsed = false;
 
-			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
+			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault()
+					.getReferenceValueProviderFactoryRegistry()
 					.getValueProviderFactory(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType());
 			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
 					CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), scenarioModel);
@@ -760,13 +742,18 @@ public class CargoEditorMenuHelper {
 
 			createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 			createDeleteSlotMenu(manager, loadSlot);
+<<<<<<< HEAD
 			
 			createAddTransferRecordsMenu(manager, Collections.singletonList(loadSlot));
+=======
+
+			createAddTransferRecordMenu(manager, loadSlot);
+>>>>>>> origin/master
 			createEditTransferRecordMenu(manager, loadSlot);
-			
+
 			if (loadSlot.isDESPurchase()) {
 				createAssignmentMenus(manager, loadSlot);
-//				createPanamaAssignmentMenus(manager, loadSlot);
+				// createPanamaAssignmentMenus(manager, loadSlot);
 			} else if (loadSlot.getCargo() != null) {
 				boolean foundFobSale = false;
 				for (final Slot<?> s : loadSlot.getCargo().getSlots()) {
@@ -799,7 +786,7 @@ public class CargoEditorMenuHelper {
 				createFOBDESSwitchMenu(manager, loadSlot);
 			}
 			if (cargoModel.getCanalBookings() != null) {
-//				panamaAssignmentMenu(manager, loadSlot);
+				// panamaAssignmentMenu(manager, loadSlot);
 			}
 
 		};
@@ -815,7 +802,7 @@ public class CargoEditorMenuHelper {
 			manager.add(transferMenuManager);
 		}
 	}
-	
+
 	private void createEditTransferRecordMenu(IMenuManager manager, final Slot<?> slot) {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL) && //
 				CargoTransferUtil.isSlotReferencedByTransferRecord(slot, scenarioModel)) {
@@ -1786,60 +1773,6 @@ public class CargoEditorMenuHelper {
 			} else if (SlotClassifier.classify(dischargeSlot) == SlotType.DES_Sale) {
 				manager.add(new RunnableAction("Convert to FOB Sale", () -> helper.convertToFOBSale("Convert to FOB Sale", dischargeSlot)));
 			}
-		}
-	}
-
-	/**
-	 */
-	public void editLDDCargo(final Cargo cargo, final boolean isNew) {
-		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-		try {
-			editorLock.lock();
-			try {
-				scenarioEditingLocation.setDisableUpdates(true);
-
-				final ComplexCargoEditor editor = new ComplexCargoEditor(shell, scenarioEditingLocation, false);
-				// editor.setBlockOnOpen(true);
-
-				final int ret = editor.open(cargo);
-				final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
-				if (ret == Window.OK) {
-					final CargoModel cargomodel = scenarioModel.getCargoModel();
-
-					final CompoundCommand cmd = new CompoundCommand("Edit LDD Cargo");
-					if (cargo.eContainer() == null) {
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
-					}
-					for (final Slot<?> s : cargo.getSlots()) {
-
-						if (s.eContainer() == null) {
-
-							if (s instanceof LoadSlot) {
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), Collections.singleton(s)));
-							} else {
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), Collections.singleton(s)));
-							}
-						}
-					}
-
-					commandStack.execute(cmd);
-
-				} else {
-					final Iterator<Command> itr = new LinkedList<Command>(editor.getExecutedCommands()).descendingIterator();
-					while (itr.hasNext()) {
-						final Command cmd = itr.next();
-						if (commandStack.getUndoCommand() == cmd) {
-							commandStack.undo();
-						} else {
-							throw new IllegalStateException("Unable to cancel edit - command stack history is corrupt");
-						}
-					}
-				}
-			} finally {
-				scenarioEditingLocation.setDisableUpdates(false);
-			}
-		} finally {
-			editorLock.unlock();
 		}
 	}
 

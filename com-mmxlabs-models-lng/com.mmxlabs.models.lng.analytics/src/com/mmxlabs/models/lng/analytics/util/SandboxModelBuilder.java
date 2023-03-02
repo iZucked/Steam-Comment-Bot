@@ -77,7 +77,7 @@ public class SandboxModelBuilder {
 	}
 
 	public void setManualSandboxMode() {
-		optionAnalysisModel.setMode(SandboxModeConstants.MODE_DERIVE);
+		optionAnalysisModel.setMode(SandboxModeConstants.MODE_DEFINE);
 	}
 
 	public void setOptimiseSandboxMode() {
@@ -242,5 +242,4 @@ public class SandboxModelBuilder {
 	public PartialCaseRowMaker makePartialCaseRow() {
 		return new PartialCaseRowMaker(this);
 	}
-
 }

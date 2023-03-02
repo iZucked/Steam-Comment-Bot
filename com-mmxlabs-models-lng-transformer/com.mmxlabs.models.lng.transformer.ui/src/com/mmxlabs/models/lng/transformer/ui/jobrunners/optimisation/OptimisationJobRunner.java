@@ -245,7 +245,7 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 		try {
 
-			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
+			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp, scenarioInstance) //
 					.withRunnerHook(runnerHook) //
 					.withOptimiserInjectorService(localOverrides) //
 					.withHints(hints.toArray(new String[hints.size()])) //
@@ -272,9 +272,6 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 			assert userSettings != null;
 
-			if (localOverrides != null) {
-				runnerBuilder.withOptimiserInjectorService(localOverrides);
-			}
 			final LNGScenarioRunner runner = runnerBuilder //
 					.buildDefaultRunner() //
 					.getScenarioRunner();

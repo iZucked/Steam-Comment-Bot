@@ -49,12 +49,6 @@ public class LazyStepwiseIntegerCurve implements ILazyCurve {
 		}
 	}
 
-	@Deprecated
-	@Override
-	protected void finalize() throws Throwable {
-		clear();
-	}
-
 	@Override
 	public void clear() {
 		wrappedCurve.remove();

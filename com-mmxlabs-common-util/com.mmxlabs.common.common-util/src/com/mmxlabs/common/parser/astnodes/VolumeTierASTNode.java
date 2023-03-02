@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.common.parser.astnodes;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.common.collect.Lists;

@@ -75,8 +75,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
+import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGSchedulerInsertSlotJobRunner {
@@ -96,7 +95,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
 			LNGTransformerHelper.HINT_OPTIMISE_INSERTION, //
-			SchedulerConstants.HINT_DISABLE_CACHES, //
 			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
 
 	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
@@ -349,9 +347,9 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	}
 
-	public IMultiStateResult runInsertion(final @Nullable SlotInsertionOptimiserLogger logger, final IProgressMonitor progressMonitor) {
+	public IMultiStateResult runInsertion(final @Nullable OptioniserLogger logger, final IProgressMonitor progressMonitor) {
 
-		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
+		final OptioniserUnit slotInserter = new OptioniserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
 				scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
 		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, logger, progressMonitor);

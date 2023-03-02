@@ -103,6 +103,9 @@ public class Application implements IApplication {
 				"org.eclipse.equinox.event", //
 				"org.ops4j.peaberry.activation", //
 		};
+		// The auto-start the embedded webserver, include the following in the bundlesToStart array.
+		// "org.eclipse.equinox.http.jetty", //
+		// "org.eclipse.equinox.http.registry", //
 
 		for (final String bundleName : bundlesToStart) {
 			try {

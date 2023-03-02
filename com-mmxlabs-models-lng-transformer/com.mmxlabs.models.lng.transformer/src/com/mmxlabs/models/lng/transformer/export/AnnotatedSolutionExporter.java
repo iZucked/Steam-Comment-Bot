@@ -670,27 +670,24 @@ public class AnnotatedSolutionExporter {
 				if (purge != null) {
 					events.add(purge);
 					if (lastEvent != null) {
-						// Is this really needed - if we have a purge, then by definition heel should be
-						// zero.
-						purge.setHeelAtStart(lastEvent.getHeelAtStart());
-						purge.setHeelAtEnd(lastEvent.getHeelAtEnd());
+						purge.setHeelAtStart(lastEvent.getHeelAtEnd());
+						purge.setHeelAtEnd(0);
 					}
 					purge.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getPurgeCharterCost()));
 
 					final int purgeDuration = details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
 					voyage_currentTime += purgeDuration;
+					lastEvent = purge;
 				}
 				final Cooldown cooldown = cooldownDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				if (cooldown != null) {
 					events.add(cooldown);
 					if (lastEvent != null) {
-						// Is this really needed - if we have a cooldown, then by definition heel should
-						// be zero.
-						cooldown.setHeelAtStart(lastEvent.getHeelAtStart());
-						cooldown.setHeelAtEnd(lastEvent.getHeelAtEnd());
+						assert lastEvent.getHeelAtEnd() == 0;
+						cooldown.setHeelAtStart(0);
+						cooldown.setHeelAtEnd(0);
 					}
-					// voyage_currentTime += details.getCooldownDuration();
-
+					lastEvent = cooldown;
 				}
 			}
 			if (!isRoundTripSequence)

@@ -26,8 +26,6 @@ import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ViewForm;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -146,12 +144,7 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 			// Create view form.
 			// control = new ViewForm(parent, getStyle());
 			control = new ViewForm(parent, SWT.NONE);
-			control.addDisposeListener(new DisposeListener() {
-				@Override
-				public void widgetDisposed(DisposeEvent event) {
-					dispose();
-				}
-			});
+			control.addDisposeListener(e -> dispose());
 			control.marginWidth = 0;
 			control.marginHeight = 0;
 
@@ -348,11 +341,9 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 	protected void doMaximize() {
 		Control child = control;
 		for (Control parent = control.getParent(); parent instanceof SashForm || parent instanceof CTabFolder; parent = parent.getParent()) {
-			if (parent instanceof CTabFolder) {
-				CTabFolder cTabFolder = (CTabFolder) parent;
+			if (parent instanceof CTabFolder cTabFolder) {
 				cTabFolder.setMaximized(!cTabFolder.getMaximized());
-			} else if (parent instanceof SashForm) {
-				SashForm sashForm = (SashForm) parent;
+			} else if (parent instanceof SashForm sashForm) {
 				if (sashForm.getMaximizedControl() == null) {
 					sashForm.setMaximizedControl(child);
 				} else {
@@ -389,7 +380,7 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 		return menuManager;
 	}
 
-	public ToolBarManager getToolBarManager() {
+	public synchronized ToolBarManager getToolBarManager() {
 		if (toolBarManager == null) {
 			toolBarManager = new PaneToolBarManager(actionBar);
 		}
@@ -465,7 +456,7 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 		}
 
 		if (toolBarManager != null) {
-			getToolBarManager().update(false);
+			toolBarManager.update(false);
 		}
 	}
 

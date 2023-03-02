@@ -20,8 +20,9 @@ public class MeanFunction implements ArithmeticExpression {
 	@Override
 	public @NonNull Double evaluate() {
 		double sum = 0;
-		for (final IExpression<Double> arg : arguments)
+		for (final IExpression<Double> arg : arguments) {
 			sum += arg.evaluate();
+		}
 		return sum / arguments.size();
 	}
 
@@ -32,7 +33,6 @@ public class MeanFunction implements ArithmeticExpression {
 
 	@Override
 	public boolean canEvaluate() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }

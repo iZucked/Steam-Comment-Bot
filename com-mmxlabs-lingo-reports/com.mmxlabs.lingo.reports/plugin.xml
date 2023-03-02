@@ -884,6 +884,10 @@
    <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
       <PluginXMLEnablement
+            feature="emissions"
+            plugin.xml="emissions.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
             feature="exposures"
             plugin.xml="exposures.plugin.xml">
       </PluginXMLEnablement>

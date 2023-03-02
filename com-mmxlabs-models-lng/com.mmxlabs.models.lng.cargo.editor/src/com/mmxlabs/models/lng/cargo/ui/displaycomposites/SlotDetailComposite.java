@@ -144,6 +144,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(unshippedWindowFeatures));
 
 		loadTermsFeatures = new ArrayList<ETypedElement[]>();
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedPorts() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SchedulePurge() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
 		loadTermsFeatures
@@ -160,6 +161,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
 		dischargeTermsFeatures = new ArrayList<ETypedElement[]>();
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedPorts() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
 		dischargeTermsFeatures
@@ -544,15 +546,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			isLoad = false;
 		}
 
+		// Hide CP window for no-shipped slots, unless it is already set so we can turn it off
 		boolean isUnshipped = false;
-		if (object instanceof Slot<?> slot) {
-			if (slot.getCargo() != null && slot.getCargo().getCargoType() != CargoType.FLEET) {
-				isUnshipped = true;
-			}
-			if (slot.isWindowCounterParty()) {
-				// Validation will flag it as bad. Let them undo it.
-				isUnshipped = false;
-			}
+		if (object instanceof LoadSlot s && s.isDESPurchase()) {
+			isUnshipped = !s.isWindowCounterParty();
+		}
+		if (object instanceof DischargeSlot s && s.isFOBSale()) {
+			isUnshipped = !s.isWindowCounterParty();
 		}
 
 		contentComposite = toolkit.createComposite(this);

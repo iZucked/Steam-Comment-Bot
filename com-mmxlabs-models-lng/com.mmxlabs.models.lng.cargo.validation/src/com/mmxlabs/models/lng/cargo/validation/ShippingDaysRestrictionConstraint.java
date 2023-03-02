@@ -48,6 +48,14 @@ import com.mmxlabs.rcp.common.ServiceHelper;
  */
 public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstraint {
 
+	public static final String KEY_RESTRICTION_TOO_BIG = "KEY_RESTRICTION_TOO_BIG";
+	public static final String KEY_RESTRICTION_IS_ZERO = "KEY_RESTRICTION_IS_ZERO";
+	public static final String KEY_DES_NOT_DIVERTIBLE = "KEY_DES_NOT_DIVERTIBLE";
+	public static final String KEY_FOB_NOT_DIVERTIBLE = "KEY_FOB_NOT_DIVERTIBLE";
+	public static final String KEY_NEGATIVE_TRAVEL_TIME = "KEY_NEGATIVE_TRAVEL_TIME";
+	public static final String KEY_ROUND_TRIP_TIME_LARGER_THAN_RESTRICTION = "KEY_ROUND_TRIP_TIME_LARGER_THAN_RESTRICTION";
+	public static final String KEY_INCOMPATIBLE_WINDOWS = "KEY_INCOMPATIBLE_WINDOWS";
+
 	private static final int MAX_SHIPPING_DAYS = 90;
 
 	@Override
@@ -70,6 +78,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+						dsd.setConstraintKey(KEY_RESTRICTION_TOO_BIG);
 
 						failures.add(dsd);
 					} else if (loadSlot.getSlotOrDelegateShippingDaysRestriction() == 0) {
@@ -78,6 +87,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 						dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+						dsd.setConstraintKey(KEY_RESTRICTION_IS_ZERO);
 
 						failures.add(dsd);
 					}
@@ -92,14 +102,15 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.ERROR);
 									dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
+									dsd.setConstraintKey(KEY_DES_NOT_DIVERTIBLE);
+
 									failures.add(dsd);
 								}
 							}
 						}
 					}
 				}
-			} else if (object instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) object;
+			} else if (object instanceof DischargeSlot dischargeSlot) {
 				// if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort)
 				// {
 				// if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
@@ -134,6 +145,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.ERROR);
 									dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
+									dsd.setConstraintKey(KEY_FOB_NOT_DIVERTIBLE);
 									failures.add(dsd);
 								}
 							}
@@ -144,14 +156,11 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 		}
 
 		// Shipping checks
-		if (object instanceof Cargo) {
-			final Cargo cargo = (Cargo) object;
+		if (object instanceof Cargo cargo) {
 
 			if (cargo.getCargoType() != CargoType.FLEET) {
 				final MMXRootObject scenario = extraContext.getRootObject();
-				if (scenario instanceof LNGScenarioModel) {
-
-					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;
+				if (scenario instanceof LNGScenarioModel lngScenarioModel) {
 
 					if (cargo.getCargoType() == CargoType.DES) {
 
@@ -160,8 +169,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 							LoadSlot desPurchase = null;
 							DischargeSlot dischargeSlot = null;
 							for (final Slot s : cargo.getSlots()) {
-								if (s instanceof LoadSlot) {
-									final LoadSlot loadSlot = (LoadSlot) s;
+								if (s instanceof LoadSlot loadSlot) {
 									if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
 										desPurchase = loadSlot;
 									}
@@ -219,8 +227,9 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
-										failures.add(dsd);
 										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+										dsd.setConstraintKey(KEY_NEGATIVE_TRAVEL_TIME);
+										failures.add(dsd);
 										// No point going further!
 										return;
 									}
@@ -241,6 +250,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+										dsd.setConstraintKey(KEY_ROUND_TRIP_TIME_LARGER_THAN_RESTRICTION);
 
 										failures.add(dsd);
 									}
@@ -319,6 +329,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 										failures.add(dsd);
 										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+										dsd.setConstraintKey(KEY_NEGATIVE_TRAVEL_TIME);
 
 										// No point going further!
 										return;
@@ -340,6 +351,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 										dsd.addEObjectAndFeature(fobSale, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 										dsd.setTag(ValidationConstants.TAG_TRAVEL_TIME);
+										dsd.setConstraintKey(KEY_ROUND_TRIP_TIME_LARGER_THAN_RESTRICTION);
 
 										failures.add(dsd);
 									}
@@ -366,6 +378,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									: (String.format("is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", discharge.getName(),
 											TravelTimeUtils.formatHours(ladenTravelTimeInHours), TravelTimeUtils.formatHours(ladenTravelTimeInHours - maxTime)))) //
 					.withSeverity(IStatus.WARNING) //
+					.withConstraintKey(KEY_INCOMPATIBLE_WINDOWS) //
+
 					.make(ctx));
 		}
 	}

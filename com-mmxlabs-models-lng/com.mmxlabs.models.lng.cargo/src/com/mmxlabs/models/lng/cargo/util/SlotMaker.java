@@ -19,11 +19,9 @@ public class SlotMaker<T extends Slot> extends AbstractSlotMaker<SlotMaker<T>> {
 	@NonNull
 	public T build() {
 
-		if (slot instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) slot;
+		if (slot instanceof LoadSlot loadSlot) {
 			cargoModelBuilder.getCargoModel().getLoadSlots().add(loadSlot);
-		} else if (slot instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+		} else if (slot instanceof DischargeSlot dischargeSlot) {
 			cargoModelBuilder.getCargoModel().getDischargeSlots().add(dischargeSlot);
 		} else {
 			assert false;

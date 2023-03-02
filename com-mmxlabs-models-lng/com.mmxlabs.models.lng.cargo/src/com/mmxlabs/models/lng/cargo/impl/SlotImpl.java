@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -97,6 +98,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getBusinessUnit <em>Business Unit</em>}</li>
  * </ul>
@@ -2851,6 +2854,27 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public int getSlotOrDelegateDaysBuffer() {
 		return 0;
 	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<APortSet<Port>> getSlotOrDelegateAllowedPorts() {
+		return (EList<APortSet<Port>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__ALLOWED_PORTS).getValue(this);
+
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BaseLegalEntity getSlotOrDelegateEntity() {
+		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3853,6 +3877,30 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 						}
 					} else {
 						return getRestrictedPorts();
+					}
+					return ECollections.emptyEList();
+				}
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__ALLOWED_PORTS) {
+			return new DelegateInformation(null, null, null) {
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					if (!isAllowedPortsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__ALLOWED_PORTS);
+							}
+						} else {
+							return getAllowedPorts();
+						}
+					} else {
+						return getAllowedPorts();
 					}
 					return ECollections.emptyEList();
 				}

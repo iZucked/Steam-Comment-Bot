@@ -236,75 +236,61 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// available volume is non-negative
 		assert (unusedVolumeInMMBTU >= 0);
 
-		// load / discharge case
-		// this is subsumed by the LDD* case, but can be done more efficiently by
-		// branching instead of looping
-		if (slots.size() == 2) {
-
-			final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
-			// greedy assumption: always discharge as much as possible
-			final long dischargeVolumeInMMBTU = allocationRecord.maxVolumesInMMBtu.get(1) == Long.MAX_VALUE ? unusedVolumeInMMBTU
-					: capValueWithZeroDefault(scaleFactorL * allocationRecord.maxVolumesInMMBtu.get(1), unusedVolumeInMMBTU);
-			assert dischargeVolumeInMMBTU >= 0;
-			annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-			annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
-			unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
-
-		}
-		// multiple load/discharge case
-		else {
-			// TODO: this only handles LDD* cases
-
-			// track which discharge slot is the most profitable
-			// final int[] prices = constraint.slotPricesPerM3;
-			final int mostProfitableDischargeIndex = 1;
-
-			// assign the minimum amount per discharge slot
-			for (int i = 1; i < slots.size(); i++) {
-				final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(i);
-				final long minDischargeVolumeInMMBTU = scaleFactorL * allocationRecord.minVolumesInMMBtu.get(i);
-
-				// assign the minimum amount per discharge slot
-				final long dischargeVolumeInMMBTU;
-				if (unusedVolumeInMMBTU >= minDischargeVolumeInMMBTU) {
-					dischargeVolumeInMMBTU = minDischargeVolumeInMMBTU;
-				} else {
-					dischargeVolumeInMMBTU = unusedVolumeInMMBTU;
-				}
+		// Loop through allocating fixed discharge volumes first...
+		for (int i = 1; i < slots.size(); i++) {
+			if (unusedVolumeInMMBTU <= 0) {
+				continue;
+			}
+			final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(i);
+			if (allocationRecord.minVolumesInMMBtu.get(i).equals(allocationRecord.maxVolumesInMMBtu.get(i))) {
+				final long dischargeVolumeInMMBTU = allocationRecord.maxVolumesInMMBtu.get(i) == Long.MAX_VALUE ? unusedVolumeInMMBTU
+						: capValueWithZeroDefault(scaleFactorL * allocationRecord.maxVolumesInMMBtu.get(i), unusedVolumeInMMBTU);
+				assert dischargeVolumeInMMBTU >= 0;
 				annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
 				annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
 				unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
 
-				// more profitable ?
-				// if (i > 1 && prices[i] > prices[mostProfitableDischargeIndex]) {
-				// mostProfitableDischargeIndex = i;
-				// }
+				assert (unusedVolumeInMMBTU >= 0);
+			}
+		}
+		// ...then ensure we meet our min discharge volumes...
+		for (int i = 1; i < slots.size(); i++) {
+			if (unusedVolumeInMMBTU <= 0) {
+				continue;
+			}
+			final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(i);
+			if (!(allocationRecord.minVolumesInMMBtu.get(i).equals(allocationRecord.maxVolumesInMMBtu.get(i)))) {
+				if (allocationRecord.minVolumesInMMBtu.get(i) > 0) {
+					final long dischargeVolumeInMMBTU = capValueWithZeroDefault(scaleFactorL * allocationRecord.minVolumesInMMBtu.get(i), unusedVolumeInMMBTU);
+					assert dischargeVolumeInMMBTU >= 0;
+					annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+					annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+					unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
+
+					assert (unusedVolumeInMMBTU >= 0);
+				}
+			}
+		}
+		// .. finally allocate excess volume in order of discharges.
+		for (int i = 1; i < slots.size(); i++) {
+			if (unusedVolumeInMMBTU <= 0) {
+				continue;
+			}
+			final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(i);
+			if (!(allocationRecord.minVolumesInMMBtu.get(i).equals(allocationRecord.maxVolumesInMMBtu.get(i)))) {
+				long dischargeVolumeInMMBTU = allocationRecord.maxVolumesInMMBtu.get(i) == Long.MAX_VALUE ? unusedVolumeInMMBTU
+						: capValueWithZeroDefault((scaleFactorL * allocationRecord.maxVolumesInMMBtu.get(i)) - annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot), unusedVolumeInMMBTU);
+				assert dischargeVolumeInMMBTU >= 0;
+				unusedVolumeInMMBTU -= dischargeVolumeInMMBTU;
+				// Add on existing volume as we overwrite the value
+				dischargeVolumeInMMBTU += annotation.getCommercialSlotVolumeInMMBTu(dischargeSlot);
+
+				annotation.setCommercialSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+				annotation.setPhysicalSlotVolumeInMMBTu(dischargeSlot, dischargeVolumeInMMBTU);
+
+				assert (unusedVolumeInMMBTU >= 0);
 			}
 
-			final int nDischargeSlots = slots.size() - 1;
-
-			// now, starting with the most profitable discharge slot, allocate
-			// any remaining volume
-			for (int i = 0; i < nDischargeSlots && unusedVolumeInMMBTU > 0; i++) {
-				// start at the most profitable slot and cycle through them in order
-				// TODO: would be better to sort them by profitability, but needs to be done
-				// efficiently
-				final int index = 1 + ((i + (mostProfitableDischargeIndex - 1)) % nDischargeSlots);
-
-				final IDischargeOption slot = (IDischargeOption) slots.get(index);
-				// discharge all remaining volume at this slot, up to the different in slot
-				// maximum and minimum
-				final long volumeInMMBTU = Math.min(scaleFactorL * (allocationRecord.maxVolumesInMMBtu.get(index) - allocationRecord.minVolumesInMMBtu.get(index)), unusedVolumeInMMBTU);
-				// reduce the remaining available volume
-				unusedVolumeInMMBTU -= volumeInMMBTU;
-				final long currentVolumeInMMBTU = annotation.getCommercialSlotVolumeInMMBTu(slot);
-				annotation.setCommercialSlotVolumeInMMBTu(slot, currentVolumeInMMBTU + volumeInMMBTU);
-				annotation.setPhysicalSlotVolumeInMMBTu(slot, currentVolumeInMMBTU + volumeInMMBTU);
-			}
-
-			// Note this currently does nothing as the next() method in the allocator
-			// iterator (BaseCargoAllocator) ignores this data and looks directly on the
-			// discharge slot.
 		}
 
 		// Excess volume, drop down to min load before deciding whether or not to short

@@ -130,9 +130,9 @@ white_space = {new_line} | [ \t\f]
 "/"               { return symbol("div",DIVIDE  ); }
 "%"               { return symbol("percent",PERCENT  ); }
 "?"               { return symbol("question",QUESTION  ); }
-{PARAM}        { return symbol("param", PARAM, new String(yytext()).replace("@","") ); }
+{PARAM}        { return symbol("param", PARAM, yytext().replace("@","") ); }
 
-{VAR}        { return symbol("var", VAR, new String(yytext()).replace("#","") ); }
+{VAR}        { return symbol("var", VAR, yytext().replace("#","") ); }
 m        { return symbol("m", M, Integer.valueOf(0) ); }
 {MValue}        { return symbol("m", M, Integer.valueOf(yytext().replace("m","")) ); }
 

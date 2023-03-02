@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
+import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.IUndoRedoCommand;
@@ -328,6 +329,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	private boolean showLegend = false;
 
 	private ILegendProvider legendProvider = null;
+
+	private IPlaqueContentProvider[] plaqueContentProviders;
 
 	static {
 		final String osProperty = System.getProperty("os.name");
@@ -3433,9 +3436,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		// draw a little plaque saying how many days that this event is long
-		if (_showNumDays) {
-			final long days = DateHelper.daysBetween(ge.getActualStartDate(), ge.getActualEndDate()) + 1;
-			_paintManager.drawDaysOnChart(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, (int) days, bounds);
+		if (_showNumDays && plaqueContentProviders != null) {
+			_paintManager.drawPlaqueOnEvent(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, plaqueContentProviders, bounds);
 		}
 
 		// fetch current font
@@ -3579,8 +3581,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			ge.setHorizontalLineTopY(yStart);
 
 			if (fixedHeight) {
-				yStart += fixedRowHeight;
-
 				int extra = 0;
 
 				int halfExtra = ((fixedRowHeight / 2) - (_eventHeight / 2));
@@ -9086,5 +9086,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	public void setMenuAction(BiConsumer<Menu, GanttEvent> menuAction) {
 		this.menuAction = menuAction;
+	}
+
+	public void replacePlaqueContentProviders(final Collection<@NonNull IPlaqueContentProvider> plaqueContentProviders) {
+		this.plaqueContentProviders = plaqueContentProviders.toArray(new IPlaqueContentProvider[plaqueContentProviders.size()]);
 	}
 }

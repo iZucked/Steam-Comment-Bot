@@ -81,6 +81,21 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 			widthHints.put(feature, widthHint);
 			return this;
 		}
+		
+		/**
+		 * Define a feature for the row with a min width hint.
+		 * 
+		 * @See {@link GridData#widthHint}
+		 * @param feature
+		 * @param widthHint
+		 * @return
+		 */
+		public RowBuilder withFeature(ETypedElement feature, String label, int widthHint) {
+			orderedFeatures.add(feature);
+			labels.put(feature,  label);
+			widthHints.put(feature, widthHint);
+			return this;
+		}
 
 		public RowGroupDisplayCompositeLayoutProviderBuilder makeRow() {
 			rows.add(this);
