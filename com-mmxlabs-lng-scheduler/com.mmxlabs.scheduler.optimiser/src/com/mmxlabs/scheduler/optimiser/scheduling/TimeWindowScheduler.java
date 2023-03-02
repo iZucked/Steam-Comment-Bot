@@ -130,11 +130,13 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		// Construct new bookings data object
 		final CurrentBookingData data = new CurrentBookingData();
 
+		final IPanamaAllowedBookingsProvider allowedBookingsProvider = sequences.getProviders().getProvider(IPanamaAllowedBookingsProvider.class);
 		if (useCanalBasedWindowTrimming) {
-			for (final var entrance : this.panamaSlotsProvider.getAllBookings().keySet()) {
-				for (final var booking : this.panamaSlotsProvider.getAllBookings().get(entrance)) {
-					final IPanamaAllowedBookingsProvider allowedBookingsProvider = sequences.getProviders().getProvider(IPanamaAllowedBookingsProvider.class);
-					if(allowedBookingsProvider == null || allowedBookingsProvider.isPanamaBookingAllowed(booking)) {
+			if (allowedBookingsProvider != null) {
+				allowedBookingsProvider.getAllowedPanamaBookings().forEach(x -> data.addBooking(x));
+			} else {
+				for (final var entrance : this.panamaSlotsProvider.getAllBookings().keySet()) {
+					for (final var booking : this.panamaSlotsProvider.getAllBookings().get(entrance)) {
 						data.addBooking(booking);
 					}
 				}

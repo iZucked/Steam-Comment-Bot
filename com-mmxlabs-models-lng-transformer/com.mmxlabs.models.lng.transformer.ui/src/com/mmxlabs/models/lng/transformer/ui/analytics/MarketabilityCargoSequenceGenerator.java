@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.RouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.ThreadLocalStartRequirement;
@@ -162,7 +163,7 @@ public class MarketabilityCargoSequenceGenerator {
 		VoyageSpecificationProviderImpl voyageProvider = new VoyageSpecificationProviderImpl();
 		voyageProvider.setArrivalTime(portSlot, loadTime);
 		providers.addProvider(IVoyageSpecificationProvider.class, voyageProvider);
-		setAllowedPanamaBookings(providers, schedule, portSlot, portSlot);
+		setAllowedPanamaBookings(providers, schedule, portSlot, portSlot, targetResource);
 
 		return new ListModifiableSequence(List.of(start, load, saleMarket, end));
 
@@ -178,10 +179,10 @@ public class MarketabilityCargoSequenceGenerator {
 		oVessel.setMaxSpeed(maxSpeed);
 	}
 
-	private void setAllowedPanamaBookings(SequencesAttributesProviderImpl providers, Schedule schedule, IPortSlot load, IPortSlot nextEvent) {
+	@NonNullByDefault
+	private void setAllowedPanamaBookings(SequencesAttributesProviderImpl providers, Schedule schedule, IPortSlot load, IPortSlot nextEvent, IResource resource) {
 
 		final PanamaAllowedBookingsProviderImpl panamaAllowedBookingsProvider = new PanamaAllowedBookingsProviderImpl();
-		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
 		Set<IRouteOptionBooking> otherCargoBookings = new HashSet<>();
 
 		for (Sequence evaluatedSequence : schedule.getSequences()) {
@@ -209,7 +210,7 @@ public class MarketabilityCargoSequenceGenerator {
 					}
 				} else if (currentEvent instanceof Journey journey && journey.getCanalBooking() != null) {
 					// Add bookings used by other cargoes
-					IRouteOptionBooking booking = modelEntityMap.getOptimiserObjectNullChecked(journey.getCanalBooking(), IRouteOptionBooking.class);
+					final IRouteOptionBooking booking = modelEntityMap.getOptimiserObjectNullChecked(journey.getCanalBooking(), IRouteOptionBooking.class);
 					otherCargoBookings.add(booking);
 				}
 				currentEvent = currentEvent.getNextEvent();
@@ -218,9 +219,23 @@ public class MarketabilityCargoSequenceGenerator {
 		}
 
 		Set<IRouteOptionBooking> allPanamaBookings = panamaBookings.getAllBookings().values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
-		// Marketable Cargo can only use unused panama bookings and bookings used in the
+		// Marketable Cargo can only use unused Panama bookings and bookings used in the
 		// original cargo
-		panamaAllowedBookingsProvider.setAllowedBookings(Sets.difference(allPanamaBookings, otherCargoBookings));
+		Set<IRouteOptionBooking> allowedBookings = Sets.difference(allPanamaBookings, otherCargoBookings);
+
+		// Optimiser avoids applying Panama bookings to a vessel if the booking could be applied to multiple vessels 
+		// Transforms the original Panama bookings into bookings that contain only the vessel in the marketable cargo, if the vessel is in the original booking vessel group
+		List<@NonNull IRouteOptionBooking> mappedBookings = allowedBookings.stream().map(booking -> {
+			final IVessel oVessel = vesselProvider.getVesselCharter(resource).getVessel();
+			if (booking.getVessels().isEmpty() || booking.getVessels().contains(oVessel)) {
+				return Optional.of(new RouteOptionBooking(booking.getBookingDate(), booking.getEntryPoint(), booking.getRouteOption(), Set.of(oVessel)));
+			} else {
+				return Optional.empty();
+			}
+		}).filter(Optional::isPresent).map(Optional::get).map(IRouteOptionBooking.class::cast).toList();
+
+		panamaAllowedBookingsProvider.setAllowedBookings(mappedBookings);
+
 		providers.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
 	}
 
