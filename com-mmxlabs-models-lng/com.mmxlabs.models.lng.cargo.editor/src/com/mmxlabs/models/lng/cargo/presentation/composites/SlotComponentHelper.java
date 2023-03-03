@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrappe
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
+import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
 import com.mmxlabs.models.lng.pricing.editor.PricingBasisInlineEditor;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;

@@ -962,6 +962,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getSlot_AllowedPorts() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(43);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlot_AllowedPortsOverride() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getSlot__GetSlotOrDelegateMinQuantity() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -3355,6 +3375,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__WINDOW_COUNTER_PARTY);
 		createEAttribute(slotEClass, SLOT__PRICING_BASIS);
 		createEReference(slotEClass, SLOT__BUSINESS_UNIT);
+		createEReference(slotEClass, SLOT__ALLOWED_PORTS);
+		createEAttribute(slotEClass, SLOT__ALLOWED_PORTS_OVERRIDE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_OPERATIONAL_TOLERANCE);
@@ -3805,6 +3827,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_WindowCounterParty(), ecorePackage.getEBoolean(), "windowCounterParty", "false", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_BusinessUnit(), theCommercialPackage.getBusinessUnit(), null, "businessUnit", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getSlot_AllowedPorts(), g1, null, "allowedPorts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_AllowedPortsOverride(), ecorePackage.getEBoolean(), "allowedPortsOverride", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateMinQuantity(), ecorePackage.getEInt(), "getSlotOrDelegateMinQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
 

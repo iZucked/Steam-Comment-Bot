@@ -76,6 +76,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1883,6 +1885,63 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	boolean isSetBusinessUnit();
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;?&gt;</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Ports</em>' reference list.
+	 * @see #isSetAllowedPorts()
+	 * @see #unsetAllowedPorts()
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_AllowedPorts()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	EList<APortSet<?>> getAllowedPorts();
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetAllowedPorts()
+	 * @see #getAllowedPorts()
+	 * @generated
+	 */
+	void unsetAllowedPorts();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}' reference list is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Allowed Ports</em>' reference list is set.
+	 * @see #unsetAllowedPorts()
+	 * @see #getAllowedPorts()
+	 * @generated
+	 */
+	boolean isSetAllowedPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Ports Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Ports Override</em>' attribute.
+	 * @see #setAllowedPortsOverride(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_AllowedPortsOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isAllowedPortsOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isAllowedPortsOverride <em>Allowed Ports Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Allowed Ports Override</em>' attribute.
+	 * @see #isAllowedPortsOverride()
+	 * @generated
+	 */
+	void setAllowedPortsOverride(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

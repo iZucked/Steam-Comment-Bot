@@ -301,13 +301,7 @@ public class CargoEditorMenuHelper {
 				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, " market");
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
-<<<<<<< HEAD
-				
 				createAddTransferRecordsMenu(manager, Collections.singletonList(dischargeSlot));
-=======
-
-				createAddTransferRecordMenu(manager, dischargeSlot);
->>>>>>> origin/master
 				createEditTransferRecordMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
@@ -742,13 +736,7 @@ public class CargoEditorMenuHelper {
 
 			createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 			createDeleteSlotMenu(manager, loadSlot);
-<<<<<<< HEAD
-			
 			createAddTransferRecordsMenu(manager, Collections.singletonList(loadSlot));
-=======
-
-			createAddTransferRecordMenu(manager, loadSlot);
->>>>>>> origin/master
 			createEditTransferRecordMenu(manager, loadSlot);
 
 			if (loadSlot.isDESPurchase()) {
