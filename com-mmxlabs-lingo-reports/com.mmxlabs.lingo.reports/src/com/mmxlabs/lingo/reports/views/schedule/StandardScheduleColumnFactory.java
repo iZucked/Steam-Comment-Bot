@@ -455,7 +455,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					return "";
 				}
 			}));
-			break;	
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyport": {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy/Start Port", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
@@ -495,7 +495,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				}
 			}));
 		}
-		break;
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.nominated_load_port":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Nominated Load Port", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
@@ -504,7 +504,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				}
 			}));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.nominated_discharge_port": 
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.nominated_discharge_port":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Nominated Discharge Port", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
 				public String render(final Object object) {
@@ -536,7 +536,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				}
 			}));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.nominated_load_volume": 
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.nominated_load_volume":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Nominated Load Volume", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
 				public String render(final Object object) {
@@ -1930,20 +1930,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		}
 	}
-	
+
 	private IScenarioDataProvider getScenarioDataProvider(final Object object) {
-		if (object instanceof Row) {
-			final Row row = (Row) object;
-			if (row.getScenarioDataProvider() != null) {
-				return row.getScenarioDataProvider();
-			}
+		if (object instanceof @NonNull final Row row && row.getScenarioDataProvider() != null) {
+			return row.getScenarioDataProvider();
 		}
 		return null;
 	}
-	
+
 	private Slot<?> getLoadSlot(final Object object) {
-		if (object instanceof Row) {
-			final Row row = (Row) object;
+		if (object instanceof @NonNull final Row row) {
 			Slot<?> slot = null;
 			final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 			if (openSlotAllocation != null) {
@@ -1959,8 +1955,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	}
 
 	private Slot<?> getDischargeSlot(final Object object) {
-		if (object instanceof Row) {
-			final Row row = (Row) object;
+		if (object instanceof @NonNull final Row row) {
 			Slot<?> slot = null;
 			final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 			if (openSlotAllocation != null) {
@@ -1974,11 +1969,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		}
 		return null;
 	}
-	
 
 	private String getNominationValue(final Object object, final String nominationType) {
 		String loadNominatedValue = getBuyNominationValue(object, nominationType);
-		if (loadNominatedValue != null && !loadNominatedValue.isBlank()) { 
+		if (loadNominatedValue != null && !loadNominatedValue.isBlank()) {
 			return loadNominatedValue;
 		}
 		String dischargeNominatedValue = getSellNominationValue(object, nominationType);
@@ -2003,7 +1997,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		}
 		return "";
 	}
-	
+
 	private String getSellNominationValue(final Object object, final String nominationType) {
 		Slot<?> slot = getDischargeSlot(object);
 		if (slot != null) {
