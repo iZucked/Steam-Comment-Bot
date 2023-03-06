@@ -271,8 +271,8 @@ public class CharterContractValidationUtils {
 			failures.add(dcsd);
 			valid = false;
 		}
-		if (term instanceof NotionalJourneyBallastBonusTerm) {
-			if (((NotionalJourneyBallastBonusTerm) term).getReturnPorts().isEmpty() && !(term instanceof MonthlyBallastBonusTerm)) {
+		if (term instanceof NotionalJourneyBallastBonusTerm njbbt  && !(term instanceof MonthlyBallastBonusTerm)) {
+			if (njbbt.getReturnPorts().isEmpty() && !njbbt.isIsFirstLoadPort()) {
 				// need ports
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: return ports are needed on a notional journey", topFeatureMessage)));

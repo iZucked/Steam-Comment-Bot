@@ -164,11 +164,11 @@ public class SandboxConstraintUtils {
 	}
 
 	public static boolean shouldValidate(@NonNull final PartialCaseRow partialCaseRow) {
-		return isRunningUnderSandboxModes(partialCaseRow, Collections.singleton(SandboxModeConstants.MODE_DERIVE));
+		return isRunningUnderSandboxModes(partialCaseRow, Collections.singleton(SandboxModeConstants.MODE_DEFINE));
 	}
 
 	public static boolean shouldValidate(@NonNull final PartialCase partialCase) {
-		return isRunningUnderSandboxModes(partialCase, Collections.singleton(SandboxModeConstants.MODE_DERIVE));
+		return isRunningUnderSandboxModes(partialCase, Collections.singleton(SandboxModeConstants.MODE_DEFINE));
 	}
 
 	private static boolean isRunningUnderSandboxModes(@Nullable final EObject eObject, @NonNull Collection<Integer> modes) {

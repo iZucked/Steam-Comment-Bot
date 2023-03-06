@@ -686,6 +686,98 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityResultContainerItemProvider marketabilityResultContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityResultContainerAdapter() {
+		if (marketabilityResultContainerItemProvider == null) {
+			marketabilityResultContainerItemProvider = new MarketabilityResultContainerItemProvider(this);
+		}
+
+		return marketabilityResultContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityEventItemProvider marketabilityEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityEventAdapter() {
+		if (marketabilityEventItemProvider == null) {
+			marketabilityEventItemProvider = new MarketabilityEventItemProvider(this);
+		}
+
+		return marketabilityEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityAssignableElementItemProvider marketabilityAssignableElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityAssignableElementAdapter() {
+		if (marketabilityAssignableElementItemProvider == null) {
+			marketabilityAssignableElementItemProvider = new MarketabilityAssignableElementItemProvider(this);
+		}
+
+		return marketabilityAssignableElementItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityEndEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityEndEventItemProvider marketabilityEndEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityEndEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityEndEventAdapter() {
+		if (marketabilityEndEventItemProvider == null) {
+			marketabilityEndEventItemProvider = new MarketabilityEndEventItemProvider(this);
+		}
+
+		return marketabilityEndEventItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1120,6 +1212,75 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		}
 
 		return viabilityModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityModelItemProvider marketabilityModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityModelAdapter() {
+		if (marketabilityModelItemProvider == null) {
+			marketabilityModelItemProvider = new MarketabilityModelItemProvider(this);
+		}
+
+		return marketabilityModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityRowItemProvider marketabilityRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityRowAdapter() {
+		if (marketabilityRowItemProvider == null) {
+			marketabilityRowItemProvider = new MarketabilityRowItemProvider(this);
+		}
+
+		return marketabilityRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.MarketabilityResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarketabilityResultItemProvider marketabilityResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.MarketabilityResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarketabilityResultAdapter() {
+		if (marketabilityResultItemProvider == null) {
+			marketabilityResultItemProvider = new MarketabilityResultItemProvider(this);
+		}
+
+		return marketabilityResultItemProvider;
 	}
 
 	/**
@@ -1853,6 +2014,13 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (swapValueMatrixModelItemProvider != null) swapValueMatrixModelItemProvider.dispose();
 		if (swapValueMatrixResultItemProvider != null) swapValueMatrixResultItemProvider.dispose();
 		if (swapValueMatrixResultSetItemProvider != null) swapValueMatrixResultSetItemProvider.dispose();
+		if (marketabilityModelItemProvider != null) marketabilityModelItemProvider.dispose();
+		if (marketabilityRowItemProvider != null) marketabilityRowItemProvider.dispose();
+		if (marketabilityResultItemProvider != null) marketabilityResultItemProvider.dispose();
+		if (marketabilityResultContainerItemProvider != null) marketabilityResultContainerItemProvider.dispose();
+		if (marketabilityEventItemProvider != null) marketabilityEventItemProvider.dispose();
+		if (marketabilityAssignableElementItemProvider != null) marketabilityAssignableElementItemProvider.dispose();
+		if (marketabilityEndEventItemProvider != null) marketabilityEndEventItemProvider.dispose();
 	}
 
 }

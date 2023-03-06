@@ -68,7 +68,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 
-public class SandboxManualRunner {
+public class SandboxDefineRunner {
 
 	private final IScenarioDataProvider originalScenarioDataProvider;
 
@@ -87,7 +87,7 @@ public class SandboxManualRunner {
 
 	private boolean skipRun = false;
 
-	public SandboxManualRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final UserSettings userSettings, final IMapperClass mapper,
+	public SandboxDefineRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final UserSettings userSettings, final IMapperClass mapper,
 			final OptionAnalysisModel model) {
 
 		this.scenarioInstance = scenarioInstance;

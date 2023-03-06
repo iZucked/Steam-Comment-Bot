@@ -26,10 +26,13 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
+import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -54,6 +57,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -61,10 +65,14 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilitySandboxUnit;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.analytics.mtm.MTMSanboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanboxUnit;
@@ -80,6 +88,10 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
+import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.MarketabilitySchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -314,6 +326,71 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			/* Command cmd = */
 			unit.run(model, mapper, shippingMap, progressMonitor);
 		});
+	}
+
+	@Override
+	public void evaluateMarketabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings,
+			MarketabilityModel model, IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor) {
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
+
+		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
+
+		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
+		helper.processExtraDataProvider(mapper.getExtraDataProvider());
+
+		helper.withModuleService(OptimiserInjectorServiceMaker.begin()//
+				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, new AbstractModule() {
+
+					@Override
+					protected void configure() {
+						bind(MarketabilityWindowTrimmer.class).in(Singleton.class);
+						bind(ICustomTimeWindowTrimmer.class).to(MarketabilityWindowTrimmer.class);
+					}
+					
+					@Provides
+					@Singleton
+					private ISchedulerBuilder provideSchedulerBuilder(@NonNull final Injector injector, @NonNull final Iterable<IBuilderExtensionFactory> builderExtensionFactories) {
+						final SchedulerBuilder builder = new MarketabilitySchedulerBuilder();
+						for (final IBuilderExtensionFactory factory : builderExtensionFactories) {
+							final IBuilderExtension instance = factory.createInstance();
+							if (instance != null) {
+								injector.injectMembers(instance);
+								builder.addBuilderExtension(instance);
+							}
+						}
+						injector.injectMembers(builder);
+						return builder;
+					}
+
+				})//
+				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_Evaluation, new AbstractModule() {
+
+					@Override
+					protected void configure() {
+
+						bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+					}
+
+				})
+				.make());
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
+		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
+		customiseConstraints(constraints);
+
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+
+		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
+		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
+			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
+			final MarketabilitySandboxUnit unit = new MarketabilitySandboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
+					dataTransformer.getInitialResult(), dataTransformer.getHints());
+			/* Command cmd = */
+			unit.run(model, mapper, shippingMap, progressMonitor, bridge);
+		});
+
 	}
 
 	@Override

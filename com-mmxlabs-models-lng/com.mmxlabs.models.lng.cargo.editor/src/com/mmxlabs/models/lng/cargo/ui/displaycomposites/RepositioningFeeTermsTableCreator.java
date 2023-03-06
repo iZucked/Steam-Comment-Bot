@@ -43,7 +43,6 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
-import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
@@ -54,9 +53,6 @@ public class RepositioningFeeTermsTableCreator {
 	public static EObjectTableViewer createRepositioningFeeTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
-
-		final Label label = toolkit.createLabel(parent, "Repositioning Fee");
-		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
 		eViewer.setStatusProvider(statusProvider);

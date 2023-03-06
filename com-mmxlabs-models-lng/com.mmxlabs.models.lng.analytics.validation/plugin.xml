@@ -346,6 +346,28 @@
             </constraint>
          </constraints>
       </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/analytics/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.analytics.validation.constraints.marketability">
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.marketability.VesselSpeedValidator"
+                  id="com.mmxlabs.models.lng.analytics.validation.marketability.VesselSpeedValidator"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Marketability Model Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+         </constraints>
+      </constraintProvider>
    </extension>
 
 </plugin>

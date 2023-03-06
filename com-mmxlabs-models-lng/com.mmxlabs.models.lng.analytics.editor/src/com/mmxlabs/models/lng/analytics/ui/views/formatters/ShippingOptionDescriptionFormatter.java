@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.MTMResult;
 import com.mmxlabs.models.lng.analytics.MTMRow;
+import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
@@ -34,6 +35,9 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 			return render(shipping);
 		} else if (object instanceof ViabilityRow) {
 			final ViabilityRow row = (ViabilityRow) object;
+			final ShippingOption shipping = row.getShipping();
+			return render(shipping);
+		} else if (object instanceof MarketabilityRow row) {
 			final ShippingOption shipping = row.getShipping();
 			return render(shipping);
 		} else if (object instanceof BreakEvenAnalysisRow) {

@@ -58,7 +58,7 @@ public class SandboxTask {
 				final UserSettings[] userSettings = new UserSettings[1];
 				RunnerHelper.syncExecDisplayOptional(() -> {
 					final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(sandbox, root);
-					if (sandbox.getMode() == SandboxModeConstants.MODE_DERIVE) {
+					if (sandbox.getMode() == SandboxModeConstants.MODE_DEFINE) {
 						userSettings[0] = UserSettingsHelper.promptForSandboxUserSettings(root, false, useDialogs, false, null, previousSettings);
 					} else if (sandbox.getMode() == SandboxModeConstants.MODE_OPTIMISE) {
 						userSettings[0] = UserSettingsHelper.promptForUserSettings(root, false, useDialogs, false, null, previousSettings);
@@ -102,7 +102,7 @@ public class SandboxTask {
 	}
 
 	private static String getSubType(final OptionAnalysisModel sandbox) {
-		if (sandbox.getMode() == SandboxModeConstants.MODE_DERIVE) {
+		if (sandbox.getMode() == SandboxModeConstants.MODE_DEFINE) {
 			return "Define";
 		} else if (sandbox.getMode() == SandboxModeConstants.MODE_OPTIMISE) {
 			return "Optimise";

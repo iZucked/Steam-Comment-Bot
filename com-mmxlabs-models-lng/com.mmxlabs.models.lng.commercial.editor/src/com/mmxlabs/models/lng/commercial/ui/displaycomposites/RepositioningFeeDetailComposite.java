@@ -36,7 +36,7 @@ public class RepositioningFeeDetailComposite extends RepositioningFeeTermsDetail
 		oldContract = (GenericCharterContract) value;
 		
 		if (oldContract != null) {
-			createDefaultChildCompositeSection(dialogContext, root, oldContract, range, dbc, oldContract.eClass(), startHeelComposite);
+			createDefaultChildCompositeSection(dialogContext, root, oldContract, range, dbc, oldContract.eClass(), this);
 		}
 		
 		doDisplay(oldContract);
@@ -44,7 +44,9 @@ public class RepositioningFeeDetailComposite extends RepositioningFeeTermsDetail
 	
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CommercialPackage.eINSTANCE.getGenericCharterContract_EndHeel()
+		return ref.isContainment() && !ref.isMany() 
+				&& ref != CommercialPackage.eINSTANCE.getGenericCharterContract_StartHeel()//
+				&& ref != CommercialPackage.eINSTANCE.getGenericCharterContract_EndHeel()
 				&& ref != CommercialPackage.eINSTANCE.getGenericCharterContract_BallastBonusTerms() 
 				&& ref != CommercialPackage.eINSTANCE.getGenericCharterContract_RepositioningFeeTerms();
 	}

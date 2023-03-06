@@ -83,7 +83,7 @@ import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.analytics.SandboxManualRunner;
+import com.mmxlabs.models.lng.transformer.ui.analytics.SandboxDefineRunner;
 import com.mmxlabs.models.lng.transformer.ui.analytics.SandboxOptimiserRunner;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
@@ -208,8 +208,8 @@ public class SandboxJobRunner extends AbstractJobRunner {
 			return runSandboxInsertion(threadsToUse, sdp, null, model, userSettings, subMonitor);
 		case SandboxModeConstants.MODE_OPTIMISE:
 			return runSandboxOptimisation(threadsToUse, sdp, null, model, userSettings, subMonitor);
-		case SandboxModeConstants.MODE_DERIVE:
-			return runSandboxOptions(threadsToUse, sdp, null, model, userSettings, subMonitor);
+		case SandboxModeConstants.MODE_DEFINE:
+			return runSandboxDefine(threadsToUse, sdp, null, model, userSettings, subMonitor);
 		}
 
 		throw new IllegalArgumentException("Unknown sandbox mode");
@@ -249,7 +249,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 	}
 
-	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxOptionsFunction(final int threadsAvailable, final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance,
+	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxDefineFunction(final int threadsAvailable, final IScenarioDataProvider sdp, final @Nullable ScenarioInstance scenarioInstance,
 			final UserSettings userSettings, final OptionAnalysisModel model) {
 
 		final SandboxResult sandboxResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
@@ -270,19 +270,19 @@ public class SandboxJobRunner extends AbstractJobRunner {
 		boolean allowCaching = false;
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
-			final SandboxManualRunner deriveRunner = new SandboxManualRunner(scenarioInstance, sdp, userSettings, mapper, model);
+			final SandboxDefineRunner defineRunner = new SandboxDefineRunner(scenarioInstance, sdp, userSettings, mapper, model);
 
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
-					return deriveRunner.getBridge();
+					return defineRunner.getBridge();
 				}
 
 				@Override
 				public IMultiStateResult run(final IProgressMonitor monitor) {
 					final long startTime = System.currentTimeMillis();
 					try {
-						return deriveRunner.runSandbox(monitor);
+						return defineRunner.runSandbox(monitor);
 					} finally {
 						final long runTime = System.currentTimeMillis() - startTime;
 
@@ -290,7 +290,7 @@ public class SandboxJobRunner extends AbstractJobRunner {
 							json.getMetrics().setRuntime(runTime);
 
 							final ScenarioMeta scenarioMeta = ScenarioMetaUtils.writeOptimisationMetrics( //
-									deriveRunner.getBridge().getOptimiserScenario(), //
+									defineRunner.getBridge().getOptimiserScenario(), //
 									userSettings);
 
 							json.setScenarioMeta(scenarioMeta);
@@ -746,9 +746,9 @@ public class SandboxJobRunner extends AbstractJobRunner {
 		}
 	}
 
-	public @Nullable AbstractSolutionSet runSandboxOptions(final int numThreads, final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance,
+	public @Nullable AbstractSolutionSet runSandboxDefine(final int numThreads, final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance,
 			final OptionAnalysisModel model, final UserSettings userSettings, final IProgressMonitor progressMonitor) {
-		return createSandboxOptionsFunction(numThreads, scenarioDataProvider, scenarioInstance, userSettings, model).apply(progressMonitor);
+		return createSandboxDefineFunction(numThreads, scenarioDataProvider, scenarioInstance, userSettings, model).apply(progressMonitor);
 	}
 
 	private ScheduleSpecification createBaseScheduleSpecification(final IScenarioDataProvider scenarioDataProvider, final OptionAnalysisModel model, final IMapperClass mapper) {
