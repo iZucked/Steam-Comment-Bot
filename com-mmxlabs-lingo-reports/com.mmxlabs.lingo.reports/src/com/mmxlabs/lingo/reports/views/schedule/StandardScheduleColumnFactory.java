@@ -31,6 +31,7 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.RowTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -1896,6 +1897,32 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							final DischargeSlot dischargeSlot = (DischargeSlot) openDischargeSlotAllocation.getSlot();
 							return dischargeSlot.isFOBSale() ? "FOB" : "DES";
 						}
+					}
+					return null;
+				}
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.average_daily_charter_rate":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter Rate", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(Object object) {
+					if (object instanceof @NonNull final Row row && row.getTarget() instanceof EventGrouping eventGrouping) {
+						final int totalCharterCost = eventGrouping.getEvents().stream() //
+								.mapToInt(e -> StandardEconsRowFactory.getOrZero(e, Event::getCharterCost)) //
+								.sum();
+						final int totalDuration = eventGrouping.getEvents().stream() //
+								.mapToInt(e -> StandardEconsRowFactory.getOrZero(e, Event::getDuration)) //
+								.sum();
+						final int averageDailyCharterRate;
+						if (totalDuration == 0) {
+							return "";
+						} else {
+							averageDailyCharterRate = (int) ((totalCharterCost * 24.0) / totalDuration);
+						}
+						if (averageDailyCharterRate == 0) {
+							return "";
+						}
+						return String.format("%,d", averageDailyCharterRate);
 					}
 					return null;
 				}

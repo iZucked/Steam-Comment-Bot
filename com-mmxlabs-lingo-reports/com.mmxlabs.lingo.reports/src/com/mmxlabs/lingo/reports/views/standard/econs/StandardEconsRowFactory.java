@@ -1470,7 +1470,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return getFuelVolume(fuelUser1, unit, fuels) + getFuelVolume(fuelUser2, unit, fuels) + getFuelVolume(fuelUser3, unit, fuels);
 	}
 
-	private static <T> int getOrZero(final T object, final ToIntFunction<@NonNull T> func) {
+	public static <T> int getOrZero(final T object, final ToIntFunction<@NonNull T> func) {
 		if (object != null) {
 			return func.applyAsInt(object);
 		}
