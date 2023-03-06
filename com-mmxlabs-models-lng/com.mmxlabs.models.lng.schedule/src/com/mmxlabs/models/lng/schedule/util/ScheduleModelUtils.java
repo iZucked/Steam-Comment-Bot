@@ -74,13 +74,13 @@ public class ScheduleModelUtils {
 			return true;
 		} else if (event instanceof EndEvent) {
 			return true;
-		} else if (event instanceof SlotVisit) {
-			final SlotAllocation slotAllocation = ((SlotVisit) event).getSlotAllocation();
-			if (slotAllocation != null) {
-				if (slotAllocation.getSlot() instanceof LoadSlot) {
-					return true;
-				}
+		} else if (event instanceof @NonNull final SlotVisit slotVisit) {
+			final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+			if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
+				return true;
 			}
+		} else if (event instanceof @NonNull final PortVisit portVisit && portVisit.getNextEvent() == null) {
+			return true;
 		}
 		return false;
 	}

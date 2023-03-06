@@ -1582,12 +1582,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					new SimpleEmfBlockColumnFactory(columnID, "Next event date", "Date of the next event in the schedule", ColumnType.NORMAL, new BaseFormatter() {
 
 						ZonedDateTime getNextEventDate(Object object) {
-							if (object instanceof CargoAllocation) {
-								final CargoAllocation cargoAllocation = (CargoAllocation) object;
+							if (object instanceof CargoAllocation cargoAllocation) {
 								object = cargoAllocation.getSlotAllocations().get(0).getSlotVisit();
 							}
-							if (object instanceof PortVisit) {
-								final PortVisit portVisit = (PortVisit) object;
+							if (object instanceof PortVisit portVisit) {
 								final Sequence seq = portVisit.getSequence();
 								if (seq.getSequenceType() == SequenceType.VESSEL || seq.getSequenceType() == SequenceType.SPOT_VESSEL || seq.getSequenceType() == SequenceType.ROUND_TRIP) {
 									Event evt = portVisit;
