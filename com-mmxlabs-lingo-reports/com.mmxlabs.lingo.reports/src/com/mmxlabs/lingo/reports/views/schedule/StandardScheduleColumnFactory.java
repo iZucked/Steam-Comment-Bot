@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.Image;
 
@@ -1861,6 +1862,46 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sale_cn":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sale CN", null, ColumnType.NORMAL, new BaseFormatter(), dischargeAllocationRef,
 					s.getSlotAllocation_Slot(), c.getSlot__GetSlotOrDelegateCN()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.buy_inco":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Inco", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(Object object) {
+					if (object instanceof @NonNull final Row row) {
+						final SlotAllocation loadAllocation = row.getLoadAllocation();
+						if (loadAllocation != null) {
+							final LoadSlot loadSlot = (LoadSlot) loadAllocation.getSlot();
+							return loadSlot.isDESPurchase() ? "DES" : "FOB";
+						}
+						final OpenSlotAllocation openLoadSlotAllocation = row.getOpenLoadSlotAllocation();
+						if (openLoadSlotAllocation != null) {
+							final LoadSlot loadSlot = (LoadSlot) openLoadSlotAllocation.getSlot();
+							return loadSlot.isDESPurchase() ? "DES" : "FOB";
+						}
+					}
+					return null;
+				}
+			}));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.sell_inco":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Inco", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(Object object) {
+					if (object instanceof @NonNull final Row row) {
+						final SlotAllocation dischargeAllocation = row.getDischargeAllocation();
+						if (dischargeAllocation != null) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) dischargeAllocation.getSlot();
+							return dischargeSlot.isFOBSale() ? "FOB" : "DES";
+						}
+						final OpenSlotAllocation openDischargeSlotAllocation = row.getOpenDischargeSlotAllocation();
+						if (openDischargeSlotAllocation != null) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) openDischargeSlotAllocation.getSlot();
+							return dischargeSlot.isFOBSale() ? "FOB" : "DES";
+						}
+					}
+					return null;
+				}
+			}));
 			break;
 		}
 	}
