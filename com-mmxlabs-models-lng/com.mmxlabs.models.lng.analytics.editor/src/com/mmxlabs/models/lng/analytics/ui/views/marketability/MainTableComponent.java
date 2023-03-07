@@ -30,7 +30,6 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -104,21 +103,8 @@ public class MainTableComponent {
 	}
 
 	public void createControls(final Composite mainParent, final MarketabilityView marketabilityModellerView) {
-		final Composite vesselSpeedComposite = new Composite(mainParent, SWT.NONE);
-		vesselSpeedComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
-		vesselSpeedComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.END).minSize(1000, -1).create());
-		final Label lbl = new Label(vesselSpeedComposite, SWT.NONE);
-		lbl.setText("Vessel speed:");
-		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
-		vesselSpeedText = new Text(vesselSpeedComposite, SWT.SINGLE | SWT.BORDER);
-		vesselSpeedText.setEditable(true);
-		vesselSpeedText.setTextLimit(2);
-		vesselSpeedText.setMessage("max");
-		vesselSpeedText.setData(vesselSpeedText.getText());
-
-		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
-		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
-		knotsLabel.setText("kts");
+		
+		createVesselSpeedComposite(mainParent);
 		Control control = createViewer(mainParent);
 
 		control.setLayoutData(GridDataFactory.fillDefaults().minSize(0, 0).grab(true, true).create());
@@ -131,6 +117,22 @@ public class MainTableComponent {
 			}
 		};
 		tableViewer.addSelectionChangedListener(tableSelectionChangedListener);
+	}
+	
+	private void createVesselSpeedComposite(final Composite parent) {
+		final Composite vesselSpeedComposite = new Composite(parent, SWT.NONE);
+		vesselSpeedComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
+		vesselSpeedComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.END).minSize(1000, -1).create());
+		final Label lbl = new Label(vesselSpeedComposite, SWT.NONE);
+		lbl.setText("Vessel speed:");
+		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
+		vesselSpeedText = new Text(vesselSpeedComposite, SWT.SINGLE | SWT.BORDER);
+		vesselSpeedText.setEditable(true);
+		vesselSpeedText.setTextLimit(2);
+		vesselSpeedText.setMessage("max");
+		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
+		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
+		knotsLabel.setText("kts");
 	}
 
 	private Control createViewer(final Composite parent) {
@@ -227,14 +229,23 @@ public class MainTableComponent {
 		};
 		inputWants.add(refreshDynamicColumns);
 		tableViewer.setContentProvider(new MarketabilityModelContentProvider());
-		inputWants.add(model -> {
-			tableViewer.setInput(model);
-			tableViewer.refresh();
-		});
+		inputWants.add(this::refresh);
 		return tableViewer.getGrid();
 	}
 
-	public void refresh() {
+	private void updateVesselSpeedText(MarketabilityModel model) {
+		if (model.isSetVesselSpeed()) {
+			vesselSpeedText.setText(String.valueOf(model.getVesselSpeed()));
+		} else {
+			vesselSpeedText.setText("");
+		}
+	}
+
+	public void refresh(MarketabilityModel model) {
+		if(model != null) {
+			tableViewer.setInput(model);
+			updateVesselSpeedText(model);
+		}
 		tableViewer.refresh();
 		GridViewerHelper.recalculateRowHeights(tableViewer.getGrid());
 
@@ -441,19 +452,16 @@ public class MainTableComponent {
 		return portColumn;
 	}
 
-	
 	public void selectRowWithLoad(LoadSlot slot) {
 		Object input = tableViewer.getInput();
-		if(input instanceof MarketabilityModel model) {
-			Optional<@NonNull MarketabilityRow> loadRow = model.getRows().stream().filter(x -> 
-				x.getBuyOption() instanceof BuyReference br && br.getSlot() == slot
-			).findAny();
-			if(loadRow.isPresent()) {
+		if (input instanceof MarketabilityModel model) {
+			Optional<@NonNull MarketabilityRow> loadRow = model.getRows().stream().filter(x -> x.getBuyOption() instanceof BuyReference br && br.getSlot() == slot).findAny();
+			if (loadRow.isPresent()) {
 				tableViewer.setSelection(new StructuredSelection(loadRow.get()), true);
 			}
 		}
-			//tableViewer.setSelection(null, false);
 	}
+
 	@SuppressWarnings("null")
 	private @NonNull String formatDate(final LocalDate date) {
 		if (date == null) {

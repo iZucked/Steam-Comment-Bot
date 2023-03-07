@@ -89,17 +89,6 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	private MainTableComponent mainTableComponent;
 
 	private static final Logger LOG = LoggerFactory.getLogger(MarketabilityView.class);
-	
-	private ISelectionListener listener = new ISelectionListener() {
-		
-		@Override
-		public void selectionChanged(MPart part, Object selection) {
-			// TODO Auto-generated method stub
-		
-			mainTableComponent.getViewer().setSelection(null, isListenerAttached());
-			
-		}
-	};
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -109,7 +98,11 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		parent.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
 		mainTableComponent = new MainTableComponent();
+
+		
+		//final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(getScenarioDataProvider());
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);
+
 		inputWants.addAll(mainTableComponent.getInputWants());
 
 		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> {
@@ -207,8 +200,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 		service = getSite().getService(ESelectionService.class);
-		
-		service.addSelectionListener(listener);
+
 		listenToSelectionsFrom();
 
 		listenToScenarioSelection();
@@ -385,7 +377,9 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 			// Find valid, selected objects
 			final LoadSlot validSlot = MarketabilityView.this.processSelection(e3part, selection);
-			mainTableComponent.selectRowWithLoad(validSlot);
+			if (validSlot != null) {
+				mainTableComponent.selectRowWithLoad(validSlot);
+			}
 		};
 		service.addPostSelectionListener(selectionListener);
 	}
