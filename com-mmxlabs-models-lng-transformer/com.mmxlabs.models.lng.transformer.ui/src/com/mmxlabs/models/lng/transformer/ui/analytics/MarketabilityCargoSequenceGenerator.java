@@ -163,7 +163,7 @@ public class MarketabilityCargoSequenceGenerator {
 		VoyageSpecificationProviderImpl voyageProvider = new VoyageSpecificationProviderImpl();
 		voyageProvider.setArrivalTime(portSlot, loadTime);
 		providers.addProvider(IVoyageSpecificationProvider.class, voyageProvider);
-		setAllowedPanamaBookings(providers, schedule, portSlot, portSlot, targetResource);
+		setAllowedPanamaBookings(providers, schedule, portSlot, nextEventSlot, targetResource);
 
 		return new ListModifiableSequence(List.of(start, load, saleMarket, end));
 
@@ -182,7 +182,7 @@ public class MarketabilityCargoSequenceGenerator {
 	@NonNullByDefault
 	private void setAllowedPanamaBookings(SequencesAttributesProviderImpl providers, Schedule schedule, IPortSlot load, IPortSlot nextEvent, IResource resource) {
 
-		final AllowedPanamaBookingsProviderImpl panamaAllowedBookingsProvider = new AllowedPanamaBookingsProviderImpl();
+		final AllowedPanamaBookingsProviderImpl allowedPanamaBookingsProvider = new AllowedPanamaBookingsProviderImpl();
 		Set<IRouteOptionBooking> otherCargoBookings = new HashSet<>();
 
 		for (Sequence evaluatedSequence : schedule.getSequences()) {
@@ -208,7 +208,8 @@ public class MarketabilityCargoSequenceGenerator {
 							break;
 						}
 					}
-				} else if (currentEvent instanceof Journey journey && journey.getCanalBooking() != null) {
+				}
+				if (currentEvent instanceof Journey journey && journey.getCanalBooking() != null) {
 					// Add bookings used by other cargoes
 					final IRouteOptionBooking booking = modelEntityMap.getOptimiserObjectNullChecked(journey.getCanalBooking(), IRouteOptionBooking.class);
 					otherCargoBookings.add(booking);
@@ -223,8 +224,11 @@ public class MarketabilityCargoSequenceGenerator {
 		// original cargo
 		Set<IRouteOptionBooking> allowedBookings = Sets.difference(allPanamaBookings, otherCargoBookings);
 
-		// Optimiser avoids applying Panama bookings to a vessel if the booking could be applied to multiple vessels 
-		// Transforms the original Panama bookings into bookings that contain only the vessel in the marketable cargo, if the vessel is in the original booking vessel group
+		// Optimiser avoids applying Panama bookings to a vessel if the booking could be
+		// applied to multiple vessels
+		// Transforms the original Panama bookings into bookings that contain only the
+		// vessel in the marketable cargo, if the vessel is in the original booking
+		// vessel group
 		List<@NonNull IRouteOptionBooking> mappedBookings = allowedBookings.stream().map(booking -> {
 			final IVessel oVessel = vesselProvider.getVesselCharter(resource).getVessel();
 			if (booking.getVessels().isEmpty() || booking.getVessels().contains(oVessel)) {
@@ -234,9 +238,9 @@ public class MarketabilityCargoSequenceGenerator {
 			}
 		}).filter(Optional::isPresent).map(Optional::get).map(IRouteOptionBooking.class::cast).toList();
 
-		panamaAllowedBookingsProvider.setAllowedBookings(mappedBookings);
+		allowedPanamaBookingsProvider.setAllowedBookings(mappedBookings);
 
-		providers.addProvider(IAllowedPanamaBookingsProvider.class, panamaAllowedBookingsProvider);
+		providers.addProvider(IAllowedPanamaBookingsProvider.class, allowedPanamaBookingsProvider);
 	}
 
 	@NonNullByDefault
