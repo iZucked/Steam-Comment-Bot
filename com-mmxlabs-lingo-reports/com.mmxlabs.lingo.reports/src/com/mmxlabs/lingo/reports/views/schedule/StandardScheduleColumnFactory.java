@@ -113,11 +113,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
-							final Slot slot = openSlotAllocation.getSlot();
+							final Slot<?> slot = openSlotAllocation.getSlot();
 							if (slot != null) {
 								return slot.getName();
 							}
@@ -147,24 +146,22 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 						@Override
 						public Comparable getComparable(Object object) {
-							if (object instanceof Row) {
-								final Row row = (Row) object;
+							if (object instanceof Row row) {
 								final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 								if (openSlotAllocation != null) {
-									final Slot slot = openSlotAllocation.getSlot();
+									final Slot<?> slot = openSlotAllocation.getSlot();
 									if (slot != null) {
 										return slot.getWindowStart();
 									}
 								}
 								final SlotAllocation slotAllocation = row.getLoadAllocation();
 								if (slotAllocation != null) {
-									final Slot slot = slotAllocation.getSlot();
+									final Slot<?> slot = slotAllocation.getSlot();
 									if (slot instanceof LoadSlot) {
 										return slot.getWindowStart();
 									}
 								}
-								if (row.getTarget() instanceof VesselEventVisit) {
-									final VesselEventVisit visit = (VesselEventVisit) row.getTarget();
+								if (row.getTarget() instanceof VesselEventVisit visit) {
 									final VesselEvent event = visit.getVesselEvent();
 									if (event != null) {
 										return event.getStartAfter().toLocalDate();
@@ -178,24 +175,22 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							if (object instanceof Row) {
-								final Row row = (Row) object;
+							if (object instanceof Row row) {
 								final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 								if (openSlotAllocation != null) {
-									final Slot slot = openSlotAllocation.getSlot();
+									final Slot<?> slot = openSlotAllocation.getSlot();
 									if (slot != null) {
 										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
 									}
 								}
 								final SlotAllocation slotAllocation = row.getLoadAllocation();
 								if (slotAllocation != null) {
-									final Slot slot = slotAllocation.getSlot();
+									final Slot<?> slot = slotAllocation.getSlot();
 									if (slot instanceof LoadSlot) {
 										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
 									}
 								}
-								if (row.getTarget() instanceof VesselEventVisit) {
-									final VesselEventVisit visit = (VesselEventVisit) row.getTarget();
+								if (row.getTarget() instanceof VesselEventVisit visit) {
 									final VesselEvent event = visit.getVesselEvent();
 									if (event != null) {
 										return Formatters.asLocalDateFormatter.render(event.getStartAfter());
@@ -216,18 +211,17 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							if (object instanceof Row) {
-								final Row row = (Row) object;
+							if (object instanceof Row row) {
 								final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 								if (openSlotAllocation != null) {
-									final Slot slot = openSlotAllocation.getSlot();
+									final Slot<?> slot = openSlotAllocation.getSlot();
 									if (slot != null) {
 										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
 									}
 								}
 								final SlotAllocation slotAllocation = row.getDischargeAllocation();
 								if (slotAllocation != null) {
-									final Slot slot = slotAllocation.getSlot();
+									final Slot<?> slot = slotAllocation.getSlot();
 									if (slot instanceof DischargeSlot) {
 										return Formatters.asLocalDateFormatter.render(slot.getWindowStart());
 									}
@@ -244,15 +238,14 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				@Override
 				public Comparable getComparable(Object object) {
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
 							return getValue(openSlotAllocation.getSlot());
 						}
 						final SlotAllocation slotAllocation = row.getLoadAllocation();
 						if (slotAllocation != null) {
-							final Slot slot = slotAllocation.getSlot();
+							final Slot<?> slot = slotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
 								return getValue(slot);
 							}
@@ -261,7 +254,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					return null;
 				}
 
-				private Double getValue(final Slot slot) {
+				private Double getValue(final Slot<?> slot) {
 					if (slot != null) {
 						if (slot.isSetOperationalTolerance()) {
 							return slot.getOperationalTolerance();
@@ -279,11 +272,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
-							final Slot slot = openSlotAllocation.getSlot();
+							final Slot<?> slot = openSlotAllocation.getSlot();
 							Double v = getValue(slot);
 							if (v != null) {
 								return new NumberOfDPFormatter(1).render(v * 100.0);
@@ -291,7 +283,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						}
 						final SlotAllocation slotAllocation = row.getLoadAllocation();
 						if (slotAllocation != null) {
-							final Slot slot = slotAllocation.getSlot();
+							final Slot<?> slot = slotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
 								Double v = getValue(slot);
 								if (v != null) {
@@ -311,7 +303,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 					new BaseFormatter() {
 
-						private Double getValue(final Slot slot) {
+						private Double getValue(final Slot<?> slot) {
 							if (slot != null) {
 								if (slot.isSetOperationalTolerance()) {
 									return slot.getOperationalTolerance();
@@ -329,11 +321,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							if (object instanceof Row) {
-								final Row row = (Row) object;
+							if (object instanceof Row row) {
 								final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 								if (openSlotAllocation != null) {
-									final Slot slot = openSlotAllocation.getSlot();
+									final Slot<?> slot = openSlotAllocation.getSlot();
 									if (slot != null) {
 										Double v = getValue(slot);
 										if (v != null) {
@@ -343,7 +334,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								}
 								final SlotAllocation slotAllocation = row.getDischargeAllocation();
 								if (slotAllocation != null) {
-									final Slot slot = slotAllocation.getSlot();
+									final Slot<?> slot = slotAllocation.getSlot();
 									if (slot instanceof DischargeSlot) {
 										Double v = getValue(slot);
 										if (v != null) {
@@ -396,11 +387,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
-							final Slot slot = openSlotAllocation.getSlot();
+							final Slot<?> slot = openSlotAllocation.getSlot();
 							if (slot != null) {
 								final Contract contract = slot.getContract();
 								if (contract != null) {
@@ -410,7 +400,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						}
 						final SlotAllocation slotAllocation = row.getLoadAllocation();
 						if (slotAllocation != null) {
-							final Slot slot = slotAllocation.getSlot();
+							final Slot<?> slot = slotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
 								final Contract contract = slot.getContract();
 								if (contract != null) {
@@ -428,11 +418,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 						if (openSlotAllocation != null) {
-							final Slot slot = openSlotAllocation.getSlot();
+							final Slot<?> slot = openSlotAllocation.getSlot();
 							if (slot != null) {
 								final Contract contract = slot.getContract();
 								if (contract != null) {
@@ -442,7 +431,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						}
 						final SlotAllocation slotAllocation = row.getDischargeAllocation();
 						if (slotAllocation != null) {
-							final Slot slot = slotAllocation.getSlot();
+							final Slot<?> slot = slotAllocation.getSlot();
 							if (slot instanceof DischargeSlot) {
 								final Contract contract = slot.getContract();
 								if (contract != null) {
@@ -460,11 +449,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
-							final Slot slot = openSlotAllocation.getSlot();
+							final Slot<?> slot = openSlotAllocation.getSlot();
 							if (slot != null) {
 								final Port port = slot.getPort();
 								if (port != null) {
@@ -474,7 +462,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						}
 						final SlotAllocation slotAllocation = row.getLoadAllocation();
 						if (slotAllocation != null) {
-							final Slot slot = slotAllocation.getSlot();
+							final Slot<?> slot = slotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
 								final Port port = slot.getPort();
 								if (port != null) {
@@ -482,8 +470,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								}
 							}
 						}
-						if (row.getTarget() instanceof Event) {
-							final Event event = (Event) row.getTarget();
+						if (row.getTarget() instanceof Event event) {
 							final Port port = event.getPort();
 							if (port != null) {
 								return port.getName();
@@ -580,11 +567,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 						if (openSlotAllocation != null) {
-							final Slot slot = openSlotAllocation.getSlot();
+							final Slot<?> slot = openSlotAllocation.getSlot();
 							if (slot != null) {
 								final Port port = slot.getPort();
 								if (port != null) {
@@ -594,7 +580,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						}
 						final SlotAllocation slotAllocation = row.getDischargeAllocation();
 						if (slotAllocation != null) {
-							final Slot slot = slotAllocation.getSlot();
+							final Slot<?> slot = slotAllocation.getSlot();
 							if (slot instanceof DischargeSlot) {
 								final Port port = slot.getPort();
 								if (port != null) {
@@ -602,11 +588,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								}
 							}
 						}
-						if (row.getTarget() instanceof VesselEventVisit) {
-							final VesselEventVisit visit = (VesselEventVisit) row.getTarget();
+						if (row.getTarget() instanceof VesselEventVisit visit) {
 							final VesselEvent event = visit.getVesselEvent();
-							if (event instanceof CharterOutEvent) {
-								final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
+							if (event instanceof CharterOutEvent charterOutEvent) {
 								final Port port = charterOutEvent.getRelocateTo();
 								if (port != null) {
 									return port.getName();
@@ -725,8 +709,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				private String getValue(Object object) {
 
 					IScenarioDataProvider scenarioDataProvider = null;
-					if (object instanceof Row) {
-						Row row = (Row) object;
+					if (object instanceof Row row) {
 						scenarioDataProvider = row.getScenarioDataProvider();
 						object = ((EObject) object).eGet(targetObjectRef);
 					}
@@ -902,8 +885,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				private String getValue(Object object) {
 
 					IScenarioDataProvider scenarioDataProvider = null;
-					if (object instanceof Row) {
-						Row row = (Row) object;
+					if (object instanceof Row row) {
 						scenarioDataProvider = row.getScenarioDataProvider();
 						object = ((EObject) object).eGet(dischargeAllocationRef);
 					}
@@ -1002,10 +984,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof SlotAllocation) {
-						final SlotAllocation slotAllocation = (SlotAllocation) object;
-
-						final Slot slot = slotAllocation.getSlot();
+					if (object instanceof SlotAllocation slotAllocation) {
+						final Slot<?> slot = slotAllocation.getSlot();
 						if (slot instanceof LoadSlot) {
 							return slotAllocation.getEnergyTransferred();
 						}
@@ -1020,8 +1000,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof SlotAllocation) {
-						final SlotAllocation slotAllocation = (SlotAllocation) object;
+					if (object instanceof SlotAllocation slotAllocation) {
 						return slotAllocation.getEnergyTransferred();
 					}
 					return null;
@@ -1142,8 +1121,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Total Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, true, true, ShippingCostType.ALL);
 						return (int) total;
 					}
@@ -1156,8 +1134,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Shipping Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.ALL);
 						return (int) total;
 					}
@@ -1170,8 +1147,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Bunker Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.BUNKER_COSTS);
 						return (int) total;
 					}
@@ -1184,8 +1160,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Port Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.PORT_COSTS);
 						return (int) total;
 					}
@@ -1198,8 +1173,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.HEEL_COST);
 						return (int) total;
 					}
@@ -1212,8 +1186,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Revenue", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = -ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.HEEL_REVENUE);
 						return (int) total;
 					}
@@ -1226,8 +1199,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.CANAL_COSTS);
 						return (int) total;
 					}
@@ -1240,8 +1212,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Hire Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.HIRE_COSTS);
 						return (int) total;
 					}
@@ -1254,8 +1225,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "LNG Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.LNG_COSTS);
 						return (int) total;
 					}
@@ -1268,8 +1238,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Cooldown Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-					if (object instanceof EventGrouping) {
-						final EventGrouping grouping = (EventGrouping) object;
+					if (object instanceof EventGrouping grouping) {
 						final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.COOLDOWN_COSTS);
 						return (int) total;
 					}
@@ -1283,8 +1252,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					new SimpleEmfBlockColumnFactory(columnID, "Other Cost", "Other costs (including charter event revenue)", ColumnType.NORMAL, new IntegerFormatter() {
 						@Override
 						public Integer getIntValue(final Object object) {
-							if (object instanceof EventGrouping) {
-								final EventGrouping grouping = (EventGrouping) object;
+							if (object instanceof EventGrouping grouping) {
 								final long total = ScheduleModelKPIUtils.calculateEventShippingCost(grouping, false, false, ShippingCostType.OTHER_COSTS);
 								return (int) total;
 							}
@@ -1308,13 +1276,12 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
 						if (dataWithKey != null) {
 							for (final GeneralPNLDetails generalPNLDetails : container.getGeneralPNLDetails()) {
-								if (generalPNLDetails instanceof SlotPNLDetails) {
-									final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+								if (generalPNLDetails instanceof SlotPNLDetails slotPNLDetails) {
 									for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
-										if (details instanceof BasicSlotPNLDetails) {
-											addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
-											addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
-											addnPNL += ((BasicSlotPNLDetails) details).getExtraUpsidePNL();
+										if (details instanceof BasicSlotPNLDetails slotDetails) {
+											addnPNL += slotDetails.getAdditionalPNL();
+											addnPNL += slotDetails.getExtraShippingPNL();
+											addnPNL += slotDetails.getExtraUpsidePNL();
 										}
 									}
 								}
@@ -1401,8 +1368,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballast-idle-days":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Idle", "Ballast idle days", ColumnType.NORMAL, new BaseFormatter() {
 				private OptionalInt getDuration(final Object object) {
-					if (object instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) object;
+					if (object instanceof SlotVisit slotVisit) {
 						final Event event = ScheduleModelUtils.getLinkedIdleEvent(slotVisit);
 						if (event != null) {
 							return OptionalInt.of(event.getDuration());
@@ -1473,8 +1439,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Travel", "Ballast travel days", ColumnType.NORMAL, new BaseFormatter() {
 
 				private OptionalInt getDuration(final Object object) {
-					if (object instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) object;
+					if (object instanceof SlotVisit slotVisit) {
 						final Event event = ScheduleModelUtils.getLinkedJourneyEvent(slotVisit);
 						if (event != null) {
 							return OptionalInt.of(event.getDuration());
@@ -1545,9 +1510,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Discharge Duration", "Duration of discharge event", ColumnType.NORMAL, new BaseFormatter() {
 
 				private OptionalInt getDuration(final Object object) {
-					if (object instanceof SlotAllocation) {
-						final SlotAllocation slotAllocation = (SlotAllocation) object;
-						final Slot slot = slotAllocation.getSlot();
+					if (object instanceof SlotAllocation slotAllocation) {
+						final Slot<?> slot = slotAllocation.getSlot();
 						if (slot instanceof DischargeSlot) {
 							return OptionalInt.of(slotAllocation.getSlotVisit().getDuration());
 						}
@@ -1627,13 +1591,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					new SimpleEmfBlockColumnFactory(columnID, "Next event port", "Port of the next event in the schedule", ColumnType.NORMAL, new BaseFormatter() {
 
 						Port getNextEventPort(Object object) {
-							if (object instanceof CargoAllocation) {
-								final CargoAllocation cargoAllocation = (CargoAllocation) object;
+							if (object instanceof CargoAllocation cargoAllocation) {
 								object = cargoAllocation.getSlotAllocations().get(0).getSlotVisit();
 							}
 
-							if (object instanceof PortVisit) {
-								final PortVisit portVisit = (PortVisit) object;
+							if (object instanceof PortVisit portVisit) {
 								final Sequence seq = portVisit.getSequence();
 								if (seq.getSequenceType() == SequenceType.VESSEL || seq.getSequenceType() == SequenceType.SPOT_VESSEL || seq.getSequenceType() == SequenceType.ROUND_TRIP) {
 									Event evt = portVisit;
@@ -1679,10 +1641,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.lateness":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Lateness", null, ColumnType.NORMAL, new BaseFormatter() {
 				int getViolationCount(final Object object) {
-					if (object instanceof Row) {
-						final Row row = (Row) object;
-						if (row.getTarget() instanceof EventGrouping) {
-							return LatenessUtils.getLatenessAfterFlex((EventGrouping) row.getTarget());
+					if (object instanceof Row row) {
+						if (row.getTarget() instanceof EventGrouping grouping) {
+							return LatenessUtils.getLatenessAfterFlex(grouping);
 						}
 					}
 
@@ -1709,10 +1670,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.capacity_violation":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Violation", null, ColumnType.NORMAL, new BaseFormatter() {
 				int getViolationCount(final Object object) {
-					if (object instanceof Row) {
-						final Row row = (Row) object;
-						if (row.getTarget() instanceof EventGrouping) {
-							return CapacityUtils.getViolationCount((EventGrouping) row.getTarget());
+					if (object instanceof Row row) {
+						if (row.getTarget() instanceof EventGrouping grouping) {
+							return CapacityUtils.getViolationCount(grouping);
 						}
 					}
 
@@ -1742,11 +1702,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String render(final Object object) {
 
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final OpenSlotAllocation openSlotAllocation = row.getOpenLoadSlotAllocation();
 						if (openSlotAllocation != null) {
-							final Slot slot = openSlotAllocation.getSlot();
+							final Slot<?> slot = openSlotAllocation.getSlot();
 							if (slot != null) {
 								final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 								if (entity != null) {
@@ -1756,7 +1715,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						}
 						final SlotAllocation slotAllocation = row.getLoadAllocation();
 						if (slotAllocation != null) {
-							final Slot slot = slotAllocation.getSlot();
+							final Slot<?> slot = slotAllocation.getSlot();
 							if (slot instanceof LoadSlot) {
 								final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 								if (entity != null) {
@@ -1777,11 +1736,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						@Override
 						public String render(final Object object) {
 
-							if (object instanceof Row) {
-								final Row row = (Row) object;
+							if (object instanceof Row row) {
 								final OpenSlotAllocation openSlotAllocation = row.getOpenDischargeSlotAllocation();
 								if (openSlotAllocation != null) {
-									final Slot slot = openSlotAllocation.getSlot();
+									final Slot<?> slot = openSlotAllocation.getSlot();
 									if (slot != null) {
 										final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 										if (entity != null) {
@@ -1791,7 +1749,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								}
 								final SlotAllocation slotAllocation = row.getDischargeAllocation();
 								if (slotAllocation != null) {
-									final Slot slot = slotAllocation.getSlot();
+									final Slot<?> slot = slotAllocation.getSlot();
 									if (slot instanceof DischargeSlot) {
 										final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 										if (entity != null) {
@@ -1809,8 +1767,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Shipping Entity", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
 				public @Nullable String render(final Object object) {
-					if (object instanceof Row) {
-						final Row row = (Row) object;
+					if (object instanceof Row row) {
 						final Sequence sequence = row.getSequence();
 						if (sequence == null) {
 							return null;
@@ -1827,7 +1784,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 								final SlotAllocation loadAllocation = row.getLoadAllocation();
 								if (loadAllocation != null) {
-									final Slot slot = loadAllocation.getSlot();
+									final Slot<?> slot = loadAllocation.getSlot();
 									if (slot != null) {
 										final BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
 										if (entity != null) {
@@ -1984,7 +1941,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			if (sdp != null) {
 				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sdp, slot);
 				for (AbstractNomination nomination : nominations) {
-					if (nomination.getType() != null && nomination.getType().toLowerCase().equals(nominationType.toLowerCase())) {
+					if (nomination.getType() != null && nomination.getType().equalsIgnoreCase(nominationType)) {
 						return NominationsModelUtils.getNominatedValue(nomination);
 					}
 				}
@@ -2000,7 +1957,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			if (sdp != null) {
 				List<AbstractNomination> nominations = NominationsModelUtils.findNominationsForSlot(sdp, slot);
 				for (AbstractNomination nomination : nominations) {
-					if (nomination.getType() != null && nomination.getType().toLowerCase().equals(nominationType.toLowerCase())) {
+					if (nomination.getType() != null && nomination.getType().equalsIgnoreCase(nominationType)) {
 						return NominationsModelUtils.getNominatedValue(nomination);
 					}
 				}
