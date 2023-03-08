@@ -1867,13 +1867,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				public String render(Object object) {
 					if (object instanceof @NonNull final Row row) {
 						final SlotAllocation loadAllocation = row.getLoadAllocation();
-						if (loadAllocation != null) {
-							final LoadSlot loadSlot = (LoadSlot) loadAllocation.getSlot();
+						if (loadAllocation != null && loadAllocation.getSlot() instanceof final LoadSlot loadSlot) {
 							return loadSlot.isDESPurchase() ? "DES" : "FOB";
 						}
 						final OpenSlotAllocation openLoadSlotAllocation = row.getOpenLoadSlotAllocation();
-						if (openLoadSlotAllocation != null) {
-							final LoadSlot loadSlot = (LoadSlot) openLoadSlotAllocation.getSlot();
+						if (openLoadSlotAllocation != null && openLoadSlotAllocation instanceof final LoadSlot loadSlot) {
 							return loadSlot.isDESPurchase() ? "DES" : "FOB";
 						}
 					}
@@ -1887,13 +1885,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				public String render(Object object) {
 					if (object instanceof @NonNull final Row row) {
 						final SlotAllocation dischargeAllocation = row.getDischargeAllocation();
-						if (dischargeAllocation != null) {
-							final DischargeSlot dischargeSlot = (DischargeSlot) dischargeAllocation.getSlot();
+						if (dischargeAllocation != null && dischargeAllocation.getSlot() instanceof final DischargeSlot dischargeSlot) {
 							return dischargeSlot.isFOBSale() ? "FOB" : "DES";
 						}
 						final OpenSlotAllocation openDischargeSlotAllocation = row.getOpenDischargeSlotAllocation();
-						if (openDischargeSlotAllocation != null) {
-							final DischargeSlot dischargeSlot = (DischargeSlot) openDischargeSlotAllocation.getSlot();
+						if (openDischargeSlotAllocation != null && openDischargeSlotAllocation.getSlot() instanceof DischargeSlot dischargeSlot) {
 							return dischargeSlot.isFOBSale() ? "FOB" : "DES";
 						}
 					}
