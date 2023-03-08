@@ -1912,13 +1912,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						final int totalDuration = eventGrouping.getEvents().stream() //
 								.mapToInt(e -> ScheduleModelKPIUtils.getOrZero(e, Event::getDuration)) //
 								.sum();
-						final int averageDailyCharterRate;
+						final long averageDailyCharterRate;
 						if (totalDuration == 0) {
 							return "";
 						} else {
-							averageDailyCharterRate = (int) ((totalCharterCost * 24.0) / totalDuration);
+							averageDailyCharterRate = Math.round((totalCharterCost * 24.0) / totalDuration);
 						}
-						if (averageDailyCharterRate == 0) {
+						if (averageDailyCharterRate == 0L) {
 							return "";
 						}
 						return String.format("%,d", averageDailyCharterRate);
