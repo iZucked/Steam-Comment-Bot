@@ -332,7 +332,7 @@ public class ChangeSetView extends ViewPart {
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			if (!inChangingChangeSetSelection.get()) {
 				setViewMode(ViewMode.COMPARE, false);
-				setPartName("Changes");
+				setPartName(getChangeSetPartName());
 
 				final ScenarioResult pin = selectedDataProvider.getPinnedScenarioResult();
 
@@ -341,7 +341,7 @@ public class ChangeSetView extends ViewPart {
 				} else {
 					final ScenarioResult other = selectedDataProvider.getOtherScenarioResults().get(0);
 					setNewDataData(pin, (monitor, targetSlotId) -> {
-						final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+						final IPinDiffResultPlanTransformer transformer = getPinDiffResultPlanTransformer();
 						final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 						return new ViewState(newRoot, SortMode.BY_GROUP);
 					}, !block, null);
@@ -355,6 +355,10 @@ public class ChangeSetView extends ViewPart {
 			// Nothing to do here
 		}
 	};
+
+	protected IPinDiffResultPlanTransformer getPinDiffResultPlanTransformer() {
+		return new PinDiffResultPlanTransformer();
+	}
 
 	private ViewMode viewMode = ViewMode.COMPARE;
 	private IAdditionalAttributeProvider additionalAttributeProvider;
@@ -654,7 +658,7 @@ public class ChangeSetView extends ViewPart {
 		// Create content provider
 		viewer.setContentProvider(createContentProvider());
 
-		columnHelper = new ChangeSetViewColumnHelper(this, viewer);
+		columnHelper = createColumnHelper();
 		insertionPlanFilter = new InsertionPlanGrouperAndFilter();
 		columnHelper.makeColumns(insertionPlanFilter);
 
@@ -722,67 +726,7 @@ public class ChangeSetView extends ViewPart {
 
 		});
 
-		final ViewerFilter[] filters = new ViewerFilter[2];
-		filters[0] = new ViewerFilter() {
-
-			@Override
-			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-
-				if (!showNegativePNLChanges) {
-
-					if (element instanceof ChangeSetTableGroup changeSet) {
-						final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
-						if (totalPNLDelta <= 0) {
-							return false;
-						}
-					} else {
-
-						if (parentElement instanceof ChangeSetTableGroup changeSet) {
-							final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
-							if (totalPNLDelta <= 0) {
-								return false;
-							}
-						}
-					}
-				}
-				if (!showMinorChanges) {
-					if (element instanceof ChangeSetTableRow r) {
-						if (!r.isMajorChange()) {
-
-							Collection<ChangeSetTableRow> rows = r.getWiringGroup().getRows();
-//							if (r.getCargoGroup() != null) {
-//								rows = r.getCargoGroup().getRows();
-//							} else {
-//								rows = Collections.singleton(r);
-//							}
-
-							int small = 0;
-							for (var row : rows) {
-								final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-										- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
-								long totalPNLDelta = 0;
-								if (parentElement instanceof ChangeSetTableGroup changeSet) {
-									totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
-								}
-								if (Math.abs(delta) < 250_000L) {
-									// Exclude if less than 10% of PNL change.
-									if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
-										++small;
-									}
-								}
-							}
-							if (small == rows.size()) {
-								return false;
-							}
-						}
-					}
-				}
-				return true;
-			}
-		};
-		filters[1] = insertionPlanFilter;
-
-		viewer.setFilters(filters);
+		viewer.setFilters(createViewerFilters());
 
 		viewer.setComparator(new ChangeSetComparator(this.sortByVesselAndDate));
 
@@ -908,62 +852,140 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
+	protected ChangeSetViewColumnHelper createColumnHelper() {
+		return new ChangeSetViewColumnHelper(this, viewer);
+	}
+
 	public void makeActions() {
 		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("start"));
 
-		{
+		makeAndAddPackAction();
+		makeAndAddToggleAltPnlAction();
+		makeAndAddExpandAndCollapseActions();
+		makeAndAddCopyAction();
+		makeAndAddReEvaluateAction();
+		makeAndAddFilterMenuAction();
+		getViewSite().getActionBars().getToolBarManager().update(true);
+	}
 
-			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+	protected String getChangeSetPartName() {
+		return "Changes";
+	}
 
-			getViewSite().getActionBars().getToolBarManager().add(packAction);
-		}
+	protected ViewerFilter[] createViewerFilters() {
+		final ViewerFilter[] filters = new ViewerFilter[2];
+		filters[0] = new ViewerFilter() {
 
-		{
-			toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, ChangeSetView.this::doToggleDiffToBase);
-			toggleAltPNLBaseAction.setToolTipText("Toggle comparing to base or previous case");
-			toggleAltPNLBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
-			final GroupMarker group = new GroupMarker("diffToBaseGroup");
-			getViewSite().getActionBars().getToolBarManager().add(group);
-			toggleAltPNLBaseActionItem = new ActionContributionItem(toggleAltPNLBaseAction);
-			if (showToggleAltPNLBaseAction) {
-				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleAltPNLBaseActionItem);
+			@Override
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+
+				if (!showNegativePNLChanges) {
+
+					if (element instanceof ChangeSetTableGroup changeSet) {
+						final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+						if (totalPNLDelta <= 0) {
+							return false;
+						}
+					} else {
+
+						if (parentElement instanceof ChangeSetTableGroup changeSet) {
+							final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+							if (totalPNLDelta <= 0) {
+								return false;
+							}
+						}
+					}
+				}
+				if (!showMinorChanges) {
+					if (element instanceof ChangeSetTableRow r) {
+						if (!r.isMajorChange()) {
+
+							Collection<ChangeSetTableRow> rows = r.getWiringGroup().getRows();
+//							if (r.getCargoGroup() != null) {
+//								rows = r.getCargoGroup().getRows();
+//							} else {
+//								rows = Collections.singleton(r);
+//							}
+
+							int small = 0;
+							for (var row : rows) {
+								final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
+										- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+								long totalPNLDelta = 0;
+								if (parentElement instanceof ChangeSetTableGroup changeSet) {
+									totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+								}
+								if (Math.abs(delta) < 250_000L) {
+									// Exclude if less than 10% of PNL change.
+									if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
+										++small;
+									}
+								}
+							}
+							if (small == rows.size()) {
+								return false;
+							}
+						}
+					}
+				}
+				return true;
 			}
-			toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
+		};
+		filters[1] = insertionPlanFilter;
+		return filters;
+	}
 
+	protected void makeAndAddCopyAction() {
+		copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
+			columnHelper.setTextualVesselMarkers(true);
+			ViewerHelper.refresh(viewer, true);
+		}, () -> {
+			columnHelper.setTextualVesselMarkers(false);
+			ViewerHelper.refresh(viewer, true);
+		});
+		getViewSite().getActionBars().getToolBarManager().add(copyAction);
+	}
+
+	protected void makeAndAddPackAction() {
+		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+		getViewSite().getActionBars().getToolBarManager().add(packAction);
+	}
+
+	private void makeAndAddToggleAltPnlAction() {
+		toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, ChangeSetView.this::doToggleDiffToBase);
+		toggleAltPNLBaseAction.setToolTipText("Toggle comparing to base or previous case");
+		toggleAltPNLBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
+		final GroupMarker group = new GroupMarker("diffToBaseGroup");
+		getViewSite().getActionBars().getToolBarManager().add(group);
+		toggleAltPNLBaseActionItem = new ActionContributionItem(toggleAltPNLBaseAction);
+		if (showToggleAltPNLBaseAction) {
+			getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleAltPNLBaseActionItem);
 		}
+		toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
+	}
 
-		{
-			final Action collapseAll = new Action("Collapse All") {
-				@Override
-				public void run() {
-					viewer.collapseAll();
-				}
-			};
-			final Action expandAll = new Action("Expand All") {
-				@Override
-				public void run() {
-					viewer.expandAll();
-				}
-			};
+	private void makeAndAddExpandAndCollapseActions() {
+		final Action collapseAll = new Action("Collapse All") {
+			@Override
+			public void run() {
+				viewer.collapseAll();
+			}
+		};
+		final Action expandAll = new Action("Expand All") {
+			@Override
+			public void run() {
+				viewer.expandAll();
+			}
+		};
 
-			CommonImages.setImageDescriptors(collapseAll, IconPaths.CollapseAll);
-			CommonImages.setImageDescriptors(expandAll, IconPaths.ExpandAll);
+		CommonImages.setImageDescriptors(collapseAll, IconPaths.CollapseAll);
+		CommonImages.setImageDescriptors(expandAll, IconPaths.ExpandAll);
 
-			getViewSite().getActionBars().getToolBarManager().add(collapseAll);
-			getViewSite().getActionBars().getToolBarManager().add(expandAll);
-		}
+		getViewSite().getActionBars().getToolBarManager().add(collapseAll);
+		getViewSite().getActionBars().getToolBarManager().add(expandAll);
+	}
 
-		{
-			copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
-				columnHelper.setTextualVesselMarkers(true);
-				ViewerHelper.refresh(viewer, true);
-			}, () -> {
-				columnHelper.setTextualVesselMarkers(false);
-				ViewerHelper.refresh(viewer, true);
-			});
-			getViewSite().getActionBars().getToolBarManager().add(copyAction);
-		}
-
+	private void makeAndAddReEvaluateAction() {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_EVALUATE_SOLUTIONS)) {
 			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
 				final AnalyticsSolution solution = currentViewState.lastSolution;
@@ -983,90 +1005,88 @@ public class ChangeSetView extends ViewPart {
 			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
 			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
+	}
 
-		{
-			getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
-			filterMenu = new AbstractMenuAction("Filter...") {
+	private void makeAndAddFilterMenuAction() {
+		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
+		filterMenu = new AbstractMenuAction("Filter...") {
 
-				@Override
-				protected void populate(final Menu menu) {
-					if (showGroupByMenu) {
-						final AbstractMenuAction groupModeAction = new AbstractMenuAction("Group by") {
+			@Override
+			protected void populate(final Menu menu) {
+				if (showGroupByMenu) {
+					final AbstractMenuAction groupModeAction = new AbstractMenuAction("Group by") {
+						@Override
+						protected void populate(final Menu menu2) {
+							final RunnableAction mode_Target = new RunnableAction("Target", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Target));
+
+							final RunnableAction mode_TargetComplexity = new RunnableAction("Target and complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.TargetAndComplexity));
+							final RunnableAction mode_Complextiy = new RunnableAction("Complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Complexity));
+
+							switch (insertionPlanFilter.getGroupMode()) {
+							case Complexity:
+								mode_Complextiy.setChecked(true);
+								break;
+							case Target:
+								mode_Target.setChecked(true);
+								break;
+							case TargetAndComplexity:
+								mode_TargetComplexity.setChecked(true);
+								break;
+							default:
+								break;
+							}
+							addActionToMenu(mode_Target, menu2);
+							addActionToMenu(mode_TargetComplexity, menu2);
+							addActionToMenu(mode_Complextiy, menu2);
+						}
+					};
+					groupModeAction.setToolTipText("Change the grouping choice");
+					addActionToMenu(groupModeAction, menu);
+				}
+				final RunnableAction toggleMinorChanges = new RunnableAction("Show minor changes", ChangeSetView.this::doShowMinorChangesToggle);
+				toggleMinorChanges.setToolTipText("Toggling filtering of minor changes");
+				toggleMinorChanges.setChecked(showMinorChanges);
+				addActionToMenu(toggleMinorChanges, menu);
+
+				final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
+				toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
+				toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
+				addActionToMenu(toggleSortByVesselAndDate, menu);
+
+				if (showNegativePNLChangesMenu) {
+					final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
+					toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
+					toggleNegativePNL.setChecked(showNegativePNLChanges);
+					addActionToMenu(toggleNegativePNL, menu);
+				}
+				if (showChangeTargetMenu) {
+					if (currentViewState != null && currentViewState.allTargetElements.size() > 1) {
+
+						final AbstractMenuAction targetMenu = new AbstractMenuAction("Target... ") {
 							@Override
 							protected void populate(final Menu menu2) {
-								final RunnableAction mode_Target = new RunnableAction("Target", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Target));
 
-								final RunnableAction mode_TargetComplexity = new RunnableAction("Target and complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.TargetAndComplexity));
-								final RunnableAction mode_Complextiy = new RunnableAction("Complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Complexity));
-
-								switch (insertionPlanFilter.getGroupMode()) {
-								case Complexity:
-									mode_Complextiy.setChecked(true);
-									break;
-								case Target:
-									mode_Target.setChecked(true);
-									break;
-								case TargetAndComplexity:
-									mode_TargetComplexity.setChecked(true);
-									break;
-								default:
-									break;
+								for (final NamedObject target : currentViewState.allTargetElements) {
+									final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH,
+											() -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
+									if (currentViewState.lastTargetElement == target) {
+										action.setChecked(true);
+										action.setEnabled(false);
+									}
+									addActionToMenu(action, menu2);
 								}
-								addActionToMenu(mode_Target, menu2);
-								addActionToMenu(mode_TargetComplexity, menu2);
-								addActionToMenu(mode_Complextiy, menu2);
 							}
 						};
-						groupModeAction.setToolTipText("Change the grouping choice");
-						addActionToMenu(groupModeAction, menu);
+						targetMenu.setToolTipText("Select target element");
+						addActionToMenu(targetMenu, menu);
 					}
-					final RunnableAction toggleMinorChanges = new RunnableAction("Show minor changes", ChangeSetView.this::doShowMinorChangesToggle);
-					toggleMinorChanges.setToolTipText("Toggling filtering of minor changes");
-					toggleMinorChanges.setChecked(showMinorChanges);
-					addActionToMenu(toggleMinorChanges, menu);
-
-					final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
-					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
-					toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
-					addActionToMenu(toggleSortByVesselAndDate, menu);
-
-					if (showNegativePNLChangesMenu) {
-						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
-						toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
-						toggleNegativePNL.setChecked(showNegativePNLChanges);
-						addActionToMenu(toggleNegativePNL, menu);
-					}
-					if (showChangeTargetMenu) {
-						if (currentViewState != null && currentViewState.allTargetElements.size() > 1) {
-
-							final AbstractMenuAction targetMenu = new AbstractMenuAction("Target... ") {
-								@Override
-								protected void populate(final Menu menu2) {
-
-									for (final NamedObject target : currentViewState.allTargetElements) {
-										final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH,
-												() -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
-										if (currentViewState.lastTargetElement == target) {
-											action.setChecked(true);
-											action.setEnabled(false);
-										}
-										addActionToMenu(action, menu2);
-									}
-								}
-							};
-							targetMenu.setToolTipText("Select target element");
-							addActionToMenu(targetMenu, menu);
-						}
-					}
-
 				}
-			};
-			filterMenu.setToolTipText("Change filters");
-			filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
-			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
-		}
 
-		getViewSite().getActionBars().getToolBarManager().update(true);
+			}
+		};
+		filterMenu.setToolTipText("Change filters");
+		filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
+		getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 	}
 
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final boolean runAsync, final @Nullable String targetSlotId) {
@@ -1179,50 +1199,7 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	private ITreeContentProvider createContentProvider() {
-		return new ITreeContentProvider() {
-
-			@Override
-			public boolean hasChildren(final Object element) {
-				if (element instanceof ChangeSetTableRoot) {
-					return true;
-				}
-				if (element instanceof ChangeSetTableGroup) {
-					return true;
-				}
-
-				return false;
-			}
-
-			@Override
-			public Object getParent(final Object element) {
-				if (element instanceof ChangeSetTableRow row) {
-					return row.getTableGroup();
-				}
-				if (element instanceof EObject eObject) {
-					return eObject.eContainer();
-				}
-				return null;
-			}
-
-			@Override
-			public Object[] getElements(final Object inputElement) {
-
-				if (inputElement instanceof ChangeSetTableRoot changeSetRoot) {
-					return changeSetRoot.getGroups().toArray();
-				}
-
-				return new Object[0];
-			}
-
-			@Override
-			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof ChangeSetTableGroup group) {
-					final List<ChangeSetTableRow> rows = group.getRows();
-					return rows.toArray();
-				}
-				return null;
-			}
-		};
+		return new DefaultChangeSetContentProvider();
 	}
 
 	@Inject
@@ -1377,7 +1354,7 @@ public class ChangeSetView extends ViewPart {
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
 
-					if (obj instanceof ChangeSetTableGroup  group) {
+					if (obj instanceof ChangeSetTableGroup group) {
 						selectedSets.add(group);
 						directSelectedGroups.add(group);
 					} else if (obj instanceof ChangeSetTableRow changeSetRow) {
@@ -1827,7 +1804,7 @@ public class ChangeSetView extends ViewPart {
 
 	private void resetView() {
 		setViewMode(ViewMode.COMPARE, false);
-		setPartName("Changes");
+		setPartName(getChangeSetPartName());
 		setEmptyData();
 	}
 

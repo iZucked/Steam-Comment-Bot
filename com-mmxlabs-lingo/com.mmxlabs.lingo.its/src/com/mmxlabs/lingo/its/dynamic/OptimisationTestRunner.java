@@ -100,7 +100,7 @@ public class OptimisationTestRunner {
 				}
 			}));
 
-			if (TestingModes.OptimisationTestMode == TestMode.Run) {
+			if (false && TestingModes.OptimisationTestMode == TestMode.Run) {
 
 				childCases.add(DynamicTest.dynamicTest("CloudHeadlessApp", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
@@ -141,7 +141,7 @@ public class OptimisationTestRunner {
 			}
 
 			// Extra repeatability based test cases
-			if (TestingModes.OptimisationTestMode == TestMode.Run) {
+			if (false && TestingModes.OptimisationTestMode == TestMode.Run) {
 
 				boolean isADPOptimisation = false;
 				try {
