@@ -31,7 +31,6 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.RowTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.lingo.reports.views.standard.econs.StandardEconsRowFactory;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -1908,10 +1907,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				public String render(Object object) {
 					if (object instanceof @NonNull final Row row && row.getTarget() instanceof EventGrouping eventGrouping) {
 						final int totalCharterCost = eventGrouping.getEvents().stream() //
-								.mapToInt(e -> StandardEconsRowFactory.getOrZero(e, Event::getCharterCost)) //
+								.mapToInt(e -> ScheduleModelKPIUtils.getOrZero(e, Event::getCharterCost)) //
 								.sum();
 						final int totalDuration = eventGrouping.getEvents().stream() //
-								.mapToInt(e -> StandardEconsRowFactory.getOrZero(e, Event::getDuration)) //
+								.mapToInt(e -> ScheduleModelKPIUtils.getOrZero(e, Event::getDuration)) //
 								.sum();
 						final int averageDailyCharterRate;
 						if (totalDuration == 0) {

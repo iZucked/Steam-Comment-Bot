@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -399,13 +398,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 							rows.add(createRow(base + 20, "    Speed", false, "", "", createBasicFormatter(options, RowType.COST, Double.class, SpeedFormat::format,
 									createFullLegTransformer2(Double.class, laden, legIdx, (visit, travel, idle) -> travel == null ? 0 : travel.getSpeed()))));
 							rows.add(createRow(base + 30, "    Days", false, "", "", createDoubleDaysFormatter(options, RowType.COST, createFullLegTransformer2(Double.class, laden, legIdx,
-									(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0)))));
+									(visit, travel, idle) -> ((ScheduleModelKPIUtils.getOrZero(visit, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(travel, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(idle, Event::getDuration)) / 24.0)))));
 
 							rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", createBasicFormatter(options, RowType.COST, Integer.class, VolumeMMBtuFormat::format,
 									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO))))));
 							rows.add(createRow(base + 50, "    Charter Cost", true, "$", "",
 									createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, laden, legIdx,
-											(visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
+											(visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(visit, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(travel, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(idle, Event::getCharterCost))))));
 
 							rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 									createFullLegTransformer2(Integer.class, laden, legIdx, StandardEconsRowFactory::getAverageDailyCharterRate))));
@@ -420,7 +419,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 							rows.add(createRow(base + 90, "    Route", false, "", "", createBasicFormatter(options, RowType.OTHER, String.class, Object::toString,
 									createFullLegTransformer2(String.class, laden, legIdx, (visit, travel, idle) -> travel == null ? "" : getRoute(travel.getRouteOption())))));
 							rows.add(createRow(base + 100, "    Canal Cost", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
-									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getOrZero(travel, Journey::getToll))))));
+									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(travel, Journey::getToll))))));
 
 							rows.add(createRow(base + 110, "    Total cost ($)", true, "$", "",
 									createBasicFormatter(options, RowType.COST, Long.class, DollarsFormat::format, createFullLegTransformer2(Long.class, laden, legIdx,
@@ -428,14 +427,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 							rows.add(
 									createRow(base + 120, "    Idle days", false, "", "",
 											createDoubleDaysFormatter(options, RowType.COST,
-													createFullLegTransformer2(Double.class, laden, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getDuration) / 24.0))),
+													createFullLegTransformer2(Double.class, laden, legIdx, (visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(idle, Event::getDuration) / 24.0))),
 											greyColourProvider));
 							rows.add(createRow(base + 130, "    Idle BO", false, "", "",
 									createBasicFormatter(options, RowType.COST, Integer.class, VolumeMMBtuFormat::format,
 											createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO)))),
 									greyColourProvider));
 							rows.add(createRow(base + 140, "    Idle charter", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
-									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getCharterCost)))), greyColourProvider));
+									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(idle, Event::getCharterCost)))), greyColourProvider));
 							rows.add(createRow(base + 150, "    Idle bunkers", false, "", "",
 									createBasicFormatter(options, RowType.COST, Integer.class, VolumeM3Format::format,
 											createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))),
@@ -507,8 +506,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static int getAverageDailyCharterRate(final Event visit, final Event travel, final Event idle) {
-		final int totalCharterCost = getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost);
-		final int totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
+		final int totalCharterCost = ScheduleModelKPIUtils.getOrZero(visit, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(travel, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(idle, Event::getCharterCost);
+		final int totalDuration = ScheduleModelKPIUtils.getOrZero(visit, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(travel, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(idle, Event::getDuration);
 		return totalDuration == 0.0 ? 0 : (int) ((double) totalCharterCost * 24.0 / (double) totalDuration);
 	}
 
@@ -1468,13 +1467,6 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static int getFuelVolume(final FuelUsage fuelUser1, final FuelUsage fuelUser2, final FuelUsage fuelUser3, final FuelUnit unit, final Fuel... fuels) {
 		return getFuelVolume(fuelUser1, unit, fuels) + getFuelVolume(fuelUser2, unit, fuels) + getFuelVolume(fuelUser3, unit, fuels);
-	}
-
-	public static <T> int getOrZero(final T object, final ToIntFunction<@NonNull T> func) {
-		if (object != null) {
-			return func.applyAsInt(object);
-		}
-		return 0;
 	}
 
 	private static Integer getPortCost(@Nullable final PortVisit visit) {
