@@ -80,6 +80,7 @@ public class ScheduleModelUtils {
 				return true;
 			}
 		} else if (event instanceof @NonNull final PortVisit portVisit && portVisit.getNextEvent() == null) {
+			// The expected preceding sequence associated with this case is a nominal vessel cargo
 			return true;
 		}
 		return false;
