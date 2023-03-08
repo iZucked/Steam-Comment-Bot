@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -114,7 +115,7 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 		if (slot != null) {
 			String priceExpression = exposureCustomiser.provideExposedPriceExpression(slot);
 
-			final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+			final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY);
 
 			final StringBuilder results = new StringBuilder();
 			for (AbstractYearMonthCurve curve : curves) {

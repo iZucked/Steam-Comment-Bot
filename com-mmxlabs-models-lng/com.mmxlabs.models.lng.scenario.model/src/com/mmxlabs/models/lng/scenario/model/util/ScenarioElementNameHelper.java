@@ -89,6 +89,10 @@ public class ScenarioElementNameHelper {
 			return String.format("%s \"%s\"", TYPE_VESSEL_EVENT.toLowerCase(), getNonNullString(vesselEvent.getName()));
 		} else if (target instanceof APortSet<?> port) {
 			return String.format("%s \"%s\"", TYPE_PORT.toLowerCase(), getNonNullString(port.getName()));
+		} else if (target instanceof VesselCharter charter) {
+			Vessel vessel = charter.getVessel();
+			final String vesselName = vessel == null ? defaultName : vessel.getName();
+			return String.format("%s \"%s\"", TYPE_VESSEL_CHARTER.toLowerCase(), getNonNullString(vesselName));
 		} else if (target instanceof NamedObject namedObject) {
 			return String.format("%s \"%s\"", getTypeName(namedObject).toLowerCase(), getNonNullString(namedObject.getName()));
 		}

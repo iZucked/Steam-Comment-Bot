@@ -23,8 +23,7 @@ import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
 import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 
 /**
- * Utility class holding methods used to convert a breakeven price from e.g.
- * $9.8 to 115%HH + 6.8
+ * Utility class holding methods used to convert a breakeven price from e.g. $9.8 to 115%HH + 6.8
  * 
  * @author achurchill, refactor by FM
  *
@@ -38,47 +37,39 @@ public class ExposuresIndexConversion {
 		COEFFICIENT, INTERCEPT
 	}
 
-	@Nullable
-	public static Form getForm(final ASTNode parent) {
+	public static @Nullable Form getForm(final @Nullable ASTNode parent) {
 		if (!(parent instanceof final OperatorASTNode operator)) {
 			return null;
 		} else {
 			final var type = operator.getOperator();
 			if (type == Operator.PLUS) {
 				final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operator);
-				if (operatorChildren != null) {
-					final ASTNode constant = operatorChildren.getFirst();
-					final ASTNode other = operatorChildren.getSecond();
-					if (constant != null && (containsCommodity(other) || containsShift(other)) && (!containsConstant(other) && !containsBreakeven(other))) {
-						return Form.X_PLUS_C;
-					}
-					if (other instanceof final OperatorASTNode otherOperator) {
-						final Pair<ASTNode, ASTNode> otherOperatorChildren = getOperatorChildren(otherOperator);
-						if (otherOperatorChildren != null) {
-							final ASTNode nextConstant = operatorChildren.getFirst();
-							final ASTNode nextOther = otherOperatorChildren.getSecond();
-							if (!(nextOther instanceof OperatorASTNode) && nextConstant != null && nextOther != null && (containsCommodity(nextOther) || containsShift(nextOther))) {
-								return Form.M_X_PLUS_C;
-							}
-						}
+				final ASTNode constant = operatorChildren.getFirst();
+				final ASTNode other = operatorChildren.getSecond();
+				if (constant != null && (containsCommodity(other) || containsShift(other)) && (!containsConstant(other) && !containsBreakeven(other))) {
+					return Form.X_PLUS_C;
+				}
+				if (other instanceof final OperatorASTNode otherOperator) {
+					final Pair<ASTNode, ASTNode> otherOperatorChildren = getOperatorChildren(otherOperator);
+					final ASTNode nextConstant = operatorChildren.getFirst();
+					final ASTNode nextOther = otherOperatorChildren.getSecond();
+					if (!(nextOther instanceof OperatorASTNode) && nextConstant != null && nextOther != null && (containsCommodity(nextOther) || containsShift(nextOther))) {
+						return Form.M_X_PLUS_C;
 					}
 				}
 			} else if (type == Operator.TIMES || type == Operator.PERCENT) {
 				final Pair<ASTNode, ASTNode> operatorChildren = getOperatorChildren(operator);
-				if (operatorChildren != null) {
-					final ASTNode constant = operatorChildren.getFirst();
-					final ASTNode other = operatorChildren.getSecond();
-					if (constant != null && (containsCommodity(other) || containsShift(other)) && (!containsConstant(other) && !containsBreakeven(other))) {
-						return Form.M_X;
-					}
+				final ASTNode constant = operatorChildren.getFirst();
+				final ASTNode other = operatorChildren.getSecond();
+				if (constant != null && (containsCommodity(other) || containsShift(other)) && (!containsConstant(other) && !containsBreakeven(other))) {
+					return Form.M_X;
 				}
 			}
 		}
 		return null;
 	}
 
-	@Nullable
-	public static ASTNode rearrangeGraph(final double price, final ASTNode parent, Form form) {
+	public static @Nullable ASTNode rearrangeGraph(final double price, final ASTNode parent, Form form) {
 		if (form == Form.X_PLUS_C) {
 			// Convert to a different form
 			processCommodityNode(parent);
@@ -175,9 +166,8 @@ public class ExposuresIndexConversion {
 		return null;
 	}
 
-	public static <T extends ASTNode> ASTNode findFirstParent(final ASTNode current, final Class<T> clazz) {
-		for (@NonNull
-		final ASTNode markedUpNode : current.getChildren()) {
+	public static <T extends ASTNode> @Nullable ASTNode findFirstParent(final @NonNull ASTNode current, final Class<T> clazz) {
+		for (final @NonNull ASTNode markedUpNode : current.getChildren()) {
 			if (clazz.isAssignableFrom(markedUpNode.getClass())) {
 				return current;
 			} else {
@@ -190,11 +180,11 @@ public class ExposuresIndexConversion {
 		return null;
 	}
 
-	public static @Nullable Pair<ASTNode, ASTNode> getOperatorChildren(final OperatorASTNode node) {
-		final List<ASTNode> children = Lists.newArrayList(node.getLHS(), node.getRHS());
-		final Optional<ASTNode> optionalConstant = children.stream().filter(c -> (c instanceof ConstantASTNode || c instanceof BreakEvenASTNode)).findFirst();
+	public static Pair<ASTNode, ASTNode> getOperatorChildren(final @NonNull OperatorASTNode node) {
+		final List<@NonNull ASTNode> children = Lists.newArrayList(node.getLHS(), node.getRHS());
+		final Optional<@NonNull ASTNode> optionalConstant = children.stream().filter(c -> (c instanceof ConstantASTNode || c instanceof BreakEvenASTNode)).findFirst();
 		final ASTNode constant = optionalConstant.isPresent() ? optionalConstant.get() : null;
-		final Optional<ASTNode> optionalOther = children.stream().filter(c -> c != constant).findFirst();
+		final Optional<@NonNull ASTNode> optionalOther = children.stream().filter(c -> c != constant).findFirst();
 		final ASTNode other = optionalOther.isPresent() ? optionalOther.get() : null;
 		return new Pair<>(constant, other);
 	}
@@ -225,13 +215,12 @@ public class ExposuresIndexConversion {
 		if (clazz.isAssignableFrom(node.getClass())) {
 			nodes.add((T) node);
 		}
-		for (@NonNull
-		final ASTNode markedUpNode : node.getChildren()) {
+		for (final @NonNull ASTNode markedUpNode : node.getChildren()) {
 			getNodesOfType(markedUpNode, clazz, nodes);
 		}
 	}
 
-	public static String getExpression(final ASTNode node) {
+	public static String getExpression(final @NonNull ASTNode node) {
 		return node.asString();
 	}
 }

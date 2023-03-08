@@ -171,7 +171,7 @@ public class CharterContractValidationUtils {
 				if (earliestDate != null) {
 					final String repositioningFee = lsTerm.getPriceExpression();
 					if (repositioningFee != null && !repositioningFee.trim().isEmpty()) {
-						for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(repositioningFee)) {
+						for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(repositioningFee, PriceIndexType.CHARTER)) {
 							@Nullable
 							final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 							if (date == null || date.isAfter(earliestDate)) {

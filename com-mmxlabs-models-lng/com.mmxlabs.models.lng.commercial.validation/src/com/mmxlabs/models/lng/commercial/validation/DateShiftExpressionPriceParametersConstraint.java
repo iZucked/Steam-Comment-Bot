@@ -41,7 +41,7 @@ public class DateShiftExpressionPriceParametersConstraint extends AbstractPriceP
 
 		}
 		if (pricingParams.getValue() != 0) {
-			if (checkNodeForSplitMonth(PriceExpressionUtils.convertCommodityToASTNodes(pricingParams.getPriceExpression()))) {
+			if (checkNodeForSplitMonth(PriceExpressionUtils.getMarketCurveProvider().getPricingDataCache().getASTNodeFor(pricingParams.getPriceExpression(), PriceIndexType.COMMODITY))) {
 				factory.copyName()//
 						.withMessage("Cannot use SPLITMONTH with a date shift") //
 						.withObjectAndFeature(pricingParams, CommercialPackage.Literals.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION) //
@@ -68,26 +68,26 @@ public class DateShiftExpressionPriceParametersConstraint extends AbstractPriceP
 	}
 
 	private static boolean checkNodeForSplitMonth(final ASTNode markedUpNode) {
-		if(markedUpNode instanceof SplitMonthFunctionASTNode) {
+		if (markedUpNode instanceof SplitMonthFunctionASTNode) {
 			return true;
 		}
-		for(ASTNode childMarkedUpNode : markedUpNode.getChildren()) {
-			if(checkNodeForSplitMonth(childMarkedUpNode)) {
+		for (ASTNode childMarkedUpNode : markedUpNode.getChildren()) {
+			if (checkNodeForSplitMonth(childMarkedUpNode)) {
 				return true;
 			}
 		}
 		return false;
-//		if (node.token.toLowerCase().equals("splitmonth")) {
-//			return true;
-//		}
-//		if (node.children != null) {
-//			for (final Node c : node.children) {
-//				if (checkNodeForSplitMonth(c)) {
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
+		// if (node.token.toLowerCase().equals("splitmonth")) {
+		// return true;
+		// }
+		// if (node.children != null) {
+		// for (final Node c : node.children) {
+		// if (checkNodeForSplitMonth(c)) {
+		// return true;
+		// }
+		// }
+		// }
+		// return false;
 
 	}
 }
