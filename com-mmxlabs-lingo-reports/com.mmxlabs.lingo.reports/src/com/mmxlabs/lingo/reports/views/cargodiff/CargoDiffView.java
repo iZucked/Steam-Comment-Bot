@@ -56,4 +56,19 @@ public class CargoDiffView extends ChangeSetView {
 		makeAndAddPackAction();
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
+
+	@Override
+	protected void addSelectionChangeListenerToViewer() {
+		// do nothing - we don't need to notify any other views.
+	}
+
+	@Override
+	protected boolean shouldPropagateSelectionsToScenarioComparisionService() {
+		return false;
+	}
+
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		return null;
+	}
 }

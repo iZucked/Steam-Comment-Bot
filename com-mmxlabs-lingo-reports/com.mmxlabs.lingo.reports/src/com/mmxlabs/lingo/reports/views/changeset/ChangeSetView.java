@@ -171,7 +171,8 @@ public class ChangeSetView extends ViewPart {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	/**
-	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
+	 * This is used to avoid the re-entrant code when we change the selected
+	 * ScenarioResults in this view so it is not treated as a pin/diff update.
 	 */
 	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
@@ -375,9 +376,11 @@ public class ChangeSetView extends ViewPart {
 
 	public final class ViewUpdateRunnable implements Runnable {
 		private final ViewState newViewState;
+		private final boolean applyToScenarioComparisionService;
 
-		public ViewUpdateRunnable(final ViewState newViewState) {
+		public ViewUpdateRunnable(final ViewState newViewState, final boolean applyToScenarioComparisonService) {
 			this.newViewState = newViewState;
+			this.applyToScenarioComparisionService = applyToScenarioComparisonService;
 		}
 
 		@Override
@@ -387,7 +390,9 @@ public class ChangeSetView extends ViewPart {
 			}
 
 			// Reset selection
-			scenarioComparisonService.setSelection(new StructuredSelection());
+			if (applyToScenarioComparisionService) {
+				scenarioComparisonService.setSelection(new StructuredSelection());
+			}
 
 			// Extract vessel columns and generate.
 
@@ -513,6 +518,10 @@ public class ChangeSetView extends ViewPart {
 
 	}
 
+	protected boolean shouldPropagateSelectionsToScenarioComparisionService() {
+		return true;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
@@ -537,7 +546,7 @@ public class ChangeSetView extends ViewPart {
 						newViewState.tableRootDefault = tableRootDefault;
 						newViewState.tableRootAlternative = tableRootAlternative;
 
-						RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
+						RunnerHelper.exec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()), true);
 					}
 				};
 			}
@@ -663,68 +672,7 @@ public class ChangeSetView extends ViewPart {
 		columnHelper.makeColumns(insertionPlanFilter);
 
 		// Selection listener for pin/diff driver.
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				final ISelection selection = event.getSelection();
-				if (selection instanceof IStructuredSelection iStructuredSelection) {
-
-					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected
-					// rows
-					ISelection newSelection;
-					{
-						final Set<Object> selectedElements = new LinkedHashSet<>();
-						final Iterator<?> itr = iStructuredSelection.iterator();
-						while (itr.hasNext()) {
-							final Object o = itr.next();
-							if (o instanceof ChangeSetTableRow changeSetRow) {
-								selectRow(selectedElements, changeSetRow);
-							} else if (o instanceof ChangeSetTableGroup group) {
-								final List<ChangeSetTableRow> rows = group.getRows();
-								for (final ChangeSetTableRow changeSetRow : rows) {
-									selectRow(selectedElements, changeSetRow);
-								}
-							}
-						}
-
-						while (selectedElements.remove(null))
-							;
-
-						newSelection = new StructuredSelection(new ArrayList<>(selectedElements));
-					}
-
-					if (viewMode != ViewMode.COMPARE) {
-						final Iterator<?> itr = iStructuredSelection.iterator();
-						while (itr.hasNext()) {
-							Object o = itr.next();
-							if (o instanceof ChangeSetTableRow row) {
-								o = row.getTableGroup();
-							}
-							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
-
-								// Set the flag so we don't end up in compare mode.
-								if (inChangingChangeSetSelection.compareAndSet(false, true)) {
-									try {
-										// This is a bit inefficient if we are just changing selected row(s) rather than
-										// change set.
-										scenarioComparisonService.setSelection(newSelection);
-										scenarioComparisonService.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), newSelection, true);
-									} finally {
-										inChangingChangeSetSelection.set(false);
-									}
-								}
-								break;
-							}
-						}
-					} else {
-						// Update selected elements
-						scenarioComparisonService.setSelectionWithChangeSet(newSelection);
-					}
-				}
-			}
-
-		});
+		addSelectionChangeListenerToViewer();
 
 		viewer.setFilters(createViewerFilters());
 
@@ -850,6 +798,71 @@ public class ChangeSetView extends ViewPart {
 				}
 			});
 		}
+	}
+
+	protected void addSelectionChangeListenerToViewer() {
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				final ISelection selection = event.getSelection();
+				if (selection instanceof IStructuredSelection iStructuredSelection) {
+
+					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected
+					// rows
+					ISelection newSelection;
+					{
+						final Set<Object> selectedElements = new LinkedHashSet<>();
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							final Object o = itr.next();
+							if (o instanceof ChangeSetTableRow changeSetRow) {
+								selectRow(selectedElements, changeSetRow);
+							} else if (o instanceof ChangeSetTableGroup group) {
+								final List<ChangeSetTableRow> rows = group.getRows();
+								for (final ChangeSetTableRow changeSetRow : rows) {
+									selectRow(selectedElements, changeSetRow);
+								}
+							}
+						}
+
+						while (selectedElements.remove(null))
+							;
+
+						newSelection = new StructuredSelection(new ArrayList<>(selectedElements));
+					}
+
+					if (viewMode != ViewMode.COMPARE) {
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							Object o = itr.next();
+							if (o instanceof ChangeSetTableRow row) {
+								o = row.getTableGroup();
+							}
+							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
+
+								// Set the flag so we don't end up in compare mode.
+								if (inChangingChangeSetSelection.compareAndSet(false, true)) {
+									try {
+										// This is a bit inefficient if we are just changing selected row(s) rather than
+										// change set.
+										scenarioComparisonService.setSelection(newSelection);
+										scenarioComparisonService.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), newSelection, true);
+									} finally {
+										inChangingChangeSetSelection.set(false);
+									}
+								}
+								break;
+							}
+						}
+					} else {
+						// Update selected elements
+						scenarioComparisonService.setSelectionWithChangeSet(newSelection);
+					}
+				}
+			}
+
+		});
 	}
 
 	protected ChangeSetViewColumnHelper createColumnHelper() {
@@ -1067,8 +1080,7 @@ public class ChangeSetView extends ViewPart {
 							protected void populate(final Menu menu2) {
 
 								for (final NamedObject target : currentViewState.allTargetElements) {
-									final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH,
-											() -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
+									final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH, () -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
 									if (currentViewState.lastTargetElement == target) {
 										action.setChecked(true);
 										action.setEnabled(false);
@@ -1109,9 +1121,9 @@ public class ChangeSetView extends ViewPart {
 					newViewState.postProcess.accept(newViewState.tableRootAlternative);
 
 					if (runAsync) {
-						RunnerHelper.asyncExec(new ViewUpdateRunnable(newViewState));
+						RunnerHelper.asyncExec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()));
 					} else {
-						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
+						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()));
 					}
 				} catch (final ScenarioNotEvaluatedException cause) {
 					RunnerHelper.asyncExec(new Runnable() {
@@ -1144,7 +1156,7 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
-	private void setEmptyData() {
+	protected void setEmptyData() {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		final ChangeSetTableRoot newTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 
@@ -1153,7 +1165,7 @@ public class ChangeSetView extends ViewPart {
 		newViewState.tableRootAlternative = newTableRoot;
 		newViewState.tableRootDefault = newTableRoot;
 
-		RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
+		RunnerHelper.exec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()), true);
 	}
 
 	public void cleanUp(final ViewState viewState) {
