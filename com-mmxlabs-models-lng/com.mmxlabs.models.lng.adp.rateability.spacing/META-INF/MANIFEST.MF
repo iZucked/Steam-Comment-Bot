@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.adp.rateability.spacing;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.adp.rateability.spacing
-Bundle-Version: 6.2.6.qualifier
+Bundle-Version: 6.3.2.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd
 Bundle-RequiredExecutionEnvironment: JavaSE-17

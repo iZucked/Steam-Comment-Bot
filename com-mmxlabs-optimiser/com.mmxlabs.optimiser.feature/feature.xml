@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.optimiser.feature"
       label="Optimiser Feature"
-      version="6.2.6.qualifier"
+      version="6.3.2.RELEASE"
       provider-name="Minimax Labs Ltd.">
  
    <plugin
