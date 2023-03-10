@@ -56,7 +56,7 @@ public class HubTestHelper {
 	private static final int CONNECTION_TIMEOUT_IN_SECONDS = 5;
 	private static final int READ_TIMEOUT_IN_SECONDS = 1;
 	private static final int WRITE_TIMEOUT_IN_SECONDS = 1;
-//	private final static OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
+	// private final static OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
 
 	public static void configureHub(final String url, final boolean enableBaseCase, final boolean enableTeam) {
 		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, url);
@@ -92,8 +92,7 @@ public class HubTestHelper {
 	}
 
 	/**
-	 * Wait until a port from the portPool is available and return it. If no ports
-	 * are available before the timeout duration is reached return -1
+	 * Wait until a port from the portPool is available and return it. If no ports are available before the timeout duration is reached return -1
 	 *
 	 * @param portPool
 	 * @param timeout
@@ -118,9 +117,7 @@ public class HubTestHelper {
 	public static int getAvailablePort(final List<Integer> portPool) {
 		Optional<Integer> availablePort;
 		// @formatter:off
-		availablePort = portPool.stream()
-				.filter(port -> isTcpPortAvailable(HOST, port))
-				.findAny();
+		availablePort = portPool.stream().filter(port -> isTcpPortAvailable(HOST, port)).findAny();
 		// @formatter:on
 		if (availablePort.isPresent()) {
 			logger.info(String.format("Port %s is available", availablePort.get()));
@@ -132,13 +129,11 @@ public class HubTestHelper {
 	}
 
 	/**
-	 * Check to see if a tcp port is available by trying to open it. Note: this is
-	 * vulnerable to race conditions.
+	 * Check to see if a tcp port is available by trying to open it. Note: this is vulnerable to race conditions.
 	 *
 	 * @param host
 	 * @param port
-	 * @return true if the port is available and false otherwise. Could also return
-	 *         false if the bind operation fails
+	 * @return true if the port is available and false otherwise. Could also return false if the bind operation fails
 	 */
 	public static boolean isTcpPortAvailable(final String host, final int port) {
 		try (ServerSocket socket = new ServerSocket()) {
@@ -314,8 +309,14 @@ public class HubTestHelper {
 		// Copy env vars to system properties as the SDK can fail to read them for some
 		// reason in the ITS runs.
 		final Map<String, String> getenv = System.getenv();
-		System.setProperty("aws.accessKeyId", getenv.get("AWS_ACCESS_KEY_ID"));
-		System.setProperty("aws.secretAccessKey", getenv.get("AWS_SECRET_ACCESS_KEY"));
+		String id = getenv.get("AWS_ACCESS_KEY_ID");
+		if (id != null) {
+			System.setProperty("aws.accessKeyId", id);
+		}
+		String key = getenv.get("AWS_SECRET_ACCESS_KEY");
+		if (key != null) {
+			System.setProperty("aws.secretAccessKey", key);
+		}	
 
 		final String secretName = "lingo/hub-test";
 		final Region region = Region.of("eu-west-2");
@@ -417,21 +418,20 @@ public class HubTestHelper {
 		final AWSSecret secrets = getSecrets();
 
 		// @formatter:off
-	return new FixedHostPortGenericContainer(CONTAINER)
-		.withFixedExposedPort(availablePort, DATAHUB_PORT)
-		.withExposedPorts(DATAHUB_PORT)
-		.withEnv("PORT", Integer.toString(DATAHUB_PORT))
-		.withEnv("PROTOCOL", "http")
-		.withEnv("HOSTNAME", "localhost")
-		.withEnv("AUTHENTICATION_SCHEME", oauth ? "oauth" : "basic")
-		.withEnv("INSTANCE_TAG", "docker")
-		.withEnv("DB_HOST", "0.0.0.0")
-		.withEnv("DB_PORT", "27000")
-		.withEnv("AZURE_CLIENT_ID", secrets.client_id)
-		.withEnv("AZURE_TENANT_ID", secrets.tenant_id)
-		.withEnv("AZURE_CLIENT_SECRET", secrets.secret_id)
-		.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
-		.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
-			// @formatter:on
+		return new FixedHostPortGenericContainer(CONTAINER).withFixedExposedPort(availablePort, DATAHUB_PORT)
+				.withExposedPorts(DATAHUB_PORT)
+				.withEnv("PORT", Integer.toString(DATAHUB_PORT))
+				.withEnv("PROTOCOL", "http")
+				.withEnv("HOSTNAME", "localhost")
+				.withEnv("AUTHENTICATION_SCHEME", oauth ? "oauth" : "basic")
+				.withEnv("INSTANCE_TAG", "docker")
+				.withEnv("DB_HOST", "0.0.0.0")
+				.withEnv("DB_PORT", "27000")
+				.withEnv("AZURE_CLIENT_ID", secrets.client_id)
+				.withEnv("AZURE_TENANT_ID", secrets.tenant_id)
+				.withEnv("AZURE_CLIENT_SECRET", secrets.secret_id)
+				.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
+				.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
+		// @formatter:on
 	}
 }
