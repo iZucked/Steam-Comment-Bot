@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.reports.feature"
       label="Lingo Reports Feature"
-      version="6.2.6.qualifier"
+      version="6.3.2.qualifier"
       provider-name="Minimax Labs Ltd.">
  
    <plugin
