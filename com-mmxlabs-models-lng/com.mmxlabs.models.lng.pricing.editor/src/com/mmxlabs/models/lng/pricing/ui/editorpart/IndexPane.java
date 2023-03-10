@@ -331,6 +331,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	private void updateDateRange(final PricingModel pricingModel) {
+		minDisplayDate = null;
+		maxDisplayDate = null;
 		for (final DataType dt : DataType.values()) {
 
 			@SuppressWarnings("unchecked")
@@ -342,8 +344,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 				if (curve.isSetExpression()) {
 					continue;
 				}
-				minDisplayDate = null;
-				maxDisplayDate = null;
 				for (final YearMonthPoint pt : curve.getPoints()) {
 					final YearMonth d = pt.getDate();
 					if (minDisplayDate == null || minDisplayDate.isAfter(d)) {
