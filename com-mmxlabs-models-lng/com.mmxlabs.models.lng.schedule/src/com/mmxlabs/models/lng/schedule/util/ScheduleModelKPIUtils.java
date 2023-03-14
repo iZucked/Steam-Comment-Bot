@@ -488,14 +488,69 @@ public class ScheduleModelKPIUtils {
 		return null;
 	}
 
+	public static Integer calculateLegCost(final PortVisit portVisit, Journey journey, Idle idle) {
+		if (portVisit != null) {
+			int total = 0;
+			if (portVisit instanceof FuelUsage fu) {
+				total += fu.getFuelCost();
+			}
+			total += portVisit.getCharterCost();
+			total += portVisit.getPortCost();
+
+			if (journey != null) {
+				total += journey.getFuelCost();
+				total += journey.getCharterCost();
+				total += journey.getToll();
+			}
+			if (idle != null) {
+				total += idle.getFuelCost();
+				total += idle.getCharterCost();
+			}
+			return total;
+		}
+		return null;
+	}
+
 	public static Integer calculateLegFuel(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef, final ShippingCostType shippingCostType,
 			@NonNull final TotalType totalType) {
-		if (object instanceof EObject) {
-			final EObject eObject = (EObject) object;
+		if (object instanceof EObject eObject) {
 			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
 			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
 			return calculateLegFuel(cargoAllocation, allocation, shippingCostType, totalType);
 
+		}
+		return null;
+	}
+
+	public static Integer calculateLegFuel(final PortVisit portVisit, Journey journey, Idle idle, final ShippingCostType shippingCostType, @NonNull final TotalType totalType) {
+		if (portVisit != null) {
+			int total = 0;
+			if (portVisit instanceof FuelUsage fu) {
+				if (shippingCostType == ShippingCostType.LNG_COSTS) {
+					total += getFuelDetails(fu, totalType, Fuel.NBO, Fuel.FBO);
+				}
+				if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+					total += getFuelDetails(fu, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+
+			if (journey != null) {
+				if (shippingCostType == ShippingCostType.LNG_COSTS) {
+					total += getFuelDetails(journey, totalType, Fuel.NBO, Fuel.FBO);
+				}
+				if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+					total += getFuelDetails(journey, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+			if (idle != null) {
+				if (shippingCostType == ShippingCostType.LNG_COSTS) {
+					total += getFuelDetails(idle, totalType, Fuel.NBO, Fuel.FBO);
+				}
+				if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+					total += getFuelDetails(idle, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+			return total;
 		}
 		return null;
 	}
@@ -587,6 +642,13 @@ public class ScheduleModelKPIUtils {
 					}
 				}
 			}
+		}
+		return null;
+	}
+
+	public static Double calculateLegSpeed(@Nullable Journey journey) {
+		if (journey != null) {
+			return journey.getSpeed();
 		}
 		return null;
 	}
