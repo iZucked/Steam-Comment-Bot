@@ -346,11 +346,11 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 				Object o = itr.next();
 				if (o instanceof ChangeSetTableRow r) {
 					rows.add(r);
-					o = r.eContainer();
+					o = r.getTableGroup();
 				}
 				if (o instanceof ChangeSetTableGroup s) {
 					set = s;
-					o = s.eContainer();
+					o = s.getTableRoot();
 				}
 				if (o instanceof ChangeSetTableRoot r) {
 					root = r;

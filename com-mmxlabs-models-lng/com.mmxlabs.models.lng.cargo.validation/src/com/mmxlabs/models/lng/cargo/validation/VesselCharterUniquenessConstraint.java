@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -78,7 +79,7 @@ public class VesselCharterUniquenessConstraint extends AbstractModelMultiConstra
 					final Integer charterNumber = vesselCharter.getCharterNumber();
 					if (bad.contains(charterNumber)) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique charter number " + charterNumber));
+								(IConstraintStatus) ctx.createFailureStatus(EditorUtils.unmangle(target) + " has non-unique charter number " + charterNumber));
 						dsd.addEObjectAndFeature(target, CargoPackage.Literals.VESSEL_CHARTER__CHARTER_NUMBER);
 						statuses.add(dsd);
 					}

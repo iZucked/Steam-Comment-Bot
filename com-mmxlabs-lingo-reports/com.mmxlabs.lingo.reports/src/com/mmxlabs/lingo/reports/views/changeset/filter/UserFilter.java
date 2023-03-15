@@ -87,7 +87,45 @@ public class UserFilter {
 		final Iterator<ChangeSetTableRow> itr = rows.iterator();
 		while (itr.hasNext()) {
 			final ChangeSetTableRow row = itr.next();
-			final boolean match = doesLHSMatch(row) && doesRHSMatch(row) && doesVesselMatch(row);
+//			Boolean match = null;
+//			if (lhsType != FilterSlotType.ANY) {
+//				if (match == null) {
+//					match = doesLHSMatch(row);
+//				} else {
+//					match |= doesLHSMatch(row);
+//				}
+//			}
+//			if (lhsType != FilterSlotType.ANY) {
+//				if (match == null) {
+//					match = doesLHSMatch(row);
+//				} else {
+//					match |= doesLHSMatch(row);
+//				}
+//			}
+//			if (rhsType != FilterSlotType.ANY) {
+//				if (match == null) {
+//					match = doesRHSMatch(row);
+//				} else {
+//					match |= doesRHSMatch(row);
+//				}
+//			}
+//			if (vesselType != FilterVesselType.ANY) {
+//				if (match == null) {
+//					match = doesVesselMatch(row);
+//				} else {
+//					match |= doesVesselMatch(row);
+//				}
+//			}
+//
+//			if (match != null) {
+//				if (match == Boolean.TRUE) {
+//					return !negate;
+//				}
+//			}
+			
+			final boolean match = doesLHSMatch(row) //
+					&& doesRHSMatch(row) //
+					&& doesVesselMatch(row);
 			if (match) {
 				return !negate;
 			}
@@ -130,18 +168,19 @@ public class UserFilter {
 			return true;
 		}
 		if (rhsType == FilterSlotType.BY_OPEN) {
-			return !row.isRhsSlot();
+			return !row.isCurrentRhsSlot();
 		}
 		if (rhsType == FilterSlotType.BY_ID) {
-			return (rhsKey.equalsIgnoreCase(row.getRhsName()));
+			return (rhsKey.equalsIgnoreCase(row.getCurrentRhsName()));
 		}
 		if (rhsType == FilterSlotType.BY_CONTRACT) {
-			return (row.isRhsSlot() && row.getRhsAfter() != null && row.getRhsAfter().getDischargeSlot().getContract() != null
-					&& rhsKey.equalsIgnoreCase(row.getRhsAfter().getDischargeSlot().getContract().getName()));
+			return (row.isCurrentRhsSlot() && row.getCurrentRhsAfter() != null && row.getCurrentRhsAfter().getDischargeSlot().getContract() != null
+					&& rhsKey.equalsIgnoreCase(row.getCurrentRhsAfter().getDischargeSlot().getContract().getName()));
 		}
 		if (rhsType == FilterSlotType.BY_SPOT_MARKET) {
-			return (row.isRhsSpot() && (rhsKey == null
-					|| ((SpotSlot) row.getRhsAfter().getDischargeSlot()).getMarket() != null && rhsKey.equalsIgnoreCase(((SpotSlot) row.getRhsAfter().getDischargeSlot()).getMarket().getName())));
+			return (row.isCurrentRhsSpot() && (rhsKey == null //
+					|| ((SpotSlot) row.getCurrentRhsAfter().getDischargeSlot()).getMarket() != null //
+							&& rhsKey.equalsIgnoreCase(((SpotSlot) row.getCurrentRhsAfter().getDischargeSlot()).getMarket().getName())));
 		}
 
 		return true;

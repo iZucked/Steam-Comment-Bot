@@ -37,6 +37,9 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -127,7 +130,7 @@ public class CompareViewTests {
 			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assertions.assertEquals(2, changeSet.getRows().size());
@@ -189,7 +192,7 @@ public class CompareViewTests {
 			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assertions.assertEquals(2, changeSet.getRows().size());
@@ -259,7 +262,7 @@ public class CompareViewTests {
 			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assertions.assertEquals(1, changeSet.getRows().size());
@@ -318,7 +321,7 @@ public class CompareViewTests {
 			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assertions.assertEquals(2, changeSet.getRows().size());
@@ -388,7 +391,7 @@ public class CompareViewTests {
 			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assertions.assertEquals(1, changeSet.getRows().size());
@@ -477,7 +480,7 @@ public class CompareViewTests {
 			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assertions.assertEquals(2, changeSet.getRows().size());
@@ -575,7 +578,7 @@ public class CompareViewTests {
 			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
 
 			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
-			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, null, SortMode.BY_GROUP);
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
 
 			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
 			Assertions.assertEquals(2, changeSet.getRows().size());
@@ -603,6 +606,769 @@ public class CompareViewTests {
 				totalAfterPNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.After);
 
 			}
+			final double roudingDelta = 2.0;
+			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
+			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testOpenToLDD() throws Exception {
+		runTest(maker -> {
+
+			// Create the required basic elements
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					// .withCharterRate("50000") //
+					.build();
+
+			LoadSlot l1 = maker.cargoModelBuilder
+
+					// Purchase
+					.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+		}, maker -> {
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					.build();
+
+			// Purchase
+			LoadSlot l1 = maker.cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l1, d1, d2);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+
+		}, changeSetRoot -> {
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
+
+			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
+			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
+
+			// Expect two rows, one for each discharge
+			Assertions.assertEquals(2, changeSet.getRows().size());
+
+			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
+			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
+
+			//// Check null/not nulls state
+			// Expect row 1 to contain the load info, nothing in row 2
+			Assertions.assertNotNull(row1.getLhsAfter());
+			Assertions.assertNotNull(row1.getLhsBefore());
+			Assertions.assertNull(row2.getLhsAfter());
+			Assertions.assertNull(row2.getLhsBefore());
+
+			// Expect all RHS fields to be populated
+			Assertions.assertNotNull(row1.getCurrentRhsAfter());
+			Assertions.assertNotNull(row1.getCurrentRhsBefore());
+			Assertions.assertNull(row1.getPreviousRhsAfter());
+			Assertions.assertNull(row1.getPreviousRhsBefore());
+			Assertions.assertNotNull(row2.getCurrentRhsAfter());
+			Assertions.assertNotNull(row2.getCurrentRhsBefore());
+			Assertions.assertNull(row2.getPreviousRhsAfter());
+			Assertions.assertNull(row2.getPreviousRhsBefore());
+
+			// Expect to be part of the same wiring group
+			Assertions.assertSame(row1.getWiringGroup(), row2.getWiringGroup());
+
+			// Check the after LDD group
+			Assertions.assertEquals(2, row1.getLhsAfter().getRowDataGroup().getMembers().size());
+			Assertions.assertSame(row1.getLhsAfter().getRowDataGroup(), row1.getCurrentRhsAfter().getRowDataGroup());
+			Assertions.assertSame(row1.getLhsAfter().getRowDataGroup(), row2.getCurrentRhsAfter().getRowDataGroup());
+
+			// Check the before states are independent
+			Assertions.assertEquals(1, row1.getLhsBefore().getRowDataGroup().getMembers().size());
+			Assertions.assertEquals(1, row1.getCurrentRhsBefore().getRowDataGroup().getMembers().size());
+			Assertions.assertEquals(1, row2.getCurrentRhsBefore().getRowDataGroup().getMembers().size());
+
+			Assertions.assertNotSame(row1.getLhsBefore().getRowDataGroup(), row1.getCurrentRhsBefore().getRowDataGroup());
+			Assertions.assertNotSame(row1.getLhsBefore().getRowDataGroup(), row2.getCurrentRhsBefore().getRowDataGroup());
+			Assertions.assertNotSame(row1.getCurrentRhsBefore().getRowDataGroup(), row2.getCurrentRhsBefore().getRowDataGroup());
+
+			// Expect no after P&L on row 2 as it should be on row 1
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
+
+			// Check row state - both rows should be marked as a wiring change
+			Assertions.assertTrue(row1.isWiringChange());
+			Assertions.assertTrue(row2.isWiringChange());
+
+			// Check row state, vessel info should only be on the first row
+			Assertions.assertNotNull(row1.getAfterVesselName());
+			Assertions.assertNotNull(row1.getAfterVesselShortName());
+			Assertions.assertNull(row2.getAfterVesselName());
+			Assertions.assertNull(row2.getAfterVesselShortName());
+			Assertions.assertFalse(row1.isVesselChange()); // TODO: Should this be true?
+			Assertions.assertFalse(row2.isVesselChange());
+
+			// Expect 1m discharge 2 cancellation 2 - before only
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(-1_000_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+
+			// P&L Sanity check -- no missing components in P&L
+			// NOTE: This is different to other test cases as second D sales revenue is
+			// shown on the second D row rather than the cargo row.
+			double totalBeforePNL = 0.0;
+			double totalBeforePNLSum = 0.0;
+			double totalAfterPNL = 0.0;
+			double totalAfterPNLSum = 0.0;
+			for (final ChangeSetTableRow row : changeSet.getRows()) {
+				totalBeforePNL += ChangeSetKPIUtil.getPNL(row, ResultType.Before);
+				totalBeforePNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.Before);
+				totalAfterPNL += ChangeSetKPIUtil.getPNL(row, ResultType.After);
+				totalAfterPNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.After);
+			}
+			// Allow $2 "rounding"
+			final double roudingDelta = 2.0;
+			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
+			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLDDToOpen() throws Exception {
+		runTest(maker -> {
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					.build();
+
+			// Purchase
+			LoadSlot l1 = maker.cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l1, d1, d2);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+
+		}, maker -> {
+
+			// Create the required basic elements
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					// .withCharterRate("50000") //
+					.build();
+
+			LoadSlot l1 = maker.cargoModelBuilder
+
+					// Purchase
+					.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+		}, changeSetRoot -> {
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
+
+			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
+			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
+
+			// Expect three rows, one for each position
+			Assertions.assertEquals(3, changeSet.getRows().size());
+
+			final ChangeSetTableRow row1 = changeSet.getRows().get(0); // Expect to be l1
+			final ChangeSetTableRow row2 = changeSet.getRows().get(1); // Expect to be d1
+			final ChangeSetTableRow row3 = changeSet.getRows().get(2); // Expect to be d2
+
+			//// Check null/not nulls state
+			// Expect row 1 to contain the load info, nothing in row 2 or 3
+			Assertions.assertNotNull(row1.getLhsAfter());
+			Assertions.assertNotNull(row1.getLhsBefore());
+			Assertions.assertNull(row2.getLhsAfter());
+			Assertions.assertNull(row2.getLhsBefore());
+			Assertions.assertNull(row3.getLhsAfter());
+			Assertions.assertNull(row3.getLhsBefore());
+
+			// Check expected RHS populated fields
+			Assertions.assertNull(row1.getCurrentRhsAfter());
+			Assertions.assertNull(row1.getCurrentRhsBefore());
+			Assertions.assertNotNull(row1.getPreviousRhsAfter());
+			Assertions.assertNotNull(row1.getPreviousRhsBefore());
+
+			Assertions.assertNotNull(row2.getCurrentRhsAfter());
+			Assertions.assertNotNull(row2.getCurrentRhsBefore());
+			Assertions.assertNotNull(row3.getCurrentRhsAfter());
+			Assertions.assertNotNull(row3.getCurrentRhsBefore());
+
+			Assertions.assertNull(row2.getPreviousRhsAfter());
+			Assertions.assertNull(row2.getPreviousRhsBefore());
+
+			// Expect to be part of the same wiring group
+			Assertions.assertSame(row1.getWiringGroup(), row2.getWiringGroup());
+
+			// Check the before LDD group
+			Assertions.assertEquals(2, row1.getLhsBefore().getRowDataGroup().getMembers().size());
+			Assertions.assertSame(row1.getLhsBefore().getRowDataGroup(), row1.getPreviousRhsBefore().getRowDataGroup());
+			// We don't have a previous for D2. We don't really have a way to properly link additional rows to the first row.
+			// Assertions.assertSame(row1.getLhsBefore().getRowDataGroup(), row2.getPreviousRhsBefore().getRowDataGroup());
+
+			// Check the after states are independent
+			Assertions.assertEquals(1, row1.getLhsAfter().getRowDataGroup().getMembers().size());
+			Assertions.assertEquals(1, row2.getCurrentRhsAfter().getRowDataGroup().getMembers().size());
+			Assertions.assertEquals(1, row3.getCurrentRhsAfter().getRowDataGroup().getMembers().size());
+
+			Assertions.assertNotSame(row1.getLhsAfter().getRowDataGroup(), row2.getCurrentRhsBefore().getRowDataGroup());
+			Assertions.assertNotSame(row1.getLhsAfter().getRowDataGroup(), row3.getCurrentRhsAfter().getRowDataGroup());
+			Assertions.assertNotSame(row2.getCurrentRhsAfter().getRowDataGroup(), row3.getCurrentRhsAfter().getRowDataGroup());
+
+			// Expect no after P&L on row 2 or 3 as it should be on row 1
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row3, ResultType.Before));
+
+			// Check row state - both rows should be marked as a wiring change
+			Assertions.assertTrue(row1.isWiringChange());
+			Assertions.assertTrue(row2.isWiringChange());
+
+			// Check row state, vessel info should only be on the first row
+			Assertions.assertNotNull(row1.getBeforeVesselName());
+			Assertions.assertNotNull(row1.getBeforeVesselShortName());
+			Assertions.assertNull(row2.getBeforeVesselName());
+			Assertions.assertNull(row2.getBeforeVesselShortName());
+			Assertions.assertNull(row3.getBeforeVesselName());
+			Assertions.assertNull(row3.getBeforeVesselShortName());
+			Assertions.assertFalse(row1.isVesselChange());
+			Assertions.assertFalse(row2.isVesselChange());
+			Assertions.assertFalse(row3.isVesselChange());
+
+			// Expect 1m discharge 2 cancellation 2 - before only
+			Assertions.assertEquals(-1_000_000, ChangeSetKPIUtil.getCargoOtherPNL(row3, ResultType.After));
+			Assertions.assertEquals(-1_000_000, ChangeSetKPIUtil.getPNL(row3, ResultType.After));
+
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row3, ResultType.Before));
+
+			// P&L Sanity check -- no missing components in P&L
+			// NOTE: This is different to other test cases as second D sales revenue is
+			// shown on the second D row rather than the cargo row.
+			double totalBeforePNL = 0.0;
+			double totalBeforePNLSum = 0.0;
+			double totalAfterPNL = 0.0;
+			double totalAfterPNLSum = 0.0;
+			for (final ChangeSetTableRow row : changeSet.getRows()) {
+				totalBeforePNL += ChangeSetKPIUtil.getPNL(row, ResultType.Before);
+				totalBeforePNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.Before);
+				totalAfterPNL += ChangeSetKPIUtil.getPNL(row, ResultType.After);
+				totalAfterPNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.After);
+			}
+			// Allow $2 "rounding"
+			final double roudingDelta = 2.0;
+			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
+			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLD1DToLD1D2() throws Exception {
+		runTest(maker -> {
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					.build();
+
+			// Purchase
+			LoadSlot l1 = maker.cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l1, d1);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+
+		}, maker -> {
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					.build();
+
+			// Purchase
+			LoadSlot l1 = maker.cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_500_000, 1_500_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l1, d1, d2);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+		}, changeSetRoot -> {
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
+
+			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
+			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
+
+			// Expect three rows, one for each position
+			Assertions.assertEquals(2, changeSet.getRows().size());
+
+			final ChangeSetTableRow row1 = changeSet.getRows().get(0); // Expect to be l1 d1
+			final ChangeSetTableRow row2 = changeSet.getRows().get(1); // Expect to be d2
+
+			// Expect to be part of the same wiring group
+			Assertions.assertSame(row1.getWiringGroup(), row2.getWiringGroup());
+
+			//// Check null/not nulls state
+			// Expect row 1 only to contain the load info,
+			Assertions.assertNotNull(row1.getLhsAfter());
+			Assertions.assertNotNull(row1.getLhsBefore());
+			Assertions.assertNull(row2.getLhsAfter());
+			Assertions.assertNull(row2.getLhsBefore());
+
+			// Check expected RHS populated fields
+			Assertions.assertNotNull(row1.getCurrentRhsAfter());
+			Assertions.assertNotNull(row1.getCurrentRhsBefore());
+			Assertions.assertNotNull(row1.getPreviousRhsAfter());
+			Assertions.assertNotNull(row1.getPreviousRhsBefore());
+
+			Assertions.assertNotNull(row2.getCurrentRhsAfter());
+			Assertions.assertNotNull(row2.getCurrentRhsBefore()); // THIS SHOULD BE POPULATED?
+			// Assertions.assertNotNull(row2.getPreviousRhsAfter());
+			// Assertions.assertNotNull(row2.getPreviousRhsBefore());
+
+			Assertions.assertSame(row1.getCurrentRhsBefore(), row1.getCurrentRhsAfter().getRhsLink());
+
+			Assertions.assertEquals(ChangeSetKPIUtil.getSalesPrice(row1, ResultType.Before), ChangeSetKPIUtil.getSalesPrice(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getSalesPrice(row1, ResultType.Before) - ChangeSetKPIUtil.getSalesPrice(row1, ResultType.After));
+
+			// Still no revenue on row 2, combined in row 1
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getSalesRevenue(row2, ResultType.After));
+
+			// Expect d1 to have cancellation fee recorded
+			Assertions.assertEquals(-1_000_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+
+			// Check the after LDD group
+			Assertions.assertEquals(2, row1.getLhsAfter().getRowDataGroup().getMembers().size());
+			Assertions.assertSame(row1.getLhsAfter().getRowDataGroup(), row1.getCurrentRhsAfter().getRowDataGroup());
+			// We don't have a previous for D2?
+			Assertions.assertSame(row1.getLhsAfter().getRowDataGroup(), row2.getCurrentRhsAfter().getRowDataGroup());
+
+			// Check row state - both rows should be marked as a wiring change
+			Assertions.assertTrue(row1.isWiringChange());
+			Assertions.assertTrue(row2.isWiringChange());
+			//
+			// // Check row state, vessel info should only be on the first row
+			Assertions.assertNotNull(row1.getAfterVesselName());
+			Assertions.assertNotNull(row1.getAfterVesselShortName());
+			Assertions.assertNull(row2.getAfterVesselName());
+			Assertions.assertNull(row2.getAfterVesselShortName());
+			Assertions.assertFalse(row1.isVesselChange());
+			Assertions.assertFalse(row2.isVesselChange());
+
+			// P&L Sanity check -- no missing components in P&L
+			// NOTE: This is different to other test cases as second D sales revenue is
+			// shown on the second D row rather than the cargo row.
+			double totalBeforePNL = 0.0;
+			double totalBeforePNLSum = 0.0;
+			double totalAfterPNL = 0.0;
+			double totalAfterPNLSum = 0.0;
+			for (final ChangeSetTableRow row : changeSet.getRows()) {
+				totalBeforePNL += ChangeSetKPIUtil.getPNL(row, ResultType.Before);
+				totalBeforePNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.Before);
+				totalAfterPNL += ChangeSetKPIUtil.getPNL(row, ResultType.After);
+				totalAfterPNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.After);
+			}
+			// Allow $2 "rounding"
+			final double roudingDelta = 2.0;
+			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
+			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
+		});
+	}
+
+	/**
+	 * This test pushes D2 on to a second row, but still linked to the load
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLD2DToLD1D2() throws Exception {
+		runTest(maker -> {
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					.build();
+
+			// Purchase
+			LoadSlot l1 = maker.cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l1, d2);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+
+		}, maker -> {
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					.build();
+
+			// Purchase
+			LoadSlot l1 = maker.cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_500_000, 1_500_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l1, d1, d2);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+		}, changeSetRoot -> {
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
+
+			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
+			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
+
+			// Expect three rows, one for each position
+			Assertions.assertEquals(2, changeSet.getRows().size());
+
+			final ChangeSetTableRow row1 = changeSet.getRows().get(0); // Expect to be l1 d2/d1
+			final ChangeSetTableRow row2 = changeSet.getRows().get(1); // Expect to be d2
+
+			// Expect to be part of the same wiring group
+			Assertions.assertSame(row1.getWiringGroup(), row2.getWiringGroup());
+
+			//// Check null/not nulls state
+			// Expect row 1 only to contain the load info,
+			Assertions.assertNotNull(row1.getLhsAfter());
+			Assertions.assertNotNull(row1.getLhsBefore());
+			Assertions.assertNull(row2.getLhsAfter());
+			Assertions.assertNull(row2.getLhsBefore());
+
+			// Check expected RHS populated fields
+			Assertions.assertNotNull(row1.getCurrentRhsAfter());
+			Assertions.assertNotNull(row1.getCurrentRhsBefore());
+			Assertions.assertNotNull(row1.getPreviousRhsAfter());
+			Assertions.assertNotNull(row1.getPreviousRhsBefore());
+
+			Assertions.assertNotNull(row2.getCurrentRhsAfter());
+			Assertions.assertNotNull(row2.getCurrentRhsBefore());
+			// Assertions.assertNotNull(row2.getPreviousRhsAfter());
+			// Assertions.assertNotNull(row2.getPreviousRhsBefore());
+
+			// Check the link as D2 moves.
+			Assertions.assertSame(row1.getPreviousRhsBefore(), row2.getCurrentRhsAfter().getRhsLink());
+
+			// Sales price should move too
+			Assertions.assertEquals(ChangeSetKPIUtil.getSalesPrice(row1, ResultType.Before), ChangeSetKPIUtil.getSalesPrice(row2, ResultType.After));
+			// $1 difference between d1 & d2 sales prices
+			Assertions.assertEquals(1, ChangeSetKPIUtil.getSalesPrice(row1, ResultType.Before) - ChangeSetKPIUtil.getSalesPrice(row1, ResultType.After));
+
+			// Still no revenue on row 2, combined in row 1
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getSalesRevenue(row2, ResultType.After));
+			// totalBeforePNL += ChangeSetKPIUtil.getPNL(row2, ResultType.Before);
+
+			// Exect d1 to have cancellation fee recorded
+			Assertions.assertEquals(-1_000_000, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+
+			// Check the after LDD group
+			Assertions.assertEquals(2, row1.getLhsAfter().getRowDataGroup().getMembers().size());
+			Assertions.assertSame(row1.getLhsAfter().getRowDataGroup(), row1.getCurrentRhsAfter().getRowDataGroup());
+			// We don't have a previous for D2?
+			Assertions.assertSame(row1.getLhsAfter().getRowDataGroup(), row2.getCurrentRhsAfter().getRowDataGroup());
+
+			// Check row state - both rows should be marked as a wiring change
+			Assertions.assertTrue(row1.isWiringChange());
+			Assertions.assertTrue(row2.isWiringChange());
+			//
+			// // Check row state, vessel info should only be on the first row
+			Assertions.assertNotNull(row1.getAfterVesselName());
+			Assertions.assertNotNull(row1.getAfterVesselShortName());
+			Assertions.assertNull(row2.getAfterVesselName());
+			Assertions.assertNull(row2.getAfterVesselShortName());
+			Assertions.assertFalse(row1.isVesselChange());
+			Assertions.assertFalse(row2.isVesselChange());
+
+			// P&L Sanity check -- no missing components in P&L
+			// NOTE: This is different to other test cases as second D sales revenue is
+			// shown on the second D row rather than the cargo row.
+			double totalBeforePNL = 0.0;
+			double totalBeforePNLSum = 0.0;
+			double totalAfterPNL = 0.0;
+			double totalAfterPNLSum = 0.0;
+			for (final ChangeSetTableRow row : changeSet.getRows()) {
+				totalBeforePNL += ChangeSetKPIUtil.getPNL(row, ResultType.Before);
+				totalBeforePNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.Before);
+				totalAfterPNL += ChangeSetKPIUtil.getPNL(row, ResultType.After);
+				totalAfterPNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.After);
+			}
+			// Allow $2 "rounding"
+			final double roudingDelta = 2.0;
+			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
+			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
+		});
+	}
+
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testLDDSwapL1D2() throws Exception {
+		runTest(maker -> {
+
+			// Create the required basic elements
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					// .withCharterRate("50000") //
+					.build();
+
+			LoadSlot l1 = maker.cargoModelBuilder
+
+					// Purchase
+					.makeFOBPurchase("L1", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.build(); //
+			// Sale 2
+			DischargeSlot d2 = maker.cargoModelBuilder.makeDESSale("D2", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l1, d1, d2);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+		}, maker -> {
+
+			final Vessel vessel_1 = maker.fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+			final VesselCharter vesselCharter = maker.cargoModelBuilder.makeVesselCharter(vessel_1, maker.entity) //
+					.build();
+
+			// Purchase
+			LoadSlot l2 = maker.cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2023, 01, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, maker.entity, "5", null) //
+					.withVolumeLimits(1_000_000, 3_000_000, VolumeUnits.MMBTU) //
+					.build();
+
+			// Sale 1
+			DischargeSlot d1 = maker.cargoModelBuilder.makeDESSale("D1", LocalDate.of(2023, 01, 20), maker.portFinder.findPortById(InternalDataConstants.PORT_ESCOBAR), null, maker.entity, "7") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.build(); //
+			// Sale 2
+			DischargeSlot d3 = maker.cargoModelBuilder.makeDESSale("D3", LocalDate.of(2023, 01, 25), maker.portFinder.findPortById(InternalDataConstants.PORT_BAHIA_BLANCA), null, maker.entity, "8") //
+					.withVolumeLimits(1_000_000, 1_000_000, VolumeUnits.MMBTU) //
+					.withCancellationFee("1000000") //
+					.build();
+
+			// Cargo
+			Cargo cargo = maker.cargoModelBuilder.createCargo(l2, d1, d3);
+			cargo.setVesselAssignmentType(vesselCharter);
+			cargo.setSequenceHint(1);
+
+		}, changeSetRoot -> {
+			Assertions.assertEquals(1, changeSetRoot.getChangeSets().size());
+
+			ChangeSetToTableTransformer transformer = new ChangeSetToTableTransformer();
+			ChangeSetTableRoot tableRoot = transformer.createViewDataModel(changeSetRoot, false, SortMode.BY_GROUP);
+			final ChangeSetTableGroup changeSet = tableRoot.getGroups().get(0);
+
+			// Expect four rows. 2 for the current LDD, + 1 for old L and one for old D
+			Assertions.assertEquals(4, changeSet.getRows().size());
+
+			final ChangeSetTableRow row1 = changeSet.getRows().get(0);
+			final ChangeSetTableRow row2 = changeSet.getRows().get(1);
+			final ChangeSetTableRow row3 = changeSet.getRows().get(2);
+			final ChangeSetTableRow row4 = changeSet.getRows().get(3);
+
+			// Expect row 1 and 2 to contain the load infos
+			Assertions.assertNotNull(row1.getLhsAfter());
+			Assertions.assertNotNull(row1.getLhsBefore());
+			Assertions.assertNotNull(row2.getLhsAfter());
+			Assertions.assertNotNull(row2.getLhsBefore()); //
+			Assertions.assertNull(row3.getLhsAfter());
+			Assertions.assertNull(row3.getLhsBefore());
+			Assertions.assertNull(row4.getLhsAfter());
+			Assertions.assertNull(row4.getLhsBefore());
+
+			// Expect all RHS fields to be populated
+			Assertions.assertNull(row1.getCurrentRhsAfter());
+			Assertions.assertNull(row1.getCurrentRhsBefore());
+			Assertions.assertNotNull(row1.getPreviousRhsAfter());
+			Assertions.assertNotNull(row1.getPreviousRhsBefore());
+			Assertions.assertNotNull(row2.getCurrentRhsAfter());
+			Assertions.assertNotNull(row2.getCurrentRhsBefore());
+			Assertions.assertNull(row2.getPreviousRhsAfter());
+			Assertions.assertNull(row2.getPreviousRhsBefore());
+
+			// Expect to be part of the same wiring group
+			Assertions.assertSame(row1.getWiringGroup(), row2.getWiringGroup());
+
+			// Check the after LDD group
+			Assertions.assertEquals(2, row2.getLhsAfter().getRowDataGroup().getMembers().size());
+			Assertions.assertSame(row2.getLhsAfter().getRowDataGroup(), row2.getCurrentRhsAfter().getRowDataGroup());
+			Assertions.assertSame(row2.getLhsAfter().getRowDataGroup(), row3.getCurrentRhsAfter().getRowDataGroup());
+
+			// Check the before LDD group
+			Assertions.assertEquals(2, row1.getLhsBefore().getRowDataGroup().getMembers().size());
+			Assertions.assertSame(row1.getLhsBefore().getRowDataGroup(), row2.getCurrentRhsBefore().getRowDataGroup());
+			Assertions.assertSame(row1.getLhsBefore().getRowDataGroup(), row4.getCurrentRhsBefore().getRowDataGroup());
+
+			// // Check the before states are independent
+			// Assertions.assertEquals(1, row1.getLhsBefore().getRowDataGroup().getMembers().size());
+			// Assertions.assertEquals(1, row1.getCurrentRhsBefore().getRowDataGroup().getMembers().size());
+			// Assertions.assertEquals(1, row2.getCurrentRhsBefore().getRowDataGroup().getMembers().size());
+			//
+			// Assertions.assertNotSame(row1.getLhsBefore().getRowDataGroup(), row1.getCurrentRhsBefore().getRowDataGroup());
+			// Assertions.assertNotSame(row1.getLhsBefore().getRowDataGroup(), row2.getCurrentRhsBefore().getRowDataGroup());
+			// Assertions.assertNotSame(row1.getCurrentRhsBefore().getRowDataGroup(), row2.getCurrentRhsBefore().getRowDataGroup());
+			//
+			// // Expect no after P&L on row 2 as it should be on row 1
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getPNL(row2, ResultType.After));
+			//
+			// // Check row state - both rows should be marked as a wiring change
+			// Assertions.assertTrue(row1.isWiringChange());
+			// Assertions.assertTrue(row2.isWiringChange());
+			//
+			// // Check row state, vessel info should only be on the first row
+			// Assertions.assertNotNull(row1.getAfterVesselName());
+			// Assertions.assertNotNull(row1.getAfterVesselShortName());
+			// Assertions.assertNull(row2.getAfterVesselName());
+			// Assertions.assertNull(row2.getAfterVesselShortName());
+			// Assertions.assertFalse(row1.isVesselChange()); // TODO: Should this be true?
+			// Assertions.assertFalse(row2.isVesselChange());
+			//
+			// // Expect 1m discharge 2 cancellation 2 - before only
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.Before));
+			// Assertions.assertEquals(-1_000_000, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.Before));
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row1, ResultType.After));
+			// Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
+
+			// P&L Sanity check -- no missing components in P&L
+			// NOTE: This is different to other test cases as second D sales revenue is
+			// shown on the second D row rather than the cargo row.
+			double totalBeforePNL = 0.0;
+			double totalBeforePNLSum = 0.0;
+			double totalAfterPNL = 0.0;
+			double totalAfterPNLSum = 0.0;
+			for (final ChangeSetTableRow row : changeSet.getRows()) {
+				totalBeforePNL += ChangeSetKPIUtil.getPNL(row, ResultType.Before);
+				totalBeforePNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.Before);
+				totalAfterPNL += ChangeSetKPIUtil.getPNL(row, ResultType.After);
+				totalAfterPNLSum += ChangeSetKPIUtil.getPNLSum(row, ResultType.After);
+			}
+			// Allow $2 "rounding"
 			final double roudingDelta = 2.0;
 			Assertions.assertEquals(totalBeforePNL, totalBeforePNLSum, roudingDelta);
 			Assertions.assertEquals(totalAfterPNL, totalAfterPNLSum, roudingDelta);
@@ -667,6 +1433,7 @@ public class CompareViewTests {
 				}
 			}
 		} finally {
+			// This can trigger model not unloaded error messages
 			pinnedRecord.dispose();
 			otherRecord.dispose();
 		}

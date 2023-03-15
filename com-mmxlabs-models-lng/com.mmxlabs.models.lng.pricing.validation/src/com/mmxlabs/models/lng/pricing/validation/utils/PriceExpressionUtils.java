@@ -58,8 +58,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * 
  * @author Simon McGregor
  * 
- *         Utility class to provide methods for help when validating contract
- *         constraints.
+ *         Utility class to provide methods for help when validating contract constraints.
  * 
  */
 public class PriceExpressionUtils {
@@ -114,6 +113,15 @@ public class PriceExpressionUtils {
 			final @NonNull EObject target, final EAttribute feature, final boolean missingIsOk, @Nullable final String constraintKey, final Pair<EObject, EStructuralFeature>... otherFeatures) {
 		final PriceIndexType priceIndexType = getPriceIndexType(feature);
 		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, constraintKey, otherFeatures);
+	}
+
+	public static boolean hasPriceAnnotation(final EAttribute feature) {
+		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
+		if (eAnnotation != null) {
+			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.ANNOTATION_KEY);
+			return value != null;
+		}
+		return false;
 	}
 
 	public static @NonNull PriceIndexType getPriceIndexType(final EAttribute feature) {
@@ -188,13 +196,18 @@ public class PriceExpressionUtils {
 	 * 
 	 *         Validates a price expression for a given EMF object
 	 * 
-	 * @param ctx             A validation context.
-	 * @param object          The EMF object to associate validation failures with.
-	 * @param feature         The structural feature to attach validation failures
-	 *                        to.
-	 * @param priceExpression The price expression to validate.
-	 * @param parser          A parser for price expressions.
-	 * @param failures        The list of validation failures to append to.
+	 * @param ctx
+	 *            A validation context.
+	 * @param object
+	 *            The EMF object to associate validation failures with.
+	 * @param feature
+	 *            The structural feature to attach validation failures to.
+	 * @param priceExpression
+	 *            The price expression to validate.
+	 * @param parser
+	 *            A parser for price expressions.
+	 * @param failures
+	 *            The list of validation failures to append to.
 	 */
 	@NonNull
 	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
@@ -386,8 +399,7 @@ public class PriceExpressionUtils {
 			if (!result.isOk()) {
 				final EObject eContainer = target.eContainer();
 				final DetailConstraintStatusDecorator dsd;
-				if (eContainer instanceof Contract) {
-					final Contract contract = (Contract) eContainer;
+				if (eContainer instanceof Contract contract) {
 					final String message = String.format("[Contract|'%s']%s", contract.getName(), result.getErrorDetails());
 					dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(eContainer, attribute);
@@ -426,9 +438,9 @@ public class PriceExpressionUtils {
 		return true;
 	}
 
-	public static Collection<@NonNull AbstractYearMonthCurve> getLinkedCurves(final String priceExpression) {
+	public static Collection<@NonNull AbstractYearMonthCurve> getLinkedCurves(final String priceExpression, PriceIndexType type) {
 		final ModelMarketCurveProvider modelMarketCurveProvider = getMarketCurveProvider();
-		return modelMarketCurveProvider.getLinkedCurves(priceExpression);
+		return modelMarketCurveProvider.getLinkedCurves(priceExpression, type);
 
 	}
 
@@ -449,9 +461,9 @@ public class PriceExpressionUtils {
 	}
 
 	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature,
-			final List<IStatus> failures) {
+			final List<IStatus> failures, final PriceIndexType indexType) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
-		final Map<AbstractYearMonthCurve, LocalDate> result1 = marketCurveProvider.getLinkedCurvesAndEarliestNeededDate(priceExpression, pricingDate);
+		final Map<AbstractYearMonthCurve, LocalDate> result1 = marketCurveProvider.getLinkedCurvesAndEarliestNeededDate(priceExpression, indexType, pricingDate);
 
 		for (final Map.Entry<AbstractYearMonthCurve, LocalDate> e : result1.entrySet()) {
 			final AbstractYearMonthCurve index = e.getKey();

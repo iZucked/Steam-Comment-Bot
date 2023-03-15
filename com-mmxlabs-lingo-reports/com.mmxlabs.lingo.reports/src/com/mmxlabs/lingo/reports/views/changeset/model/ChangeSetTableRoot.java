@@ -30,6 +30,7 @@ public interface ChangeSetTableRoot extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Groups</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getTableRoot <em>Table Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Groups</em>' containment reference list isn't clear,
@@ -38,7 +39,8 @@ public interface ChangeSetTableRoot extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Groups</em>' containment reference list.
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRoot_Groups()
-	 * @model containment="true"
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getTableRoot
+	 * @model opposite="tableRoot" containment="true"
 	 * @generated
 	 */
 	EList<ChangeSetTableGroup> getGroups();

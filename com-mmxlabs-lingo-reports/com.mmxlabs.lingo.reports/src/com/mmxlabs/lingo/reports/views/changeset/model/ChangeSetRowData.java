@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -32,10 +31,19 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselName <em>Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselShortName <em>Vessel Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselType <em>Vessel Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselCharterNumber <em>Vessel Charter Number</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLhsName <em>Lhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRhsName <em>Rhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLhsLink <em>Lhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRhsLink <em>Rhs Link</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSlot <em>Lhs Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSpot <em>Lhs Spot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsOptional <em>Lhs Optional</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSlot <em>Rhs Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSpot <em>Rhs Spot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsOptional <em>Rhs Optional</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsNonShipped <em>Lhs Non Shipped</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsNonShipped <em>Rhs Non Shipped</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLoadAllocation <em>Load Allocation</em>}</li>
@@ -47,7 +55,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLhsGroupProfitAndLoss <em>Lhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getRhsGroupProfitAndLoss <em>Rhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getPaperDealAllocation <em>Paper Deal Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getVesselCharterNumber <em>Vessel Charter Number</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData()
@@ -320,6 +327,182 @@ public interface ChangeSetRowData extends EObject {
 	 * @generated
 	 */
 	void setRhsLink(ChangeSetRowData value);
+
+	/**
+	 * Returns the value of the '<em><b>Lhs Slot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lhs Slot</em>' attribute.
+	 * @see #setLhsSlot(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_LhsSlot()
+	 * @model
+	 * @generated
+	 */
+	boolean isLhsSlot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSlot <em>Lhs Slot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lhs Slot</em>' attribute.
+	 * @see #isLhsSlot()
+	 * @generated
+	 */
+	void setLhsSlot(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Lhs Spot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lhs Spot</em>' attribute.
+	 * @see #setLhsSpot(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_LhsSpot()
+	 * @model
+	 * @generated
+	 */
+	boolean isLhsSpot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSpot <em>Lhs Spot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lhs Spot</em>' attribute.
+	 * @see #isLhsSpot()
+	 * @generated
+	 */
+	void setLhsSpot(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Lhs Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lhs Optional</em>' attribute.
+	 * @see #setLhsOptional(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_LhsOptional()
+	 * @model
+	 * @generated
+	 */
+	boolean isLhsOptional();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsOptional <em>Lhs Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lhs Optional</em>' attribute.
+	 * @see #isLhsOptional()
+	 * @generated
+	 */
+	void setLhsOptional(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Rhs Slot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Rhs Slot</em>' attribute.
+	 * @see #setRhsSlot(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_RhsSlot()
+	 * @model
+	 * @generated
+	 */
+	boolean isRhsSlot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSlot <em>Rhs Slot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Rhs Slot</em>' attribute.
+	 * @see #isRhsSlot()
+	 * @generated
+	 */
+	void setRhsSlot(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Rhs Spot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Rhs Spot</em>' attribute.
+	 * @see #setRhsSpot(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_RhsSpot()
+	 * @model
+	 * @generated
+	 */
+	boolean isRhsSpot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSpot <em>Rhs Spot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Rhs Spot</em>' attribute.
+	 * @see #isRhsSpot()
+	 * @generated
+	 */
+	void setRhsSpot(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Rhs Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Rhs Optional</em>' attribute.
+	 * @see #setRhsOptional(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_RhsOptional()
+	 * @model
+	 * @generated
+	 */
+	boolean isRhsOptional();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsOptional <em>Rhs Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Rhs Optional</em>' attribute.
+	 * @see #isRhsOptional()
+	 * @generated
+	 */
+	void setRhsOptional(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Lhs Non Shipped</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lhs Non Shipped</em>' attribute.
+	 * @see #setLhsNonShipped(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_LhsNonShipped()
+	 * @model
+	 * @generated
+	 */
+	boolean isLhsNonShipped();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsNonShipped <em>Lhs Non Shipped</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lhs Non Shipped</em>' attribute.
+	 * @see #isLhsNonShipped()
+	 * @generated
+	 */
+	void setLhsNonShipped(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Rhs Non Shipped</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Rhs Non Shipped</em>' attribute.
+	 * @see #setRhsNonShipped(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRowData_RhsNonShipped()
+	 * @model
+	 * @generated
+	 */
+	boolean isRhsNonShipped();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsNonShipped <em>Rhs Non Shipped</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Rhs Non Shipped</em>' attribute.
+	 * @see #isRhsNonShipped()
+	 * @generated
+	 */
+	void setRhsNonShipped(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Load Slot</b></em>' reference.

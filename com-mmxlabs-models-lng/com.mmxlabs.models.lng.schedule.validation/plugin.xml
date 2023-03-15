@@ -89,7 +89,7 @@
                 <target class="Event"/>
             </constraint>
                         <constraint
-                              class="com.mmxlabs.models.lng.schedule.validation.MissingCurveValueConstraint"
+                              class="com.mmxlabs.models.lng.schedule.validation.MissingScheduledVesselCharterCurveValueConstraint"
                               id="com.mmxlabs.models.lng.schedule.validation.MissingCurveValueConstraint"
                               isEnabledByDefault="true"
                               lang="java"

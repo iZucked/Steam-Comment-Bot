@@ -6,11 +6,18 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -19,16 +26,6 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,10 +41,19 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselName <em>Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselShortName <em>Vessel Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselType <em>Vessel Type</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselCharterNumber <em>Vessel Charter Number</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLhsName <em>Lhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getRhsName <em>Rhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLhsLink <em>Lhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getRhsLink <em>Rhs Link</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isLhsSlot <em>Lhs Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isLhsSpot <em>Lhs Spot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isLhsOptional <em>Lhs Optional</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isRhsSlot <em>Rhs Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isRhsSpot <em>Rhs Spot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isRhsOptional <em>Rhs Optional</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isLhsNonShipped <em>Lhs Non Shipped</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#isRhsNonShipped <em>Rhs Non Shipped</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLoadAllocation <em>Load Allocation</em>}</li>
@@ -59,7 +65,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getLhsGroupProfitAndLoss <em>Lhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getRhsGroupProfitAndLoss <em>Rhs Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getPaperDealAllocation <em>Paper Deal Allocation</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl#getVesselCharterNumber <em>Vessel Charter Number</em>}</li>
  * </ul>
  *
  * @generated
@@ -156,6 +161,26 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	protected ChangeSetVesselType vesselType = VESSEL_TYPE_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getVesselCharterNumber() <em>Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VESSEL_CHARTER_NUMBER_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVesselCharterNumber() <em>Vessel Charter Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselCharterNumber()
+	 * @generated
+	 * @ordered
+	 */
+	protected int vesselCharterNumber = VESSEL_CHARTER_NUMBER_EDEFAULT;
+
+	/**
 	 * The default value of the '{@link #getLhsName() <em>Lhs Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -214,6 +239,166 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected ChangeSetRowData rhsLink;
+
+	/**
+	 * The default value of the '{@link #isLhsSlot() <em>Lhs Slot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LHS_SLOT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLhsSlot() <em>Lhs Slot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean lhsSlot = LHS_SLOT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isLhsSpot() <em>Lhs Spot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsSpot()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LHS_SPOT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLhsSpot() <em>Lhs Spot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsSpot()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean lhsSpot = LHS_SPOT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isLhsOptional() <em>Lhs Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LHS_OPTIONAL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLhsOptional() <em>Lhs Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean lhsOptional = LHS_OPTIONAL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isRhsSlot() <em>Rhs Slot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RHS_SLOT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRhsSlot() <em>Rhs Slot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean rhsSlot = RHS_SLOT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isRhsSpot() <em>Rhs Spot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsSpot()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RHS_SPOT_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRhsSpot() <em>Rhs Spot</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsSpot()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean rhsSpot = RHS_SPOT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isRhsOptional() <em>Rhs Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RHS_OPTIONAL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRhsOptional() <em>Rhs Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean rhsOptional = RHS_OPTIONAL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isLhsNonShipped() <em>Lhs Non Shipped</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsNonShipped()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LHS_NON_SHIPPED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLhsNonShipped() <em>Lhs Non Shipped</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLhsNonShipped()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean lhsNonShipped = LHS_NON_SHIPPED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isRhsNonShipped() <em>Rhs Non Shipped</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsNonShipped()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RHS_NON_SHIPPED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRhsNonShipped() <em>Rhs Non Shipped</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isRhsNonShipped()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean rhsNonShipped = RHS_NON_SHIPPED_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' reference.
@@ -324,26 +509,6 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected PaperDealAllocation paperDealAllocation;
-
-	/**
-	 * The default value of the '{@link #getVesselCharterNumber() <em>Vessel Charter Number</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselCharterNumber()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int VESSEL_CHARTER_NUMBER_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getVesselCharterNumber() <em>Vessel Charter Number</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVesselCharterNumber()
-	 * @generated
-	 * @ordered
-	 */
-	protected int vesselCharterNumber = VESSEL_CHARTER_NUMBER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -511,6 +676,190 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 		rhsLink = newRhsLink;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_LINK, oldRhsLink, rhsLink));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isLhsSlot() {
+		return lhsSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLhsSlot(boolean newLhsSlot) {
+		boolean oldLhsSlot = lhsSlot;
+		lhsSlot = newLhsSlot;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SLOT, oldLhsSlot, lhsSlot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isLhsSpot() {
+		return lhsSpot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLhsSpot(boolean newLhsSpot) {
+		boolean oldLhsSpot = lhsSpot;
+		lhsSpot = newLhsSpot;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SPOT, oldLhsSpot, lhsSpot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isLhsOptional() {
+		return lhsOptional;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLhsOptional(boolean newLhsOptional) {
+		boolean oldLhsOptional = lhsOptional;
+		lhsOptional = newLhsOptional;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_OPTIONAL, oldLhsOptional, lhsOptional));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRhsSlot() {
+		return rhsSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRhsSlot(boolean newRhsSlot) {
+		boolean oldRhsSlot = rhsSlot;
+		rhsSlot = newRhsSlot;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SLOT, oldRhsSlot, rhsSlot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRhsSpot() {
+		return rhsSpot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRhsSpot(boolean newRhsSpot) {
+		boolean oldRhsSpot = rhsSpot;
+		rhsSpot = newRhsSpot;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SPOT, oldRhsSpot, rhsSpot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRhsOptional() {
+		return rhsOptional;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRhsOptional(boolean newRhsOptional) {
+		boolean oldRhsOptional = rhsOptional;
+		rhsOptional = newRhsOptional;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_OPTIONAL, oldRhsOptional, rhsOptional));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isLhsNonShipped() {
+		return lhsNonShipped;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLhsNonShipped(boolean newLhsNonShipped) {
+		boolean oldLhsNonShipped = lhsNonShipped;
+		lhsNonShipped = newLhsNonShipped;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NON_SHIPPED, oldLhsNonShipped, lhsNonShipped));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isRhsNonShipped() {
+		return rhsNonShipped;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRhsNonShipped(boolean newRhsNonShipped) {
+		boolean oldRhsNonShipped = rhsNonShipped;
+		rhsNonShipped = newRhsNonShipped;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NON_SHIPPED, oldRhsNonShipped, rhsNonShipped));
 	}
 
 	/**
@@ -1193,6 +1542,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return getVesselShortName();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
 				return getVesselType();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				return getVesselCharterNumber();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				return getLhsName();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NAME:
@@ -1203,6 +1554,22 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_LINK:
 				if (resolve) return getRhsLink();
 				return basicGetRhsLink();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SLOT:
+				return isLhsSlot();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SPOT:
+				return isLhsSpot();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_OPTIONAL:
+				return isLhsOptional();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SLOT:
+				return isRhsSlot();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SPOT:
+				return isRhsSpot();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_OPTIONAL:
+				return isRhsOptional();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NON_SHIPPED:
+				return isLhsNonShipped();
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NON_SHIPPED:
+				return isRhsNonShipped();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LOAD_SLOT:
 				if (resolve) return getLoadSlot();
 				return basicGetLoadSlot();
@@ -1236,8 +1603,6 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				if (resolve) return getPaperDealAllocation();
 				return basicGetPaperDealAllocation();
-			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
-				return getVesselCharterNumber();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1268,6 +1633,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
 				setVesselType((ChangeSetVesselType)newValue);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				setVesselCharterNumber((Integer)newValue);
+				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				setLhsName((String)newValue);
 				return;
@@ -1279,6 +1647,30 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_LINK:
 				setRhsLink((ChangeSetRowData)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SLOT:
+				setLhsSlot((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SPOT:
+				setLhsSpot((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_OPTIONAL:
+				setLhsOptional((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SLOT:
+				setRhsSlot((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SPOT:
+				setRhsSpot((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_OPTIONAL:
+				setRhsOptional((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NON_SHIPPED:
+				setLhsNonShipped((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NON_SHIPPED:
+				setRhsNonShipped((Boolean)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LOAD_SLOT:
 				setLoadSlot((LoadSlot)newValue);
@@ -1313,9 +1705,6 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				setPaperDealAllocation((PaperDealAllocation)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
-				setVesselCharterNumber((Integer)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1346,6 +1735,9 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
 				setVesselType(VESSEL_TYPE_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				setVesselCharterNumber(VESSEL_CHARTER_NUMBER_EDEFAULT);
+				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				setLhsName(LHS_NAME_EDEFAULT);
 				return;
@@ -1357,6 +1749,30 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_LINK:
 				setRhsLink((ChangeSetRowData)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SLOT:
+				setLhsSlot(LHS_SLOT_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SPOT:
+				setLhsSpot(LHS_SPOT_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_OPTIONAL:
+				setLhsOptional(LHS_OPTIONAL_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SLOT:
+				setRhsSlot(RHS_SLOT_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SPOT:
+				setRhsSpot(RHS_SPOT_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_OPTIONAL:
+				setRhsOptional(RHS_OPTIONAL_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NON_SHIPPED:
+				setLhsNonShipped(LHS_NON_SHIPPED_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NON_SHIPPED:
+				setRhsNonShipped(RHS_NON_SHIPPED_EDEFAULT);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LOAD_SLOT:
 				setLoadSlot((LoadSlot)null);
@@ -1391,9 +1807,6 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				setPaperDealAllocation((PaperDealAllocation)null);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
-				setVesselCharterNumber(VESSEL_CHARTER_NUMBER_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1418,6 +1831,8 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return VESSEL_SHORT_NAME_EDEFAULT == null ? vesselShortName != null : !VESSEL_SHORT_NAME_EDEFAULT.equals(vesselShortName);
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_TYPE:
 				return vesselType != VESSEL_TYPE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
+				return vesselCharterNumber != VESSEL_CHARTER_NUMBER_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NAME:
 				return LHS_NAME_EDEFAULT == null ? lhsName != null : !LHS_NAME_EDEFAULT.equals(lhsName);
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NAME:
@@ -1426,6 +1841,22 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return lhsLink != null;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_LINK:
 				return rhsLink != null;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SLOT:
+				return lhsSlot != LHS_SLOT_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_SPOT:
+				return lhsSpot != LHS_SPOT_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_OPTIONAL:
+				return lhsOptional != LHS_OPTIONAL_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SLOT:
+				return rhsSlot != RHS_SLOT_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_SPOT:
+				return rhsSpot != RHS_SPOT_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_OPTIONAL:
+				return rhsOptional != RHS_OPTIONAL_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__LHS_NON_SHIPPED:
+				return lhsNonShipped != LHS_NON_SHIPPED_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW_DATA__RHS_NON_SHIPPED:
+				return rhsNonShipped != RHS_NON_SHIPPED_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__LOAD_SLOT:
 				return loadSlot != null;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__DISCHARGE_SLOT:
@@ -1448,8 +1879,6 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 				return rhsGroupProfitAndLoss != null;
 			case ChangesetPackage.CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION:
 				return paperDealAllocation != null;
-			case ChangesetPackage.CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER:
-				return vesselCharterNumber != VESSEL_CHARTER_NUMBER_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1472,12 +1901,28 @@ public class ChangeSetRowDataImpl extends MinimalEObjectImpl.Container implement
 		result.append(vesselShortName);
 		result.append(", vesselType: ");
 		result.append(vesselType);
+		result.append(", vesselCharterNumber: ");
+		result.append(vesselCharterNumber);
 		result.append(", lhsName: ");
 		result.append(lhsName);
 		result.append(", rhsName: ");
 		result.append(rhsName);
-		result.append(", vesselCharterNumber: ");
-		result.append(vesselCharterNumber);
+		result.append(", lhsSlot: ");
+		result.append(lhsSlot);
+		result.append(", lhsSpot: ");
+		result.append(lhsSpot);
+		result.append(", lhsOptional: ");
+		result.append(lhsOptional);
+		result.append(", rhsSlot: ");
+		result.append(rhsSlot);
+		result.append(", rhsSpot: ");
+		result.append(rhsSpot);
+		result.append(", rhsOptional: ");
+		result.append(rhsOptional);
+		result.append(", lhsNonShipped: ");
+		result.append(lhsNonShipped);
+		result.append(", rhsNonShipped: ");
+		result.append(rhsNonShipped);
 		result.append(')');
 		return result.toString();
 	}

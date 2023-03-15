@@ -74,13 +74,14 @@ public class ScheduleModelUtils {
 			return true;
 		} else if (event instanceof EndEvent) {
 			return true;
-		} else if (event instanceof SlotVisit) {
-			final SlotAllocation slotAllocation = ((SlotVisit) event).getSlotAllocation();
-			if (slotAllocation != null) {
-				if (slotAllocation.getSlot() instanceof LoadSlot) {
-					return true;
-				}
+		} else if (event instanceof @NonNull final SlotVisit slotVisit) {
+			final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+			if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
+				return true;
 			}
+		} else if (event instanceof @NonNull final PortVisit portVisit && portVisit.getNextEvent() == null) {
+			// The expected preceding sequence associated with this case is a nominal vessel cargo
+			return true;
 		}
 		return false;
 	}

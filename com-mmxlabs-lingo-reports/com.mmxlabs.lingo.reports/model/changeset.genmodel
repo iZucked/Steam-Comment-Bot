@@ -49,13 +49,11 @@
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRowDataGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowDataGroup/members"/>
     </genClasses>
-    <genClasses ecoreClass="changeset.ecore#//ChangeSetRow">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/wiringChange"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/vesselChange"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/dateChange"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/beforeData"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/afterData"/>
-      <genOperations ecoreOperation="changeset.ecore#//ChangeSetRow/isMajorChange"/>
+    <genClasses ecoreClass="changeset.ecore#//ChangeSetWiringGroup">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetWiringGroup/rows"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetWiringGroup/isWiringChange"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetWiringGroup/isVesselChange"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetWiringGroup/isDateChange"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRowData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/primaryRecord"/>
@@ -64,10 +62,19 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselShortName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselCharterNumber"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/lhsName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/rhsName"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/lhsLink"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsLink"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/lhsSlot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/lhsSpot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/lhsOptional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/rhsSlot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/rhsSpot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/rhsOptional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/lhsNonShipped"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/rhsNonShipped"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/loadSlot"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/dischargeSlot"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/loadAllocation"/>
@@ -79,7 +86,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/lhsGroupProfitAndLoss"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/rhsGroupProfitAndLoss"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRowData/paperDealAllocation"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/vesselCharterNumber"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetTableGroup">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/rows"/>
@@ -95,38 +101,43 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/groupSortValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/groupObject"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableGroup/groupAlternative"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableGroup/tableRoot"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetTableRow">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsName"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/lhsBefore"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/lhsAfter"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/rhsBefore"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/rhsAfter"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselShortName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselName"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselShortName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsValid"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/currentRhsBefore"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/currentRhsAfter"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/previousRhsBefore"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/previousRhsAfter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/currentRhsValid"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/wiringChange"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/vesselChange"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/dateChange"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/previousRHS"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/nextLHS"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsSlot"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsSpot"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsOptional"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsValid"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsNonShipped"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsSlot"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsSpot"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsOptional"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsValid"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/rhsNonShipped"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselType"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselType"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselCharterNumber"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselCharterNumber"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/wiringGroup"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/tableGroup"/>
       <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isMajorChange"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getLHSAfterOrBefore"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getCurrentRHSAfterOrBefore"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getLhsName"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getCurrentRhsName"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getBeforeVesselCharterNumber"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getBeforeVesselName"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getBeforeVesselShortName"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getBeforeVesselType"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getAfterVesselCharterNumber"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getAfterVesselName"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getAfterVesselShortName"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/getAfterVesselType"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isLhsSlot"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isCurrentRhsSlot"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isLhsSpot"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isCurrentRhsOptional"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isLhsOptional"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isCurrentRhsSpot"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isLhsNonShipped"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isCurrentRhsNonShipped"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetTableRoot">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRoot/groups"/>
