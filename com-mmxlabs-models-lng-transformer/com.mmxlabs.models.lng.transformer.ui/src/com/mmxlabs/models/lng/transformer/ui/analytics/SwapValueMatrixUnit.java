@@ -94,8 +94,8 @@ import com.mmxlabs.scheduler.optimiser.moves.util.MoveGeneratorModule;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.sequenceproviders.IPanamaAllowedBookingsProvider;
-import com.mmxlabs.scheduler.optimiser.sequenceproviders.PanamaAllowedBookingsProviderImpl;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.AllowedPanamaBookingsProviderImpl;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IAllowedPanamaBookingsProvider;
 
 public class SwapValueMatrixUnit {
 
@@ -192,9 +192,9 @@ public class SwapValueMatrixUnit {
 			final long nonVesselCharterPnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(baseScheduleFull) - ScheduleModelKPIUtils.getVesselCharterProfitAndLoss(baseScheduleFull, vesselCharter);
 
 			@NonNull
-			final IPanamaAllowedBookingsProvider panamaAllowedBookingsProvider = buildAllowedPanamaBookingsProvider(baseScheduleFull, vesselCharter, modelEntityMap);
+			final IAllowedPanamaBookingsProvider allowedPanamaBookingsProvider = buildAllowedPanamaBookingsProvider(baseScheduleFull, vesselCharter, modelEntityMap);
 			final SequencesAttributesProviderImpl provider = new SequencesAttributesProviderImpl();
-			provider.addProvider(IPanamaAllowedBookingsProvider.class, panamaAllowedBookingsProvider);
+			provider.addProvider(IAllowedPanamaBookingsProvider.class, allowedPanamaBookingsProvider);
 
 			final ISequences baseSequences;
 			{
@@ -542,8 +542,8 @@ public class SwapValueMatrixUnit {
 	}
 
 	@NonNullByDefault
-	private IPanamaAllowedBookingsProvider buildAllowedPanamaBookingsProvider(final Schedule schedule, final VesselCharter vesselCharter, final ModelEntityMap modelEntityMap) {
-		final PanamaAllowedBookingsProviderImpl panamaAllowedBookingsProvider = new PanamaAllowedBookingsProviderImpl();
+	private IAllowedPanamaBookingsProvider buildAllowedPanamaBookingsProvider(final Schedule schedule, final VesselCharter vesselCharter, final ModelEntityMap modelEntityMap) {
+		final AllowedPanamaBookingsProviderImpl panamaAllowedBookingsProvider = new AllowedPanamaBookingsProviderImpl();
 		final Set<IRouteOptionBooking> bookingsUsedByOtherCharters = schedule.getSequences().stream() //
 				.filter(seq -> seq.getVesselCharter() != null || seq.getCharterInMarket() != null || seq.getCharterInMarketOverride() != null) //
 				.filter(seq -> seq.getVesselCharter() != vesselCharter) //
