@@ -245,7 +245,7 @@ public class MarketabilitySandboxUnit {
 
 			final VesselAssignmentType vesselAssignment = shippingMap.get(shipping);
 			final int vesselSpotIndex = getSpotIndex(shipping);
-			final Integer vesselSpeed;
+			final Double vesselSpeed;
 			if (model.isSetVesselSpeed()) {
 				vesselSpeed = model.getVesselSpeed();
 			} else {
@@ -294,7 +294,7 @@ public class MarketabilitySandboxUnit {
 	}
 
 	private MarketabilityResult generateMarketabilityResult(final Schedule schedule, final IMapperClass mapper, final ModelEntityMap modelEntityMap, final VesselAssignmentType vesselAssignment,
-			final int vesselSpotIndex, final LoadSlot load, final SpotMarket market, final Integer vesselSpeed) {
+			final int vesselSpotIndex, final LoadSlot load, final SpotMarket market, final Double vesselSpeed) {
 
 		final MarketabilityResult marketabilityResult = AnalyticsFactory.eINSTANCE.createMarketabilityResult();
 		marketabilityResult.setTarget(market);
@@ -309,7 +309,7 @@ public class MarketabilitySandboxUnit {
 			}
 			Slot<?> marketabilityTarget = discharge;
 			timeZone = discharge.getPort().getLocation().getTimeZone();
-			final InternalResult result = doIt(schedule, vesselAssignment, vesselSpotIndex, load, discharge, marketabilityTarget, dataTransformer.getInitialSequences(), vesselSpeed);
+			final InternalResult result = doShipped(schedule, vesselAssignment, vesselSpotIndex, load, discharge, marketabilityTarget, dataTransformer.getInitialSequences(), vesselSpeed);
 			ret.merge(result);
 		}
 		assert timeZone != null;
@@ -320,14 +320,8 @@ public class MarketabilitySandboxUnit {
 		return marketabilityResult;
 	}
 
-	private InternalResult doIt(final Schedule schedule, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge,
-			final Slot<?> target, final ISequences initialSequences, final Integer vesselSpeed) {
-
-		return doShipped(schedule, vesselAssignment, vesselSpotIndex, load, discharge, target, initialSequences, vesselSpeed);
-	}
-
 	private InternalResult doShipped(final Schedule schedule, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge,
-			final Slot<?> target, final ISequences initialSequences, final Integer vesselSpeed) {
+			final Slot<?> target, final ISequences initialSequences, final Double vesselSpeed) {
 		final IResource resource;
 
 		final IPortSlot a = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);

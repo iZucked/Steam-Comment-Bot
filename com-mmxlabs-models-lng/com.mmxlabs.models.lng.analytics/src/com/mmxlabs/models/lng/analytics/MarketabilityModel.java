@@ -57,12 +57,12 @@ public interface MarketabilityModel extends AbstractAnalysisModel {
 	 * @return the value of the '<em>Vessel Speed</em>' attribute.
 	 * @see #isSetVesselSpeed()
 	 * @see #unsetVesselSpeed()
-	 * @see #setVesselSpeed(int)
+	 * @see #setVesselSpeed(double)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getMarketabilityModel_VesselSpeed()
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	int getVesselSpeed();
+	double getVesselSpeed();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed <em>Vessel Speed</em>}' attribute.
@@ -74,7 +74,7 @@ public interface MarketabilityModel extends AbstractAnalysisModel {
 	 * @see #getVesselSpeed()
 	 * @generated
 	 */
-	void setVesselSpeed(int value);
+	void setVesselSpeed(double value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel#getVesselSpeed <em>Vessel Speed</em>}' attribute.
@@ -82,7 +82,7 @@ public interface MarketabilityModel extends AbstractAnalysisModel {
 	 * <!-- end-user-doc -->
 	 * @see #isSetVesselSpeed()
 	 * @see #getVesselSpeed()
-	 * @see #setVesselSpeed(int)
+	 * @see #setVesselSpeed(double)
 	 * @generated
 	 */
 	void unsetVesselSpeed();
@@ -94,7 +94,7 @@ public interface MarketabilityModel extends AbstractAnalysisModel {
 	 * @return whether the value of the '<em>Vessel Speed</em>' attribute is set.
 	 * @see #unsetVesselSpeed()
 	 * @see #getVesselSpeed()
-	 * @see #setVesselSpeed(int)
+	 * @see #setVesselSpeed(double)
 	 * @generated
 	 */
 	boolean isSetVesselSpeed();

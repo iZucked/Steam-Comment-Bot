@@ -128,9 +128,6 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 									try {
 										executor.submit(() -> {
 											final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket", vesselSpeed.orElse(null));
-
-											// MarketabilityUtils.validateMarketabilityModel(sdp, model, true, false);
-
 											boolean successful = MarketabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m, true);
 											if (successful) {
 												RunnerHelper.asyncExec(() -> {

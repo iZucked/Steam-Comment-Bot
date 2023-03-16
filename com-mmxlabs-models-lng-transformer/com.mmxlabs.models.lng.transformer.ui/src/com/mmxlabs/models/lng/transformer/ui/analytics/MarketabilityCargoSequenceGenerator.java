@@ -100,7 +100,7 @@ public class MarketabilityCargoSequenceGenerator {
 	}
 
 	private @NonNull IModifiableSequence createDiversionSequence(final Schedule schedule, final @NonNull IResource targetResource, final ISequenceElement load, final ISequenceElement saleMarket,
-			final ISequence sequence, final SequencesAttributesProviderImpl providers, final Integer vesselSpeed) {
+			final ISequence sequence, final SequencesAttributesProviderImpl providers, final Double vesselSpeed) {
 
 		IVesselCharter vesselCharter = vesselProvider.getVesselCharter(targetResource);
 
@@ -245,7 +245,7 @@ public class MarketabilityCargoSequenceGenerator {
 
 	@NonNullByDefault
 	public void generateOptions(final Schedule schedule, final ISequences sequences, final List<@NonNull ISequenceElement> orderedCargoElements, final IResource targetResource,
-			final IPortSlot portSlot, final Integer vesselSpeed, final ToBooleanFunction<ISequences> action) {
+			final IPortSlot portSlot, final Double vesselSpeed, final ToBooleanFunction<ISequences> action) {
 
 		for (final ISequenceElement e : orderedCargoElements) {
 			if (!helper.checkResource(e, targetResource)) {
