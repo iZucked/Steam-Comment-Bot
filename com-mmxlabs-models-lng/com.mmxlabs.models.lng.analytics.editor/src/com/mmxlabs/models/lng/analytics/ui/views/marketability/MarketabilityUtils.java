@@ -4,8 +4,16 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.marketability;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.validation.model.Category;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -31,10 +39,15 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IValidationService;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
+import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public final class MarketabilityUtils {
 
@@ -55,14 +68,6 @@ public final class MarketabilityUtils {
 				}
 			}
 		}
-		final SpotMarketGroup smgFS = spotModel.getFobSalesSpotMarket();
-		if (smgFS != null) {
-			for (final SpotMarket spotMarket : smgFS.getMarkets()) {
-				if (spotMarket != null && spotMarket.isEnabled()) {
-					model.getMarkets().add(spotMarket);
-				}
-			}
-		}
 
 		for (Cargo c : cargoModel.getCargoes()) {
 			Slot<?> slot1 = c.getSortedSlots().get(0);
@@ -73,13 +78,6 @@ public final class MarketabilityUtils {
 					final ExistingVesselCharterOption evco = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
 					evco.setVesselCharter(vesselCharter);
 					shippingOption = evco;
-				} else if (c.getVesselAssignmentType() instanceof CharterInMarket charterInMarket) {
-//					if (charterInMarket != null && charterInMarket.getVessel() != null && charterInMarket.isEnabled() && charterInMarket.getSpotCharterCount() > 0) {
-//						final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
-//						ecmo.setCharterInMarket(charterInMarket);
-//						ecmo.setSpotIndex(c.getSpotIndex());
-//						shippingOption = ecmo;
-//					}
 				}
 				if (shippingOption == null) {
 					continue;
@@ -152,6 +150,58 @@ public final class MarketabilityUtils {
 				nextEvent = nextEvent.getNextEvent();
 			}
 		}
+	}
+	
+	public static boolean validateMarketabilityModel(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget,  final boolean displayWarnings,
+			final boolean relaxedValidation) {
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		validator.addConstraintFilter((constraint, target) -> {
+			return constraint.getCategories().stream().anyMatch(cat -> cat.getId().endsWith(".marketability"));
+		});
+
+		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
+		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
+			return helper.runValidation(validator, extraContext, rootObject, extraTarget);
+		});
+
+		if (status == null) {
+			return false;
+		}
+
+		if (!status.isOK()) {
+
+			if (status.getSeverity() == IStatus.WARNING || status.getSeverity() == IStatus.ERROR) {
+
+				// See if this command was executed in the UI thread - if so fire up the dialog
+				// box.
+				if (displayWarnings) {
+					final boolean[] res = new boolean[1];
+					Display.getDefault().syncExec(() -> {
+						final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getDefault().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
+
+						// Wait for use to press a button before continuing.
+						dialog.setBlockOnOpen(true);
+
+						if (dialog.open() == Window.CANCEL) {
+							res[0] = false;
+						} else {
+							res[0] = true;
+						}
+					});
+					if (!res[0]) {
+						return false;
+					}
+				}
+			}
+		}
+		if (status.getSeverity() == IStatus.ERROR) {
+			return false;
+		}
+
+		return true;
 	}
 
 }

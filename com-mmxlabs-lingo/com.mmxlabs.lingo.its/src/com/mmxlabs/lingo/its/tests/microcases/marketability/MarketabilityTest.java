@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,11 +20,17 @@ import com.mmxlabs.models.lng.analytics.MarketabilityResult;
 import com.mmxlabs.models.lng.analytics.MarketabilityRow;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ui.views.marketability.MarketabilityUtils;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -342,7 +347,7 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 		vesselCharter.setStartBy(LocalDateTime.of(2013, 1, 1, 0, 0));
 		vesselCharter.setStartAfter(LocalDateTime.of(2013, 1, 1, 0, 0));
 
-		spotMarketsModelBuilder.makeDESSaleMarket("DES MEXICO", pAltamira, entity, "1");
+		spotMarketsModelBuilder.makeDESSaleMarket("DES MEXICO", pAltamira, entity, "1").build();
 		cargoModelBuilder.makeCargo()//
 				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 3), pBonny, null, entity, "1")//
 				.build()//
@@ -388,8 +393,88 @@ public class MarketabilityTest extends AbstractMarketablilityTest {
 		Assertions.assertTrue(resultRow.isPresent());
 
 		MarketabilityRow row = resultRow.get();
-		Assertions.assertEquals(0, row.getResult().getRhsResults().size());
+		row.getResult().getRhsResults().stream().forEach(result -> {
+			Assertions.assertNull(result.getEarliestETA());
+			Assertions.assertNull(result.getLatestETA());
+		});
+	}
+	
+	@Test
+	public void testMarketabilityModel_cargoDoesNotTakeOtherPanamaBookings() {
+		final Vessel vTDFE155 = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_155);
+		final Port pSabinePass = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
+		final Port pTokyo =  portFinder.findPortById(InternalDataConstants.PORT_TOKYO_BAY);
+		final VesselCharter v1 = cargoModelBuilder.makeVesselCharter(vTDFE160, entity).build();
+		final VesselCharter v2 = cargoModelBuilder.makeVesselCharter(vTDFE155, entity).build();
+		//final int vesselSpeed = 15;
 
+		spotMarketsModelBuilder.makeDESSaleMarket("DES JAPAN", pTokyo, entity, "1").build();
+		cargoModelBuilder.makeCargo()//
+				.makeFOBPurchase("L1", LocalDate.of(2023, 1, 1), pSabinePass, null, entity, "1")//
+				.withWindowSize(1, TimePeriod.DAYS)//
+				.build()//
+				.makeDESSale("D1", LocalDate.of(2023, 2, 1), pTokyo, null, entity, "1")//
+				.withWindowSize(1, TimePeriod.DAYS)//
+				.build()//
+				.withVesselAssignment(v1, 1)//
+				.build();
+		cargoModelBuilder.makeCargo()//
+				.makeFOBPurchase("L2", LocalDate.of(2023, 1, 1), pSabinePass, null, entity, "1")//
+				.withWindowSize(1, TimePeriod.DAYS)//
+				.build()//
+				.makeDESSale("D2", LocalDate.of(2023, 2, 1), pDragon, null, entity, "1")//
+				.withWindowSize(1, TimePeriod.DAYS)//
+				.build()//
+				.withVesselAssignment(v2, 1)//
+				.build();
+		
+		final CanalBookings canalBookings =  CargoFactory.eINSTANCE.createCanalBookings();
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		final VesselGroupCanalParameters vgcp = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(10);
+		psr.setVesselGroupCanalParameter(vgcp);
+		final CanalBookingSlot cbs = CargoFactory.eINSTANCE.createCanalBookingSlot();
+		cbs.setBookingDate(LocalDate.of(2023, 1, 13));
+		cbs.setCanalEntrance(CanalEntry.NORTHSIDE);
+		cbs.setBookingCode(vgcp);
+		vgcp.setName("default");
+		
+		canalBookings.getCanalBookingSlots().add(cbs);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
+		canalBookings.getVesselGroupCanalParameters().add(vgcp);
+		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
+		
+		MarketabilityModel model = MarketabilityUtils.createModelFromScenario(lngScenarioModel, "marketabilityModel", null);
+
+		evaluateMarketabilityModel(model);
+		Assertions.assertNotNull(model);
+		Slot<?> l1 = cargoModelFinder.findSlot("L1");
+		Slot<?> l2 = cargoModelFinder.findSlot("L2");		
+		Optional<@NonNull MarketabilityRow> oRow1 = model.getRows().stream().filter(x -> {
+			if (x.getBuyOption() instanceof BuyReference br) {
+				return br.getSlot() == l1;
+			} else {
+				return false;
+			}
+		}).findFirst();
+		
+		Assertions.assertTrue(oRow1.isPresent());
+		Optional<@NonNull MarketabilityRow> oRow2 = model.getRows().stream().filter(x -> {
+			if (x.getBuyOption() instanceof BuyReference br) {
+				return br.getSlot() == l2;
+			} else {
+				return false;
+			}
+		}).findFirst();
+		Assertions.assertTrue(oRow2.isPresent());
+
+		MarketabilityRow row1 = oRow1.get();
+		MarketabilityRow row2 = oRow2.get();
+		
+		LocalDateTime earliest1 = row1.getResult().getRhsResults().get(0).getEarliestETA().toLocalDateTime();
+		LocalDateTime earliest2 = row2.getResult().getRhsResults().get(0).getEarliestETA().toLocalDateTime();
+		Assertions.assertTrue(earliest2.isAfter(earliest1));
 	}
 
 	private LocalDateTime getArrivalDate(MarketabilityModel model, Slot<?> slot) {

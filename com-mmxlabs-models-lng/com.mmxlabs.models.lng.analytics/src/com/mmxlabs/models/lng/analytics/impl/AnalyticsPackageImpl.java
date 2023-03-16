@@ -3274,46 +3274,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMarketabilityResult_EarliestVolume() {
-		return (EAttribute)marketabilityResultEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getMarketabilityResult_LatestVolume() {
-		return (EAttribute)marketabilityResultEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getMarketabilityResult_EarliestPrice() {
-		return (EAttribute)marketabilityResultEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getMarketabilityResult_LatestPrice() {
-		return (EAttribute)marketabilityResultEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getViabilityRow() {
 		return viabilityRowEClass;
 	}
@@ -4950,10 +4910,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(marketabilityResultEClass, MARKETABILITY_RESULT__TARGET);
 		createEAttribute(marketabilityResultEClass, MARKETABILITY_RESULT__EARLIEST_ETA);
 		createEAttribute(marketabilityResultEClass, MARKETABILITY_RESULT__LATEST_ETA);
-		createEAttribute(marketabilityResultEClass, MARKETABILITY_RESULT__EARLIEST_VOLUME);
-		createEAttribute(marketabilityResultEClass, MARKETABILITY_RESULT__LATEST_VOLUME);
-		createEAttribute(marketabilityResultEClass, MARKETABILITY_RESULT__EARLIEST_PRICE);
-		createEAttribute(marketabilityResultEClass, MARKETABILITY_RESULT__LATEST_PRICE);
 
 		marketabilityResultContainerEClass = createEClass(MARKETABILITY_RESULT_CONTAINER);
 		createEReference(marketabilityResultContainerEClass, MARKETABILITY_RESULT_CONTAINER__RHS_RESULTS);
@@ -5512,7 +5468,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(marketabilityModelEClass, MarketabilityModel.class, "MarketabilityModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityModel_Rows(), this.getMarketabilityRow(), null, "rows", null, 0, -1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketabilityModel_Markets(), theSpotMarketsPackage.getSpotMarket(), null, "markets", null, 0, -1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarketabilityModel_VesselSpeed(), ecorePackage.getEInt(), "vesselSpeed", null, 0, 1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketabilityModel_VesselSpeed(), ecorePackage.getEDouble(), "vesselSpeed", null, 0, 1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketabilityRowEClass, MarketabilityRow.class, "MarketabilityRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityRow_BuyOption(), this.getBuyOption(), null, "buyOption", null, 0, 1, MarketabilityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5524,10 +5480,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getMarketabilityResult_Target(), theSpotMarketsPackage.getSpotMarket(), null, "target", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarketabilityResult_EarliestETA(), theDateTimePackage.getDateTime(), "earliestETA", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarketabilityResult_LatestETA(), theDateTimePackage.getDateTime(), "latestETA", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarketabilityResult_EarliestVolume(), ecorePackage.getEInt(), "earliestVolume", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarketabilityResult_LatestVolume(), ecorePackage.getEInt(), "latestVolume", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarketabilityResult_EarliestPrice(), ecorePackage.getEDouble(), "earliestPrice", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarketabilityResult_LatestPrice(), ecorePackage.getEDouble(), "latestPrice", null, 0, 1, MarketabilityResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketabilityResultContainerEClass, MarketabilityResultContainer.class, "MarketabilityResultContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityResultContainer_RhsResults(), this.getMarketabilityResult(), null, "rhsResults", null, 0, -1, MarketabilityResultContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

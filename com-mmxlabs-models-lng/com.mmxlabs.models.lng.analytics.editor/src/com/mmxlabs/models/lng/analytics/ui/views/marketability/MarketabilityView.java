@@ -15,7 +15,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -47,17 +49,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.MarketabilityModel;
-import com.mmxlabs.models.lng.analytics.MarketabilityResult;
-import com.mmxlabs.models.lng.analytics.MarketabilityRow;
-import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselCharter;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -100,12 +93,16 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	@Override
 	public void createPartControl(final Composite parent) {
 		this.parent = parent;
-		
+
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
 		parent.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
 		mainTableComponent = new MainTableComponent();
+
+		
+		//final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(getScenarioDataProvider());
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);
+
 		inputWants.addAll(mainTableComponent.getInputWants());
 
 		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> {
@@ -131,18 +128,18 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 									try {
 										executor.submit(() -> {
 											final MarketabilityModel model = MarketabilityUtils.createModelFromScenario(scenarioModel, "marketabilitymarket", vesselSpeed.orElse(null));
-											MarketabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m);
+											boolean successful = MarketabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m, true);
+											if (successful) {
+												RunnerHelper.asyncExec(() -> {
+													final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+													final EditingDomain editingDomain = sdp.getEditingDomain();
 
-											RunnerHelper.asyncExec(() -> {
-												final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
-												final EditingDomain editingDomain = sdp.getEditingDomain();
-
-												final CompoundCommand cmd = new CompoundCommand("Create marketability matrix");
-												cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel(), model));
-												editingDomain.getCommandStack().execute(cmd);
-
-												doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
-											});
+													final CompoundCommand cmd = new CompoundCommand("Create marketability matrix");
+													cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel(), model));
+													editingDomain.getCommandStack().execute(cmd);
+													doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+												});
+											}
 										}).get();
 									} finally {
 										executor.shutdown();
@@ -200,6 +197,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 		service = getSite().getService(ESelectionService.class);
+
 		listenToSelectionsFrom();
 
 		listenToScenarioSelection();
@@ -216,103 +214,20 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			errorLabel = null;
 		}
 
-		boolean update = false;
-
 		if (scenarioInstance == null) {
 			errorLabel = new Label(this.parent, SWT.NONE);
 			errorLabel.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			errorLabel.setText("No scenario selected");
 			model = null;
-			update = true;
 			this.rootObject = null;
 		} else {
 			if (model == null && rootObject instanceof @NonNull LNGScenarioModel lngScenarioModel) {
 				final @NonNull AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(lngScenarioModel);
 				model = analyticsModel.getMarketabilityModel();
 			}
-
-			if (model != this.currentModel) {
-				update = true;
-				if (model != null) {
-					// extractPlainForTest(model);
-				}
-			}
+			this.rootObject = rootObject;
 		}
-		if (update) {
-			setInput(model);
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void extractForTest(final MarketabilityModel model) {
-		// for tests
-		if (model != null) {
-			for (final MarketabilityRow row : model.getRows()) {
-				for (final BuyOption bo : model.getBuys()) {
-					final BuyReference br = (BuyReference) bo;
-					final String line1 = "//" + br.getSlot().getName();
-
-					String vesselName = "//";
-
-					final ShippingOption so = row.getShipping();
-					if (so instanceof ExistingVesselCharterOption) {
-						final VesselCharter va = ((ExistingVesselCharterOption) so).getVesselCharter();
-						vesselName += va.getVessel().getName();
-					}
-
-					for (final MarketabilityResult vr : row.getResult().getRhsResults()) {
-						if (vr.getEarliestETA() == null) {
-							continue;
-						}
-						System.out.println(line1);
-						System.out.println(vesselName);
-						final String line2 = "vls.add(createResult(findMarketByName(spotModel, \"" + vr.getTarget().getName() + "\"), //\n" + vr.getEarliestVolume() + "," + vr.getLatestVolume()
-								+ ",\n" + vr.getEarliestPrice() + ", " + vr.getLatestPrice() + ",\n" + "LocalDate.of(" + vr.getEarliestETA().getYear() + "," + vr.getEarliestETA().getMonthValue() + ","
-								+ vr.getEarliestETA().getDayOfMonth() + ")," + "LocalDate.of(" + vr.getLatestETA().getYear() + "," + vr.getLatestETA().getMonthValue() + ","
-								+ vr.getLatestETA().getDayOfMonth() + ")));\n";
-						System.out.print(line2);
-						System.out.println(line1);
-					}
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void extractPlainForTest(final MarketabilityModel model) {
-		// for tests
-		if (model != null) {
-			for (final MarketabilityRow row : model.getRows()) {
-				for (final BuyOption bo : model.getBuys()) {
-					final BuyReference br = (BuyReference) bo;
-					final String line1 = "//" + br.getSlot().getName();
-
-					String vesselName = "//";
-
-					final ShippingOption so = row.getShipping();
-					if (so instanceof ExistingVesselCharterOption) {
-						final VesselCharter va = ((ExistingVesselCharterOption) so).getVesselCharter();
-						vesselName += va.getVessel().getName();
-					}
-					if (so instanceof RoundTripShippingOption) {
-						final Vessel v = ((RoundTripShippingOption) so).getVessel();
-						vesselName += v.getName();
-					}
-
-					for (final MarketabilityResult vr : row.getResult().getRhsResults()) {
-						if (vr.getEarliestETA() == null) {
-							continue;
-						}
-						System.out.println(line1);
-						System.out.println(vesselName);
-						final String line2 = vr.getTarget().getName() + "\n" + vr.getEarliestVolume() + "," + vr.getLatestVolume() + ",\n" + vr.getEarliestPrice() + ", " + vr.getLatestPrice() + ",\n"
-								+ vr.getEarliestETA().toString() + ",\n" + vr.getLatestETA().toString() + "\n";
-						System.out.print(line2);
-						System.out.println(line1);
-					}
-				}
-			}
-		}
+		setInput(rootObject, model);
 	}
 
 	/**
@@ -328,40 +243,42 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 				if (notification.isTouch()) {
 					continue;
 				}
-				if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel()) {
+
+				if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel()
+						|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getMarketabilityModel_Rows()) {
 					doDisplay = true;
 					break;
 				}
 			}
 			if (doDisplay) {
-				displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
+				doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 			}
 		}
 
+		@Override
 		public void reallyNotifyChanged(Notification notification) {
 			if (notification.isTouch()) {
 				return;
 			}
-			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel()) {
-				displayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel()
+					|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getMarketabilityModel_Rows()) {
+				doDisplayScenarioInstance(getScenarioInstance(), getRootObject(), currentModel);
 			}
 		}
 	};
 
-	public void setInput(final @Nullable MarketabilityModel model) {
-		if (rootObject != null) {
-			rootObject.eAdapters().remove(deletedOptionModelAdapter);
-			rootObject = null;
+	public void setInput(final @Nullable MMXRootObject rootObject, final @Nullable MarketabilityModel model) {
+		if (this.rootObject != null) {
+			this.rootObject.eAdapters().remove(deletedOptionModelAdapter);
+			this.rootObject = null;
 		}
-
+		this.rootObject = rootObject;
+		if (this.rootObject != null) {
+			this.rootObject.eAdapters().add(deletedOptionModelAdapter);
+		}
 		this.currentModel = model;
 
 		inputWants.forEach(want -> want.accept(model));
-
-		rootObject = getRootObject();
-		if (rootObject != null) {
-			rootObject.eAdapters().add(deletedOptionModelAdapter);
-		}
 	}
 
 	@Override
@@ -381,7 +298,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			service.removePostSelectionListener(selectionListener);
 			selectionListener = null;
 		}
-		
+
 		mainTableComponent.dispose();
 		super.dispose();
 	}
@@ -457,9 +374,13 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 			// Find valid, selected objects
 			final LoadSlot validSlot = MarketabilityView.this.processSelection(e3part, selection);
+			if (validSlot != null) {
+				mainTableComponent.selectRowWithLoad(validSlot);
+			}
 		};
 		service.addPostSelectionListener(selectionListener);
 	}
+
 	public ESelectionService getSelectionService() {
 		return service;
 	}

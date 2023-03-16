@@ -419,10 +419,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResult/target"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/earliestETA"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/latestETA"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/earliestVolume"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/latestVolume"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/earliestPrice"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MarketabilityResult/latestPrice"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//MarketabilityResultContainer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MarketabilityResultContainer/rhsResults"/>

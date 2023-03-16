@@ -329,8 +329,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	@Override
-	public void evaluateMarketabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings,
-			MarketabilityModel model, IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor) {
+	public boolean evaluateMarketabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings,
+			MarketabilityModel model, IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor, boolean validateScenario) {
+		if(validateScenario && !OptimisationHelper.validateScenario(scenarioDataProvider, model, false, true, false, Set.of(".marketability"))) {
+			return false;
+		}
+		
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 
@@ -379,17 +383,15 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
 		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
 		customiseConstraints(constraints);
-
-		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
-
+		
 		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
 			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
 			final MarketabilitySandboxUnit unit = new MarketabilitySandboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
-			/* Command cmd = */
 			unit.run(model, mapper, shippingMap, progressMonitor, bridge);
 		});
+		return true;
 
 	}
 

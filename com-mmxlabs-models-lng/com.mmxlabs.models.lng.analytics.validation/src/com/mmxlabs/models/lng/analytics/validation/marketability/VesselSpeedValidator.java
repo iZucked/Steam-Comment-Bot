@@ -26,7 +26,7 @@ public class VesselSpeedValidator extends AbstractModelMultiConstraint {
 
 	private static final ValidationGroup TAG_MARKETABLE_WINDOWS = new ValidationGroup("Marketable Windows", (short) 0, true);
 
-	public static Collection<Vessel> invalidVessels(Collection<ShippingOption> shippingOptions, int speed) {
+	public static Collection<Vessel> invalidVessels(Collection<ShippingOption> shippingOptions, double speed) {
 		Set<Vessel> invalid = new HashSet<>();
 		for (ShippingOption shipping : shippingOptions) {
 			Vessel vessel = null;
@@ -53,7 +53,7 @@ public class VesselSpeedValidator extends AbstractModelMultiConstraint {
 			Collection<Vessel> invalidVessels = invalidVessels(model.getShippingTemplates(), model.getVesselSpeed());
 			invalidVessels.stream().forEach(vessel -> {
 
-				final String message = String.format("'%s': %d kts outside of valid speed for vessel", vessel.getName(), model.getVesselSpeed());
+				final String message = String.format("'%s': Selected speed (%.2f kts) is outside of vessel speed range", vessel.getName(), model.getVesselSpeed());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(model, AnalyticsPackage.eINSTANCE.getMarketabilityModel_VesselSpeed());
 				dsd.setTag(TAG_MARKETABLE_WINDOWS);

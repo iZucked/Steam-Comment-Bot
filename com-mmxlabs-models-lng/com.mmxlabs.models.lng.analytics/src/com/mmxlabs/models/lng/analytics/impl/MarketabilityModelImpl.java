@@ -69,7 +69,7 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int VESSEL_SPEED_EDEFAULT = 0;
+	protected static final double VESSEL_SPEED_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getVesselSpeed() <em>Vessel Speed</em>}' attribute.
@@ -79,7 +79,7 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 	 * @generated
 	 * @ordered
 	 */
-	protected int vesselSpeed = VESSEL_SPEED_EDEFAULT;
+	protected double vesselSpeed = VESSEL_SPEED_EDEFAULT;
 
 	/**
 	 * This is true if the Vessel Speed attribute has been set.
@@ -141,7 +141,7 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 	 * @generated
 	 */
 	@Override
-	public int getVesselSpeed() {
+	public double getVesselSpeed() {
 		return vesselSpeed;
 	}
 
@@ -151,8 +151,8 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 	 * @generated
 	 */
 	@Override
-	public void setVesselSpeed(int newVesselSpeed) {
-		int oldVesselSpeed = vesselSpeed;
+	public void setVesselSpeed(double newVesselSpeed) {
+		double oldVesselSpeed = vesselSpeed;
 		vesselSpeed = newVesselSpeed;
 		boolean oldVesselSpeedESet = vesselSpeedESet;
 		vesselSpeedESet = true;
@@ -167,7 +167,7 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 	 */
 	@Override
 	public void unsetVesselSpeed() {
-		int oldVesselSpeed = vesselSpeed;
+		double oldVesselSpeed = vesselSpeed;
 		boolean oldVesselSpeedESet = vesselSpeedESet;
 		vesselSpeed = VESSEL_SPEED_EDEFAULT;
 		vesselSpeedESet = false;
@@ -235,7 +235,7 @@ public class MarketabilityModelImpl extends AbstractAnalysisModelImpl implements
 				getMarkets().addAll((Collection<? extends SpotMarket>)newValue);
 				return;
 			case AnalyticsPackage.MARKETABILITY_MODEL__VESSEL_SPEED:
-				setVesselSpeed((Integer)newValue);
+				setVesselSpeed((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

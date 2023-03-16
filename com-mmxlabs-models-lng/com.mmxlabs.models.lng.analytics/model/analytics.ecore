@@ -610,7 +610,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="markets" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
         unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityRow">
@@ -624,14 +624,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//SpotMarket"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestETA" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestETA" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestVolume" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestVolume" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="earliestPrice" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latestPrice" unique="false"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityResultContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhsResults" upperBound="-1"

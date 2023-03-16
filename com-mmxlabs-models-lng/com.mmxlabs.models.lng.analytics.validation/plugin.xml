@@ -52,6 +52,11 @@
             mandatory="false"
             name="Value Matrix Validation">
       </category>
+      <category
+            id="com.mmxlabs.models.lng.analytics.validation.constraints.marketability"
+            mandatory="false"
+            name="Marketability Validation">
+      </category>
       <constraintProvider
             cache="true">
          <package

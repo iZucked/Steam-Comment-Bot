@@ -169,29 +169,6 @@ public class MarketabilitySandboxEvaluator {
 				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
 			}
 		}
-		for (final SpotMarket market : spotMarketsModel.getFobSalesSpotMarket().getMarkets()) {
-			for (final YearMonth date : loadDates) {
-				final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
-				m.setMarket(market);
-				final DischargeSlot slot_original = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
-				final DischargeSlot slot_breakEven = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
-				final DischargeSlot slot_changable = AnalyticsBuilder.makeDischargeSlot(m, clone, SlotMode.CHANGE_PRICE_VARIANT, usedIDs);
-
-				slot_original.setWindowStart(date.atDay(1));
-				slot_original.setWindowSize(1);
-				slot_original.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_breakEven.setWindowStart(date.atDay(1));
-				slot_breakEven.setWindowSize(1);
-				slot_breakEven.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				slot_changable.setWindowStart(date.atDay(1));
-				slot_changable.setWindowSize(1);
-				slot_changable.setWindowSizeUnits(TimePeriod.MONTHS);
-
-				mapper.addMapping(market, date, slot_original, slot_breakEven, slot_changable);
-			}
-		}
 
 		return shippingMap;
 	}
@@ -311,20 +288,21 @@ public class MarketabilitySandboxEvaluator {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
-			final MarketabilityModel model, final IProgressMonitor progressMonitor) {
+	public static boolean evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final MarketabilityModel model, final IProgressMonitor progressMonitor, boolean validateScenario) {
 		final long timeBefore = System.currentTimeMillis();
-		singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor);
+		boolean successful = singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor, validateScenario);
 		final long timeAfter = System.currentTimeMillis();
 
 		System.out.printf("Eval %d\n", timeAfter - timeBefore);
+		return successful;
 	}
 
-	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
-			final MarketabilityModel model, final IProgressMonitor progressMonitor) {
+	private static boolean singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final MarketabilityModel model, final IProgressMonitor progressMonitor, boolean validateScenario) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		final IMapperClass mapper = new Mapper(optimiserScenario, true);
+		final IMapperClass mapper = new Mapper(optimiserScenario, false);
 		final Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(optimiserScenario, model, mapper);
 
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -332,10 +310,11 @@ public class MarketabilitySandboxEvaluator {
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
+		boolean[] successful = new boolean[1];
 		ServiceHelper.<IAnalyticsScenarioEvaluator>withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
-			evaluator.evaluateMarketabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap, progressMonitor);
+			successful[0] = evaluator.evaluateMarketabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap, progressMonitor, validateScenario );
 		});
+		return successful[0];
 	}
 
 	
