@@ -111,7 +111,8 @@ public class CloudManagerView extends ViewPart {
 				final TaskStatus status = t.taskStatus;
 				if (status != null) {
 					if (status.isRunning()) {
-						return String.format("%.0f%%", status.getProgress() * 100.0);
+						// Cap progress at 100% - sometimes rounding errors mean we can get over 100%
+						return String.format("%.0f%%", Math.min(100.0, status.getProgress() * 100.0));
 					}
 					if (status.isFailed()) {
 						return status.getReason();
