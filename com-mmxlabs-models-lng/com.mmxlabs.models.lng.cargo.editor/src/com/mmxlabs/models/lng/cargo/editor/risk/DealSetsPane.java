@@ -80,6 +80,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -524,7 +525,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
 						.forEach(slot -> {
 							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY);
 							for (final AbstractYearMonthCurve curve : curves) {
 								final String curveName = curve.getName();
 								if (curveName != null) {
@@ -605,7 +606,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
 						.forEach(slot -> {
 							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression);
+							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY);
 							for (final AbstractYearMonthCurve curve : curves) {
 								final String curveName = curve.getName();
 								if (curveName != null) {
@@ -677,7 +678,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
 						.forEach(slot -> {
 							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							for (final AbstractYearMonthCurve curve : mmCurveProvider.getLinkedCurves(priceExpression)) {
+							for (final AbstractYearMonthCurve curve : mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY)) {
 								if (curve instanceof CommodityCurve) {
 									CommodityCurve comCurve = (CommodityCurve) curve;
 									if (comCurve.isSetMarketIndex()) {
@@ -737,7 +738,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
 						.forEach(slot -> {
 							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							for (final AbstractYearMonthCurve curve : mmCurveProvider.getLinkedCurves(priceExpression)) {
+							for (final AbstractYearMonthCurve curve : mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY)) {
 								if (curve instanceof CommodityCurve) {
 									CommodityCurve comCurve = (CommodityCurve) curve;
 									if (comCurve.isSetMarketIndex()) {

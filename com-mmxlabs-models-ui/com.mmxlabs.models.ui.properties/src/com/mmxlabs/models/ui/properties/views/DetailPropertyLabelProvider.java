@@ -22,8 +22,7 @@ public class DetailPropertyLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getText(final Object element) {
 
-		if (element instanceof DetailProperty) {
-			final DetailProperty dp = (DetailProperty) element;
+		if (element instanceof DetailProperty dp) {
 			String pre = dp.getUnitsPrefix() != null ? dp.getUnitsPrefix() : "";
 			String val = dp.format() != null ? dp.format() : "";
 			final String post = dp.getUnitsSuffix() != null ? dp.getUnitsSuffix() : "";
@@ -52,10 +51,8 @@ public class DetailPropertyLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public Color getForeground(final Object element) {
-		if (element instanceof DetailProperty) {
-			final DetailProperty dp = (DetailProperty) element;
-			if (dp.getLabelProvider() instanceof IColorProvider) {
-				final IColorProvider colorProvider = (IColorProvider) dp.getLabelProvider();
+		if (element instanceof DetailProperty dp) {
+			if (dp.getLabelProvider() instanceof IColorProvider colorProvider) {
 				return colorProvider.getForeground(dp);
 			}
 		}
@@ -64,10 +61,8 @@ public class DetailPropertyLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public Color getBackground(final Object element) {
-		if (element instanceof DetailProperty) {
-			final DetailProperty dp = (DetailProperty) element;
-			if (dp.getLabelProvider() instanceof IColorProvider) {
-				final IColorProvider colorProvider = (IColorProvider) dp.getLabelProvider();
+		if (element instanceof DetailProperty dp) {
+			if (dp.getLabelProvider() instanceof IColorProvider colorProvider) {
 				return colorProvider.getBackground(dp);
 			}
 		}
@@ -77,8 +72,7 @@ public class DetailPropertyLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getToolTipText(final Object element) {
 
-		if (element instanceof DetailProperty) {
-			final DetailProperty detailProperty = (DetailProperty) element;
+		if (element instanceof DetailProperty detailProperty) {
 			return detailProperty.getDescription();
 		}
 

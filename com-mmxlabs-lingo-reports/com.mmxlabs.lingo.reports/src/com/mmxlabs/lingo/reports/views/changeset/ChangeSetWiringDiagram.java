@@ -31,6 +31,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
@@ -160,7 +162,58 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		// Fill whole area - not for use in a table
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 
-		// draw paths
+		// draw LDD bracket 
+		for (ChangeSetTableGroup changeSet : root.getGroups()) {
+			List<ChangeSetTableRow> rows = changeSet.getRows();
+			for (final ChangeSetTableRow row : rows) {
+
+				ChangeSetRowData lhsAfter = row.getLhsAfter();
+				if (row.getLhsAfter() != null && row.isLhsSlot()) {
+					ChangeSetRowDataGroup rowDataGroup = lhsAfter.getRowDataGroup();
+					if (rowDataGroup.getMembers().size() > 1) {
+						for (var m : rowDataGroup.getMembers()) {
+							for (final ChangeSetTableRow otherRow : rows) {
+								if (otherRow.getCurrentRhsAfter() == m) {
+
+									final Integer unsortedSource = rowIndices.get(row);
+									final Integer unsortedDestination = rowIndices.get(otherRow);
+									if (unsortedSource == null || unsortedDestination == null) {
+										// Error?
+										continue;
+									}
+									// Map back between current row (sorted) and data (unsorted)
+									final int sortedDestination = unsortedDestination;
+									final int sortedSource = unsortedSource;
+
+									// Filtering can lead to missing terminals
+									if (sortedDestination < 0 || sortedSource < 0) {
+										continue;
+									}
+
+									final float startMid = terminalPositions.get(sortedSource);
+									final float endMid = terminalPositions.get(sortedDestination);
+
+									// Draw wire - offset by ca.x to as x pos is relative to left hand side
+
+									graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+
+									int x1 = Math.round(ca.x + 1.5f * terminalSize);
+									int x2 = Math.round(ca.x + ca.width - 2 * terminalSize);
+									int x1a = x1 + ((x2 - x1) * 3 / 4);
+									// graphics.drawLine(x1, Math.round(startMid), x1a, Math.round(startMid));
+									if (startMid != endMid) {
+										graphics.drawLine(x1a, Math.round(startMid), x1a, Math.round(endMid));
+									}
+									graphics.drawLine(x1a, Math.round(endMid), x2, Math.round(endMid));
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
+		// draw previous wiring paths
 		for (ChangeSetTableGroup changeSet : root.getGroups()) {
 			List<ChangeSetTableRow> rows = changeSet.getRows();
 			for (final ChangeSetTableRow row : rows) {
@@ -168,44 +221,110 @@ public class ChangeSetWiringDiagram implements PaintListener {
 				if (!row.isWiringChange()) {
 					continue;
 				}
-				ChangeSetTableRow otherRow = row.getPreviousRHS();
-				if (otherRow == null) {
-					continue;
+
+				ChangeSetRowData lhsBefore = row.getLhsBefore();
+				if (row.getLhsAfter() != null && lhsBefore != null) {
+					ChangeSetRowDataGroup rowDataGroup = lhsBefore.getRowDataGroup();
+					for (var m : rowDataGroup.getMembers()) {
+						if (m.getRhsLink() != null) {
+							var link = m.getRhsLink();
+							for (final ChangeSetTableRow otherRow : rows) {
+								if (otherRow.getCurrentRhsAfter() == link) {
+									if (row == otherRow) {
+										continue;
+									}
+									final Integer unsortedSource = rowIndices.get(row);
+									final Integer unsortedDestination = rowIndices.get(otherRow);
+									if (unsortedSource == null || unsortedDestination == null) {
+										// Error?
+										continue;
+									}
+									// Map back between current row (sorted) and data (unsorted)
+									final int sortedDestination = unsortedDestination;
+									final int sortedSource = unsortedSource;
+
+									// Filtering can lead to missing terminals
+									if (sortedDestination < 0 || sortedSource < 0) {
+										continue;
+									}
+
+									if (otherRow.isCurrentRhsSlot()) {
+
+										var afterGroup = otherRow.getCurrentRhsAfter().getRowDataGroup();
+										boolean draw = true;
+										for (var ee : afterGroup.getMembers()) {
+											if (ee.isLhsSlot()) {
+												var loadBefore = ee.getLhsLink();
+												if (loadBefore.getRowDataGroup().getMembers().contains(otherRow.getCurrentRhsBefore())) {
+													draw = false;
+												}
+											}
+										}
+
+										if (draw) {
+
+											final float startMid = terminalPositions.get(sortedSource);
+											final float endMid = terminalPositions.get(sortedDestination);
+
+											// Draw wire - offset by ca.x to as x pos is relative to left hand side
+											final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
+
+											graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+
+											// if (wire.dashed) {
+											graphics.setLineDash(new int[] { 2, 3 });
+											// } else {
+											// graphics.setLineDash(null);
+											// }
+
+											graphics.drawPath(path);
+											path.dispose();
+											graphics.setLineDash(null);
+										}
+									}
+								}
+							}
+						}
+					}
 				}
-
-				final Integer unsortedSource = rowIndices.get(row);
-				final Integer unsortedDestination = rowIndices.get(otherRow);
-				if (unsortedSource == null || unsortedDestination == null) {
-					// Error?
-					continue;
-				}
-				// Map back between current row (sorted) and data (unsorted)
-				final int sortedDestination = unsortedDestination;
-				final int sortedSource = unsortedSource;
-
-				// Filtering can lead to missing terminals
-				if (sortedDestination < 0 || sortedSource < 0) {
-					continue;
-				}
-
-				final float startMid = terminalPositions.get(sortedSource);
-				final float endMid = terminalPositions.get(sortedDestination);
-
-				// Draw wire - offset by ca.x to as x pos is relative to left hand side
-				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
-
-				graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-
-				// if (wire.dashed) {
-				graphics.setLineDash(new int[] { 2, 3 });
-				// } else {
-				// graphics.setLineDash(null);
+				// ChangeSetTableRow otherRow = row.getPreviousRHS();
+				// if (otherRow == null) {
+				// continue;
 				// }
+				//
+				// final Integer unsortedSource = rowIndices.get(row);
+				// final Integer unsortedDestination = rowIndices.get(otherRow);
+				// if (unsortedSource == null || unsortedDestination == null) {
+				// // Error?
+				// continue;
+				// }
+				// // Map back between current row (sorted) and data (unsorted)
+				// final int sortedDestination = unsortedDestination;
+				// final int sortedSource = unsortedSource;
+				//
+				// // Filtering can lead to missing terminals
+				// if (sortedDestination < 0 || sortedSource < 0) {
+				// continue;
+				// }
+				//
+				// final float startMid = terminalPositions.get(sortedSource);
+				// final float endMid = terminalPositions.get(sortedDestination);
+				//
+				// // Draw wire - offset by ca.x to as x pos is relative to left hand side
+				// final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
+				//
+				// graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+				//
+				// // if (wire.dashed) {
+				// graphics.setLineDash(new int[] { 2, 3 });
+				// // } else {
+				// // graphics.setLineDash(null);
+				// // }
+				//
+				// graphics.drawPath(path);
+				// path.dispose();
 
-				graphics.drawPath(path);
-				path.dispose();
-
-				graphics.setLineDash(null);
+				// graphics.setLineDash(null);
 			}
 		}
 
@@ -243,9 +362,24 @@ public class ChangeSetWiringDiagram implements PaintListener {
 
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
-			if (row.isRhsSlot()) {
-				final Color terminalColour = row.isRhsValid() ? ValidTerminalColour : InvalidTerminalColour;
-				drawTerminal(false, !row.isRhsNonShipped(), terminalColour, row.isRhsOptional(), row.isRhsSpot(), ca, graphics, midpoint);
+			if (row.isCurrentRhsSlot()) {
+
+				var afterGroup = row.getCurrentRhsAfter().getRowDataGroup();
+				boolean draw = true;
+				for (var ee : afterGroup.getMembers()) {
+					if (ee.isLhsSlot()) {
+						var loadBefore = ee.getLhsLink();
+						if (loadBefore.getRowDataGroup().getMembers().contains(row.getCurrentRhsBefore())) {
+							draw = false;
+							;
+						}
+					}
+				}
+
+				if (draw) {
+					final Color terminalColour = row.isCurrentRhsValid() ? ValidTerminalColour : InvalidTerminalColour;
+					drawTerminal(false, !row.isCurrentRhsNonShipped(), terminalColour, row.isCurrentRhsOptional(), row.isCurrentRhsSpot(), ca, graphics, midpoint);
+				}
 			}
 		}
 	}

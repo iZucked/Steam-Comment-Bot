@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
+@NonNullByDefault
 public interface ISeriesContainer {
-	
+
 	String getName();
-	
+
 	SeriesType getType();
-	
+
 	ISeries get();
 
 	boolean canGet();

@@ -12,7 +12,10 @@ import java.util.Optional;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -24,6 +27,24 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class CargoReportJSONGenerator {
+
+	public static String createSchemaAndReportData(final Mode mode, final @NonNull ScheduleModel scheduleModel) throws JsonProcessingException {
+
+		final StringBuilder sb = new StringBuilder();
+		sb.append("{ \"coldef\": ");
+
+		final SchemaGenerator generator = new SchemaGenerator();
+		final String generateHubSchema = generator.generateHubSchema(CargoReportModel.class, mode);
+		sb.append(generateHubSchema);
+
+		sb.append(", \"data\": ");
+		final List<CargoReportModel> models = CargoReportJSONGenerator.createReportData(scheduleModel);
+		final ObjectMapper objectMapper = new ObjectMapper();
+		sb.append(objectMapper.writeValueAsString(models));
+		sb.append("}");
+
+		return sb.toString();
+	}
 
 	public static List<CargoReportModel> createReportData(final @NonNull ScheduleModel scheduleModel) {
 

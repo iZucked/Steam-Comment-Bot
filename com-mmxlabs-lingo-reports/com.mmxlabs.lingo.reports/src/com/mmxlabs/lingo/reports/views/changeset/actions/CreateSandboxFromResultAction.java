@@ -351,7 +351,7 @@ public class CreateSandboxFromResultAction extends Action {
 					}
 				}
 				{
-					final ChangeSetRowData rhsData = row.getRhsAfter();
+					final ChangeSetRowData rhsData = row.getCurrentRhsAfter();
 					if (rhsData != null) {
 						final SlotAllocation dischargeAllocation = rhsData.getDischargeAllocation();
 						if (dischargeAllocation != null) {

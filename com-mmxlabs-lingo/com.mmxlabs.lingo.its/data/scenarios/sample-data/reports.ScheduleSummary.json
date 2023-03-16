@@ -7,6 +7,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "474,219",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,380,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -44,6 +45,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "26,185,291",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -76,6 +78,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "490,179",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -113,6 +116,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "26,169,331",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -145,6 +149,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "490,179",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -182,6 +187,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "26,169,331",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -214,6 +220,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "442,299",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -251,6 +258,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "26,217,211",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -283,6 +291,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "453,072",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -320,6 +329,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "26,206,438",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -352,6 +362,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "474,885",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -389,6 +400,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "26,180,320",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -421,6 +433,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "346,672",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -458,6 +471,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "26,308,532",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -482,6 +496,7 @@
     "P&L (US - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "150,000",
   "Ballast Idle" : "50:18",
   "Ballast Travel" : "11:11",
   "Ballast LNG Cost" : "1,139,145",
@@ -490,6 +505,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "10,650,395",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Bonny Nigeria",
   "Buy Price" : "5.000",
@@ -527,6 +543,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "25,565,860",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -551,6 +568,7 @@
     "P&L (US - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "99,999",
   "Buy/Start Port" : "Point Fortin",
   "Discharge/End Date" : "01/01/11",
   "Discharge/End Time" : "20:00",
@@ -587,6 +605,7 @@
     "P&L (Shipping - Shipping)" : "-68,749"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Buy/Start Port" : "Point Fortin",
   "Discharge/End Date" : "24/12/10",
   "Discharge/End Time" : "14:00",
@@ -623,6 +642,7 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Buy/Start Port" : "Damietta",
   "Discharge/End Date" : "03/06/11",
   "Discharge/End Time" : "14:00",
@@ -659,6 +679,7 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Buy/Start Port" : "Damietta",
   "Discharge/End Date" : "27/08/11",
   "Discharge/End Time" : "20:00",
@@ -695,6 +716,7 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Discharge/End Date" : "08/04/11",
   "Discharge/End Time" : "14:00",
@@ -731,6 +753,7 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "150,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Discharge/End Date" : "20/11/10",
   "Discharge/End Time" : "13:00",
@@ -1216,6 +1239,7 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "23:12",
   "Ballast Travel" : "10:03",
   "Ballast LNG Cost" : "665,931",
@@ -1224,6 +1248,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "4,158,431",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "16,621,200",
   "Buy/Start Port" : "Point Fortin",
   "Buy Price" : "5.000",
@@ -1261,6 +1286,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "22,135,020",
   "Sell/End Port" : "Dragon LNG",
   "Sell Price" : "7.000",
@@ -1293,6 +1319,7 @@
   "Ballast Speed" : "18.0",
   "Ballast Cost" : "573,611",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Point Fortin",
   "Buy Price" : "5.000",
@@ -1330,6 +1357,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "25,904,401",
   "Sell/End Port" : "Quintero Bay LNG",
   "Sell Price" : "7.000",
@@ -1354,6 +1382,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "06:03",
   "Ballast Canal Entry" : "Suez Northside",
@@ -1363,6 +1392,7 @@
   "Ballast Speed" : "19.5",
   "Ballast Cost" : "1,120,507",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "15,732,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -1400,6 +1430,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "20,956,390",
   "Sell/End Port" : "Hazira - LNG Terminal",
   "Sell Price" : "7.000",
@@ -1422,6 +1453,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "13:12",
   "Ballast LNG Cost" : "767,037",
@@ -1430,6 +1462,7 @@
   "Ballast Speed" : "19.5",
   "Ballast Cost" : "2,247,037",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "15,732,000",
   "Buy/Start Port" : "Damietta",
   "Buy Price" : "5.000",
@@ -1467,6 +1500,7 @@
   "Sales Contract" : "HH Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "US",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "20,561,108",
   "Sell/End Port" : "Pascagoula",
   "Sell Price" : "7.000",
@@ -1499,6 +1533,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "815,631",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,380,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -1536,6 +1571,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "25,271,529",
   "Sell/End Port" : "Pyeongtaek",
   "Sell Price" : "7.000",
@@ -1558,6 +1594,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "150,000",
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "25:13",
   "Ballast LNG Cost" : "813,846",
@@ -1566,6 +1603,7 @@
   "Ballast Speed" : "16.6",
   "Ballast Cost" : "4,825,096",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Idku LNG",
   "Buy Price" : "5.000",
@@ -1605,6 +1643,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "25,519,022",
   "Sell/End Port" : "Pyeongtaek",
   "Sell Price" : "7.000",
@@ -1627,6 +1666,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "03:05",
   "Ballast Travel" : "14:18",
   "Ballast LNG Cost" : "474,942",
@@ -1635,6 +1675,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "2,400,775",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "15,732,000",
   "Buy/Start Port" : "Point Fortin",
   "Buy Price" : "5.000",
@@ -1672,6 +1713,7 @@
   "Sales Contract" : "NBP Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Europe",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,070,531",
   "Sell/End Port" : "Isle of Grain",
   "Sell Price" : "7.000",
@@ -1704,6 +1746,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "1,910,088",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "17,065,800",
   "Buy/Start Port" : "Point Fortin",
   "Buy Price" : "5.000",
@@ -1741,6 +1784,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,036,264",
   "Sell/End Port" : "Fujian LNG",
   "Sell Price" : "7.000",
@@ -1765,6 +1809,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "54:13",
   "Ballast Travel" : "21:17",
   "Ballast LNG Cost" : "1,494,121",
@@ -1773,6 +1818,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "9,249,120",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "16,621,200",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -1810,6 +1856,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,105,371",
   "Sell/End Port" : "Quintero Bay LNG",
   "Sell Price" : "7.000",
@@ -1832,6 +1879,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "13:08",
   "Ballast LNG Cost" : "757,567",
@@ -1840,6 +1888,7 @@
   "Ballast Speed" : "19.5",
   "Ballast Cost" : "2,220,900",
   "Buy Entity" : "Europe",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "15,732,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -1877,6 +1926,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "19,996,683",
   "Sell/End Port" : "Freeport LNG",
   "Sell Price" : "7.000",
@@ -1901,6 +1951,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "150,000",
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "15:13",
   "Ballast Canal Entry" : "Suez Northside",
@@ -1910,6 +1961,7 @@
   "Ballast Speed" : "19.5",
   "Ballast Cost" : "3,215,932",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "18,707,874",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -1947,6 +1999,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "24,879,738",
   "Sell/End Port" : "Pyeongtaek",
   "Sell Price" : "7.000",
@@ -1977,6 +2030,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "899,287",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "17,065,800",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -2014,6 +2068,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "22,290,401",
   "Sell/End Port" : "Quintero Bay LNG",
   "Sell Price" : "7.000",
@@ -2036,6 +2091,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "18:00",
   "Ballast LNG Cost" : "526,900",
@@ -2044,6 +2100,7 @@
   "Ballast Speed" : "12.7",
   "Ballast Cost" : "2,456,900",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "16,621,200",
   "Buy/Start Port" : "Idku LNG",
   "Buy Price" : "5.000",
@@ -2081,6 +2138,7 @@
   "Sales Contract" : "HH Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "US",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,853,142",
   "Sell/End Port" : "Elba Island",
   "Sell Price" : "7.000",
@@ -2114,6 +2172,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "931,282",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "17,065,800",
   "Buy/Start Port" : "Point Fortin",
   "Buy Price" : "5.000",
@@ -2151,6 +2210,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,950,187",
   "Sell/End Port" : "Pyeongtaek",
   "Sell Price" : "7.000",
@@ -2183,6 +2243,7 @@
   "Ballast Speed" : "15.6",
   "Ballast Cost" : "617,310",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "17,065,800",
   "Buy/Start Port" : "Idku LNG",
   "Buy Price" : "5.000",
@@ -2220,6 +2281,7 @@
   "Sales Contract" : "HH Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "US",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "22,690,718",
   "Sell/End Port" : "Elba Island",
   "Sell Price" : "7.000",
@@ -2244,6 +2306,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "100,000",
   "Ballast Idle" : "02:04",
   "Ballast Travel" : "24:03",
   "Ballast Canal Entry" : "Suez Northside",
@@ -2253,6 +2316,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "3,516,808",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "16,621,200",
   "Buy/Start Port" : "Idku LNG",
   "Buy Price" : "5.000",
@@ -2291,6 +2355,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,682,224",
   "Sell/End Port" : "Pyeongtaek",
   "Sell Price" : "7.000",
@@ -2321,6 +2386,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "1,207,182",
   "Buy Entity" : "US",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Point Fortin",
   "Buy Price" : "5.000",
@@ -2358,6 +2424,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "25,208,886",
   "Sell/End Port" : "Quintero Bay LNG",
   "Sell Price" : "7.000",
@@ -2390,6 +2457,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "1,497,255",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -2427,6 +2495,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "24,604,933",
   "Sell/End Port" : "Tobata",
   "Sell Price" : "7.000",
@@ -2458,6 +2527,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "929,154",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "17,065,800",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -2495,6 +2565,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,606,648",
   "Sell/End Port" : "Pyeongtaek",
   "Sell Price" : "7.000",
@@ -2525,6 +2596,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "793,287",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -2562,6 +2634,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "25,293,674",
   "Sell/End Port" : "Yung An",
   "Sell Price" : "7.000",
@@ -2592,6 +2665,7 @@
   "Ballast Speed" : "12.6",
   "Ballast Cost" : "1,470,256",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "17,065,800",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -2629,6 +2703,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "21,369,219",
   "Sell/End Port" : "Ogishima - Tokyo Gas LNG Berth",
   "Sell Price" : "7.000",
@@ -2659,6 +2734,7 @@
   "Ballast Speed" : "12.8",
   "Ballast Cost" : "183,761",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "17,065,800",
   "Buy/Start Port" : "Damietta",
   "Buy Price" : "5.000",
@@ -2697,6 +2773,7 @@
   "Sales Contract" : "HH Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "US",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "22,954,589",
   "Sell/End Port" : "Elba Island",
   "Sell Price" : "7.000",
@@ -2721,6 +2798,7 @@
     "P&L (Asia - Shipping)" : "0"
   }
 }, {
+  "Charter Rate" : "150,000",
   "Ballast Idle" : "10:21",
   "Ballast Travel" : "24:10",
   "Ballast LNG Cost" : "875,007",
@@ -2729,6 +2807,7 @@
   "Ballast Speed" : "15.7",
   "Ballast Cost" : "6,348,757",
   "Buy Entity" : "Asia",
+  "Buy Inco" : "FOB",
   "Purchase Cost" : "19,323,000",
   "Buy/Start Port" : "Punta Europa LNG",
   "Buy Price" : "5.000",
@@ -2766,6 +2845,7 @@
   "Sales Contract" : "JCC Sales",
   "Scenario" : "/scenarios/sample-data/",
   "Sell Entity" : "Asia",
+  "Sell Inco" : "DES",
   "Sales Revenue" : "25,248,986",
   "Sell/End Port" : "Yung An",
   "Sell Price" : "7.000",

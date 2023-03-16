@@ -26,6 +26,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.validation.internal.Activator;
+import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -116,7 +117,7 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 			final String name = (String) target.eGet(nameAttribute);
 			if (bad.contains(name)) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name (names are case insensitive) " + name));
+						(IConstraintStatus) ctx.createFailureStatus(EditorUtils.unmangle(target) + " has non-unique name (names are case insensitive) " + name));
 				dsd.addEObjectAndFeature(target, nameAttribute);
 				statuses.add(dsd);
 				return;
@@ -129,7 +130,7 @@ public class NameUniquenessConstraint extends AbstractModelMultiConstraint {
 					}
 					if (bad.contains(ns)) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name + " has non-unique other name (names are case insensitive) " + ns));
+								(IConstraintStatus) ctx.createFailureStatus(EditorUtils.unmangle(target) + " " + name + " has non-unique other name (names are case insensitive) " + ns));
 						dsd.addEObjectAndFeature(target, nameAttribute);
 						statuses.add(dsd);
 						return;

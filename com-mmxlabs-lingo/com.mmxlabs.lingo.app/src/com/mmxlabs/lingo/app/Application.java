@@ -103,6 +103,9 @@ public class Application implements IApplication {
 				"org.eclipse.equinox.event", //
 				"org.ops4j.peaberry.activation", //
 		};
+		// The auto-start the embedded webserver, include the following in the bundlesToStart array.
+		// "org.eclipse.equinox.http.jetty", //
+		// "org.eclipse.equinox.http.registry", //
 
 		for (final String bundleName : bundlesToStart) {
 			try {
@@ -181,7 +184,7 @@ public class Application implements IApplication {
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
 			return IApplication.EXIT_OK;
 		}
-		{
+		if (System.getProperty("lingo.suppress.dialogs") == null) {
 			Date c = null;
 			if ((c = licenseCheckExpiresSoon(14, subMonitor.split(1))) != null) {
 				final LocalDate d = LocalDate.ofInstant(c.toInstant(), ZoneId.systemDefault());

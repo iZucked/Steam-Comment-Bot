@@ -17,14 +17,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
@@ -74,7 +66,7 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 			case ChangesetPackage.METRICS: return createMetrics();
 			case ChangesetPackage.DELTA_METRICS: return createDeltaMetrics();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA_GROUP: return createChangeSetRowDataGroup();
-			case ChangesetPackage.CHANGE_SET_ROW: return createChangeSetRow();
+			case ChangesetPackage.CHANGE_SET_WIRING_GROUP: return createChangeSetWiringGroup();
 			case ChangesetPackage.CHANGE_SET_ROW_DATA: return createChangeSetRowData();
 			case ChangesetPackage.CHANGE_SET_TABLE_GROUP: return createChangeSetTableGroup();
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW: return createChangeSetTableRow();
@@ -187,9 +179,9 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	 * @generated
 	 */
 	@Override
-	public ChangeSetRow createChangeSetRow() {
-		ChangeSetRowImpl changeSetRow = new ChangeSetRowImpl();
-		return changeSetRow;
+	public ChangeSetWiringGroup createChangeSetWiringGroup() {
+		ChangeSetWiringGroupImpl changeSetWiringGroup = new ChangeSetWiringGroupImpl();
+		return changeSetWiringGroup;
 	}
 
 	/**

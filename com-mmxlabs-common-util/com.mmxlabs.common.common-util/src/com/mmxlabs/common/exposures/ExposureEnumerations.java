@@ -14,6 +14,6 @@ public class ExposureEnumerations{
 	}
 
 	public enum AggregationMode {
-		BY_MONTH_NO_TOTAL, BY_MONTH, BY_DEALSET
+		BY_MONTH_NO_TOTAL, BY_MONTH, BY_DEALSET, BY_CALENDAR_YEAR,
 	}
 }

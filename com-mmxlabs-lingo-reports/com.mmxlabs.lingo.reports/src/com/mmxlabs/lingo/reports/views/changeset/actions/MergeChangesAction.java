@@ -49,7 +49,7 @@ public class MergeChangesAction extends Action {
 				firstChangeSet.getDeltaMetrics().setLatenessDelta(lateness + cs.getDeltaMetrics().getLatenessDelta());
 			}
 		}
-		final ChangeSetTableRoot root = (ChangeSetTableRoot) firstChangeSet.eContainer();
+		final ChangeSetTableRoot root = firstChangeSet.getTableRoot();
 		root.getGroups().removeAll(selectedSets);
 		viewer.refresh();
 	}

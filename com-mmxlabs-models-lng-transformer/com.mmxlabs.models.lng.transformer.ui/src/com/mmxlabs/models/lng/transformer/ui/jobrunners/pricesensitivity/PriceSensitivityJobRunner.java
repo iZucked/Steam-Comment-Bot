@@ -224,7 +224,7 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 			final List<Long> portfolioPnls = new ArrayList<>();
 
 			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
-				final List<Future<?>> jobs = new LinkedList<>();
+				final List<@Nullable Future<?>> jobs = new LinkedList<>();
 				if (results != null) {
 					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
