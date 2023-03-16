@@ -121,7 +121,7 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 			final PreviousHeelRecord heelRecord, final boolean fullDetails, final IPort returnPort, NotionalJourneyBallastBonusTermAnnotation bestResult) {
 		
 		if (returnPort == null) {
-			throw new IllegalStateException("Can not work out the return port.");
+			return null;
 		}
 		
 		final IPortSlot slot = portTimesRecord.getFirstSlot();

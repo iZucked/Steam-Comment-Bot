@@ -197,6 +197,9 @@ public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 
 							if (priceExpression != null && !priceExpression.trim().isEmpty()) {
 								for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(priceExpression, PriceIndexType.BUNKERS)) {
+									if (index.isSetExpression()) {
+										continue;
+									}
 									final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
 									if (date == null) {
 										statuses.add(baseFactory.copyName() //
