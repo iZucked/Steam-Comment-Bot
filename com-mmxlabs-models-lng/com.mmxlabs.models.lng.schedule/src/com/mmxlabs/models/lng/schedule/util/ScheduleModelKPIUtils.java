@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -96,7 +97,8 @@ public class ScheduleModelKPIUtils {
 				}
 			}
 		}
-		// for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+		// for (final MarketAllocation marketAllocation :
+		// schedule.getMarketAllocations()) {
 		// totalMtMPNL += getElementTradingPNL(marketAllocation);
 		// totalMtMPNL += getElementShippingPNL(marketAllocation);
 		// }
@@ -889,4 +891,12 @@ public class ScheduleModelKPIUtils {
 			}
 		}
 	}
+
+	public static <T> int getOrZero(final T object, final ToIntFunction<@NonNull T> func) {
+		if (object != null) {
+			return func.applyAsInt(object);
+		}
+		return 0;
+	}
+
 }

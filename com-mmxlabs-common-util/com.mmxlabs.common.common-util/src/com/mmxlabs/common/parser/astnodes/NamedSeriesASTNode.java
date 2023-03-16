@@ -8,7 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
+@NonNullByDefault
 public abstract class NamedSeriesASTNode implements ASTNode {
 
 	private final String name;

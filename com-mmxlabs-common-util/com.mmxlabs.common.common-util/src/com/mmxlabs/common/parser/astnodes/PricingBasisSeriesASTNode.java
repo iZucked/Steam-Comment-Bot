@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.common.parser.astnodes;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -13,15 +13,16 @@ import com.mmxlabs.common.parser.series.NamedSeriesExpression;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesType;
 
+@NonNullByDefault
 public final class PricingBasisSeriesASTNode extends NamedSeriesASTNode {
 
-	public PricingBasisSeriesASTNode(String name) {
+	public PricingBasisSeriesASTNode(final String name) {
 		super(name);
 	}
 
 	@Override
-	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull SeriesParser seriesParser) {
-		ISeriesContainer seriesContainer = seriesParser.getSeries(getName());
+	public IExpression<ISeries> asExpression(final SeriesParser seriesParser) {
+		final ISeriesContainer seriesContainer = seriesParser.getSeries(getName());
 		assert seriesContainer.getType() == SeriesType.PRICING_BASIS;
 		return new NamedSeriesExpression(seriesContainer, getName());
 	}

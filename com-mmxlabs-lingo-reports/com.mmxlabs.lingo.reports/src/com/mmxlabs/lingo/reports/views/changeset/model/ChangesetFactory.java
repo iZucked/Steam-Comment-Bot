@@ -71,13 +71,13 @@ public interface ChangesetFactory extends EFactory {
 	ChangeSetRowDataGroup createChangeSetRowDataGroup();
 
 	/**
-	 * Returns a new object of class '<em>Change Set Row</em>'.
+	 * Returns a new object of class '<em>Change Set Wiring Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Change Set Row</em>'.
+	 * @return a new object of class '<em>Change Set Wiring Group</em>'.
 	 * @generated
 	 */
-	ChangeSetRow createChangeSetRow();
+	ChangeSetWiringGroup createChangeSetWiringGroup();
 
 	/**
 	 * Returns a new object of class '<em>Change Set Row Data</em>'.

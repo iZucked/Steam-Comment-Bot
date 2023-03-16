@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
@@ -160,7 +160,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ChangeSetRow> changeSetRowsToDefaultBase;
+	protected EList<ChangeSetTableRow> changeSetRowsToDefaultBase;
 
 	/**
 	 * The cached value of the '{@link #getChangeSetRowsToAlternativeBase() <em>Change Set Rows To Alternative Base</em>}' containment reference list.
@@ -170,7 +170,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ChangeSetRow> changeSetRowsToAlternativeBase;
+	protected EList<ChangeSetTableRow> changeSetRowsToAlternativeBase;
 
 	/**
 	 * The cached value of the '{@link #getCurrentMetrics() <em>Current Metrics</em>}' containment reference.
@@ -449,9 +449,9 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @generated
 	 */
 	@Override
-	public EList<ChangeSetRow> getChangeSetRowsToDefaultBase() {
+	public EList<ChangeSetTableRow> getChangeSetRowsToDefaultBase() {
 		if (changeSetRowsToDefaultBase == null) {
-			changeSetRowsToDefaultBase = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE);
+			changeSetRowsToDefaultBase = new EObjectContainmentEList<ChangeSetTableRow>(ChangeSetTableRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE);
 		}
 		return changeSetRowsToDefaultBase;
 	}
@@ -462,9 +462,9 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @generated
 	 */
 	@Override
-	public EList<ChangeSetRow> getChangeSetRowsToAlternativeBase() {
+	public EList<ChangeSetTableRow> getChangeSetRowsToAlternativeBase() {
 		if (changeSetRowsToAlternativeBase == null) {
-			changeSetRowsToAlternativeBase = new EObjectContainmentEList<ChangeSetRow>(ChangeSetRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE);
+			changeSetRowsToAlternativeBase = new EObjectContainmentEList<ChangeSetTableRow>(ChangeSetTableRow.class, this, ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE);
 		}
 		return changeSetRowsToAlternativeBase;
 	}
@@ -670,11 +670,11 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return;
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_DEFAULT_BASE:
 				getChangeSetRowsToDefaultBase().clear();
-				getChangeSetRowsToDefaultBase().addAll((Collection<? extends ChangeSetRow>)newValue);
+				getChangeSetRowsToDefaultBase().addAll((Collection<? extends ChangeSetTableRow>)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_ALTERNATIVE_BASE:
 				getChangeSetRowsToAlternativeBase().clear();
-				getChangeSetRowsToAlternativeBase().addAll((Collection<? extends ChangeSetRow>)newValue);
+				getChangeSetRowsToAlternativeBase().addAll((Collection<? extends ChangeSetTableRow>)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
 				setCurrentMetrics((Metrics)newValue);

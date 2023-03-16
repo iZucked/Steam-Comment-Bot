@@ -7,6 +7,12 @@ package com.mmxlabs.lngdataserver.integration.reports.nominations;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
+import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
@@ -18,9 +24,27 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class NominationsJSONGenerator {
 
 	private NominationsJSONGenerator() {
-		//Disallow construction of this helper class.
+		// Disallow construction of this helper class.
 	}
-	
+
+	public static String createSchemaAndReportData(final Mode mode, final @NonNull IScenarioDataProvider scenarioDataProvider) throws JsonProcessingException {
+
+		final StringBuilder sb = new StringBuilder();
+		sb.append("{ \"coldef\": ");
+
+		final SchemaGenerator generator = new SchemaGenerator();
+		final String generateHubSchema = generator.generateHubSchema(Nominations.class, mode);
+		sb.append(generateHubSchema);
+
+		sb.append(", \"data\": ");
+		final List<Nominations> models = createNominationsData(scenarioDataProvider);
+		final ObjectMapper objectMapper = new ObjectMapper();
+		sb.append(objectMapper.writeValueAsString(models));
+		sb.append("}");
+
+		return sb.toString();
+	}
+
 	public static List<Nominations> createNominationsData(final IScenarioDataProvider scenarioDataProvider) {
 
 		final List<Nominations> result = new ArrayList<>();

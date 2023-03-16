@@ -48,17 +48,17 @@ public class ValidationTestUtil {
 	}
 
 	public static IStatus validate(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean relaxedValidation, final Set<String> onlyConstraints) {
-
+		
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-
+		
 		validator.addConstraintFilter((constraint, target) -> {
-
+			
 			// If the set is populated, then we only want to target specific constraint ids.
 			if (!onlyConstraints.isEmpty() && !onlyConstraints.contains(constraint.getId())) {
 				return false;
 			}
-
+			
 			for (final Category cat : constraint.getCategories()) {
 				if (cat.getId().endsWith(".base")) {
 					return true;
@@ -68,13 +68,26 @@ public class ValidationTestUtil {
 					return true;
 				}
 			}
-
+			
 			return false;
 		});
-
+		
 		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
+			return helper.runValidation(validator, extraContext, root, null);
+		});
+		
+		return status;
+	}
+	public static IStatus validateWithAllConstraints(final IScenarioDataProvider scenarioDataProvider) {
+
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
+		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, false);
 			return helper.runValidation(validator, extraContext, root, null);
 		});
 
@@ -113,8 +126,7 @@ public class ValidationTestUtil {
 			}
 		}
 
-		if (status instanceof DetailConstraintStatusDecorator) {
-			final DetailConstraintStatusDecorator element = (DetailConstraintStatusDecorator) status;
+		if (status instanceof DetailConstraintStatusDecorator element) {
 			if (element.getConstraintKey() == constraintKey) {
 				l.add(element);
 			}

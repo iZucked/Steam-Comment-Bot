@@ -32,8 +32,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
-		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.emptySet());
 
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 	}
@@ -50,8 +50,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> singleton(element2));
-		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.singleton(element2));
+		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.emptySet());
 
 		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
@@ -71,8 +71,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
-		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
+		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.singleton(element1));
 
 		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));

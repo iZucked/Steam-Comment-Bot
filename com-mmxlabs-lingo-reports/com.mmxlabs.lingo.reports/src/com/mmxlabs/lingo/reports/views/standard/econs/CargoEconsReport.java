@@ -42,9 +42,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
@@ -63,6 +60,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -79,6 +77,7 @@ import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -101,11 +100,6 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
  * The {@link CargoEconsReport} is a vertical report similar in concept to the
@@ -483,25 +477,15 @@ public class CargoEconsReport extends ViewPart {
 
 		// Assume input is from a ScheduleModel element
 		for (Object obj : selectedObjects) {
-			if (obj instanceof Event) {
-				obj = ScheduleModelUtils.getSegmentStart((Event) obj);
+			if (obj instanceof final Event e) {
+				obj = ScheduleModelUtils.getSegmentStart(e);
 			}
-			if (obj instanceof StartEvent) {
+			if (obj instanceof StartEvent || obj instanceof EndEvent //
+					|| obj instanceof GeneratedCharterOut || obj instanceof CharterLengthEvent || obj instanceof VesselEventVisit //
+					|| obj instanceof CargoAllocation || obj instanceof OpenSlotAllocation || obj instanceof PaperDealAllocation//
+					|| obj instanceof Purge) {
 				validObjects.add(obj);
-			} else if (obj instanceof EndEvent) {
-				validObjects.add(obj);
-			} else if (obj instanceof GeneratedCharterOut) {
-				validObjects.add(obj);
-			} else if (obj instanceof CharterLengthEvent) {
-				validObjects.add(obj);
-			} else if (obj instanceof VesselEventVisit) {
-				validObjects.add(obj);
-			} else if (obj instanceof CargoAllocation) {
-				validObjects.add(obj);
-			} else if (obj instanceof OpenSlotAllocation) {
-				validObjects.add(obj);
-			} else if (obj instanceof SlotAllocation) {
-				final SlotAllocation slotAllocation = (SlotAllocation) obj;
+			} else if (obj instanceof final SlotAllocation slotAllocation) {
 				if (slotAllocation.getCargoAllocation() != null) {
 					validObjects.add(slotAllocation.getCargoAllocation());
 				}
@@ -510,10 +494,6 @@ public class CargoEconsReport extends ViewPart {
 				}
 			} else if (obj instanceof SlotVisit) {
 				validObjects.add((((SlotVisit) obj).getSlotAllocation().getCargoAllocation()));
-			} else if (obj instanceof Purge) {
-				validObjects.add(obj);
-			} else if (obj instanceof PaperDealAllocation) {
-				validObjects.add(obj);
 			} else if (obj instanceof PaperDealAllocationEntry) {
 				final EObject objContainer = ((PaperDealAllocationEntry) obj).eContainer();
 				if (objContainer instanceof PaperDealAllocation) {
@@ -534,7 +514,11 @@ public class CargoEconsReport extends ViewPart {
 			Map<Collection<Slot<?>>, CargoAllocation> cargoMap = null;
 
 			for (final Object obj : selectedObjects) {
-				if (obj != null && (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent || obj instanceof PaperDeal)) {
+				if (obj != null && (obj instanceof Cargo //
+						|| obj instanceof Slot //
+						|| obj instanceof VesselEvent //
+						|| obj instanceof PaperDeal//
+						|| obj instanceof VesselCharter)) {
 					final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel((EObject) obj);
 					if (scenarioModel != null && scenarioModel.getScheduleModel() != null && scenarioModel.getScheduleModel().getSchedule() != null) {
 						final Schedule schedule = scenarioModel.getScheduleModel().getSchedule();
@@ -557,7 +541,23 @@ public class CargoEconsReport extends ViewPart {
 									validObjects.add(pda);
 								}
 							}
+						} else if (obj instanceof VesselCharter vc) {
+							if (schedule != null) {
+								
+								for (final Sequence seq : schedule.getSequences()) {
+									if (!seq.getEvents().isEmpty() && seq.getVesselCharter() == vc) {
+										if (seq.getEvents().get(0) instanceof final StartEvent se){
+											validObjects.add(se);
+										}
+										if (seq.getEvents().get(seq.getEvents().size() - 1) instanceof final EndEvent ee) {
+											validObjects.add(ee);
+										}
+									}
+											
+								}
+							}
 						} else {
+						
 							// Must be a slot
 							assert obj instanceof Slot;
 							if (obj instanceof LoadSlot) {
@@ -684,23 +684,23 @@ public class CargoEconsReport extends ViewPart {
 		ViewerHelper.refresh(getViewer(), false);
 	}
 
-	private @Nullable ModelReference getPartInstanceReference(final IWorkbenchPart part) {
-		if (part instanceof IEditorPart) {
-			final IEditorPart editorPart = (IEditorPart) part;
-			final IEditorInput editorInput = editorPart.getEditorInput();
-			if (editorInput instanceof IScenarioServiceEditorInput) {
-				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
-				final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
-				if (scenarioInstance != null) {
-					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-					if (modelRecord != null) {
-						return modelRecord.aquireReference("CargoEconsReport");
-					}
-				}
-			}
-		}
-		return null;
-	}
+//	private @Nullable ModelReference getPartInstanceReference(final IWorkbenchPart part) {
+//		if (part instanceof IEditorPart) {
+//			final IEditorPart editorPart = (IEditorPart) part;
+//			final IEditorInput editorInput = editorPart.getEditorInput();
+//			if (editorInput instanceof IScenarioServiceEditorInput) {
+//				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+//				final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
+//				if (scenarioInstance != null) {
+//					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+//					if (modelRecord != null) {
+//						return modelRecord.aquireReference("CargoEconsReport");
+//					}
+//				}
+//			}
+//		}
+//		return null;
+//	}
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
@@ -757,36 +757,15 @@ public class CargoEconsReport extends ViewPart {
 
 			if (object instanceof Event) {
 				name = ((Event) object).name();
-			}
-
-			if (object instanceof VesselEventVisit) {
-				name = ((VesselEventVisit) object).name();
-			}
-
-			if (object instanceof CargoAllocation) {
+			} else if (object instanceof CargoAllocation) {
 				name = ((CargoAllocation) object).getName();
-			}
-			if (object instanceof CharterLengthEvent) {
-				name = ((CharterLengthEvent) object).name();
-			}
-			if (object instanceof GroupedCharterLengthEvent) {
-				name = ((GroupedCharterLengthEvent) object).name();
-			}
-			if (object instanceof GroupedCharterOutEvent) {
-				name = ((GroupedCharterOutEvent) object).name();
-			}
-			if (object instanceof DeltaPair) {
+			} else if (object instanceof DeltaPair) {
 				name = ((DeltaPair) object).getName();
-			}
-
-			if (object instanceof MarketAllocation) {
+			} else if (object instanceof MarketAllocation) {
 				name = ((MarketAllocation) object).getSlot().getName();
-			}
-			if (object instanceof OpenSlotAllocation) {
+			} else if (object instanceof OpenSlotAllocation) {
 				name = ((OpenSlotAllocation) object).getSlot().getName();
-			}
-
-			if (object instanceof PaperDealAllocation) {
+			} else if (object instanceof PaperDealAllocation) {
 				name = ((PaperDealAllocation) object).getPaperDeal().getName();
 			}
 

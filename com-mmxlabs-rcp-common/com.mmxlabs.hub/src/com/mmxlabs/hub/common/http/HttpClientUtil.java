@@ -164,12 +164,12 @@ public class HttpClientUtil {
 				final SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new DefaultHostnameVerifier());
 				builder.setSSLSocketFactory(sslsf);
 			}
-			
-//			PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-////			cm.set
-////			BasicHttpClientConnectionManager cm = new BasicHttpClientConnectionManager();
-//			builder.setConnectionManager( cm );
-			
+
+			// PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+			//// cm.set
+			//// BasicHttpClientConnectionManager cm = new BasicHttpClientConnectionManager();
+			// builder.setConnectionManager( cm );
+
 		} catch (final Exception e1) {
 			e1.printStackTrace();
 		}
@@ -180,31 +180,33 @@ public class HttpClientUtil {
 
 	public static void configureProxyServer(final HttpHost httpHost, final HttpClientBuilder builder) {
 		final Bundle bundle = FrameworkUtil.getBundle(HttpClientUtil.class);
-		final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
-		proxyTracker.open();
-		try {
-			final IProxyService service = proxyTracker.getService();
+		if (bundle != null) {
+			final ServiceTracker<IProxyService, IProxyService> proxyTracker = new ServiceTracker<>(bundle.getBundleContext(), IProxyService.class.getName(), null);
+			proxyTracker.open();
+			try {
+				final IProxyService service = proxyTracker.getService();
 
-			if (service != null) {
-				service.addProxyChangeListener(e -> fireInvalidationListeners());
-			}
+				if (service != null) {
+					service.addProxyChangeListener(e -> fireInvalidationListeners());
+				}
 
-			if (service != null && service.isProxiesEnabled()) {
-				final IProxyData[] data = service.select(new URI(httpHost.toURI()));
-				if (data != null && data.length > 0) {
-					for (final var pd : data) {
-						if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
-							final HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
-							final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-							builder.setRoutePlanner(routePlanner);
+				if (service != null && service.isProxiesEnabled()) {
+					final IProxyData[] data = service.select(new URI(httpHost.toURI()));
+					if (data != null && data.length > 0) {
+						for (final var pd : data) {
+							if (Objects.equals(pd.getType(), IProxyData.HTTPS_PROXY_TYPE)) {
+								final HttpHost proxy = new HttpHost(pd.getHost(), pd.getPort());
+								final DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+								builder.setRoutePlanner(routePlanner);
+							}
 						}
 					}
 				}
+			} catch (final URISyntaxException e) {
+				e.printStackTrace();
+			} finally {
+				proxyTracker.close();
 			}
-		} catch (final URISyntaxException e) {
-			e.printStackTrace();
-		} finally {
-			proxyTracker.close();
 		}
 	}
 

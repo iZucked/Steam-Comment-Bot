@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -29,6 +28,9 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -108,14 +110,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				int numDischarges = 0;
 				
 				if (target instanceof final CargoAllocation cargoAllocation) {
-					final Sequence sequence = cargoAllocation.getSequence();
-					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
-						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
+					containsInCharterBallastBonus = hasBallastBonus(cargoAllocation.getSequence());
+					containsInCharterRepositioning = hasRepositioningFee(cargoAllocation.getSequence());
 					containsCargo = true;
 					complexCargo |= cargoAllocation.getSlotAllocations().size() > 2;
 
@@ -160,39 +156,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (target instanceof final StartEvent evt) {
 					ballastLegs = Math.max(ballastLegs, 1);
 					containsStartEvent = true;
-					final Sequence sequence = evt.getSequence();
-					if (sequence != null && sequence.getVesselCharter() != null) {
-						final GenericCharterContract genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
-					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() >= 0) {
-						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
+					containsInCharterRepositioning = hasRepositioningFee(evt.getSequence());
 				}
 				if (target instanceof final EndEvent evt) {
 					containsEndEvent = true;
-					final Sequence sequence = evt.getSequence();
-					if (sequence != null && sequence.getVesselCharter() != null) {
-						final GenericCharterContract genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
-					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() >= 0) {
-						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-						if (genericCharterContract != null) {
-							containsInCharterBallastBonus = true;
-							containsInCharterRepositioning = true;
-						}
-					}
+					containsInCharterBallastBonus = hasBallastBonus(evt.getSequence());
 				}
 				if (target instanceof final VesselEventVisit vesselEventVisit) {
 					ballastLegs = Math.max(ballastLegs, 1);
@@ -430,13 +398,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 							rows.add(createRow(base + 20, "    Speed", false, "", "", createBasicFormatter(options, RowType.COST, Double.class, SpeedFormat::format,
 									createFullLegTransformer2(Double.class, laden, legIdx, (visit, travel, idle) -> travel == null ? 0 : travel.getSpeed()))));
 							rows.add(createRow(base + 30, "    Days", false, "", "", createDoubleDaysFormatter(options, RowType.COST, createFullLegTransformer2(Double.class, laden, legIdx,
-									(visit, travel, idle) -> ((getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration)) / 24.0)))));
+									(visit, travel, idle) -> ((ScheduleModelKPIUtils.getOrZero(visit, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(travel, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(idle, Event::getDuration)) / 24.0)))));
 
 							rows.add(createRow(base + 40, "    Total BO (mmBtu)", false, "", "", createBasicFormatter(options, RowType.COST, Integer.class, VolumeMMBtuFormat::format,
 									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getFuelVolume(visit, travel, idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO))))));
 							rows.add(createRow(base + 50, "    Charter Cost", true, "$", "",
 									createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format, createFullLegTransformer2(Integer.class, laden, legIdx,
-											(visit, travel, idle) -> (getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost))))));
+											(visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(visit, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(travel, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(idle, Event::getCharterCost))))));
 
 							rows.add(createRow(base + 51, "    Charter Rate", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
 									createFullLegTransformer2(Integer.class, laden, legIdx, StandardEconsRowFactory::getAverageDailyCharterRate))));
@@ -451,7 +419,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 							rows.add(createRow(base + 90, "    Route", false, "", "", createBasicFormatter(options, RowType.OTHER, String.class, Object::toString,
 									createFullLegTransformer2(String.class, laden, legIdx, (visit, travel, idle) -> travel == null ? "" : getRoute(travel.getRouteOption())))));
 							rows.add(createRow(base + 100, "    Canal Cost", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
-									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getOrZero(travel, Journey::getToll))))));
+									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(travel, Journey::getToll))))));
 
 							rows.add(createRow(base + 110, "    Total cost ($)", true, "$", "",
 									createBasicFormatter(options, RowType.COST, Long.class, DollarsFormat::format, createFullLegTransformer2(Long.class, laden, legIdx,
@@ -459,14 +427,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 							rows.add(
 									createRow(base + 120, "    Idle days", false, "", "",
 											createDoubleDaysFormatter(options, RowType.COST,
-													createFullLegTransformer2(Double.class, laden, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getDuration) / 24.0))),
+													createFullLegTransformer2(Double.class, laden, legIdx, (visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(idle, Event::getDuration) / 24.0))),
 											greyColourProvider));
 							rows.add(createRow(base + 130, "    Idle BO", false, "", "",
 									createBasicFormatter(options, RowType.COST, Integer.class, VolumeMMBtuFormat::format,
 											createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MMBTU, Fuel.NBO, Fuel.FBO)))),
 									greyColourProvider));
 							rows.add(createRow(base + 140, "    Idle charter", true, "$", "", createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format,
-									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getOrZero(idle, Event::getCharterCost)))), greyColourProvider));
+									createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (ScheduleModelKPIUtils.getOrZero(idle, Event::getCharterCost)))), greyColourProvider));
 							rows.add(createRow(base + 150, "    Idle bunkers", false, "", "",
 									createBasicFormatter(options, RowType.COST, Integer.class, VolumeM3Format::format,
 											createFullLegTransformer2(Integer.class, laden, legIdx, (visit, travel, idle) -> (getFuelVolume(idle, FuelUnit.MT, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT)))),
@@ -538,8 +506,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static int getAverageDailyCharterRate(final Event visit, final Event travel, final Event idle) {
-		final int totalCharterCost = getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost);
-		final int totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
+		final int totalCharterCost = ScheduleModelKPIUtils.getOrZero(visit, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(travel, Event::getCharterCost) + ScheduleModelKPIUtils.getOrZero(idle, Event::getCharterCost);
+		final int totalDuration = ScheduleModelKPIUtils.getOrZero(visit, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(travel, Event::getDuration) + ScheduleModelKPIUtils.getOrZero(idle, Event::getDuration);
 		return totalDuration == 0.0 ? 0 : (int) ((double) totalCharterCost * 24.0 / (double) totalDuration);
 	}
 
@@ -1239,32 +1207,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			}
 		}
 
-		if (sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
-
-			if (object instanceof final CargoAllocation cargoAllocation) {
-
-				final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
-				if (genericCharterContract != null) {
-					for (final var d : cargoAllocation.getGeneralPNLDetails()) {
-						if (d instanceof final CharterContractFeeDetails feeDetails) {
-							if (feeDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails
-									|| feeDetails.getMatchingContractDetails() instanceof LumpSumBallastBonusTermDetails) {
-								// Revenue
-								shippingCost -= feeDetails.getFee();
-							}
-
-//							cehck cost or revenue?
-
-							if (feeDetails.getMatchingContractDetails() instanceof OriginPortRepositioningFeeTermDetails
-									|| feeDetails.getMatchingContractDetails() instanceof LumpSumRepositioningFeeTermDetails) {
-								shippingCost += feeDetails.getFee();
-							}
-						}
-					}
-				}
-
-			}
-
+		final GenericCharterContract genericCharterContract = getCharterContract(sequence);
+		
+		if (genericCharterContract != null) {
+			shippingCost = getCharterContractCost(object, shippingCost);
 		}
 
 		// Add on chartering costs
@@ -1273,6 +1219,53 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		return shippingCost;
 
+	}
+
+	protected static int getCharterContractCost(final Object object, int shippingCost) {
+		final EList<GeneralPNLDetails> generalPNLDetails;
+		if (object instanceof final ProfitAndLossContainer pnlContainer) {
+			generalPNLDetails = pnlContainer.getGeneralPNLDetails();
+		} else {
+			generalPNLDetails = null;
+		}
+		if (generalPNLDetails != null) {
+
+			for (final GeneralPNLDetails d : generalPNLDetails) {
+				if (d instanceof final CharterContractFeeDetails feeDetails) {
+					if (feeDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails
+							|| feeDetails.getMatchingContractDetails() instanceof LumpSumBallastBonusTermDetails) {
+						// Revenue
+						shippingCost -= feeDetails.getFee();
+					}
+
+					if (feeDetails.getMatchingContractDetails() instanceof OriginPortRepositioningFeeTermDetails
+							|| feeDetails.getMatchingContractDetails() instanceof LumpSumRepositioningFeeTermDetails) {
+						shippingCost += feeDetails.getFee();
+					}
+				}
+			}
+		}
+		return shippingCost;
+	}
+
+	private static GenericCharterContract getCharterContract(final Sequence sequence) {
+		final GenericCharterContract genericCharterContract;
+		if (sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
+			genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
+		} else if (sequence.getVesselCharter() != null) {
+			if (sequence.getVesselCharter().getContainedCharterContract() != null) {
+				genericCharterContract = sequence.getVesselCharter().getContainedCharterContract();
+			} else if (sequence.getVesselCharter().getCharterOrDelegateCharterContract() != null) {
+				genericCharterContract = sequence.getVesselCharter().getCharterOrDelegateCharterContract();
+			} else if (sequence.getVesselCharter().getGenericCharterContract() != null) {
+				genericCharterContract = sequence.getVesselCharter().getGenericCharterContract();
+			} else {
+				genericCharterContract = null;
+			}
+		} else {
+			genericCharterContract = null;
+		}
+		return genericCharterContract;
 	}
 
 	private static Integer getEquityPNLValue(final Object object) {
@@ -1476,13 +1469,6 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return getFuelVolume(fuelUser1, unit, fuels) + getFuelVolume(fuelUser2, unit, fuels) + getFuelVolume(fuelUser3, unit, fuels);
 	}
 
-	private static <T> int getOrZero(final T object, final ToIntFunction<@NonNull T> func) {
-		if (object != null) {
-			return func.applyAsInt(object);
-		}
-		return 0;
-	}
-
 	private static Integer getPortCost(@Nullable final PortVisit visit) {
 		if (visit != null) {
 			return visit.getPortCost();
@@ -1504,5 +1490,29 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		}
 		return null;
+	}
+	
+	private static boolean hasRepositioningFee(final Sequence sequence) {
+		boolean result = false;
+		if (sequence != null) {
+			final GenericCharterContract genericCharterContract = getCharterContract(sequence);
+			if (genericCharterContract != null && genericCharterContract.getRepositioningFeeTerms() instanceof final SimpleRepositioningFeeContainer rfc && !rfc.getTerms().isEmpty()) {
+					result = true;
+			}
+		}
+		return result;
+	}
+	
+	private static boolean hasBallastBonus(final Sequence sequence) {
+		boolean result = false;
+		if (sequence != null) {
+			final GenericCharterContract genericCharterContract = getCharterContract(sequence);
+			if (genericCharterContract != null 
+					&& ((genericCharterContract.getBallastBonusTerms() instanceof final SimpleBallastBonusContainer sbbc && !sbbc.getTerms().isEmpty()) 
+							|| (genericCharterContract.getBallastBonusTerms() instanceof final MonthlyBallastBonusContainer mbbc && !mbbc.getTerms().isEmpty()))) {
+				result = true;
+			}
+		}
+		return result;
 	}
 }

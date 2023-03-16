@@ -5,16 +5,15 @@
 package com.mmxlabs.lingo.its.tests.reports;
 
 import java.net.URL;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
-import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
 @ExtendWith(ShiroRunner.class)

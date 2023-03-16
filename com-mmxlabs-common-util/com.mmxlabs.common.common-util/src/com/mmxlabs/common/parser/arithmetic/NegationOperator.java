@@ -11,7 +11,7 @@ import com.mmxlabs.common.parser.IExpression;
 public class NegationOperator implements ArithmeticExpression {
 	final IExpression<@NonNull Double> argument;
 
-	public NegationOperator(IExpression<@NonNull Double> argument) {
+	public NegationOperator(final IExpression<@NonNull Double> argument) {
 		super();
 		this.argument = argument;
 	}

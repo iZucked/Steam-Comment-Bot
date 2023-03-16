@@ -111,8 +111,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -355,8 +354,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									}
 								}
 								{
-									final SlotAllocation oldAllocation = csRow.getRhsBefore() != null ? csRow.getRhsBefore().getDischargeAllocation() : null;
-									final SlotAllocation newAllocation = csRow.getRhsAfter() != null ? csRow.getRhsAfter().getDischargeAllocation() : null;
+									final SlotAllocation oldAllocation = csRow.getCurrentRhsBefore() != null ? csRow.getCurrentRhsBefore().getDischargeAllocation() : null;
+									final SlotAllocation newAllocation = csRow.getCurrentRhsAfter() != null ? csRow.getCurrentRhsAfter().getDischargeAllocation() : null;
 
 									if (oldAllocation != null && newAllocation != null) {
 										if (differentSequenceChecker.test(oldAllocation, newAllocation)) {
@@ -604,9 +603,18 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							return Collections.singletonList(vev.getVesselEvent());
 						} else if (event instanceof final OpenSlotAllocation sa) {
 							return Collections.singletonList(sa.getSlot());
-						} else {
-							return Collections.emptyList();
+						} else if (event instanceof StartEvent se) {
+							if (se.getSequence() != null && se.getSequence().getVesselCharter() != null) {
+								return Collections.singletonList(se.getSequence().getVesselCharter());
+							}
+						} else if (event instanceof EndEvent ee) {
+							if (ee.getSequence() != null && ee.getSequence().getVesselCharter() != null) {
+								return Collections.singletonList(ee.getSequence().getVesselCharter());
+							}
 						}
+						
+						return Collections.emptyList();
+						
 					};
 
 					for (final Object event : result) {
@@ -1336,18 +1344,6 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			@Override
 			protected Collection<EObject> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				numberOfSchedules++;
-				final List<Event> interestingEvents = new LinkedList<>();
-				for (final Sequence sequence : schedule.getSequences()) {
-					for (final Event event : sequence.getEvents()) {
-						if (event instanceof StartEvent //
-								|| event instanceof VesselEventVisit //
-								|| event instanceof GeneratedCharterOut //
-								|| event instanceof SlotVisit) {
-							interestingEvents.add(event);
-						}
-					}
-				}
-
 				return Collections.singleton(schedule);
 			}
 		};

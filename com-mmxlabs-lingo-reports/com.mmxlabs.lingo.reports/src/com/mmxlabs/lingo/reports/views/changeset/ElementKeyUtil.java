@@ -44,6 +44,7 @@ public class ElementKeyUtil {
 	 * @param element
 	 * @return
 	 */
+	@NonNull
 	public static String getElementKey(EObject element) {
 		if (element instanceof Row) {
 			if (element.eIsSet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION)) {
@@ -56,11 +57,10 @@ public class ElementKeyUtil {
 				element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__TARGET);
 			}
 		}
-		if (element instanceof SlotVisit) {
-			return "visit-" + getElementKey(((SlotVisit) element).getSlotAllocation());
+		if (element instanceof SlotVisit slotVisit) {
+			return "visit-" + getElementKey(slotVisit.getSlotAllocation());
 		}
-		if (element instanceof SlotAllocation) {
-			final SlotAllocation slotAllocation = (SlotAllocation) element;
+		if (element instanceof SlotAllocation slotAllocation) {
 			String prefix = "";
 			final Slot<?> slot = slotAllocation.getSlot();
 			prefix = "allocation-" + getSlotTypePrefix(slot);
@@ -71,10 +71,9 @@ public class ElementKeyUtil {
 				final String baseName = slotAllocation.getName();
 				return prefix + "-" + baseName;
 			}
-		} else if (element instanceof CargoAllocation) {
-			return "cargo-" + ((CargoAllocation) element).getName();
-		} else if (element instanceof OpenSlotAllocation) {
-			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+		} else if (element instanceof CargoAllocation cargoAllocation) {
+			return "cargo-" + cargoAllocation.getName();
+		} else if (element instanceof OpenSlotAllocation openSlotAllocation) {
 			String prefix = "";
 			final Slot<?> slot = openSlotAllocation.getSlot();
 			prefix = getSlotTypePrefix(slot);
@@ -84,8 +83,7 @@ public class ElementKeyUtil {
 				final String baseName = openSlotAllocation.getSlot().getName();
 				return prefix + "-" + baseName;
 			}
-		} else if (element instanceof StartEvent) {
-			final StartEvent startEvent = (StartEvent) element;
+		} else if (element instanceof StartEvent startEvent) {
 			Sequence sequence = startEvent.getSequence();
 			VesselCharter vesselCharter = sequence.getVesselCharter();
 			final String base = "start-" + sequence.getName() + "-" + (vesselCharter == null ? "" : Integer.toString(vesselCharter.getCharterNumber()));
@@ -93,8 +91,7 @@ public class ElementKeyUtil {
 				return base + "-" + sequence.getSpotIndex();
 			}
 			return base;
-		} else if (element instanceof EndEvent) {
-			final EndEvent endEvent = (EndEvent) element;
+		} else if (element instanceof EndEvent endEvent) {
 			Sequence sequence = endEvent.getSequence();
 			VesselCharter vesselCharter = sequence.getVesselCharter();
 			final String base = "end-" + sequence.getName() + "-" + (vesselCharter == null ? "" : Integer.toString(vesselCharter.getCharterNumber()));
@@ -102,32 +99,31 @@ public class ElementKeyUtil {
 				return base + "-" + sequence.getSpotIndex();
 			}
 			return base;
-		} else if (element instanceof GeneratedCharterOut) {
+		} else if (element instanceof GeneratedCharterOut generatedCharterOut) {
 			// Add in hash code to keep elements unique.
 			// See start of #checkElementEquivalence
 			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
-			return element.eClass().getName() + "-" + ((Event) element).name() + "-" + element.hashCode();
-		} else if (element instanceof CharterLengthEvent) {
+			return element.eClass().getName() + "-" + generatedCharterOut.name() + "-" + element.hashCode();
+		} else if (element instanceof CharterLengthEvent charterLengthEvent) {
 			// Add in hash code to keep elements unique.
 			// See start of #checkElementEquivalence
 			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
-			return element.eClass().getName() + "-" + ((Event) element).name() + "-" + element.hashCode();
-		} else if (element instanceof GroupedCharterLengthEvent) {
+			return element.eClass().getName() + "-" + charterLengthEvent.name() + "-" + element.hashCode();
+		} else if (element instanceof GroupedCharterLengthEvent groupedCharterLengthEvent) {
 			// Add in hash code to keep elements unique.
 			// See start of #checkElementEquivalence
 			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
-			return element.eClass().getName() + "-" + ((Event) element).name();
-		} else if (element instanceof GroupedCharterOutEvent) {
+			return element.eClass().getName() + "-" + groupedCharterLengthEvent.name();
+		} else if (element instanceof GroupedCharterOutEvent groupedCharterOutEvent) {
 			// Add in hash code to keep elements unique.
 			// See start of #checkElementEquivalence
 			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
-			return element.eClass().getName() + "-" + ((Event) element).name();
-		} else if (element instanceof Event) {
-			return element.eClass().getName() + "-" + ((Event) element).name();
+			return element.eClass().getName() + "-" + groupedCharterOutEvent.name();
+		} else if (element instanceof Event event) {
+			return element.eClass().getName() + "-" + event.name();
 		}
-		if (element instanceof Slot) {
+		if (element instanceof Slot<?> slot) {
 			String prefix = "";
-			final Slot<?> slot = (Slot<?>) element;
 			prefix = getSlotTypePrefix(slot);
 			if (slot instanceof SpotSlot) {
 				return prefix + "-" + getSpotSlotSuffix(slot);

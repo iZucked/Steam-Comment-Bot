@@ -25,9 +25,8 @@ import com.mmxlabs.rcp.common.internal.Activator;
  */
 public class PieChartRenderer {
 
-	private static Color majorColor = new Color(Display.getDefault(), 240, 80, 85);
-	private static Color defaultMinorColour = new Color(Display.getDefault(), 100, 230, 120);
-//	-		
+	private static Color majorColor = new Color(Display.getDefault(), 150, 200, 255); // Background/incomplete (i.e. 0%)
+	private static Color defaultMinorColour = new Color(Display.getDefault(), 79, 173, 50); // Completed (i.e. 100%)
 
 	public static Image renderPie(final double p) {
 		return renderPie(defaultMinorColour, majorColor, p);
@@ -71,7 +70,6 @@ public class PieChartRenderer {
 		Arrays.fill(data.alphaData, (byte) 0);
 
 		final PaletteData palette = data.palette;
-		final double dmax = Math.max(colourDistance(maskColor.getRGB(), minorColor.getRGB()), colourDistance(maskColor.getRGB(), majorColor.getRGB()));
 
 		for (int x = 0; x < data.width; x++) {
 			for (int y = 0; y < data.height; y++) {
@@ -79,10 +77,7 @@ public class PieChartRenderer {
 				if (rgb.equals(maskColor.getRGB())) {
 					data.setAlpha(x, y, 0);
 				} else {
-					double minorDistance = colourDistance(rgb, minorColor.getRGB());
-					double majorDistance = colourDistance(rgb, majorColor.getRGB());
-
-					data.setAlpha(x, y, (int) (255 * (1 - (Math.min(minorDistance, majorDistance) / dmax))));
+					data.setAlpha(x, y, 255);
 				}
 			}
 		}
@@ -90,16 +85,9 @@ public class PieChartRenderer {
 		gc.dispose();
 
 		image.dispose();
-		
+
 		final Image result = new Image(Display.getDefault(), data);
 		Activator.getDefault().getImageRegistry().put(imageName, result);
 		return result;
-	}
-
-	private static final double colourDistance(final RGB one, final RGB two) {
-		final int dr = one.red - two.red;
-		final int dg = one.green - two.green;
-		final int db = one.blue - two.blue;
-		return Math.sqrt(dr * dr + dg * dg + db * db);
 	}
 }

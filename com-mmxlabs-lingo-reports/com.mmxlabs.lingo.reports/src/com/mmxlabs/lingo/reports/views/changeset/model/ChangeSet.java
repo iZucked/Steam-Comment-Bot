@@ -198,7 +198,7 @@ public interface ChangeSet extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Change Set Rows To Default Base</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow}.
+	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Change Set Rows To Default Base</em>' containment reference list isn't clear,
@@ -210,11 +210,11 @@ public interface ChangeSet extends EObject {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<ChangeSetRow> getChangeSetRowsToDefaultBase();
+	EList<ChangeSetTableRow> getChangeSetRowsToDefaultBase();
 
 	/**
 	 * Returns the value of the '<em><b>Change Set Rows To Alternative Base</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow}.
+	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Change Set Rows To Alternative Base</em>' containment reference list isn't clear,
@@ -226,7 +226,7 @@ public interface ChangeSet extends EObject {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<ChangeSetRow> getChangeSetRowsToAlternativeBase();
+	EList<ChangeSetTableRow> getChangeSetRowsToAlternativeBase();
 
 	/**
 	 * Returns the value of the '<em><b>Current Metrics</b></em>' containment reference.

@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
@@ -46,6 +47,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 
 	public static final String KEY_THIRD_PARTY_ENTITY = "VesselCharterConstraint.third-party-entity";
+
+	public static final Object KEY_VESSEL_CHARTER_RATE = new Object();
+	public static final Object KEY_VESSEL_BUNKER_PRICE = new Object();
+	
 	
 	@Override
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
@@ -148,13 +153,19 @@ public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 			if (earliestDate != null) {
 				final String timeCharterRate = vesselCharter.getTimeCharterRate();
 				if (timeCharterRate != null && !timeCharterRate.trim().isEmpty()) {
-					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(timeCharterRate)) {
-						@Nullable
-						final YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
-						if (date == null || date.isAfter(earliestDate)) {
+					for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(timeCharterRate, PriceIndexType.CHARTER)) {
+						final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+						if (date == null) {
 
 							statuses.add(baseFactory.copyName() //
 									.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__TIME_CHARTER_RATE) //
+									.withMessage(String.format("There is no charter cost pricing data for curve %s", index.getName())) //
+									.withConstraintKey(KEY_VESSEL_CHARTER_RATE) //
+									.make(ctx));
+						} else if (date.isAfter(earliestDate)) {
+							statuses.add(baseFactory.copyName() //
+									.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__TIME_CHARTER_RATE) //
+									.withConstraintKey(KEY_VESSEL_CHARTER_RATE) //
 									.withMessage(String.format("There is no charter cost pricing data before %s %04d for curve %s", date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()),
 											date.getYear(), index.getName())) //
 									.make(ctx));
@@ -173,36 +184,40 @@ public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 				fuels.remove(null);
 
 				final MMXRootObject rootObject = extraContext.getRootObject();
-				if (rootObject instanceof LNGScenarioModel) {
-					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 
-					final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
+				final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
 
-					for (final BaseFuel baseFuel : fuels) {
-						for (final BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
-							if (baseFuelCost.getFuel() == baseFuel) {
+				for (final BaseFuel baseFuel : fuels) {
+					for (final BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
+						if (baseFuelCost.getFuel() == baseFuel) {
 
-								final YearMonth key = earliestDate;
-								final String priceExpression = baseFuelCost.getExpression();
+							final YearMonth key = earliestDate;
+							final String priceExpression = baseFuelCost.getExpression();
 
-								if (priceExpression != null && !priceExpression.trim().isEmpty()) {
-									for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(priceExpression)) {
-										final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
-										if (date == null) {
-											statuses.add(baseFactory.copyName() //
-													.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__VESSEL) //
-													.withMessage(String.format("There is no base fuel cost pricing data for curve %s", index.getName())) //
-													.make(ctx));
-										} else if (date.isAfter(key)) {
-											statuses.add(baseFactory.copyName() //
-													.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__VESSEL) //
-													.withMessage(String.format("There is no base fuel cost pricing data before %s %04d for curve %s",
-															date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())) //
-													.make(ctx));
-										}
+							if (priceExpression != null && !priceExpression.trim().isEmpty()) {
+								for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(priceExpression, PriceIndexType.BUNKERS)) {
+									if (index.isSetExpression()) {
+										continue;
+									}
+									final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+									if (date == null) {
+										statuses.add(baseFactory.copyName() //
+												.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__VESSEL) //
+												.withMessage(String.format("There is no base fuel cost pricing data for curve %s", index.getName())) //
+												.withConstraintKey(KEY_VESSEL_BUNKER_PRICE) //
+
+												.make(ctx));
+									} else if (date.isAfter(key)) {
+										statuses.add(baseFactory.copyName() //
+												.withObjectAndFeature(vesselCharter, CargoPackage.Literals.VESSEL_CHARTER__VESSEL) //
+												.withMessage(String.format("There is no base fuel cost pricing data before %s %04d for curve %s",
+														date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), date.getYear(), index.getName())) //
+												.withConstraintKey(KEY_VESSEL_BUNKER_PRICE) //
+
+												.make(ctx));
 									}
 								}
-
 							}
 						}
 					}
@@ -215,9 +230,7 @@ public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 	private void charterContractValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory, final List<IStatus> failures,
 			final YearMonth earliestDate, final String vesselName) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselCharter) {
-			final VesselCharter va = (VesselCharter) target;
-
+		if (target instanceof VesselCharter va) {
 			final GenericCharterContract contract = va.getCharterOrDelegateCharterContract();
 			if (contract != null) {
 				final IBallastBonus ballastBonusContract = contract.getBallastBonusTerms();

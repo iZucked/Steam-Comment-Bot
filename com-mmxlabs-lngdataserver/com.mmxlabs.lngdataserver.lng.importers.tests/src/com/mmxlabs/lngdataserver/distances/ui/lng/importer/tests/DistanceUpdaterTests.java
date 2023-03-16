@@ -39,8 +39,11 @@ public class DistanceUpdaterTests {
 				{ "2022a", "2022b", 0 }, //
 				{ "2022b", "2023a", 0 }, //
 				{ "2023a", "2023b", 0 }, //
+				{ "2023b", "2023c", 0 }, //
+				{ "2023a", "2023c", 0 }, //
 				{ "2023a", CURRENT, 0 }, //
 				{ "2023b", CURRENT, 0 }, //
+				{ "2023c", CURRENT, 0 }, //
 
 		});
 	}
@@ -101,7 +104,7 @@ public class DistanceUpdaterTests {
 
 		// Make sure we have not lost any distance lines from the totals count
 		for (var ro : RouteOption.values()) {
-			// System.out.printf("%s %,d -> %,d%n", ro.getName(), before.get(ro), after.get(ro));
+//			 System.out.printf("%s %,d -> %,d%n", ro.getName(), before.get(ro), after.get(ro));
 			 Assertions.assertTrue(after.get(ro) >= before.get(ro));
 		}
 		int lost = 0;

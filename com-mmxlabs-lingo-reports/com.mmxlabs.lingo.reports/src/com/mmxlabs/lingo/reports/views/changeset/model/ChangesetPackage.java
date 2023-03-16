@@ -384,87 +384,68 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW_DATA_GROUP_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl <em>Change Set Row</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetWiringGroupImpl <em>Change Set Wiring Group</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeSetRow()
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetWiringGroupImpl
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeSetWiringGroup()
 	 * @generated
 	 */
-	int CHANGE_SET_ROW = 5;
+	int CHANGE_SET_WIRING_GROUP = 5;
 
 	/**
-	 * The feature id for the '<em><b>Wiring Change</b></em>' attribute.
+	 * The feature id for the '<em><b>Rows</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__WIRING_CHANGE = 0;
+	int CHANGE_SET_WIRING_GROUP__ROWS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Change</b></em>' attribute.
+	 * The number of structural features of the '<em>Change Set Wiring Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__VESSEL_CHANGE = 1;
+	int CHANGE_SET_WIRING_GROUP_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Date Change</b></em>' attribute.
+	 * The operation id for the '<em>Is Wiring Change</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__DATE_CHANGE = 2;
+	int CHANGE_SET_WIRING_GROUP___IS_WIRING_CHANGE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Before Data</b></em>' containment reference.
+	 * The operation id for the '<em>Is Vessel Change</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__BEFORE_DATA = 3;
+	int CHANGE_SET_WIRING_GROUP___IS_VESSEL_CHANGE = 1;
 
 	/**
-	 * The feature id for the '<em><b>After Data</b></em>' containment reference.
+	 * The operation id for the '<em>Is Date Change</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__AFTER_DATA = 4;
+	int CHANGE_SET_WIRING_GROUP___IS_DATE_CHANGE = 2;
 
 	/**
-	 * The number of structural features of the '<em>Change Set Row</em>' class.
+	 * The number of operations of the '<em>Change Set Wiring Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_FEATURE_COUNT = 5;
-
-	/**
-	 * The operation id for the '<em>Is Major Change</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_ROW___IS_MAJOR_CHANGE = 0;
-
-	/**
-	 * The number of operations of the '<em>Change Set Row</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_ROW_OPERATION_COUNT = 1;
-
+	int CHANGE_SET_WIRING_GROUP_OPERATION_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl <em>Change Set Row Data</em>}' class.
@@ -531,13 +512,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW_DATA__VESSEL_TYPE = 5;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Charter Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER = 6;
+
+	/**
 	 * The feature id for the '<em><b>Lhs Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_NAME = 6;
+	int CHANGE_SET_ROW_DATA__LHS_NAME = 7;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Name</b></em>' attribute.
@@ -546,7 +536,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_NAME = 7;
+	int CHANGE_SET_ROW_DATA__RHS_NAME = 8;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Link</b></em>' reference.
@@ -555,7 +545,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_LINK = 8;
+	int CHANGE_SET_ROW_DATA__LHS_LINK = 9;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Link</b></em>' reference.
@@ -564,7 +554,79 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_LINK = 9;
+	int CHANGE_SET_ROW_DATA__RHS_LINK = 10;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Slot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__LHS_SLOT = 11;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Spot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__LHS_SPOT = 12;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__LHS_OPTIONAL = 13;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Slot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__RHS_SLOT = 14;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Spot</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__RHS_SPOT = 15;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__RHS_OPTIONAL = 16;
+
+	/**
+	 * The feature id for the '<em><b>Lhs Non Shipped</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__LHS_NON_SHIPPED = 17;
+
+	/**
+	 * The feature id for the '<em><b>Rhs Non Shipped</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW_DATA__RHS_NON_SHIPPED = 18;
 
 	/**
 	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
@@ -573,7 +635,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LOAD_SLOT = 10;
+	int CHANGE_SET_ROW_DATA__LOAD_SLOT = 19;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
@@ -582,7 +644,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__DISCHARGE_SLOT = 11;
+	int CHANGE_SET_ROW_DATA__DISCHARGE_SLOT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
@@ -591,7 +653,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LOAD_ALLOCATION = 12;
+	int CHANGE_SET_ROW_DATA__LOAD_ALLOCATION = 21;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
@@ -600,7 +662,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION = 13;
+	int CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION = 22;
 
 	/**
 	 * The feature id for the '<em><b>Open Load Allocation</b></em>' reference.
@@ -609,7 +671,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__OPEN_LOAD_ALLOCATION = 14;
+	int CHANGE_SET_ROW_DATA__OPEN_LOAD_ALLOCATION = 23;
 
 	/**
 	 * The feature id for the '<em><b>Open Discharge Allocation</b></em>' reference.
@@ -618,7 +680,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__OPEN_DISCHARGE_ALLOCATION = 15;
+	int CHANGE_SET_ROW_DATA__OPEN_DISCHARGE_ALLOCATION = 24;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Event</b></em>' reference.
@@ -627,7 +689,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_EVENT = 16;
+	int CHANGE_SET_ROW_DATA__LHS_EVENT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Event</b></em>' reference.
@@ -636,7 +698,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_EVENT = 17;
+	int CHANGE_SET_ROW_DATA__RHS_EVENT = 26;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Group Profit And Loss</b></em>' reference.
@@ -645,7 +707,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__LHS_GROUP_PROFIT_AND_LOSS = 18;
+	int CHANGE_SET_ROW_DATA__LHS_GROUP_PROFIT_AND_LOSS = 27;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Group Profit And Loss</b></em>' reference.
@@ -654,7 +716,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS = 19;
+	int CHANGE_SET_ROW_DATA__RHS_GROUP_PROFIT_AND_LOSS = 28;
 
 	/**
 	 * The feature id for the '<em><b>Paper Deal Allocation</b></em>' reference.
@@ -663,16 +725,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION = 20;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Charter Number</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_ROW_DATA__VESSEL_CHARTER_NUMBER = 21;
+	int CHANGE_SET_ROW_DATA__PAPER_DEAL_ALLOCATION = 29;
 
 	/**
 	 * The number of structural features of the '<em>Change Set Row Data</em>' class.
@@ -681,7 +734,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 22;
+	int CHANGE_SET_ROW_DATA_FEATURE_COUNT = 30;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row Data</em>' class.
@@ -704,7 +757,7 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_GROUP = 7;
 
 	/**
-	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Rows</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -821,13 +874,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE = 12;
 
 	/**
+	 * The feature id for the '<em><b>Table Root</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_GROUP__TABLE_ROOT = 13;
+
+	/**
 	 * The number of structural features of the '<em>Change Set Table Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_GROUP_FEATURE_COUNT = 13;
+	int CHANGE_SET_TABLE_GROUP_FEATURE_COUNT = 14;
 
 	/**
 	 * The number of operations of the '<em>Change Set Table Group</em>' class.
@@ -849,31 +911,13 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_ROW = 8;
 
 	/**
-	 * The feature id for the '<em><b>Lhs Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__LHS_NAME = 0;
-
-	/**
-	 * The feature id for the '<em><b>Rhs Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__RHS_NAME = 1;
-
-	/**
 	 * The feature id for the '<em><b>Lhs Before</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_BEFORE = 2;
+	int CHANGE_SET_TABLE_ROW__LHS_BEFORE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Lhs After</b></em>' reference.
@@ -882,133 +926,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_AFTER = 3;
-
-	/**
-	 * The feature id for the '<em><b>Rhs Before</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__RHS_BEFORE = 4;
-
-	/**
-	 * The feature id for the '<em><b>Rhs After</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__RHS_AFTER = 5;
-
-	/**
-	 * The feature id for the '<em><b>Before Vessel Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_NAME = 6;
-
-	/**
-	 * The feature id for the '<em><b>Before Vessel Short Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_SHORT_NAME = 7;
-
-	/**
-	 * The feature id for the '<em><b>After Vessel Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_NAME = 8;
-
-	/**
-	 * The feature id for the '<em><b>After Vessel Short Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_SHORT_NAME = 9;
-
-	/**
-	 * The feature id for the '<em><b>Wiring Change</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__WIRING_CHANGE = 10;
-
-	/**
-	 * The feature id for the '<em><b>Vessel Change</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__VESSEL_CHANGE = 11;
-
-	/**
-	 * The feature id for the '<em><b>Date Change</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__DATE_CHANGE = 12;
-
-	/**
-	 * The feature id for the '<em><b>Previous RHS</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__PREVIOUS_RHS = 13;
-
-	/**
-	 * The feature id for the '<em><b>Next LHS</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__NEXT_LHS = 14;
-
-	/**
-	 * The feature id for the '<em><b>Lhs Slot</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__LHS_SLOT = 15;
-
-	/**
-	 * The feature id for the '<em><b>Lhs Spot</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__LHS_SPOT = 16;
-
-	/**
-	 * The feature id for the '<em><b>Lhs Optional</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_TABLE_ROW__LHS_OPTIONAL = 17;
+	int CHANGE_SET_TABLE_ROW__LHS_AFTER = 1;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Valid</b></em>' attribute.
@@ -1017,97 +935,97 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_VALID = 18;
+	int CHANGE_SET_TABLE_ROW__LHS_VALID = 2;
 
 	/**
-	 * The feature id for the '<em><b>Lhs Non Shipped</b></em>' attribute.
+	 * The feature id for the '<em><b>Current Rhs Before</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_NON_SHIPPED = 19;
+	int CHANGE_SET_TABLE_ROW__CURRENT_RHS_BEFORE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Rhs Slot</b></em>' attribute.
+	 * The feature id for the '<em><b>Current Rhs After</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_SLOT = 20;
+	int CHANGE_SET_TABLE_ROW__CURRENT_RHS_AFTER = 4;
 
 	/**
-	 * The feature id for the '<em><b>Rhs Spot</b></em>' attribute.
+	 * The feature id for the '<em><b>Previous Rhs Before</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_SPOT = 21;
+	int CHANGE_SET_TABLE_ROW__PREVIOUS_RHS_BEFORE = 5;
 
 	/**
-	 * The feature id for the '<em><b>Rhs Optional</b></em>' attribute.
+	 * The feature id for the '<em><b>Previous Rhs After</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_OPTIONAL = 22;
+	int CHANGE_SET_TABLE_ROW__PREVIOUS_RHS_AFTER = 6;
 
 	/**
-	 * The feature id for the '<em><b>Rhs Valid</b></em>' attribute.
+	 * The feature id for the '<em><b>Current Rhs Valid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_VALID = 23;
+	int CHANGE_SET_TABLE_ROW__CURRENT_RHS_VALID = 7;
 
 	/**
-	 * The feature id for the '<em><b>Rhs Non Shipped</b></em>' attribute.
+	 * The feature id for the '<em><b>Wiring Change</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED = 24;
+	int CHANGE_SET_TABLE_ROW__WIRING_CHANGE = 8;
 
 	/**
-	 * The feature id for the '<em><b>Before Vessel Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Vessel Change</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE = 25;
+	int CHANGE_SET_TABLE_ROW__VESSEL_CHANGE = 9;
 
 	/**
-	 * The feature id for the '<em><b>After Vessel Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Date Change</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = 26;
+	int CHANGE_SET_TABLE_ROW__DATE_CHANGE = 10;
 
 	/**
-	 * The feature id for the '<em><b>Before Vessel Charter Number</b></em>' attribute.
+	 * The feature id for the '<em><b>Wiring Group</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER = 27;
+	int CHANGE_SET_TABLE_ROW__WIRING_GROUP = 11;
 
 	/**
-	 * The feature id for the '<em><b>After Vessel Charter Number</b></em>' attribute.
+	 * The feature id for the '<em><b>Table Group</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER = 28;
+	int CHANGE_SET_TABLE_ROW__TABLE_GROUP = 12;
 
 	/**
 	 * The number of structural features of the '<em>Change Set Table Row</em>' class.
@@ -1116,7 +1034,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 29;
+	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 13;
 
 	/**
 	 * The operation id for the '<em>Is Major Change</em>' operation.
@@ -1128,13 +1046,193 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_ROW___IS_MAJOR_CHANGE = 0;
 
 	/**
+	 * The operation id for the '<em>Get LHS After Or Before</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_LHS_AFTER_OR_BEFORE = 1;
+
+	/**
+	 * The operation id for the '<em>Get Current RHS After Or Before</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_CURRENT_RHS_AFTER_OR_BEFORE = 2;
+
+	/**
+	 * The operation id for the '<em>Get Lhs Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_LHS_NAME = 3;
+
+	/**
+	 * The operation id for the '<em>Get Current Rhs Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_CURRENT_RHS_NAME = 4;
+
+	/**
+	 * The operation id for the '<em>Get Before Vessel Charter Number</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_CHARTER_NUMBER = 5;
+
+	/**
+	 * The operation id for the '<em>Get Before Vessel Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_NAME = 6;
+
+	/**
+	 * The operation id for the '<em>Get Before Vessel Short Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_SHORT_NAME = 7;
+
+	/**
+	 * The operation id for the '<em>Get Before Vessel Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_TYPE = 8;
+
+	/**
+	 * The operation id for the '<em>Get After Vessel Charter Number</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_CHARTER_NUMBER = 9;
+
+	/**
+	 * The operation id for the '<em>Get After Vessel Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_NAME = 10;
+
+	/**
+	 * The operation id for the '<em>Get After Vessel Short Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_SHORT_NAME = 11;
+
+	/**
+	 * The operation id for the '<em>Get After Vessel Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_TYPE = 12;
+
+	/**
+	 * The operation id for the '<em>Is Lhs Slot</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_LHS_SLOT = 13;
+
+	/**
+	 * The operation id for the '<em>Is Current Rhs Slot</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_SLOT = 14;
+
+	/**
+	 * The operation id for the '<em>Is Lhs Spot</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_LHS_SPOT = 15;
+
+	/**
+	 * The operation id for the '<em>Is Current Rhs Optional</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_OPTIONAL = 16;
+
+	/**
+	 * The operation id for the '<em>Is Lhs Optional</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_LHS_OPTIONAL = 17;
+
+	/**
+	 * The operation id for the '<em>Is Current Rhs Spot</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_SPOT = 18;
+
+	/**
+	 * The operation id for the '<em>Is Lhs Non Shipped</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_LHS_NON_SHIPPED = 19;
+
+	/**
+	 * The operation id for the '<em>Is Current Rhs Non Shipped</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_NON_SHIPPED = 20;
+
+	/**
 	 * The number of operations of the '<em>Change Set Table Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW_OPERATION_COUNT = 1;
+	int CHANGE_SET_TABLE_ROW_OPERATION_COUNT = 21;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRootImpl <em>Change Set Table Root</em>}' class.
@@ -1454,79 +1552,55 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSetRowDataGroup_Members();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow <em>Change Set Row</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup <em>Change Set Wiring Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Change Set Row</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow
+	 * @return the meta object for class '<em>Change Set Wiring Group</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup
 	 * @generated
 	 */
-	EClass getChangeSetRow();
+	EClass getChangeSetWiringGroup();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isWiringChange <em>Wiring Change</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#getRows <em>Rows</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Wiring Change</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isWiringChange()
-	 * @see #getChangeSetRow()
+	 * @return the meta object for the reference list '<em>Rows</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#getRows()
+	 * @see #getChangeSetWiringGroup()
 	 * @generated
 	 */
-	EAttribute getChangeSetRow_WiringChange();
+	EReference getChangeSetWiringGroup_Rows();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isVesselChange <em>Vessel Change</em>}'.
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#isWiringChange() <em>Is Wiring Change</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Vessel Change</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isVesselChange()
-	 * @see #getChangeSetRow()
+	 * @return the meta object for the '<em>Is Wiring Change</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#isWiringChange()
 	 * @generated
 	 */
-	EAttribute getChangeSetRow_VesselChange();
+	EOperation getChangeSetWiringGroup__IsWiringChange();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isDateChange <em>Date Change</em>}'.
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#isVesselChange() <em>Is Vessel Change</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Date Change</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isDateChange()
-	 * @see #getChangeSetRow()
+	 * @return the meta object for the '<em>Is Vessel Change</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#isVesselChange()
 	 * @generated
 	 */
-	EAttribute getChangeSetRow_DateChange();
+	EOperation getChangeSetWiringGroup__IsVesselChange();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getBeforeData <em>Before Data</em>}'.
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#isDateChange() <em>Is Date Change</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Before Data</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getBeforeData()
-	 * @see #getChangeSetRow()
+	 * @return the meta object for the '<em>Is Date Change</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup#isDateChange()
 	 * @generated
 	 */
-	EReference getChangeSetRow_BeforeData();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getAfterData <em>After Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>After Data</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getAfterData()
-	 * @see #getChangeSetRow()
-	 * @generated
-	 */
-	EReference getChangeSetRow_AfterData();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isMajorChange() <em>Is Major Change</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Is Major Change</em>' operation.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isMajorChange()
-	 * @generated
-	 */
-	EOperation getChangeSetRow__IsMajorChange();
+	EOperation getChangeSetWiringGroup__IsDateChange();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData <em>Change Set Row Data</em>}'.
@@ -1592,6 +1666,94 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getChangeSetRowData_RhsLink();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSlot <em>Lhs Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lhs Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSlot()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_LhsSlot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSpot <em>Lhs Spot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lhs Spot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsSpot()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_LhsSpot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsOptional <em>Lhs Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lhs Optional</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsOptional()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_LhsOptional();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSlot <em>Rhs Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Rhs Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSlot()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_RhsSlot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSpot <em>Rhs Spot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Rhs Spot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsSpot()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_RhsSpot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsOptional <em>Rhs Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Rhs Optional</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsOptional()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_RhsOptional();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsNonShipped <em>Lhs Non Shipped</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lhs Non Shipped</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isLhsNonShipped()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_LhsNonShipped();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsNonShipped <em>Rhs Non Shipped</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Rhs Non Shipped</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#isRhsNonShipped()
+	 * @see #getChangeSetRowData()
+	 * @generated
+	 */
+	EAttribute getChangeSetRowData_RhsNonShipped();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData#getLoadSlot <em>Load Slot</em>}'.
@@ -1769,10 +1931,10 @@ public interface ChangesetPackage extends EPackage {
 	EClass getChangeSetTableGroup();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getRows <em>Rows</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getRows <em>Rows</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Rows</em>'.
+	 * @return the meta object for the reference list '<em>Rows</em>'.
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getRows()
 	 * @see #getChangeSetTableGroup()
 	 * @generated
@@ -1912,6 +2074,17 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetTableGroup_GroupAlternative();
 
 	/**
+	 * Returns the meta object for the container reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getTableRoot <em>Table Root</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Table Root</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getTableRoot()
+	 * @see #getChangeSetTableGroup()
+	 * @generated
+	 */
+	EReference getChangeSetTableGroup_TableRoot();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow <em>Change Set Table Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1920,28 +2093,6 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getChangeSetTableRow();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsName <em>Lhs Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lhs Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsName()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_LhsName();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsName <em>Rhs Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Rhs Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsName()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_RhsName();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsBefore <em>Lhs Before</em>}'.
@@ -1964,72 +2115,6 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getChangeSetTableRow_LhsAfter();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsBefore <em>Rhs Before</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Rhs Before</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsBefore()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EReference getChangeSetTableRow_RhsBefore();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsAfter <em>Rhs After</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Rhs After</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getRhsAfter()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EReference getChangeSetTableRow_RhsAfter();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselName <em>Before Vessel Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Before Vessel Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselName()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_BeforeVesselName();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselShortName <em>Before Vessel Short Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Before Vessel Short Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselShortName()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_BeforeVesselShortName();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselName <em>After Vessel Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>After Vessel Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselName()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_AfterVesselName();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselShortName <em>After Vessel Short Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>After Vessel Short Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselShortName()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_AfterVesselShortName();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isWiringChange <em>Wiring Change</em>}'.
@@ -2065,61 +2150,6 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetTableRow_DateChange();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS <em>Previous RHS</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Previous RHS</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EReference getChangeSetTableRow_PreviousRHS();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getNextLHS <em>Next LHS</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Next LHS</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getNextLHS()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EReference getChangeSetTableRow_NextLHS();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSlot <em>Lhs Slot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lhs Slot</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSlot()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_LhsSlot();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSpot <em>Lhs Spot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lhs Spot</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSpot()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_LhsSpot();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsOptional <em>Lhs Optional</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lhs Optional</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsOptional()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_LhsOptional();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsValid <em>Lhs Valid</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2131,114 +2161,81 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetTableRow_LhsValid();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsNonShipped <em>Lhs Non Shipped</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsBefore <em>Current Rhs Before</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lhs Non Shipped</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsNonShipped()
+	 * @return the meta object for the reference '<em>Current Rhs Before</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsBefore()
 	 * @see #getChangeSetTableRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetTableRow_LhsNonShipped();
+	EReference getChangeSetTableRow_CurrentRhsBefore();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSlot <em>Rhs Slot</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsAfter <em>Current Rhs After</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Rhs Slot</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSlot()
+	 * @return the meta object for the reference '<em>Current Rhs After</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsAfter()
 	 * @see #getChangeSetTableRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetTableRow_RhsSlot();
+	EReference getChangeSetTableRow_CurrentRhsAfter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSpot <em>Rhs Spot</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsBefore <em>Previous Rhs Before</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Rhs Spot</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsSpot()
+	 * @return the meta object for the reference '<em>Previous Rhs Before</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsBefore()
 	 * @see #getChangeSetTableRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetTableRow_RhsSpot();
+	EReference getChangeSetTableRow_PreviousRhsBefore();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsOptional <em>Rhs Optional</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsAfter <em>Previous Rhs After</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Rhs Optional</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsOptional()
+	 * @return the meta object for the reference '<em>Previous Rhs After</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRhsAfter()
 	 * @see #getChangeSetTableRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetTableRow_RhsOptional();
+	EReference getChangeSetTableRow_PreviousRhsAfter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsValid <em>Rhs Valid</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsValid <em>Current Rhs Valid</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Rhs Valid</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsValid()
+	 * @return the meta object for the attribute '<em>Current Rhs Valid</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsValid()
 	 * @see #getChangeSetTableRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetTableRow_RhsValid();
+	EAttribute getChangeSetTableRow_CurrentRhsValid();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsNonShipped <em>Rhs Non Shipped</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getWiringGroup <em>Wiring Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Rhs Non Shipped</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isRhsNonShipped()
+	 * @return the meta object for the reference '<em>Wiring Group</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getWiringGroup()
 	 * @see #getChangeSetTableRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetTableRow_RhsNonShipped();
+	EReference getChangeSetTableRow_WiringGroup();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType <em>Before Vessel Type</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getTableGroup <em>Table Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Before Vessel Type</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType()
+	 * @return the meta object for the reference '<em>Table Group</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getTableGroup()
 	 * @see #getChangeSetTableRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetTableRow_BeforeVesselType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType <em>After Vessel Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>After Vessel Type</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_AfterVesselType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber <em>Before Vessel Charter Number</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Before Vessel Charter Number</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_BeforeVesselCharterNumber();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber <em>After Vessel Charter Number</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>After Vessel Charter Number</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber()
-	 * @see #getChangeSetTableRow()
-	 * @generated
-	 */
-	EAttribute getChangeSetTableRow_AfterVesselCharterNumber();
+	EReference getChangeSetTableRow_TableGroup();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isMajorChange() <em>Is Major Change</em>}' operation.
@@ -2249,6 +2246,206 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getChangeSetTableRow__IsMajorChange();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLHSAfterOrBefore() <em>Get LHS After Or Before</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get LHS After Or Before</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLHSAfterOrBefore()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetLHSAfterOrBefore();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRHSAfterOrBefore() <em>Get Current RHS After Or Before</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Current RHS After Or Before</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRHSAfterOrBefore()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetCurrentRHSAfterOrBefore();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsName() <em>Get Lhs Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Lhs Name</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getLhsName()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetLhsName();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsName() <em>Get Current Rhs Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Current Rhs Name</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getCurrentRhsName()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetCurrentRhsName();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber() <em>Get Before Vessel Charter Number</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Before Vessel Charter Number</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselCharterNumber()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetBeforeVesselCharterNumber();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselName() <em>Get Before Vessel Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Before Vessel Name</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselName()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetBeforeVesselName();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselShortName() <em>Get Before Vessel Short Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Before Vessel Short Name</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselShortName()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetBeforeVesselShortName();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType() <em>Get Before Vessel Type</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Before Vessel Type</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getBeforeVesselType()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetBeforeVesselType();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber() <em>Get After Vessel Charter Number</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get After Vessel Charter Number</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselCharterNumber()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetAfterVesselCharterNumber();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselName() <em>Get After Vessel Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get After Vessel Name</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselName()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetAfterVesselName();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselShortName() <em>Get After Vessel Short Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get After Vessel Short Name</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselShortName()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetAfterVesselShortName();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType() <em>Get After Vessel Type</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get After Vessel Type</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselType()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__GetAfterVesselType();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSlot() <em>Is Lhs Slot</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Lhs Slot</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSlot()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsLhsSlot();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsSlot() <em>Is Current Rhs Slot</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Current Rhs Slot</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsSlot()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsCurrentRhsSlot();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSpot() <em>Is Lhs Spot</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Lhs Spot</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSpot()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsLhsSpot();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsOptional() <em>Is Current Rhs Optional</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Current Rhs Optional</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsOptional()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsCurrentRhsOptional();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsOptional() <em>Is Lhs Optional</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Lhs Optional</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsOptional()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsLhsOptional();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsSpot() <em>Is Current Rhs Spot</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Current Rhs Spot</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsSpot()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsCurrentRhsSpot();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsNonShipped() <em>Is Lhs Non Shipped</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Lhs Non Shipped</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsNonShipped()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsLhsNonShipped();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsNonShipped() <em>Is Current Rhs Non Shipped</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Current Rhs Non Shipped</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isCurrentRhsNonShipped()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsCurrentRhsNonShipped();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot <em>Change Set Table Root</em>}'.
@@ -2603,62 +2800,46 @@ public interface ChangesetPackage extends EPackage {
 		EReference CHANGE_SET_ROW_DATA_GROUP__MEMBERS = eINSTANCE.getChangeSetRowDataGroup_Members();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl <em>Change Set Row</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetWiringGroupImpl <em>Change Set Wiring Group</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl
-		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeSetRow()
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetWiringGroupImpl
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeSetWiringGroup()
 		 * @generated
 		 */
-		EClass CHANGE_SET_ROW = eINSTANCE.getChangeSetRow();
+		EClass CHANGE_SET_WIRING_GROUP = eINSTANCE.getChangeSetWiringGroup();
 
 		/**
-		 * The meta object literal for the '<em><b>Wiring Change</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Rows</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_ROW__WIRING_CHANGE = eINSTANCE.getChangeSetRow_WiringChange();
+		EReference CHANGE_SET_WIRING_GROUP__ROWS = eINSTANCE.getChangeSetWiringGroup_Rows();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Change</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Is Wiring Change</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_ROW__VESSEL_CHANGE = eINSTANCE.getChangeSetRow_VesselChange();
+		EOperation CHANGE_SET_WIRING_GROUP___IS_WIRING_CHANGE = eINSTANCE.getChangeSetWiringGroup__IsWiringChange();
 
 		/**
-		 * The meta object literal for the '<em><b>Date Change</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Is Vessel Change</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_ROW__DATE_CHANGE = eINSTANCE.getChangeSetRow_DateChange();
+		EOperation CHANGE_SET_WIRING_GROUP___IS_VESSEL_CHANGE = eINSTANCE.getChangeSetWiringGroup__IsVesselChange();
 
 		/**
-		 * The meta object literal for the '<em><b>Before Data</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Is Date Change</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHANGE_SET_ROW__BEFORE_DATA = eINSTANCE.getChangeSetRow_BeforeData();
-
-		/**
-		 * The meta object literal for the '<em><b>After Data</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_ROW__AFTER_DATA = eINSTANCE.getChangeSetRow_AfterData();
-
-		/**
-		 * The meta object literal for the '<em><b>Is Major Change</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation CHANGE_SET_ROW___IS_MAJOR_CHANGE = eINSTANCE.getChangeSetRow__IsMajorChange();
+		EOperation CHANGE_SET_WIRING_GROUP___IS_DATE_CHANGE = eINSTANCE.getChangeSetWiringGroup__IsDateChange();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl <em>Change Set Row Data</em>}' class.
@@ -2709,6 +2890,70 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_ROW_DATA__RHS_LINK = eINSTANCE.getChangeSetRowData_RhsLink();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Slot</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__LHS_SLOT = eINSTANCE.getChangeSetRowData_LhsSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Spot</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__LHS_SPOT = eINSTANCE.getChangeSetRowData_LhsSpot();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__LHS_OPTIONAL = eINSTANCE.getChangeSetRowData_LhsOptional();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Slot</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__RHS_SLOT = eINSTANCE.getChangeSetRowData_RhsSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Spot</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__RHS_SPOT = eINSTANCE.getChangeSetRowData_RhsSpot();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__RHS_OPTIONAL = eINSTANCE.getChangeSetRowData_RhsOptional();
+
+		/**
+		 * The meta object literal for the '<em><b>Lhs Non Shipped</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__LHS_NON_SHIPPED = eINSTANCE.getChangeSetRowData_LhsNonShipped();
+
+		/**
+		 * The meta object literal for the '<em><b>Rhs Non Shipped</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW_DATA__RHS_NON_SHIPPED = eINSTANCE.getChangeSetRowData_RhsNonShipped();
 
 		/**
 		 * The meta object literal for the '<em><b>Load Slot</b></em>' reference feature.
@@ -2817,7 +3062,7 @@ public interface ChangesetPackage extends EPackage {
 		EClass CHANGE_SET_TABLE_GROUP = eINSTANCE.getChangeSetTableGroup();
 
 		/**
-		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Rows</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -2921,6 +3166,14 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET_TABLE_GROUP__GROUP_ALTERNATIVE = eINSTANCE.getChangeSetTableGroup_GroupAlternative();
 
 		/**
+		 * The meta object literal for the '<em><b>Table Root</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_TABLE_GROUP__TABLE_ROOT = eINSTANCE.getChangeSetTableGroup_TableRoot();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl <em>Change Set Table Row</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2929,22 +3182,6 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CHANGE_SET_TABLE_ROW = eINSTANCE.getChangeSetTableRow();
-
-		/**
-		 * The meta object literal for the '<em><b>Lhs Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__LHS_NAME = eINSTANCE.getChangeSetTableRow_LhsName();
-
-		/**
-		 * The meta object literal for the '<em><b>Rhs Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__RHS_NAME = eINSTANCE.getChangeSetTableRow_RhsName();
 
 		/**
 		 * The meta object literal for the '<em><b>Lhs Before</b></em>' reference feature.
@@ -2961,54 +3198,6 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_TABLE_ROW__LHS_AFTER = eINSTANCE.getChangeSetTableRow_LhsAfter();
-
-		/**
-		 * The meta object literal for the '<em><b>Rhs Before</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_TABLE_ROW__RHS_BEFORE = eINSTANCE.getChangeSetTableRow_RhsBefore();
-
-		/**
-		 * The meta object literal for the '<em><b>Rhs After</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_TABLE_ROW__RHS_AFTER = eINSTANCE.getChangeSetTableRow_RhsAfter();
-
-		/**
-		 * The meta object literal for the '<em><b>Before Vessel Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_NAME = eINSTANCE.getChangeSetTableRow_BeforeVesselName();
-
-		/**
-		 * The meta object literal for the '<em><b>Before Vessel Short Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_SHORT_NAME = eINSTANCE.getChangeSetTableRow_BeforeVesselShortName();
-
-		/**
-		 * The meta object literal for the '<em><b>After Vessel Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_NAME = eINSTANCE.getChangeSetTableRow_AfterVesselName();
-
-		/**
-		 * The meta object literal for the '<em><b>After Vessel Short Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_SHORT_NAME = eINSTANCE.getChangeSetTableRow_AfterVesselShortName();
 
 		/**
 		 * The meta object literal for the '<em><b>Wiring Change</b></em>' attribute feature.
@@ -3035,46 +3224,6 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET_TABLE_ROW__DATE_CHANGE = eINSTANCE.getChangeSetTableRow_DateChange();
 
 		/**
-		 * The meta object literal for the '<em><b>Previous RHS</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_TABLE_ROW__PREVIOUS_RHS = eINSTANCE.getChangeSetTableRow_PreviousRHS();
-
-		/**
-		 * The meta object literal for the '<em><b>Next LHS</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_TABLE_ROW__NEXT_LHS = eINSTANCE.getChangeSetTableRow_NextLHS();
-
-		/**
-		 * The meta object literal for the '<em><b>Lhs Slot</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__LHS_SLOT = eINSTANCE.getChangeSetTableRow_LhsSlot();
-
-		/**
-		 * The meta object literal for the '<em><b>Lhs Spot</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__LHS_SPOT = eINSTANCE.getChangeSetTableRow_LhsSpot();
-
-		/**
-		 * The meta object literal for the '<em><b>Lhs Optional</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__LHS_OPTIONAL = eINSTANCE.getChangeSetTableRow_LhsOptional();
-
-		/**
 		 * The meta object literal for the '<em><b>Lhs Valid</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3083,84 +3232,60 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET_TABLE_ROW__LHS_VALID = eINSTANCE.getChangeSetTableRow_LhsValid();
 
 		/**
-		 * The meta object literal for the '<em><b>Lhs Non Shipped</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Current Rhs Before</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_TABLE_ROW__LHS_NON_SHIPPED = eINSTANCE.getChangeSetTableRow_LhsNonShipped();
+		EReference CHANGE_SET_TABLE_ROW__CURRENT_RHS_BEFORE = eINSTANCE.getChangeSetTableRow_CurrentRhsBefore();
 
 		/**
-		 * The meta object literal for the '<em><b>Rhs Slot</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Current Rhs After</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_TABLE_ROW__RHS_SLOT = eINSTANCE.getChangeSetTableRow_RhsSlot();
+		EReference CHANGE_SET_TABLE_ROW__CURRENT_RHS_AFTER = eINSTANCE.getChangeSetTableRow_CurrentRhsAfter();
 
 		/**
-		 * The meta object literal for the '<em><b>Rhs Spot</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Previous Rhs Before</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_TABLE_ROW__RHS_SPOT = eINSTANCE.getChangeSetTableRow_RhsSpot();
+		EReference CHANGE_SET_TABLE_ROW__PREVIOUS_RHS_BEFORE = eINSTANCE.getChangeSetTableRow_PreviousRhsBefore();
 
 		/**
-		 * The meta object literal for the '<em><b>Rhs Optional</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Previous Rhs After</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_TABLE_ROW__RHS_OPTIONAL = eINSTANCE.getChangeSetTableRow_RhsOptional();
+		EReference CHANGE_SET_TABLE_ROW__PREVIOUS_RHS_AFTER = eINSTANCE.getChangeSetTableRow_PreviousRhsAfter();
 
 		/**
-		 * The meta object literal for the '<em><b>Rhs Valid</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Current Rhs Valid</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_TABLE_ROW__RHS_VALID = eINSTANCE.getChangeSetTableRow_RhsValid();
+		EAttribute CHANGE_SET_TABLE_ROW__CURRENT_RHS_VALID = eINSTANCE.getChangeSetTableRow_CurrentRhsValid();
 
 		/**
-		 * The meta object literal for the '<em><b>Rhs Non Shipped</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Wiring Group</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED = eINSTANCE.getChangeSetTableRow_RhsNonShipped();
+		EReference CHANGE_SET_TABLE_ROW__WIRING_GROUP = eINSTANCE.getChangeSetTableRow_WiringGroup();
 
 		/**
-		 * The meta object literal for the '<em><b>Before Vessel Type</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Table Group</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE = eINSTANCE.getChangeSetTableRow_BeforeVesselType();
-
-		/**
-		 * The meta object literal for the '<em><b>After Vessel Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = eINSTANCE.getChangeSetTableRow_AfterVesselType();
-
-		/**
-		 * The meta object literal for the '<em><b>Before Vessel Charter Number</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetTableRow_BeforeVesselCharterNumber();
-
-		/**
-		 * The meta object literal for the '<em><b>After Vessel Charter Number</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetTableRow_AfterVesselCharterNumber();
+		EReference CHANGE_SET_TABLE_ROW__TABLE_GROUP = eINSTANCE.getChangeSetTableRow_TableGroup();
 
 		/**
 		 * The meta object literal for the '<em><b>Is Major Change</b></em>' operation.
@@ -3169,6 +3294,166 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation CHANGE_SET_TABLE_ROW___IS_MAJOR_CHANGE = eINSTANCE.getChangeSetTableRow__IsMajorChange();
+
+		/**
+		 * The meta object literal for the '<em><b>Get LHS After Or Before</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_LHS_AFTER_OR_BEFORE = eINSTANCE.getChangeSetTableRow__GetLHSAfterOrBefore();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Current RHS After Or Before</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_CURRENT_RHS_AFTER_OR_BEFORE = eINSTANCE.getChangeSetTableRow__GetCurrentRHSAfterOrBefore();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Lhs Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_LHS_NAME = eINSTANCE.getChangeSetTableRow__GetLhsName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Current Rhs Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_CURRENT_RHS_NAME = eINSTANCE.getChangeSetTableRow__GetCurrentRhsName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Before Vessel Charter Number</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetTableRow__GetBeforeVesselCharterNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Before Vessel Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_NAME = eINSTANCE.getChangeSetTableRow__GetBeforeVesselName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Before Vessel Short Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_SHORT_NAME = eINSTANCE.getChangeSetTableRow__GetBeforeVesselShortName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Before Vessel Type</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_BEFORE_VESSEL_TYPE = eINSTANCE.getChangeSetTableRow__GetBeforeVesselType();
+
+		/**
+		 * The meta object literal for the '<em><b>Get After Vessel Charter Number</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetTableRow__GetAfterVesselCharterNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>Get After Vessel Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_NAME = eINSTANCE.getChangeSetTableRow__GetAfterVesselName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get After Vessel Short Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_SHORT_NAME = eINSTANCE.getChangeSetTableRow__GetAfterVesselShortName();
+
+		/**
+		 * The meta object literal for the '<em><b>Get After Vessel Type</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___GET_AFTER_VESSEL_TYPE = eINSTANCE.getChangeSetTableRow__GetAfterVesselType();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Lhs Slot</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_LHS_SLOT = eINSTANCE.getChangeSetTableRow__IsLhsSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Current Rhs Slot</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_SLOT = eINSTANCE.getChangeSetTableRow__IsCurrentRhsSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Lhs Spot</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_LHS_SPOT = eINSTANCE.getChangeSetTableRow__IsLhsSpot();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Current Rhs Optional</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_OPTIONAL = eINSTANCE.getChangeSetTableRow__IsCurrentRhsOptional();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Lhs Optional</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_LHS_OPTIONAL = eINSTANCE.getChangeSetTableRow__IsLhsOptional();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Current Rhs Spot</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_SPOT = eINSTANCE.getChangeSetTableRow__IsCurrentRhsSpot();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Lhs Non Shipped</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_LHS_NON_SHIPPED = eINSTANCE.getChangeSetTableRow__IsLhsNonShipped();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Current Rhs Non Shipped</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_CURRENT_RHS_NON_SHIPPED = eINSTANCE.getChangeSetTableRow__IsCurrentRhsNonShipped();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRootImpl <em>Change Set Table Root</em>}' class.
