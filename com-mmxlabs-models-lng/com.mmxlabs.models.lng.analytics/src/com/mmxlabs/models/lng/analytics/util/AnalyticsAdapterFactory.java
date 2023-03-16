@@ -404,6 +404,26 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createMarketabilityEndEventAdapter();
 			}
 			@Override
+			public Adapter caseSwapValueMatrixParameters(SwapValueMatrixParameters object) {
+				return createSwapValueMatrixParametersAdapter();
+			}
+			@Override
+			public Adapter caseRange(Range object) {
+				return createRangeAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixCargoResult(SwapValueMatrixCargoResult object) {
+				return createSwapValueMatrixCargoResultAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixShippedCargoResult(SwapValueMatrixShippedCargoResult object) {
+				return createSwapValueMatrixShippedCargoResultAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixNonShippedCargoResult(SwapValueMatrixNonShippedCargoResult object) {
+				return createSwapValueMatrixNonShippedCargoResultAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -894,6 +914,76 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMarketabilityEndEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters <em>Swap Value Matrix Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.Range <em>Range</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.Range
+	 * @generated
+	 */
+	public Adapter createRangeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult <em>Swap Value Matrix Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixCargoResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult <em>Swap Value Matrix Shipped Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixShippedCargoResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult <em>Swap Value Matrix Non Shipped Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixNonShippedCargoResultAdapter() {
 		return null;
 	}
 

@@ -22,34 +22,14 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDischargePrice <em>Base Discharge Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapMarketPrice <em>Swap Market Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapPnlMinusBasePnl <em>Swap Pnl Minus Base Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseLoadPrice <em>Base Load Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadPrice <em>Swap Fob Load Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseFobLoadVolume <em>Base Fob Load Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadVolume <em>Swap Fob Load Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketBuyVolume <em>Market Buy Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketSellVolume <em>Market Sell Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDesSellVolume <em>Base Des Sell Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePrecedingPnl <em>Base Preceding Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargoPnl <em>Base Cargo Pnl</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSucceedingPnl <em>Base Succeeding Pnl</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapPrecedingPnl <em>Swap Preceding Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapShippedCargoPnl <em>Swap Shipped Cargo Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargoPnl <em>Swap Backfill Cargo Pnl</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapSucceedingPnl <em>Swap Succeeding Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePurchaseCost <em>Base Purchase Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSaleRevenue <em>Base Sale Revenue</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseShippingCost <em>Base Shipping Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseAdditionalPnl <em>Base Additional Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoPurchaseCost <em>Swap Cargo Purchase Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoSaleRevenue <em>Swap Cargo Sale Revenue</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoShippingCost <em>Swap Cargo Shipping Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoAdditionalPnl <em>Swap Cargo Additional Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillPurchaseCost <em>Swap Backfill Purchase Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillSaleRevenue <em>Swap Backfill Sale Revenue</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillAdditionalPnl <em>Swap Backfill Additional Pnl</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargo <em>Base Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapDiversionCargo <em>Swap Diversion Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargo <em>Swap Backfill Cargo</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult()
@@ -57,50 +37,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface SwapValueMatrixResult extends UUIDObject {
-	/**
-	 * Returns the value of the '<em><b>Base Discharge Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Discharge Price</em>' attribute.
-	 * @see #setBaseDischargePrice(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseDischargePrice()
-	 * @model
-	 * @generated
-	 */
-	int getBaseDischargePrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDischargePrice <em>Base Discharge Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Discharge Price</em>' attribute.
-	 * @see #getBaseDischargePrice()
-	 * @generated
-	 */
-	void setBaseDischargePrice(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Market Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Market Price</em>' attribute.
-	 * @see #setSwapMarketPrice(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapMarketPrice()
-	 * @model
-	 * @generated
-	 */
-	int getSwapMarketPrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapMarketPrice <em>Swap Market Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Market Price</em>' attribute.
-	 * @see #getSwapMarketPrice()
-	 * @generated
-	 */
-	void setSwapMarketPrice(int value);
-
 	/**
 	 * Returns the value of the '<em><b>Swap Pnl Minus Base Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -124,160 +60,6 @@ public interface SwapValueMatrixResult extends UUIDObject {
 	void setSwapPnlMinusBasePnl(long value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Load Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Load Price</em>' attribute.
-	 * @see #setBaseLoadPrice(double)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseLoadPrice()
-	 * @model
-	 * @generated
-	 */
-	double getBaseLoadPrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseLoadPrice <em>Base Load Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Load Price</em>' attribute.
-	 * @see #getBaseLoadPrice()
-	 * @generated
-	 */
-	void setBaseLoadPrice(double value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Fob Load Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Fob Load Price</em>' attribute.
-	 * @see #setSwapFobLoadPrice(double)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapFobLoadPrice()
-	 * @model
-	 * @generated
-	 */
-	double getSwapFobLoadPrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadPrice <em>Swap Fob Load Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Fob Load Price</em>' attribute.
-	 * @see #getSwapFobLoadPrice()
-	 * @generated
-	 */
-	void setSwapFobLoadPrice(double value);
-
-	/**
-	 * Returns the value of the '<em><b>Base Fob Load Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Fob Load Volume</em>' attribute.
-	 * @see #setBaseFobLoadVolume(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseFobLoadVolume()
-	 * @model
-	 * @generated
-	 */
-	int getBaseFobLoadVolume();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseFobLoadVolume <em>Base Fob Load Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Fob Load Volume</em>' attribute.
-	 * @see #getBaseFobLoadVolume()
-	 * @generated
-	 */
-	void setBaseFobLoadVolume(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Fob Load Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Fob Load Volume</em>' attribute.
-	 * @see #setSwapFobLoadVolume(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapFobLoadVolume()
-	 * @model
-	 * @generated
-	 */
-	int getSwapFobLoadVolume();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadVolume <em>Swap Fob Load Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Fob Load Volume</em>' attribute.
-	 * @see #getSwapFobLoadVolume()
-	 * @generated
-	 */
-	void setSwapFobLoadVolume(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Market Buy Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Market Buy Volume</em>' attribute.
-	 * @see #setMarketBuyVolume(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_MarketBuyVolume()
-	 * @model
-	 * @generated
-	 */
-	int getMarketBuyVolume();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketBuyVolume <em>Market Buy Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Market Buy Volume</em>' attribute.
-	 * @see #getMarketBuyVolume()
-	 * @generated
-	 */
-	void setMarketBuyVolume(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Market Sell Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Market Sell Volume</em>' attribute.
-	 * @see #setMarketSellVolume(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_MarketSellVolume()
-	 * @model
-	 * @generated
-	 */
-	int getMarketSellVolume();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketSellVolume <em>Market Sell Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Market Sell Volume</em>' attribute.
-	 * @see #getMarketSellVolume()
-	 * @generated
-	 */
-	void setMarketSellVolume(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Base Des Sell Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Des Sell Volume</em>' attribute.
-	 * @see #setBaseDesSellVolume(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseDesSellVolume()
-	 * @model
-	 * @generated
-	 */
-	int getBaseDesSellVolume();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDesSellVolume <em>Base Des Sell Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Des Sell Volume</em>' attribute.
-	 * @see #getBaseDesSellVolume()
-	 * @generated
-	 */
-	void setBaseDesSellVolume(int value);
-
-	/**
 	 * Returns the value of the '<em><b>Base Preceding Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -298,28 +80,6 @@ public interface SwapValueMatrixResult extends UUIDObject {
 	 * @generated
 	 */
 	void setBasePrecedingPnl(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Base Cargo Pnl</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Cargo Pnl</em>' attribute.
-	 * @see #setBaseCargoPnl(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseCargoPnl()
-	 * @model
-	 * @generated
-	 */
-	long getBaseCargoPnl();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargoPnl <em>Base Cargo Pnl</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Cargo Pnl</em>' attribute.
-	 * @see #getBaseCargoPnl()
-	 * @generated
-	 */
-	void setBaseCargoPnl(long value);
 
 	/**
 	 * Returns the value of the '<em><b>Base Succeeding Pnl</b></em>' attribute.
@@ -366,50 +126,6 @@ public interface SwapValueMatrixResult extends UUIDObject {
 	void setSwapPrecedingPnl(long value);
 
 	/**
-	 * Returns the value of the '<em><b>Swap Shipped Cargo Pnl</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Shipped Cargo Pnl</em>' attribute.
-	 * @see #setSwapShippedCargoPnl(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapShippedCargoPnl()
-	 * @model
-	 * @generated
-	 */
-	long getSwapShippedCargoPnl();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapShippedCargoPnl <em>Swap Shipped Cargo Pnl</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Shipped Cargo Pnl</em>' attribute.
-	 * @see #getSwapShippedCargoPnl()
-	 * @generated
-	 */
-	void setSwapShippedCargoPnl(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Backfill Cargo Pnl</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Backfill Cargo Pnl</em>' attribute.
-	 * @see #setSwapBackfillCargoPnl(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapBackfillCargoPnl()
-	 * @model
-	 * @generated
-	 */
-	long getSwapBackfillCargoPnl();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargoPnl <em>Swap Backfill Cargo Pnl</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Backfill Cargo Pnl</em>' attribute.
-	 * @see #getSwapBackfillCargoPnl()
-	 * @generated
-	 */
-	void setSwapBackfillCargoPnl(long value);
-
-	/**
 	 * Returns the value of the '<em><b>Swap Succeeding Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -432,245 +148,69 @@ public interface SwapValueMatrixResult extends UUIDObject {
 	void setSwapSucceedingPnl(long value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Purchase Cost</b></em>' attribute.
+	 * Returns the value of the '<em><b>Base Cargo</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Purchase Cost</em>' attribute.
-	 * @see #setBasePurchaseCost(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BasePurchaseCost()
-	 * @model
+	 * @return the value of the '<em>Base Cargo</em>' containment reference.
+	 * @see #setBaseCargo(SwapValueMatrixShippedCargoResult)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseCargo()
+	 * @model containment="true"
 	 * @generated
 	 */
-	long getBasePurchaseCost();
+	SwapValueMatrixShippedCargoResult getBaseCargo();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePurchaseCost <em>Base Purchase Cost</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargo <em>Base Cargo</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Purchase Cost</em>' attribute.
-	 * @see #getBasePurchaseCost()
+	 * @param value the new value of the '<em>Base Cargo</em>' containment reference.
+	 * @see #getBaseCargo()
 	 * @generated
 	 */
-	void setBasePurchaseCost(long value);
+	void setBaseCargo(SwapValueMatrixShippedCargoResult value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Sale Revenue</b></em>' attribute.
+	 * Returns the value of the '<em><b>Swap Diversion Cargo</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Sale Revenue</em>' attribute.
-	 * @see #setBaseSaleRevenue(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseSaleRevenue()
-	 * @model
+	 * @return the value of the '<em>Swap Diversion Cargo</em>' containment reference.
+	 * @see #setSwapDiversionCargo(SwapValueMatrixShippedCargoResult)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapDiversionCargo()
+	 * @model containment="true"
 	 * @generated
 	 */
-	long getBaseSaleRevenue();
+	SwapValueMatrixShippedCargoResult getSwapDiversionCargo();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSaleRevenue <em>Base Sale Revenue</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapDiversionCargo <em>Swap Diversion Cargo</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Sale Revenue</em>' attribute.
-	 * @see #getBaseSaleRevenue()
+	 * @param value the new value of the '<em>Swap Diversion Cargo</em>' containment reference.
+	 * @see #getSwapDiversionCargo()
 	 * @generated
 	 */
-	void setBaseSaleRevenue(long value);
+	void setSwapDiversionCargo(SwapValueMatrixShippedCargoResult value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Shipping Cost</b></em>' attribute.
+	 * Returns the value of the '<em><b>Swap Backfill Cargo</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Shipping Cost</em>' attribute.
-	 * @see #setBaseShippingCost(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseShippingCost()
-	 * @model
+	 * @return the value of the '<em>Swap Backfill Cargo</em>' containment reference.
+	 * @see #setSwapBackfillCargo(SwapValueMatrixNonShippedCargoResult)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapBackfillCargo()
+	 * @model containment="true"
 	 * @generated
 	 */
-	long getBaseShippingCost();
+	SwapValueMatrixNonShippedCargoResult getSwapBackfillCargo();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseShippingCost <em>Base Shipping Cost</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargo <em>Swap Backfill Cargo</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Shipping Cost</em>' attribute.
-	 * @see #getBaseShippingCost()
+	 * @param value the new value of the '<em>Swap Backfill Cargo</em>' containment reference.
+	 * @see #getSwapBackfillCargo()
 	 * @generated
 	 */
-	void setBaseShippingCost(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Base Additional Pnl</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Additional Pnl</em>' attribute.
-	 * @see #setBaseAdditionalPnl(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_BaseAdditionalPnl()
-	 * @model
-	 * @generated
-	 */
-	long getBaseAdditionalPnl();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseAdditionalPnl <em>Base Additional Pnl</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Additional Pnl</em>' attribute.
-	 * @see #getBaseAdditionalPnl()
-	 * @generated
-	 */
-	void setBaseAdditionalPnl(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Cargo Purchase Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Cargo Purchase Cost</em>' attribute.
-	 * @see #setSwapCargoPurchaseCost(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapCargoPurchaseCost()
-	 * @model
-	 * @generated
-	 */
-	long getSwapCargoPurchaseCost();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoPurchaseCost <em>Swap Cargo Purchase Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Cargo Purchase Cost</em>' attribute.
-	 * @see #getSwapCargoPurchaseCost()
-	 * @generated
-	 */
-	void setSwapCargoPurchaseCost(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Cargo Sale Revenue</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Cargo Sale Revenue</em>' attribute.
-	 * @see #setSwapCargoSaleRevenue(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapCargoSaleRevenue()
-	 * @model
-	 * @generated
-	 */
-	long getSwapCargoSaleRevenue();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoSaleRevenue <em>Swap Cargo Sale Revenue</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Cargo Sale Revenue</em>' attribute.
-	 * @see #getSwapCargoSaleRevenue()
-	 * @generated
-	 */
-	void setSwapCargoSaleRevenue(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Cargo Shipping Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Cargo Shipping Cost</em>' attribute.
-	 * @see #setSwapCargoShippingCost(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapCargoShippingCost()
-	 * @model
-	 * @generated
-	 */
-	long getSwapCargoShippingCost();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoShippingCost <em>Swap Cargo Shipping Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Cargo Shipping Cost</em>' attribute.
-	 * @see #getSwapCargoShippingCost()
-	 * @generated
-	 */
-	void setSwapCargoShippingCost(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Cargo Additional Pnl</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Cargo Additional Pnl</em>' attribute.
-	 * @see #setSwapCargoAdditionalPnl(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapCargoAdditionalPnl()
-	 * @model
-	 * @generated
-	 */
-	long getSwapCargoAdditionalPnl();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapCargoAdditionalPnl <em>Swap Cargo Additional Pnl</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Cargo Additional Pnl</em>' attribute.
-	 * @see #getSwapCargoAdditionalPnl()
-	 * @generated
-	 */
-	void setSwapCargoAdditionalPnl(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Backfill Purchase Cost</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Backfill Purchase Cost</em>' attribute.
-	 * @see #setSwapBackfillPurchaseCost(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapBackfillPurchaseCost()
-	 * @model
-	 * @generated
-	 */
-	long getSwapBackfillPurchaseCost();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillPurchaseCost <em>Swap Backfill Purchase Cost</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Backfill Purchase Cost</em>' attribute.
-	 * @see #getSwapBackfillPurchaseCost()
-	 * @generated
-	 */
-	void setSwapBackfillPurchaseCost(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Backfill Sale Revenue</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Backfill Sale Revenue</em>' attribute.
-	 * @see #setSwapBackfillSaleRevenue(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapBackfillSaleRevenue()
-	 * @model
-	 * @generated
-	 */
-	long getSwapBackfillSaleRevenue();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillSaleRevenue <em>Swap Backfill Sale Revenue</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Backfill Sale Revenue</em>' attribute.
-	 * @see #getSwapBackfillSaleRevenue()
-	 * @generated
-	 */
-	void setSwapBackfillSaleRevenue(long value);
-
-	/**
-	 * Returns the value of the '<em><b>Swap Backfill Additional Pnl</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Swap Backfill Additional Pnl</em>' attribute.
-	 * @see #setSwapBackfillAdditionalPnl(long)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResult_SwapBackfillAdditionalPnl()
-	 * @model
-	 * @generated
-	 */
-	long getSwapBackfillAdditionalPnl();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillAdditionalPnl <em>Swap Backfill Additional Pnl</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Swap Backfill Additional Pnl</em>' attribute.
-	 * @see #getSwapBackfillAdditionalPnl()
-	 * @generated
-	 */
-	void setSwapBackfillAdditionalPnl(long value);
+	void setSwapBackfillCargo(SwapValueMatrixNonShippedCargoResult value);
 
 } // SwapValueMatrixResult

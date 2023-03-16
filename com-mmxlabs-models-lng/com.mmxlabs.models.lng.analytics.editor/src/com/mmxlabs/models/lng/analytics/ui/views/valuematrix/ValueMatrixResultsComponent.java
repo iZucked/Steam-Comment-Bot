@@ -282,7 +282,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					final Object element = cell.getElement();
 					if (element instanceof @NonNull final DiffSummaryRow row) {
 						if (!row.isEmpty) {
-							cell.setText(String.format("%.2f", row.swapValue));
+							cell.setText(String.format("%,.2f", row.swapValue));
 							if (row.grey || row.swapGrey) {
 								cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
 							}
@@ -312,7 +312,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					final Object element = cell.getElement();
 					if (element instanceof @NonNull final DiffSummaryRow row) {
 						if (!row.isEmpty && !row.ignoreBase) {
-							cell.setText(String.format("%.2f", row.baseValue));
+							cell.setText(String.format("%,.2f", row.baseValue));
 							if (row.grey || row.baseGrey) {
 								cell.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
 							}
@@ -456,7 +456,10 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 				public void update(ViewerCell cell) {
 					final Object element = cell.getElement();
 					if (element instanceof @NonNull final SwapValueMatrixResult[] result && result.length > 0) {
-						cell.setText(Integer.toString(result[0].getSwapMarketPrice()));
+						if (result[0] == null) {
+							int i = 0;
+						}
+						cell.setText(Integer.toString((int) result[0].getSwapDiversionCargo().getDischargePrice()));
 					}
 				}
 			});
@@ -464,7 +467,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		}
 
 		final GridColumnGroup valueMatrixColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
-		final DischargeSlot dischargeSlot = model.getBaseDischarge().getSlot();
+		final DischargeSlot dischargeSlot = model.getParameters().getBaseDischarge().getSlot();
 		final String dischargeName = dischargeSlot == null ? "<Unknown>" : ScenarioElementNameHelper.getName(dischargeSlot, "<Unknown>");
 		valueMatrixColumnGroup.setHeaderRenderer(new ColumnGroupHeaderRenderer());
 		valueMatrixColumnGroup.setText(String.format("%s sales price", dischargeName));
@@ -580,30 +583,30 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			return Collections.emptyList();
 		}
 		final List<ISummaryRow> rows = new ArrayList<>();
-		final LoadSlot loadSlot = model.getBaseLoad().getSlot();
+		final LoadSlot loadSlot = model.getParameters().getBaseLoad().getSlot();
 		final String loadName = loadSlot == null ? "<Unknown>" : ScenarioElementNameHelper.getName(loadSlot, "<Unknown>");
-		final DischargeSlot dischargeSlot = model.getBaseDischarge().getSlot();
+		final DischargeSlot dischargeSlot = model.getParameters().getBaseDischarge().getSlot();
 		final String dischargeName = dischargeSlot == null ? "<Unknown>" : ScenarioElementNameHelper.getName(dischargeSlot, "<Unknown>");
 
 		final ValueMatrixResultDiffData diffData = getHighlightData(result);
 
-		rows.add(buildSummaryRow(result, diffData, String.format("%s price", loadName), SwapValueMatrixResult::getBaseLoadPrice, SwapValueMatrixResult::getSwapFobLoadPrice, UNITS_DOLLAR_PER_MMBTU,
+		rows.add(buildSummaryRow(result, diffData, String.format("%s price", loadName), res -> res.getBaseCargo().getLoadPrice(), res -> res.getSwapDiversionCargo().getLoadPrice(), UNITS_DOLLAR_PER_MMBTU,
 				ValueMatrixResultDiffData::hasBaseLoadPriceDiff, ValueMatrixResultDiffData::hasSwapLoadPriceDiff));
-		rows.add(new MergedSummaryRow(String.format("%s price", dischargeName), UNITS_DOLLAR_PER_MMBTU, result.getBaseDischargePrice(), false));
-		rows.add(new MergedSummaryRow("Market price", UNITS_DOLLAR_PER_MMBTU, result.getSwapMarketPrice(), false));
-		rows.add(new MergedSummaryRow("Spread", UNITS_DOLLAR_PER_MMBTU, result.getSwapMarketPrice() - result.getBaseDischargePrice(), false));
+		rows.add(new MergedSummaryRow(String.format("%s price", dischargeName), UNITS_DOLLAR_PER_MMBTU, result.getBaseCargo().getDischargePrice(), false));
+		rows.add(new MergedSummaryRow("Market price", UNITS_DOLLAR_PER_MMBTU, result.getSwapDiversionCargo().getDischargePrice(), false));
+		rows.add(new MergedSummaryRow("Spread", UNITS_DOLLAR_PER_MMBTU, result.getSwapDiversionCargo().getDischargePrice() - result.getBaseCargo().getDischargePrice(), false));
 		rows.add(EmptySummaryRow.getInstance());
-		rows.add(buildSummaryRow(result, diffData, "LT load vol", SwapValueMatrixResult::getBaseFobLoadVolume, SwapValueMatrixResult::getSwapFobLoadVolume, UNITS_TBTU, VOL_SCALEDOWN_FACTOR,
+		rows.add(buildSummaryRow(result, diffData, "LT load vol", res -> res.getBaseCargo().getLoadVolume(), res -> res.getSwapDiversionCargo().getLoadVolume(), UNITS_TBTU, VOL_SCALEDOWN_FACTOR,
 				ValueMatrixResultDiffData::hasBaseLoadVolumeDiff, ValueMatrixResultDiffData::hasSwapLoadVolumeDiff));
-		rows.add(buildSummaryRow(result, diffData, "LT sell vol", SwapValueMatrixResult::getBaseDesSellVolume, SwapValueMatrixResult::getMarketBuyVolume, UNITS_TBTU, VOL_SCALEDOWN_FACTOR,
+		rows.add(buildSummaryRow(result, diffData, "LT sell vol", res -> res.getBaseCargo().getDischargeVolume(), res -> res.getSwapBackfillCargo().getVolume(), UNITS_TBTU, VOL_SCALEDOWN_FACTOR,
 				ValueMatrixResultDiffData::hasBaseDischargeVolumeDiff, ValueMatrixResultDiffData::hasSwapDischargeVolumeDiff));
-		rows.add(new SwapSummaryRow("Market sell vol", UNITS_TBTU, result.getMarketSellVolume() / VOL_SCALEDOWN_FACTOR, diffData.hasDesSaleMarketVolumeDiff()));
-		rows.add(new SwapSummaryRow("Optimised vol", UNITS_TBTU, (result.getMarketSellVolume() - result.getMarketBuyVolume()) / VOL_SCALEDOWN_FACTOR, false));
+		rows.add(new SwapSummaryRow("Market sell vol", UNITS_TBTU, result.getSwapDiversionCargo().getDischargeVolume() / VOL_SCALEDOWN_FACTOR, diffData.hasDesSaleMarketVolumeDiff()));
+		rows.add(new SwapSummaryRow("Optimised vol", UNITS_TBTU, (result.getSwapDiversionCargo().getDischargeVolume() - result.getSwapBackfillCargo().getVolume()) / VOL_SCALEDOWN_FACTOR, false));
 		rows.add(new SwapSummaryRow("Optimised val", UNITS_MILLION_DOLLARS,
-				((result.getMarketSellVolume() - result.getMarketBuyVolume()) * (result.getSwapMarketPrice() - result.getBaseDischargePrice())) / PNL_SCALEDOWN_FACTOR, false));
+				((result.getSwapDiversionCargo().getDischargeVolume() - result.getSwapBackfillCargo().getVolume()) * (result.getSwapDiversionCargo().getDischargePrice() - result.getBaseCargo().getDischargePrice())) / PNL_SCALEDOWN_FACTOR, false));
 		rows.add(EmptySummaryRow.getInstance());
 		rows.add(new SwapSummaryRow("Swap fee", UNITS_DOLLAR_PER_MMBTU, -1 * ((SwapValueMatrixResultSet) result.eContainer()).getSwapFee(), false));
-		rows.add(new SwapSummaryRow("Additional cost", UNITS_MILLION_DOLLARS, -1 * ((SwapValueMatrixResultSet) result.eContainer()).getSwapFee() * result.getMarketBuyVolume() / PNL_SCALEDOWN_FACTOR,
+		rows.add(new SwapSummaryRow("Additional cost", UNITS_MILLION_DOLLARS, -1 * ((SwapValueMatrixResultSet) result.eContainer()).getSwapFee() * result.getSwapBackfillCargo().getVolume() / PNL_SCALEDOWN_FACTOR,
 				false));
 		return rows;
 	}
@@ -616,10 +619,9 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		final ValueMatrixResultDiffData diffData = getHighlightData(result);
 		final List<DiffSummaryRow> rows = new ArrayList<>();
 		{
-			final String ltLoadName = ScenarioElementNameHelper.getName(model.getBaseLoad().getSlot(), "");
-//			final String vesselName = ScenarioElementNameHelper.getName(model.getBaseVesselCharter().getVesselCharter().getVessel(), "");
-			final long baseVal = result.getBaseCargoPnl();
-			final long swapVal = result.getSwapShippedCargoPnl();
+			final String ltLoadName = ScenarioElementNameHelper.getName(model.getParameters().getBaseLoad().getSlot(), "");
+			final long baseVal = result.getBaseCargo().getTotalPnl();
+			final long swapVal = result.getSwapDiversionCargo().getTotalPnl();
 			final long swapMinusBaseVal = swapVal - baseVal;
 			final DiffSummaryRow row = new DiffSummaryRow();
 			if (!ltLoadName.isBlank()) {
@@ -633,8 +635,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			rows.add(row);
 		}
 		{
-			final long baseVal = result.getBasePurchaseCost();
-			final long swapVal = result.getSwapCargoPurchaseCost();
+			final long baseVal = result.getBaseCargo().getPurchaseCost();
+			final long swapVal = result.getSwapDiversionCargo().getPurchaseCost();
 			final long swapMinusBaseVal = swapVal - baseVal;
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = TAB + "Purchase";
@@ -645,8 +647,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			rows.add(row);
 		}
 		{
-			final long baseVal = result.getBaseSaleRevenue();
-			final long swapVal = result.getSwapCargoSaleRevenue();
+			final long baseVal = result.getBaseCargo().getSalesRevenue();
+			final long swapVal = result.getSwapDiversionCargo().getSalesRevenue();
 			final long swapMinusBaseVal = swapVal - baseVal;
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = TAB + "Sale";
@@ -657,8 +659,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			rows.add(row);
 		}
 		{
-			final long baseVal = result.getBaseShippingCost();
-			final long swapVal = result.getSwapCargoShippingCost();
+			final long baseVal = result.getBaseCargo().getShippingCost();
+			final long swapVal = result.getSwapDiversionCargo().getShippingCost();
 			final long swapMinusBaseVal = swapVal - baseVal;
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = TAB + "Shipping";
@@ -669,8 +671,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			rows.add(row);
 		}
 		{
-			final long baseVal = result.getBaseAdditionalPnl();
-			final long swapVal = result.getSwapCargoAdditionalPnl();
+			final long baseVal = result.getBaseCargo().getAdditionalPnl();
+			final long swapVal = result.getSwapDiversionCargo().getAdditionalPnl();
 			final long swapMinusBaseVal = swapVal - baseVal;
 			if (baseVal > 0L || swapVal > 0L) {
 				final DiffSummaryRow row = new DiffSummaryRow();
@@ -683,7 +685,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			}
 		}
 		{
-			final long swapVal = result.getSwapBackfillCargoPnl();
+			final long swapVal = result.getSwapBackfillCargo().getTotalPnl();
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = "Backfill";
 			row.swapValue = swapVal / PNL_SCALEDOWN_FACTOR;
@@ -692,7 +694,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			rows.add(row);
 		}
 		{
-			final long swapVal = result.getSwapBackfillPurchaseCost();
+			final long swapVal = result.getSwapBackfillCargo().getPurchaseCost();
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = TAB + "Purchase";
 			row.grey = true;
@@ -703,7 +705,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		}
 		{
 
-			final long swapVal = result.getSwapBackfillSaleRevenue();
+			final long swapVal = result.getSwapBackfillCargo().getSalesRevenue();
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = TAB + "Sale";
 			row.grey = true;
@@ -714,7 +716,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		}
 		{
 
-			final long swapVal = result.getSwapBackfillAdditionalPnl();
+			final long swapVal = result.getSwapBackfillCargo().getAdditionalPnl();
 			if (swapVal != 0L) {
 				final DiffSummaryRow row = new DiffSummaryRow();
 				row.rowHeader = TAB + "Addn. P&L";
@@ -732,8 +734,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			rows.add(row);
 		}
 		{
-			final long baseVal = result.getBaseCargoPnl();
-			final long swapVal = result.getSwapShippedCargoPnl() + result.getSwapBackfillCargoPnl();
+			final long baseVal = result.getBaseCargo().getTotalPnl();
+			final long swapVal = result.getSwapDiversionCargo().getTotalPnl() + result.getSwapBackfillCargo().getTotalPnl();
 			final long swapMinusBaseVal = swapVal - baseVal;
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = "Target play";
@@ -764,6 +766,18 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 			row.highlightDiff = diffData.hasSucceedingKnockOnDiff();
 			rows.add(row);
 		}
+		final long nonVesselCharterPnl = ((SwapValueMatrixResultSet) result.eContainer()).getNonVesselCharterPnl();
+		{
+			final DiffSummaryRow row = new DiffSummaryRow();
+			row.rowHeader = "Remaining";
+			final double scaledNonVesselCharterPnl = nonVesselCharterPnl / PNL_SCALEDOWN_FACTOR;
+			row.baseValue = scaledNonVesselCharterPnl;
+			row.swapValue = scaledNonVesselCharterPnl;
+			row.swapMinusBase = 0L;
+			row.grey = true;
+			row.highlightDiff = false;
+			rows.add(row);
+		}
 		{
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = "";
@@ -773,8 +787,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 		{
 			final DiffSummaryRow row = new DiffSummaryRow();
 			row.rowHeader = "Portfolio P&L";
-			row.baseValue = (result.getBaseCargoPnl() + result.getBasePrecedingPnl() + result.getBaseSucceedingPnl()) / PNL_SCALEDOWN_FACTOR;
-			row.swapValue = (result.getSwapShippedCargoPnl() + result.getSwapBackfillCargoPnl() + result.getSwapPrecedingPnl() + result.getSwapSucceedingPnl()) / PNL_SCALEDOWN_FACTOR;
+			row.baseValue = (nonVesselCharterPnl + result.getBaseCargo().getTotalPnl() + result.getBasePrecedingPnl() + result.getBaseSucceedingPnl()) / PNL_SCALEDOWN_FACTOR;
+			row.swapValue = (nonVesselCharterPnl + result.getSwapDiversionCargo().getTotalPnl() + result.getSwapBackfillCargo().getTotalPnl() + result.getSwapPrecedingPnl() + result.getSwapSucceedingPnl()) / PNL_SCALEDOWN_FACTOR;
 			row.swapMinusBase = result.getSwapPnlMinusBasePnl() / PNL_SCALEDOWN_FACTOR;
 			row.baseGrey = true;
 			row.swapGrey = true;
@@ -849,8 +863,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 				final Set<Integer> rowNumbers = new HashSet<>();
 				final Set<Integer> columnNumbers = new HashSet<>();
 				for (final SwapValueMatrixResult result : resultsSet.getResults()) {
-					rowNumbers.add(result.getSwapMarketPrice());
-					columnNumbers.add(result.getBaseDischargePrice());
+					rowNumbers.add((int) result.getSwapDiversionCargo().getDischargePrice());
+					columnNumbers.add((int) result.getBaseCargo().getDischargePrice());
 				}
 				final SwapValueMatrixResult[][] rows = new SwapValueMatrixResult[rowNumbers.size()][columnNumbers.size()];
 				final List<Integer> sortedRowNumbers = rowNumbers.stream().sorted().toList();
@@ -872,7 +886,7 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 					}
 				}
 				for (final SwapValueMatrixResult result : resultsSet.getResults()) {
-					rows[rowNumberToIndex.get(result.getSwapMarketPrice())][columnNumberToIndex.get(result.getBaseDischargePrice())] = result;
+					rows[rowNumberToIndex.get((int) result.getSwapDiversionCargo().getDischargePrice())][columnNumberToIndex.get((int) result.getBaseCargo().getDischargePrice())] = result;
 				}
 				createValueMatrix(model, sortedColumnNumbers);
 				valueMatrixViewer.setData(KEY_MATRIX_ROW_OFFSET, sortedRowNumbers.get(0));
@@ -905,8 +919,8 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 
 		final int rowOffset = (int) valueMatrixViewer.getData(KEY_MATRIX_ROW_OFFSET);
 		final int colOffset = (int) valueMatrixViewer.getData(KEY_MATRIX_COLUMN_OFFSET);
-		final int resultRowIndex = result.getSwapMarketPrice() - rowOffset;
-		final int resultColIndex = result.getBaseDischargePrice() - colOffset;
+		final int resultRowIndex = ((int) result.getSwapDiversionCargo().getDischargePrice()) - rowOffset;
+		final int resultColIndex = ((int) result.getBaseCargo().getDischargePrice()) - colOffset;
 		final SwapValueMatrixResult[][] rows = (SwapValueMatrixResult[][]) valueMatrixViewer.getInput();
 		for (int i = -1; i <= 1; ++i) {
 			final int neighbourRowIndex = resultRowIndex + i;
@@ -917,25 +931,25 @@ public class ValueMatrixResultsComponent extends AbstractValueMatrixComponent {
 						final int neighbourColIndex = resultColIndex + j;
 						if (neighbourColIndex >= 0 && neighbourColIndex < row.length) {
 							final SwapValueMatrixResult neighbour = row[neighbourColIndex];
-							if (result.getBaseLoadPrice() != neighbour.getBaseLoadPrice()) {
+							if (result.getBaseCargo().getLoadPrice() != neighbour.getBaseCargo().getLoadPrice()) {
 								hasBaseLoadPriceDiff = true;
 							}
-							if (result.getSwapFobLoadPrice() != neighbour.getSwapFobLoadPrice()) {
+							if (result.getSwapDiversionCargo().getLoadPrice() != neighbour.getSwapDiversionCargo().getLoadPrice()) {
 								hasSwapLoadPriceDiff = true;
 							}
-							if (result.getBaseFobLoadVolume() != neighbour.getBaseFobLoadVolume()) {
+							if (result.getBaseCargo().getLoadVolume() != neighbour.getBaseCargo().getLoadVolume()) {
 								hasBaseLoadVolumeDiff = true;
 							}
-							if (result.getSwapFobLoadVolume() != neighbour.getSwapFobLoadVolume()) {
+							if (result.getSwapDiversionCargo().getLoadVolume() != neighbour.getSwapDiversionCargo().getLoadVolume()) {
 								hasSwapLoadVolumeDiff = true;
 							}
-							if (result.getBaseDesSellVolume() != neighbour.getBaseDesSellVolume()) {
+							if (result.getBaseCargo().getDischargeVolume() != neighbour.getBaseCargo().getDischargeVolume()) {
 								hasBaseDischargeVolumeDiff = true;
 							}
-							if (result.getMarketBuyVolume() != neighbour.getMarketBuyVolume()) {
+							if (result.getSwapBackfillCargo().getVolume() != neighbour.getSwapBackfillCargo().getVolume()) {
 								hasSwapDischargeVolumeDiff = true;
 							}
-							if (result.getMarketSellVolume() != neighbour.getMarketSellVolume()) {
+							if (result.getSwapDiversionCargo().getDischargeVolume() != neighbour.getSwapDiversionCargo().getDischargeVolume()) {
 								hasDesSaleMarketVolumeDiff = true;
 							}
 							if (result.getSwapPrecedingPnl() - result.getBasePrecedingPnl() != neighbour.getSwapPrecedingPnl() - neighbour.getBasePrecedingPnl()) {

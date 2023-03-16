@@ -19,13 +19,13 @@ public class SwapValueChangeKey {
 	private final long succeedingKnockOn;
 
 	public SwapValueChangeKey(@NonNull final SwapValueMatrixResult result) {
-		this.baseLoadPrice = result.getBaseLoadPrice();
-		this.swapLoadPrice = result.getSwapFobLoadPrice();
-		this.baseLoadVolume = result.getBaseFobLoadVolume();
-		this.swapLoadVolume = result.getSwapFobLoadVolume();
-		this.baseDischargeVolume = result.getBaseDesSellVolume();
-		this.swapDischargeVolume = result.getMarketBuyVolume();
-		this.desSaleMarketVolume = result.getMarketSellVolume();
+		this.baseLoadPrice = result.getBaseCargo().getLoadPrice();
+		this.swapLoadPrice = result.getSwapDiversionCargo().getLoadPrice();
+		this.baseLoadVolume = result.getBaseCargo().getLoadVolume();
+		this.swapLoadVolume = result.getSwapDiversionCargo().getLoadVolume();
+		this.baseDischargeVolume = result.getBaseCargo().getDischargeVolume();
+		this.swapDischargeVolume = result.getSwapBackfillCargo().getVolume();
+		this.desSaleMarketVolume = result.getSwapDiversionCargo().getDischargeVolume();
 		this.precedingKnockOn = result.getSwapPrecedingPnl() - result.getBasePrecedingPnl();
 		this.succeedingKnockOn = result.getSwapSucceedingPnl() - result.getBaseSucceedingPnl();
 	}

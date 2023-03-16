@@ -59,8 +59,6 @@ import org.eclipse.ui.forms.events.IExpansionListener;
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -432,7 +430,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 			}
 
 			if (notification.getNotifier() == getModel() && notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
-				setPartName("Value Matrix: " + getModel().getName());
+				setPartName(getModel().getName());
 				return null;
 			}
 			if (notification.getNotifier() == getModel() && notification.getFeature() == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT) {
@@ -527,7 +525,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 		}
 
 		if (model != null) {
-			setPartName("Value Matrix: " + model.getName());
+			setPartName(model.getName());
 
 			if (!model.eAdapters().contains(refreshAdapter)) {
 				model.eAdapters().add(refreshAdapter);
@@ -768,15 +766,15 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				}
 				final SwapValueMatrixModel m = currentModel;
 				if (m != null) {
-					final SellReference sellReference = m.getBaseDischarge();
+					final SellReference sellReference = m.getParameters().getBaseDischarge();
 					if (sellReference.getSlot() == null) {
 						throw new IllegalStateException("No discharge slot selected");
 					}
-					final BuyMarket buyMarket = m.getSwapLoadMarket();
+					final BuyMarket buyMarket = m.getParameters().getSwapLoadMarket();
 					if (buyMarket.getMarket() == null) {
 						throw new IllegalStateException("No buy market selected");
 					}
-					final SellMarket sellMarket = m.getSwapDischargeMarket();
+					final SellMarket sellMarket = m.getParameters().getSwapDischargeMarket();
 					if (sellMarket.getMarket() == null) {
 						throw new IllegalStateException("No sell market selected");
 					}

@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult;
 import com.mmxlabs.models.lng.analytics.PositionDescriptor;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
+import com.mmxlabs.models.lng.analytics.Range;
 import com.mmxlabs.models.lng.analytics.RealSlotDescriptor;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SandboxResult;
@@ -86,9 +87,13 @@ import com.mmxlabs.models.lng.analytics.SlotType;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.SolutionOptionMicroCase;
 import com.mmxlabs.models.lng.analytics.SpotMarketSlotDescriptor;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixResult;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult;
 import com.mmxlabs.models.lng.analytics.VesselAllocationDescriptor;
 import com.mmxlabs.models.lng.analytics.VesselEventChange;
 import com.mmxlabs.models.lng.analytics.VesselEventDescriptor;
@@ -346,6 +351,41 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass marketabilityEndEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass swapValueMatrixParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass rangeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass swapValueMatrixCargoResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass swapValueMatrixShippedCargoResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass swapValueMatrixNonShippedCargoResultEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2184,6 +2224,266 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EClass getSwapValueMatrixParameters() {
+		return swapValueMatrixParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSwapValueMatrixParameters_BaseLoad() {
+		return (EReference)swapValueMatrixParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSwapValueMatrixParameters_BaseDischarge() {
+		return (EReference)swapValueMatrixParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSwapValueMatrixParameters_BaseVesselCharter() {
+		return (EReference)swapValueMatrixParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSwapValueMatrixParameters_BasePriceRange() {
+		return (EReference)swapValueMatrixParametersEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSwapValueMatrixParameters_SwapLoadMarket() {
+		return (EReference)swapValueMatrixParametersEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSwapValueMatrixParameters_SwapDischargeMarket() {
+		return (EReference)swapValueMatrixParametersEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixParameters_SwapFee() {
+		return (EAttribute)swapValueMatrixParametersEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSwapValueMatrixParameters_SwapPriceRange() {
+		return (EReference)swapValueMatrixParametersEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getRange() {
+		return rangeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRange_Min() {
+		return (EAttribute)rangeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRange_Max() {
+		return (EAttribute)rangeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRange_StepSize() {
+		return (EAttribute)rangeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSwapValueMatrixCargoResult() {
+		return swapValueMatrixCargoResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixCargoResult_LoadPrice() {
+		return (EAttribute)swapValueMatrixCargoResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixCargoResult_DischargePrice() {
+		return (EAttribute)swapValueMatrixCargoResultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixCargoResult_PurchaseCost() {
+		return (EAttribute)swapValueMatrixCargoResultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixCargoResult_SalesRevenue() {
+		return (EAttribute)swapValueMatrixCargoResultEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixCargoResult_AdditionalPnl() {
+		return (EAttribute)swapValueMatrixCargoResultEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixCargoResult_TotalPnl() {
+		return (EAttribute)swapValueMatrixCargoResultEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSwapValueMatrixShippedCargoResult() {
+		return swapValueMatrixShippedCargoResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixShippedCargoResult_ShippingCost() {
+		return (EAttribute)swapValueMatrixShippedCargoResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixShippedCargoResult_LoadVolume() {
+		return (EAttribute)swapValueMatrixShippedCargoResultEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixShippedCargoResult_DischargeVolume() {
+		return (EAttribute)swapValueMatrixShippedCargoResultEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSwapValueMatrixNonShippedCargoResult() {
+		return swapValueMatrixNonShippedCargoResultEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixNonShippedCargoResult_Volume() {
+		return (EAttribute)swapValueMatrixNonShippedCargoResultEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getMarketabilityResultContainer_BuyDate() {
 		return (EAttribute)marketabilityResultContainerEClass.getEStructuralFeatures().get(2);
 	}
@@ -3854,7 +4154,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getSwapValueMatrixModel_BaseLoad() {
+	public EReference getSwapValueMatrixModel_Parameters() {
 		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -3864,118 +4164,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getSwapValueMatrixModel_BaseDischarge() {
-		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSwapValueMatrixModel_BaseVesselCharter() {
-		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSwapValueMatrixModel_SwapLoadMarket() {
-		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSwapValueMatrixModel_SwapDischargeMarket() {
-		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixModel_BaseDischargeMinPrice() {
-		return (EAttribute)swapValueMatrixModelEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixModel_BaseDischargeMaxPrice() {
-		return (EAttribute)swapValueMatrixModelEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixModel_BaseDischargeStepSize() {
-		return (EAttribute)swapValueMatrixModelEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixModel_MarketMinPrice() {
-		return (EAttribute)swapValueMatrixModelEClass.getEStructuralFeatures().get(8);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixModel_MarketMaxPrice() {
-		return (EAttribute)swapValueMatrixModelEClass.getEStructuralFeatures().get(9);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixModel_MarketStepSize() {
-		return (EAttribute)swapValueMatrixModelEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixModel_SwapFee() {
-		return (EAttribute)swapValueMatrixModelEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSwapValueMatrixModel_SwapValueMatrixResult() {
-		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(12);
+		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -3994,7 +4184,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_BaseDischargePrice() {
+	public EAttribute getSwapValueMatrixResult_SwapPnlMinusBasePnl() {
 		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -4004,7 +4194,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_SwapMarketPrice() {
+	public EAttribute getSwapValueMatrixResult_BasePrecedingPnl() {
 		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -4014,7 +4204,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_SwapPnlMinusBasePnl() {
+	public EAttribute getSwapValueMatrixResult_BaseSucceedingPnl() {
 		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -4024,7 +4214,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_BaseLoadPrice() {
+	public EAttribute getSwapValueMatrixResult_SwapPrecedingPnl() {
 		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -4034,7 +4224,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_SwapFobLoadPrice() {
+	public EAttribute getSwapValueMatrixResult_SwapSucceedingPnl() {
 		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -4044,8 +4234,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_BaseFobLoadVolume() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(5);
+	public EReference getSwapValueMatrixResult_BaseCargo() {
+		return (EReference)swapValueMatrixResultEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -4054,8 +4244,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_SwapFobLoadVolume() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(6);
+	public EReference getSwapValueMatrixResult_SwapDiversionCargo() {
+		return (EReference)swapValueMatrixResultEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -4064,208 +4254,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSwapValueMatrixResult_MarketBuyVolume() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_MarketSellVolume() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(8);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BaseDesSellVolume() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(9);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BasePrecedingPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BaseCargoPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BaseSucceedingPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(12);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapPrecedingPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(13);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapShippedCargoPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(14);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapBackfillCargoPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(15);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapSucceedingPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(16);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BasePurchaseCost() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(17);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BaseSaleRevenue() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(18);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BaseShippingCost() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(19);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_BaseAdditionalPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(20);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapCargoPurchaseCost() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(21);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapCargoSaleRevenue() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(22);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapCargoShippingCost() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(23);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapCargoAdditionalPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(24);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapBackfillPurchaseCost() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(25);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapBackfillSaleRevenue() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(26);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSwapValueMatrixResult_SwapBackfillAdditionalPnl() {
-		return (EAttribute)swapValueMatrixResultEClass.getEStructuralFeatures().get(27);
+	public EReference getSwapValueMatrixResult_SwapBackfillCargo() {
+		return (EReference)swapValueMatrixResultEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -4316,6 +4306,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	@Override
 	public EReference getSwapValueMatrixResultSet_GeneratedSpotDischargeSlot() {
 		return (EReference)swapValueMatrixResultSetEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSwapValueMatrixResultSet_NonVesselCharterPnl() {
+		return (EAttribute)swapValueMatrixResultSetEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -4915,55 +4915,25 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(cargoPnLResultEClass, CARGO_PN_LRESULT__CARGO);
 
 		swapValueMatrixModelEClass = createEClass(SWAP_VALUE_MATRIX_MODEL);
-		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__BASE_LOAD);
-		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE);
-		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__BASE_VESSEL_CHARTER);
-		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__SWAP_LOAD_MARKET);
-		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__SWAP_DISCHARGE_MARKET);
-		createEAttribute(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MIN_PRICE);
-		createEAttribute(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MAX_PRICE);
-		createEAttribute(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_STEP_SIZE);
-		createEAttribute(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__MARKET_MIN_PRICE);
-		createEAttribute(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__MARKET_MAX_PRICE);
-		createEAttribute(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__MARKET_STEP_SIZE);
-		createEAttribute(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__SWAP_FEE);
+		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__PARAMETERS);
 		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT);
 
 		swapValueMatrixResultEClass = createEClass(SWAP_VALUE_MATRIX_RESULT);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE);
 		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME);
 		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_CARGO_PNL);
 		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL);
 		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_SHIPPED_CARGO_PNL);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO_PNL);
 		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_PURCHASE_COST);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_SALE_REVENUE);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_SHIPPING_COST);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_ADDITIONAL_PNL);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_PURCHASE_COST);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_SALE_REVENUE);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_SHIPPING_COST);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_CARGO_ADDITIONAL_PNL);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_PURCHASE_COST);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_SALE_REVENUE);
-		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_ADDITIONAL_PNL);
+		createEReference(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__BASE_CARGO);
+		createEReference(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO);
+		createEReference(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO);
 
 		swapValueMatrixResultSetEClass = createEClass(SWAP_VALUE_MATRIX_RESULT_SET);
 		createEReference(swapValueMatrixResultSetEClass, SWAP_VALUE_MATRIX_RESULT_SET__RESULTS);
 		createEAttribute(swapValueMatrixResultSetEClass, SWAP_VALUE_MATRIX_RESULT_SET__SWAP_FEE);
 		createEReference(swapValueMatrixResultSetEClass, SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_LOAD_SLOT);
 		createEReference(swapValueMatrixResultSetEClass, SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_DISCHARGE_SLOT);
+		createEAttribute(swapValueMatrixResultSetEClass, SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL);
 
 		marketabilityModelEClass = createEClass(MARKETABILITY_MODEL);
 		createEReference(marketabilityModelEClass, MARKETABILITY_MODEL__ROWS);
@@ -5000,6 +4970,37 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(marketabilityAssignableElementEClass, MARKETABILITY_ASSIGNABLE_ELEMENT__ELEMENT);
 
 		marketabilityEndEventEClass = createEClass(MARKETABILITY_END_EVENT);
+
+		swapValueMatrixParametersEClass = createEClass(SWAP_VALUE_MATRIX_PARAMETERS);
+		createEReference(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__BASE_LOAD);
+		createEReference(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__BASE_DISCHARGE);
+		createEReference(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__BASE_VESSEL_CHARTER);
+		createEReference(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__BASE_PRICE_RANGE);
+		createEReference(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__SWAP_LOAD_MARKET);
+		createEReference(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__SWAP_DISCHARGE_MARKET);
+		createEAttribute(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__SWAP_FEE);
+		createEReference(swapValueMatrixParametersEClass, SWAP_VALUE_MATRIX_PARAMETERS__SWAP_PRICE_RANGE);
+
+		rangeEClass = createEClass(RANGE);
+		createEAttribute(rangeEClass, RANGE__MIN);
+		createEAttribute(rangeEClass, RANGE__MAX);
+		createEAttribute(rangeEClass, RANGE__STEP_SIZE);
+
+		swapValueMatrixCargoResultEClass = createEClass(SWAP_VALUE_MATRIX_CARGO_RESULT);
+		createEAttribute(swapValueMatrixCargoResultEClass, SWAP_VALUE_MATRIX_CARGO_RESULT__LOAD_PRICE);
+		createEAttribute(swapValueMatrixCargoResultEClass, SWAP_VALUE_MATRIX_CARGO_RESULT__DISCHARGE_PRICE);
+		createEAttribute(swapValueMatrixCargoResultEClass, SWAP_VALUE_MATRIX_CARGO_RESULT__PURCHASE_COST);
+		createEAttribute(swapValueMatrixCargoResultEClass, SWAP_VALUE_MATRIX_CARGO_RESULT__SALES_REVENUE);
+		createEAttribute(swapValueMatrixCargoResultEClass, SWAP_VALUE_MATRIX_CARGO_RESULT__ADDITIONAL_PNL);
+		createEAttribute(swapValueMatrixCargoResultEClass, SWAP_VALUE_MATRIX_CARGO_RESULT__TOTAL_PNL);
+
+		swapValueMatrixShippedCargoResultEClass = createEClass(SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT);
+		createEAttribute(swapValueMatrixShippedCargoResultEClass, SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__SHIPPING_COST);
+		createEAttribute(swapValueMatrixShippedCargoResultEClass, SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__LOAD_VOLUME);
+		createEAttribute(swapValueMatrixShippedCargoResultEClass, SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__DISCHARGE_VOLUME);
+
+		swapValueMatrixNonShippedCargoResultEClass = createEClass(SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT);
+		createEAttribute(swapValueMatrixNonShippedCargoResultEClass, SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__VOLUME);
 
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
@@ -5116,6 +5117,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		marketabilityModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		marketabilityAssignableElementEClass.getESuperTypes().add(this.getMarketabilityEvent());
 		marketabilityEndEventEClass.getESuperTypes().add(this.getMarketabilityEvent());
+		swapValueMatrixShippedCargoResultEClass.getESuperTypes().add(this.getSwapValueMatrixCargoResult());
+		swapValueMatrixNonShippedCargoResultEClass.getESuperTypes().add(this.getSwapValueMatrixCargoResult());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -5486,55 +5489,25 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getCargoPnLResult_Cargo(), theCargoPackage.getCargo(), null, "cargo", null, 0, 1, CargoPnLResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(swapValueMatrixModelEClass, SwapValueMatrixModel.class, "SwapValueMatrixModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSwapValueMatrixModel_BaseLoad(), this.getBuyReference(), null, "baseLoad", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSwapValueMatrixModel_BaseDischarge(), this.getSellReference(), null, "baseDischarge", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSwapValueMatrixModel_BaseVesselCharter(), this.getExistingVesselCharterOption(), null, "baseVesselCharter", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSwapValueMatrixModel_SwapLoadMarket(), this.getBuyMarket(), null, "swapLoadMarket", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSwapValueMatrixModel_SwapDischargeMarket(), this.getSellMarket(), null, "swapDischargeMarket", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixModel_BaseDischargeMinPrice(), ecorePackage.getEInt(), "baseDischargeMinPrice", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixModel_BaseDischargeMaxPrice(), ecorePackage.getEInt(), "baseDischargeMaxPrice", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixModel_BaseDischargeStepSize(), ecorePackage.getEInt(), "baseDischargeStepSize", "1", 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixModel_MarketMinPrice(), ecorePackage.getEInt(), "marketMinPrice", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixModel_MarketMaxPrice(), ecorePackage.getEInt(), "marketMaxPrice", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixModel_MarketStepSize(), ecorePackage.getEInt(), "marketStepSize", "1", 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixModel_SwapFee(), ecorePackage.getEDouble(), "swapFee", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixModel_Parameters(), this.getSwapValueMatrixParameters(), null, "parameters", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSwapValueMatrixModel_SwapValueMatrixResult(), this.getSwapValueMatrixResultSet(), null, "swapValueMatrixResult", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(swapValueMatrixResultEClass, SwapValueMatrixResult.class, "SwapValueMatrixResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSwapValueMatrixResult_BaseDischargePrice(), ecorePackage.getEInt(), "baseDischargePrice", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapMarketPrice(), ecorePackage.getEInt(), "swapMarketPrice", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSwapValueMatrixResult_SwapPnlMinusBasePnl(), ecorePackage.getELong(), "swapPnlMinusBasePnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BaseLoadPrice(), ecorePackage.getEDouble(), "baseLoadPrice", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapFobLoadPrice(), ecorePackage.getEDouble(), "swapFobLoadPrice", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BaseFobLoadVolume(), ecorePackage.getEInt(), "baseFobLoadVolume", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapFobLoadVolume(), ecorePackage.getEInt(), "swapFobLoadVolume", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_MarketBuyVolume(), ecorePackage.getEInt(), "marketBuyVolume", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_MarketSellVolume(), ecorePackage.getEInt(), "marketSellVolume", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BaseDesSellVolume(), ecorePackage.getEInt(), "baseDesSellVolume", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSwapValueMatrixResult_BasePrecedingPnl(), ecorePackage.getELong(), "basePrecedingPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BaseCargoPnl(), ecorePackage.getELong(), "baseCargoPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSwapValueMatrixResult_BaseSucceedingPnl(), ecorePackage.getELong(), "baseSucceedingPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSwapValueMatrixResult_SwapPrecedingPnl(), ecorePackage.getELong(), "swapPrecedingPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapShippedCargoPnl(), ecorePackage.getELong(), "swapShippedCargoPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapBackfillCargoPnl(), ecorePackage.getELong(), "swapBackfillCargoPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSwapValueMatrixResult_SwapSucceedingPnl(), ecorePackage.getELong(), "swapSucceedingPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BasePurchaseCost(), ecorePackage.getELong(), "basePurchaseCost", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BaseSaleRevenue(), ecorePackage.getELong(), "baseSaleRevenue", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BaseShippingCost(), ecorePackage.getELong(), "baseShippingCost", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_BaseAdditionalPnl(), ecorePackage.getELong(), "baseAdditionalPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapCargoPurchaseCost(), ecorePackage.getELong(), "swapCargoPurchaseCost", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapCargoSaleRevenue(), ecorePackage.getELong(), "swapCargoSaleRevenue", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapCargoShippingCost(), ecorePackage.getELong(), "swapCargoShippingCost", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapCargoAdditionalPnl(), ecorePackage.getELong(), "swapCargoAdditionalPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapBackfillPurchaseCost(), ecorePackage.getELong(), "swapBackfillPurchaseCost", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapBackfillSaleRevenue(), ecorePackage.getELong(), "swapBackfillSaleRevenue", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSwapValueMatrixResult_SwapBackfillAdditionalPnl(), ecorePackage.getELong(), "swapBackfillAdditionalPnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixResult_BaseCargo(), this.getSwapValueMatrixShippedCargoResult(), null, "baseCargo", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixResult_SwapDiversionCargo(), this.getSwapValueMatrixShippedCargoResult(), null, "swapDiversionCargo", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixResult_SwapBackfillCargo(), this.getSwapValueMatrixNonShippedCargoResult(), null, "swapBackfillCargo", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(swapValueMatrixResultSetEClass, SwapValueMatrixResultSet.class, "SwapValueMatrixResultSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSwapValueMatrixResultSet_Results(), this.getSwapValueMatrixResult(), null, "results", null, 0, -1, SwapValueMatrixResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSwapValueMatrixResultSet_SwapFee(), ecorePackage.getEDouble(), "swapFee", null, 0, 1, SwapValueMatrixResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSwapValueMatrixResultSet_GeneratedSpotLoadSlot(), theCargoPackage.getSpotLoadSlot(), null, "generatedSpotLoadSlot", null, 0, 1, SwapValueMatrixResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSwapValueMatrixResultSet_GeneratedSpotDischargeSlot(), theCargoPackage.getSpotDischargeSlot(), null, "generatedSpotDischargeSlot", null, 0, 1, SwapValueMatrixResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixResultSet_NonVesselCharterPnl(), ecorePackage.getELong(), "nonVesselCharterPnl", null, 0, 1, SwapValueMatrixResultSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketabilityModelEClass, MarketabilityModel.class, "MarketabilityModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarketabilityModel_Rows(), this.getMarketabilityRow(), null, "rows", null, 0, -1, MarketabilityModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5571,6 +5544,37 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getMarketabilityAssignableElement_Element(), theCargoPackage.getAssignableElement(), null, "element", null, 0, 1, MarketabilityAssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(marketabilityEndEventEClass, MarketabilityEndEvent.class, "MarketabilityEndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(swapValueMatrixParametersEClass, SwapValueMatrixParameters.class, "SwapValueMatrixParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSwapValueMatrixParameters_BaseLoad(), this.getBuyReference(), null, "baseLoad", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixParameters_BaseDischarge(), this.getSellReference(), null, "baseDischarge", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixParameters_BaseVesselCharter(), this.getExistingVesselCharterOption(), null, "baseVesselCharter", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixParameters_BasePriceRange(), this.getRange(), null, "basePriceRange", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixParameters_SwapLoadMarket(), this.getBuyMarket(), null, "swapLoadMarket", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixParameters_SwapDischargeMarket(), this.getSellMarket(), null, "swapDischargeMarket", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixParameters_SwapFee(), ecorePackage.getEDouble(), "swapFee", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixParameters_SwapPriceRange(), this.getRange(), null, "swapPriceRange", null, 0, 1, SwapValueMatrixParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(rangeEClass, Range.class, "Range", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRange_Min(), ecorePackage.getEInt(), "min", null, 0, 1, Range.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRange_Max(), ecorePackage.getEInt(), "max", null, 0, 1, Range.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRange_StepSize(), ecorePackage.getEInt(), "stepSize", "1", 0, 1, Range.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(swapValueMatrixCargoResultEClass, SwapValueMatrixCargoResult.class, "SwapValueMatrixCargoResult", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSwapValueMatrixCargoResult_LoadPrice(), ecorePackage.getEDouble(), "loadPrice", null, 0, 1, SwapValueMatrixCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixCargoResult_DischargePrice(), ecorePackage.getEDouble(), "dischargePrice", null, 0, 1, SwapValueMatrixCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixCargoResult_PurchaseCost(), ecorePackage.getELong(), "purchaseCost", null, 0, 1, SwapValueMatrixCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixCargoResult_SalesRevenue(), ecorePackage.getELong(), "salesRevenue", null, 0, 1, SwapValueMatrixCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixCargoResult_AdditionalPnl(), ecorePackage.getELong(), "additionalPnl", null, 0, 1, SwapValueMatrixCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixCargoResult_TotalPnl(), ecorePackage.getELong(), "totalPnl", null, 0, 1, SwapValueMatrixCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(swapValueMatrixShippedCargoResultEClass, SwapValueMatrixShippedCargoResult.class, "SwapValueMatrixShippedCargoResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSwapValueMatrixShippedCargoResult_ShippingCost(), ecorePackage.getELong(), "shippingCost", null, 0, 1, SwapValueMatrixShippedCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixShippedCargoResult_LoadVolume(), ecorePackage.getEInt(), "loadVolume", null, 0, 1, SwapValueMatrixShippedCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSwapValueMatrixShippedCargoResult_DischargeVolume(), ecorePackage.getEInt(), "dischargeVolume", null, 0, 1, SwapValueMatrixShippedCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(swapValueMatrixNonShippedCargoResultEClass, SwapValueMatrixNonShippedCargoResult.class, "SwapValueMatrixNonShippedCargoResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSwapValueMatrixNonShippedCargoResult_Volume(), ecorePackage.getEInt(), "volume", null, 0, 1, SwapValueMatrixNonShippedCargoResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");
@@ -5633,12 +5637,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source,
 		   new String[] {
 			   "formatString", "##,##0"
-		   });
-		addAnnotation
-		  (getSwapValueMatrixModel_SwapFee(),
-		   source,
-		   new String[] {
-			   "formatString", "##.##"
 		   });
 	}
 

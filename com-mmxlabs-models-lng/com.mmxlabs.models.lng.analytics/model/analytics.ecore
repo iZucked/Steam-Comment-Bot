@@ -575,69 +575,23 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SwapValueMatrixModel" eSuperTypes="#//AbstractAnalysisModel">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseLoad" eType="#//BuyReference"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" eType="#//SwapValueMatrixParameters"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseDischarge" eType="#//SellReference"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseVesselCharter" eType="#//ExistingVesselCharterOption"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="swapLoadMarket" eType="#//BuyMarket"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="swapDischargeMarket" eType="#//SellMarket"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDischargeMinPrice"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDischargeMaxPrice"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDischargeStepSize"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketMinPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketMaxPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketStepSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        defaultValueLiteral="1"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="formatString" value="##.##"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="swapValueMatrixResult"
         eType="#//SwapValueMatrixResultSet" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SwapValueMatrixResult" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDischargePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapMarketPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapPnlMinusBasePnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseLoadPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapFobLoadPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFobLoadVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapFobLoadVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketBuyVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marketSellVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDesSellVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="basePrecedingPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseCargoPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseSucceedingPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapPrecedingPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapShippedCargoPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapBackfillCargoPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapSucceedingPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="basePurchaseCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseSaleRevenue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseShippingCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseAdditionalPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapCargoPurchaseCost"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapCargoSaleRevenue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapCargoShippingCost"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapCargoAdditionalPnl"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapBackfillPurchaseCost"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapBackfillSaleRevenue"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapBackfillAdditionalPnl"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseCargo" eType="#//SwapValueMatrixShippedCargoResult"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="swapDiversionCargo" eType="#//SwapValueMatrixShippedCargoResult"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="swapBackfillCargo" eType="#//SwapValueMatrixNonShippedCargoResult"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SwapValueMatrixResultSet" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="results" upperBound="-1"
@@ -649,6 +603,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="generatedSpotDischargeSlot"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//SpotDischargeSlot"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nonVesselCharterPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityModel" eSuperTypes="#//AbstractAnalysisModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//MarketabilityRow"
@@ -695,4 +650,44 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//AssignableElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MarketabilityEndEvent" eSuperTypes="#//MarketabilityEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SwapValueMatrixParameters">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseLoad" eType="#//BuyReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseDischarge" eType="#//SellReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseVesselCharter" eType="#//ExistingVesselCharterOption"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basePriceRange" eType="#//Range"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="swapLoadMarket" eType="#//BuyMarket"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="swapDischargeMarket" eType="#//SellMarket"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="swapFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="swapPriceRange" eType="#//Range"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Range">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stepSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SwapValueMatrixCargoResult" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="purchaseCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesRevenue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="additionalPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalPnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SwapValueMatrixShippedCargoResult" eSuperTypes="#//SwapValueMatrixCargoResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargeVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SwapValueMatrixNonShippedCargoResult"
+      eSuperTypes="#//SwapValueMatrixCargoResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
 </ecore:EPackage>

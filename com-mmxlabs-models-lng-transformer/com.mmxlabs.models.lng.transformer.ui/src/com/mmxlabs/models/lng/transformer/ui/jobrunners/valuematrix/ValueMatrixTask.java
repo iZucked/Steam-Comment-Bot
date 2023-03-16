@@ -51,11 +51,12 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelReferenceThread;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 public class ValueMatrixTask {
+
 	@NonNull
-	private static Pair<@NonNull LoadSlot, @NonNull DischargeSlot> buildFullScenario(@NonNull final LNGScenarioModel root, @NonNull final SwapValueMatrixModel model, final IMapperClass mapper) {
+	public static Pair<@NonNull LoadSlot, @NonNull DischargeSlot> buildFullScenario(@NonNull final LNGScenarioModel root, @NonNull final SwapValueMatrixModel model, final IMapperClass mapper) {
 		final Set<String> usedIDs = getUsedSlotIDs(root);
-		final BuyReference loadReference = model.getBaseLoad();
-		final ExistingVesselCharterOption vesselCharterOption = model.getBaseVesselCharter();
+		final BuyReference loadReference = model.getParameters().getBaseLoad();
+		final ExistingVesselCharterOption vesselCharterOption = model.getParameters().getBaseVesselCharter();
 		if (vesselCharterOption == null) {
 			throw new IllegalStateException("Swap model missing vessel charter information");
 		}
@@ -66,7 +67,7 @@ public class ValueMatrixTask {
 		if (loadSlot == null) {
 			throw new IllegalStateException("Swap model missing load slot information");
 		}
-		final SellReference dischargeReference = model.getBaseDischarge();
+		final SellReference dischargeReference = model.getParameters().getBaseDischarge();
 		if (dischargeReference == null) {
 			throw new IllegalStateException("Swap model missing discharge slot information");
 		}
@@ -74,11 +75,11 @@ public class ValueMatrixTask {
 		if (dischargeSlot == null) {
 			throw new IllegalStateException("Swap model missing discharge slot information");
 		}
-		final BuyMarket desPurchaseMarketContainer = model.getSwapLoadMarket();
+		final BuyMarket desPurchaseMarketContainer = model.getParameters().getSwapLoadMarket();
 		if (desPurchaseMarketContainer == null || desPurchaseMarketContainer.getMarket() == null || desPurchaseMarketContainer.getMonth() == null) {
 			throw new IllegalStateException("Swap model missing DES purchase market information");
 		}
-		final SellMarket desSalesMarketContainer = model.getSwapDischargeMarket();
+		final SellMarket desSalesMarketContainer = model.getParameters().getSwapDischargeMarket();
 		if (desSalesMarketContainer == null || desSalesMarketContainer.getMarket() == null || desSalesMarketContainer.getMonth() == null) {
 			throw new IllegalStateException("Swap model missing DES sales market information");
 		}
@@ -139,9 +140,10 @@ public class ValueMatrixTask {
 				final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 				helper.generateWith(scenarioModelRecord.getScenarioInstance(), userSettings, sdp.getEditingDomain(), hints, bridge -> {
 					final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
+					bridge.getFullDataTransformer().getLifecyleManager().startPhase("value-matrix", hints);
 					final SwapValueMatrixUnit unit = new SwapValueMatrixUnit(sdp, dataTransformer, "swap-value-matrix", userSettings, constraintAndFitnessSettings, jobExecutorFactory,
 							dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
-					unit.run(valueMatrixModel, swapCargo, mapper, new NullProgressMonitor());
+					unit.run(valueMatrixModel, swapCargo, mapper, new NullProgressMonitor(), bridge, new DefaultValueMatrixPairsGenerator(valueMatrixModel));
 				});
 			});
 		});

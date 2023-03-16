@@ -32,14 +32,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.BuyMarket;
-import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SellMarket;
-import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -97,20 +91,11 @@ public class CreateValueMatrixHandler extends AbstractHandler {
 							}
 						};
 						if (dialog.open() == Window.OK) {
-							final String name = dialog.getValue();
-						
-							final SwapValueMatrixModel model = AnalyticsFactory.eINSTANCE.createSwapValueMatrixModel();
-							model.setName(name);
-							final BuyReference buyReference = AnalyticsFactory.eINSTANCE.createBuyReference();
-							final SellReference sellReference = AnalyticsFactory.eINSTANCE.createSellReference();
-							final ExistingVesselCharterOption vesselCharterReference = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
-							final BuyMarket buyMarket = AnalyticsFactory.eINSTANCE.createBuyMarket();
-							final SellMarket sellMarket = AnalyticsFactory.eINSTANCE.createSellMarket();
-							model.setBaseLoad(buyReference);
-							model.setBaseDischarge(sellReference);
-							model.setSwapLoadMarket(buyMarket);
-							model.setSwapDischargeMarket(sellMarket);
-							model.setBaseVesselCharter(vesselCharterReference);
+							String name = dialog.getValue();
+							if (name == null) {
+								name = "";
+							}
+							final SwapValueMatrixModel model = ValueMatrixUtils.createEmptyValueMatrixModel(name);
 							
 							final CompoundCommand cmd = new CompoundCommand("Create value matrix");
 							cmd.append(AddCommand.create(domain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_SwapValueMatrixModels(), Collections.singletonList(model)));
