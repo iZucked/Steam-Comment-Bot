@@ -61,6 +61,12 @@ public abstract class DynamicTestCaseRunner {
 
 	@TestFactory
 	@Tag(TestCategories.OPTIMISATION_TEST)
+	public List<DynamicNode> runValueMatrixTests() {
+		return OptimisationTestRunner.runValueMatrixTests(getBaseDirectory());
+	}
+
+	@TestFactory
+	@Tag(TestCategories.OPTIMISATION_TEST)
 	public List<DynamicNode> runOptimisationTests() {
 		return OptimisationTestRunner.runOptimisationTests(getBaseDirectory());
 	}
