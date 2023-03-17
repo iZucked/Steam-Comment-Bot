@@ -149,15 +149,15 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 			// dateHelper.
 
 			final ModelEntityMap mem = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge().getDataTransformer().getModelEntityMap();
-//			System.out.println(mem.getDateFromHours(-735, "UTC"));
-//			System.out.println(mem.getDateFromHours(-399, "UTC"));
-//			System.out.println(mem.getDateFromHours(9, "UTC"));
-//			System.out.println(mem.getDateFromHours(345, "UTC"));
-//			System.out.println(mem.getDateFromHours(7641, "UTC")); // last curve interval
-//			System.out.println(mem.getDateFromHours(8664, "UTC")); // Discharge pricing date
-//
-//			System.out.println(mem.getDateFromHours(9096, "UTC")); // Last curve price
-//			System.out.println(mem.getDateFromHours(9504, "UTC")); // Discharge pricing date
+			// System.out.println(mem.getDateFromHours(-735, "UTC"));
+			// System.out.println(mem.getDateFromHours(-399, "UTC"));
+			// System.out.println(mem.getDateFromHours(9, "UTC"));
+			// System.out.println(mem.getDateFromHours(345, "UTC"));
+			// System.out.println(mem.getDateFromHours(7641, "UTC")); // last curve interval
+			// System.out.println(mem.getDateFromHours(8664, "UTC")); // Discharge pricing date
+			//
+			// System.out.println(mem.getDateFromHours(9096, "UTC")); // Last curve price
+			// System.out.println(mem.getDateFromHours(9504, "UTC")); // Discharge pricing date
 
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
 			final SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
@@ -240,8 +240,7 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Data for the shift function tests. These set the pricing date, expression and
-	 * expected value for the load slot Added to test fix for FB 5310
+	 * Data for the shift function tests. These set the pricing date, expression and expected value for the load slot Added to test fix for FB 5310
 	 * 
 	 * @return
 	 */
@@ -616,6 +615,92 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 			final Optional<ExposureDetail> detail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> curve.equalsIgnoreCase(d.getIndexName())).findFirst();
 			Assertions.assertTrue(detail.isPresent());
 			Assertions.assertEquals(exposureMonth, detail.get().getDate());
+		}
+
+	}
+
+	public static Iterable<Object[]> generateBlendPriceData() {
+		return Arrays.asList(new Object[][] { //
+
+				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 1_000_000, 10, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 1_500_000, 10, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 2_000_000, 12.5, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 3_000_000, 15, YearMonth.of(2020, Month.JANUARY) }, //
+
+		});
+	}
+
+	@Tag(TestCategories.MICRO_TEST)
+	@ParameterizedTest(name = "{0} {1} = {2}")
+	@MethodSource("generateBlendPriceData")
+	public void testBlendExpressionTest(final LocalDate windowDate, final String expression, int volumeMMBTU, final double expectedPrice, final YearMonth exposureMonth) {
+
+		pricingModelBuilder.makeCommodityDataCurve("TestLow", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2020, 1), 10.0) //
+				.build();
+		pricingModelBuilder.makeCommodityDataCurve("TestHigh", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2020, 1), 20.0) //
+				.build();
+
+		final DESSalesMarket mkt = spotMarketsModelBuilder.makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_CHITA), entity, "0")
+				.withVolumeLimits(volumeMMBTU, volumeMMBTU, VolumeUnits.MMBTU) //
+				.build();
+
+		final Cargo testCargo = cargoModelBuilder.makeCargo() ///
+				.makeDESPurchase("F1", DESPurchaseDealType.DEST_ONLY, windowDate, portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, expression, 22.8, null)//
+				.withWindowStartTime(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				//
+				.build() //
+
+				.makeMarketDESSale("D1", mkt, YearMonth.from(windowDate), portFinder.findPortById(InternalDataConstants.PORT_CHITA)) //
+				.build() //
+
+				//
+				.build();
+
+		final Slot<?> load = testCargo.getSlots().get(0);
+		final Slot<?> discharge = testCargo.getSlots().get(1);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		runnerBuilder.evaluateInitialState();
+
+		final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
+		final SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
+		Assertions.assertEquals(expectedPrice, simpleCargoAllocation.getLoadAllocation().getPrice(), 0.0001);
+
+		final List<ExposureDetail> exposures = simpleCargoAllocation.getLoadAllocation().getExposures();
+		// Always expect low curve
+		{
+			final String curve = "TestLow";
+			final Optional<ExposureDetail> detail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> curve.equalsIgnoreCase(d.getIndexName())).findFirst();
+
+			Assertions.assertTrue(detail.isPresent());
+			Assertions.assertEquals(exposureMonth, detail.get().getDate());
+			Assertions.assertEquals(-Math.min(1_500_000, volumeMMBTU), detail.get().getVolumeInMMBTU());
+		}
+		// Expect high curve
+		{
+			final String curve = "TestHigh";
+			final Optional<ExposureDetail> detail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> curve.equalsIgnoreCase(d.getIndexName())).findFirst();
+
+			if (expectedPrice == 10) {
+				// Financial + physical
+				Assertions.assertEquals(1 + 1, exposures.size());
+				Assertions.assertFalse(detail.isPresent());
+			} else if (expectedPrice > 10) {
+				// 2 x Financial + physical
+				Assertions.assertEquals(1 + 1 + 1, exposures.size());
+				Assertions.assertTrue(detail.isPresent());
+				Assertions.assertEquals(exposureMonth, detail.get().getDate());
+				// Expect excess over 1_500_000
+				Assertions.assertEquals(-(volumeMMBTU - 1_500_000), detail.get().getVolumeInMMBTU());
+			} else {
+				Assertions.fail();
+			}
 		}
 
 	}
