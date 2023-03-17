@@ -37,7 +37,7 @@ public interface IAnalyticsScenarioEvaluator {
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor);
 
 	boolean evaluateMarketabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, MarketabilityModel model,
-			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor, boolean validateScenario);
+			IProgressMonitor progressMonitor, boolean validateScenario);
 
 	void evaluateMTMSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, MTMModel model, //
 			IMapperClass mapper, IProgressMonitor progressMonitor);

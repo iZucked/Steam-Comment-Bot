@@ -71,6 +71,7 @@ import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilitySandboxRunner;
 import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilitySandboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.analytics.mtm.MTMSanboxUnit;
@@ -330,68 +331,8 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 	@Override
 	public boolean evaluateMarketabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings,
-			MarketabilityModel model, IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor, boolean validateScenario) {
-		if(validateScenario && !OptimisationHelper.validateScenario(scenarioDataProvider, model, false, true, false, Set.of(".marketability"))) {
-			return false;
-		}
-		
-		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
-
-		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);
-
-		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
-		helper.processExtraDataProvider(mapper.getExtraDataProvider());
-
-		helper.withModuleService(OptimiserInjectorServiceMaker.begin()//
-				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, new AbstractModule() {
-
-					@Override
-					protected void configure() {
-						bind(MarketabilityWindowTrimmer.class).in(Singleton.class);
-						bind(ICustomTimeWindowTrimmer.class).to(MarketabilityWindowTrimmer.class);
-					}
-					
-					@Provides
-					@Singleton
-					private ISchedulerBuilder provideSchedulerBuilder(@NonNull final Injector injector, @NonNull final Iterable<IBuilderExtensionFactory> builderExtensionFactories) {
-						final SchedulerBuilder builder = new MarketabilitySchedulerBuilder();
-						for (final IBuilderExtensionFactory factory : builderExtensionFactories) {
-							final IBuilderExtension instance = factory.createInstance();
-							if (instance != null) {
-								injector.injectMembers(instance);
-								builder.addBuilderExtension(instance);
-							}
-						}
-						injector.injectMembers(builder);
-						return builder;
-					}
-
-				})//
-				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_Evaluation, new AbstractModule() {
-
-					@Override
-					protected void configure() {
-
-						bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
-					}
-
-				})
-				.make());
-
-		final List<String> hints = new LinkedList<>();
-		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
-		final ConstraintAndFitnessSettings constraints = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
-		customiseConstraints(constraints);
-		
-		final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
-		helper.generateWith(scenarioInstance, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
-			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
-			final MarketabilitySandboxUnit unit = new MarketabilitySandboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
-					dataTransformer.getInitialResult(), dataTransformer.getHints());
-			unit.run(model, mapper, shippingMap, progressMonitor, bridge);
-		});
-		return true;
+			MarketabilityModel model, IProgressMonitor progressMonitor, boolean validateScenario) {
+		return MarketabilitySandboxRunner.run(scenarioDataProvider, scenarioInstance, userSettings, model, progressMonitor, validateScenario, null);
 
 	}
 
