@@ -130,6 +130,13 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL: return createSwapValueMatrixModel();
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT: return createSwapValueMatrixResult();
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET: return createSwapValueMatrixResultSet();
+			case AnalyticsPackage.MARKETABILITY_MODEL: return createMarketabilityModel();
+			case AnalyticsPackage.MARKETABILITY_ROW: return createMarketabilityRow();
+			case AnalyticsPackage.MARKETABILITY_RESULT: return createMarketabilityResult();
+			case AnalyticsPackage.MARKETABILITY_RESULT_CONTAINER: return createMarketabilityResultContainer();
+			case AnalyticsPackage.MARKETABILITY_EVENT: return createMarketabilityEvent();
+			case AnalyticsPackage.MARKETABILITY_ASSIGNABLE_ELEMENT: return createMarketabilityAssignableElement();
+			case AnalyticsPackage.MARKETABILITY_END_EVENT: return createMarketabilityEndEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -461,6 +468,50 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * @generated
 	 */
 	@Override
+	public MarketabilityResultContainer createMarketabilityResultContainer() {
+		MarketabilityResultContainerImpl marketabilityResultContainer = new MarketabilityResultContainerImpl();
+		return marketabilityResultContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityEvent createMarketabilityEvent() {
+		MarketabilityEventImpl marketabilityEvent = new MarketabilityEventImpl();
+		return marketabilityEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityAssignableElement createMarketabilityAssignableElement() {
+		MarketabilityAssignableElementImpl marketabilityAssignableElement = new MarketabilityAssignableElementImpl();
+		return marketabilityAssignableElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityEndEvent createMarketabilityEndEvent() {
+		MarketabilityEndEventImpl marketabilityEndEvent = new MarketabilityEndEventImpl();
+		return marketabilityEndEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public OptionAnalysisModel createOptionAnalysisModel() {
 		OptionAnalysisModelImpl optionAnalysisModel = new OptionAnalysisModelImpl();
 		return optionAnalysisModel;
@@ -662,6 +713,39 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public ViabilityModel createViabilityModel() {
 		ViabilityModelImpl viabilityModel = new ViabilityModelImpl();
 		return viabilityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityModel createMarketabilityModel() {
+		MarketabilityModelImpl marketabilityModel = new MarketabilityModelImpl();
+		return marketabilityModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityRow createMarketabilityRow() {
+		MarketabilityRowImpl marketabilityRow = new MarketabilityRowImpl();
+		return marketabilityRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarketabilityResult createMarketabilityResult() {
+		MarketabilityResultImpl marketabilityResult = new MarketabilityResultImpl();
+		return marketabilityResult;
 	}
 
 	/**

@@ -147,7 +147,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private VesselEventOptionsComponent eventsComponent;
 
 	private BaseCaseComponent baseCaseComponent;
-	private PartialCaseCompoment partialCaseComponent;
+	private PartialCaseComponent partialCaseComponent;
 
 	protected Collection<Consumer<Boolean>> lockedListeners = Sets.newConcurrentHashSet();
 
@@ -321,7 +321,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				hook.accept(baseCaseComponent, true);
 			}
 			{
-				partialCaseComponent = new PartialCaseCompoment(OptionModellerView.this, validationErrors, this::getModel);
+				partialCaseComponent = new PartialCaseComponent(OptionModellerView.this, validationErrors, this::getModel);
 				hook.accept(partialCaseComponent, true);
 			}
 		}

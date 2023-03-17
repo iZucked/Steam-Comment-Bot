@@ -107,18 +107,7 @@ public class ScheduleSpecificationHelper {
 				editingDomain, //
 				cores, //
 				null, //
-				OptimiserInjectorServiceMaker.begin()//
-						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, new AbstractModule() {
-
-							@Override
-							protected void configure() {
-								bind(ViabilityWindowTrimmer.class).in(Singleton.class);
-								bind(ICustomTimeWindowTrimmer.class).to(ViabilityWindowTrimmer.class);
-							}
-
-						})//
-
-						.makeAsList(), //
+				extraInjectorService, //
 				true, // Evaluation only?
 				hints.toArray(new String[hints.size()]) // Hints? No Caching?
 		);

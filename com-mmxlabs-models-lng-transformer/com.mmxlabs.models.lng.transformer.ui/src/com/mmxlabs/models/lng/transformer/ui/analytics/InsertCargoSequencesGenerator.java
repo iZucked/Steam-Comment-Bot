@@ -32,8 +32,7 @@ public class InsertCargoSequencesGenerator {
 	@Inject
 	private @NonNull IFollowersAndPreceders followersAndPreceders;
 
-	public void generateOptions(final ISequences sequences, final List<ISequenceElement> orderedCargoElements,
-			final IResource targetResource, final ViabilityWindowTrimmer trimmer,
+	public void generateOptions(final ISequences sequences, final List<ISequenceElement> orderedCargoElements, final IResource targetResource, final ViabilityWindowTrimmer trimmer,
 			final IPortSlot portSlot, final ToBooleanFunction<ISequences> action) {
 
 		for (final ISequenceElement e : orderedCargoElements) {
@@ -63,9 +62,11 @@ public class InsertCargoSequencesGenerator {
 				final boolean latestValid = action.accept(newSequences);
 				if (earliestValid && !latestValid) {
 					for (int j = 0; j < 31; j++) {
-						trimmer.setTrim(portSlot, ViabilityWindowTrimmer.Mode.SHIFT, j*24);
+						trimmer.setTrim(portSlot, ViabilityWindowTrimmer.Mode.SHIFT, j * 24);
 						final boolean newValid = action.accept(newSequences);
-						if (newValid) break;
+						if (newValid) {
+							break;
+						}
 					}
 				}
 			}
