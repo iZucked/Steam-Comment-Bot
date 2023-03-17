@@ -137,6 +137,10 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.MARKETABILITY_EVENT: return createMarketabilityEvent();
 			case AnalyticsPackage.MARKETABILITY_ASSIGNABLE_ELEMENT: return createMarketabilityAssignableElement();
 			case AnalyticsPackage.MARKETABILITY_END_EVENT: return createMarketabilityEndEvent();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_PARAMETERS: return createSwapValueMatrixParameters();
+			case AnalyticsPackage.RANGE: return createRange();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT: return createSwapValueMatrixShippedCargoResult();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT: return createSwapValueMatrixNonShippedCargoResult();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -504,6 +508,50 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public MarketabilityEndEvent createMarketabilityEndEvent() {
 		MarketabilityEndEventImpl marketabilityEndEvent = new MarketabilityEndEventImpl();
 		return marketabilityEndEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SwapValueMatrixParameters createSwapValueMatrixParameters() {
+		SwapValueMatrixParametersImpl swapValueMatrixParameters = new SwapValueMatrixParametersImpl();
+		return swapValueMatrixParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Range createRange() {
+		RangeImpl range = new RangeImpl();
+		return range;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SwapValueMatrixShippedCargoResult createSwapValueMatrixShippedCargoResult() {
+		SwapValueMatrixShippedCargoResultImpl swapValueMatrixShippedCargoResult = new SwapValueMatrixShippedCargoResultImpl();
+		return swapValueMatrixShippedCargoResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SwapValueMatrixNonShippedCargoResult createSwapValueMatrixNonShippedCargoResult() {
+		SwapValueMatrixNonShippedCargoResultImpl swapValueMatrixNonShippedCargoResult = new SwapValueMatrixNonShippedCargoResultImpl();
+		return swapValueMatrixNonShippedCargoResult;
 	}
 
 	/**

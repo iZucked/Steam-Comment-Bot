@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet#getSwapFee <em>Swap Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet#getGeneratedSpotLoadSlot <em>Generated Spot Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet#getGeneratedSpotDischargeSlot <em>Generated Spot Discharge Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet#getNonVesselCharterPnl <em>Non Vessel Charter Pnl</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResultSet()
@@ -110,5 +111,27 @@ public interface SwapValueMatrixResultSet extends UUIDObject {
 	 * @generated
 	 */
 	void setGeneratedSpotDischargeSlot(SpotDischargeSlot value);
+
+	/**
+	 * Returns the value of the '<em><b>Non Vessel Charter Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Non Vessel Charter Pnl</em>' attribute.
+	 * @see #setNonVesselCharterPnl(long)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixResultSet_NonVesselCharterPnl()
+	 * @model
+	 * @generated
+	 */
+	long getNonVesselCharterPnl();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet#getNonVesselCharterPnl <em>Non Vessel Charter Pnl</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Non Vessel Charter Pnl</em>' attribute.
+	 * @see #getNonVesselCharterPnl()
+	 * @generated
+	 */
+	void setNonVesselCharterPnl(long value);
 
 } // SwapValueMatrixResultSet

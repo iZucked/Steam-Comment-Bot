@@ -99,6 +99,7 @@ Export-Package: com.mmxlabs.models.lng.transformer.breakeven,
  com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation,
  com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser,
  com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox,
+ com.mmxlabs.models.lng.transformer.ui.jobrunners.valuematrix,
  com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor,
  com.mmxlabs.models.lng.transformer.ui.parametermodes,
  com.mmxlabs.models.lng.transformer.ui.parametermodes.impl

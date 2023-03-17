@@ -65,6 +65,7 @@ public class SwapValueMatrixResultSetItemProvider
 			super.getPropertyDescriptors(object);
 
 			addSwapFeePropertyDescriptor(object);
+			addNonVesselCharterPnlPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -87,6 +88,28 @@ public class SwapValueMatrixResultSetItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Non Vessel Charter Pnl feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNonVesselCharterPnlPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SwapValueMatrixResultSet_nonVesselCharterPnl_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResultSet_nonVesselCharterPnl_feature", "_UI_SwapValueMatrixResultSet_type"),
+				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -162,6 +185,7 @@ public class SwapValueMatrixResultSetItemProvider
 
 		switch (notification.getFeatureID(SwapValueMatrixResultSet.class)) {
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__SWAP_FEE:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__RESULTS:

@@ -52,169 +52,8 @@ public class SwapValueMatrixModelItemProvider extends AbstractAnalysisModelItemP
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addBaseDischargeMinPricePropertyDescriptor(object);
-			addBaseDischargeMaxPricePropertyDescriptor(object);
-			addBaseDischargeStepSizePropertyDescriptor(object);
-			addMarketMinPricePropertyDescriptor(object);
-			addMarketMaxPricePropertyDescriptor(object);
-			addMarketStepSizePropertyDescriptor(object);
-			addSwapFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Base Discharge Min Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseDischargeMinPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixModel_baseDischargeMinPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixModel_baseDischargeMinPrice_feature", "_UI_SwapValueMatrixModel_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MIN_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Base Discharge Max Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseDischargeMaxPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixModel_baseDischargeMaxPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixModel_baseDischargeMaxPrice_feature", "_UI_SwapValueMatrixModel_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MAX_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Base Discharge Step Size feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseDischargeStepSizePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixModel_baseDischargeStepSize_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixModel_baseDischargeStepSize_feature", "_UI_SwapValueMatrixModel_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_STEP_SIZE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Market Min Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMarketMinPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixModel_marketMinPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixModel_marketMinPrice_feature", "_UI_SwapValueMatrixModel_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__MARKET_MIN_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Market Max Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMarketMaxPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixModel_marketMaxPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixModel_marketMaxPrice_feature", "_UI_SwapValueMatrixModel_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__MARKET_MAX_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Market Step Size feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMarketStepSizePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixModel_marketStepSize_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixModel_marketStepSize_feature", "_UI_SwapValueMatrixModel_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__MARKET_STEP_SIZE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Swap Fee feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSwapFeePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixModel_swapFee_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixModel_swapFee_feature", "_UI_SwapValueMatrixModel_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_FEE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -229,12 +68,8 @@ public class SwapValueMatrixModelItemProvider extends AbstractAnalysisModelItemP
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_LOAD);
-			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE);
-			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_VESSEL_CHARTER);
-			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_LOAD_MARKET);
-			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_DISCHARGE_MARKET);
 			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT);
+			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__PARAMETERS);
 		}
 		return childrenFeatures;
 	}
@@ -290,21 +125,8 @@ public class SwapValueMatrixModelItemProvider extends AbstractAnalysisModelItemP
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SwapValueMatrixModel.class)) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MIN_PRICE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MAX_PRICE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_STEP_SIZE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__MARKET_MIN_PRICE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__MARKET_MAX_PRICE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__MARKET_STEP_SIZE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_FEE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__BASE_LOAD:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__BASE_VESSEL_CHARTER:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_LOAD_MARKET:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_DISCHARGE_MARKET:
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -324,62 +146,13 @@ public class SwapValueMatrixModelItemProvider extends AbstractAnalysisModelItemP
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_LOAD,
-				 AnalyticsFactory.eINSTANCE.createBuyReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE,
-				 AnalyticsFactory.eINSTANCE.createSellReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_VESSEL_CHARTER,
-				 AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_LOAD_MARKET,
-				 AnalyticsFactory.eINSTANCE.createBuyMarket()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_DISCHARGE_MARKET,
-				 AnalyticsFactory.eINSTANCE.createSellMarket()));
-
-		newChildDescriptors.add
-			(createChildParameter
 				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT,
 				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixResultSet()));
-	}
 
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS ||
-			childFeature == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_LOAD_MARKET ||
-			childFeature == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_LOAD ||
-			childFeature == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS ||
-			childFeature == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_DISCHARGE_MARKET ||
-			childFeature == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE ||
-			childFeature == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES ||
-			childFeature == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__BASE_VESSEL_CHARTER;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__PARAMETERS,
+				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixParameters()));
 	}
 
 }

@@ -778,6 +778,98 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SwapValueMatrixParametersItemProvider swapValueMatrixParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSwapValueMatrixParametersAdapter() {
+		if (swapValueMatrixParametersItemProvider == null) {
+			swapValueMatrixParametersItemProvider = new SwapValueMatrixParametersItemProvider(this);
+		}
+
+		return swapValueMatrixParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Range} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RangeItemProvider rangeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Range}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRangeAdapter() {
+		if (rangeItemProvider == null) {
+			rangeItemProvider = new RangeItemProvider(this);
+		}
+
+		return rangeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SwapValueMatrixShippedCargoResultItemProvider swapValueMatrixShippedCargoResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSwapValueMatrixShippedCargoResultAdapter() {
+		if (swapValueMatrixShippedCargoResultItemProvider == null) {
+			swapValueMatrixShippedCargoResultItemProvider = new SwapValueMatrixShippedCargoResultItemProvider(this);
+		}
+
+		return swapValueMatrixShippedCargoResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SwapValueMatrixNonShippedCargoResultItemProvider swapValueMatrixNonShippedCargoResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSwapValueMatrixNonShippedCargoResultAdapter() {
+		if (swapValueMatrixNonShippedCargoResultItemProvider == null) {
+			swapValueMatrixNonShippedCargoResultItemProvider = new SwapValueMatrixNonShippedCargoResultItemProvider(this);
+		}
+
+		return swapValueMatrixNonShippedCargoResultItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2021,6 +2113,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (marketabilityEventItemProvider != null) marketabilityEventItemProvider.dispose();
 		if (marketabilityAssignableElementItemProvider != null) marketabilityAssignableElementItemProvider.dispose();
 		if (marketabilityEndEventItemProvider != null) marketabilityEndEventItemProvider.dispose();
+		if (swapValueMatrixParametersItemProvider != null) swapValueMatrixParametersItemProvider.dispose();
+		if (rangeItemProvider != null) rangeItemProvider.dispose();
+		if (swapValueMatrixShippedCargoResultItemProvider != null) swapValueMatrixShippedCargoResultItemProvider.dispose();
+		if (swapValueMatrixNonShippedCargoResultItemProvider != null) swapValueMatrixNonShippedCargoResultItemProvider.dispose();
 	}
 
 }

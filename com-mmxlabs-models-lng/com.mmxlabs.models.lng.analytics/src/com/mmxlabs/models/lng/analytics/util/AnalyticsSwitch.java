@@ -700,6 +700,38 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_PARAMETERS: {
+				SwapValueMatrixParameters swapValueMatrixParameters = (SwapValueMatrixParameters)theEObject;
+				T result = caseSwapValueMatrixParameters(swapValueMatrixParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.RANGE: {
+				Range range = (Range)theEObject;
+				T result = caseRange(range);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_CARGO_RESULT: {
+				SwapValueMatrixCargoResult swapValueMatrixCargoResult = (SwapValueMatrixCargoResult)theEObject;
+				T result = caseSwapValueMatrixCargoResult(swapValueMatrixCargoResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT: {
+				SwapValueMatrixShippedCargoResult swapValueMatrixShippedCargoResult = (SwapValueMatrixShippedCargoResult)theEObject;
+				T result = caseSwapValueMatrixShippedCargoResult(swapValueMatrixShippedCargoResult);
+				if (result == null) result = caseSwapValueMatrixCargoResult(swapValueMatrixShippedCargoResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT: {
+				SwapValueMatrixNonShippedCargoResult swapValueMatrixNonShippedCargoResult = (SwapValueMatrixNonShippedCargoResult)theEObject;
+				T result = caseSwapValueMatrixNonShippedCargoResult(swapValueMatrixNonShippedCargoResult);
+				if (result == null) result = caseSwapValueMatrixCargoResult(swapValueMatrixNonShippedCargoResult);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1196,6 +1228,81 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMarketabilityEndEvent(MarketabilityEndEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Swap Value Matrix Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Swap Value Matrix Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSwapValueMatrixParameters(SwapValueMatrixParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Range</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Range</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRange(Range object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Swap Value Matrix Cargo Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Swap Value Matrix Cargo Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSwapValueMatrixCargoResult(SwapValueMatrixCargoResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Swap Value Matrix Shipped Cargo Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Swap Value Matrix Shipped Cargo Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSwapValueMatrixShippedCargoResult(SwapValueMatrixShippedCargoResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Swap Value Matrix Non Shipped Cargo Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Swap Value Matrix Non Shipped Cargo Result</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSwapValueMatrixNonShippedCargoResult(SwapValueMatrixNonShippedCargoResult object) {
 		return null;
 	}
 

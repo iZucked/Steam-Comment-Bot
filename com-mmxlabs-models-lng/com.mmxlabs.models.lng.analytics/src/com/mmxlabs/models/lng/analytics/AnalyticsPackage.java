@@ -5128,121 +5128,22 @@ s	 * <!-- end-user-doc -->
 	int SWAP_VALUE_MATRIX_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
 
 	/**
-	 * The feature id for the '<em><b>Base Load</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__BASE_LOAD = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Base Discharge</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Base Vessel Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__BASE_VESSEL_CHARTER = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Swap Load Market</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__SWAP_LOAD_MARKET = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Swap Discharge Market</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__SWAP_DISCHARGE_MARKET = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Base Discharge Min Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MIN_PRICE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Base Discharge Max Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MAX_PRICE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Base Discharge Step Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_STEP_SIZE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 7;
-
-	/**
-	 * The feature id for the '<em><b>Market Min Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__MARKET_MIN_PRICE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Market Max Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__MARKET_MAX_PRICE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 9;
-
-	/**
-	 * The feature id for the '<em><b>Market Step Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__MARKET_STEP_SIZE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 10;
-
-	/**
-	 * The feature id for the '<em><b>Swap Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__SWAP_FEE = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 11;
-
-	/**
 	 * The feature id for the '<em><b>Swap Value Matrix Result</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 12;
+	int SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_MODEL__PARAMETERS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Swap Value Matrix Model</em>' class.
@@ -5251,7 +5152,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 13;
+	int SWAP_VALUE_MATRIX_MODEL_FEATURE_COUNT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl <em>Swap Value Matrix Result</em>}' class.
@@ -5282,94 +5183,76 @@ s	 * <!-- end-user-doc -->
 	int SWAP_VALUE_MATRIX_RESULT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Base Discharge Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Swap Market Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Swap Pnl Minus Base Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Base Load Price</b></em>' attribute.
+	 * The feature id for the '<em><b>Base Preceding Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Swap Fob Load Price</b></em>' attribute.
+	 * The feature id for the '<em><b>Base Succeeding Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Base Fob Load Volume</b></em>' attribute.
+	 * The feature id for the '<em><b>Swap Preceding Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Swap Fob Load Volume</b></em>' attribute.
+	 * The feature id for the '<em><b>Swap Succeeding Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Market Buy Volume</b></em>' attribute.
+	 * The feature id for the '<em><b>Base Cargo</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SWAP_VALUE_MATRIX_RESULT__BASE_CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Market Sell Volume</b></em>' attribute.
+	 * The feature id for the '<em><b>Swap Diversion Cargo</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Base Des Sell Volume</b></em>' attribute.
+	 * The feature id for the '<em><b>Swap Backfill Cargo</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Swap Value Matrix Result</em>' class.
@@ -5378,7 +5261,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SWAP_VALUE_MATRIX_RESULT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl <em>Swap Value Matrix Result Set</em>}' class.
@@ -5445,13 +5328,22 @@ s	 * <!-- end-user-doc -->
 	int SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_DISCHARGE_SLOT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Non Vessel Charter Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Swap Value Matrix Result Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_RESULT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SWAP_VALUE_MATRIX_RESULT_SET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5769,6 +5661,398 @@ s	 * <!-- end-user-doc -->
 	int MARKETABILITY_END_EVENT_FEATURE_COUNT = MARKETABILITY_EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixParametersImpl <em>Swap Value Matrix Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixParametersImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS = 82;
+
+	/**
+	 * The feature id for the '<em><b>Base Load</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__BASE_LOAD = 0;
+
+	/**
+	 * The feature id for the '<em><b>Base Discharge</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__BASE_DISCHARGE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Base Vessel Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__BASE_VESSEL_CHARTER = 2;
+
+	/**
+	 * The feature id for the '<em><b>Base Price Range</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__BASE_PRICE_RANGE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Swap Load Market</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__SWAP_LOAD_MARKET = 4;
+
+	/**
+	 * The feature id for the '<em><b>Swap Discharge Market</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__SWAP_DISCHARGE_MARKET = 5;
+
+	/**
+	 * The feature id for the '<em><b>Swap Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__SWAP_FEE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Swap Price Range</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS__SWAP_PRICE_RANGE = 7;
+
+	/**
+	 * The number of structural features of the '<em>Swap Value Matrix Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_PARAMETERS_FEATURE_COUNT = 8;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RangeImpl <em>Range</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.RangeImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRange()
+	 * @generated
+	 */
+	int RANGE = 83;
+
+	/**
+	 * The feature id for the '<em><b>Min</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANGE__MIN = 0;
+
+	/**
+	 * The feature id for the '<em><b>Max</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANGE__MAX = 1;
+
+	/**
+	 * The feature id for the '<em><b>Step Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANGE__STEP_SIZE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Range</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RANGE_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixCargoResultImpl <em>Swap Value Matrix Cargo Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixCargoResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixCargoResult()
+	 * @generated
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT = 84;
+
+	/**
+	 * The feature id for the '<em><b>Load Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT__LOAD_PRICE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT__DISCHARGE_PRICE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Purchase Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT__PURCHASE_COST = 2;
+
+	/**
+	 * The feature id for the '<em><b>Sales Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT__SALES_REVENUE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Additional Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT__ADDITIONAL_PNL = 4;
+
+	/**
+	 * The feature id for the '<em><b>Total Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT__TOTAL_PNL = 5;
+
+	/**
+	 * The number of structural features of the '<em>Swap Value Matrix Cargo Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_CARGO_RESULT_FEATURE_COUNT = 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixShippedCargoResultImpl <em>Swap Value Matrix Shipped Cargo Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixShippedCargoResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixShippedCargoResult()
+	 * @generated
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT = 85;
+
+	/**
+	 * The feature id for the '<em><b>Load Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__LOAD_PRICE = SWAP_VALUE_MATRIX_CARGO_RESULT__LOAD_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__DISCHARGE_PRICE = SWAP_VALUE_MATRIX_CARGO_RESULT__DISCHARGE_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Purchase Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__PURCHASE_COST = SWAP_VALUE_MATRIX_CARGO_RESULT__PURCHASE_COST;
+
+	/**
+	 * The feature id for the '<em><b>Sales Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__SALES_REVENUE = SWAP_VALUE_MATRIX_CARGO_RESULT__SALES_REVENUE;
+
+	/**
+	 * The feature id for the '<em><b>Additional Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__ADDITIONAL_PNL = SWAP_VALUE_MATRIX_CARGO_RESULT__ADDITIONAL_PNL;
+
+	/**
+	 * The feature id for the '<em><b>Total Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__TOTAL_PNL = SWAP_VALUE_MATRIX_CARGO_RESULT__TOTAL_PNL;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__SHIPPING_COST = SWAP_VALUE_MATRIX_CARGO_RESULT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Load Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__LOAD_VOLUME = SWAP_VALUE_MATRIX_CARGO_RESULT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__DISCHARGE_VOLUME = SWAP_VALUE_MATRIX_CARGO_RESULT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Swap Value Matrix Shipped Cargo Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT_FEATURE_COUNT = SWAP_VALUE_MATRIX_CARGO_RESULT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixNonShippedCargoResultImpl <em>Swap Value Matrix Non Shipped Cargo Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixNonShippedCargoResultImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixNonShippedCargoResult()
+	 * @generated
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT = 86;
+
+	/**
+	 * The feature id for the '<em><b>Load Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__LOAD_PRICE = SWAP_VALUE_MATRIX_CARGO_RESULT__LOAD_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__DISCHARGE_PRICE = SWAP_VALUE_MATRIX_CARGO_RESULT__DISCHARGE_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Purchase Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__PURCHASE_COST = SWAP_VALUE_MATRIX_CARGO_RESULT__PURCHASE_COST;
+
+	/**
+	 * The feature id for the '<em><b>Sales Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__SALES_REVENUE = SWAP_VALUE_MATRIX_CARGO_RESULT__SALES_REVENUE;
+
+	/**
+	 * The feature id for the '<em><b>Additional Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__ADDITIONAL_PNL = SWAP_VALUE_MATRIX_CARGO_RESULT__ADDITIONAL_PNL;
+
+	/**
+	 * The feature id for the '<em><b>Total Pnl</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__TOTAL_PNL = SWAP_VALUE_MATRIX_CARGO_RESULT__TOTAL_PNL;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__VOLUME = SWAP_VALUE_MATRIX_CARGO_RESULT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Swap Value Matrix Non Shipped Cargo Result</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT_FEATURE_COUNT = SWAP_VALUE_MATRIX_CARGO_RESULT_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5776,7 +6060,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 82;
+	int VOLUME_MODE = 87;
 
 
 	/**
@@ -5787,7 +6071,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 83;
+	int SLOT_TYPE = 88;
 
 
 	/**
@@ -7296,6 +7580,287 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EClass getMarketabilityEndEvent();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters <em>Swap Value Matrix Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Swap Value Matrix Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters
+	 * @generated
+	 */
+	EClass getSwapValueMatrixParameters();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBaseLoad <em>Base Load</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Base Load</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBaseLoad()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EReference getSwapValueMatrixParameters_BaseLoad();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBaseDischarge <em>Base Discharge</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Base Discharge</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBaseDischarge()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EReference getSwapValueMatrixParameters_BaseDischarge();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBaseVesselCharter <em>Base Vessel Charter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Base Vessel Charter</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBaseVesselCharter()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EReference getSwapValueMatrixParameters_BaseVesselCharter();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBasePriceRange <em>Base Price Range</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Base Price Range</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getBasePriceRange()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EReference getSwapValueMatrixParameters_BasePriceRange();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapLoadMarket <em>Swap Load Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Swap Load Market</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapLoadMarket()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EReference getSwapValueMatrixParameters_SwapLoadMarket();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapDischargeMarket <em>Swap Discharge Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Swap Discharge Market</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapDischargeMarket()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EReference getSwapValueMatrixParameters_SwapDischargeMarket();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapFee <em>Swap Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Swap Fee</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapFee()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixParameters_SwapFee();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapPriceRange <em>Swap Price Range</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Swap Price Range</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters#getSwapPriceRange()
+	 * @see #getSwapValueMatrixParameters()
+	 * @generated
+	 */
+	EReference getSwapValueMatrixParameters_SwapPriceRange();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Range <em>Range</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Range</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Range
+	 * @generated
+	 */
+	EClass getRange();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Range#getMin <em>Min</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Range#getMin()
+	 * @see #getRange()
+	 * @generated
+	 */
+	EAttribute getRange_Min();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Range#getMax <em>Max</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Range#getMax()
+	 * @see #getRange()
+	 * @generated
+	 */
+	EAttribute getRange_Max();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.Range#getStepSize <em>Step Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Step Size</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Range#getStepSize()
+	 * @see #getRange()
+	 * @generated
+	 */
+	EAttribute getRange_StepSize();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult <em>Swap Value Matrix Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Swap Value Matrix Cargo Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult
+	 * @generated
+	 */
+	EClass getSwapValueMatrixCargoResult();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getLoadPrice <em>Load Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Load Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getLoadPrice()
+	 * @see #getSwapValueMatrixCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixCargoResult_LoadPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getDischargePrice <em>Discharge Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Discharge Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getDischargePrice()
+	 * @see #getSwapValueMatrixCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixCargoResult_DischargePrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getPurchaseCost <em>Purchase Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Purchase Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getPurchaseCost()
+	 * @see #getSwapValueMatrixCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixCargoResult_PurchaseCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getSalesRevenue <em>Sales Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sales Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getSalesRevenue()
+	 * @see #getSwapValueMatrixCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixCargoResult_SalesRevenue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getAdditionalPnl <em>Additional Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Additional Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getAdditionalPnl()
+	 * @see #getSwapValueMatrixCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixCargoResult_AdditionalPnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getTotalPnl <em>Total Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Total Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult#getTotalPnl()
+	 * @see #getSwapValueMatrixCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixCargoResult_TotalPnl();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult <em>Swap Value Matrix Shipped Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Swap Value Matrix Shipped Cargo Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult
+	 * @generated
+	 */
+	EClass getSwapValueMatrixShippedCargoResult();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult#getShippingCost <em>Shipping Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Shipping Cost</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult#getShippingCost()
+	 * @see #getSwapValueMatrixShippedCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixShippedCargoResult_ShippingCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult#getLoadVolume <em>Load Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Load Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult#getLoadVolume()
+	 * @see #getSwapValueMatrixShippedCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixShippedCargoResult_LoadVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult#getDischargeVolume <em>Discharge Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Discharge Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult#getDischargeVolume()
+	 * @see #getSwapValueMatrixShippedCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixShippedCargoResult_DischargeVolume();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult <em>Swap Value Matrix Non Shipped Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Swap Value Matrix Non Shipped Cargo Result</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult
+	 * @generated
+	 */
+	EClass getSwapValueMatrixNonShippedCargoResult();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult#getVolume <em>Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult#getVolume()
+	 * @see #getSwapValueMatrixNonShippedCargoResult()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixNonShippedCargoResult_Volume();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer#getBuyDate <em>Buy Date</em>}'.
@@ -9049,136 +9614,15 @@ s	 * <!-- end-user-doc -->
 	EClass getSwapValueMatrixModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseLoad <em>Base Load</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getParameters <em>Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Base Load</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseLoad()
+	 * @return the meta object for the containment reference '<em>Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getParameters()
 	 * @see #getSwapValueMatrixModel()
 	 * @generated
 	 */
-	EReference getSwapValueMatrixModel_BaseLoad();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischarge <em>Base Discharge</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Base Discharge</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischarge()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EReference getSwapValueMatrixModel_BaseDischarge();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseVesselCharter <em>Base Vessel Charter</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Base Vessel Charter</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseVesselCharter()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EReference getSwapValueMatrixModel_BaseVesselCharter();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapLoadMarket <em>Swap Load Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Swap Load Market</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapLoadMarket()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EReference getSwapValueMatrixModel_SwapLoadMarket();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapDischargeMarket <em>Swap Discharge Market</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Swap Discharge Market</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapDischargeMarket()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EReference getSwapValueMatrixModel_SwapDischargeMarket();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischargeMinPrice <em>Base Discharge Min Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Discharge Min Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischargeMinPrice()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixModel_BaseDischargeMinPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischargeMaxPrice <em>Base Discharge Max Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Discharge Max Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischargeMaxPrice()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixModel_BaseDischargeMaxPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischargeStepSize <em>Base Discharge Step Size</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Discharge Step Size</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getBaseDischargeStepSize()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixModel_BaseDischargeStepSize();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getMarketMinPrice <em>Market Min Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Market Min Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getMarketMinPrice()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixModel_MarketMinPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getMarketMaxPrice <em>Market Max Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Market Max Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getMarketMaxPrice()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixModel_MarketMaxPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getMarketStepSize <em>Market Step Size</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Market Step Size</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getMarketStepSize()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixModel_MarketStepSize();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapFee <em>Swap Fee</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Swap Fee</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapFee()
-	 * @see #getSwapValueMatrixModel()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixModel_SwapFee();
+	EReference getSwapValueMatrixModel_Parameters();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapValueMatrixResult <em>Swap Value Matrix Result</em>}'.
@@ -9202,28 +9646,6 @@ s	 * <!-- end-user-doc -->
 	EClass getSwapValueMatrixResult();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDischargePrice <em>Base Discharge Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Discharge Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDischargePrice()
-	 * @see #getSwapValueMatrixResult()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixResult_BaseDischargePrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapMarketPrice <em>Swap Market Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Swap Market Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapMarketPrice()
-	 * @see #getSwapValueMatrixResult()
-	 * @generated
-	 */
-	EAttribute getSwapValueMatrixResult_SwapMarketPrice();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapPnlMinusBasePnl <em>Swap Pnl Minus Base Pnl</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9235,81 +9657,81 @@ s	 * <!-- end-user-doc -->
 	EAttribute getSwapValueMatrixResult_SwapPnlMinusBasePnl();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseLoadPrice <em>Base Load Price</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePrecedingPnl <em>Base Preceding Pnl</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Load Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseLoadPrice()
+	 * @return the meta object for the attribute '<em>Base Preceding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBasePrecedingPnl()
 	 * @see #getSwapValueMatrixResult()
 	 * @generated
 	 */
-	EAttribute getSwapValueMatrixResult_BaseLoadPrice();
+	EAttribute getSwapValueMatrixResult_BasePrecedingPnl();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadPrice <em>Swap Fob Load Price</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSucceedingPnl <em>Base Succeeding Pnl</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Swap Fob Load Price</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadPrice()
+	 * @return the meta object for the attribute '<em>Base Succeeding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseSucceedingPnl()
 	 * @see #getSwapValueMatrixResult()
 	 * @generated
 	 */
-	EAttribute getSwapValueMatrixResult_SwapFobLoadPrice();
+	EAttribute getSwapValueMatrixResult_BaseSucceedingPnl();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseFobLoadVolume <em>Base Fob Load Volume</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapPrecedingPnl <em>Swap Preceding Pnl</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Fob Load Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseFobLoadVolume()
+	 * @return the meta object for the attribute '<em>Swap Preceding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapPrecedingPnl()
 	 * @see #getSwapValueMatrixResult()
 	 * @generated
 	 */
-	EAttribute getSwapValueMatrixResult_BaseFobLoadVolume();
+	EAttribute getSwapValueMatrixResult_SwapPrecedingPnl();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadVolume <em>Swap Fob Load Volume</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapSucceedingPnl <em>Swap Succeeding Pnl</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Swap Fob Load Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapFobLoadVolume()
+	 * @return the meta object for the attribute '<em>Swap Succeeding Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapSucceedingPnl()
 	 * @see #getSwapValueMatrixResult()
 	 * @generated
 	 */
-	EAttribute getSwapValueMatrixResult_SwapFobLoadVolume();
+	EAttribute getSwapValueMatrixResult_SwapSucceedingPnl();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketBuyVolume <em>Market Buy Volume</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargo <em>Base Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Market Buy Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketBuyVolume()
+	 * @return the meta object for the containment reference '<em>Base Cargo</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseCargo()
 	 * @see #getSwapValueMatrixResult()
 	 * @generated
 	 */
-	EAttribute getSwapValueMatrixResult_MarketBuyVolume();
+	EReference getSwapValueMatrixResult_BaseCargo();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketSellVolume <em>Market Sell Volume</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapDiversionCargo <em>Swap Diversion Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Market Sell Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getMarketSellVolume()
+	 * @return the meta object for the containment reference '<em>Swap Diversion Cargo</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapDiversionCargo()
 	 * @see #getSwapValueMatrixResult()
 	 * @generated
 	 */
-	EAttribute getSwapValueMatrixResult_MarketSellVolume();
+	EReference getSwapValueMatrixResult_SwapDiversionCargo();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDesSellVolume <em>Base Des Sell Volume</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargo <em>Swap Backfill Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Base Des Sell Volume</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getBaseDesSellVolume()
+	 * @return the meta object for the containment reference '<em>Swap Backfill Cargo</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResult#getSwapBackfillCargo()
 	 * @see #getSwapValueMatrixResult()
 	 * @generated
 	 */
-	EAttribute getSwapValueMatrixResult_BaseDesSellVolume();
+	EReference getSwapValueMatrixResult_SwapBackfillCargo();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet <em>Swap Value Matrix Result Set</em>}'.
@@ -9364,6 +9786,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getSwapValueMatrixResultSet_GeneratedSpotDischargeSlot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet#getNonVesselCharterPnl <em>Non Vessel Charter Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Non Vessel Charter Pnl</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixResultSet#getNonVesselCharterPnl()
+	 * @see #getSwapValueMatrixResultSet()
+	 * @generated
+	 */
+	EAttribute getSwapValueMatrixResultSet_NonVesselCharterPnl();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
@@ -10788,6 +11221,224 @@ s	 * <!-- end-user-doc -->
 		EClass MARKETABILITY_END_EVENT = eINSTANCE.getMarketabilityEndEvent();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixParametersImpl <em>Swap Value Matrix Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixParametersImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixParameters()
+		 * @generated
+		 */
+		EClass SWAP_VALUE_MATRIX_PARAMETERS = eINSTANCE.getSwapValueMatrixParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Load</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SWAP_VALUE_MATRIX_PARAMETERS__BASE_LOAD = eINSTANCE.getSwapValueMatrixParameters_BaseLoad();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Discharge</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SWAP_VALUE_MATRIX_PARAMETERS__BASE_DISCHARGE = eINSTANCE.getSwapValueMatrixParameters_BaseDischarge();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Vessel Charter</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SWAP_VALUE_MATRIX_PARAMETERS__BASE_VESSEL_CHARTER = eINSTANCE.getSwapValueMatrixParameters_BaseVesselCharter();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Price Range</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SWAP_VALUE_MATRIX_PARAMETERS__BASE_PRICE_RANGE = eINSTANCE.getSwapValueMatrixParameters_BasePriceRange();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Load Market</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SWAP_VALUE_MATRIX_PARAMETERS__SWAP_LOAD_MARKET = eINSTANCE.getSwapValueMatrixParameters_SwapLoadMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Discharge Market</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SWAP_VALUE_MATRIX_PARAMETERS__SWAP_DISCHARGE_MARKET = eINSTANCE.getSwapValueMatrixParameters_SwapDischargeMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_PARAMETERS__SWAP_FEE = eINSTANCE.getSwapValueMatrixParameters_SwapFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Swap Price Range</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SWAP_VALUE_MATRIX_PARAMETERS__SWAP_PRICE_RANGE = eINSTANCE.getSwapValueMatrixParameters_SwapPriceRange();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.RangeImpl <em>Range</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.RangeImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRange()
+		 * @generated
+		 */
+		EClass RANGE = eINSTANCE.getRange();
+
+		/**
+		 * The meta object literal for the '<em><b>Min</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANGE__MIN = eINSTANCE.getRange_Min();
+
+		/**
+		 * The meta object literal for the '<em><b>Max</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANGE__MAX = eINSTANCE.getRange_Max();
+
+		/**
+		 * The meta object literal for the '<em><b>Step Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RANGE__STEP_SIZE = eINSTANCE.getRange_StepSize();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixCargoResultImpl <em>Swap Value Matrix Cargo Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixCargoResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixCargoResult()
+		 * @generated
+		 */
+		EClass SWAP_VALUE_MATRIX_CARGO_RESULT = eINSTANCE.getSwapValueMatrixCargoResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_CARGO_RESULT__LOAD_PRICE = eINSTANCE.getSwapValueMatrixCargoResult_LoadPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_CARGO_RESULT__DISCHARGE_PRICE = eINSTANCE.getSwapValueMatrixCargoResult_DischargePrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Purchase Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_CARGO_RESULT__PURCHASE_COST = eINSTANCE.getSwapValueMatrixCargoResult_PurchaseCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Sales Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_CARGO_RESULT__SALES_REVENUE = eINSTANCE.getSwapValueMatrixCargoResult_SalesRevenue();
+
+		/**
+		 * The meta object literal for the '<em><b>Additional Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_CARGO_RESULT__ADDITIONAL_PNL = eINSTANCE.getSwapValueMatrixCargoResult_AdditionalPnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Total Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_CARGO_RESULT__TOTAL_PNL = eINSTANCE.getSwapValueMatrixCargoResult_TotalPnl();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixShippedCargoResultImpl <em>Swap Value Matrix Shipped Cargo Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixShippedCargoResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixShippedCargoResult()
+		 * @generated
+		 */
+		EClass SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT = eINSTANCE.getSwapValueMatrixShippedCargoResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__SHIPPING_COST = eINSTANCE.getSwapValueMatrixShippedCargoResult_ShippingCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__LOAD_VOLUME = eINSTANCE.getSwapValueMatrixShippedCargoResult_LoadVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT__DISCHARGE_VOLUME = eINSTANCE.getSwapValueMatrixShippedCargoResult_DischargeVolume();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixNonShippedCargoResultImpl <em>Swap Value Matrix Non Shipped Cargo Result</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixNonShippedCargoResultImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixNonShippedCargoResult()
+		 * @generated
+		 */
+		EClass SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT = eINSTANCE.getSwapValueMatrixNonShippedCargoResult();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT__VOLUME = eINSTANCE.getSwapValueMatrixNonShippedCargoResult_Volume();
+
+		/**
 		 * The meta object literal for the '<em><b>Buy Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12176,100 +12827,12 @@ s	 * <!-- end-user-doc -->
 		EClass SWAP_VALUE_MATRIX_MODEL = eINSTANCE.getSwapValueMatrixModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Load</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Parameters</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SWAP_VALUE_MATRIX_MODEL__BASE_LOAD = eINSTANCE.getSwapValueMatrixModel_BaseLoad();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Discharge</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE = eINSTANCE.getSwapValueMatrixModel_BaseDischarge();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Vessel Charter</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SWAP_VALUE_MATRIX_MODEL__BASE_VESSEL_CHARTER = eINSTANCE.getSwapValueMatrixModel_BaseVesselCharter();
-
-		/**
-		 * The meta object literal for the '<em><b>Swap Load Market</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SWAP_VALUE_MATRIX_MODEL__SWAP_LOAD_MARKET = eINSTANCE.getSwapValueMatrixModel_SwapLoadMarket();
-
-		/**
-		 * The meta object literal for the '<em><b>Swap Discharge Market</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SWAP_VALUE_MATRIX_MODEL__SWAP_DISCHARGE_MARKET = eINSTANCE.getSwapValueMatrixModel_SwapDischargeMarket();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Discharge Min Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MIN_PRICE = eINSTANCE.getSwapValueMatrixModel_BaseDischargeMinPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Discharge Max Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_MAX_PRICE = eINSTANCE.getSwapValueMatrixModel_BaseDischargeMaxPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Base Discharge Step Size</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_MODEL__BASE_DISCHARGE_STEP_SIZE = eINSTANCE.getSwapValueMatrixModel_BaseDischargeStepSize();
-
-		/**
-		 * The meta object literal for the '<em><b>Market Min Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_MODEL__MARKET_MIN_PRICE = eINSTANCE.getSwapValueMatrixModel_MarketMinPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Market Max Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_MODEL__MARKET_MAX_PRICE = eINSTANCE.getSwapValueMatrixModel_MarketMaxPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Market Step Size</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_MODEL__MARKET_STEP_SIZE = eINSTANCE.getSwapValueMatrixModel_MarketStepSize();
-
-		/**
-		 * The meta object literal for the '<em><b>Swap Fee</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_MODEL__SWAP_FEE = eINSTANCE.getSwapValueMatrixModel_SwapFee();
+		EReference SWAP_VALUE_MATRIX_MODEL__PARAMETERS = eINSTANCE.getSwapValueMatrixModel_Parameters();
 
 		/**
 		 * The meta object literal for the '<em><b>Swap Value Matrix Result</b></em>' containment reference feature.
@@ -12290,22 +12853,6 @@ s	 * <!-- end-user-doc -->
 		EClass SWAP_VALUE_MATRIX_RESULT = eINSTANCE.getSwapValueMatrixResult();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Discharge Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE = eINSTANCE.getSwapValueMatrixResult_BaseDischargePrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Swap Market Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE = eINSTANCE.getSwapValueMatrixResult_SwapMarketPrice();
-
-		/**
 		 * The meta object literal for the '<em><b>Swap Pnl Minus Base Pnl</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12314,60 +12861,60 @@ s	 * <!-- end-user-doc -->
 		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL = eINSTANCE.getSwapValueMatrixResult_SwapPnlMinusBasePnl();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Load Price</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Base Preceding Pnl</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE = eINSTANCE.getSwapValueMatrixResult_BaseLoadPrice();
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL = eINSTANCE.getSwapValueMatrixResult_BasePrecedingPnl();
 
 		/**
-		 * The meta object literal for the '<em><b>Swap Fob Load Price</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Base Succeeding Pnl</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE = eINSTANCE.getSwapValueMatrixResult_SwapFobLoadPrice();
+		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL = eINSTANCE.getSwapValueMatrixResult_BaseSucceedingPnl();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Fob Load Volume</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Swap Preceding Pnl</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME = eINSTANCE.getSwapValueMatrixResult_BaseFobLoadVolume();
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL = eINSTANCE.getSwapValueMatrixResult_SwapPrecedingPnl();
 
 		/**
-		 * The meta object literal for the '<em><b>Swap Fob Load Volume</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Swap Succeeding Pnl</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME = eINSTANCE.getSwapValueMatrixResult_SwapFobLoadVolume();
+		EAttribute SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL = eINSTANCE.getSwapValueMatrixResult_SwapSucceedingPnl();
 
 		/**
-		 * The meta object literal for the '<em><b>Market Buy Volume</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Base Cargo</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME = eINSTANCE.getSwapValueMatrixResult_MarketBuyVolume();
+		EReference SWAP_VALUE_MATRIX_RESULT__BASE_CARGO = eINSTANCE.getSwapValueMatrixResult_BaseCargo();
 
 		/**
-		 * The meta object literal for the '<em><b>Market Sell Volume</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Swap Diversion Cargo</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME = eINSTANCE.getSwapValueMatrixResult_MarketSellVolume();
+		EReference SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO = eINSTANCE.getSwapValueMatrixResult_SwapDiversionCargo();
 
 		/**
-		 * The meta object literal for the '<em><b>Base Des Sell Volume</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Swap Backfill Cargo</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME = eINSTANCE.getSwapValueMatrixResult_BaseDesSellVolume();
+		EReference SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO = eINSTANCE.getSwapValueMatrixResult_SwapBackfillCargo();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl <em>Swap Value Matrix Result Set</em>}' class.
@@ -12410,6 +12957,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_DISCHARGE_SLOT = eINSTANCE.getSwapValueMatrixResultSet_GeneratedSpotDischargeSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Non Vessel Charter Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL = eINSTANCE.getSwapValueMatrixResultSet_NonVesselCharterPnl();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

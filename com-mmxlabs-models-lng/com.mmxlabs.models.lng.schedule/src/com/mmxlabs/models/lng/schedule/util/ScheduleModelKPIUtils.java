@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -123,6 +124,31 @@ public class ScheduleModelKPIUtils {
 		return result;
 	}
 
+	public static long getVesselCharterProfitAndLoss(@NonNull final Schedule schedule, @NonNull final VesselCharter vesselCharter) {
+		final List<@NonNull Sequence> vesselCharterSequences = schedule.getSequences().stream() //
+				.filter(seq -> seq.getVesselCharter() == vesselCharter) //
+				.toList();
+		if (vesselCharterSequences.size() > 1) {
+			throw new IllegalStateException("Vessel charter should not have more than one schedule");
+		}
+		return vesselCharterSequences.isEmpty() ? 0L : getSequenceProfitAndLoss(vesselCharterSequences.get(0));
+	}
+
+	private static long getSequenceProfitAndLoss(@NonNull final Sequence sequence) {
+		long totalPnl = 0L;
+		for (final Event event : sequence.getEvents()) {
+			if (event instanceof SlotVisit slotVisit) {
+				if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+					final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+					totalPnl += getElementPNL(cargoAllocation);
+				}
+			} else if (event instanceof ProfitAndLossContainer pnlContainer) {
+				totalPnl += getElementPNL(pnlContainer);
+			}
+		}
+		return totalPnl;
+	}
+
 	public static long getScheduleProfitAndLoss(@NonNull final Schedule schedule) {
 
 		long totalPNL = 0L;
@@ -130,20 +156,7 @@ public class ScheduleModelKPIUtils {
 			return totalPNL;
 		}
 		for (final Sequence seq : schedule.getSequences()) {
-
-			for (final Event evt : seq.getEvents()) {
-				if (evt instanceof SlotVisit) {
-					final SlotVisit visit = (SlotVisit) evt;
-
-					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-						totalPNL += getElementPNL(cargoAllocation);
-					}
-
-				} else if (evt instanceof ProfitAndLossContainer) {
-					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
-				}
-			}
+			totalPNL += getSequenceProfitAndLoss(seq);
 		}
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			totalPNL += getElementPNL(openSlotAllocation);

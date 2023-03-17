@@ -348,6 +348,59 @@
                <message>
                   {0}
                </message>
+               <target
+                     class="SwapValueMatrixModel">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/analytics/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.analytics.validation.constraints.valuematrix">
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.valuematrix.RangeConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.valuematrix.RangeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Value Matrix Range Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Range">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/analytics/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.analytics.validation.constraints.valuematrix">
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.valuematrix.SwapValueMatrixParametersConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.valuematrix.SwapValueMatrixParametersConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Value Matrix Parameters Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SwapValueMatrixParameters">
+               </target>
             </constraint>
          </constraints>
       </constraintProvider>
