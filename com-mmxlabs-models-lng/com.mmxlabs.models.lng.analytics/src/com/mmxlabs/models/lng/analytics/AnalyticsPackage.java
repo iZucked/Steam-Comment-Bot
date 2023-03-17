@@ -5128,22 +5128,22 @@ s	 * <!-- end-user-doc -->
 	int SWAP_VALUE_MATRIX_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
 
 	/**
-	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SWAP_VALUE_MATRIX_MODEL__PARAMETERS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Swap Value Matrix Result</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
+	int SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SWAP_VALUE_MATRIX_MODEL__PARAMETERS = ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Swap Value Matrix Model</em>' class.

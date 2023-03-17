@@ -16,8 +16,8 @@ package com.mmxlabs.models.lng.analytics;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getParameters <em>Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getSwapValueMatrixResult <em>Swap Value Matrix Result</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixModel#getParameters <em>Parameters</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSwapValueMatrixModel()

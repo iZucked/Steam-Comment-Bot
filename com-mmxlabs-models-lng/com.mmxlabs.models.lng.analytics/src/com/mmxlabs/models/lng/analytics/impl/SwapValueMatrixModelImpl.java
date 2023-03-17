@@ -32,23 +32,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixModelImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixModelImpl#getSwapValueMatrixResult <em>Swap Value Matrix Result</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixModelImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SwapValueMatrixModelImpl extends AbstractAnalysisModelImpl implements SwapValueMatrixModel {
-	/**
-	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getParameters()
-	 * @generated
-	 * @ordered
-	 */
-	protected SwapValueMatrixParameters parameters;
-
 	/**
 	 * The cached value of the '{@link #getSwapValueMatrixResult() <em>Swap Value Matrix Result</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -58,6 +48,16 @@ public class SwapValueMatrixModelImpl extends AbstractAnalysisModelImpl implemen
 	 * @ordered
 	 */
 	protected SwapValueMatrixResultSet swapValueMatrixResult;
+
+	/**
+	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getParameters()
+	 * @generated
+	 * @ordered
+	 */
+	protected SwapValueMatrixParameters parameters;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -176,10 +176,10 @@ public class SwapValueMatrixModelImpl extends AbstractAnalysisModelImpl implemen
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
-				return basicSetParameters(null, msgs);
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT:
 				return basicSetSwapValueMatrixResult(null, msgs);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
+				return basicSetParameters(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -192,10 +192,10 @@ public class SwapValueMatrixModelImpl extends AbstractAnalysisModelImpl implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
-				return getParameters();
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT:
 				return getSwapValueMatrixResult();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
+				return getParameters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -208,11 +208,11 @@ public class SwapValueMatrixModelImpl extends AbstractAnalysisModelImpl implemen
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
-				setParameters((SwapValueMatrixParameters)newValue);
-				return;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT:
 				setSwapValueMatrixResult((SwapValueMatrixResultSet)newValue);
+				return;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
+				setParameters((SwapValueMatrixParameters)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -226,11 +226,11 @@ public class SwapValueMatrixModelImpl extends AbstractAnalysisModelImpl implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
-				setParameters((SwapValueMatrixParameters)null);
-				return;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT:
 				setSwapValueMatrixResult((SwapValueMatrixResultSet)null);
+				return;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
+				setParameters((SwapValueMatrixParameters)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -244,10 +244,10 @@ public class SwapValueMatrixModelImpl extends AbstractAnalysisModelImpl implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
-				return parameters != null;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT:
 				return swapValueMatrixResult != null;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
+				return parameters != null;
 		}
 		return super.eIsSet(featureID);
 	}

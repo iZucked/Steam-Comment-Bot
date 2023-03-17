@@ -384,8 +384,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//CargoPnLResult/cargo"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SwapValueMatrixModel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/parameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/swapValueMatrixResult"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//SwapValueMatrixModel/parameters"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//SwapValueMatrixResult">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SwapValueMatrixResult/swapPnlMinusBasePnl"/>

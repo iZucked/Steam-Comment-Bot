@@ -4115,7 +4115,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EReference getSwapValueMatrixModel_Parameters() {
-		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(0);
+		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -4125,7 +4125,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EReference getSwapValueMatrixModel_SwapValueMatrixResult() {
-		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(1);
+		return (EReference)swapValueMatrixModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -4875,8 +4875,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(cargoPnLResultEClass, CARGO_PN_LRESULT__CARGO);
 
 		swapValueMatrixModelEClass = createEClass(SWAP_VALUE_MATRIX_MODEL);
-		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__PARAMETERS);
 		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT);
+		createEReference(swapValueMatrixModelEClass, SWAP_VALUE_MATRIX_MODEL__PARAMETERS);
 
 		swapValueMatrixResultEClass = createEClass(SWAP_VALUE_MATRIX_RESULT);
 		createEAttribute(swapValueMatrixResultEClass, SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL);
@@ -5445,8 +5445,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getCargoPnLResult_Cargo(), theCargoPackage.getCargo(), null, "cargo", null, 0, 1, CargoPnLResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(swapValueMatrixModelEClass, SwapValueMatrixModel.class, "SwapValueMatrixModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSwapValueMatrixModel_Parameters(), this.getSwapValueMatrixParameters(), null, "parameters", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSwapValueMatrixModel_SwapValueMatrixResult(), this.getSwapValueMatrixResultSet(), null, "swapValueMatrixResult", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwapValueMatrixModel_Parameters(), this.getSwapValueMatrixParameters(), null, "parameters", null, 0, 1, SwapValueMatrixModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(swapValueMatrixResultEClass, SwapValueMatrixResult.class, "SwapValueMatrixResult", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSwapValueMatrixResult_SwapPnlMinusBasePnl(), ecorePackage.getELong(), "swapPnlMinusBasePnl", null, 0, 1, SwapValueMatrixResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

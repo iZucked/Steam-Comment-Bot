@@ -68,8 +68,8 @@ public class SwapValueMatrixModelItemProvider extends AbstractAnalysisModelItemP
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__PARAMETERS);
 			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT);
+			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__PARAMETERS);
 		}
 		return childrenFeatures;
 	}
@@ -125,8 +125,8 @@ public class SwapValueMatrixModelItemProvider extends AbstractAnalysisModelItemP
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SwapValueMatrixModel.class)) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_MODEL__PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -146,13 +146,13 @@ public class SwapValueMatrixModelItemProvider extends AbstractAnalysisModelItemP
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__PARAMETERS,
-				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixParameters()));
+				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT,
+				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixResultSet()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT,
-				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixResultSet()));
+				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__PARAMETERS,
+				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixParameters()));
 	}
 
 }
