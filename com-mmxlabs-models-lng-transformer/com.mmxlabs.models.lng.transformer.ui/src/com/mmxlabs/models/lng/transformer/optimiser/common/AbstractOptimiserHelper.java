@@ -272,7 +272,7 @@ public abstract class AbstractOptimiserHelper {
 	}
 
 	public static void addTargetEventsToProvider(ILongTermSlotsProviderEditor longTermSlotsProviderEditor, Collection<IPortSlot> allPortSlots) {
-		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut);
+		Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut, PortType.CharterLength);
 		allPortSlots.forEach(e -> {
 			if (eventsPortType.contains(e.getPortType())) {
 				if (e instanceof IVesselEventPortSlot) {

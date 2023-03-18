@@ -244,6 +244,18 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.CHARTER_LENGTH_EVENT: {
+				CharterLengthEvent charterLengthEvent = (CharterLengthEvent)theEObject;
+				T1 result = caseCharterLengthEvent(charterLengthEvent);
+				if (result == null) result = caseVesselEvent(charterLengthEvent);
+				if (result == null) result = caseUUIDObject(charterLengthEvent);
+				if (result == null) result = caseNamedObject(charterLengthEvent);
+				if (result == null) result = caseITimezoneProvider(charterLengthEvent);
+				if (result == null) result = caseAssignableElement(charterLengthEvent);
+				if (result == null) result = caseMMXObject(charterLengthEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case CargoPackage.CHARTER_OUT_EVENT: {
 				CharterOutEvent charterOutEvent = (CharterOutEvent)theEObject;
 				T1 result = caseCharterOutEvent(charterOutEvent);
@@ -617,6 +629,21 @@ public class CargoSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseDryDockEvent(DryDockEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Length Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Length Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCharterLengthEvent(CharterLengthEvent object) {
 		return null;
 	}
 

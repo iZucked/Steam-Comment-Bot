@@ -183,7 +183,7 @@ public class PairingOptimiserUnit {
 	}
 
 	private void addLongTermOptimiserEvents(final ILongTermSlotsProviderEditor longTermSlotsProviderEditor, final Collection<IPortSlot> allPortSlots) {
-		final Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut);
+		final Set<PortType> eventsPortType = Sets.newHashSet(PortType.DryDock, PortType.Maintenance, PortType.CharterOut, PortType.CharterLength);
 		allPortSlots.forEach(e -> {
 			if (eventsPortType.contains(e.getPortType())) {
 				if (e instanceof IVesselEventPortSlot) {

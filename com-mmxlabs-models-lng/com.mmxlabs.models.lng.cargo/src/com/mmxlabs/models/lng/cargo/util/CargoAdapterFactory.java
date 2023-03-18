@@ -146,6 +146,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createDryDockEventAdapter();
 			}
 			@Override
+			public Adapter caseCharterLengthEvent(CharterLengthEvent object) {
+				return createCharterLengthEventAdapter();
+			}
+			@Override
 			public Adapter caseCharterOutEvent(CharterOutEvent object) {
 				return createCharterOutEventAdapter();
 			}
@@ -468,6 +472,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDryDockEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CharterLengthEvent <em>Charter Length Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CharterLengthEvent
+	 * @generated
+	 */
+	public Adapter createCharterLengthEventAdapter() {
 		return null;
 	}
 

@@ -28,6 +28,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -70,6 +71,8 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 					return "Dry Dock";
 				} else if (object instanceof MaintenanceEvent) {
 					return "Maintenance Event";
+				} else if (object instanceof CharterLengthEvent) {
+					return "Charter Length";
 				} else {
 					return "Unknown Event";
 				}

@@ -1411,6 +1411,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IVesselEventPortSlot createMaintenanceEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
 		return createVesselEvent(id, PortType.Maintenance, arrival, port, port, durationHours);
 	}
+	
+	@Override
+	@NonNull
+	public IVesselEventPortSlot createCharterLengthEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
+		return createVesselEvent(id, PortType.CharterLength, arrival, port, port, durationHours);
+	}
 
 	/**
 	 */

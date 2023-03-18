@@ -283,6 +283,11 @@ public class CargoModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createCharterLengthEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS,
 				 CargoFactory.eINSTANCE.createCharterOutEvent()));
 
 		newChildDescriptors.add

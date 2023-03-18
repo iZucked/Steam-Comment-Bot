@@ -193,14 +193,14 @@ public class VoyagePlanner implements IVoyagePlanner {
 			cargoCV = loadOption.getCargoCVValue();
 		} else if (prevPortType == PortType.Virtual || prevPortType == PortType.Other) {
 			cargoCV = 0;
-		} else if (prevPortType == PortType.DryDock) {
+		} else if (prevPortType == PortType.DryDock || prevPortType == PortType.CharterLength) {
 			cargoCV = 0;
 		} else {
 			assert previousOptions != null;
 			cargoCV = previousOptions.getCargoCVValue();
 		}
 
-		if (prevPortType == PortType.DryDock) {
+		if (prevPortType == PortType.DryDock || prevPortType == PortType.CharterLength) {
 			options.setWarm(true);
 		} else {
 			options.setWarm(false);

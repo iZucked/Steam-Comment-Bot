@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -167,6 +168,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass dryDockEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass charterLengthEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2042,6 +2050,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getCharterLengthEvent() {
+		return charterLengthEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterOutEvent() {
 		return charterOutEventEClass;
 	}
@@ -3447,6 +3465,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		dryDockEventEClass = createEClass(DRY_DOCK_EVENT);
 
+		charterLengthEventEClass = createEClass(CHARTER_LENGTH_EVENT);
+
 		charterOutEventEClass = createEClass(CHARTER_OUT_EVENT);
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__OPTIONAL);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__RELOCATE_TO);
@@ -3674,6 +3694,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		vesselEventEClass.getESuperTypes().add(this.getAssignableElement());
 		maintenanceEventEClass.getESuperTypes().add(this.getVesselEvent());
 		dryDockEventEClass.getESuperTypes().add(this.getVesselEvent());
+		charterLengthEventEClass.getESuperTypes().add(this.getVesselEvent());
 		charterOutEventEClass.getESuperTypes().add(this.getVesselEvent());
 		g1 = createEGenericType(theTypesPackage.getAVesselSet());
 		g2 = createEGenericType(theFleetPackage.getVessel());
@@ -3956,6 +3977,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(maintenanceEventEClass, MaintenanceEvent.class, "MaintenanceEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(dryDockEventEClass, DryDockEvent.class, "DryDockEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(charterLengthEventEClass, CharterLengthEvent.class, "CharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(charterOutEventEClass, CharterOutEvent.class, "CharterOutEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterOutEvent_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

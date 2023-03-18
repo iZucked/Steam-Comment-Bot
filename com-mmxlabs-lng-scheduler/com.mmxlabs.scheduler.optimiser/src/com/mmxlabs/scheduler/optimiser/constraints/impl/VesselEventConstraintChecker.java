@@ -89,7 +89,7 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 
 	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final List<String> messages) {
 		if (portTypeProvider.getPortType(element) == PortType.DryDock || portTypeProvider.getPortType(element) == PortType.Maintenance
-				|| portTypeProvider.getPortType(element) == PortType.CharterOut) {
+				|| portTypeProvider.getPortType(element) == PortType.CharterOut || portTypeProvider.getPortType(element) == PortType.CharterLength) {
 
 			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 			final boolean result = (vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET || vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);

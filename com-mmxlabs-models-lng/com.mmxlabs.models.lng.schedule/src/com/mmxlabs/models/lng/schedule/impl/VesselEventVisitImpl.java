@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -921,6 +922,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			}
 			if (event instanceof MaintenanceEvent) {
 				return "Maintenance";
+			}
+			if (event instanceof CharterLengthEvent) {
+				return "Charter length";
 			}
 		}
 		return "Unknown Event";

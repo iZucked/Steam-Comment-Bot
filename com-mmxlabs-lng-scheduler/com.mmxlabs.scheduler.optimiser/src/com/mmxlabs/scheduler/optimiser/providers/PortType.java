@@ -68,6 +68,11 @@ public enum PortType {
 	 * Port type is a generated charter length, which will have a start time window and duration (although not neccessarily at creation time).
 	 */
 	GeneratedCharterLength,
+	
+	/**
+	 * Port type is a charter length, which will have a start time window and duration (although not neccessarily at creation time).
+	 */
+	CharterLength,
 
 	/**
 	 * Generic port type.

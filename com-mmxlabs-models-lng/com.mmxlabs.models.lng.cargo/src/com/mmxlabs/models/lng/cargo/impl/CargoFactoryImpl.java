@@ -104,6 +104,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.VESSEL_CHARTER: return createVesselCharter();
 			case CargoPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
 			case CargoPackage.DRY_DOCK_EVENT: return createDryDockEvent();
+			case CargoPackage.CHARTER_LENGTH_EVENT: return createCharterLengthEvent();
 			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			case CargoPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
 			case CargoPackage.INVENTORY_EVENT_ROW: return createInventoryEventRow();
@@ -293,6 +294,17 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public DryDockEvent createDryDockEvent() {
 		DryDockEventImpl dryDockEvent = new DryDockEventImpl();
 		return dryDockEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CharterLengthEvent createCharterLengthEvent() {
+		CharterLengthEventImpl charterLengthEvent = new CharterLengthEventImpl();
+		return charterLengthEvent;
 	}
 
 	/**

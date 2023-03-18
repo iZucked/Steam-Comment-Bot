@@ -110,6 +110,7 @@ public class SequencesToChangeDescriptionTransformer {
 						|| portTypeProvider.getPortType(e) == PortType.DryDock //
 						|| portTypeProvider.getPortType(e) == PortType.Maintenance //
 						|| portTypeProvider.getPortType(e) == PortType.CharterOut //
+						|| portTypeProvider.getPortType(e) == PortType.CharterLength
 				) {
 					final List<ISequenceElement> elementList = moveHandlerHelper.extractSegment(seq, e);
 					for (final ISequenceElement e2 : elementList) {

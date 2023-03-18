@@ -11,6 +11,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -28,6 +29,7 @@ public class EventDurationConstraint extends AbstractModelConstraint {
 	private int maxDryDockDurationInDays = 30 * 6;
 	private int maxMaintenanceDurationInDays = 30;
 	private int maxCharterOutDurationInDays = 365;
+	private int maxCharterLengthDurationInDays = 365;
 	
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
@@ -49,6 +51,9 @@ public class EventDurationConstraint extends AbstractModelConstraint {
 			else if (target instanceof CharterOutEvent) {
 				max = maxCharterOutDurationInDays;
 				type = "Charter out";
+			} else if (target instanceof CharterLengthEvent) {
+				max = maxCharterLengthDurationInDays;
+				type = "Charter length";
 			}
 			else {
 				return (IConstraintStatus) ctx.createFailureStatus("No known maximum duration for events of type '" + event.getClass().getName() + "'.");

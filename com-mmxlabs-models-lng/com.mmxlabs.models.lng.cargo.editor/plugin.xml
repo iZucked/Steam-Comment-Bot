@@ -455,6 +455,13 @@
           targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
     </factory>
     <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.charterLengthFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Length"
+          outputEClass="com.mmxlabs.models.lng.cargo.CharterLengthEvent"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
+    </factory>
+    <factory
           ID="com.mmxlabs.models.lng.cargo.InventoryEventRow.Factory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Event"

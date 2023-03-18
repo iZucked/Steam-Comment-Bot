@@ -115,6 +115,15 @@ public interface CargoFactory extends EFactory {
 	DryDockEvent createDryDockEvent();
 
 	/**
+	 * Returns a new object of class '<em>Charter Length Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Length Event</em>'.
+	 * @generated
+	 */
+	CharterLengthEvent createCharterLengthEvent();
+
+	/**
 	 * Returns a new object of class '<em>Charter Out Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

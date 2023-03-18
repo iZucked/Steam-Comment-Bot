@@ -417,7 +417,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterOutEvent()
 	 * @generated
 	 */
-	int CHARTER_OUT_EVENT = 13;
+	int CHARTER_OUT_EVENT = 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
@@ -427,7 +427,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getAssignableElement()
 	 * @generated
 	 */
-	int ASSIGNABLE_ELEMENT = 14;
+	int ASSIGNABLE_ELEMENT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5308,6 +5308,196 @@ public interface CargoPackage extends EPackage {
 	int DRY_DOCK_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterLengthEventImpl <em>Charter Length Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CharterLengthEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterLengthEvent()
+	 * @generated
+	 */
+	int CHARTER_LENGTH_EVENT = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__UUID = VESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__SEQUENCE_HINT = VESSEL_EVENT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Assignment Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__VESSEL_ASSIGNMENT_TYPE = VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__SPOT_INDEX = VESSEL_EVENT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__LOCKED = VESSEL_EVENT__LOCKED;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The number of structural features of the '<em>Charter Length Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = VESSEL_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = VESSEL_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT___ECONTAINER_OP = VESSEL_EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT___GET_TIME_ZONE__EATTRIBUTE = VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Start By As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT___GET_START_BY_AS_DATE_TIME = VESSEL_EVENT___GET_START_BY_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Start After As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
+
+	/**
+	 * The number of operations of the '<em>Charter Length Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5621,7 +5811,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselTypeGroup()
 	 * @generated
 	 */
-	int VESSEL_TYPE_GROUP = 15;
+	int VESSEL_TYPE_GROUP = 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5721,7 +5911,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryEventRow()
 	 * @generated
 	 */
-	int INVENTORY_EVENT_ROW = 16;
+	int INVENTORY_EVENT_ROW = 17;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -5839,7 +6029,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryCapacityRow()
 	 * @generated
 	 */
-	int INVENTORY_CAPACITY_ROW = 17;
+	int INVENTORY_CAPACITY_ROW = 18;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -5894,7 +6084,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventory()
 	 * @generated
 	 */
-	int INVENTORY = 18;
+	int INVENTORY = 19;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6012,7 +6202,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookingSlot()
 	 * @generated
 	 */
-	int CANAL_BOOKING_SLOT = 19;
+	int CANAL_BOOKING_SLOT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6130,7 +6320,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookings()
 	 * @generated
 	 */
-	int CANAL_BOOKINGS = 20;
+	int CANAL_BOOKINGS = 21;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6230,7 +6420,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecification()
 	 * @generated
 	 */
-	int SCHEDULE_SPECIFICATION = 21;
+	int SCHEDULE_SPECIFICATION = 22;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Schedule Specifications</b></em>' containment reference list.
@@ -6285,7 +6475,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getNonShippedCargoSpecification()
 	 * @generated
 	 */
-	int NON_SHIPPED_CARGO_SPECIFICATION = 22;
+	int NON_SHIPPED_CARGO_SPECIFICATION = 23;
 
 	/**
 	 * The feature id for the '<em><b>Slot Specifications</b></em>' containment reference list.
@@ -6322,7 +6512,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselScheduleSpecification()
 	 * @generated
 	 */
-	int VESSEL_SCHEDULE_SPECIFICATION = 23;
+	int VESSEL_SCHEDULE_SPECIFICATION = 24;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Allocation</b></em>' reference.
@@ -6377,7 +6567,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecificationEvent()
 	 * @generated
 	 */
-	int SCHEDULE_SPECIFICATION_EVENT = 24;
+	int SCHEDULE_SPECIFICATION_EVENT = 25;
 
 	/**
 	 * The number of structural features of the '<em>Schedule Specification Event</em>' class.
@@ -6405,7 +6595,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEventSpecification()
 	 * @generated
 	 */
-	int VESSEL_EVENT_SPECIFICATION = 25;
+	int VESSEL_EVENT_SPECIFICATION = 26;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -6451,7 +6641,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVoyageSpecification()
 	 * @generated
 	 */
-	int VOYAGE_SPECIFICATION = 26;
+	int VOYAGE_SPECIFICATION = 27;
 
 	/**
 	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
@@ -6497,7 +6687,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlotSpecification()
 	 * @generated
 	 */
-	int SLOT_SPECIFICATION = 27;
+	int SLOT_SPECIFICATION = 28;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -6543,7 +6733,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterInMarketOverride()
 	 * @generated
 	 */
-	int CHARTER_IN_MARKET_OVERRIDE = 28;
+	int CHARTER_IN_MARKET_OVERRIDE = 29;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6733,7 +6923,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperDeal()
 	 * @generated
 	 */
-	int PAPER_DEAL = 29;
+	int PAPER_DEAL = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6905,7 +7095,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getBuyPaperDeal()
 	 * @generated
 	 */
-	int BUY_PAPER_DEAL = 30;
+	int BUY_PAPER_DEAL = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7077,7 +7267,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSellPaperDeal()
 	 * @generated
 	 */
-	int SELL_PAPER_DEAL = 31;
+	int SELL_PAPER_DEAL = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7249,7 +7439,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDealSet()
 	 * @generated
 	 */
-	int DEAL_SET = 32;
+	int DEAL_SET = 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7340,7 +7530,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselGroupCanalParameters()
 	 * @generated
 	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS = 33;
+	int VESSEL_GROUP_CANAL_PARAMETERS = 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7422,7 +7612,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPanamaSeasonalityRecord()
 	 * @generated
 	 */
-	int PANAMA_SEASONALITY_RECORD = 34;
+	int PANAMA_SEASONALITY_RECORD = 35;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Group Canal Parameter</b></em>' reference.
@@ -7504,7 +7694,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedSlotsConstraint()
 	 * @generated
 	 */
-	int GROUPED_SLOTS_CONSTRAINT = 35;
+	int GROUPED_SLOTS_CONSTRAINT = 36;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -7550,7 +7740,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedDischargeSlotsConstraint()
 	 * @generated
 	 */
-	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT = 36;
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT = 37;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -7596,7 +7786,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 37;
+	int CARGO_TYPE = 38;
 
 
 	/**
@@ -7607,7 +7797,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 38;
+	int VESSEL_TYPE = 39;
 
 
 	/**
@@ -7618,7 +7808,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 39;
+	int INVENTORY_FACILITY_TYPE = 40;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -7628,7 +7818,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 40;
+	int INVENTORY_FREQUENCY = 41;
 
 
 	/**
@@ -7639,7 +7829,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 41;
+	int PAPER_PRICING_TYPE = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
@@ -7649,7 +7839,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
 	 * @generated
 	 */
-	int FUEL_CHOICE = 42;
+	int FUEL_CHOICE = 43;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -7659,7 +7849,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 43;
+	int SCHEDULING_TIME_WINDOW = 44;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -9361,6 +9551,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDryDockEvent();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CharterLengthEvent <em>Charter Length Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter Length Event</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterLengthEvent
+	 * @generated
+	 */
+	EClass getCharterLengthEvent();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent <em>Charter Out Event</em>}'.
@@ -11976,6 +12176,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DRY_DOCK_EVENT = eINSTANCE.getDryDockEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterLengthEventImpl <em>Charter Length Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CharterLengthEventImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterLengthEvent()
+		 * @generated
+		 */
+		EClass CHARTER_LENGTH_EVENT = eINSTANCE.getCharterLengthEvent();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.

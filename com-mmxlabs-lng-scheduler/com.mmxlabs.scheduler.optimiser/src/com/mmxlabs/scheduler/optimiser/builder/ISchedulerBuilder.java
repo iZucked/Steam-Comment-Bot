@@ -664,4 +664,7 @@ public interface ISchedulerBuilder {
 
 	void setSuezRouteRebate(@NonNull IPort from, @NonNull IPort to, long discountFactor);
 
+	@NonNull
+	IVesselEventPortSlot createCharterLengthEvent(String id, ITimeWindow arrival, IPort port, int durationHours);
+
 }

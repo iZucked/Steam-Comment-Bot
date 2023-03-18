@@ -318,6 +318,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CharterLengthEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterLengthEventItemProvider charterLengthEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CharterLengthEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterLengthEventAdapter() {
+		if (charterLengthEventItemProvider == null) {
+			charterLengthEventItemProvider = new CharterLengthEventItemProvider(this);
+		}
+
+		return charterLengthEventItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CharterOutEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -965,6 +988,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (vesselCharterItemProvider != null) vesselCharterItemProvider.dispose();
 		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
 		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
+		if (charterLengthEventItemProvider != null) charterLengthEventItemProvider.dispose();
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
 		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
 		if (inventoryEventRowItemProvider != null) inventoryEventRowItemProvider.dispose();

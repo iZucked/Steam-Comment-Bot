@@ -294,7 +294,8 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 		for (int i = 0; i < cargo.size(); ++i) {
 			if (cargo.get(i).getPortType() == PortType.CharterOut //
 					|| cargo.get(i).getPortType() == PortType.DryDock //
-					|| cargo.get(i).getPortType() == PortType.Maintenance) {
+					|| cargo.get(i).getPortType() == PortType.Maintenance//
+					|| cargo.get(i).getPortType() == PortType.CharterLength) {
 				return cargo.get(i);
 			}
 		}

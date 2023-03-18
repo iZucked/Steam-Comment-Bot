@@ -64,6 +64,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -252,7 +253,6 @@ public class LNGScenarioTransformer {
 	private static final int NOMINAL_CARGO_INDEX = -1;
 
 	private static final Logger LOG = LoggerFactory.getLogger(LNGScenarioTransformer.class);
-
 
 	private final @NonNull LNGScenarioModel rootObject;
 
@@ -1167,6 +1167,8 @@ public class LNGScenarioTransformer {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
 				builderSlot = builder.createMaintenanceEvent(event.getName(), window, port, durationHours);
+			} else if (event instanceof CharterLengthEvent) {
+				builderSlot = builder.createCharterLengthEvent(event.getName(), window, port, durationHours);
 			} else {
 				throw new RuntimeException("Unknown event type: " + event.getClass().getName());
 			}
