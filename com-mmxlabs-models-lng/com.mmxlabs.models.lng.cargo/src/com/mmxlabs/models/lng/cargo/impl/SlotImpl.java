@@ -99,6 +99,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isComputeExposure <em>Compute Exposure</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isComputeHedge <em>Compute Hedge</em>}</li>
  * </ul>
  *
  * @generated
@@ -1055,6 +1057,46 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean allowedPortsOverride = ALLOWED_PORTS_OVERRIDE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isComputeExposure() <em>Compute Exposure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isComputeExposure()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean COMPUTE_EXPOSURE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isComputeExposure() <em>Compute Exposure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isComputeExposure()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean computeExposure = COMPUTE_EXPOSURE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isComputeHedge() <em>Compute Hedge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isComputeHedge()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean COMPUTE_HEDGE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isComputeHedge() <em>Compute Hedge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isComputeHedge()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean computeHedge = COMPUTE_HEDGE_EDEFAULT;
 
 	/**
 	 * Clump of methods for computing the schedule time window start and end times etc.
@@ -2713,6 +2755,52 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isComputeExposure() {
+		return computeExposure;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setComputeExposure(boolean newComputeExposure) {
+		boolean oldComputeExposure = computeExposure;
+		computeExposure = newComputeExposure;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__COMPUTE_EXPOSURE, oldComputeExposure, computeExposure));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isComputeHedge() {
+		return computeHedge;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setComputeHedge(boolean newComputeHedge) {
+		boolean oldComputeHedge = computeHedge;
+		computeHedge = newComputeHedge;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__COMPUTE_HEDGE, oldComputeHedge, computeHedge));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
@@ -3088,6 +3176,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getAllowedPorts();
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
 				return isAllowedPortsOverride();
+			case CargoPackage.SLOT__COMPUTE_EXPOSURE:
+				return isComputeExposure();
+			case CargoPackage.SLOT__COMPUTE_HEDGE:
+				return isComputeHedge();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3237,6 +3329,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
 				setAllowedPortsOverride((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__COMPUTE_EXPOSURE:
+				setComputeExposure((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__COMPUTE_HEDGE:
+				setComputeHedge((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3380,6 +3478,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
 				setAllowedPortsOverride(ALLOWED_PORTS_OVERRIDE_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__COMPUTE_EXPOSURE:
+				setComputeExposure(COMPUTE_EXPOSURE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__COMPUTE_HEDGE:
+				setComputeHedge(COMPUTE_HEDGE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3496,6 +3600,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isSetAllowedPorts();
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
 				return allowedPortsOverride != ALLOWED_PORTS_OVERRIDE_EDEFAULT;
+			case CargoPackage.SLOT__COMPUTE_EXPOSURE:
+				return computeExposure != COMPUTE_EXPOSURE_EDEFAULT;
+			case CargoPackage.SLOT__COMPUTE_HEDGE:
+				return computeHedge != COMPUTE_HEDGE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3698,6 +3806,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(windowCounterParty);
 		result.append(", allowedPortsOverride: ");
 		result.append(allowedPortsOverride);
+		result.append(", computeExposure: ");
+		result.append(computeExposure);
+		result.append(", computeHedge: ");
+		result.append(computeHedge);
 		result.append(')');
 		return result.toString();
 	}

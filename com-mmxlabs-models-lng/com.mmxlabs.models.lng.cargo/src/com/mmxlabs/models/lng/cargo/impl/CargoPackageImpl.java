@@ -962,6 +962,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSlot_ComputeExposure() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(43);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlot_ComputeHedge() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getSlot__GetSlotOrDelegateMinQuantity() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -1552,28 +1572,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getCargoModel_CargoesForExposures() {
-		return (EReference)cargoModelEClass.getEStructuralFeatures().get(12);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getCargoModel_CargoesForHedging() {
-		return (EReference)cargoModelEClass.getEStructuralFeatures().get(13);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getCargoModel_GroupedDischargeSlots() {
-		return (EReference)cargoModelEClass.getEStructuralFeatures().get(14);
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -3288,8 +3288,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 		createEReference(cargoModelEClass, CARGO_MODEL__PAPER_DEALS);
 		createEReference(cargoModelEClass, CARGO_MODEL__DEAL_SETS);
-		createEReference(cargoModelEClass, CARGO_MODEL__CARGOES_FOR_EXPOSURES);
-		createEReference(cargoModelEClass, CARGO_MODEL__CARGOES_FOR_HEDGING);
 		createEReference(cargoModelEClass, CARGO_MODEL__GROUPED_DISCHARGE_SLOTS);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING);
@@ -3345,6 +3343,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__WINDOW_COUNTER_PARTY);
 		createEReference(slotEClass, SLOT__ALLOWED_PORTS);
 		createEAttribute(slotEClass, SLOT__ALLOWED_PORTS_OVERRIDE);
+		createEAttribute(slotEClass, SLOT__COMPUTE_EXPOSURE);
+		createEAttribute(slotEClass, SLOT__COMPUTE_HEDGE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_OPERATIONAL_TOLERANCE);
@@ -3713,8 +3713,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_CharterInMarketOverrides(), this.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_DealSets(), this.getDealSet(), null, "dealSets", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoModel_CargoesForExposures(), this.getCargo(), null, "cargoesForExposures", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoModel_CargoesForHedging(), this.getCargo(), null, "cargoesForHedging", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_GroupedDischargeSlots(), this.getGroupedDischargeSlotsConstraint(), null, "groupedDischargeSlots", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getCargoModel__GetLoadSlotByName__String(), this.getLoadSlot(), "getLoadSlotByName", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -3797,6 +3795,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getSlot_AllowedPorts(), g1, null, "allowedPorts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_AllowedPortsOverride(), ecorePackage.getEBoolean(), "allowedPortsOverride", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_ComputeExposure(), ecorePackage.getEBoolean(), "computeExposure", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_ComputeHedge(), ecorePackage.getEBoolean(), "computeHedge", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateMinQuantity(), ecorePackage.getEInt(), "getSlotOrDelegateMinQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
 

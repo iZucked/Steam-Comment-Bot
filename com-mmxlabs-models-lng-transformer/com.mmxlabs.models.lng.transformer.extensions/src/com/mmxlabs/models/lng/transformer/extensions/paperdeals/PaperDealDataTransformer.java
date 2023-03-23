@@ -24,10 +24,9 @@ import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.common.paperdeals.PaperDealsLookupData;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
@@ -120,21 +119,22 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 						lookupData.cutoffMonth = YearMonth.from(lngScenarioModel.getPromptPeriodStart());
 					}
 					if (individualExposures) {
-						cargoModel.getCargoesForHedging().forEach(c -> {
-							for (final var slot : c.getSlots()) {
+						cargoModel.getLoadSlots().forEach( s-> {
+							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
 								String prefix = "FP-";
-								if (slot instanceof LoadSlot) {
-									prefix = "FP-";
-									if (((LoadSlot) slot).isDESPurchase()) {
-										prefix = "DP-";
-									}
-								} else {
-									prefix = "DS-";
-									if (((DischargeSlot) slot).isFOBSale()) {
-										prefix = "FS-";
-									}
+								if (s.isDESPurchase()) {
+									prefix = "DP-";
 								}
-								lookupData.slotsToInclude.add(prefix + slot.getName());
+								lookupData.slotsToInclude.add(prefix + s.getName());
+							}
+						});
+						cargoModel.getDischargeSlots().forEach( s-> {
+							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
+								String prefix = "DS-";
+								if (s.isFOBSale()) {
+									prefix = "FS-";
+								}
+								lookupData.slotsToInclude.add(prefix + s.getName());
 							}
 						});
 					}

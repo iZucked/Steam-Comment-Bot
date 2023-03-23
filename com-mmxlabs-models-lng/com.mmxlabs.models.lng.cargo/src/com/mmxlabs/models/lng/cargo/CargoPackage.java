@@ -240,31 +240,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__DEAL_SETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
-	 * The feature id for the '<em><b>Cargoes For Exposures</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL__CARGOES_FOR_EXPOSURES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
-
-	/**
-	 * The feature id for the '<em><b>Cargoes For Hedging</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL__CARGOES_FOR_HEDGING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
-
-	/**
 	 * The feature id for the '<em><b>Grouped Discharge Slots</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -273,7 +255,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -988,13 +970,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
 
 	/**
+	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+
+	/**
+	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1652,6 +1652,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__ALLOWED_PORTS_OVERRIDE = SLOT__ALLOWED_PORTS_OVERRIDE;
+
+	/**
+	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__COMPUTE_EXPOSURE = SLOT__COMPUTE_EXPOSURE;
+
+	/**
+	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__COMPUTE_HEDGE = SLOT__COMPUTE_HEDGE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -2417,6 +2435,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__ALLOWED_PORTS_OVERRIDE = SLOT__ALLOWED_PORTS_OVERRIDE;
+
+	/**
+	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__COMPUTE_EXPOSURE = SLOT__COMPUTE_EXPOSURE;
+
+	/**
+	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__COMPUTE_HEDGE = SLOT__COMPUTE_HEDGE;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -3247,6 +3283,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__ALLOWED_PORTS_OVERRIDE = LOAD_SLOT__ALLOWED_PORTS_OVERRIDE;
 
 	/**
+	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__COMPUTE_EXPOSURE = LOAD_SLOT__COMPUTE_EXPOSURE;
+
+	/**
+	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__COMPUTE_HEDGE = LOAD_SLOT__COMPUTE_HEDGE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4019,6 +4073,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__ALLOWED_PORTS_OVERRIDE = DISCHARGE_SLOT__ALLOWED_PORTS_OVERRIDE;
+
+	/**
+	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__COMPUTE_EXPOSURE = DISCHARGE_SLOT__COMPUTE_EXPOSURE;
+
+	/**
+	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__COMPUTE_HEDGE = DISCHARGE_SLOT__COMPUTE_HEDGE;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -8217,6 +8289,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_AllowedPortsOverride();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isComputeExposure <em>Compute Exposure</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Compute Exposure</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isComputeExposure()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_ComputeExposure();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isComputeHedge <em>Compute Hedge</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Compute Hedge</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isComputeHedge()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_ComputeHedge();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateMinQuantity() <em>Get Slot Or Delegate Min Quantity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8832,28 +8926,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargoModel_DealSets();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForExposures <em>Cargoes For Exposures</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Cargoes For Exposures</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForExposures()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_CargoesForExposures();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForHedging <em>Cargoes For Hedging</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Cargoes For Hedging</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForHedging()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_CargoesForHedging();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}'.
@@ -11084,6 +11156,22 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__ALLOWED_PORTS_OVERRIDE = eINSTANCE.getSlot_AllowedPortsOverride();
 
 		/**
+		 * The meta object literal for the '<em><b>Compute Exposure</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__COMPUTE_EXPOSURE = eINSTANCE.getSlot_ComputeExposure();
+
+		/**
+		 * The meta object literal for the '<em><b>Compute Hedge</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__COMPUTE_HEDGE = eINSTANCE.getSlot_ComputeHedge();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Quantity</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11560,22 +11648,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_MODEL__DEAL_SETS = eINSTANCE.getCargoModel_DealSets();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargoes For Exposures</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__CARGOES_FOR_EXPOSURES = eINSTANCE.getCargoModel_CargoesForExposures();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargoes For Hedging</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__CARGOES_FOR_HEDGING = eINSTANCE.getCargoModel_CargoesForHedging();
 
 		/**
 		 * The meta object literal for the '<em><b>Grouped Discharge Slots</b></em>' containment reference list feature.
