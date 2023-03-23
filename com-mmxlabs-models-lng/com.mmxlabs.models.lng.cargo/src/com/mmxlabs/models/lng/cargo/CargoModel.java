@@ -29,8 +29,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDeals <em>Paper Deals</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getDealSets <em>Deal Sets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForExposures <em>Cargoes For Exposures</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForHedging <em>Cargoes For Hedging</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}</li>
  * </ul>
  *
@@ -242,30 +240,6 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<DealSet> getDealSets();
-
-	/**
-	 * Returns the value of the '<em><b>Cargoes For Exposures</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Cargo}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargoes For Exposures</em>' reference list.
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_CargoesForExposures()
-	 * @model
-	 * @generated
-	 */
-	EList<Cargo> getCargoesForExposures();
-
-	/**
-	 * Returns the value of the '<em><b>Cargoes For Hedging</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Cargo}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cargoes For Hedging</em>' reference list.
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_CargoesForHedging()
-	 * @model
-	 * @generated
-	 */
-	EList<Cargo> getCargoesForHedging();
 
 	/**
 	 * Returns the value of the '<em><b>Grouped Discharge Slots</b></em>' containment reference list.

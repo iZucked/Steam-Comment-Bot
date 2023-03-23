@@ -75,6 +75,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isComputeExposure <em>Compute Exposure</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isComputeHedge <em>Compute Hedge</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1840,6 +1842,50 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	void setAllowedPortsOverride(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Compute Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Compute Exposure</em>' attribute.
+	 * @see #setComputeExposure(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ComputeExposure()
+	 * @model
+	 * @generated
+	 */
+	boolean isComputeExposure();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isComputeExposure <em>Compute Exposure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Compute Exposure</em>' attribute.
+	 * @see #isComputeExposure()
+	 * @generated
+	 */
+	void setComputeExposure(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Compute Hedge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Compute Hedge</em>' attribute.
+	 * @see #setComputeHedge(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ComputeHedge()
+	 * @model
+	 * @generated
+	 */
+	boolean isComputeHedge();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isComputeHedge <em>Compute Hedge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Compute Hedge</em>' attribute.
+	 * @see #isComputeHedge()
+	 * @generated
+	 */
+	void setComputeHedge(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
