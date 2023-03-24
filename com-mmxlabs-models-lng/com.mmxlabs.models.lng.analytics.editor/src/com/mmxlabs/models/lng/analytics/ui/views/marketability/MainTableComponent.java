@@ -233,19 +233,17 @@ public class MainTableComponent {
 		return tableViewer.getGrid();
 	}
 
-	private void updateVesselSpeedText(MarketabilityModel model) {
-		if (model.isSetVesselSpeed()) {
-			vesselSpeedText.setText(String.valueOf(model.getVesselSpeed()));
+	private void updateVesselSpeedText(final @Nullable MarketabilityModel model) {
+		if (model != null && model.isSetVesselSpeed()) {
+			vesselSpeedText.setText(Integer.toString((int)model.getVesselSpeed()));
 		} else {
 			vesselSpeedText.setText("");
 		}
 	}
 
-	public void refresh(MarketabilityModel model) {
-		if(model != null) {
-			tableViewer.setInput(model);
-			updateVesselSpeedText(model);
-		}
+	public void refresh(final @Nullable MarketabilityModel model) {
+		tableViewer.setInput(model);
+		updateVesselSpeedText(model);
 		tableViewer.refresh();
 		GridViewerHelper.recalculateRowHeights(tableViewer.getGrid());
 
