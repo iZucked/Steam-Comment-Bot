@@ -17,5 +17,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.spotmarkets.validation.tests
-Import-Package: org.junit.jupiter.api;version="5.1.0",
- org.junit.runner.manipulation;version="4.12.0"
+Import-Package: org.junit.jupiter.api;version="5.1.0"

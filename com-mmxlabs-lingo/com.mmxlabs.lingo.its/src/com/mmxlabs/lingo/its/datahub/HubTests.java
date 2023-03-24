@@ -4,13 +4,7 @@
  */
 package com.mmxlabs.lingo.its.datahub;
 
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2020
- * All rights reserved.
- */
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withText;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
@@ -26,6 +20,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -154,8 +149,8 @@ public class HubTests {
 			bot.buttonWithId("login").click();
 			Thread.sleep(2000);
 		}
-		assertTrue(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
-		assertFalse(oauthManager.isAuthenticated(oauthUpstreamUrl));
+		Assertions.assertTrue(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
+		Assertions.assertFalse(oauthManager.isAuthenticated(oauthUpstreamUrl));
 	}
 
 	@Test
@@ -170,9 +165,9 @@ public class HubTests {
 		bot.checkBox("Force local authentication").click();
 		bot.button("Apply and Close").click();
 		if (basicAuthenticated) {
-			assertTrue(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
+			Assertions.assertTrue(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
 		} else {
-			assertFalse(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
+			Assertions.assertFalse(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
 		}
 	}
 
@@ -195,7 +190,7 @@ public class HubTests {
 		for (SWTBotShell shell : swtshells) {
 			logger.info(shell.getText());
 		}
-		assertFalse(bot.buttonWithId("login").isEnabled());
+		Assertions.assertFalse(bot.buttonWithId("login").isEnabled());
 	}
 
 	@Test
@@ -203,6 +198,6 @@ public class HubTests {
 		openDatahubPreferencePage();
 		bot.checkBox("Force local authentication").click();
 		Thread.sleep(1000);
-		assertFalse(bot.buttonWithId("login").isEnabled());
+		Assertions.assertFalse(bot.buttonWithId("login").isEnabled());
 	}
 }
