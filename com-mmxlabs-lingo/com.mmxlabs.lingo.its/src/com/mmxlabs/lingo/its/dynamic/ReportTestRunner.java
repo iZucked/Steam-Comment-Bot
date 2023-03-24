@@ -63,7 +63,7 @@ public class ReportTestRunner {
 
 						for (final ReportRecord t : reportRecords) {
 							final String reportID = t.reportID();
-							scenarioCases.add(DynamicTest.dynamicTest(t.fileNameCode(), () -> {
+							scenarioCases.add(DynamicTest.dynamicTest(name + " " + t.fileNameCode(), () -> {
 								ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 									final String actual = ReportTester.runReportsTest(modelRecord, scenarioDataProvider, reportID, t.reportType());
 
@@ -116,7 +116,7 @@ public class ReportTestRunner {
 
 							for (final ReportRecord t : ReportTesterHelper.createSelectedElementReportTests()) {
 								final String reportID = t.reportID();
-								elementCases.add(DynamicTest.dynamicTest(t.fileNameCode(), () -> {
+								elementCases.add(DynamicTest.dynamicTest(name + " " + t.fileNameCode(), () -> {
 									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 										final String actual = ReportTester.runReportsTestWithElement(modelRecord, scenarioDataProvider, reportID, t.reportType(), elementID);
 

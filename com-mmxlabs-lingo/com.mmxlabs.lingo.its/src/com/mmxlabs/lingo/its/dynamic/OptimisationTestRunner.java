@@ -86,7 +86,7 @@ public class OptimisationTestRunner {
 			final List<DynamicNode> childCases = new LinkedList<>();
 
 			// Basic optimisation
-			childCases.add(DynamicTest.dynamicTest("Base", () -> {
+			childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Base", () -> {
 				final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 					final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -119,9 +119,9 @@ public class OptimisationTestRunner {
 				}
 			}));
 
-			if (false && TestingModes.OptimisationTestMode == TestMode.Run) {
+			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
-				childCases.add(DynamicTest.dynamicTest("CloudHeadlessApp", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " CloudHeadlessApp", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 						final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -160,7 +160,7 @@ public class OptimisationTestRunner {
 			}
 
 			// Extra repeatability based test cases
-			if (false && TestingModes.OptimisationTestMode == TestMode.Run) {
+			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
 				boolean isADPOptimisation = false;
 				try {
@@ -180,7 +180,7 @@ public class OptimisationTestRunner {
 				// influence the result.
 				if (isADPOptimisation) {
 
-					childCases.add(DynamicTest.dynamicTest("ADP - unpair cargoes", () -> {
+					childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " ADP - unpair cargoes", () -> {
 						final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 							final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -214,7 +214,7 @@ public class OptimisationTestRunner {
 				}
 
 				// Test the anonymised, re-optimised, de-anonymised solution is also the same
-				childCases.add(DynamicTest.dynamicTest("Anonymised", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Anonymised", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 						final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -329,7 +329,7 @@ public class OptimisationTestRunner {
 
 			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
-				childCases.add(DynamicTest.dynamicTest("CloudHeadlessApp", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " CloudHeadlessApp", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 						final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 						resultsFolder.mkdir();
@@ -363,7 +363,7 @@ public class OptimisationTestRunner {
 
 			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
-				childCases.add(DynamicTest.dynamicTest("Anonymised", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Anonymised", () -> {
 					ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 
 						final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
