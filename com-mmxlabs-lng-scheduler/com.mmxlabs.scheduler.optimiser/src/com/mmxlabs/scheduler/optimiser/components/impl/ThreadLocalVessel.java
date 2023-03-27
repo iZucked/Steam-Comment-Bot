@@ -15,6 +15,8 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 
+// FIXME: Currently clamps consumption rate for vessels outside of speed range
+// Only should be used with marketable windows report
 public class ThreadLocalVessel implements IVessel {
 
 	private final ThreadLocal<Vessel> reference = new ThreadLocal<>();
@@ -136,7 +138,26 @@ public class ThreadLocalVessel implements IVessel {
 
 	@Override
 	public @NonNull IConsumptionRateCalculator getConsumptionRate(@NonNull VesselState vesselState) {
-		return getUnderlyingVessel().getConsumptionRate(vesselState);
+		final IConsumptionRateCalculator calc = getUnderlyingVessel().getConsumptionRate(vesselState);
+		final IConsumptionRateCalculator newConsumptionRateCalaculator = new IConsumptionRateCalculator() {
+
+			@Override
+			public int getSpeed(long rate) {
+				return calc.getSpeed(rate);
+			}
+
+			@Override
+			public long getRate(int speed) {
+				if (speed > globalReference.getMaxSpeed()) {
+					return calc.getRate(globalReference.getMaxSpeed());
+				} else if (speed < globalReference.getMinSpeed()) {
+					return calc.getRate(globalReference.getMinSpeed());
+				} else {
+					return calc.getRate(speed);
+				}
+			}
+		};
+		return (minSpeed.get() == null || maxSpeed.get() == null) ? calc : newConsumptionRateCalaculator;
 	}
 
 	@Override
