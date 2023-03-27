@@ -181,7 +181,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			}
 		});
 
-		CommonImages.setImageDescriptors(go, IconPaths.Play);
+		CommonImages.setImageDescriptors(go, IconPaths.Play_16);
 		getViewSite().getActionBars().getToolBarManager().add(go);
 
 		final RunnableAction remove = new RunnableAction("Remove", IAction.AS_PUSH_BUTTON, () -> {
