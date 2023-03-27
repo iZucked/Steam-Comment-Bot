@@ -15,9 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -65,6 +63,9 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -74,6 +75,11 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	private MarketabilityModel currentModel;
 	// listens which object is selected
 	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
+	
+	private IScenarioServiceSelectionProvider selectedScenariosService;
+	
+	private IScenarioServiceSelectionChangedListener scenarioChangedListener;
+
 	// selection service from upper class
 	private ESelectionService service;
 
@@ -100,10 +106,26 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		mainTableComponent = new MainTableComponent();
 
 		
-		//final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(getScenarioDataProvider());
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);
-
 		inputWants.addAll(mainTableComponent.getInputWants());
+		selectedScenariosService = getSite().getService(IScenarioServiceSelectionProvider.class);
+		scenarioChangedListener = (pinned, others) ->  {
+			ScenarioResult scenarioResult = null;
+			if(pinned != null) {
+				scenarioResult = pinned;
+			} else if(others.iterator().hasNext()) {
+				scenarioResult = others.iterator().next();
+			}
+			if(scenarioResult != null) {
+				final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
+				final AnalyticsModel analyticsModel =  ScenarioModelUtil.getAnalyticsModel(sdp);
+				setInput(scenarioResult.getRootObject(), analyticsModel.getMarketabilityModel());
+			} else {
+				setInput(null, null);
+			}
+			
+		};
+		selectedScenariosService.addSelectionChangedListener(scenarioChangedListener);
 
 		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> {
 
@@ -298,7 +320,11 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			service.removePostSelectionListener(selectionListener);
 			selectionListener = null;
 		}
-
+		if(selectedScenariosService != null) {
+			selectedScenariosService.removeSelectionChangedListener(scenarioChangedListener);
+			selectedScenariosService = null;
+		}
+		
 		mainTableComponent.dispose();
 		super.dispose();
 	}
