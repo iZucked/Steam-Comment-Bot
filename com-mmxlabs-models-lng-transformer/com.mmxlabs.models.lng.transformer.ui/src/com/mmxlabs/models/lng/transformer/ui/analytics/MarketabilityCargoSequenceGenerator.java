@@ -175,8 +175,14 @@ public class MarketabilityCargoSequenceGenerator {
 			throw new IllegalArgumentException();
 		}
 		ThreadLocalVessel oVessel = (ThreadLocalVessel) vessel;
-		oVessel.setMinSpeed(maxSpeed);
+		if(maxSpeed < oVessel.getMinSpeed()) {
+			maxSpeed = oVessel.getMinSpeed();
+		}
+		if(maxSpeed > oVessel.getMaxSpeed()) {
+			maxSpeed = oVessel.getMaxSpeed();
+		}
 		oVessel.setMaxSpeed(maxSpeed);
+		oVessel.setMinSpeed(maxSpeed);		
 	}
 
 	@NonNullByDefault
