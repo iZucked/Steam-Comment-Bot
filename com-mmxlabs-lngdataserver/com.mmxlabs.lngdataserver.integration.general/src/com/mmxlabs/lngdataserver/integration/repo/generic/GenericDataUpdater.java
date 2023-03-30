@@ -165,7 +165,7 @@ public class GenericDataUpdater {
 					updateLock.lock();
 					try {
 						refresh();
-					} catch (final IOException e1) {
+					} catch (final Exception e1) {
 						e1.printStackTrace();
 					} finally {
 						updateLock.unlock();

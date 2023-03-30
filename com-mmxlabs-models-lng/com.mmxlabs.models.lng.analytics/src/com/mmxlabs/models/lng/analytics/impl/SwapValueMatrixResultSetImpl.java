@@ -41,6 +41,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl#getSwapFee <em>Swap Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl#getGeneratedSpotLoadSlot <em>Generated Spot Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl#getGeneratedSpotDischargeSlot <em>Generated Spot Discharge Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultSetImpl#getNonVesselCharterPnl <em>Non Vessel Charter Pnl</em>}</li>
  * </ul>
  *
  * @generated
@@ -95,6 +96,26 @@ public class SwapValueMatrixResultSetImpl extends UUIDObjectImpl implements Swap
 	 * @ordered
 	 */
 	protected SpotDischargeSlot generatedSpotDischargeSlot;
+
+	/**
+	 * The default value of the '{@link #getNonVesselCharterPnl() <em>Non Vessel Charter Pnl</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNonVesselCharterPnl()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long NON_VESSEL_CHARTER_PNL_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getNonVesselCharterPnl() <em>Non Vessel Charter Pnl</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNonVesselCharterPnl()
+	 * @generated
+	 * @ordered
+	 */
+	protected long nonVesselCharterPnl = NON_VESSEL_CHARTER_PNL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -247,6 +268,29 @@ public class SwapValueMatrixResultSetImpl extends UUIDObjectImpl implements Swap
 	 * @generated
 	 */
 	@Override
+	public long getNonVesselCharterPnl() {
+		return nonVesselCharterPnl;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNonVesselCharterPnl(long newNonVesselCharterPnl) {
+		long oldNonVesselCharterPnl = nonVesselCharterPnl;
+		nonVesselCharterPnl = newNonVesselCharterPnl;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL, oldNonVesselCharterPnl, nonVesselCharterPnl));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__RESULTS:
@@ -275,6 +319,8 @@ public class SwapValueMatrixResultSetImpl extends UUIDObjectImpl implements Swap
 				return getGeneratedSpotLoadSlot();
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_DISCHARGE_SLOT:
 				return getGeneratedSpotDischargeSlot();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL:
+				return getNonVesselCharterPnl();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -301,6 +347,9 @@ public class SwapValueMatrixResultSetImpl extends UUIDObjectImpl implements Swap
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_DISCHARGE_SLOT:
 				setGeneratedSpotDischargeSlot((SpotDischargeSlot)newValue);
 				return;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL:
+				setNonVesselCharterPnl((Long)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -325,6 +374,9 @@ public class SwapValueMatrixResultSetImpl extends UUIDObjectImpl implements Swap
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_DISCHARGE_SLOT:
 				setGeneratedSpotDischargeSlot((SpotDischargeSlot)null);
 				return;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL:
+				setNonVesselCharterPnl(NON_VESSEL_CHARTER_PNL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -345,6 +397,8 @@ public class SwapValueMatrixResultSetImpl extends UUIDObjectImpl implements Swap
 				return generatedSpotLoadSlot != null;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__GENERATED_SPOT_DISCHARGE_SLOT:
 				return generatedSpotDischargeSlot != null;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT_SET__NON_VESSEL_CHARTER_PNL:
+				return nonVesselCharterPnl != NON_VESSEL_CHARTER_PNL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -361,6 +415,8 @@ public class SwapValueMatrixResultSetImpl extends UUIDObjectImpl implements Swap
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (swapFee: ");
 		result.append(swapFee);
+		result.append(", nonVesselCharterPnl: ");
+		result.append(nonVesselCharterPnl);
 		result.append(')');
 		return result.toString();
 	}

@@ -878,6 +878,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Cancelled(), scenarioEditingLocation.getDefaultCommandHandler());
 			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Cancelled", "Sale is cancelled", ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE,
 					DEFAULT_ORDER_KEY, rendMan, rendMan, "Cancelled", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			break;
 		}
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-restrictions": {
 
@@ -1270,8 +1271,33 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				}
 
 			});
-		}
 			break;
+		}
+		
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-exposures": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeExposure(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Exposure", "Compute Exposures", ColumnType.NORMAL, LOAD_END_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, "Exposure", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			break;
+		}
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-exposures": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeExposure(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Exposure", "Compute Exposures", ColumnType.NORMAL, DISCHARGE_END_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, "Exposure", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			break;
+		}
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-hedge": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeHedge(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Hedging", "Generate Hedge", ColumnType.NORMAL, LOAD_END_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, "Hedging", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			break;
+		}
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-hedge": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeHedge(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Hedging", "Generate Hedge", ColumnType.NORMAL, DISCHARGE_END_GROUP, DEFAULT_BLOCK_TYPE,
+					DEFAULT_ORDER_KEY, rendMan, rendMan, "Hedging", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			break;
+		}
 
 		}
 	}

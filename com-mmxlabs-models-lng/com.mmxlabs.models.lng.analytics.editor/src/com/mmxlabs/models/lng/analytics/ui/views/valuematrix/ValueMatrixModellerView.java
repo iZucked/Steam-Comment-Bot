@@ -42,8 +42,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -69,8 +67,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.BuyReference;
-import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellMarket;
@@ -81,7 +77,6 @@ import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.SwapValueMatrixSandboxEvaluator;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -115,6 +110,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 
 	private UndoAction undoAction;
 	private RedoAction redoAction;
+	private HighlightAction highlightAction;
 	private CommandStack currentCommandStack;
 
 	private SwapValueMatrixModel currentModel;
@@ -181,7 +177,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 
 			centralComposite.setLayout(GridLayoutFactory.fillDefaults().equalWidth(true) //
 					.numColumns(1) //
-					.margins(10, 10)
+					.margins(10, 10) //
 					.spacing(20, 20) //
 					.create());
 			final Runnable recalculateScrollbar = () -> {
@@ -205,29 +201,6 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 			};
 
 			{
-				final Action runAction = createRunAction();
-				runAction.setEnabled(true);
-				getViewSite().getActionBars().getToolBarManager().add(runAction);
-
-				final Action deleteResultsAction = createDeleteResultsAction(centralComposite);
-				getViewSite().getActionBars().getToolBarManager().add(deleteResultsAction);
-
-				final Action packAction = createPackAction();
-				packAction.setEnabled(true);
-				getViewSite().getActionBars().getToolBarManager().add(packAction);
-
-				lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> {
-					final IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
-					final boolean actionState = currentModel != null && !locked;
-					runAction.setEnabled(actionState);
-					deleteResultsAction.setEnabled(actionState);
-					toolbarManager.update(true);
-				}));
-				getViewSite().getActionBars().getToolBarManager().update(true);
-
-			}
-
-			{
 				valueMatrixDataComponent = new ValueMatrixDataComponent(ValueMatrixModellerView.this, validationErrors, this::getModel);
 				hook.accept(valueMatrixDataComponent, true);
 				lockedListeners.add(locked -> valueMatrixDataComponent.setEditingLock(locked));
@@ -248,6 +221,32 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 		redoAction = new RedoAction();
 		redoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
+
+		{
+			final Action runAction = createRunAction();
+			runAction.setEnabled(true);
+			getViewSite().getActionBars().getToolBarManager().add(runAction);
+
+			final Action deleteResultsAction = createDeleteResultsAction(centralComposite);
+			getViewSite().getActionBars().getToolBarManager().add(deleteResultsAction);
+
+			highlightAction = new HighlightAction(valueMatrixResultsComponent);
+			getViewSite().getActionBars().getToolBarManager().add(highlightAction);
+
+			final Action packAction = createPackAction();
+			packAction.setEnabled(true);
+			getViewSite().getActionBars().getToolBarManager().add(packAction);
+
+			lockedListeners.add(locked -> RunnerHelper.runNowOrAsync(() -> {
+				final IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
+				final boolean actionState = currentModel != null && !locked;
+				runAction.setEnabled(actionState);
+				deleteResultsAction.setEnabled(actionState);
+				toolbarManager.update(true);
+			}));
+			getViewSite().getActionBars().getToolBarManager().update(true);
+
+		}
 
 		updateActions(getEditingDomain());
 
@@ -431,7 +430,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 			}
 
 			if (notification.getNotifier() == getModel() && notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME) {
-				setPartName("Value Matrix: " + getModel().getName());
+				setPartName(getModel().getName());
 				return null;
 			}
 			if (notification.getNotifier() == getModel() && notification.getFeature() == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_MODEL__SWAP_VALUE_MATRIX_RESULT) {
@@ -526,7 +525,7 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 		}
 
 		if (model != null) {
-			setPartName("Value Matrix: " + model.getName());
+			setPartName(model.getName());
 
 			if (!model.eAdapters().contains(refreshAdapter)) {
 				model.eAdapters().add(refreshAdapter);
@@ -767,15 +766,15 @@ public class ValueMatrixModellerView extends ScenarioInstanceView implements Com
 				}
 				final SwapValueMatrixModel m = currentModel;
 				if (m != null) {
-					final SellReference sellReference = m.getBaseDischarge();
+					final SellReference sellReference = m.getParameters().getBaseDischarge();
 					if (sellReference.getSlot() == null) {
 						throw new IllegalStateException("No discharge slot selected");
 					}
-					final BuyMarket buyMarket = m.getSwapLoadMarket();
+					final BuyMarket buyMarket = m.getParameters().getSwapLoadMarket();
 					if (buyMarket.getMarket() == null) {
 						throw new IllegalStateException("No buy market selected");
 					}
-					final SellMarket sellMarket = m.getSwapDischargeMarket();
+					final SellMarket sellMarket = m.getParameters().getSwapDischargeMarket();
 					if (sellMarket.getMarket() == null) {
 						throw new IllegalStateException("No sell market selected");
 					}

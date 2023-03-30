@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Migration Tests
 Bundle-SymbolicName: com.mmxlabs.models.migration.tests
-Bundle-Version: 6.2.6.qualifier
+Bundle-Version: 6.3.4.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Fragment-Host: com.mmxlabs.models.migration
@@ -15,5 +15,4 @@ Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
 Bundle-ClassPath: .
 Automatic-Module-Name: com.mmxlabs.models.migration.tests
 Import-Package: org.junit.jupiter.api;version="5.1.0",
- org.junit.jupiter.api.function;version="5.1.0",
- org.junit.runner.manipulation;version="4.12.0"
+ org.junit.jupiter.api.function;version="5.1.0"

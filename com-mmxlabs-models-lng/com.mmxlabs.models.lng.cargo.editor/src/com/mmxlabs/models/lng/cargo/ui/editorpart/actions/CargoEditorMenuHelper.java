@@ -337,32 +337,40 @@ public class CargoEditorMenuHelper {
 				if (cargoModel.getCanalBookings() != null) {
 					// panamaAssignmentMenu(manager, dischargeSlot);
 				}
+				
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
+					createExposuresAndHedgingActions(manager, Set.of(dischargeSlot));
+				}
 			}
 
 		};
 	}
 
-	public void createLightEditorMenuListener(final IMenuManager manager, final Set<Cargo> cargoes) {
-		final CargoModel cm = scenarioModel.getCargoModel();
-		if (cargoes.size() == 1) {
-			cargoes.forEach(c -> {
-				if (cm.getCargoesForExposures().contains(c)) {
-					manager.add(new RunnableAction(NO_EXPOSURES, () -> helper.setExposuresForCargoAssignment(NO_EXPOSURES, cm, false, cargoes)));
+	public void createExposuresAndHedgingActions(final IMenuManager manager, final Set< ? extends Slot> slots) {
+		manager.add(new Separator());
+		final MenuManager exposuresMenuManager = new MenuManager("Exposures...", null);
+		if (slots.size() == 1) {
+			slots.forEach(s -> {
+				if (s.isComputeExposure()) {
+					exposuresMenuManager.add(new RunnableAction(NO_EXPOSURES, () -> helper.setExposuresForSlots(NO_EXPOSURES, false, slots)));
 				} else {
-					manager.add(new RunnableAction(ALLOW_EXPOSURES, () -> helper.setExposuresForCargoAssignment(ALLOW_EXPOSURES, cm, true, cargoes)));
+					exposuresMenuManager.add(new RunnableAction(ALLOW_EXPOSURES, () -> helper.setExposuresForSlots(ALLOW_EXPOSURES, true, slots)));
 				}
-				if (cm.getCargoesForHedging().contains(c)) {
-					manager.add(new RunnableAction(NO_HEDGING, () -> helper.setHedgingForCargoAssignment(NO_HEDGING, cm, false, cargoes)));
+				if (s.isComputeHedge()) {
+					exposuresMenuManager.add(new RunnableAction(NO_HEDGING, () -> helper.setHedgingForSlots(NO_EXPOSURES, false, slots)));
 				} else {
-					manager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForCargoAssignment(ALLOW_HEDGING, cm, true, cargoes)));
+					exposuresMenuManager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForSlots(ALLOW_EXPOSURES, true, slots)));
 				}
 			});
-		} else if (cargoes.size() > 1) {
-			manager.add(new RunnableAction(ALLOW_EXPOSURES, () -> helper.setExposuresForCargoAssignment(ALLOW_EXPOSURES, cm, true, cargoes)));
-			manager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForCargoAssignment(ALLOW_HEDGING, cm, true, cargoes)));
-			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-			manager.add(new RunnableAction(NO_EXPOSURES, () -> helper.setExposuresForCargoAssignment(NO_EXPOSURES, cm, false, cargoes)));
-			manager.add(new RunnableAction(NO_HEDGING, () -> helper.setHedgingForCargoAssignment(NO_HEDGING, cm, false, cargoes)));
+		} else if (slots.size() > 1) {
+			exposuresMenuManager.add(new RunnableAction(ALLOW_EXPOSURES, () -> helper.setExposuresForSlots(ALLOW_EXPOSURES, true, slots)));
+			exposuresMenuManager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForSlots(ALLOW_HEDGING, true, slots)));
+			exposuresMenuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+			exposuresMenuManager.add(new RunnableAction(NO_EXPOSURES, () -> helper.setExposuresForSlots(NO_EXPOSURES, false, slots)));
+			exposuresMenuManager.add(new RunnableAction(NO_HEDGING, () -> helper.setHedgingForSlots(NO_HEDGING, false, slots)));
+		}
+		if (exposuresMenuManager.getItems().length > 0) {
+			manager.add(exposuresMenuManager);
 		}
 	}
 
@@ -699,6 +707,14 @@ public class CargoEditorMenuHelper {
 					}
 				}
 			}
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
+				if (!discharges.isEmpty()) {
+					createExposuresAndHedgingActions(manager, discharges);
+				}
+				if (!loads.isEmpty()) {
+					createExposuresAndHedgingActions(manager, loads);
+				}
+			}
 		};
 	}
 
@@ -769,6 +785,10 @@ public class CargoEditorMenuHelper {
 			}
 			if (cargoModel.getCanalBookings() != null) {
 				// panamaAssignmentMenu(manager, loadSlot);
+			}
+			
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
+				createExposuresAndHedgingActions(manager, Set.of(loadSlot));
 			}
 
 		};

@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -116,7 +117,7 @@ public class SlotNameUniquenessConstraint extends AbstractModelMultiConstraint {
 					final String name = slot.getName();
 					if (bad.contains(name)) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name " + name));
+								(IConstraintStatus) ctx.createFailureStatus(EditorUtils.unmangle(target) + " has non-unique name " + name));
 						dsd.addEObjectAndFeature(target, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
 						dsd.setConstraintKey(KEY_SLOT_NAME_UNIQUENESS);
 						statuses.add(dsd);

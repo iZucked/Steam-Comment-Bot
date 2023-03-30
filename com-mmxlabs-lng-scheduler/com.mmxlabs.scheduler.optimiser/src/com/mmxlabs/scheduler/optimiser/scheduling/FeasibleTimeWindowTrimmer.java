@@ -13,7 +13,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -167,7 +166,7 @@ public class FeasibleTimeWindowTrimmer {
 
 	@Inject
 	private PanamaBookingHelper panamaBookingsHelper;
-
+	
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean checkPanamaCanalBookings = false;

@@ -92,7 +92,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 
 	private ICommandHandler localCommandHandler;
 
-	private MainTableCompoment mainTableComponent;
+	private MainTableComponent mainTableComponent;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ViabilityView.class);
 
@@ -103,7 +103,7 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).create());
 		parent.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-		mainTableComponent = new MainTableCompoment();
+		mainTableComponent = new MainTableComponent();
 		mainTableComponent.createControls(this.parent, ViabilityView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
 		

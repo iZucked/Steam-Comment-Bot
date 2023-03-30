@@ -7,6 +7,9 @@ package com.mmxlabs.lingo.its.dynamic;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +32,12 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 public class ReportTestRunner {
 
+	private static final Collection<String> IGNORED_PREFIXES; 
+	static {
+		IGNORED_PREFIXES = new ArrayList<>();
+		IGNORED_PREFIXES.add("value-matrix-");
+	}
+
 	public static List<DynamicNode> runReportTests(final File baseDirectory, @Nullable final List<ReportRecord> extraReports) throws IOException {
 		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
@@ -43,12 +52,18 @@ public class ReportTestRunner {
 				if (f.isDirectory()) {
 					final String name = f.getName();
 					final File scenarioFile = new File(f, "scenario.lingo");
-					if (scenarioFile.exists()) {
+					final File[] localFiles = f.listFiles();
+					final boolean isIgnored = Arrays.stream(localFiles) //
+							.filter(File::isFile) //
+							.map(File::getName) //
+							.filter(filename -> filename.endsWith(".json")) //
+							.anyMatch(filename -> IGNORED_PREFIXES.stream().anyMatch(filename::startsWith));
+					if (scenarioFile.exists() && !isIgnored) {
 						final List<DynamicNode> scenarioCases = new LinkedList<>();
 
 						for (final ReportRecord t : reportRecords) {
 							final String reportID = t.reportID();
-							scenarioCases.add(DynamicTest.dynamicTest(t.fileNameCode(), () -> {
+							scenarioCases.add(DynamicTest.dynamicTest(name + " " + t.fileNameCode(), () -> {
 								ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 									final String actual = ReportTester.runReportsTest(modelRecord, scenarioDataProvider, reportID, t.reportType());
 
@@ -101,7 +116,7 @@ public class ReportTestRunner {
 
 							for (final ReportRecord t : ReportTesterHelper.createSelectedElementReportTests()) {
 								final String reportID = t.reportID();
-								elementCases.add(DynamicTest.dynamicTest(t.fileNameCode(), () -> {
+								elementCases.add(DynamicTest.dynamicTest(name + " " + t.fileNameCode(), () -> {
 									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 										final String actual = ReportTester.runReportsTestWithElement(modelRecord, scenarioDataProvider, reportID, t.reportType(), elementID);
 

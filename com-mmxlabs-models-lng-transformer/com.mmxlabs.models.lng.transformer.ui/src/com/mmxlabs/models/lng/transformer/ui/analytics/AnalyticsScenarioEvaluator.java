@@ -26,10 +26,13 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.MTMModel;
+import com.mmxlabs.models.lng.analytics.MarketabilityModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SensitivityModel;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -54,6 +57,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -61,10 +65,15 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.ExportScheduleHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilitySandboxRunner;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilitySandboxUnit;
+import com.mmxlabs.models.lng.transformer.ui.analytics.marketability.MarketabilityWindowTrimmer;
 import com.mmxlabs.models.lng.transformer.ui.analytics.mtm.MTMSanboxUnit;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.viability.ViabilitySanboxUnit;
@@ -80,6 +89,10 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
+import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.builder.impl.MarketabilitySchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -314,6 +327,13 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			/* Command cmd = */
 			unit.run(model, mapper, shippingMap, progressMonitor);
 		});
+	}
+
+	@Override
+	public boolean evaluateMarketabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings,
+			MarketabilityModel model, IProgressMonitor progressMonitor, boolean validateScenario) {
+		return MarketabilitySandboxRunner.run(scenarioDataProvider, scenarioInstance, userSettings, model, progressMonitor, validateScenario, null);
+
 	}
 
 	@Override

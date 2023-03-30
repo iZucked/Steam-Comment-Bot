@@ -194,45 +194,48 @@ public class ValueMatrixDataComponent extends AbstractValueMatrixValidatedCompon
 				final IReferenceValueProviderProvider referenceValueProviderProvider = new RefetchingReferenceValueProviderProvider(scenarioEditingLocation::getReferenceValueProviderCache);
 				{
 					final MultipleValidationStatusSandboxLabelProvider vesselLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseVesselCharter(), new ValueMatrixVesselCharterDescriptionFormatter(), validationErrors, "Vessel",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseVesselCharter());
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseVesselCharter(), new ValueMatrixVesselCharterDescriptionFormatter(), validationErrors, "Vessel",
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseVesselCharter());
 					final SingleReferenceManipulator vesselManipulator = new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getExistingVesselCharterOption_VesselCharter(),
 							referenceValueProviderProvider, scenarioEditingLocation.getDefaultCommandHandler());
-					addSwapValueMatrixColumn("Vessel", cargoColumnGroup, vesselManipulator, vesselManipulator, vesselLabelProvider,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseVesselCharter());
+					addSwapValueMatrixColumn("Vessel", cargoColumnGroup, vesselManipulator, vesselManipulator, vesselLabelProvider, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(),
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseVesselCharter());
 				}
 				{
 					final MultipleValidationStatusSandboxLabelProvider loadLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseLoad(), new BuyOptionDescriptionFormatter(), validationErrors, "Load",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseLoad());
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseLoad(), new BuyOptionDescriptionFormatter(), validationErrors, "Load",
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseLoad());
 					final SingleReferenceManipulator loadManipulator = new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getBuyReference_Slot(), referenceValueProviderProvider,
 							scenarioEditingLocation.getDefaultCommandHandler());
-					addSwapValueMatrixColumn("Load", cargoColumnGroup, loadManipulator, loadManipulator, loadLabelProvider, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseLoad());
+					addSwapValueMatrixColumn("Load", cargoColumnGroup, loadManipulator, loadManipulator, loadLabelProvider, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(),
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseLoad());
 				}
 				{
 					final MultipleValidationStatusSandboxLabelProvider dischargeLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischarge(), new SellOptionDescriptionFormatter(), validationErrors, "Discharge",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischarge());
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseDischarge(), new SellOptionDescriptionFormatter(), validationErrors, "Discharge",
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseDischarge());
 					final SingleReferenceManipulator dischargeManipulator = new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellReference_Slot(), referenceValueProviderProvider,
 							scenarioEditingLocation.getDefaultCommandHandler());
 					addSwapValueMatrixColumn("Discharge", cargoColumnGroup, dischargeManipulator, dischargeManipulator, dischargeLabelProvider,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischarge());
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BaseDischarge());
 				}
 				{
 					final MultipleValidationStatusSandboxLabelProvider dischargeMinLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischargeMinPrice(), new SellOptionDescriptionFormatter(), validationErrors, "Min",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischargeMinPrice());
-					final NumericAttributeManipulator dischargeMinManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischargeMinPrice(),
+							AnalyticsPackage.eINSTANCE.getRange_Min(), new SellOptionDescriptionFormatter(), validationErrors, "Min", AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(),
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BasePriceRange(), AnalyticsPackage.eINSTANCE.getRange_Min());
+					final NumericAttributeManipulator dischargeMinManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getRange_Min(),
 							scenarioEditingLocation.getDefaultCommandHandler());
-					addSwapValueMatrixColumn("Min", cargoColumnGroup, dischargeMinManipulator, dischargeMinManipulator, dischargeMinLabelProvider);
+					addSwapValueMatrixColumn("Min", cargoColumnGroup, dischargeMinManipulator, dischargeMinManipulator, dischargeMinLabelProvider,
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BasePriceRange());
 				}
 				{
-					final NumericAttributeManipulator dischargeMaxManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischargeMaxPrice(),
+					final NumericAttributeManipulator dischargeMaxManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getRange_Max(),
 							scenarioEditingLocation.getDefaultCommandHandler());
 					final MultipleValidationStatusSandboxLabelProvider dischargeMaxLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischargeMaxPrice(), new SellOptionDescriptionFormatter(), validationErrors, "Max",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_BaseDischargeMaxPrice());
-					addSwapValueMatrixColumn("Max", cargoColumnGroup, dischargeMaxManipulator, dischargeMaxManipulator, dischargeMaxLabelProvider);
+							AnalyticsPackage.eINSTANCE.getRange_Max(), new SellOptionDescriptionFormatter(), validationErrors, "Max", AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(),
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BasePriceRange(), AnalyticsPackage.eINSTANCE.getRange_Max());
+					addSwapValueMatrixColumn("Max", cargoColumnGroup, dischargeMaxManipulator, dischargeMaxManipulator, dischargeMaxLabelProvider,
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_BasePriceRange());
 				}
 				final GridColumnGroup marketsColumnGroup = new GridColumnGroup(parametersViewer.getGrid(), SWT.CENTER);
 				{
@@ -243,45 +246,48 @@ public class ValueMatrixDataComponent extends AbstractValueMatrixValidatedCompon
 				}
 				{
 					final MultipleValidationStatusSandboxLabelProvider desBuyLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapLoadMarket(), new ValueMatrixBuyMarketDescriptionFormatter(), validationErrors, "DES Buy",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapLoadMarket());
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapLoadMarket(), new ValueMatrixBuyMarketDescriptionFormatter(), validationErrors, "DES Buy",
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapLoadMarket());
 					final SingleReferenceManipulator desBuyManipulator = new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getBuyMarket_Market(), referenceValueProviderProvider,
 							scenarioEditingLocation.getDefaultCommandHandler());
-					addSwapValueMatrixColumn("DES Buy", marketsColumnGroup, desBuyManipulator, desBuyManipulator, desBuyLabelProvider,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapLoadMarket());
+					addSwapValueMatrixColumn("DES Buy", marketsColumnGroup, desBuyManipulator, desBuyManipulator, desBuyLabelProvider, AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(),
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapLoadMarket());
 				}
 				{
 					final MultipleValidationStatusSandboxLabelProvider desSellLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapDischargeMarket(), new ValueMatrixSellMarketDescriptionFormatter(), validationErrors, "DES Sell",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapDischargeMarket());
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapDischargeMarket(), new ValueMatrixSellMarketDescriptionFormatter(), validationErrors, "DES Sell",
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapDischargeMarket());
 					final SingleReferenceManipulator desSellManipulator = new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellMarket_Market(), referenceValueProviderProvider,
 							scenarioEditingLocation.getDefaultCommandHandler());
 					addSwapValueMatrixColumn("DES Sell", marketsColumnGroup, desSellManipulator, desSellManipulator, desSellLabelProvider,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapDischargeMarket());
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapDischargeMarket());
 				}
 				{
-					final NumericAttributeManipulator marketMinManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMinPrice(),
+					final NumericAttributeManipulator marketMinManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getRange_Min(),
 							scenarioEditingLocation.getDefaultCommandHandler());
 					final MultipleValidationStatusSandboxLabelProvider marketMinLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMinPrice(), new SellOptionDescriptionFormatter(), validationErrors, "Min",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMinPrice());
-					addSwapValueMatrixColumn("Min", marketsColumnGroup, marketMinManipulator, marketMinManipulator, marketMinLabelProvider);
+							AnalyticsPackage.eINSTANCE.getRange_Min(), new SellOptionDescriptionFormatter(), validationErrors, "Min", AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(),
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapPriceRange(), AnalyticsPackage.eINSTANCE.getRange_Min());
+					addSwapValueMatrixColumn("Min", marketsColumnGroup, marketMinManipulator, marketMinManipulator, marketMinLabelProvider,
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapPriceRange());
 				}
 				{
-					final NumericAttributeManipulator marketMaxManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMaxPrice(),
+					final NumericAttributeManipulator marketMaxManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getRange_Max(),
 							scenarioEditingLocation.getDefaultCommandHandler());
 					final MultipleValidationStatusSandboxLabelProvider marketMaxLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMaxPrice(), new SellOptionDescriptionFormatter(), validationErrors, "Max",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_MarketMaxPrice());
-					addSwapValueMatrixColumn("Max", marketsColumnGroup, marketMaxManipulator, marketMaxManipulator, marketMaxLabelProvider);
+							AnalyticsPackage.eINSTANCE.getRange_Max(), new SellOptionDescriptionFormatter(), validationErrors, "Max", AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(),
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapPriceRange(), AnalyticsPackage.eINSTANCE.getRange_Max());
+					addSwapValueMatrixColumn("Max", marketsColumnGroup, marketMaxManipulator, marketMaxManipulator, marketMaxLabelProvider,
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapPriceRange());
 				}
 				{
-					final NumericAttributeManipulator swapFeeManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapFee(),
+					final NumericAttributeManipulator swapFeeManipulator = new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapFee(),
 							scenarioEditingLocation.getDefaultCommandHandler());
 					final MultipleValidationStatusSandboxLabelProvider swapFeeLabelProvider = new MultipleValidationStatusSandboxLabelProvider(sandboxUIHelper,
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapFee(), new SellOptionDescriptionFormatter(), validationErrors, "Swap fee",
-							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_SwapFee());
-					addSwapValueMatrixColumn("Swap fee", marketsColumnGroup, swapFeeManipulator, swapFeeManipulator, swapFeeLabelProvider);
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapFee(), new SellOptionDescriptionFormatter(), validationErrors, "Swap fee",
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters(), AnalyticsPackage.eINSTANCE.getSwapValueMatrixParameters_SwapFee());
+					addSwapValueMatrixColumn("Swap fee", marketsColumnGroup, swapFeeManipulator, swapFeeManipulator, swapFeeLabelProvider,
+							AnalyticsPackage.eINSTANCE.getSwapValueMatrixModel_Parameters());
 				}
 			}
 			parametersViewer.setInput(model);

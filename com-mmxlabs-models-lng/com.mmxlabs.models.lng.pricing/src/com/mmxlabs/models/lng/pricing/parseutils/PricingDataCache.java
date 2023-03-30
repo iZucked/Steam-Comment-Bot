@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
@@ -57,9 +58,9 @@ public final class PricingDataCache {
 	private final Map<String, UnitConversion> conversionMap = new HashMap<>(); // Key is lowercase
 	private final Map<String, UnitConversion> reverseConversionMap = new HashMap<>(); // Key is lowercase
 
-	private final Map<String, Collection<AbstractYearMonthCurve>> expressionToLinkedCurves = new HashMap<>();
-	private final Map<String, ASTNode> expressionToNode = new HashMap<>();
-	private final Map<String, IExpression<ISeries>> expressionToIExpression = new HashMap<>();
+	private final Map<String, Collection<AbstractYearMonthCurve>> expressionToLinkedCurves = new ConcurrentHashMap<>();
+	private final Map<String, ASTNode> expressionToNode = new ConcurrentHashMap<>();
+	private final Map<String, IExpression<ISeries>> expressionToIExpression = new ConcurrentHashMap<>();
 
 	private final Map<AbstractYearMonthCurve, @Nullable YearMonth> firstDateCache = new HashMap<>();
 	private final Map<PriceIndexType, SeriesParser> parserCache = new EnumMap<>(PriceIndexType.class);

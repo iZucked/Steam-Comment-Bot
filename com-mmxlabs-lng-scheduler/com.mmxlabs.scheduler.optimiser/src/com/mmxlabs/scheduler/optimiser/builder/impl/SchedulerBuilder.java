@@ -148,7 +148,7 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
  * 
  * @author Simon Goodall
  */
-public final class SchedulerBuilder implements ISchedulerBuilder {
+public class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private Injector injector;
@@ -166,7 +166,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<ISequenceElement> sequenceElements = new ArrayList<>();
 
 	@NonNull
-	private final List<IVessel> vessels = new LinkedList<>();
+	protected final List<IVessel> vessels = new LinkedList<>();
 
 	@NonNull
 	private final List<IVesselCharter> vesselCharters = new LinkedList<>();
@@ -200,7 +200,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * cases where a vessel can be in any location. This can be replaced with a real
 	 * location at a later date, after running an optimisation.
 	 */
-	private IPort ANYWHERE;
+	protected IPort ANYWHERE;
 
 	/**
 	 * A field for tracking the time at which the last time window closes
@@ -1262,14 +1262,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			throw new IllegalArgumentException("Expected instance of " + Vessel.class.getCanonicalName());
 		}
 
-		final Vessel veeselEditor = (Vessel) vessel;
+		final Vessel vesselEditor = (Vessel) vessel;
 
-		veeselEditor.setNBORate(state, nboRateInM3PerDay);
-		veeselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
-		veeselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
-		veeselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
-		veeselEditor.setServiceSpeed(state, serviceSpeed);
-		veeselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
+		vesselEditor.setNBORate(state, nboRateInM3PerDay);
+		vesselEditor.setIdleNBORate(state, idleNBORateInM3PerDay);
+		vesselEditor.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
+		vesselEditor.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
+		vesselEditor.setServiceSpeed(state, serviceSpeed);
+		vesselEditor.setInPortNBORate(state, inPortNBORateInM3PerDay);
 	}
 
 	/**

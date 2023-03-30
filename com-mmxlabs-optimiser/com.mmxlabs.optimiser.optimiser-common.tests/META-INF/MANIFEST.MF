@@ -4,7 +4,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-common.tests
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-common.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 6.2.6.qualifier
+Bundle-Version: 6.3.4.qualifier
 Fragment-Host: com.mmxlabs.optimiser.optimiser-common
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.google.inject;bundle-version="3.0.0",
@@ -16,5 +16,4 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.objenesis;bundle-version="2.6.0",
  org.aopalliance;bundle-version="1.0.0",
  com.google.guava.failureaccess;bundle-version="1.0.1"
-Import-Package: org.junit.jupiter.api;version="5.1.0",
- org.junit.runner.manipulation;version="4.12.0"
+Import-Package: org.junit.jupiter.api;version="5.1.0"
