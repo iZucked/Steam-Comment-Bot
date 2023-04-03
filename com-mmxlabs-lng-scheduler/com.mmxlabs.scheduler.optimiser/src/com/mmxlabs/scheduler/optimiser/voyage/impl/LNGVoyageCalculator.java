@@ -1524,6 +1524,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				if (details.getIdleTime() <= hoursBeforeCooldownsNoLongerForced //
 						|| details.getOptions().getToPortSlot().getPortType() == PortType.End //
+						|| details.getOptions().getFromPortSlot().getPortType() != PortType.CharterLength
 				) {
 					// TODO: Original check also looked at the should be cold requirement - not
 					// really needed?

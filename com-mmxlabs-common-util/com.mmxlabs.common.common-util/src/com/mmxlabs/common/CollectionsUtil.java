@@ -146,6 +146,24 @@ public final class CollectionsUtil {
 	}
 
 	/**
+	 * Create a new {@link HashMap} from the list of elements. This method takes
+	 * a list of 
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param elements
+	 * @return
+	 */
+	public static <K, V> HashMap<K, V> makeHashMap(final List<Pair<K, V>> elements) {
+
+		final HashMap<K, V> map = new HashMap<>();
+		for (Pair<K, V> pair : elements) {
+			map.put(pair.getFirst(), pair.getSecond());
+		}
+		return map;
+	}
+
+	/**
 	 * Create a new {@link HashMap} from the list of elements. This method assumes
 	 * an even number of elements in the form of { key1, value1, key2, value2,...}
 	 * 

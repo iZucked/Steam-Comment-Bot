@@ -19,6 +19,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
@@ -39,11 +40,17 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 
+	private static final HashMap<EClass, Set<EReference>> exceptions = CollectionsUtil
+			.makeHashMap(List.of(Pair.of(CargoPackage.eINSTANCE.getCharterLengthEvent(), Set.of(CargoPackage.eINSTANCE.getVesselEvent_Port()))));
+
 	private static synchronized Set<EReference> getReferencesToCheck(final EClass targetClass) {
 		Set<EReference> result = cacheByClass.get(targetClass);
 		if (result == null) {
 			result = new HashSet<EReference>(targetClass.getEAllReferences());
 			result.retainAll(checkedReferences);
+			if (exceptions.get(targetClass) != null) {
+				result.removeAll(exceptions.get(targetClass));
+			}
 			cacheByClass.put(targetClass, result);
 		}
 
@@ -67,7 +74,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 		} else {
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
-			for (final EReference ref : errors) {				
+			for (final EReference ref : errors) {
 				if (!first) {
 					sb.append(", ");
 				}
@@ -75,18 +82,18 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 				first = false;
 			}
 			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-						
+
 			String targetType = "";
 			String name = "";
-			if(target instanceof Cargo){
+			if (target instanceof Cargo) {
 				targetType = "Cargo";
 				name = ((Cargo) target).getLoadName();
-			} else if (target instanceof VesselCharter){
+			} else if (target instanceof VesselCharter) {
 				targetType = "Vessel";
 				Vessel v = ((VesselCharter) target).getVessel();
 				name = v == null ? "<unspecified>" : v.getName();
 			}
-			String msg = "" + targetType + " \"" + name + "\" - " + sb.toString() + " must be set.";	
+			String msg = "" + targetType + " \"" + name + "\" - " + sb.toString() + " must be set.";
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			for (final EReference ref : errors) {
 				dcsd.addEObjectAndFeature(target, ref);

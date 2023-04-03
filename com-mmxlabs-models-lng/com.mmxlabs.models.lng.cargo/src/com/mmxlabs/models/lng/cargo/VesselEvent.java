@@ -93,7 +93,7 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * @return the value of the '<em>Port</em>' reference.
 	 * @see #setPort(Port)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEvent_Port()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	Port getPort();

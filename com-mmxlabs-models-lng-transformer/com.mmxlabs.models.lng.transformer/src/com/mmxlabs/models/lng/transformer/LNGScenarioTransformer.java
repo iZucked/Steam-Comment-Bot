@@ -1146,7 +1146,7 @@ public class LNGScenarioTransformer {
 			}
 
 			final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(event.getStartAfterAsDateTime()), dateHelper.convertTime(event.getStartByAsDateTime()), false);
-			final IPort port = portAssociation.lookupNullChecked(event.getPort());
+			final IPort port = event.getPort() == null ? portProvider.getAnywherePort() : portAssociation.lookupNullChecked(event.getPort());
 			final int durationHours = event.getDurationInDays() * 24;
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof final CharterOutEvent charterOut) {

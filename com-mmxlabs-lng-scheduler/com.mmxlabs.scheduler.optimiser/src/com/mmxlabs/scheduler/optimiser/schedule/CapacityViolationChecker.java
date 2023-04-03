@@ -142,7 +142,7 @@ public class CapacityViolationChecker {
 					}
 
 				} else if (portSlot instanceof IVesselEventPortSlot) {
-					if (portSlot.getPortType() == PortType.DryDock || portSlot.getPortType() == PortType.Maintenance) {
+					if (portSlot.getPortType() == PortType.DryDock || portSlot.getPortType() == PortType.Maintenance || portSlot.getPortType() == PortType.CharterLength) {
 						// Any heel sent into a dry-dock or maintenance event is lost.
 						if (startHeelInM3 > 0) {
 							addEntryToCapacityViolationAnnotation(portSlot, CapacityViolationType.LOST_HEEL, startHeelInM3, voyagePlanRecord);

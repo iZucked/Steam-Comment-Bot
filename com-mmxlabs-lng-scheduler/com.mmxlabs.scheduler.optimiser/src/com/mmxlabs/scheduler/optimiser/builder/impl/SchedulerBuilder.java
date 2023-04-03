@@ -74,6 +74,8 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
+import com.mmxlabs.scheduler.optimiser.components.impl.CharterLengthEvent;
+import com.mmxlabs.scheduler.optimiser.components.impl.CharterLengthPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.CharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.CharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
@@ -1411,11 +1413,16 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 	public IVesselEventPortSlot createMaintenanceEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
 		return createVesselEvent(id, PortType.Maintenance, arrival, port, port, durationHours);
 	}
-	
+
 	@Override
 	@NonNull
 	public IVesselEventPortSlot createCharterLengthEvent(final String id, final ITimeWindow arrival, final IPort port, final int durationHours) {
-		return createVesselEvent(id, PortType.CharterLength, arrival, port, port, durationHours);
+		final CharterLengthEvent event = new CharterLengthEvent(arrival, port);
+		event.setDurationHours(durationHours);
+		final CharterLengthPortSlot slot = new CharterLengthPortSlot(id, arrival, port, event);
+		vesselEvents.add(slot);
+		buildVesselEvent(slot);
+		return slot;
 	}
 
 	/**
