@@ -264,6 +264,12 @@
            referenceEClass="com.mmxlabs.models.lng.port.Port">
      </valueProvider>
      <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselCharterStartPortValueProviderFactory"
+           id="VesselEventPortValueProviderFactory"
+           ownerEClass="com.mmxlabs.models.lng.cargo.CharterLengthEvent"
+           referenceEClass="com.mmxlabs.models.lng.port.Port">
+     </valueProvider>
+     <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory"
            id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory_BookingCode"
            referenceEClass="com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters">

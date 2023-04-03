@@ -15,14 +15,10 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
  * 
  */
 @NonNullByDefault
-public interface IGeneratedCharterLengthEventPortSlot extends IVesselEventPortSlot, IHeelOptionSupplierPortSlot, IHeelOptionConsumerPortSlot {
+public interface IGeneratedCharterLengthEventPortSlot extends ICharterLengthEventPortSlot, IHeelOptionSupplierPortSlot, IHeelOptionConsumerPortSlot {
 
 	@Override
 	IGeneratedCharterLengthEvent getVesselEvent();
-
-	void setPort(IPort port);
-
-	void setTimeWindow(ITimeWindow port);
 
 	void setVesselEvent(IGeneratedCharterLengthEvent event);
 }

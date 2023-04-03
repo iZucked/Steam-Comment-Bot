@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
-import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ICharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -474,7 +474,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 				if (!options.getAllowCooldown() && voyageDetails.isCooldownPerformed()) {
 					// Record as forced cooldown (unless this is on a charter length, then it is not
 					// a "forced" violation)
-					if (!(options.getFromPortSlot() instanceof IGeneratedCharterLengthEventPortSlot)) {
+					if (!(options.getFromPortSlot() instanceof ICharterLengthEventPortSlot)) {
 						isForcedCooldown = true;
 					}
 				}
