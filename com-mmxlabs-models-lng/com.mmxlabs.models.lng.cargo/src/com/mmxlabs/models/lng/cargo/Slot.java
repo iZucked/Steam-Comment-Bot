@@ -1890,7 +1890,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;?&gt;</code>.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Allowed Ports</em>' reference list.
@@ -1900,7 +1900,7 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	EList<APortSet<?>> getAllowedPorts();
+	EList<APortSet<Port>> getAllowedPorts();
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}' reference list.

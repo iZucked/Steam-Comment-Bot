@@ -994,7 +994,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
 
 	/**
 	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
@@ -1003,7 +1003,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
+	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -1012,7 +1012,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.

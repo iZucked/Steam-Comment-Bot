@@ -983,7 +983,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_ComputeExposure() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(43);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(45);
 	}
 
 	/**
@@ -993,7 +993,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_ComputeHedge() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(46);
 	}
 
 	/**
@@ -3826,7 +3826,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_BusinessUnit(), theCommercialPackage.getBusinessUnit(), null, "businessUnit", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
-		g2 = createEGenericType();
+		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getSlot_AllowedPorts(), g1, null, "allowedPorts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_AllowedPortsOverride(), ecorePackage.getEBoolean(), "allowedPortsOverride", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

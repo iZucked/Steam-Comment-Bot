@@ -1087,7 +1087,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet<?>> allowedPorts;
+	protected EList<APortSet<Port>> allowedPorts;
 
 	/**
 	 * The default value of the '{@link #isAllowedPortsOverride() <em>Allowed Ports Override</em>}' attribute.
@@ -2870,9 +2870,9 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public EList<APortSet<?>> getAllowedPorts() {
+	public EList<APortSet<Port>> getAllowedPorts() {
 		if (allowedPorts == null) {
-			allowedPorts = new EObjectResolvingEList.Unsettable<APortSet<?>>(APortSet.class, this, CargoPackage.SLOT__ALLOWED_PORTS);
+			allowedPorts = new EObjectResolvingEList.Unsettable<APortSet<Port>>(APortSet.class, this, CargoPackage.SLOT__ALLOWED_PORTS);
 		}
 		return allowedPorts;
 	}
@@ -3513,7 +3513,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
-				getAllowedPorts().addAll((Collection<? extends APortSet<?>>)newValue);
+				getAllowedPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
 				setAllowedPortsOverride((Boolean)newValue);
