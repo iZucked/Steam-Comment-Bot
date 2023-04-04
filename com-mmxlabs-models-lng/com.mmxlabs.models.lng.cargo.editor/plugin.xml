@@ -607,6 +607,14 @@
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VolumeTierContractCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.VolumeTierContractCommandProvider">
     </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider">
+    </ModelCommandProvider>
     <!--<ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider">
@@ -674,12 +682,5 @@
             plugin.xml="risk.plugin.xml">
       </PluginXMLEnablement>
    </extension>
-   
-    <extension point="com.mmxlabs.models.common.modelcommandprovider">
-    	<ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider">
-    	</ModelCommandProvider>
-    </extension>
 
 </plugin>

@@ -30,7 +30,7 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 	@Override
 	public Command provideAdditionalAfterCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
-		if (rootObject instanceof LNGScenarioModel) {
+  		if (rootObject instanceof final LNGScenarioModel sm) {
 			final CompoundCommand cc = new CompoundCommand();
 			if (commandClass == SetCommand.class) {
 				//Check if slot has been renamed.
@@ -46,7 +46,6 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 
 						if (!Objects.equals(oldName, newName)) {
 							//update all nominations with nomineeId = slot name.
-							final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 							final NominationsModel nm = sm.getNominationsModel();
 							nm.getNominations().forEach(sn -> {
 								if (sn.getSide() == side && Objects.equals(sn.getNomineeId(), oldName)) {
@@ -56,8 +55,7 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 						}
 					}
 				}
-			}
-			else if (commandClass == DeleteCommand.class) {
+			} else if (commandClass == DeleteCommand.class) {
 				//Check if slot has been deleted.
 				for (final Object object : getChangedValues(parameter)) {
 					if (object instanceof Slot) {
@@ -68,7 +66,6 @@ public class SlotUpdatingCommandProvider extends AbstractCommandProvider {
 						final Side side = (slot instanceof LoadSlot) ? Side.BUY : Side.SELL;
 						
 						//delete all nominations with nomineeId = slot name.
-						final LNGScenarioModel sm = (LNGScenarioModel)rootObject;
 						final NominationsModel nm = sm.getNominationsModel();
 						nm.getNominations().forEach(sn -> {
 							if (sn.getSide() == side && Objects.equals(sn.getNomineeId(), name)) {

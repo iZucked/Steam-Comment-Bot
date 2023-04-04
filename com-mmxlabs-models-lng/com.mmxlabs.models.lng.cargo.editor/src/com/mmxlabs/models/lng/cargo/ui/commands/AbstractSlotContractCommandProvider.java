@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -22,10 +23,12 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.ui.util.CargoTransferUtil;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -84,10 +87,9 @@ public abstract class AbstractSlotContractCommandProvider<P extends LNGPriceCalc
 	public Command provideAdditionalAfterCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 
-		if (rootObject instanceof LNGScenarioModel) {
+		if (rootObject instanceof final LNGScenarioModel sm) {
 
-			if (parameter.getOwner() instanceof Slot) {
-				final Slot slot = (Slot) parameter.getOwner();
+			if (parameter.getOwner() instanceof final Slot slot) {
 
 				// Check for contract change
 				if (parameter.getFeature() == CargoPackage.eINSTANCE.getSlot_Contract()) {
@@ -111,6 +113,11 @@ public abstract class AbstractSlotContractCommandProvider<P extends LNGPriceCalc
 							final EObject slotContractParams = factory.create(slotContractParamsEClass);
 							return AddCommand.create(editingDomain, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), slotContractParams);
 						}
+					}
+				} else if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Cargo()) {
+					final EObject tr = CargoTransferUtil.getTransferRecordForSlot(slot, sm);
+					if (tr != null) {
+						return SetCommand.create(editingDomain, tr, TransfersPackage.eINSTANCE.getTransferRecord_Stale(),  Boolean.TRUE);
 					}
 				}
 			}

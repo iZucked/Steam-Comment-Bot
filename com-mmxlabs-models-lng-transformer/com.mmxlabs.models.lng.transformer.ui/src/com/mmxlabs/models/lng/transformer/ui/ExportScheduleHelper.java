@@ -81,6 +81,9 @@ public class ExportScheduleHelper {
 
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
+		if (o_scenarioModel != null) {
+			final CargoModel o_cargoModel = ScenarioModelUtil.getCargoModel(o_scenarioModel);
+		}
 		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 
 		@Nullable
