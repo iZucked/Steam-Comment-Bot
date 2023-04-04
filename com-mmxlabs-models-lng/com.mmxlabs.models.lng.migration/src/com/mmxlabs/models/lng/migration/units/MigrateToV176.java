@@ -29,6 +29,6 @@ public class MigrateToV176 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// do nothing - harmony changes
+		// Added marketability report to analytics.ecore
 	}
 }

@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getMtmModel <em>Mtm Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getBreakevenModels <em>Breakeven Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSwapValueMatrixModels <em>Swap Value Matrix Models</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getMarketabilityModel <em>Marketability Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel()
@@ -140,6 +141,28 @@ public interface AnalyticsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<SwapValueMatrixModel> getSwapValueMatrixModels();
+
+	/**
+	 * Returns the value of the '<em><b>Marketability Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Marketability Model</em>' containment reference.
+	 * @see #setMarketabilityModel(MarketabilityModel)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_MarketabilityModel()
+	 * @model containment="true"
+	 * @generated
+	 */
+	MarketabilityModel getMarketabilityModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getMarketabilityModel <em>Marketability Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Marketability Model</em>' containment reference.
+	 * @see #getMarketabilityModel()
+	 * @generated
+	 */
+	void setMarketabilityModel(MarketabilityModel value);
 
 } // end of  AnalyticsModel
 

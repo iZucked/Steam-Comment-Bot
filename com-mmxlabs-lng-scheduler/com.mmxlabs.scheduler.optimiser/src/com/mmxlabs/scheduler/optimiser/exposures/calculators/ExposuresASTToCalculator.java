@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.astnodes.ASTNode;
+import com.mmxlabs.common.parser.astnodes.BlendASTNode;
 import com.mmxlabs.common.parser.astnodes.ConstantASTNode;
 import com.mmxlabs.common.parser.astnodes.DatedAvgFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.FunctionASTNode;
@@ -52,6 +53,8 @@ public class ExposuresASTToCalculator {
 			return NamedSeriedExposuresCalculator.getExposureNode(namedSeriesNode, inputRecord);
 		} else if (node instanceof final FunctionASTNode functionNode) {
 			return FunctionExposuresCalculator.getExposureNode(functionNode, inputRecord);
+		} else if (node instanceof final BlendASTNode blendNode) {
+			return BlendFunctionExposuresCalculator.getExposureNode(blendNode, inputRecord);
 		} else if (node instanceof final ParamASTNode paramNode) {
 			return ParamExposuresCalculator.getExposureNode(paramNode, inputRecord);
 		}

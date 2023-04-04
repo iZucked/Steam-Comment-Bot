@@ -15,9 +15,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -25,7 +23,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -605,23 +602,23 @@ public class CargoEditingHelper {
 			currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
 		}
 	}
-
-	public void setExposuresForCargoAssignment(@NonNull final String description, final CargoModel cargoModel, final boolean add, @NonNull final Collection<@NonNull Cargo> cargoes) {
+	
+	public void setExposuresForSlots(@NonNull final String description, final boolean add, @NonNull final Collection<@NonNull  ? extends Slot> slots) {
 
 		final CompoundCommand cc = new CompoundCommand(description);
 
-		for (final var cargo : cargoes) {
-			final boolean allowsExposures = cargoModel.getCargoesForExposures().contains(cargo);
-			final boolean allowsHedging = cargoModel.getCargoesForHedging().contains(cargo);
+		for (final var slot : slots) {
+			final boolean allowsExposures = slot.isComputeExposure();
+			final boolean allowsHedging = slot.isComputeHedge();
 			if (add) {
 				if (!allowsExposures) {
-					cc.append(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES, cargo));
+					cc.append(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE, true));
 				}
 			} else {
 				if (allowsExposures) {
-					cc.append(RemoveCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES, cargo));
+					cc.append(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE, false));
 					if (allowsHedging) {
-						cc.append(RemoveCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING, cargo));
+						cc.append(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__COMPUTE_HEDGE, false));
 					}
 				}
 			}
@@ -635,23 +632,23 @@ public class CargoEditingHelper {
 		}
 	}
 	
-	public void setHedgingForCargoAssignment(@NonNull final String description, final CargoModel cargoModel, final boolean add, @NonNull final Collection<@NonNull Cargo> cargoes) {
+	public void setHedgingForSlots(@NonNull final String description, final boolean add, @NonNull final Collection<@NonNull  ? extends Slot> slots) {
 
 		final CompoundCommand cc = new CompoundCommand(description);
 
-		for (final var cargo : cargoes) {
-			final boolean allowsHedging = cargoModel.getCargoesForHedging().contains(cargo);
-			final boolean allowsExposures = cargoModel.getCargoesForExposures().contains(cargo);
+		for (final var slot : slots) {
+			final boolean allowsExposures = slot.isComputeExposure();
+			final boolean allowsHedging = slot.isComputeHedge();
 			if (add) {
 				if (!allowsHedging) {
-					cc.append(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING, cargo));
+					cc.append(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__COMPUTE_HEDGE, true));
 					if (!allowsExposures) {
-						cc.append(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES, cargo));
+						cc.append(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE, true));
 					}
 				}
 			} else {
 				if (allowsHedging) {
-					cc.append(RemoveCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING, cargo));
+					cc.append(SetCommand.create(editingDomain, slot, CargoPackage.Literals.SLOT__COMPUTE_HEDGE, false));
 				}
 			}
 		}

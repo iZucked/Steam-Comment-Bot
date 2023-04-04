@@ -1,4 +1,9 @@
 [ {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "27/01/11",
   "Discharge/End Time" : "07:00",
@@ -7,7 +12,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Kano",
   "L-ID" : "Charter Out -  Start LNG Kano",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "27/01/11",
@@ -35,6 +39,11 @@
     "P&L (Shipping - Shipping)" : "4,886,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "11/01/11",
   "Discharge/End Time" : "07:00",
@@ -43,7 +52,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Lagos",
   "L-ID" : "Charter Out -  Start LNG Lagos",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "11/01/11",
@@ -71,6 +79,11 @@
     "P&L (Shipping - Shipping)" : "3,990,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "09/01/11",
   "Discharge/End Time" : "07:00",
@@ -79,7 +92,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Lokoja",
   "L-ID" : "Charter Out -  Start LNG Lokoja",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "09/01/11",
@@ -107,6 +119,11 @@
     "P&L (Shipping - Shipping)" : "3,878,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "29/01/11",
   "Discharge/End Time" : "07:00",
@@ -115,7 +132,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Ogun",
   "L-ID" : "Charter Out -  Start LNG Ogun",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "29/01/11",
@@ -143,6 +159,11 @@
     "P&L (Shipping - Shipping)" : "4,998,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "18/01/11",
   "Discharge/End Time" : "07:00",
@@ -151,7 +172,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Ondo",
   "L-ID" : "Charter Out -  Start LNG Ondo",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "18/01/11",
@@ -179,6 +199,11 @@
     "P&L (Shipping - Shipping)" : "4,382,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "19/01/11",
   "Discharge/End Time" : "07:00",
@@ -187,7 +212,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Oyo",
   "L-ID" : "Charter Out -  Start LNG Oyo",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "19/01/11",
@@ -215,6 +239,11 @@
     "P&L (Shipping - Shipping)" : "4,438,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "10/02/11",
   "Discharge/End Time" : "07:00",
@@ -223,7 +252,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Port Harcourt",
   "L-ID" : "Charter Out -  Start LNG Port Harcourt",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "10/02/11",
@@ -251,6 +279,11 @@
     "P&L (Shipping - Shipping)" : "5,670,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "07/01/11",
   "Discharge/End Time" : "07:00",
@@ -259,7 +292,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG River Niger",
   "L-ID" : "Charter Out -  Start LNG River Niger",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "07/01/11",
@@ -287,6 +319,11 @@
     "P&L (Shipping - Shipping)" : "3,766,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "28/12/10",
   "Discharge/End Time" : "16:00",
@@ -295,7 +332,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG River Orashi",
   "L-ID" : "Charter Out -  Start LNG River Orashi",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "28/12/10",
@@ -323,6 +359,11 @@
     "P&L (Shipping - Shipping)" : "3,227,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "15/01/11",
   "Discharge/End Time" : "07:00",
@@ -331,7 +372,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Rivers",
   "L-ID" : "Charter Out -  Start LNG Rivers",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "15/01/11",
@@ -359,6 +399,11 @@
     "P&L (Shipping - Shipping)" : "4,214,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "30/12/10",
   "Discharge/End Time" : "07:00",
@@ -367,7 +412,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out -  Start LNG Sokoto",
   "L-ID" : "Charter Out -  Start LNG Sokoto",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "30/12/10",
@@ -395,6 +439,11 @@
     "P&L (Shipping - Shipping)" : "3,318,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Violation" : "1",
   "Discharge/End Date" : "29/06/11",
@@ -404,7 +453,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - Lagos",
   "L-ID" : "Charter Out - Lagos",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "12/06/11",
   "Load/Start Time" : "10:00",
   "Next event date" : "29/06/11",
@@ -432,6 +480,11 @@
     "P&L (Shipping - Shipping)" : "1,518,750"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Violation" : "1",
   "Discharge/End Date" : "12/09/11",
@@ -441,7 +494,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - RO drydock",
   "L-ID" : "Charter Out - RO drydock",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "23/08/11",
   "Load/Start Time" : "13:00",
   "Next event date" : "12/09/11",
@@ -469,6 +521,11 @@
     "P&L (Shipping - Shipping)" : "1,876,250"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "10/07/11",
   "Discharge/End Time" : "07:00",
@@ -477,7 +534,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 109a",
   "L-ID" : "Charter Out - discharge-Cargo 109a",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "24/06/11",
   "Load/Start Time" : "14:00",
   "Next event date" : "10/07/11",
@@ -505,6 +561,11 @@
     "P&L (Shipping - Shipping)" : "1,413,750"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "17/02/11",
   "Discharge/End Time" : "07:00",
@@ -513,7 +574,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 13",
   "L-ID" : "Charter Out - discharge-Cargo 13",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "30/01/11",
   "Load/Start Time" : "07:00",
   "Next event date" : "17/02/11",
@@ -541,6 +601,11 @@
     "P&L (Shipping - Shipping)" : "1,350,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "25/07/11",
   "Discharge/End Time" : "07:00",
@@ -549,7 +614,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 131",
   "L-ID" : "Charter Out - discharge-Cargo 131",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "19/06/11",
   "Load/Start Time" : "23:00",
   "Next event date" : "25/07/11",
@@ -577,6 +641,11 @@
     "P&L (Shipping - Shipping)" : "3,180,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "20/08/11",
   "Discharge/End Time" : "07:00",
@@ -585,7 +654,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 132",
   "L-ID" : "Charter Out - discharge-Cargo 132",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "18/07/11",
   "Load/Start Time" : "16:00",
   "Next event date" : "20/08/11",
@@ -613,6 +681,11 @@
     "P&L (Shipping - Shipping)" : "2,936,250"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "30/07/11",
   "Discharge/End Time" : "07:00",
@@ -621,7 +694,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 141",
   "L-ID" : "Charter Out - discharge-Cargo 141",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "28/06/11",
   "Load/Start Time" : "11:00",
   "Next event date" : "30/07/11",
@@ -649,6 +721,11 @@
     "P&L (Shipping - Shipping)" : "2,865,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "10/08/11",
   "Discharge/End Time" : "07:00",
@@ -657,7 +734,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 154",
   "L-ID" : "Charter Out - discharge-Cargo 154",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "21/07/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "10/08/11",
@@ -685,6 +761,11 @@
     "P&L (Shipping - Shipping)" : "1,743,750"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "09/09/11",
   "Discharge/End Time" : "07:00",
@@ -693,7 +774,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 161",
   "L-ID" : "Charter Out - discharge-Cargo 161",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "24/08/11",
   "Load/Start Time" : "05:00",
   "Next event date" : "09/09/11",
@@ -721,6 +801,11 @@
     "P&L (Shipping - Shipping)" : "1,527,916"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "07/09/11",
   "Discharge/End Time" : "04:00",
@@ -729,7 +814,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 174",
   "L-ID" : "Charter Out - discharge-Cargo 174",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "17/08/11",
   "Load/Start Time" : "08:00",
   "Next event date" : "07/09/11",
@@ -757,6 +841,11 @@
     "P&L (Shipping - Shipping)" : "1,979,166"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -765,7 +854,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 188",
   "L-ID" : "Charter Out - discharge-Cargo 188",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "08/10/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "23/12/11",
@@ -793,6 +881,11 @@
     "P&L (Shipping - Shipping)" : "9,040,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "26/02/11",
   "Discharge/End Time" : "07:00",
@@ -801,7 +894,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 20",
   "L-ID" : "Charter Out - discharge-Cargo 20",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "08/02/11",
   "Load/Start Time" : "23:00",
   "Next event date" : "26/02/11",
@@ -829,6 +921,11 @@
     "P&L (Shipping - Shipping)" : "1,300,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -837,7 +934,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 200",
   "L-ID" : "Charter Out - discharge-Cargo 200",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "25/09/11",
   "Load/Start Time" : "06:00",
   "Next event date" : "23/12/11",
@@ -865,6 +961,11 @@
     "P&L (Shipping - Shipping)" : "9,345,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -873,7 +974,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 201",
   "L-ID" : "Charter Out - discharge-Cargo 201",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "26/09/11",
   "Load/Start Time" : "14:00",
   "Next event date" : "23/12/11",
@@ -901,6 +1001,11 @@
     "P&L (Shipping - Shipping)" : "9,205,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -909,7 +1014,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 203",
   "L-ID" : "Charter Out - discharge-Cargo 203",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/10/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "23/12/11",
@@ -937,6 +1041,11 @@
     "P&L (Shipping - Shipping)" : "9,880,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -945,7 +1054,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 205",
   "L-ID" : "Charter Out - discharge-Cargo 205",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "29/10/11",
   "Load/Start Time" : "16:00",
   "Next event date" : "23/12/11",
@@ -973,6 +1081,11 @@
     "P&L (Shipping - Shipping)" : "6,550,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -981,7 +1094,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 207",
   "L-ID" : "Charter Out - discharge-Cargo 207",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "02/10/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "23/12/11",
@@ -1009,6 +1121,11 @@
     "P&L (Shipping - Shipping)" : "9,760,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -1017,7 +1134,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 208",
   "L-ID" : "Charter Out - discharge-Cargo 208",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "04/10/11",
   "Load/Start Time" : "18:00",
   "Next event date" : "23/12/11",
@@ -1045,6 +1161,11 @@
     "P&L (Shipping - Shipping)" : "9,540,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -1053,7 +1174,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 210",
   "L-ID" : "Charter Out - discharge-Cargo 210",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "09/10/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "23/12/11",
@@ -1081,6 +1201,11 @@
     "P&L (Shipping - Shipping)" : "8,920,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -1089,7 +1214,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 213",
   "L-ID" : "Charter Out - discharge-Cargo 213",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "15/10/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "23/12/11",
@@ -1117,6 +1241,11 @@
     "P&L (Shipping - Shipping)" : "8,200,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -1125,7 +1254,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 215",
   "L-ID" : "Charter Out - discharge-Cargo 215",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "26/10/11",
   "Load/Start Time" : "11:00",
   "Next event date" : "23/12/11",
@@ -1153,6 +1281,11 @@
     "P&L (Shipping - Shipping)" : "6,935,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
   "Discharge/End Time" : "06:00",
@@ -1161,7 +1294,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 224",
   "L-ID" : "Charter Out - discharge-Cargo 224",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "23/12/11",
@@ -1189,6 +1321,11 @@
     "P&L (Shipping - Shipping)" : "6,160,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "12/04/11",
   "Discharge/End Time" : "07:00",
@@ -1197,7 +1334,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 34",
   "L-ID" : "Charter Out - discharge-Cargo 34",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "22/02/11",
   "Load/Start Time" : "13:00",
   "Next event date" : "12/04/11",
@@ -1225,6 +1361,11 @@
     "P&L (Shipping - Shipping)" : "3,656,250"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/02/11",
   "Discharge/End Time" : "07:00",
@@ -1233,7 +1374,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 6",
   "L-ID" : "Charter Out - discharge-Cargo 6",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "17/01/11",
   "Load/Start Time" : "23:00",
   "Next event date" : "23/02/11",
@@ -1261,6 +1401,11 @@
     "P&L (Shipping - Shipping)" : "2,725,000"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "05/02/11",
   "Discharge/End Time" : "11:00",
@@ -1269,7 +1414,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 7",
   "L-ID" : "Charter Out - discharge-Cargo 7",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "20/01/11",
   "Load/Start Time" : "12:00",
   "Next event date" : "05/02/11",
@@ -1297,6 +1441,11 @@
     "P&L (Shipping - Shipping)" : "1,196,875"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "08/06/11",
   "Discharge/End Time" : "07:00",
@@ -1305,7 +1454,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-Cargo 90",
   "L-ID" : "Charter Out - discharge-Cargo 90",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/05/11",
   "Load/Start Time" : "06:00",
   "Next event date" : "08/06/11",
@@ -1696,6 +1844,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1704,7 +1857,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Kano",
   "L-ID" : "LNG Kano",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1732,6 +1884,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1740,7 +1897,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Lagos",
   "L-ID" : "LNG Lagos",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1768,6 +1924,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1776,7 +1937,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Lokoja",
   "L-ID" : "LNG Lokoja",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1804,6 +1964,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1812,7 +1977,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Ogun",
   "L-ID" : "LNG Ogun",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1840,6 +2004,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1848,7 +2017,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Ondo",
   "L-ID" : "LNG Ondo",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1876,6 +2044,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1884,7 +2057,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Oyo",
   "L-ID" : "LNG Oyo",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1912,6 +2084,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1920,7 +2097,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Port Harcourt",
   "L-ID" : "LNG Port Harcourt",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1948,6 +2124,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1956,7 +2137,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG River Niger",
   "L-ID" : "LNG River Niger",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -1984,6 +2164,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -1992,7 +2177,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG River Orashi",
   "L-ID" : "LNG River Orashi",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -2020,6 +2204,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -2028,7 +2217,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Rivers",
   "L-ID" : "LNG Rivers",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -2056,6 +2244,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
   "Discharge/End Time" : "01:00",
@@ -2064,7 +2257,6 @@
   "Heel Revenue" : "0",
   "ID" : "LNG Sokoto",
   "L-ID" : "LNG Sokoto",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "01/11/10",
   "Load/Start Time" : "01:00",
   "Next event date" : "01/11/10",
@@ -2092,6 +2284,13 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast Travel" : "08:16",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Speed" : "19.5",
+  "Ballast Cost" : "792,599",
   "Buy/Start Port" : "Montoir",
   "Discharge/End Date" : "03/06/11",
   "Discharge/End Time" : "19:00",
@@ -2100,8 +2299,6 @@
   "Heel Revenue" : "0",
   "ID" : "Lagos",
   "L-ID" : "Lagos",
-  "Laden Idle" : "00:00",
-  "Laden Travel" : "08:16",
   "Load/Start Date" : "09/05/11",
   "Load/Start Time" : "19:00",
   "Load/Start Window" : "01/05/11",
@@ -2131,6 +2328,13 @@
     "P&L (Shipping - Shipping)" : "-792,599"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast Travel" : "22:23",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Speed" : "19.5",
+  "Ballast Cost" : "1,868,762",
   "Buy/Start Port" : "Senboku",
   "Discharge/End Date" : "31/07/11",
   "Discharge/End Time" : "22:00",
@@ -2139,8 +2343,6 @@
   "Heel Revenue" : "0",
   "ID" : "RO drydock",
   "L-ID" : "RO drydock",
-  "Laden Idle" : "00:00",
-  "Laden Travel" : "22:23",
   "Load/Start Date" : "01/06/11",
   "Load/Start Time" : "22:00",
   "Load/Start Window" : "01/06/11",

@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixResult;
 
@@ -65,62 +66,13 @@ public class SwapValueMatrixResultItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addBaseDischargePricePropertyDescriptor(object);
-			addSwapMarketPricePropertyDescriptor(object);
 			addSwapPnlMinusBasePnlPropertyDescriptor(object);
-			addBaseLoadPricePropertyDescriptor(object);
-			addSwapFobLoadPricePropertyDescriptor(object);
-			addBaseFobLoadVolumePropertyDescriptor(object);
-			addSwapFobLoadVolumePropertyDescriptor(object);
-			addMarketBuyVolumePropertyDescriptor(object);
-			addMarketSellVolumePropertyDescriptor(object);
-			addBaseDesSellVolumePropertyDescriptor(object);
+			addBasePrecedingPnlPropertyDescriptor(object);
+			addBaseSucceedingPnlPropertyDescriptor(object);
+			addSwapPrecedingPnlPropertyDescriptor(object);
+			addSwapSucceedingPnlPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Base Discharge Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseDischargePricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_baseDischargePrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_baseDischargePrice_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Swap Market Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSwapMarketPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_swapMarketPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_swapMarketPrice_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -146,63 +98,19 @@ public class SwapValueMatrixResultItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Base Load Price feature.
+	 * This adds a property descriptor for the Base Preceding Pnl feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addBaseLoadPricePropertyDescriptor(Object object) {
+	protected void addBasePrecedingPnlPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_baseLoadPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_baseLoadPrice_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Swap Fob Load Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSwapFobLoadPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_swapFobLoadPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_swapFobLoadPrice_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Base Fob Load Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseFobLoadVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_baseFobLoadVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_baseFobLoadVolume_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME,
+				 getString("_UI_SwapValueMatrixResult_basePrecedingPnl_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_basePrecedingPnl_feature", "_UI_SwapValueMatrixResult_type"),
+				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL,
 				 true,
 				 false,
 				 false,
@@ -212,19 +120,19 @@ public class SwapValueMatrixResultItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Swap Fob Load Volume feature.
+	 * This adds a property descriptor for the Base Succeeding Pnl feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSwapFobLoadVolumePropertyDescriptor(Object object) {
+	protected void addBaseSucceedingPnlPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_swapFobLoadVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_swapFobLoadVolume_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME,
+				 getString("_UI_SwapValueMatrixResult_baseSucceedingPnl_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_baseSucceedingPnl_feature", "_UI_SwapValueMatrixResult_type"),
+				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL,
 				 true,
 				 false,
 				 false,
@@ -234,19 +142,19 @@ public class SwapValueMatrixResultItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Market Buy Volume feature.
+	 * This adds a property descriptor for the Swap Preceding Pnl feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMarketBuyVolumePropertyDescriptor(Object object) {
+	protected void addSwapPrecedingPnlPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_marketBuyVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_marketBuyVolume_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME,
+				 getString("_UI_SwapValueMatrixResult_swapPrecedingPnl_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_swapPrecedingPnl_feature", "_UI_SwapValueMatrixResult_type"),
+				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL,
 				 true,
 				 false,
 				 false,
@@ -256,19 +164,19 @@ public class SwapValueMatrixResultItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Market Sell Volume feature.
+	 * This adds a property descriptor for the Swap Succeeding Pnl feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMarketSellVolumePropertyDescriptor(Object object) {
+	protected void addSwapSucceedingPnlPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_marketSellVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_marketSellVolume_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME,
+				 getString("_UI_SwapValueMatrixResult_swapSucceedingPnl_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_swapSucceedingPnl_feature", "_UI_SwapValueMatrixResult_type"),
+				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL,
 				 true,
 				 false,
 				 false,
@@ -278,25 +186,35 @@ public class SwapValueMatrixResultItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Base Des Sell Volume feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addBaseDesSellVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SwapValueMatrixResult_baseDesSellVolume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SwapValueMatrixResult_baseDesSellVolume_feature", "_UI_SwapValueMatrixResult_type"),
-				 AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO);
+			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO);
+			childrenFeatures.add(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -337,17 +255,17 @@ public class SwapValueMatrixResultItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SwapValueMatrixResult.class)) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE:
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME:
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO:
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -363,6 +281,44 @@ public class SwapValueMatrixResultItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO,
+				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixShippedCargoResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO,
+				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixShippedCargoResult()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO,
+				 AnalyticsFactory.eINSTANCE.createSwapValueMatrixNonShippedCargoResult()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO ||
+			childFeature == AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

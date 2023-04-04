@@ -91,6 +91,7 @@ white_space = {new_line} | [ \t\f]
 "VOLUMETIERM3"           { return symbol("volumetierm3", VOLUMETIERM3); }
 "VOLUMETIERMMBTU"           { return symbol("volumetiermmbtu", VOLUMETIERMMBTU); }
 "TIER"           { return symbol("tier", TIER); }
+"BLEND"           { return symbol("blend", BLEND); }
  
  
  "JAN" { return symbol("jan",MONTH, Month.JANUARY); }

@@ -95,6 +95,8 @@ public class SlotItemProvider
 			addBusinessUnitPropertyDescriptor(object);
 			addAllowedPortsPropertyDescriptor(object);
 			addAllowedPortsOverridePropertyDescriptor(object);
+			addComputeExposurePropertyDescriptor(object);
+			addComputeHedgePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -1112,6 +1114,50 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Compute Exposure feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addComputeExposurePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_computeExposure_feature"),
+				 getString("_UI_Slot_computeExposure_description"),
+				 CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Compute Hedge feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addComputeHedgePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_computeHedge_feature"),
+				 getString("_UI_Slot_computeHedge_description"),
+				 CargoPackage.Literals.SLOT__COMPUTE_HEDGE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1183,6 +1229,8 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 			case CargoPackage.SLOT__PRICING_BASIS:
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
+			case CargoPackage.SLOT__COMPUTE_EXPOSURE:
+			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

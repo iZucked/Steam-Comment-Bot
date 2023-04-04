@@ -141,6 +141,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_MARKET_MODEL_CONTRACTS = "features:market-model-contracts";
 
+	public static final String FEATURE_MARKETABLE_WINDOWS = "features:marketability";
+	
 	public static final String FEATURE_PRICING_BASES = "features:pricing-bases";
 	
 	public static final String FEATURE_PREFERRED_PRICING_BASES = "features:preferred-pricing-bases";
@@ -174,6 +176,7 @@ public final class KnownFeatures {
 	//emissions
 	public static final String FEATURE_EMISSIONS = "features:emissions";
 
+	
 	/**
 	 * Enable LDD etc style cargoes
 	 */

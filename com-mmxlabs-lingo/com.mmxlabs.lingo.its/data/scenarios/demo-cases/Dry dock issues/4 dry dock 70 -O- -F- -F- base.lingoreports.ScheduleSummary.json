@@ -1,5 +1,10 @@
 [ {
   "Charter Rate" : "99,999",
+  "Ballast Idle" : "00:11",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "68,749",
   "Buy/Start Port" : "Point Fortin",
   "Discharge/End Date" : "01/01/11",
   "Discharge/End Time" : "20:00",
@@ -8,7 +13,6 @@
   "Heel Revenue" : "0",
   "ID" : "Bluesky",
   "L-ID" : "Bluesky",
-  "Laden Idle" : "00:11",
   "Load/Start Date" : "01/01/11",
   "Load/Start Time" : "20:00",
   "Next event date" : "02/01/11",
@@ -37,6 +41,11 @@
   }
 }, {
   "Charter Rate" : "100,000",
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "6,187,500",
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "27/08/11",
   "Discharge/End Time" : "19:00",
@@ -45,7 +54,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-cargo-30",
   "L-ID" : "Charter Out - discharge-cargo-30",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "26/06/11",
   "Load/Start Time" : "22:00",
   "Next event date" : "27/08/11",
@@ -74,6 +82,11 @@
   }
 }, {
   "Charter Rate" : "100,000",
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "1,754,166",
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "08/04/11",
   "Discharge/End Time" : "14:00",
@@ -82,7 +95,6 @@
   "Heel Revenue" : "0",
   "ID" : "Charter Out - discharge-cargo-31",
   "L-ID" : "Charter Out - discharge-cargo-31",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "22/03/11",
   "Load/Start Time" : "01:00",
   "Next event date" : "08/04/11",
@@ -110,6 +122,13 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast Travel" : "00:06",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Speed" : "19.5",
+  "Ballast Cost" : "44,500",
   "Buy/Start Port" : "Damietta",
   "Discharge/End Date" : "21/04/11",
   "Discharge/End Time" : "07:00",
@@ -118,8 +137,6 @@
   "Heel Revenue" : "0",
   "ID" : "Dry Dock",
   "L-ID" : "Dry Dock",
-  "Laden Idle" : "00:00",
-  "Laden Travel" : "00:06",
   "Load/Start Date" : "10/02/11",
   "Load/Start Time" : "07:00",
   "Load/Start Window" : "10/02/11",
@@ -347,6 +364,11 @@
     "P&L (Shipping - Shipping)" : "0"
   }
 }, {
+  "Ballast Idle" : "01:01",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "52,083",
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "20/12/10",
   "Discharge/End Time" : "06:00",
@@ -355,7 +377,6 @@
   "Heel Revenue" : "0",
   "ID" : "Methane Becki Anne",
   "L-ID" : "Methane Becki Anne",
-  "Laden Idle" : "01:01",
   "Load/Start Date" : "20/12/10",
   "Load/Start Time" : "06:00",
   "Next event date" : "21/12/10",
@@ -383,6 +404,11 @@
     "P&L (Shipping - Shipping)" : "-283,281"
   }
 }, {
+  "Ballast Idle" : "00:01",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "2,083",
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "29/11/10",
   "Discharge/End Time" : "06:00",
@@ -391,7 +417,6 @@
   "Heel Revenue" : "0",
   "ID" : "Methane Heather Sally",
   "L-ID" : "Methane Heather Sally",
-  "Laden Idle" : "00:01",
   "Load/Start Date" : "29/11/10",
   "Load/Start Time" : "06:00",
   "Next event date" : "29/11/10",
@@ -419,6 +444,11 @@
     "P&L (Shipping - Shipping)" : "-2,083"
   }
 }, {
+  "Ballast Idle" : "01:01",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "52,083",
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "30/12/10",
   "Discharge/End Time" : "06:00",
@@ -427,7 +457,6 @@
   "Heel Revenue" : "0",
   "ID" : "Methane Julia Louise",
   "L-ID" : "Methane Julia Louise",
-  "Laden Idle" : "01:01",
   "Load/Start Date" : "30/12/10",
   "Load/Start Time" : "06:00",
   "Next event date" : "31/12/10",
@@ -455,6 +484,11 @@
     "P&L (Shipping - Shipping)" : "-283,281"
   }
 }, {
+  "Ballast Idle" : "00:01",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "2,083",
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "08/12/10",
   "Discharge/End Time" : "06:00",
@@ -463,7 +497,6 @@
   "Heel Revenue" : "0",
   "ID" : "Methane Lydon Volney",
   "L-ID" : "Methane Lydon Volney",
-  "Laden Idle" : "00:01",
   "Load/Start Date" : "08/12/10",
   "Load/Start Time" : "06:00",
   "Next event date" : "08/12/10",
@@ -491,6 +524,11 @@
     "P&L (Shipping - Shipping)" : "-2,083"
   }
 }, {
+  "Ballast Idle" : "00:00",
+  "Ballast LNG Cost" : "0",
+  "Ballast LNG (m³)" : "0",
+  "Ballast LNG (mmBtu)" : "0",
+  "Ballast Cost" : "0",
   "Buy/Start Port" : "Point Fortin",
   "Discharge/End Date" : "24/12/10",
   "Discharge/End Time" : "14:00",
@@ -499,7 +537,6 @@
   "Heel Revenue" : "0",
   "ID" : "Methane Princess",
   "L-ID" : "Methane Princess",
-  "Laden Idle" : "00:00",
   "Load/Start Date" : "24/12/10",
   "Load/Start Time" : "14:00",
   "Next event date" : "24/12/10",

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.common.parser.series.functions;
 
+import java.nio.channels.IllegalSelectorException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,9 @@ import java.util.stream.IntStream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.parser.astnodes.ComparisonOperators;
+import com.mmxlabs.common.parser.astnodes.VolumeTierASTNode;
+import com.mmxlabs.common.parser.astnodes.VolumeTierASTNode.ExprSelector;
 import com.mmxlabs.common.parser.series.ISeries;
 
 public class VolumeTierSeries implements ISeries {
@@ -26,10 +30,12 @@ public class VolumeTierSeries implements ISeries {
 	private final int[] changePoints;
 
 	private Set<String> parameters;
+	private @NonNull ComparisonOperators op;
 
-	public VolumeTierSeries(final boolean isM3Volume, @NonNull final ISeries tier1Series, final double threshold, @NonNull final ISeries tier2Series) {
+	public VolumeTierSeries(final boolean isM3Volume, @NonNull final ISeries tier1Series, final @NonNull ComparisonOperators op, final double threshold, @NonNull final ISeries tier2Series) {
 		this.isM3Volume = isM3Volume;
 		this.tier1Series = tier1Series;
+		this.op = op;
 		this.threshold = threshold;
 		this.tier2Series = tier2Series;
 
@@ -65,7 +71,6 @@ public class VolumeTierSeries implements ISeries {
 	@Override
 	public int[] getChangePoints() {
 		return changePoints;
-
 	}
 
 	@Override
@@ -79,13 +84,15 @@ public class VolumeTierSeries implements ISeries {
 		}
 		if (volume == null) {
 			return tier1Series.evaluate(timePoint, params);
-
 		}
 
 		final double inputVolume = Double.parseDouble(volume);
-		if (inputVolume <= threshold) {
+
+		final ExprSelector selected = VolumeTierASTNode.select(inputVolume, op, threshold);
+		switch (selected) {
+		case LOW:
 			return tier1Series.evaluate(timePoint, params);
-		} else {
+		case BLEND:
 			// Get the tier prices
 			final Number a = tier1Series.evaluate(timePoint, params);
 			final Number b = tier2Series.evaluate(timePoint, params);
@@ -96,6 +103,8 @@ public class VolumeTierSeries implements ISeries {
 			// Divide by total volume to get price again
 			v = v / inputVolume;
 			return v;
+		default:
+			throw new IllegalStateException();
 		}
 	}
 }

@@ -54,8 +54,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/charterInMarketOverrides"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/paperDeals"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dealSets"/>
-      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoesForExposures"/>
-      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoesForHedging"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/groupedDischargeSlots"/>
       <genOperations ecoreOperation="cargo.ecore#//CargoModel/getLoadSlotByName">
         <genParameters ecoreParameter="cargo.ecore#//CargoModel/getLoadSlotByName/name"/>
@@ -155,6 +153,8 @@
       <genFeatures notify="false" createChild="false" propertyDescription="A list of ports to restrict the port this position can be at. Overrides the contract list. Note: This is different to the restricted ports which defines where this position can be sent to."
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedPorts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/allowedPortsOverride"/>
+      <genFeatures createChild="false" propertyDescription="Compute exposure" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/computeExposure"/>
+      <genFeatures createChild="false" propertyDescription="Compute hedge" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/computeHedge"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateOperationalTolerance"/>

@@ -16,9 +16,8 @@ import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters;
@@ -119,21 +118,22 @@ public class ExposureDataTransformer implements ISlotTransformer {
 						lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();
 					}
 					if (individualExposures) {
-						cargoModel.getCargoesForExposures().forEach(c -> {
-							for (final var slot : c.getSlots()) {
+						cargoModel.getLoadSlots().forEach( s-> {
+							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
 								String prefix = "FP-";
-								if (slot instanceof LoadSlot) {
-									prefix = "FP-";
-									if (((LoadSlot) slot).isDESPurchase()) {
-										prefix = "DP-";
-									}
-								} else {
-									prefix = "DS-";
-									if (((DischargeSlot) slot).isFOBSale()) {
-										prefix = "FS-";
-									}
+								if (s.isDESPurchase()) {
+									prefix = "DP-";
 								}
-								lookupData.slotsToInclude.add(prefix + slot.getName());
+								lookupData.slotsToInclude.add(prefix + s.getName());
+							}
+						});
+						cargoModel.getDischargeSlots().forEach( s-> {
+							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
+								String prefix = "DS-";
+								if (s.isFOBSale()) {
+									prefix = "FS-";
+								}
+								lookupData.slotsToInclude.add(prefix + s.getName());
 							}
 						});
 					}

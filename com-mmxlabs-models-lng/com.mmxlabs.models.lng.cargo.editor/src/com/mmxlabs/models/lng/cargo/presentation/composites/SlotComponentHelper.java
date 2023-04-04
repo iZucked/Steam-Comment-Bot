@@ -40,7 +40,8 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_PORTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__ALLOWED_PORTS_OVERRIDE);
-		
+		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE);
+		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_HEDGE);
 		//TODO: check layout for the feature:
 		// ignoreFeatures.add(CargoPackage.Literals.SLOT__PRICING_BASIS);
 

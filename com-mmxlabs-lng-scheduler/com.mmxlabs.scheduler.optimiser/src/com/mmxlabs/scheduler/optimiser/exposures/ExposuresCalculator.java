@@ -188,7 +188,6 @@ public class ExposuresCalculator {
 
 	private Collection<BasicExposureRecord> createOptimiserExposureRecord(final String name, final @NonNull ASTNode node, InputRecord inputRecord, final boolean isLong) {
 		final List<BasicExposureRecord> results = new LinkedList<>();
-
 		final IExposureNode enode = ExposuresASTToCalculator.getExposureNode(node, inputRecord).getSecond();
 		if (enode instanceof final ExposureRecords exposureRecords) {
 			for (final ExposureRecord record : exposureRecords.records) {

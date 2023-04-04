@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.pricing.util;
 import java.time.YearMonth;
 import java.util.function.Consumer;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
@@ -27,6 +29,11 @@ public class DataCurveBuilder<T extends AbstractYearMonthCurve> {
 
 		curve.getPoints().add(pt);
 
+		return this;
+	}
+	
+	public DataCurveBuilder<T> addExpression(final @NonNull String expression){
+		curve.setExpression(expression);
 		return this;
 	}
 

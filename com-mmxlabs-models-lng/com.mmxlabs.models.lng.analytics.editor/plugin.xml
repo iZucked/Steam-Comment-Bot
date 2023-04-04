@@ -175,6 +175,10 @@
             plugin.xml="viability.plugin.xml">
       </PluginXMLEnablement>
       <PluginXMLEnablement
+            feature="marketability"
+            plugin.xml="marketable-windows.plugin.xml">
+      </PluginXMLEnablement>
+      <PluginXMLEnablement
             feature="mtm"
             plugin.xml="mtm.plugin.xml">
       </PluginXMLEnablement>
