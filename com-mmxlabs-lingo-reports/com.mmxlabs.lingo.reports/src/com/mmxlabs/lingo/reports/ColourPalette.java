@@ -155,6 +155,9 @@ public final class ColourPalette {
 
 		setItemColour(ColourPaletteItems.Destination_Based_Highlight_Journey, ColourElements.Background, Dark_Yellow);
 		setItemColour(ColourPaletteItems.Destination_Based_Highlight_Idle, ColourElements.Background, Warning_Yellow);
+
+		setItemColour(ColourPaletteItems.Source_Contract_Based_Highlight_Journey, ColourElements.Background, Dark_Yellow);
+		setItemColour(ColourPaletteItems.Source_Contract_Based_Highlight_Idle, ColourElements.Background, Warning_Yellow);
 	}
 
 	public enum ColourElements {
@@ -185,7 +188,9 @@ public final class ColourPalette {
 		
 		Charter_Range,
 		
-		Destination_Based_Highlight_Journey, Destination_Based_Highlight_Idle
+		Destination_Based_Highlight_Journey, Destination_Based_Highlight_Idle,
+
+		Source_Contract_Based_Highlight_Journey, Source_Contract_Based_Highlight_Idle,
 	}
 	// @formatter:on	
 	private final Map<RGB, Color> colourMap = new HashMap<>();
