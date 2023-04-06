@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.scheduleview.views;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Highlight_;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
+import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Destination_Labels;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -63,6 +64,7 @@ import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -106,6 +108,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private final IMemento memento;
 
 	private boolean showCanals = false;
+	private boolean showDestinationLabels = false;
 	private final ScenarioComparisonService selectedScenariosService;
 
 	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
@@ -128,9 +131,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(p.getSchedule())) {
 				return pinImage;
 			}
-//			return getImage(p.getSchedule());
+			// return getImage(p.getSchedule());
 		}
-		
+
 		if (element instanceof Sequence sequence) {
 			final @Nullable ISelectedDataProvider currentSelectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 			if (currentSelectedDataProvider != null && currentSelectedDataProvider.isPinnedObject(sequence)) {
@@ -175,9 +178,74 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			text = seqText;
 		} else if (element instanceof Journey j) {
 			final RouteOption routeOption = j.getRouteOption();
-			if (routeOption != RouteOption.DIRECT) {
-				if (memento.getBoolean(Show_Canals)) {
+			if (memento.getBoolean(Show_Canals)) {
+				if (routeOption != RouteOption.DIRECT) {
 					text = PortModelLabeller.getName(routeOption);
+				}
+			} else {
+				final Boolean showDest = memento.getBoolean(Show_Destination_Labels);
+				if (showDest != null && showDest.booleanValue()) {
+					if (j.isLaden()) {
+						StringBuilder sb = new StringBuilder();
+						final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM");
+						if (j.getPreviousEvent() instanceof SlotVisit sv) {
+							String cp = sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty();
+							if (cp == null || cp.isBlank()) {
+								String portName = sv.getPort().getShortName();
+								if (portName == null || portName.isBlank()) {
+									portName = sv.getPort().getName();
+								}
+								cp = portName;
+							}
+							String date = sv.getStart().format(formatter);
+							if (!cp.isBlank()) {
+								sb.append(cp + " ");
+							}
+							sb.append("["+date+"]");
+						}
+						Event next = j.getNextEvent();
+						if (next instanceof Idle) {
+							next = next.getNextEvent();
+						}
+						if (next instanceof SlotVisit sv) {
+							sb.append(" > ");
+							String cp = sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty();
+							if (cp == null || cp.isBlank()) {
+								String portName = sv.getPort().getShortName();
+								if (portName == null || portName.isBlank()) {
+									portName = sv.getPort().getName();
+								}
+								cp = portName;
+							}
+							String date = sv.getStart().format(formatter);
+							if (!cp.isBlank()) {
+								sb.append(cp + " ");
+							}
+							sb.append("["+date+"]");
+						}
+						text = sb.toString();
+					} else {
+						StringBuilder sb = new StringBuilder();
+						if (j.getPreviousEvent() instanceof SlotVisit sv) {
+							String portName = sv.getPort().getShortName();
+							if (portName == null || portName.isBlank()) {
+								portName = sv.getPort().getName();
+							}
+							sb.append(portName + " > ");
+						}
+						Event next = j.getNextEvent();
+						if (next instanceof Idle) {
+							next = next.getNextEvent();
+						}
+						if (next instanceof PortVisit pv) {
+							String portName = pv.getPort().getShortName();
+							if (portName == null || portName.isBlank()) {
+								portName = pv.getPort().getName();
+							}
+							sb.append(portName);
+						}
+						text = sb.toString();
+					}
 				}
 			}
 		} else if (element instanceof CombinedSequence combinedSequence) {
@@ -251,11 +319,26 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	public void toggleShowCanals() {
 		showCanals = !showCanals;
+		if (showCanals && showDestinationLabels) {
+			toggleShowDestinationLabels();
+		}
 		memento.putBoolean(Show_Canals, showCanals);
+	}
+
+	public void toggleShowDestinationLabels() {
+		showDestinationLabels = !showDestinationLabels;
+		if (showDestinationLabels && showCanals) {
+			toggleShowCanals();
+		}
+		memento.putBoolean(Show_Destination_Labels, showDestinationLabels);
 	}
 
 	public boolean showCanals() {
 		return showCanals;
+	}
+
+	public boolean showDestinationLabels() {
+		return showDestinationLabels;
 	}
 
 	public void addHighlighter(final String id, final IScheduleViewColourScheme cs) {
@@ -299,7 +382,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public String getToolTipText(final Object element) {
-		
 		if (element instanceof MultiEvent multiEvent) {
 			StringBuilder sb = new StringBuilder();
 			for (Object e : multiEvent.getElements()) {
@@ -310,8 +392,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			}
 			return sb.toString();
 		}
-		
-		
+
 		if (element instanceof CharterAvailableFromEvent) {
 			return "";
 		}
@@ -556,7 +637,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					eventText.append(" \n");
 				}
 
-//				eventText.append("Time in port: " + durationTime + " \n");
+				// eventText.append("Time in port: " + durationTime + " \n");
 				eventText.append("Window Start: " + dateToString(slot.getSchedulingTimeWindow().getStart()) + "\n");
 				eventText.append("Window End: " + dateToString(slot.getSchedulingTimeWindow().getEnd()) + "\n");
 				eventText.append(" \n");
@@ -596,8 +677,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	/**
-	 * Split nOfHours into the number of days and/or hours as a user readable
-	 * String.
+	 * Split nOfHours into the number of days and/or hours as a user readable String.
 	 * 
 	 * @param nOfHours
 	 * @return a String

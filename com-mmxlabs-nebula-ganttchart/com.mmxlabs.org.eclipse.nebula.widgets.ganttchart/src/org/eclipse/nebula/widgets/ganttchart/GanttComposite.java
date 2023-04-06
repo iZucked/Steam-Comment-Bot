@@ -3455,6 +3455,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// draw the text if any, o
 		if (ge.getParsedString() != null) {
+			gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 			_paintManager.drawEventString(this, _settings, _colorManager, ge, gc, ge.getParsedString(), _threeDee, xStart, yDrawPos, xEventWidth, bounds);
 		}
 

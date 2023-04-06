@@ -71,6 +71,20 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 		{
+			final Action destinationLabelsAction = new Action("Show destination labels") {
+				@Override
+				public void run() {
+					lp.toggleShowDestinationLabels();
+					setChecked(lp.showDestinationLabels());
+					viewer.setInput(viewer.getInput());
+					schedulerView.redraw();
+				}
+			};
+			destinationLabelsAction.setChecked(lp.showDestinationLabels());
+			final ActionContributionItem aci = new ActionContributionItem(destinationLabelsAction);
+			aci.fill(menu, -1);
+		}
+		{
 			final Action showDaysOnEventsAction = new DefaultMenuCreatorAction("Show days") {
 				
 				@Override

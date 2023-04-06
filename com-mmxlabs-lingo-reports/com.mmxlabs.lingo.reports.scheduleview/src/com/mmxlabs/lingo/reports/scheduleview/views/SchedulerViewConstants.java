@@ -24,6 +24,8 @@ public final class SchedulerViewConstants {
 	public static final String Show_Nominals = "Show.Nominals";
 	public static final String Show_Days = "Show.Days";
 
+	public static final String Show_Destination_Labels = "Show.Destination.Labels";
+
 	public static final String Highlight_ = "Hi.";
 //	public static final String HighlightScheme = "SchedulerView.HighlightScheme";
 	public static final String Highlight_Riskies = "Hi.RiskyJourneys";

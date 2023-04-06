@@ -582,7 +582,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 
 		Font oldFont = null;
 
-		gc.setForeground(colorManager.getTextColor());
+//		gc.setForeground(colorManager.getTextColor());
 		if (event.showBoldText()) {
 			oldFont = gc.getFont();
 			final FontData[] old = oldFont.getFontData();
@@ -634,7 +634,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			yTextPos = event.getY() - toDrawExtent.y;
 			break;
 		case SWT.CENTER:
-			yTextPos -= (toDrawExtent.y / 2) - 1;
+			yTextPos -= (toDrawExtent.y / 2) + 1;
 			break;
 		case SWT.BOTTOM:
 			yTextPos = event.getBottomY();
