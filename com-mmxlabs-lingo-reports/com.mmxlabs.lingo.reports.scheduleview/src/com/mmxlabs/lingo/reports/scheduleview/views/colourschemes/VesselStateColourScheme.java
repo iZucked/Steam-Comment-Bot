@@ -185,6 +185,9 @@ public class VesselStateColourScheme extends ColourScheme {
 					return ColourPalette.getInstance().getColour(ColourPalette.Black);
 				}
 			}
+			if (event instanceof SlotVisit) {
+				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
+			}
 		}
 
 		return null;
@@ -192,7 +195,6 @@ public class VesselStateColourScheme extends ColourScheme {
 
 	@Override
 	public int getBorderWidth(final Object element) {
-
 		return 1;
 	}
 

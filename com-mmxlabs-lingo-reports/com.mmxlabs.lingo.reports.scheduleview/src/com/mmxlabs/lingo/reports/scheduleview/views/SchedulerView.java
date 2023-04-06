@@ -91,6 +91,7 @@ import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
+import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderComparator;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
@@ -527,6 +528,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			}
 
 		};
+		viewer.getGanttChart().getGanttComposite().setRenderOrderComparator(new DefaultRenderOrderComparator());
 
 		viewer.getGanttChart().getGanttComposite().setMenuAction((menu, event) -> {
 

@@ -136,8 +136,19 @@ public abstract class AbstractPaintManager implements IPaintManager {
 					}
 				}
 			} else {
-				gc.setLineWidth(event.getStatusBorderWidth());
-				gc.drawRectangle(xLoc, y, eventWidth + event.getStatusBorderWidth() - 1, event.getBounds().height + event.getStatusBorderWidth() - 1);
+				final int borderWidth = event.getStatusBorderWidth();
+				if (borderWidth > 0) {
+					int oldAlpha = gc.getAlpha();
+					int cEventAlpha = event.getStatusAlpha();
+					if (alpha) {
+						gc.setAlpha(cEventAlpha);
+					}
+					gc.setLineWidth(event.getStatusBorderWidth());
+					gc.drawRectangle(xLoc, y, eventWidth + event.getStatusBorderWidth() - 1, event.getBounds().height + event.getStatusBorderWidth() - 1);
+					if (alpha) {
+						gc.setAlpha(oldAlpha);
+					}
+				}
 			}
 			gc.setLineWidth(1);
 			gc.setLineStyle(SWT.LINE_SOLID);
@@ -165,10 +176,10 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		if (eventWidth > 1) {
 			if (settings.showGradientEventBars()) {
 				gc.setForeground(gradient);
-				gc.fillGradientRectangle(xLoc + 1, y + 1, eventWidth - 1, settings.getEventHeight() - 1, true);
+				gc.fillGradientRectangle(xLoc , y , eventWidth , settings.getEventHeight(), true);
 				gc.setForeground(colorManager.getEventBorderColor()); // re-set foreground color
 			} else {
-				gc.fillRectangle(xLoc + 1, y + 1, eventWidth - 1, settings.getEventHeight() - 1);
+				gc.fillRectangle(xLoc , y , eventWidth, settings.getEventHeight() );
 			}
 		}
 		// Reset alpha
@@ -468,7 +479,8 @@ public abstract class AbstractPaintManager implements IPaintManager {
 	}
 
 	@Override
-	public void drawPlaqueOnEvent(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent event, GC gc, boolean threeDee, int x, int y, int eventWidth, IPlaqueContentProvider[] plaqueContentProviders, Rectangle bounds) {
+	public void drawPlaqueOnEvent(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent event, GC gc, boolean threeDee, int x, int y, int eventWidth,
+			IPlaqueContentProvider[] plaqueContentProviders, Rectangle bounds) {
 		if (event.isImage()) {
 			return;
 		}
@@ -495,15 +507,15 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			}
 			final Point extent = gc.stringExtent(plaqueContents);
 			final Point unmodified = new Point(extent.x, extent.y);
-			extent.x = extent.x + (2*2) +2;
+			extent.x = extent.x + (2 * 2) + 2;
 
 			if ((middle - extent.x) > x) {
 				gc.setBackground(gradient);
-				gc.fillRectangle(middle - extent.x/ 2, top, extent.x, eventHeight + 4);
+				gc.fillRectangle(middle - extent.x / 2, top, extent.x, eventHeight + 4);
 				gc.setForeground(textColour);
-				gc.drawRectangle(middle - extent.x /2, top, extent.x, eventHeight + 4);
-				
-				yMiddle -= unmodified.y/2;
+				gc.drawRectangle(middle - extent.x / 2, top, extent.x, eventHeight + 4);
+
+				yMiddle -= unmodified.y / 2;
 				gc.drawString(plaqueContents, middle - unmodified.x + (unmodified.x / 2) + 1, yMiddle, true);
 				// Short circuit on first match
 				return;
