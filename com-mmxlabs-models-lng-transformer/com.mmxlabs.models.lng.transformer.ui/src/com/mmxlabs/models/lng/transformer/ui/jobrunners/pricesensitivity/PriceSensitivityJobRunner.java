@@ -59,7 +59,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerPriceCurveSetRunner;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.AbstractJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner.SandboxJob;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJob;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
