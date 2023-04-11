@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
@@ -19,11 +18,11 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 @NonNullByDefault
 public class DMYUtil {
 
-	enum DayMonthOrder {
+	public enum DayMonthOrder {
 		DAY_MONTH, MONTH_DAY
 	}
 
-	enum DayMonthYearOrder {
+	public enum DayMonthYearOrder {
 		DAY_MONTH_YEAR, MONTH_DAY_YEAR, YEAR_MONTH_DAY
 	}
 
