@@ -34,7 +34,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AbstractSequencesOptimiser;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -108,16 +107,16 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 		return lookupManager;
 	}
 
-	public void setLookupManager(ILookupManager stateManager) {
+	public void setLookupManager(final ILookupManager stateManager) {
 		this.lookupManager = stateManager;
 	}
 
-	protected void updateSequencesLookup(@NonNull ISequences rawSequences, @Nullable Collection<IResource> changedResources) {
+	protected void updateSequencesLookup(@NonNull final ISequences rawSequences, @Nullable final Collection<IResource> changedResources) {
 		this.lookupManager.createLookup(rawSequences);
 	}
 
 	@Override
-	public int step(final int percentage, JobExecutor jobExecutor) {
+	public int step(final int percentage, final JobExecutor jobExecutor) {
 		return step(percentage, potentialRawSequences, currentRawSequences, jobExecutor);
 	}
 
@@ -165,7 +164,7 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 				break;
 			}
 		}
-		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty()) {
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && messages != null && !messages.isEmpty()) {
 			messages.stream().forEach(LOG::debug);
 		}
 
