@@ -321,7 +321,7 @@ public class GanttChartViewer extends StructuredViewer {
 							final Color statusBorderColour = getLabelProviderBorderColor(labelProvider, c);
 							if (statusBorderColour != null) {
 								event.setStatusBorderColor(statusBorderColour);
-							} else if (statusColour != null){
+							} else if (statusColour != null) {
 								event.setStatusBorderColor(statusColour);
 							}
 
@@ -329,7 +329,7 @@ public class GanttChartViewer extends StructuredViewer {
 							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
 							event.setSpecialDrawMode(getSpecialDrawMode(labelProvider, c));
-							
+
 							event.setHorizontalTextLocation(SWT.CENTER);
 
 							// Get tooltip from label provider
