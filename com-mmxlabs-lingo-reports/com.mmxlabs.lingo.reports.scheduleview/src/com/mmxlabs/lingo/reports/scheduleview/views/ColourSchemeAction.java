@@ -4,31 +4,22 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.nebula.widgets.ganttchart.plaque.DayAndHoursAsTextContentProvider;
-import org.eclipse.nebula.widgets.ganttchart.plaque.DaysContentProvider;
-import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
+import com.mmxlabs.lingo.reports.scheduleview.views.label.EDaysLabellingChoice;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 class ColourSchemeAction extends SchedulerViewAction {
-
-	public enum ShowDaysOption {
-		OFF, DECIMAL, HOURS_AND_DAYS
-	}
-	private ShowDaysOption selectedShowDaysOption = ShowDaysOption.OFF;
 
 	public ColourSchemeAction(final SchedulerView schedulerView, final EMFScheduleLabelProvider lp, final GanttChartViewer viewer) {
 		super("Label", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
@@ -56,8 +47,10 @@ class ColourSchemeAction extends SchedulerViewAction {
 
 	@Override
 	protected void createMenuItems(final Menu menu) {
+		Action canalAction;
+		Action destinationLabelsAction;
 		{
-			final Action canalAction = new Action("Show canals", IAction.AS_CHECK_BOX) {
+			canalAction = new Action("Show canals", IAction.AS_CHECK_BOX) {
 				@Override
 				public void run() {
 					lp.toggleShowCanals();
@@ -71,7 +64,8 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 		{
-			final Action destinationLabelsAction = new Action("Show destination labels") {
+			destinationLabelsAction = new Action("Show destination labels") {
+
 				@Override
 				public void run() {
 					lp.toggleShowDestinationLabels();
@@ -81,73 +75,42 @@ class ColourSchemeAction extends SchedulerViewAction {
 				}
 			};
 			destinationLabelsAction.setChecked(lp.showDestinationLabels());
+
 			final ActionContributionItem aci = new ActionContributionItem(destinationLabelsAction);
 			aci.fill(menu, -1);
 		}
 		{
 			final Action showDaysOnEventsAction = new DefaultMenuCreatorAction("Show days") {
-				
+
 				@Override
 				protected void populate(Menu menu) {
 					final Action off = new Action("off") {
 						@Override
 						public void run() {
-							final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
-							if (b) {
-								viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(!b);
-								viewer.getGanttChart().getGanttComposite().redraw();
-							}
-							selectedShowDaysOption = ShowDaysOption.OFF;
+							lp.chooseShowDays(null);
+							viewer.getGanttChart().getGanttComposite().redraw();
 						}
 					};
 
 					final Action oneDp = new Action("\"1.5\"") {
 						@Override
 						public void run() {
-							final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
-							if (!b) {
-								final List<@NonNull IPlaqueContentProvider> newContentProviders = new ArrayList<>(2);
-								newContentProviders.add(new DaysContentProvider(1));
-								newContentProviders.add(new DaysContentProvider(0));
-								viewer.getGanttChart().getGanttComposite().replacePlaqueContentProviders(newContentProviders);
-								viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(true);
-								viewer.getGanttChart().getGanttComposite().redraw();
-							} else {
-								final List<@NonNull IPlaqueContentProvider> newContentProviders = new ArrayList<>(2);
-								newContentProviders.add(new DaysContentProvider(1));
-								newContentProviders.add(new DaysContentProvider(0));
-								viewer.getGanttChart().getGanttComposite().replacePlaqueContentProviders(newContentProviders);
-								viewer.getGanttChart().getGanttComposite().redraw();
-							}
-							selectedShowDaysOption = ShowDaysOption.DECIMAL;
+							lp.chooseShowDays(EDaysLabellingChoice.DECIMAL);
+							viewer.getGanttChart().getGanttComposite().redraw();
 						}
 					};
 					final Action daysAndHoursText = new Action("\"1d 12h\"") {
 						@Override
 						public void run() {
-							final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
-							if (!b) {
-								final List<@NonNull IPlaqueContentProvider> newContentProviders = new ArrayList<>(2);
-								newContentProviders.add(new DayAndHoursAsTextContentProvider());
-								newContentProviders.add(new DaysContentProvider(0));
-								viewer.getGanttChart().getGanttComposite().replacePlaqueContentProviders(newContentProviders);
-								viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(true);
-								viewer.getGanttChart().getGanttComposite().redraw();
-							} else {
-								final List<@NonNull IPlaqueContentProvider> newContentProviders = new ArrayList<>(2);
-								newContentProviders.add(new DayAndHoursAsTextContentProvider());
-								newContentProviders.add(new DaysContentProvider(0));
-								viewer.getGanttChart().getGanttComposite().replacePlaqueContentProviders(newContentProviders);
-								viewer.getGanttChart().getGanttComposite().redraw();
-							}
-							selectedShowDaysOption = ShowDaysOption.HOURS_AND_DAYS;
+							lp.chooseShowDays(EDaysLabellingChoice.HOURS_AND_DAYS);
+							viewer.getGanttChart().getGanttComposite().redraw();
 						}
 					};
-					if (selectedShowDaysOption != null) {
-						switch (selectedShowDaysOption) {
-						case OFF:
-							off.setChecked(true);
-							break;
+					final EDaysLabellingChoice choice = lp.getDaysChoice();
+					if (choice == null) {
+						off.setChecked(true);
+					} else {
+						switch (choice) {
 						case DECIMAL:
 							oneDp.setChecked(true);
 							break;
@@ -165,7 +128,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 
 			};
 
-			showDaysOnEventsAction.setChecked(selectedShowDaysOption != null && selectedShowDaysOption != ShowDaysOption.OFF);
+			showDaysOnEventsAction.setChecked(lp.showDays());
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(showDaysOnEventsAction);
 			actionContributionItem.fill(menu, -1);
 		}
@@ -186,4 +149,5 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 	}
+
 }

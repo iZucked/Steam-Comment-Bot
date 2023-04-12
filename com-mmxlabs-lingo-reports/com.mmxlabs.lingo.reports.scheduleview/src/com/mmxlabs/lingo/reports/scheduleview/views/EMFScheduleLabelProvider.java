@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.scheduleview.views;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Highlight_;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
+import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Days;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Destination_Labels;
 
 import java.time.LocalDateTime;
@@ -14,22 +15,39 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.BaseLabelProvider;
+import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
+import org.eclipse.nebula.widgets.ganttchart.label.EEventLabelAlignment;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventTextGenerator;
+import org.eclipse.nebula.widgets.ganttchart.plaque.DayAndHoursAsTextContentProvider;
+import org.eclipse.nebula.widgets.ganttchart.plaque.DaysContentProvider;
+import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMemento;
 
+import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.time.DMYUtil;
+import com.mmxlabs.common.time.DMYUtil.DayMonthOrder;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
+import com.mmxlabs.lingo.reports.scheduleview.views.label.EDaysLabellingChoice;
+import com.mmxlabs.lingo.reports.scheduleview.views.label.EnumBasedLabellingOption;
+import com.mmxlabs.lingo.reports.scheduleview.views.label.ILabellingOption;
+import com.mmxlabs.lingo.reports.scheduleview.views.label.TogglableLabel;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
@@ -47,6 +65,7 @@ import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
+import com.mmxlabs.models.lng.port.util.PortUtil;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
@@ -99,6 +118,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private final List<IScheduleViewColourScheme> highlighters = new ArrayList<>();
 	private final Map<String, IScheduleViewColourScheme> highlightersById = new HashMap<>();
 
+	private Collection<Collection<IEventTextGenerator>> textGenerationStrategies = Collections.emptyList();
+
 	private IScheduleViewColourScheme currentScheme = null;
 
 	private final List<IScheduleViewColourScheme> currentHighlighters = new ArrayList<>();
@@ -107,9 +128,18 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	private final IMemento memento;
 
-	private boolean showCanals = false;
-	private boolean showDestinationLabels = false;
+	private final TogglableLabel showCanals;
+	private final TogglableLabel showDestinationLabels;
+	private final EnumBasedLabellingOption<EDaysLabellingChoice> showDays;
+
+	private final List<ILabellingOption> knownLabels = new ArrayList<>();
+
+	private final Map<ILabellingOption, Action> applyActions = new HashMap<>();
+	// private boolean showDestinationLabels = false;
+
 	private final ScenarioComparisonService selectedScenariosService;
+
+	private List<Map<EEventLabelAlignment, IEventTextGenerator>> alignmentMaps = null;
 
 	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
 	private Image pinImage = null;
@@ -118,9 +148,376 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		this.viewer = viewer;
 		this.memento = memento;
 		this.selectedScenariosService = selectedScenariosService;
-		this.showCanals = memento.getBoolean(Show_Canals);
+		this.showCanals = new TogglableLabel(Show_Canals, memento);
+		this.showDestinationLabels = new TogglableLabel(Show_Destination_Labels, memento);
+		this.showDays = new EnumBasedLabellingOption<>(Show_Days, memento, () -> EDaysLabellingChoice.values());
+		applyActions.put(showCanals, new Action() {
+			@Override
+			public void run() {
+				alignmentMaps = buildCanalAlignmentMaps();
+			}
+		});
+		applyActions.put(showDestinationLabels, new Action() {
+			@Override
+			public void run() {
+				alignmentMaps = buildDestinationLabelAlignmentMaps();
+			}
+		});
+		applyActions.put(showDays, new Action() {
+			public void run() {
+				final EDaysLabellingChoice choice = showDays.getChosenOption();
+				if (choice != null) {
+					alignmentMaps = buildShowDaysLabelAlignmentMaps(choice);
+				} else {
+					alignmentMaps = null;
+				}
+			};
+		});
+		
+		knownLabels.add(showCanals);
+		knownLabels.add(showDestinationLabels);
+		knownLabels.add(showDays);
+
+		final List<ILabellingOption> activeLabels = knownLabels.stream() //
+			.filter(ILabellingOption::isShowing) //
+			.toList();
+		final int numActiveLabels = activeLabels.size();
+		if (numActiveLabels == 1) {
+			applyActions.get(activeLabels.get(0)).run();
+		} else if (numActiveLabels > 1) {
+			// Bad state - reset everything
+			activeLabels.forEach(ILabellingOption::reset);
+		}
+		updateViewerTextGenerationCollection();
 
 		pinImage = CommonImages.getImage(IconPaths.PinnedRow, IconMode.Enabled);
+	}
+
+	private List<Map<EEventLabelAlignment, IEventTextGenerator>> buildShowDaysLabelAlignmentMaps(final @NonNull EDaysLabellingChoice choice) {
+		final List<List<IEventTextGenerator>> alignments = new ArrayList<>();
+		final List<IPlaqueContentProvider> contentProviders; 
+		switch(choice) {
+		case DECIMAL:
+			contentProviders = CollectionsUtil.makeArrayList(new DaysContentProvider(1), new DaysContentProvider(0));
+			break;
+		case HOURS_AND_DAYS:
+			contentProviders = CollectionsUtil.makeArrayList(new DayAndHoursAsTextContentProvider(), new DaysContentProvider(0));
+			break;
+		default:
+			return Collections.emptyList();
+		}
+		for (final IPlaqueContentProvider contentProvider : contentProviders) {
+			final List<IEventTextGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextGenerator() {
+				
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.CENTRE;
+				}
+				
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					return contentProvider.provideContents(event);
+				}
+			});
+			alignments.add(alignment);
+		}
+		return alignments.stream() //
+				.map(l -> l.stream().collect(Collectors.toMap(IEventTextGenerator::getAlignment, Function.identity()))) //
+				.toList();
+	}
+
+	private List<Map<EEventLabelAlignment, IEventTextGenerator>> buildDestinationLabelAlignmentMaps() {
+		final List<List<IEventTextGenerator>> alignments = new ArrayList<>();
+		{
+			final List<IEventTextGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextGenerator() {
+
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.LEFT;
+				}
+
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					final Object object = event.getData();
+					if (object instanceof Journey j) {
+						if (!j.isLaden()) {
+							final Port port = j.getPort();
+							if (port != null) {
+								final String name = PortUtil.getShortOrFullName(port);
+								if (name != null) {
+									return name;
+								}
+							}
+						} else {
+							if (j.getPreviousEvent() instanceof final SlotVisit sv) {
+								final @NonNull StringBuilder sb = new StringBuilder();
+								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
+								if (!firstPart.isBlank()) {
+									sb.append(firstPart);
+									sb.append(" ");
+								}
+								final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM");
+								sb.append("[");
+								sb.append(sv.getStart().format(formatter));
+								sb.append("]");
+								return sb.toString();
+							}
+						}
+					}
+					return "";
+				}
+			});
+			alignment.add(new IEventTextGenerator() {
+
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.RIGHT;
+				}
+
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					final Object object = event.getData();
+					if (object instanceof Journey j) {
+						if (!j.isLaden()) {
+							final Port port = j.getDestination();
+							if (port != null) {
+								final String name = PortUtil.getShortOrFullName(port);
+								if (name != null) {
+									return name;
+								}
+							}
+						} else {
+							Event next = j.getNextEvent();
+							if (next instanceof Idle) {
+								next = next.getNextEvent();
+							}
+							if (next instanceof final SlotVisit sv) {
+								final @NonNull StringBuilder sb = new StringBuilder();
+								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
+								if (!firstPart.isBlank()) {
+									sb.append(firstPart);
+									sb.append(" ");
+								}
+								final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM");
+								sb.append("[");
+								sb.append(sv.getStart().format(formatter));
+								sb.append("]");
+								return sb.toString();
+							}
+						}
+					}
+					return "";
+				}
+			});
+			alignments.add(alignment);
+		}
+		{
+			final List<IEventTextGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextGenerator() {
+
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.LEFT;
+				}
+
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					final Object object = event.getData();
+					if (object instanceof Journey j) {
+						if (!j.isLaden()) {
+							final Port port = j.getPort();
+							if (port != null) {
+								final String name = PortUtil.getShortOrFullName(port);
+								if (name != null) {
+									return name;
+								}
+							}
+						} else {
+							if (j.getPreviousEvent() instanceof final SlotVisit sv) {
+								final @NonNull StringBuilder sb = new StringBuilder();
+								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
+								if (!firstPart.isBlank()) {
+									sb.append(firstPart);
+									sb.append(" ");
+								}
+								final DayMonthOrder order =  DMYUtil.getDayMonthOrder();
+								final String pattern = order == DayMonthOrder.DAY_MONTH ? "d/M" : "M/d";
+								final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+								sb.append("[");
+								sb.append(sv.getStart().format(formatter));
+								sb.append("]");
+								return sb.toString();
+							}
+						}
+					}
+					return "";
+				}
+			});
+			alignment.add(new IEventTextGenerator() {
+
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.RIGHT;
+				}
+
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					final Object object = event.getData();
+					if (object instanceof Journey j) {
+						if (!j.isLaden()) {
+							final Port port = j.getDestination();
+							if (port != null) {
+								final String name = PortUtil.getShortOrFullName(port);
+								if (name != null) {
+									return name;
+								}
+							}
+						} else {
+							Event next = j.getNextEvent();
+							if (next instanceof Idle) {
+								next = next.getNextEvent();
+							}
+							if (next instanceof final SlotVisit sv) {
+								final @NonNull StringBuilder sb = new StringBuilder();
+								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
+								if (!firstPart.isBlank()) {
+									sb.append(firstPart);
+									sb.append(" ");
+								}
+								final DayMonthOrder order =  DMYUtil.getDayMonthOrder();
+								final String pattern = order == DayMonthOrder.DAY_MONTH ? "d/M" : "M/d";
+								final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+								sb.append("[");
+								sb.append(sv.getStart().format(formatter));
+								sb.append("]");
+								return sb.toString();
+							}
+						}
+					}
+					return "";
+				}
+			});
+			alignments.add(alignment);
+		}
+		{
+			final List<IEventTextGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextGenerator() {
+
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.LEFT;
+				}
+
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					final Object object = event.getData();
+					if (object instanceof Journey j) {
+						if (!j.isLaden()) {
+							final Port port = j.getPort();
+							if (port != null) {
+								final String name = PortUtil.getShortOrFullName(port);
+								if (name != null) {
+									return name;
+								}
+							}
+						} else {
+							if (j.getPreviousEvent() instanceof final SlotVisit sv) {
+								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
+								if (!firstPart.isBlank()) {
+									return firstPart;
+								}
+							}
+						}
+					}
+					return "";
+				}
+			});
+			alignment.add(new IEventTextGenerator() {
+
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.RIGHT;
+				}
+
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					final Object object = event.getData();
+					if (object instanceof Journey j) {
+						if (!j.isLaden()) {
+							final Port port = j.getDestination();
+							if (port != null) {
+								final String name = PortUtil.getShortOrFullName(port);
+								if (name != null) {
+									return name;
+								}
+							}
+						} else {
+							Event next = j.getNextEvent();
+							if (next instanceof Idle) {
+								next = next.getNextEvent();
+							}
+							if (next instanceof final SlotVisit sv) {
+								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
+								if (!firstPart.isBlank()) {
+									return firstPart;
+								}
+							}
+						}
+					}
+					return "";
+				}
+			});
+			alignments.add(alignment);
+		}
+		return alignments.stream() //
+				.map(l -> l.stream().collect(Collectors.toMap(IEventTextGenerator::getAlignment, Function.identity()))) //
+				.toList();
+	}
+
+	private List<Map<EEventLabelAlignment, IEventTextGenerator>> buildCanalAlignmentMaps() {
+		final List<List<IEventTextGenerator>> alignments = new ArrayList<>();
+		{
+			final List<IEventTextGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextGenerator() {
+
+				@Override
+				public @NonNull EEventLabelAlignment getAlignment() {
+					return EEventLabelAlignment.CENTRE;
+				}
+
+				@Override
+				public @NonNull String generateText(final @NonNull GanttEvent event) {
+					final Object object = event.getData();
+					if (object instanceof Journey j) {
+						final RouteOption routeOption = j.getRouteOption();
+						if (routeOption != RouteOption.DIRECT) {
+							return PortModelLabeller.getShortName(routeOption);
+						}
+					}
+					return "";
+				}
+			});
+			alignments.add(alignment);
+		}
+		return alignments.stream() //
+				.map(l -> l.stream().collect(Collectors.toMap(IEventTextGenerator::getAlignment, Function.identity()))) //
+				.toList();
+	}
+
+	private static @NonNull String getCpOrPort(final String counterparty, final @NonNull Supplier<Port> portProvider) {
+		if (counterparty == null || counterparty.isBlank()) {
+			final Port port = portProvider.get();
+			if (port != null) {
+				final String name = PortUtil.getShortOrFullName(port);
+				if (name != null) {
+					return name;
+				}
+			}
+			return "";
+		}
+		return counterparty;
 	}
 
 	@Override
@@ -201,7 +598,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 							if (!cp.isBlank()) {
 								sb.append(cp + " ");
 							}
-							sb.append("["+date+"]");
+							sb.append("[" + date + "]");
 						}
 						Event next = j.getNextEvent();
 						if (next instanceof Idle) {
@@ -221,7 +618,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 							if (!cp.isBlank()) {
 								sb.append(cp + " ");
 							}
-							sb.append("["+date+"]");
+							sb.append("[" + date + "]");
 						}
 						text = sb.toString();
 					} else {
@@ -318,27 +715,63 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	public void toggleShowCanals() {
-		showCanals = !showCanals;
-		if (showCanals && showDestinationLabels) {
-			toggleShowDestinationLabels();
+		if (showCanals.isShowing()) {
+			alignmentMaps = null;
 		}
-		memento.putBoolean(Show_Canals, showCanals);
+		showCanals.toggle();
+		if (showCanals.isShowing()) {
+			applyActions.get(showCanals).run();
+		}
+		resetLabelStates(showCanals);
+		updateViewerTextGenerationCollection();
 	}
 
 	public void toggleShowDestinationLabels() {
-		showDestinationLabels = !showDestinationLabels;
-		if (showDestinationLabels && showCanals) {
-			toggleShowCanals();
+		if (showDestinationLabels.isShowing()) {
+			alignmentMaps = null;
 		}
-		memento.putBoolean(Show_Destination_Labels, showDestinationLabels);
+		showDestinationLabels.toggle();
+		if (showDestinationLabels.isShowing()) {
+			applyActions.get(showDestinationLabels).run();
+		}
+		resetLabelStates(showDestinationLabels);
+		updateViewerTextGenerationCollection();
+	}
+
+	public void chooseShowDays(final EDaysLabellingChoice choice) {
+		if (showDays.isShowing()) {
+			alignmentMaps = null;
+		}
+		showDays.choose(choice);
+		if (showDays.isShowing()) {
+			applyActions.get(showDays).run();
+		}
+		resetLabelStates(showDays);
+		updateViewerTextGenerationCollection();
+	}
+
+	private void resetLabelStates() {
+		knownLabels.forEach(ILabellingOption::reset);
+	}
+
+	private void resetLabelStates(final @NonNull ILabellingOption toIgnore) {
+		knownLabels.stream().filter(label -> label != toIgnore).forEach(ILabellingOption::reset);
 	}
 
 	public boolean showCanals() {
-		return showCanals;
+		return showCanals.isShowing();
 	}
 
 	public boolean showDestinationLabels() {
-		return showDestinationLabels;
+		return showDestinationLabels.isShowing();
+	}
+
+	public boolean showDays() {
+		return showDays.isShowing();
+	}
+
+	public EDaysLabellingChoice getDaysChoice() {
+		return showDays.getChosenOption();
 	}
 
 	public void addHighlighter(final String id, final IScheduleViewColourScheme cs) {
@@ -914,5 +1347,30 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		default:
 			return fuel.toString();
 		}
+	}
+
+	public Collection<Collection<IEventTextGenerator>> getTextGenerationStrategies() {
+		return textGenerationStrategies;
+	}
+
+	private void updateViewerTextGenerationCollection() {
+		if (alignmentMaps == null) {
+			viewer.getGanttChart().getGanttComposite().clearTextGenerationCollection();
+		} else {
+			final Collection<Collection<IEventTextGenerator>> strategies = alignmentMaps.stream() //
+					.map(m -> (Collection<IEventTextGenerator>) m.values().stream().toList()) //
+					.toList();
+			viewer.getGanttChart().getGanttComposite().replaceTextGenerationCollection(strategies);
+		}
+	}
+
+	public void setTextGenerationStrategies(@NonNull final Collection<Collection<IEventTextGenerator>> textGenerationStrategies) {
+		this.textGenerationStrategies = textGenerationStrategies.stream() //
+				.map(c -> (Collection<IEventTextGenerator>) c.stream().toList()) //
+				.toList();
+	}
+
+	public void clearTextGenerationStragies() {
+		this.textGenerationStrategies = Collections.emptyList();
 	}
 }
