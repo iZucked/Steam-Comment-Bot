@@ -18,6 +18,7 @@ public class DefaultRenderOrderComparator implements Comparator<GanttEvent> {
 			return 1;
 		} else if (!(o1.getData() instanceof SlotVisit) && o2.getData() instanceof SlotVisit) {
 			return -1;
+		// delay CanalJourneyEvent rendering
 		} else if (o1.getData() instanceof CanalJourneyEvent && o2.getData() instanceof CanalJourneyEvent) {
 			return 0;
 		} else if (o1.getData() instanceof CanalJourneyEvent && !(o2.getData() instanceof CanalJourneyEvent)) {
@@ -25,6 +26,7 @@ public class DefaultRenderOrderComparator implements Comparator<GanttEvent> {
 		} else if (!(o1.getData() instanceof CanalJourneyEvent) && o2.getData() instanceof CanalJourneyEvent) {
 			return -1;
 		}
+		// Indifferent to how remainder is ordered
 		return 0;
 	}
 

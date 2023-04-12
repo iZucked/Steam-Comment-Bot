@@ -382,8 +382,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						}
 					}
 				}
-
-				// Canal events are always selected as well
+				// Canal events are always selected with journeys 
 				final List<Object> additionalElements = l.stream() //
 						.filter(Journey.class::isInstance) //
 						.map(Journey.class::cast) //
@@ -405,6 +404,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 					if (!l.isEmpty() && currentSelectedDataProvider != null && (currentSelectedDataProvider.getSelectedChangeSetRows() != null || !currentSelectedDataProvider.inPinDiffMode())) {
 						for (final GanttEvent ganttEvent : ganttChart.getGanttComposite().getEvents()) {
+							// Render CanalJourneyEvent without change to alpha
 							if (!(ganttEvent.getData() instanceof CanalJourneyEvent)) {
 								ganttEvent.setStatusAlpha(130);
 							} else {
