@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.nebula.widgets.ganttchart.label.IEventTextGenerator;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
 import org.eclipse.nebula.widgets.ganttchart.label.internal.GeneratedEventText;
 import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.swt.SWT;
@@ -583,7 +583,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 	}
 
 	@Override
-	public void drawEventLabel(final GanttComposite composite, final ISettings settings, final GanttEvent event, final GC gc, final Collection<Collection<IEventTextGenerator>> generatorsCollection,
+	public void drawEventLabel(final GanttComposite composite, final ISettings settings, final GanttEvent event, final GC gc, final Collection<Collection<IEventTextPropertiesGenerator>> generatorsCollection,
 			final int x, final int y, final int eventWidth) {
 		if (generatorsCollection == null || generatorsCollection.isEmpty()) {
 			return;
@@ -604,7 +604,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 
 		final int textSpacer = composite.isConnected(event) ? settings.getTextSpacerConnected() : settings.getTextSpacerNonConnected();
 
-		for (final Collection<IEventTextGenerator> textGenerators : generatorsCollection) {
+		for (final Collection<IEventTextPropertiesGenerator> textGenerators : generatorsCollection) {
 			if (checkAndDrawEventLabel(event, gc, textGenerators, textSpacer, x, y, eventWidth)) {
 				break;
 			}
@@ -613,14 +613,14 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		gc.setFont(oldFont);
 	}
 
-	private boolean checkAndDrawEventLabel(final GanttEvent event, final GC gc, final Collection<IEventTextGenerator> textGenerators, final int textSpacer, final int x, final int y,
+	private boolean checkAndDrawEventLabel(final GanttEvent event, final GC gc, final Collection<IEventTextPropertiesGenerator> textGenerators, final int textSpacer, final int x, final int y,
 			final int eventWidth) {
 		if (textGenerators.isEmpty()) {
 			return true;
 		}
 		int betweenLabelSpacing = 5;
 
-		final List<IEventTextGenerator> sortedTextGenerators = new ArrayList<>(textGenerators);
+		final List<IEventTextPropertiesGenerator> sortedTextGenerators = new ArrayList<>(textGenerators);
 		sortedTextGenerators.sort((g1, g2) -> Integer.compare(g1.getAlignment().ordinal(), g2.getAlignment().ordinal()));
 		final List<GeneratedEventText> textContainers = generateEventTextList(sortedTextGenerators, event, gc::stringExtent);
 		if (textContainers.isEmpty()) {
@@ -671,7 +671,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		return true;
 	}
 
-	private List<GeneratedEventText> generateEventTextList(final List<IEventTextGenerator> textGenerators, final GanttEvent event, final Function<String, Point> sizeCalculator) {
+	private List<GeneratedEventText> generateEventTextList(final List<IEventTextPropertiesGenerator> textGenerators, final GanttEvent event, final Function<String, Point> sizeCalculator) {
 		return textGenerators.stream() //
 				.map(g -> {
 					final String text = g.generateText(event);

@@ -49,7 +49,7 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 	    gd3.horizontalSpan = 2;
 		allSection.setLayoutData(gd3);
 	
-		final GridDataFactory labelLayoutData = GridDataFactory.fillDefaults().span(2,1).hint(200,SWT.DEFAULT);
+		final GridDataFactory labelLayoutData = GridDataFactory.fillDefaults().span(3,1).hint(200,SWT.DEFAULT);
 		addDurationFormatPreferences(labelLayoutData);
 		
 	    Label separator1 = new Label(getFieldEditorParent(), SWT.HORIZONTAL | SWT.SEPARATOR);
@@ -65,6 +65,7 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 		scheduleSection.setLayoutData(gd2);
 		
 		addLeewayDaysPreferences(labelLayoutData);
+		addScheduleChartDaysFormatOverride();
 		
 	    Label separator2 = new Label(getFieldEditorParent(), SWT.HORIZONTAL | SWT.SEPARATOR);
 	    separator2.setLayoutData(gd);
@@ -89,6 +90,14 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 		leeway.getTextControl(getFieldEditorParent()).setToolTipText(tooltip);
 		leeway.getLabelControl(getFieldEditorParent()).setToolTipText(tooltip);
 		addField(leeway);
+	}
+
+	private void addScheduleChartDaysFormatOverride() {
+		final String[][] durationValues = new String[][] { //
+			{ "Days and  hours (1:12)", Formatters.DurationMode.DAYS_HOURS_COLON.name() }, //
+			{ "Days and hours (1d 12h)", Formatters.DurationMode.DAYS_HOURS_HUMAN.name() }, //
+			{ "Days to 1 d.p. (1.5)", Formatters.DurationMode.DECIMAL.name() } };
+		addField(new ComboFieldEditor(PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT, "&Schedule chart number of days format", durationValues, getFieldEditorParent()));
 	}
 
 	private void addDurationFormatPreferences(final GridDataFactory labelLayoutData) {

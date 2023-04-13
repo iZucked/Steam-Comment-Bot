@@ -21,12 +21,10 @@ public final class Formatters {
 	public static final ICellRenderer namedObjectFormatter = new BaseFormatter() {
 		@Override
 		public @Nullable String render(final Object object) {
-			if (object instanceof RouteOption) {
-				RouteOption routeOption = (RouteOption) object;
+			if (object instanceof @NonNull RouteOption routeOption) {
 				return PortModelLabeller.getName(routeOption);
 			}
-			if (object instanceof NamedObject) {
-				final NamedObject namedObject = (NamedObject) object;
+			if (object instanceof NamedObject namedObject) {
 				return namedObject.getName();
 			}
 			return super.render(object);
@@ -55,7 +53,7 @@ public final class Formatters {
 		durationMode = mode;
 	}
 
-	public static @NonNull String formatAsDays(final int hours) {
+	public static @NonNull String formatAsDays(final long hours) {
 		return formatAsDays(durationMode, hours);
 	}
 

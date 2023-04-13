@@ -29,27 +29,25 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
+import org.eclipse.nebula.widgets.ganttchart.label.AsDecimalGenerator;
 import org.eclipse.nebula.widgets.ganttchart.label.EEventLabelAlignment;
-import org.eclipse.nebula.widgets.ganttchart.label.IEventTextGenerator;
-import org.eclipse.nebula.widgets.ganttchart.plaque.DayAndHoursAsTextContentProvider;
-import org.eclipse.nebula.widgets.ganttchart.plaque.DaysContentProvider;
-import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
+import org.eclipse.nebula.widgets.ganttchart.label.FromHoursGenerator;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
+import org.eclipse.nebula.widgets.ganttchart.label.IFromEventTextGenerator;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMemento;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.time.DMYUtil;
 import com.mmxlabs.common.time.DMYUtil.DayMonthOrder;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
-import com.mmxlabs.lingo.reports.scheduleview.views.label.EDaysLabellingChoice;
-import com.mmxlabs.lingo.reports.scheduleview.views.label.EnumBasedLabellingOption;
 import com.mmxlabs.lingo.reports.scheduleview.views.label.ILabellingOption;
 import com.mmxlabs.lingo.reports.scheduleview.views.label.TogglableLabel;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.formatters.ScheduleChartFormatters;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -118,7 +116,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private final List<IScheduleViewColourScheme> highlighters = new ArrayList<>();
 	private final Map<String, IScheduleViewColourScheme> highlightersById = new HashMap<>();
 
-	private Collection<Collection<IEventTextGenerator>> textGenerationStrategies = Collections.emptyList();
+	private Collection<Collection<IEventTextPropertiesGenerator>> textGenerationStrategies = Collections.emptyList();
 
 	private IScheduleViewColourScheme currentScheme = null;
 
@@ -130,16 +128,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	private final TogglableLabel showCanals;
 	private final TogglableLabel showDestinationLabels;
-	private final EnumBasedLabellingOption<EDaysLabellingChoice> showDays;
+	private final TogglableLabel showDays;
 
 	private final List<ILabellingOption> knownLabels = new ArrayList<>();
 
 	private final Map<ILabellingOption, Action> applyActions = new HashMap<>();
-	// private boolean showDestinationLabels = false;
 
 	private final ScenarioComparisonService selectedScenariosService;
 
-	private List<Map<EEventLabelAlignment, IEventTextGenerator>> alignmentMaps = null;
+	private List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> alignmentMaps = null;
 
 	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
 	private Image pinImage = null;
@@ -150,7 +147,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		this.selectedScenariosService = selectedScenariosService;
 		this.showCanals = new TogglableLabel(Show_Canals, memento);
 		this.showDestinationLabels = new TogglableLabel(Show_Destination_Labels, memento);
-		this.showDays = new EnumBasedLabellingOption<>(Show_Days, memento, () -> EDaysLabellingChoice.values());
+		this.showDays = new TogglableLabel(Show_Days, memento);
 		applyActions.put(showCanals, new Action() {
 			@Override
 			public void run() {
@@ -164,14 +161,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			}
 		});
 		applyActions.put(showDays, new Action() {
+			@Override
 			public void run() {
-				final EDaysLabellingChoice choice = showDays.getChosenOption();
-				if (choice != null) {
-					alignmentMaps = buildShowDaysLabelAlignmentMaps(choice);
-				} else {
-					alignmentMaps = null;
-				}
-			};
+				alignmentMaps = buildShowDaysLabelAlignmentMaps();
+			}
 		});
 		
 		knownLabels.add(showCanals);
@@ -193,22 +186,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		pinImage = CommonImages.getImage(IconPaths.PinnedRow, IconMode.Enabled);
 	}
 
-	private List<Map<EEventLabelAlignment, IEventTextGenerator>> buildShowDaysLabelAlignmentMaps(final @NonNull EDaysLabellingChoice choice) {
-		final List<List<IEventTextGenerator>> alignments = new ArrayList<>();
-		final List<IPlaqueContentProvider> contentProviders; 
-		switch(choice) {
-		case DECIMAL:
-			contentProviders = CollectionsUtil.makeArrayList(new DaysContentProvider(1), new DaysContentProvider(0));
-			break;
-		case HOURS_AND_DAYS:
-			contentProviders = CollectionsUtil.makeArrayList(new DayAndHoursAsTextContentProvider(), new DaysContentProvider(0));
-			break;
-		default:
-			return Collections.emptyList();
-		}
-		for (final IPlaqueContentProvider contentProvider : contentProviders) {
-			final List<IEventTextGenerator> alignment = new ArrayList<>();
-			alignment.add(new IEventTextGenerator() {
+	private List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> buildShowDaysLabelAlignmentMaps() {
+		final List<List<IEventTextPropertiesGenerator>> alignments = new ArrayList<>();
+		final List<IFromEventTextGenerator> textGenerators = new ArrayList<>(2);
+		textGenerators.add(new FromHoursGenerator(ScheduleChartFormatters::formatAsDays));
+		textGenerators.add(new AsDecimalGenerator(0));
+		for (final IFromEventTextGenerator textGenerator : textGenerators) {
+			final List<IEventTextPropertiesGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextPropertiesGenerator() {
 				
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -217,21 +202,21 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				
 				@Override
 				public @NonNull String generateText(final @NonNull GanttEvent event) {
-					return contentProvider.provideContents(event);
+					return textGenerator.generateText(event);
 				}
 			});
 			alignments.add(alignment);
 		}
 		return alignments.stream() //
-				.map(l -> l.stream().collect(Collectors.toMap(IEventTextGenerator::getAlignment, Function.identity()))) //
+				.map(l -> l.stream().collect(Collectors.toMap(IEventTextPropertiesGenerator::getAlignment, Function.identity()))) //
 				.toList();
 	}
 
-	private List<Map<EEventLabelAlignment, IEventTextGenerator>> buildDestinationLabelAlignmentMaps() {
-		final List<List<IEventTextGenerator>> alignments = new ArrayList<>();
+	private List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> buildDestinationLabelAlignmentMaps() {
+		final List<List<IEventTextPropertiesGenerator>> alignments = new ArrayList<>();
 		{
-			final List<IEventTextGenerator> alignment = new ArrayList<>();
-			alignment.add(new IEventTextGenerator() {
+			final List<IEventTextPropertiesGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -269,7 +254,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					return "";
 				}
 			});
-			alignment.add(new IEventTextGenerator() {
+			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -314,8 +299,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			alignments.add(alignment);
 		}
 		{
-			final List<IEventTextGenerator> alignment = new ArrayList<>();
-			alignment.add(new IEventTextGenerator() {
+			final List<IEventTextPropertiesGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -355,7 +340,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					return "";
 				}
 			});
-			alignment.add(new IEventTextGenerator() {
+			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -402,8 +387,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			alignments.add(alignment);
 		}
 		{
-			final List<IEventTextGenerator> alignment = new ArrayList<>();
-			alignment.add(new IEventTextGenerator() {
+			final List<IEventTextPropertiesGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -434,7 +419,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					return "";
 				}
 			});
-			alignment.add(new IEventTextGenerator() {
+			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -472,15 +457,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			alignments.add(alignment);
 		}
 		return alignments.stream() //
-				.map(l -> l.stream().collect(Collectors.toMap(IEventTextGenerator::getAlignment, Function.identity()))) //
+				.map(l -> l.stream().collect(Collectors.toMap(IEventTextPropertiesGenerator::getAlignment, Function.identity()))) //
 				.toList();
 	}
 
-	private List<Map<EEventLabelAlignment, IEventTextGenerator>> buildCanalAlignmentMaps() {
-		final List<List<IEventTextGenerator>> alignments = new ArrayList<>();
+	private List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> buildCanalAlignmentMaps() {
+		final List<List<IEventTextPropertiesGenerator>> alignments = new ArrayList<>();
 		{
-			final List<IEventTextGenerator> alignment = new ArrayList<>();
-			alignment.add(new IEventTextGenerator() {
+			final List<IEventTextPropertiesGenerator> alignment = new ArrayList<>();
+			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
 				public @NonNull EEventLabelAlignment getAlignment() {
@@ -502,7 +487,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			alignments.add(alignment);
 		}
 		return alignments.stream() //
-				.map(l -> l.stream().collect(Collectors.toMap(IEventTextGenerator::getAlignment, Function.identity()))) //
+				.map(l -> l.stream().collect(Collectors.toMap(IEventTextPropertiesGenerator::getAlignment, Function.identity()))) //
 				.toList();
 	}
 
@@ -714,44 +699,28 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 	}
 
-	public void toggleShowCanals() {
-		if (showCanals.isShowing()) {
+	private void toggleTogglable(final @NonNull TogglableLabel togglableLabel) {
+		if (togglableLabel.isShowing()) {
 			alignmentMaps = null;
 		}
-		showCanals.toggle();
-		if (showCanals.isShowing()) {
-			applyActions.get(showCanals).run();
+		togglableLabel.toggle();
+		if (togglableLabel.isShowing()) {
+			applyActions.get(togglableLabel).run();
 		}
-		resetLabelStates(showCanals);
+		resetLabelStates(togglableLabel);
 		updateViewerTextGenerationCollection();
+	}
+
+	public void toggleShowCanals() {
+		toggleTogglable(showCanals);
 	}
 
 	public void toggleShowDestinationLabels() {
-		if (showDestinationLabels.isShowing()) {
-			alignmentMaps = null;
-		}
-		showDestinationLabels.toggle();
-		if (showDestinationLabels.isShowing()) {
-			applyActions.get(showDestinationLabels).run();
-		}
-		resetLabelStates(showDestinationLabels);
-		updateViewerTextGenerationCollection();
+		toggleTogglable(showDestinationLabels);
 	}
 
-	public void chooseShowDays(final EDaysLabellingChoice choice) {
-		if (showDays.isShowing()) {
-			alignmentMaps = null;
-		}
-		showDays.choose(choice);
-		if (showDays.isShowing()) {
-			applyActions.get(showDays).run();
-		}
-		resetLabelStates(showDays);
-		updateViewerTextGenerationCollection();
-	}
-
-	private void resetLabelStates() {
-		knownLabels.forEach(ILabellingOption::reset);
+	public void toggleShowDays() {
+		toggleTogglable(showDays);
 	}
 
 	private void resetLabelStates(final @NonNull ILabellingOption toIgnore) {
@@ -768,10 +737,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	public boolean showDays() {
 		return showDays.isShowing();
-	}
-
-	public EDaysLabellingChoice getDaysChoice() {
-		return showDays.getChosenOption();
 	}
 
 	public void addHighlighter(final String id, final IScheduleViewColourScheme cs) {
@@ -1349,7 +1314,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 	}
 
-	public Collection<Collection<IEventTextGenerator>> getTextGenerationStrategies() {
+	public Collection<Collection<IEventTextPropertiesGenerator>> getTextGenerationStrategies() {
 		return textGenerationStrategies;
 	}
 
@@ -1357,16 +1322,16 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (alignmentMaps == null) {
 			viewer.getGanttChart().getGanttComposite().clearTextGenerationCollection();
 		} else {
-			final Collection<Collection<IEventTextGenerator>> strategies = alignmentMaps.stream() //
-					.map(m -> (Collection<IEventTextGenerator>) m.values().stream().toList()) //
+			final Collection<Collection<IEventTextPropertiesGenerator>> strategies = alignmentMaps.stream() //
+					.map(m -> (Collection<IEventTextPropertiesGenerator>) m.values().stream().toList()) //
 					.toList();
 			viewer.getGanttChart().getGanttComposite().replaceTextGenerationCollection(strategies);
 		}
 	}
 
-	public void setTextGenerationStrategies(@NonNull final Collection<Collection<IEventTextGenerator>> textGenerationStrategies) {
+	public void setTextGenerationStrategies(@NonNull final Collection<Collection<IEventTextPropertiesGenerator>> textGenerationStrategies) {
 		this.textGenerationStrategies = textGenerationStrategies.stream() //
-				.map(c -> (Collection<IEventTextGenerator>) c.stream().toList()) //
+				.map(c -> (Collection<IEventTextPropertiesGenerator>) c.stream().toList()) //
 				.toList();
 	}
 

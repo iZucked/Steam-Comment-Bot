@@ -23,6 +23,7 @@ import org.osgi.framework.BundleContext;
 
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
+import com.mmxlabs.lingo.reports.views.formatters.ScheduleChartFormatters;
 import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
@@ -186,6 +187,8 @@ public final class Activator extends EMFPlugin {
 							Formatters.setDurationMode(m);
 						}
 					}
+				} else if (PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT.equals(property)) {
+					updateNumDaysFormat(getPreferenceStore().getString(property));
 				}
 			};
 			getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
@@ -196,6 +199,12 @@ public final class Activator extends EMFPlugin {
 					Formatters.setDurationMode(m);
 				}
 			}
+			updateNumDaysFormat(getPreferenceStore().getString(PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT));
+		}
+
+		private void updateNumDaysFormat(final String value) {
+			final Formatters.DurationMode mode = value == IPreferenceStore.STRING_DEFAULT_DEFAULT || value.isBlank() ? null : Formatters.DurationMode.valueOf(value);
+			ScheduleChartFormatters.setDurationMode(mode);
 		}
 
 		/**

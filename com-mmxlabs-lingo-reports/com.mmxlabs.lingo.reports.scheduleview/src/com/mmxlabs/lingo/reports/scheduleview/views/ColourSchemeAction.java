@@ -9,12 +9,11 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
-import com.mmxlabs.lingo.reports.scheduleview.views.label.EDaysLabellingChoice;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -50,7 +49,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 		Action canalAction;
 		Action destinationLabelsAction;
 		{
-			canalAction = new Action("Show canals", IAction.AS_CHECK_BOX) {
+			canalAction = new Action("Canals", IAction.AS_CHECK_BOX) {
 				@Override
 				public void run() {
 					lp.toggleShowCanals();
@@ -64,7 +63,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 		{
-			destinationLabelsAction = new Action("Show destination labels") {
+			destinationLabelsAction = new Action("Cargoes", IAction.AS_CHECK_BOX) {
 
 				@Override
 				public void run() {
@@ -80,60 +79,25 @@ class ColourSchemeAction extends SchedulerViewAction {
 			aci.fill(menu, -1);
 		}
 		{
-			final Action showDaysOnEventsAction = new DefaultMenuCreatorAction("Show days") {
-
+			final Action showDaysOnEventsAction = new Action("Days", IAction.AS_CHECK_BOX) {
 				@Override
-				protected void populate(Menu menu) {
-					final Action off = new Action("off") {
-						@Override
-						public void run() {
-							lp.chooseShowDays(null);
-							viewer.getGanttChart().getGanttComposite().redraw();
-						}
-					};
-
-					final Action oneDp = new Action("\"1.5\"") {
-						@Override
-						public void run() {
-							lp.chooseShowDays(EDaysLabellingChoice.DECIMAL);
-							viewer.getGanttChart().getGanttComposite().redraw();
-						}
-					};
-					final Action daysAndHoursText = new Action("\"1d 12h\"") {
-						@Override
-						public void run() {
-							lp.chooseShowDays(EDaysLabellingChoice.HOURS_AND_DAYS);
-							viewer.getGanttChart().getGanttComposite().redraw();
-						}
-					};
-					final EDaysLabellingChoice choice = lp.getDaysChoice();
-					if (choice == null) {
-						off.setChecked(true);
-					} else {
-						switch (choice) {
-						case DECIMAL:
-							oneDp.setChecked(true);
-							break;
-						case HOURS_AND_DAYS:
-							daysAndHoursText.setChecked(true);
-							break;
-						default:
-							break;
-						}
-					}
-					addActionToMenu(off, menu);
-					addActionToMenu(oneDp, menu);
-					addActionToMenu(daysAndHoursText, menu);
+				public void run() {
+					lp.toggleShowDays();
+					setChecked(lp.showDays());
+					viewer.setInput(viewer.getInput());
+					schedulerView.redraw();
 				}
-
 			};
-
 			showDaysOnEventsAction.setChecked(lp.showDays());
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(showDaysOnEventsAction);
 			actionContributionItem.fill(menu, -1);
 		}
 		{
-			final Action toggleShowNominalsByDefaultAction = new Action("Show nominals", SWT.CHECK) {
+			final Separator separator = new Separator();
+			separator.fill(menu, -1);
+		}
+		{
+			final Action toggleShowNominalsByDefaultAction = new Action("Nominals", SWT.CHECK) {
 				@Override
 				public void run() {
 					// TODO: Tidy all this state up.

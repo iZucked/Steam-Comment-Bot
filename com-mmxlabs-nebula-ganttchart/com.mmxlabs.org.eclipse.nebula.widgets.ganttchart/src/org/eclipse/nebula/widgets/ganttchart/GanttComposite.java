@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
-import org.eclipse.nebula.widgets.ganttchart.label.IEventTextGenerator;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
 import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
@@ -326,7 +326,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	private IPlaqueContentProvider[] plaqueContentProviders;
 
-	private Collection<Collection<IEventTextGenerator>> textGeneratorCollection = null;
+	private Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection = null;
 
 	private Comparator<GanttEvent> eventRenderOrderComparator;
 
@@ -9119,7 +9119,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		this.eventRenderOrderComparator = comparator;
 	}
 
-	public void replaceTextGenerationCollection(final Collection<Collection<IEventTextGenerator>> textGeneratorCollection) {
+	public void replaceTextGenerationCollection(final Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection) {
 		this.textGeneratorCollection = textGeneratorCollection;
 	}
 

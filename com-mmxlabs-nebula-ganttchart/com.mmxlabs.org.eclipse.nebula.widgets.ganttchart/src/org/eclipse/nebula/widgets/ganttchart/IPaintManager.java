@@ -6,7 +6,7 @@ package org.eclipse.nebula.widgets.ganttchart;
 
 import java.util.Collection;
 
-import org.eclipse.nebula.widgets.ganttchart.label.IEventTextGenerator;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
 import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -220,7 +220,7 @@ public interface IPaintManager {
 	void drawEventString(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, String toDraw, boolean threeDee, int x, int y, int eventWidth,
 			Rectangle bounds);
 
-	void drawEventLabel(GanttComposite composite, ISettings settings, GanttEvent event, GC gc, Collection<Collection<IEventTextGenerator>> generatorsCollection, int x, int y, int eventWidth);
+	void drawEventLabel(GanttComposite composite, ISettings settings, GanttEvent event, GC gc, Collection<Collection<IEventTextPropertiesGenerator>> generatorsCollection, int x, int y, int eventWidth);
 
 	/**
 	 * Draws one scope.
