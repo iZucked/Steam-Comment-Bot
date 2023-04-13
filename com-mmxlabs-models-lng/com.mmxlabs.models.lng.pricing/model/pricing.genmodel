@@ -175,6 +175,8 @@
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//CommodityCurve">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CommodityCurve/marketIndex"/>
+      <genFeatures createChild="false" propertyDescription="Physical cargo's exposure adjustment. Shifts exposure by entered number of months forward."
+          ecoreFeature="ecore:EAttribute pricing.ecore#//CommodityCurve/adjustment"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//CharterCurve"/>
     <genClasses ecoreClass="pricing.ecore#//BunkerFuelCurve"/>
@@ -212,11 +214,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//HolidayCalendar/description"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//SettleStrategy">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/dayOfTheMonth"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/lastDayOfTheMonth"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriod"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriodUnit"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settleStartMonthsPrior"/>
+      <genFeatures createChild="false" propertyDescription="Day of the month" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/dayOfTheMonth"/>
+      <genFeatures createChild="false" propertyDescription="Last day" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/lastDayOfTheMonth"/>
+      <genFeatures createChild="false" propertyDescription="Settle period" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriod"/>
+      <genFeatures createChild="false" propertyDescription="Settle period unit" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriodUnit"/>
+      <genFeatures createChild="false" propertyDescription="Start settling months prior"
+          ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settleStartMonthsPrior"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PricingBasis"/>
   </genPackages>

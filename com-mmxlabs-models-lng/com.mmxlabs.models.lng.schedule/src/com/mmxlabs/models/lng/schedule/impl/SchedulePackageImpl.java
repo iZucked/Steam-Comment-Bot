@@ -2520,6 +2520,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getExposureDetail_LocalDate() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterContractFeeDetails() {
 		return charterContractFeeDetailsEClass;
 	}
@@ -3617,6 +3627,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__VOLUME_UNIT);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__CURRENCY_UNIT);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__DEAL_TYPE);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__LOCAL_DATE);
 
 		matchingContractDetailsEClass = createEClass(MATCHING_CONTRACT_DETAILS);
 		createEAttribute(matchingContractDetailsEClass, MATCHING_CONTRACT_DETAILS__MATCHED_PORT);
@@ -4078,6 +4089,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getExposureDetail_VolumeUnit(), ecorePackage.getEString(), "volumeUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_DealType(), theTypesPackage.getDealType(), "dealType", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_LocalDate(), theDateTimePackage.getLocalDate(), "localDate", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(matchingContractDetailsEClass, MatchingContractDetails.class, "MatchingContractDetails", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMatchingContractDetails_MatchedPort(), ecorePackage.getEString(), "matchedPort", "", 1, 1, MatchingContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

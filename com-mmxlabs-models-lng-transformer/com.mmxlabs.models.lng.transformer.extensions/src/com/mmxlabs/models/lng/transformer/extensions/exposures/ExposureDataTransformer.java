@@ -127,7 +127,7 @@ public class ExposureDataTransformer implements ISlotTransformer {
 					}
 					pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
 							.forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-									idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
+									idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
 					pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null)//
 							.forEach(idx -> lookupData.currencyList.add(idx.getName().toLowerCase()));
 					pricingModel.getConversionFactors().forEach(f -> lookupData.conversionMap.put(//

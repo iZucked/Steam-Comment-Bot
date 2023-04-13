@@ -160,10 +160,12 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 	private PaperDealAllocation allocatePaperDeal(final PaperDeal paperDeal, final List<BasicPaperDealAllocationEntry> paperDealAllocations) {
 		final PaperDealAllocation allocation = ScheduleFactory.eINSTANCE.createPaperDealAllocation();
 		allocation.setPaperDeal(paperDeal);
+		final YearMonth contractMonth = paperDeal.getPricingMonth();
 
 		for (final BasicPaperDealAllocationEntry optiEntry : paperDealAllocations) {
 			final PaperDealAllocationEntry entry = ScheduleFactory.eINSTANCE.createPaperDealAllocationEntry();
 			entry.setDate(optiEntry.getDate());
+			//entry.setDate(contractMonth.atDay(1));
 			entry.setPrice(OptimiserUnitConvertor.convertToExternalPrice(optiEntry.getPrice()));
 			entry.setQuantity(OptimiserUnitConvertor.convertToExternalVolume(optiEntry.getQuantity()));
 			entry.setValue(OptimiserUnitConvertor.convertToExternalVolume(optiEntry.getValue()));
@@ -181,7 +183,9 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					newDetail.setNativeValue(volumeValueNative);
 					newDetail.setVolumeUnit(record.getVolumeUnit());
 					newDetail.setIndexName(record.getIndexName());
-					newDetail.setDate(YearMonth.from(record.getTime()));
+					//newDetail.setDate(YearMonth.from(record.getTime()));
+					newDetail.setDate(contractMonth);
+					newDetail.setLocalDate(optiEntry.getDate());
 					newDetail.setUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(record.getUnitPrice()));
 					newDetail.setCurrencyUnit(record.getCurrencyUnit());
 
