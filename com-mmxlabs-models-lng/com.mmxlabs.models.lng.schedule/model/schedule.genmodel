@@ -286,6 +286,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/volumeUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/currencyUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/dealType"/>
+      <genFeatures createChild="false" propertyDescription="Date of the exposure"
+          ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/localDate"/>
     </genClasses>
     <genClasses image="false" ecoreClass="schedule.ecore#//MatchingContractDetails">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//MatchingContractDetails/matchedPort"/>

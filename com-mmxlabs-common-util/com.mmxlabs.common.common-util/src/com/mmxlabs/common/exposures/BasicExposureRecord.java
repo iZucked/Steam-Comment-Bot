@@ -18,7 +18,14 @@ public class BasicExposureRecord {
 	private String indexName;
 	private String volumeUnit;
 	private String currencyUnit;
+	private int adjustment;
 	
+	public int getAdjustment() {
+		return adjustment;
+	}
+	public void setAdjustment(int adjustment) {
+		this.adjustment = adjustment;
+	}
 	public String getPortSlotName() {
 		return portSlotName;
 	}

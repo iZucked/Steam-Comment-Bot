@@ -112,7 +112,8 @@ public class ExposuresExporterExtension implements IExporterExtension {
 			newDetail.setNativeValue(volumeValueNative);
 			newDetail.setVolumeUnit(record.getVolumeUnit());
 			newDetail.setIndexName(record.getIndexName());
-			newDetail.setDate(YearMonth.from(record.getTime()));
+			newDetail.setDate(YearMonth.from(record.getTime().minusMonths(record.getAdjustment())));
+			newDetail.setLocalDate(record.getTime().minusMonths(record.getAdjustment()));
 			newDetail.setUnitPrice(unitPrice);
 			newDetail.setCurrencyUnit(record.getCurrencyUnit());
 
