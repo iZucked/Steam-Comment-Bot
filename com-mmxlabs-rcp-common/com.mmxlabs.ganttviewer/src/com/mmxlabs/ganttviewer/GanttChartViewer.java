@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -317,6 +318,10 @@ public class GanttChartViewer extends StructuredViewer {
 							if (statusColour != null) {
 								event.setStatusColor(statusColour);
 							}
+							final Color statusForegroundColour = getLabelProviderForegroundColour(labelProvider, c);
+							if (statusForegroundColour != null) {
+								event.setStatusForegroundColour(statusForegroundColour);
+							}
 
 							final Color statusBorderColour = getLabelProviderBorderColor(labelProvider, c);
 							if (statusBorderColour != null) {
@@ -381,10 +386,10 @@ public class GanttChartViewer extends StructuredViewer {
 				}
 				if (contentProvider instanceof IGanttChartContentProvider cp) {
 
-					for (final Object c : eventMap.keySet()) {
-						final Object elementDependency = cp.getElementDependency(c);
+					for (final Entry<Object, GanttEvent> entry : eventMap.entrySet()) {
+						final Object elementDependency = cp.getElementDependency(entry.getKey());
 						if (elementDependency != null) {
-							ganttChart.addDependency(eventMap.get(c), eventMap.get(elementDependency));
+							ganttChart.addDependency(entry.getValue(), eventMap.get(elementDependency));
 						}
 					}
 				}
@@ -398,15 +403,22 @@ public class GanttChartViewer extends StructuredViewer {
 	}
 
 	protected String getGanttGroup(final IContentProvider provider, final Object c) {
-		if (provider instanceof IGanttChartContentProvider) {
-			return ((IGanttChartContentProvider) provider).getGroupIdentifier(c);
+		if (provider instanceof IGanttChartContentProvider ganttChartContentProvider) {
+			return ganttChartContentProvider.getGroupIdentifier(c);
+		}
+		return null;
+	}
+
+	public Color getLabelProviderForegroundColour(final ILabelProvider labelProvider, final Object c) {
+		if (labelProvider instanceof IColorProvider colourProvider) {
+			return colourProvider.getForeground(c);
 		}
 		return null;
 	}
 
 	public Color getLabelProviderColor(final ILabelProvider labelProvider, final Object c) {
-		if (labelProvider instanceof IColorProvider) {
-			return ((IColorProvider) labelProvider).getBackground(c);
+		if (labelProvider instanceof IColorProvider colourProvider) {
+			return colourProvider.getBackground(c);
 		}
 		return null;
 	}
@@ -419,22 +431,22 @@ public class GanttChartViewer extends StructuredViewer {
 	}
 
 	public Color getLabelProviderBorderColor(final ILabelProvider labelProvider, final Object c) {
-		if (labelProvider instanceof IGanttChartColourProvider) {
-			return ((IGanttChartColourProvider) labelProvider).getBorderColour(c);
+		if (labelProvider instanceof IGanttChartColourProvider colourProvider) {
+			return colourProvider.getBorderColour(c);
 		}
 		return null;
 	}
 
 	protected int getLabelProviderBorderWidth(final ILabelProvider labelProvider, final Object c) {
-		if (labelProvider instanceof IGanttChartColourProvider) {
-			return ((IGanttChartColourProvider) labelProvider).getBorderWidth(c);
+		if (labelProvider instanceof IGanttChartColourProvider colourProvider) {
+			return colourProvider.getBorderWidth(c);
 		}
 		return 1;
 	}
 
 	protected int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {
-		if (labelProvider instanceof IGanttChartColourProvider) {
-			return ((IGanttChartColourProvider) labelProvider).getAlpha(c);
+		if (labelProvider instanceof IGanttChartColourProvider colourProvider) {
+			return colourProvider.getAlpha(c);
 		}
 		return 255;
 	}

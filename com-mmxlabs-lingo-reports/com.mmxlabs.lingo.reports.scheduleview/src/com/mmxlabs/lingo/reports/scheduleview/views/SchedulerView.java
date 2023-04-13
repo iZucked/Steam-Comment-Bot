@@ -181,8 +181,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	/**
-	 * Basic colour only items. Other are rendered directly once the ganttchart has
-	 * been created
+	 * Basic colour only items. Other are rendered directly once the ganttchart has been created
 	 */
 	private static final List<ILegendItem> basiclegendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
@@ -274,7 +273,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							selectedObjects.add(obj);
 						}
 
-//						selectedObjects.add(obj);
+						// selectedObjects.add(obj);
 					}
 
 				}
@@ -630,9 +629,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 								return Collections.singletonList(ee.getSequence().getVesselCharter());
 							}
 						}
-						
+
 						return Collections.emptyList();
-						
+
 					};
 
 					for (final Object event : result) {
@@ -1298,8 +1297,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Helper method to expand cargo selections to include the whole set of events
-	 * representing the cargo
+	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
 	 * 
 	 * @param selectedObjects
 	 * @return
@@ -1334,8 +1332,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to
-	 * reset pin mode data
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
 	 * 
 	 */
 	private void clearPinModeData() {
@@ -1478,6 +1475,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				ge.setSpecialDrawMode(viewer.getSpecialDrawMode((ILabelProvider) viewer.getLabelProvider(), e));
 				ge.setStatusBorderColor(viewer.getLabelProviderBorderColor((ILabelProvider) viewer.getLabelProvider(), e));
 				ge.setStatusColor(viewer.getLabelProviderColor((ILabelProvider) viewer.getLabelProvider(), e));
+				ge.setStatusForegroundColour(viewer.getLabelProviderForegroundColour((ILabelProvider) viewer.getLabelProvider(), e));
 				l2.add(ge);
 			}
 
@@ -1507,6 +1505,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		ge.setSpecialDrawMode(viewer.getSpecialDrawMode((ILabelProvider) viewer.getLabelProvider(), object));
 		ge.setStatusBorderColor(viewer.getLabelProviderBorderColor((ILabelProvider) viewer.getLabelProvider(), object));
 		ge.setStatusColor(viewer.getLabelProviderColor((ILabelProvider) viewer.getLabelProvider(), object));
+		ge.setStatusForegroundColour(viewer.getLabelProviderForegroundColour((ILabelProvider) viewer.getLabelProvider(), object));
 
 		return new ILegendItem() {
 

@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
 import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
@@ -324,6 +325,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	private ILegendProvider legendProvider = null;
 
 	private IPlaqueContentProvider[] plaqueContentProviders;
+
+	private Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection = null;
 
 	private Comparator<GanttEvent> eventRenderOrderComparator;
 
@@ -3455,7 +3458,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		// draw the text if any, o
 		if (ge.getParsedString() != null) {
-			_paintManager.drawEventString(this, _settings, _colorManager, ge, gc, ge.getParsedString(), _threeDee, xStart, yDrawPos, xEventWidth, bounds);
+			_paintManager.drawEventLabel(this, _settings, ge, gc, this.textGeneratorCollection, xStart, yDrawPos, xEventWidth);
+//			_paintManager.drawEventString(this, _settings, _colorManager, ge, gc, ge.getParsedString(), _threeDee, xStart, yDrawPos, xEventWidth, bounds);
 		}
 
 		// reset font
@@ -9113,5 +9117,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	public void setRenderOrderComparator(final @Nullable Comparator<GanttEvent> comparator) {
 		this.eventRenderOrderComparator = comparator;
+	}
+
+	public void replaceTextGenerationCollection(final Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection) {
+		this.textGeneratorCollection = textGeneratorCollection;
+	}
+
+	public void clearTextGenerationCollection() {
+		this.textGeneratorCollection = null;
 	}
 }

@@ -4,8 +4,15 @@
  */
 package org.eclipse.nebula.widgets.ganttchart;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
+import org.eclipse.nebula.widgets.ganttchart.label.internal.GeneratedEventText;
 import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -578,6 +585,138 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		return false;
 	}
 
+	@Override
+	public void drawEventLabel(final GanttComposite composite, final ISettings settings, final GanttEvent event, final GC gc, final Collection<Collection<IEventTextPropertiesGenerator>> generatorsCollection,
+			final int x, final int y, final int eventWidth) {
+		if (generatorsCollection == null || generatorsCollection.isEmpty()) {
+			return;
+		}
+		Font oldFont = null;
+		if (event.showBoldText()) {
+			oldFont = gc.getFont();
+			final FontData[] old = oldFont.getFontData();
+			old[0].setStyle(SWT.BOLD);
+			final Font f = new Font(Display.getDefault(), old);
+			gc.setFont(f);
+			f.dispose();
+		}
+
+		if (event.getTextFont() != null) {
+			gc.setFont(event.getTextFont());
+		}
+
+		final int textSpacer = composite.isConnected(event) ? settings.getTextSpacerConnected() : settings.getTextSpacerNonConnected();
+
+		for (final Collection<IEventTextPropertiesGenerator> textGenerators : generatorsCollection) {
+			if (checkAndDrawEventLabel(event, gc, textGenerators, textSpacer, x, y, eventWidth)) {
+				break;
+			}
+		}
+
+		gc.setFont(oldFont);
+	}
+
+	private boolean checkAndDrawEventLabel(final GanttEvent event, final GC gc, final Collection<IEventTextPropertiesGenerator> textGenerators, final int textSpacer, final int x, final int y,
+			final int eventWidth) {
+		if (textGenerators.isEmpty()) {
+			return true;
+		}
+		int betweenLabelSpacing = 5;
+
+		final List<IEventTextPropertiesGenerator> sortedTextGenerators = new ArrayList<>(textGenerators);
+		sortedTextGenerators.sort((g1, g2) -> Integer.compare(g1.getAlignment().ordinal(), g2.getAlignment().ordinal()));
+		final List<GeneratedEventText> textContainers = generateEventTextList(sortedTextGenerators, event, gc::stringExtent);
+		if (textContainers.isEmpty()) {
+			return false;
+		}
+
+		final List<Point> textPositions = textContainers.stream() //
+				.map(generatedEventText -> generateEventTextPosition(event, generatedEventText, x, y, textSpacer, eventWidth)) //
+				.toList();
+
+		{
+			// check sequencing
+			final Iterator<GeneratedEventText> iterGeneratedTexts = textContainers.iterator();
+			final Iterator<Point> iterPositions = textPositions.iterator();
+			GeneratedEventText currentEventText = iterGeneratedTexts.next();
+			Point currentPosition = iterPositions.next();
+			int leftMostX = currentPosition.x;
+			int rightMostX = currentPosition.x + currentEventText.size().x;
+			@NonNull
+			Point previousPosition = currentPosition;
+			@NonNull
+			GeneratedEventText previousEventText = currentEventText;
+			while (iterGeneratedTexts.hasNext()) {
+				currentEventText = iterGeneratedTexts.next();
+				currentPosition = iterPositions.next();
+				leftMostX = Math.min(leftMostX, currentPosition.x);
+				rightMostX = Math.max(rightMostX, currentPosition.x + currentEventText.size().x);
+				final int previousEndWithSpacing = previousPosition.x + previousEventText.size().x + betweenLabelSpacing;
+				if (currentPosition.x < previousEndWithSpacing) {
+					return false;
+				}
+				previousPosition = currentPosition;
+				previousEventText = currentEventText;
+			}
+			if (leftMostX < x + textSpacer || rightMostX > event.getXEnd() - textSpacer) {
+				return false;
+			}
+		}
+
+		final Color oldForegroundColour = gc.getForeground();
+		gc.setForeground(event.getStatusForegroundColour());
+		final Iterator<GeneratedEventText> iterGeneratedTexts = textContainers.iterator();
+		for (final Point point : textPositions) {
+			final GeneratedEventText generatedEventText = iterGeneratedTexts.next();
+			gc.drawString(generatedEventText.text(), point.x, point.y, true);
+		}
+		gc.setForeground(oldForegroundColour);
+		return true;
+	}
+
+	private List<GeneratedEventText> generateEventTextList(final List<IEventTextPropertiesGenerator> textGenerators, final GanttEvent event, final Function<String, Point> sizeCalculator) {
+		return textGenerators.stream() //
+				.map(g -> {
+					final String text = g.generateText(event);
+					return new GeneratedEventText(text, g.getAlignment(), sizeCalculator.apply(text));
+				}) //
+				.filter(textContainer -> !textContainer.text().isBlank()) //
+				.toList();
+	}
+
+	private Point generateEventTextPosition(final GanttEvent event, final GeneratedEventText generatedEventText, final int x, final int y, final int textSpacer, final int eventWidth) {
+		int textXStart = 0;
+		final Point size = generatedEventText.size();
+		switch (generatedEventText.alignment()) {
+		case LEFT:
+			textXStart = x + textSpacer;
+			break;
+		case CENTRE:
+			textXStart = x + (eventWidth / 2) - (size.x / 2);
+			break;
+		case RIGHT:
+			textXStart = event.getXEnd() - size.x - textSpacer;
+			break;
+		default:
+			break;
+		}
+		int yTextPos = y + (event.getHeight() / 2);
+		switch (event.getVerticalTextLocation()) {
+		case SWT.TOP:
+			yTextPos = event.getY() - size.y;
+			break;
+		case SWT.CENTER:
+			yTextPos -= (size.y / 2) + 1;
+			break;
+		case SWT.BOTTOM:
+			yTextPos = event.getBottomY();
+			break;
+		default:
+			break;
+		}
+		return new Point(textXStart, yTextPos);
+	}
+
 	public void drawEventString(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final String toDraw,
 			final boolean threeDee, final int x, final int y, final int eventWidth, final Rectangle bounds) {
 		int textEndX = 0;
@@ -585,7 +724,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 
 		Font oldFont = null;
 
-		gc.setForeground(colorManager.getTextColor());
+		// gc.setForeground(colorManager.getTextColor());
 		if (event.showBoldText()) {
 			oldFont = gc.getFont();
 			final FontData[] old = oldFont.getFontData();
@@ -637,7 +776,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			yTextPos = event.getY() - toDrawExtent.y;
 			break;
 		case SWT.CENTER:
-			yTextPos -= (toDrawExtent.y / 2) - 1;
+			yTextPos -= (toDrawExtent.y / 2) + 1;
 			break;
 		case SWT.BOTTOM:
 			yTextPos = event.getBottomY();
