@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -159,16 +160,20 @@ public class SandboxJobRunner extends AbstractJobRunner {
 
 	public @Nullable AbstractSolutionSet runSandboxOptioniser(final int numThreads, final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance,
 			final OptionAnalysisModel model, final IProgressMonitor progressMonitor) {
-		return SandboxOptioniserRunner.createSandboxJobFunction(numThreads, sdp, scenarioInstance, sandboxSettings, model, meta, l -> SandboxJobRunner.this.loggingData = l).apply(progressMonitor);
+		return SandboxOptioniserRunner.createSandboxJobFunction(numThreads, sdp, scenarioInstance, sandboxSettings, model, meta, getLoggingRegisterConsumer()).apply(progressMonitor);
 	}
 
 	public @Nullable AbstractSolutionSet runSandboxOptimisation(final int numThreads, final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance,
 			final OptionAnalysisModel model, final IProgressMonitor progressMonitor) {
-		return SandboxOptimiserRunner.createSandboxJobFunction(numThreads, sdp, scenarioInstance, sandboxSettings, model, meta, l -> SandboxJobRunner.this.loggingData = l).apply(progressMonitor);
+		return SandboxOptimiserRunner.createSandboxJobFunction(numThreads, sdp, scenarioInstance, sandboxSettings, model, meta, getLoggingRegisterConsumer()).apply(progressMonitor);
 	}
 
 	public @Nullable AbstractSolutionSet runSandboxDefine(final int numThreads, final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance,
 			final OptionAnalysisModel model, final IProgressMonitor progressMonitor) {
-		return SandboxDefineRunner.createSandboxJobFunction(numThreads, sdp, scenarioInstance, sandboxSettings, model, meta, l -> SandboxJobRunner.this.loggingData = l).apply(progressMonitor);
+		return SandboxDefineRunner.createSandboxJobFunction(numThreads, sdp, scenarioInstance, sandboxSettings, model, meta, getLoggingRegisterConsumer()).apply(progressMonitor);
+	}
+
+	private @Nullable Consumer<@Nullable Object> getLoggingRegisterConsumer() {
+		return enableLogging ? l -> SandboxJobRunner.this.loggingData = l : null;
 	}
 }
