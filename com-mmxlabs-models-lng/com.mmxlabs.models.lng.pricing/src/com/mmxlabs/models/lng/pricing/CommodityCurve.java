@@ -17,6 +17,7 @@ package com.mmxlabs.models.lng.pricing;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CommodityCurve#getMarketIndex <em>Market Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.CommodityCurve#getAdjustment <em>Adjustment</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCommodityCurve()
@@ -77,4 +78,27 @@ public interface CommodityCurve extends AbstractYearMonthCurve {
 	 * @generated
 	 */
 	boolean isSetMarketIndex();
+
+	/**
+	 * Returns the value of the '<em><b>Adjustment</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Adjustment</em>' attribute.
+	 * @see #setAdjustment(int)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCommodityCurve_Adjustment()
+	 * @model default="0"
+	 * @generated
+	 */
+	int getAdjustment();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CommodityCurve#getAdjustment <em>Adjustment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Adjustment</em>' attribute.
+	 * @see #getAdjustment()
+	 * @generated
+	 */
+	void setAdjustment(int value);
 } // CommodityCurve

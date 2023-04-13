@@ -18,12 +18,14 @@ public class BasicCommodityCurveData {
 	private String volumeUnit;
 	private String currencyUnit;
 	private @Nullable String expression;
+	private Integer adjustment;
 
-	public BasicCommodityCurveData(final String name, final String volumeUnit, final String currencyUnit, final @Nullable String expression) {
+	public BasicCommodityCurveData(final String name, final String volumeUnit, final String currencyUnit, final @Nullable String expression, final Integer adjustment) {
 		this.name = name;
 		this.volumeUnit = volumeUnit;
 		this.currencyUnit = currencyUnit;
 		this.expression = expression;
+		this.adjustment = adjustment;
 	}
 	
 	public String getName() {
@@ -45,5 +47,9 @@ public class BasicCommodityCurveData {
 
 	public boolean isSetExpression() {
 		return (this.expression != null);
+	}
+	
+	public Integer getAdjustment() {
+		return this.adjustment;
 	}
 }
