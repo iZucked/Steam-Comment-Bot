@@ -1520,6 +1520,16 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getCommodityCurve_Adjustment() {
+		return (EAttribute)commodityCurveEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterCurve() {
 		return charterCurveEClass;
 	}
@@ -1991,6 +2001,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		commodityCurveEClass = createEClass(COMMODITY_CURVE);
 		createEReference(commodityCurveEClass, COMMODITY_CURVE__MARKET_INDEX);
+		createEAttribute(commodityCurveEClass, COMMODITY_CURVE__ADJUSTMENT);
 
 		charterCurveEClass = createEClass(CHARTER_CURVE);
 
@@ -2293,6 +2304,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		initEClass(commodityCurveEClass, CommodityCurve.class, "CommodityCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCommodityCurve_MarketIndex(), this.getMarketIndex(), null, "marketIndex", null, 0, 1, CommodityCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCommodityCurve_Adjustment(), ecorePackage.getEInt(), "adjustment", "0", 0, 1, CommodityCurve.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterCurveEClass, CharterCurve.class, "CharterCurve", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

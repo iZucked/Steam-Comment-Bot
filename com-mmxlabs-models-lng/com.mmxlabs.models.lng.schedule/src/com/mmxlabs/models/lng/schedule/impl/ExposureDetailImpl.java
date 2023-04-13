@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 import com.mmxlabs.models.lng.types.DealType;
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -35,6 +36,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getCurrencyUnit <em>Currency Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getDealType <em>Deal Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getLocalDate <em>Local Date</em>}</li>
  * </ul>
  *
  * @generated
@@ -219,6 +221,26 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * @ordered
 	 */
 	protected DealType dealType = DEAL_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLocalDate() <em>Local Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate LOCAL_DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getLocalDate() <em>Local Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate localDate = LOCAL_DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -452,6 +474,29 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * @generated
 	 */
 	@Override
+	public LocalDate getLocalDate() {
+		return localDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLocalDate(LocalDate newLocalDate) {
+		LocalDate oldLocalDate = localDate;
+		localDate = newLocalDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE, oldLocalDate, localDate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME:
@@ -472,6 +517,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return getCurrencyUnit();
 			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
 				return getDealType();
+			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
+				return getLocalDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -510,6 +557,9 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return;
 			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
 				setDealType((DealType)newValue);
+				return;
+			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
+				setLocalDate((LocalDate)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -550,6 +600,9 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
 				setDealType(DEAL_TYPE_EDEFAULT);
 				return;
+			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
+				setLocalDate(LOCAL_DATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -580,6 +633,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return CURRENCY_UNIT_EDEFAULT == null ? currencyUnit != null : !CURRENCY_UNIT_EDEFAULT.equals(currencyUnit);
 			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
 				return dealType != DEAL_TYPE_EDEFAULT;
+			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
+				return LOCAL_DATE_EDEFAULT == null ? localDate != null : !LOCAL_DATE_EDEFAULT.equals(localDate);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -612,6 +667,8 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 		result.append(currencyUnit);
 		result.append(", dealType: ");
 		result.append(dealType);
+		result.append(", localDate: ");
+		result.append(localDate);
 		result.append(')');
 		return result.toString();
 	}

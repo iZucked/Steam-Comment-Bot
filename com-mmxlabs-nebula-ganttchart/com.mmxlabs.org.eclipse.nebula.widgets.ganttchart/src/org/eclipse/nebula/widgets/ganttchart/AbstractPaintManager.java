@@ -52,43 +52,46 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		final SpecialDrawModes sdm = event.getSpecialDrawMode();
 
 		if (sdm == SpecialDrawModes.NONE && isSelected && settings.drawSelectionMarkerAroundSelectedEvent()) {
-			gc.setLineStyle(settings.getSelectionLineStyle());
-			gc.setLineWidth(settings.getSelectionLineWidth());
+			// Don't draw borders for zero width events
+			if (eventWidth != 0) {
+				gc.setLineStyle(settings.getSelectionLineStyle());
+				gc.setLineWidth(settings.getSelectionLineWidth());
 
-			// // this is _extremely_ slow to draw, so we need to check bounds here, which
-			// is probably a good idea anyway
-			// final boolean oobLeft = (xLoc < bounds.x);
-			// final boolean oobRight = (xLoc + eventWidth > bounds.width);
-			// if (oobLeft || oobRight) {
-			// if (!oobLeft || !oobRight) { // NOPMD
-			// if (oobLeft) {
-			// // left side out of bounds
-			// gc.drawLine(xLoc, y, xLoc + eventWidth, y);
-			// gc.drawLine(xLoc + eventWidth, y, xLoc + eventWidth, y + event.getHeight());
-			// gc.drawLine(xLoc, y + event.getHeight(), xLoc + eventWidth, y +
-			// event.getHeight());
-			// } else {
-			// // right side out of bounds
-			// gc.drawLine(xLoc, y, bounds.width, y);
-			// gc.drawLine(xLoc, y, xLoc, y + event.getHeight());
-			// gc.drawLine(xLoc, y + event.getHeight(), bounds.width, y +
-			// event.getHeight());
-			// }
-			// } else {
-			// // double out of bounds
-			// gc.drawLine(bounds.x, y, bounds.x + bounds.width, y);
-			// gc.drawLine(bounds.x, y + event.getHeight(), bounds.x + bounds.width, y +
-			// event.getHeight());
-			// }
-			// } else {
-			// gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
-			// }
-			// Skip above, the bounds.width is incorrect leading to short drawing on RHS for
-			// events at end of the view
-			gc.drawRectangle(xLoc, y, eventWidth, event.getBounds().height);
+				// // this is _extremely_ slow to draw, so we need to check bounds here, which
+				// is probably a good idea anyway
+				// final boolean oobLeft = (xLoc < bounds.x);
+				// final boolean oobRight = (xLoc + eventWidth > bounds.width);
+				// if (oobLeft || oobRight) {
+				// if (!oobLeft || !oobRight) { // NOPMD
+				// if (oobLeft) {
+				// // left side out of bounds
+				// gc.drawLine(xLoc, y, xLoc + eventWidth, y);
+				// gc.drawLine(xLoc + eventWidth, y, xLoc + eventWidth, y + event.getHeight());
+				// gc.drawLine(xLoc, y + event.getHeight(), xLoc + eventWidth, y +
+				// event.getHeight());
+				// } else {
+				// // right side out of bounds
+				// gc.drawLine(xLoc, y, bounds.width, y);
+				// gc.drawLine(xLoc, y, xLoc, y + event.getHeight());
+				// gc.drawLine(xLoc, y + event.getHeight(), bounds.width, y +
+				// event.getHeight());
+				// }
+				// } else {
+				// // double out of bounds
+				// gc.drawLine(bounds.x, y, bounds.x + bounds.width, y);
+				// gc.drawLine(bounds.x, y + event.getHeight(), bounds.x + bounds.width, y +
+				// event.getHeight());
+				// }
+				// } else {
+				// gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
+				// }
+				// Skip above, the bounds.width is incorrect leading to short drawing on RHS for
+				// events at end of the view
+				gc.drawRectangle(xLoc, y, eventWidth, event.getBounds().height);
 
-			gc.setLineStyle(SWT.LINE_SOLID);
-			gc.setLineWidth(1);
+				gc.setLineStyle(SWT.LINE_SOLID);
+				gc.setLineWidth(1);
+			}
 		} else {
 
 			if (sdm != SpecialDrawModes.NONE) {

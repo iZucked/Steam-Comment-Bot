@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CommodityCurveImpl#getMarketIndex <em>Market Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CommodityCurveImpl#getAdjustment <em>Adjustment</em>}</li>
  * </ul>
  *
  * @generated
@@ -47,6 +48,26 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 	 * @ordered
 	 */
 	protected boolean marketIndexESet;
+
+	/**
+	 * The default value of the '{@link #getAdjustment() <em>Adjustment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdjustment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int ADJUSTMENT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getAdjustment() <em>Adjustment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdjustment()
+	 * @generated
+	 * @ordered
+	 */
+	protected int adjustment = ADJUSTMENT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -140,11 +161,36 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 	 * @generated
 	 */
 	@Override
+	public int getAdjustment() {
+		return adjustment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAdjustment(int newAdjustment) {
+		int oldAdjustment = adjustment;
+		adjustment = newAdjustment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COMMODITY_CURVE__ADJUSTMENT, oldAdjustment, adjustment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PricingPackage.COMMODITY_CURVE__MARKET_INDEX:
 				if (resolve) return getMarketIndex();
 				return basicGetMarketIndex();
+			case PricingPackage.COMMODITY_CURVE__ADJUSTMENT:
+				return getAdjustment();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -159,6 +205,9 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 		switch (featureID) {
 			case PricingPackage.COMMODITY_CURVE__MARKET_INDEX:
 				setMarketIndex((MarketIndex)newValue);
+				return;
+			case PricingPackage.COMMODITY_CURVE__ADJUSTMENT:
+				setAdjustment((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -175,6 +224,9 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 			case PricingPackage.COMMODITY_CURVE__MARKET_INDEX:
 				unsetMarketIndex();
 				return;
+			case PricingPackage.COMMODITY_CURVE__ADJUSTMENT:
+				setAdjustment(ADJUSTMENT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -189,8 +241,26 @@ public class CommodityCurveImpl extends AbstractYearMonthCurveImpl implements Co
 		switch (featureID) {
 			case PricingPackage.COMMODITY_CURVE__MARKET_INDEX:
 				return isSetMarketIndex();
+			case PricingPackage.COMMODITY_CURVE__ADJUSTMENT:
+				return adjustment != ADJUSTMENT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (adjustment: ");
+		result.append(adjustment);
+		result.append(')');
+		return result.toString();
 	}
 
 } //CommodityCurveImpl

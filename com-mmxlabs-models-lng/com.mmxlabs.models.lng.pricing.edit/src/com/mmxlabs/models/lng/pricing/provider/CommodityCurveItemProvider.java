@@ -18,6 +18,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CommodityCurve} object.
@@ -48,6 +50,7 @@ public class CommodityCurveItemProvider extends AbstractYearMonthCurveItemProvid
 			super.getPropertyDescriptors(object);
 
 			addMarketIndexPropertyDescriptor(object);
+			addAdjustmentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -70,6 +73,28 @@ public class CommodityCurveItemProvider extends AbstractYearMonthCurveItemProvid
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Adjustment feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAdjustmentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CommodityCurve_adjustment_feature"),
+				 getString("_UI_CommodityCurve_adjustment_description"),
+				 PricingPackage.Literals.COMMODITY_CURVE__ADJUSTMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -110,6 +135,12 @@ public class CommodityCurveItemProvider extends AbstractYearMonthCurveItemProvid
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(CommodityCurve.class)) {
+			case PricingPackage.COMMODITY_CURVE__ADJUSTMENT:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
