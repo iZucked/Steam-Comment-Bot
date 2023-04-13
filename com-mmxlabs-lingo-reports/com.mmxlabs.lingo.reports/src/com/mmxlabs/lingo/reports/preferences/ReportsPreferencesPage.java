@@ -49,7 +49,7 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 	    gd3.horizontalSpan = 2;
 		allSection.setLayoutData(gd3);
 	
-		final GridDataFactory labelLayoutData = GridDataFactory.fillDefaults().span(3,1).hint(200,SWT.DEFAULT);
+		final GridDataFactory labelLayoutData = GridDataFactory.fillDefaults().span(2,1).hint(200,SWT.DEFAULT);
 		addDurationFormatPreferences(labelLayoutData);
 		
 	    Label separator1 = new Label(getFieldEditorParent(), SWT.HORIZONTAL | SWT.SEPARATOR);
