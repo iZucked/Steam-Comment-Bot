@@ -14,6 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
@@ -57,6 +58,15 @@ public class TransferRecordConstraint extends AbstractModelMultiConstraint {
 				}
 				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
 					validatePrice(ctx, statuses, transferRecord.getPriceExpression(), PriceIndexType.COMMODITY, name, transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION);
+				}
+				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__LHS)) {
+					final Slot<?> slot = transferRecord.getLhs();
+					if (slot != null && slot.getCargo() != null && slot.getCargo().getSlots().size() > 2) {
+						final String failureMessage = String.format("[%s]: can not transfer complex cargo", name);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
+						dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__LHS);
+						statuses.add(dsd);
+					}
 				}
 			}
 		}

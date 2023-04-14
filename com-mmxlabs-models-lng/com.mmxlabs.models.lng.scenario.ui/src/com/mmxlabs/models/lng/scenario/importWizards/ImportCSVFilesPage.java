@@ -63,6 +63,7 @@ import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.RadioSelectionGrou
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
@@ -481,6 +482,8 @@ public class ImportCSVFilesPage extends WizardPage {
 			scenarioModel.setScheduleModel(scheduleModel);
 		} else if (subModel instanceof final NominationsModel scheduleModel) {
 			scenarioModel.setNominationsModel(scheduleModel);
+		} else if (subModel instanceof final TransferModel transferModel) {
+			scenarioModel.setTransferModel(transferModel);
 		} else {
 			LOG.error("Unknown sub model type: " + subModel.eClass().getName());
 		}

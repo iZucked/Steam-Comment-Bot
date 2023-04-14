@@ -72,6 +72,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowCounterParty = CargoFeatures.getSlot_WindowCounterParty();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
+	private static final EStructuralFeature PricingBasis = CargoFeatures.getSlot_PricingBasis();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
 
 	Composite contentComposite;
@@ -107,7 +108,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<>();
-		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity() });
+		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity(), CargoFeatures.getSlot_BusinessUnit() });
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_VolumeLimitsUnit(),
 				CargoFeatures.getSlot_OperationalTolerance(), CargoFeatures.getSlot_FullCargoLot(), CargoFeatures.getLoadSlot_VolumeCounterParty() });
 		mainFeatures.add(new EStructuralFeature[] { CargoPackage.Literals.SLOT__COUNTERPARTY, CargoPackage.Literals.SLOT__CN });
@@ -115,13 +116,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		pricingFeatures = new ArrayList<>();
 		pricingFeatures.add(new EStructuralFeature[] { Contract, CargoPackage.Literals.SPOT_SLOT__MARKET });
-		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
+		pricingFeatures.add(new EStructuralFeature[] { PriceExpression, PricingBasis });
 		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__OVERRIDE_CONTRACT });
 		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION, CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION });
 		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD, CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingEvent(), CargoFeatures.getSlot_PricingDate() });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MiscCosts(), CargoFeatures.getSlot_CancellationExpression() });
-		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
+		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression, PricingBasis);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
 		shippedWindowFeatures = new ArrayList<>();
@@ -194,12 +195,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				final MMXObject mmxEo = (MMXObject) eo;
 				final Contract c = (Contract) mmxEo.eGet(Contract);
 				final String pe = (String) mmxEo.eGet(PriceExpression);
+				final String pb = (String) mmxEo.eGet(PricingBasis);
 				String text = "";
 				if (c != null) {
 					text += c.getName() != null ? c.getName() : "";
 					text += pe != null && pe.length() > 0 ? ", " : "";
+					text += pb != null && pb.length() > 0 ? ", " : "";
 				}
 				text += pe != null ? pe : "";
+				text += pb != null ? pb : "";
 				textClient.setText(text);
 				textClient.update();
 			}

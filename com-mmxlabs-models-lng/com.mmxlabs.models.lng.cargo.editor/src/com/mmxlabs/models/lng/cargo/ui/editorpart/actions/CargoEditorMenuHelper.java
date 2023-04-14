@@ -135,26 +135,32 @@ public class CargoEditorMenuHelper {
 	}
 
 	/**
+<<<<<<< HEAD
+	 * For a given transfer agreement creates an action
+	 * which allows creation of the new transfer record
+	 * for a list of slots
+=======
 	 * For a given transfer agreement creates an action which allows creation of the new transfer record
 	 * 
+>>>>>>> origin/master
 	 * @author FM
 	 *
 	 */
-	private final class CreateAddTransferRecordAction extends Action {
-		private final Slot<?> slot;
+	private final class CreateAddTransferRecordsAction extends Action {
+		private final List<Slot<?>> slots;
 		private final EObject transferAgreement;
 
-		private CreateAddTransferRecordAction(final String text, final Slot<?> slot, final EObject transferAgreement) {
+		private CreateAddTransferRecordsAction(final String text, final List<Slot<?>> slots, final EObject transferAgreement) {
 			super(text);
-			this.slot = slot;
+			this.slots = slots;
 			this.transferAgreement = transferAgreement;
 		}
 
 		@Override
 		public void run() {
 
-			if (slot != null) {
-				helper.transferCargoBetweenEntities(scenarioEditingLocation, "Create transfer record", slot, transferAgreement);
+			if (slots != null && !slots.isEmpty()) {
+				helper.transferCargoesBetweenEntities(scenarioEditingLocation, "Create transfer record", slots, transferAgreement);
 			}
 
 		}
@@ -295,8 +301,7 @@ public class CargoEditorMenuHelper {
 				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, " market");
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
-
-				createAddTransferRecordMenu(manager, dischargeSlot);
+				createAddTransferRecordsMenu(manager, Collections.singletonList(dischargeSlot));
 				createEditTransferRecordMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
@@ -665,6 +670,7 @@ public class CargoEditorMenuHelper {
 					createBulkSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, (Collection) loads, " market");
 				}
 				newMenuManager.add(new Separator());
+				createAddTransferRecordsMenu(manager, new ArrayList<>(loads));
 			} else if (!discharges.isEmpty()) {
 				final MenuManager newMenuManager = new MenuManager("Pair to new...", null);
 				manager.add(newMenuManager);
@@ -674,6 +680,7 @@ public class CargoEditorMenuHelper {
 					createBulkSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, (Collection) discharges, " market");
 				}
 				newMenuManager.add(new Separator());
+				createAddTransferRecordsMenu(manager, new ArrayList<>(discharges));
 			}
 			if (anyLocked) {
 				manager.add(new RunnableAction("Unlock", () -> helper.unlockCargoesAssignment("Unlock assignments", cargoes)));
@@ -745,8 +752,7 @@ public class CargoEditorMenuHelper {
 
 			createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 			createDeleteSlotMenu(manager, loadSlot);
-
-			createAddTransferRecordMenu(manager, loadSlot);
+			createAddTransferRecordsMenu(manager, Collections.singletonList(loadSlot));
 			createEditTransferRecordMenu(manager, loadSlot);
 
 			if (loadSlot.isDESPurchase()) {
@@ -793,13 +799,13 @@ public class CargoEditorMenuHelper {
 
 		};
 	}
-
-	private void createAddTransferRecordMenu(IMenuManager manager, final Slot<?> slot) {
+	
+	private void createAddTransferRecordsMenu(IMenuManager manager, final List<Slot<?>> slots) {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL)) {
 			manager.add(new Separator());
 			final MenuManager transferMenuManager = new MenuManager("Transfer...", null);
 			for (final NamedObject ta : CargoTransferUtil.getTransferAgreementsForMenu(scenarioModel)) {
-				transferMenuManager.add(new CreateAddTransferRecordAction(ta.getName(), slot, ta));
+				transferMenuManager.add(new CreateAddTransferRecordsAction(ta.getName(), slots, ta));
 			}
 			manager.add(transferMenuManager);
 		}

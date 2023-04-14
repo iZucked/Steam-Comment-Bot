@@ -48,6 +48,8 @@ public class ExpressionPriceParametersItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPriceExpressionPropertyDescriptor(object);
+			addPricingBasisPropertyDescriptor(object);
+			addPreferredPBsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -70,6 +72,50 @@ public class ExpressionPriceParametersItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pricing Basis feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingBasisPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ExpressionPriceParameters_pricingBasis_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ExpressionPriceParameters_pricingBasis_feature", "_UI_ExpressionPriceParameters_type"),
+				 CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Preferred PBs feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPreferredPBsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ExpressionPriceParameters_preferredPBs_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ExpressionPriceParameters_preferredPBs_feature", "_UI_ExpressionPriceParameters_type"),
+				 CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -112,6 +158,7 @@ public class ExpressionPriceParametersItemProvider
 
 		switch (notification.getFeatureID(ExpressionPriceParameters.class)) {
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION:
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

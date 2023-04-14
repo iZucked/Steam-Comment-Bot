@@ -111,6 +111,12 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return ZonedDateTime.of(windowStart.getYear(), windowStart.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
+	/**
+	 * Please keep in sync with DefaultTransferModelDataProviderEditor#generateExpressionCurve (FM)
+	 * @param priceExpression
+	 * @param seriesParser
+	 * @return
+	 */
 	public ParameterisedIntegerCurve generateParameterisedExpressionCurve(final ISeries series) {
 
 		return new ParameterisedIntegerCurve(params -> {
@@ -147,7 +153,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 	public @Nullable PreGeneratedIntegerCurve generateExpressionCurve(final @Nullable String priceExpression, final SeriesParser seriesParser) {
 
-		if (priceExpression == null || priceExpression.isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return null;
 		}
 
@@ -167,7 +173,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 	public @Nullable PreGeneratedLongCurve generateLongExpressionCurve(final @Nullable String priceExpression, final @NonNull SeriesParser seriesParser) {
 
-		if (priceExpression == null || priceExpression.isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return null;
 		}
 
@@ -287,7 +293,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 	public @Nullable Pair<IParameterisedCurve, IIntegerIntervalCurve> createCurveAndIntervals(final SeriesParser seriesParser, final String priceExpression,
 			final Function<ISeries, IParameterisedCurve> curveFactory) {
 
-		if (priceExpression == null || priceExpression.isEmpty()) {
+		if (priceExpression == null || priceExpression.isBlank()) {
 			return null;
 		}
 

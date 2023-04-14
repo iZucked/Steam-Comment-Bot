@@ -34,7 +34,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.EditorSite;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -108,6 +107,10 @@ public abstract class ScenarioViewerPane extends EMFViewerPane {
 		}
 
 	};
+	
+	protected void lookAtMySelection(final ISelection selection) {
+		// nothing
+	}
 
 	protected ScenarioViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part);

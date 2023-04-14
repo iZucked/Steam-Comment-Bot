@@ -12,8 +12,16 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -21,6 +29,12 @@ import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
  * A component helper for BaseLegalEntity instances
@@ -72,6 +86,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 		add_tradingBookEditor(detailComposite, topClass);
 		add_upstreamBookEditor(detailComposite, topClass);
 		add_thirdPartyEditor(detailComposite, topClass);
+		add_businessUnitsEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -109,6 +124,53 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	protected void add_thirdPartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		if (LicenseFeatures.isPermitted("features:third-party-entities")) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_LEGAL_ENTITY__THIRD_PARTY));
+		}
+	}
+	
+	/**
+	 * Create the editor for the businessUnits feature on BaseLegalEntity
+	 *
+	 * @generated NOT
+	 */
+	protected void add_businessUnitsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BUSINESS_UNITS)) {
+			TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
+			b.withShowHeaders(true);
+			b.withLabel("Business Units");
+			b.withContentProvider(new ArrayContentProvider());
+
+			b.buildColumn("   Name   ", MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
+			.withWidth(100) //
+			.withRMMaker((ed, rvp) -> new StringAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, ed)) //
+			.build();
+
+			b.buildColumn("  Description  ", CommercialPackage.Literals.BUSINESS_UNIT__DESCRIPTION) //
+			.withWidth(150) //
+			.withRMMaker((ed, rvp) -> new StringAttributeManipulator(CommercialPackage.Literals.BUSINESS_UNIT__DESCRIPTION, ed)) //
+			.build();
+
+			b.buildColumn("Default", CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT) //
+			.withWidth(100) //
+			.withRMMaker((ed, rvp) -> new BooleanFlagAttributeManipulator(CommercialPackage.Literals.BUSINESS_UNIT__DEFAULT, ed)) //
+			.build();
+
+			// Add action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
+				if (input instanceof final BaseLegalEntity entity) {
+					final BusinessUnit newBusinessUnit = CommercialFactory.eINSTANCE.createBusinessUnit();
+					ch.handleCommand(AddCommand.create(ch.getEditingDomain(), entity,  CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS, newBusinessUnit), entity,  CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS);
+				}
+			});
+			// Delete action
+			b.withAction(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), (input, ch, sel) -> {
+				if (input instanceof final BaseLegalEntity entity) {
+					if (sel instanceof final IStructuredSelection ss && !ss.isEmpty()) {
+						ch.handleCommand(RemoveCommand.create(ch.getEditingDomain(), entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS, ss.getFirstElement()), entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS);
+					}
+				}
+			}, false, (btn, sel) -> btn.setEnabled(!sel.isEmpty()));
+
+			detailComposite.addInlineEditor(new BusinessUnitsEditorWrapper(b.build(CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS)));
 		}
 	}
 }

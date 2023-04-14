@@ -84,6 +84,19 @@ public class TransferAgreementConstraint extends AbstractModelMultiConstraint {
 						statuses.add(dsd);
 					}
 				}
+				if (transferAgreement.getPreferredPBs() != null && !transferAgreement.getPreferredPBs().isEmpty()) {
+					transferAgreement.getPreferredPBs().forEach( w -> {
+						final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, transferAgreement, //
+								TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_PBS, //
+								w.getName(), PriceIndexType.PRICING_BASIS);
+						if (!result.isOk()) {
+							final String message = String.format("[%s]: %s", name, result.getErrorDetails());
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+							dsd.addEObjectAndFeature(w, TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_PBS);
+							statuses.add(dsd);
+						}
+					});
+				}
 			}
 		}
 	}

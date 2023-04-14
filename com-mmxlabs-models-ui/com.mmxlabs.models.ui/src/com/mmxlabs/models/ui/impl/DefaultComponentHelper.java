@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -88,6 +89,19 @@ public class DefaultComponentHelper implements IComponentHelper {
 			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, feature);
 			if (editor != null) {
 				return Collections.singletonList(wrapperFactory.apply(editor));
+			}
+			return null;
+		});
+	}
+	
+	protected void addEditorWithWrapperForLicenseFeature(final @NonNull String licenseFeature, final ETypedElement feature, //
+			Function<ETypedElement, IInlineEditor> editorFactory, Function<IInlineEditor, IInlineEditorEnablementWrapper> wrapperFactory) {
+		editorFactories.put(feature, topClass -> {
+			if (LicenseFeatures.isPermitted(licenseFeature)) {
+				final IInlineEditor editor = editorFactory.apply(feature);
+				if (editor != null) {
+					return Collections.singletonList(wrapperFactory.apply(editor));
+				}
 			}
 			return null;
 		});

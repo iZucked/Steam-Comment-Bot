@@ -44,9 +44,17 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 				if (!(object instanceof ExpressionPriceParameters)) {
 					return "n/a";
 				}
+				if (object instanceof final ExpressionPriceParameters priceInfo) {
+					if ((priceInfo.getPriceExpression() == null || priceInfo.getPriceExpression().isBlank()) && priceInfo.getPricingBasis() != null) {
+						return priceInfo.getPricingBasis();
+					}
+					if ((priceInfo.getPricingBasis() == null || priceInfo.getPricingBasis().isBlank()) && priceInfo.getPriceExpression() != null) {
+						return priceInfo.getPriceExpression();
+					}
+				}
 				return super.render(object);
 			}
-		}, CommercialPackage.eINSTANCE.getContract_PriceInfo());
+		}, CommercialPackage.eINSTANCE.getContract_PriceInfo()).setEditingSupport(null);
 		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Counterparty", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getContract_Counterparty(),  getCommandHandler()));
 

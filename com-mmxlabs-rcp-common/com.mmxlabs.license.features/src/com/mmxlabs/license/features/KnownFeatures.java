@@ -144,6 +144,10 @@ public final class KnownFeatures {
 	public static final String FEATURE_MARKETABLE_WINDOWS = "features:marketability";
 	
 	public static final String FEATURE_PRICING_BASES = "features:pricing-bases";
+	
+	public static final String FEATURE_PREFERRED_PRICING_BASES = "features:preferred-pricing-bases";
+	
+	public static final String FEATURE_BUSINESS_UNITS = "features:business-units";
 
 	/**
 	 * Scenario repair features

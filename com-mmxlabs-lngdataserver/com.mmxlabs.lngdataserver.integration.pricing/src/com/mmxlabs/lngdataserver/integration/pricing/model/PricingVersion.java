@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
-import com.mmxlabs.lngdataserver.commons.model.CreatedAtInstantDeserializer;
+import com.mmxlabs.rcp.common.json.CreatedAtInstantDeserializer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({ "published", "current", "metaInformation" })

@@ -357,6 +357,22 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.BUSINESS_UNIT: {
+				BusinessUnit businessUnit = (BusinessUnit)theEObject;
+				T result = caseBusinessUnit(businessUnit);
+				if (result == null) result = caseNamedObject(businessUnit);
+				if (result == null) result = caseMMXObject(businessUnit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.PREFERRED_PRICING_BASES_WRAPPER: {
+				PreferredPricingBasesWrapper preferredPricingBasesWrapper = (PreferredPricingBasesWrapper)theEObject;
+				T result = casePreferredPricingBasesWrapper(preferredPricingBasesWrapper);
+				if (result == null) result = caseNamedObject(preferredPricingBasesWrapper);
+				if (result == null) result = caseMMXObject(preferredPricingBasesWrapper);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -883,6 +899,36 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRegasPricingParams(RegasPricingParams object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Business Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Business Unit</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBusinessUnit(BusinessUnit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePreferredPricingBasesWrapper(PreferredPricingBasesWrapper object) {
 		return null;
 	}
 

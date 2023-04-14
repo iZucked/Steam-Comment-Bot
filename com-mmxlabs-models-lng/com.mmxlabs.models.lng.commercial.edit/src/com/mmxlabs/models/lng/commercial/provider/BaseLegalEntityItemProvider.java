@@ -118,6 +118,7 @@ public class BaseLegalEntityItemProvider
 			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
 			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK);
+			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS);
 		}
 		return childrenFeatures;
 	}
@@ -168,6 +169,7 @@ public class BaseLegalEntityItemProvider
 			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
 			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
 			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
+			case CommercialPackage.BASE_LEGAL_ENTITY__BUSINESS_UNITS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -199,6 +201,11 @@ public class BaseLegalEntityItemProvider
 			(createChildParameter
 				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__UPSTREAM_BOOK,
 				 CommercialFactory.eINSTANCE.createSimpleEntityBook()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS,
+				 CommercialFactory.eINSTANCE.createBusinessUnit()));
 	}
 
 	/**

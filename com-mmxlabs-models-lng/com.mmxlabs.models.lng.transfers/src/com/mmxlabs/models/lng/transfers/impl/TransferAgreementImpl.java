@@ -6,21 +6,29 @@
  */
 package com.mmxlabs.models.lng.transfers.impl;
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
+import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.lng.transfers.CompanyStatus;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferIncoterm;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
-
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,6 +45,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getCompanyStatus <em>Company Status</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getBufferDays <em>Buffer Days</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getFromBU <em>From BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getToBU <em>To BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getPreferredPBs <em>Preferred PBs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferAgreementImpl#getCode <em>Code</em>}</li>
  * </ul>
  *
  * @generated
@@ -170,6 +182,74 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @ordered
 	 */
 	protected boolean bufferDaysESet;
+
+	/**
+	 * The cached value of the '{@link #getFromBU() <em>From BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFromBU()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit fromBU;
+
+	/**
+	 * This is true if the From BU reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fromBUESet;
+
+	/**
+	 * The cached value of the '{@link #getToBU() <em>To BU</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getToBU()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit toBU;
+
+	/**
+	 * This is true if the To BU reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean toBUESet;
+
+	/**
+	 * The cached value of the '{@link #getPreferredPBs() <em>Preferred PBs</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPreferredPBs()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PreferredPricingBasesWrapper> preferredPBs;
+
+	/**
+	 * The default value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String code = CODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -418,6 +498,210 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * @generated
 	 */
 	@Override
+	public BusinessUnit getFromBU() {
+		if (fromBU != null && fromBU.eIsProxy()) {
+			InternalEObject oldFromBU = (InternalEObject)fromBU;
+			fromBU = (BusinessUnit)eResolveProxy(oldFromBU);
+			if (fromBU != oldFromBU) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_AGREEMENT__FROM_BU, oldFromBU, fromBU));
+			}
+		}
+		return fromBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetFromBU() {
+		return fromBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setFromBU(BusinessUnit newFromBU) {
+		BusinessUnit oldFromBU = fromBU;
+		fromBU = newFromBU;
+		boolean oldFromBUESet = fromBUESet;
+		fromBUESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_AGREEMENT__FROM_BU, oldFromBU, fromBU, !oldFromBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetFromBU() {
+		BusinessUnit oldFromBU = fromBU;
+		boolean oldFromBUESet = fromBUESet;
+		fromBU = null;
+		fromBUESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, TransfersPackage.TRANSFER_AGREEMENT__FROM_BU, oldFromBU, null, oldFromBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetFromBU() {
+		return fromBUESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BusinessUnit getToBU() {
+		if (toBU != null && toBU.eIsProxy()) {
+			InternalEObject oldToBU = (InternalEObject)toBU;
+			toBU = (BusinessUnit)eResolveProxy(oldToBU);
+			if (toBU != oldToBU) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TransfersPackage.TRANSFER_AGREEMENT__TO_BU, oldToBU, toBU));
+			}
+		}
+		return toBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetToBU() {
+		return toBU;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setToBU(BusinessUnit newToBU) {
+		BusinessUnit oldToBU = toBU;
+		toBU = newToBU;
+		boolean oldToBUESet = toBUESet;
+		toBUESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_AGREEMENT__TO_BU, oldToBU, toBU, !oldToBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetToBU() {
+		BusinessUnit oldToBU = toBU;
+		boolean oldToBUESet = toBUESet;
+		toBU = null;
+		toBUESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, TransfersPackage.TRANSFER_AGREEMENT__TO_BU, oldToBU, null, oldToBUESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetToBU() {
+		return toBUESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<PreferredPricingBasesWrapper> getPreferredPBs() {
+		if (preferredPBs == null) {
+			preferredPBs = new EObjectContainmentEList<PreferredPricingBasesWrapper>(PreferredPricingBasesWrapper.class, this, TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS);
+		}
+		return preferredPBs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCode(String newCode) {
+		String oldCode = code;
+		code = newCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_AGREEMENT__CODE, oldCode, code));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BusinessUnit getAgreementOrDelegateFromBU() {
+		return (BusinessUnit) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_BU).getValue(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BusinessUnit getAgreementOrDelegateToBU() {
+		return (BusinessUnit) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_BU).getValue(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				return ((InternalEList<?>)getPreferredPBs()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case TransfersPackage.TRANSFER_AGREEMENT__FROM_ENTITY:
@@ -436,6 +720,16 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return getPricingBasis();
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				return getBufferDays();
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				if (resolve) return getFromBU();
+				return basicGetFromBU();
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				if (resolve) return getToBU();
+				return basicGetToBU();
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				return getPreferredPBs();
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				return getCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -445,6 +739,7 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -468,6 +763,19 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return;
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				setBufferDays((Integer)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				setFromBU((BusinessUnit)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				setToBU((BusinessUnit)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				getPreferredPBs().clear();
+				getPreferredPBs().addAll((Collection<? extends PreferredPricingBasesWrapper>)newValue);
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				setCode((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -502,6 +810,18 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				unsetBufferDays();
 				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				unsetFromBU();
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				unsetToBU();
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				getPreferredPBs().clear();
+				return;
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				setCode(CODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -528,8 +848,32 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 				return PRICING_BASIS_EDEFAULT == null ? pricingBasis != null : !PRICING_BASIS_EDEFAULT.equals(pricingBasis);
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 				return isSetBufferDays();
+			case TransfersPackage.TRANSFER_AGREEMENT__FROM_BU:
+				return isSetFromBU();
+			case TransfersPackage.TRANSFER_AGREEMENT__TO_BU:
+				return isSetToBU();
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+				return preferredPBs != null && !preferredPBs.isEmpty();
+			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
+				return CODE_EDEFAULT == null ? code != null : !CODE_EDEFAULT.equals(code);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case TransfersPackage.TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_FROM_BU:
+				return getAgreementOrDelegateFromBU();
+			case TransfersPackage.TRANSFER_AGREEMENT___GET_AGREEMENT_OR_DELEGATE_TO_BU:
+				return getAgreementOrDelegateToBU();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
@@ -552,8 +896,65 @@ public class TransferAgreementImpl extends NamedObjectImpl implements TransferAg
 		result.append(pricingBasis);
 		result.append(", bufferDays: ");
 		if (bufferDaysESet) result.append(bufferDays); else result.append("<unset>");
+		result.append(", code: ");
+		result.append(code);
 		result.append(')');
 		return result.toString();
+	}
+	
+	@Override
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		final TransfersPackage transferPackage = TransfersPackage.eINSTANCE;
+		if (transferPackage.getTransferAgreement_FromBU() == feature) {
+			return new DelegateInformation(null, null, null) {
+
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_BU);
+				}
+
+				@Override
+				public Object getValue(final EObject object) {
+					if (getFromEntity() != null) {
+						final BaseLegalEntity entity = getFromEntity();
+						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : entity.getBusinessUnits()) {
+								if (bu.isDefault()) {
+									return bu;
+								}
+							}
+							return entity.getBusinessUnits().get(0);
+						}
+					}
+					return ECollections.emptyEList();
+				}
+			};
+		} else if (transferPackage.getTransferAgreement_ToBU() == feature) {
+			return new DelegateInformation(null, null, null) {
+
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_BU);
+				}
+
+				@Override
+				public Object getValue(final EObject object) {
+					if (getToEntity() != null) {
+						final BaseLegalEntity entity = getToEntity();
+						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : entity.getBusinessUnits()) {
+								if (bu.isDefault()) {
+									return bu;
+								}
+							}
+							return entity.getBusinessUnits().get(0);
+						}
+					}
+					return ECollections.emptyEList();
+				}
+			};
+		}
+		return super.getUnsetValueOrDelegate(feature);
 	}
 
 } //TransferAgreementImpl

@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -61,6 +62,8 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.transfers.TransferModel;
+import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
@@ -186,6 +189,7 @@ public class LNGSchedulerJobUtils {
 		} else {
 			postExportProcessors = null;
 		}
+		// NOTE: MB not call derive when it is a simple scenario evaluation
 		command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
 
 		// Mark schedule as clean
@@ -255,6 +259,7 @@ public class LNGSchedulerJobUtils {
 	 */
 	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
+		
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
 		// The ElementAssignment needs a cargo linked to a slot. Not all slots will have
@@ -284,13 +289,11 @@ public class LNGSchedulerJobUtils {
 				final Slot slot = slotAllocation.getSlot();
 				// Slots created in the builder have no container so add it the container now as
 				// it is used.
-				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
+				if (slot instanceof final LoadSlot loadSlot) {
 					if (slot.eContainer() == null) {
 						cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
 					}
-				} else if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				} else if (slot instanceof final DischargeSlot dischargeSlot) {
 					if (dischargeSlot.eContainer() == null) {
 						cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
 					}
@@ -306,13 +309,11 @@ public class LNGSchedulerJobUtils {
 			final Slot<?> slot = slotAllocation.getSlot();
 			// Slots created in the builder have no container so add it the container now as
 			// it is used.
-			if (slot instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) slot;
+			if (slot instanceof final LoadSlot loadSlot) {
 				if (slot.eContainer() == null) {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
 				}
-			} else if (slot instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			} else if (slot instanceof final DischargeSlot dischargeSlot) {
 				if (dischargeSlot.eContainer() == null) {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
 				}
@@ -352,8 +353,7 @@ public class LNGSchedulerJobUtils {
 
 				// Slots created in the builder have no container so add it the container now as
 				// it is used.
-				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
+				if (slot instanceof final LoadSlot loadSlot) {
 
 					if (firstLoad) {
 						// Found our first load slot to define the cargo
@@ -382,8 +382,7 @@ public class LNGSchedulerJobUtils {
 					if (loadSlot.isDESPurchase()) {
 						desPurchaseSlot = loadSlot;
 					}
-				} else if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				} else if (slot instanceof final DischargeSlot dischargeSlot) {
 					// Record different cargoes as possibly unused cargoes and remove the reference
 					if (dischargeSlot.getCargo() != loadCargo) {
 						possibleUnusedCargoes.add(dischargeSlot.getCargo());
@@ -462,8 +461,7 @@ public class LNGSchedulerJobUtils {
 
 		// For slots which are no longer used, remove the cargo
 		for (final EObject eObj : schedule.getUnusedElements()) {
-			if (eObj instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) eObj;
+			if (eObj instanceof final LoadSlot loadSlot) {
 				if (loadSlot.getCargo() != null) {
 					final Cargo c = loadSlot.getCargo();
 					possibleUnusedCargoes.remove(c);
@@ -484,8 +482,7 @@ public class LNGSchedulerJobUtils {
 
 				}
 			}
-			if (eObj instanceof SpotSlot) {
-				final SpotSlot spotSlot = (SpotSlot) eObj;
+			if (eObj instanceof final SpotSlot spotSlot) {
 				// Market slot, we can remove it.
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
 					// Remove rather than full delete as we may wish to re-use the object later
@@ -503,8 +500,7 @@ public class LNGSchedulerJobUtils {
 
 				}
 			}
-			if (eObj instanceof CharterOutEvent) {
-				final CharterOutEvent charterOutEvent = (CharterOutEvent) eObj;
+			if (eObj instanceof final CharterOutEvent charterOutEvent) {
 
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
 				cmd.append(SetCommand.create(domain, charterOutEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
@@ -576,8 +572,7 @@ public class LNGSchedulerJobUtils {
 				if (event instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
-					if (slot instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) slot;
+					if (slot instanceof final LoadSlot loadSlot) {
 						object = slotToCargoMap.get(loadSlot);
 						if (object == null) {
 							object = loadSlot.getCargo();
@@ -616,6 +611,151 @@ public class LNGSchedulerJobUtils {
 
 		return cmd;
 
+	}
+	
+	public static Command processTransfers(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule) {
+		
+		final Set<Slot> changedSlots = new HashSet<>();
+		final Set<Slot> slotsWTR = new HashSet<>();
+		// cargoes WITH transfer records from the ORIGINAL scenario
+		final Map<LoadSlot, Cargo> loadToCargo = new HashMap();
+		final Map<DischargeSlot, Cargo> dischargeToCargo = new HashMap();
+		final Set<Slot<?>> openSlots = new HashSet<>();
+		//original cargo model and transfer models
+		final CargoModel cargoModel = (CargoModel) scenario.eGetWithDefault(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CargoModel());
+		final TransferModel tm = (TransferModel) scenario.eGetWithDefault(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel());
+		
+		// collect slots referenced by transfer records
+		tm.getTransferRecords().stream().forEach( tr -> {
+			if (tr.getLhs() != null) {
+				slotsWTR.add(tr.getLhs());
+			}
+		});
+		
+		if (slotsWTR.isEmpty()) {
+			return IdentityCommand.INSTANCE;
+		}
+		
+//		// collect cargoes which have slots referenced by transfer records
+//		cargoModel.getCargoes().stream().forEach( c -> {
+//			c.getSlots().stream().forEach( s -> {
+//				if (slotsWTR.contains(s)) {
+//					if (s instanceof final LoadSlot ls) {
+//						loadToCargo.put(ls, c);
+//					} else if (s instanceof final DischargeSlot ds) {
+//						dischargeToCargo.put(ds, c);
+//					}
+//				}
+//			});
+//		});
+//		// collect open slots which referenced by transfer records
+//		cargoModel.getLoadSlots().forEach( ls -> {
+//			if (slotsWTR.contains(ls) && ls.getCargo() == null) {
+//				openSlots.add(ls);
+//			}
+//		});
+//		cargoModel.getDischargeSlots().forEach( ds -> {
+//			if (slotsWTR.contains(ds) && ds.getCargo() == null) {
+//				openSlots.add(ds);
+//			}
+//		});
+		
+		// check that ORIGINALLY open slots are still open in the FOREIGN schedule
+		schedule.getOpenSlotAllocations().forEach( osa -> {
+			final Slot s = osa.getSlot();
+			if (slotsWTR.contains(s) && s.getCargo() != null) {
+				changedSlots.add(s);
+			}
+		});
+		
+		// get the sorted slots on the cargo
+		// get the sorted slots on the cargo allocation in FOREIGN schedule
+		schedule.getCargoAllocations().forEach( ca -> {
+			boolean hasChange = false;
+			Cargo c = null;
+			for(final var sa : ca.getSlotAllocations()) {
+				final Slot s = sa.getSlot();
+				if (s != null) {
+					if (s.getCargo() == null) {
+						hasChange = true;
+						break;
+					} else {
+						if (c == null) {
+							c = s.getCargo();
+						} else if (c != s.getCargo()) {
+							hasChange = true;
+							break;
+						}
+					}
+				}
+			}
+			if (hasChange) {
+				ca.getSlotAllocations().forEach( sa -> {
+					final Slot s = sa.getSlot();
+					if (slotsWTR.contains(s)) {
+						changedSlots.add(s);
+					}
+				});
+			}
+			
+		});
+		
+//		// go through the FOREIGN schedule and find changes to wiring in cargoes
+//		schedule.getCargoAllocations().forEach( ca -> {
+//			
+//			ca.getSlotAllocations().forEach( sa -> {
+//				final Slot s = sa.getSlot();
+//				if (slotsWTR.contains(s)) {
+//					//register change to slot's wiring and remove them from the map of cargoes
+//					if (s instanceof final LoadSlot ls) {
+//						if (ls.getCargo() != loadToCargo.get(ls)) {
+//							changedSlots.add(s);
+//							loadToCargo.remove(ls);
+//						}
+//					} else if (s instanceof final DischargeSlot ds) {
+//						if (ds.getCargo() != dischargeToCargo.get(ds)) {
+//							changedSlots.add(s);
+//							dischargeToCargo.remove(ds);
+//						}
+//					}
+//					// previously open slot is now wired in the FOREIGN schedule
+//					if (openSlots.contains(s)) {
+//						changedSlots.add(s);
+//						openSlots.remove(s);
+//					}
+//					
+//				}
+//			});
+//		});
+		
+//		// if any cargoes are left, check FOREIGN schedule
+//		if (!loadToCargo.isEmpty() && !dischargeToCargo.isEmpty()) {
+//			schedule.getOpenSlotAllocations().stream().forEach( osa -> {
+//				final Slot s = osa.getSlot();
+//				if (slotsWTR.contains(s)) {
+//					if (loadToCargo.get(s) != null) {
+//						changedSlots.add(s);
+//						loadToCargo.remove(s);
+//					} else if (dischargeToCargo.get(s) != null) {
+//						changedSlots.add(s);
+//						dischargeToCargo.remove(s);
+//					}
+//				}
+//			});
+//		}
+		
+		CompoundCommand cc = new CompoundCommand();
+		changedSlots.forEach(s -> {
+			tm.getTransferRecords().forEach( tr -> {
+				if (tr.getLhs() == s) {
+					cc.append(SetCommand.create(domain, tr, TransfersPackage.eINSTANCE.getTransferRecord_Stale(), Boolean.TRUE));
+				}
+			});
+		});
+		
+		return cc;
+		
+		
 	}
 
 	public static @NonNull Pair<IAnnotatedSolution, IEvaluationState> evaluateCurrentState(@NonNull final Injector injector, @NonNull final ISequences rawSequences) {

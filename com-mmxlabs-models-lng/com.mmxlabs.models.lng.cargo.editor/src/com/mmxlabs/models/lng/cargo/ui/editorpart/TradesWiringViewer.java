@@ -2878,4 +2878,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	protected Action createDuplicateAction() {
 		return null;
 	}
+	
+	@Override
+	protected void lookAtMySelection(final ISelection selection) {
+		// nothing
+		if (selection != null && !selection.isEmpty()) {
+			
+		}
+	}
 }

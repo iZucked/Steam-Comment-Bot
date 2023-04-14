@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
@@ -97,6 +98,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getBusinessUnit <em>Business Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isComputeExposure <em>Compute Exposure</em>}</li>
@@ -1027,6 +1030,54 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean windowCounterParty = WINDOW_COUNTER_PARTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingBasis()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PRICING_BASIS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingBasis()
+	 * @generated
+	 * @ordered
+	 */
+	protected String pricingBasis = PRICING_BASIS_EDEFAULT;
+
+	/**
+	 * This is true if the Pricing Basis attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pricingBasisESet;
+
+	/**
+	 * The cached value of the '{@link #getBusinessUnit() <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBusinessUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit businessUnit;
+
+	/**
+	 * This is true if the Business Unit reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean businessUnitESet;
 
 	/**
 	 * The cached value of the '{@link #getAllowedPorts() <em>Allowed Ports</em>}' reference list.
@@ -2702,6 +2753,123 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
+	public String getPricingBasis() {
+		return pricingBasis;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPricingBasis(String newPricingBasis) {
+		String oldPricingBasis = pricingBasis;
+		pricingBasis = newPricingBasis;
+		boolean oldPricingBasisESet = pricingBasisESet;
+		pricingBasisESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, pricingBasis, !oldPricingBasisESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetPricingBasis() {
+		String oldPricingBasis = pricingBasis;
+		boolean oldPricingBasisESet = pricingBasisESet;
+		pricingBasis = PRICING_BASIS_EDEFAULT;
+		pricingBasisESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, PRICING_BASIS_EDEFAULT, oldPricingBasisESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetPricingBasis() {
+		return pricingBasisESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BusinessUnit getBusinessUnit() {
+		if (businessUnit != null && businessUnit.eIsProxy()) {
+			InternalEObject oldBusinessUnit = (InternalEObject)businessUnit;
+			businessUnit = (BusinessUnit)eResolveProxy(oldBusinessUnit);
+			if (businessUnit != oldBusinessUnit) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, businessUnit));
+			}
+		}
+		return businessUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetBusinessUnit() {
+		return businessUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBusinessUnit(BusinessUnit newBusinessUnit) {
+		BusinessUnit oldBusinessUnit = businessUnit;
+		businessUnit = newBusinessUnit;
+		boolean oldBusinessUnitESet = businessUnitESet;
+		businessUnitESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, businessUnit, !oldBusinessUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetBusinessUnit() {
+		BusinessUnit oldBusinessUnit = businessUnit;
+		boolean oldBusinessUnitESet = businessUnitESet;
+		businessUnit = null;
+		businessUnitESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__BUSINESS_UNIT, oldBusinessUnit, null, oldBusinessUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetBusinessUnit() {
+		return businessUnitESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<APortSet<Port>> getAllowedPorts() {
 		if (allowedPorts == null) {
 			allowedPorts = new EObjectResolvingEList.Unsettable<APortSet<Port>>(APortSet.class, this, CargoPackage.SLOT__ALLOWED_PORTS);
@@ -2860,7 +3028,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	public int getSlotOrDelegateDaysBuffer() {
 		return 0;
 	}
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2880,6 +3048,16 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@Override
 	public BaseLegalEntity getSlotOrDelegateEntity() {
 		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public BusinessUnit getSlotOrDelegateBusinessUnit() {
+		return (BusinessUnit) eGetWithDefault(CargoPackage.Literals.SLOT__BUSINESS_UNIT);
 	}
  
 	/**
@@ -3172,6 +3350,11 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isCancelled();
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return isWindowCounterParty();
+			case CargoPackage.SLOT__PRICING_BASIS:
+				return getPricingBasis();
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				if (resolve) return getBusinessUnit();
+				return basicGetBusinessUnit();
 			case CargoPackage.SLOT__ALLOWED_PORTS:
 				return getAllowedPorts();
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
@@ -3321,6 +3504,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__PRICING_BASIS:
+				setPricingBasis((String)newValue);
+				return;
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				setBusinessUnit((BusinessUnit)newValue);
 				return;
 			case CargoPackage.SLOT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
@@ -3472,6 +3661,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty(WINDOW_COUNTER_PARTY_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__PRICING_BASIS:
+				unsetPricingBasis();
+				return;
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				unsetBusinessUnit();
+				return;
 			case CargoPackage.SLOT__ALLOWED_PORTS:
 				unsetAllowedPorts();
 				return;
@@ -3596,6 +3791,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return cancelled != CANCELLED_EDEFAULT;
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return windowCounterParty != WINDOW_COUNTER_PARTY_EDEFAULT;
+			case CargoPackage.SLOT__PRICING_BASIS:
+				return isSetPricingBasis();
+			case CargoPackage.SLOT__BUSINESS_UNIT:
+				return isSetBusinessUnit();
 			case CargoPackage.SLOT__ALLOWED_PORTS:
 				return isSetAllowedPorts();
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
@@ -3723,6 +3922,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return getSlotOrDelegateDaysBuffer();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS:
 				return getSlotOrDelegateAllowedPorts();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT:
+				return getSlotOrDelegateBusinessUnit();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -3804,6 +4005,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(cancelled);
 		result.append(", windowCounterParty: ");
 		result.append(windowCounterParty);
+		result.append(", pricingBasis: ");
+		if (pricingBasisESet) result.append(pricingBasis); else result.append("<unset>");
 		result.append(", allowedPortsOverride: ");
 		result.append(allowedPortsOverride);
 		result.append(", computeExposure: ");
@@ -3947,6 +4150,30 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedVesselsArePermissive(), Boolean.FALSE);
 		} else if (feature == CargoPackage.Literals.SLOT__FULL_CARGO_LOT) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_FullCargoLot(), Boolean.FALSE);
+		} else if (feature == CargoPackage.Literals.SLOT__BUSINESS_UNIT) {
+			return new DelegateInformation(null, null, null) {
+				
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__BUSINESS_UNIT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					if (getSlotOrDelegateEntity() != null) {
+						final BaseLegalEntity entity = getSlotOrDelegateEntity();
+						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : entity.getBusinessUnits()) {
+								if (bu.isDefault()) {
+									return bu;
+								}
+							}
+							return entity.getBusinessUnits().get(0);
+						}
+					}
+					return null;
+				}
+			};
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}
