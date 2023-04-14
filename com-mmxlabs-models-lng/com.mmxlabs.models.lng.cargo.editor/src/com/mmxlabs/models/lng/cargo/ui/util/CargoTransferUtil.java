@@ -62,6 +62,10 @@ public class CargoTransferUtil {
 		return getTransferRecords(scenarioModel).stream().filter(tr -> tr.getLhs() == slot).findFirst();
 	}
 	
+	public static List< ? extends EObject> getTransferRecordsAsEObjects(final LNGScenarioModel scenarioModel){
+		return getTransferRecords(scenarioModel);
+	}
+	
 	private static List<TransferRecord> getTransferRecords(final LNGScenarioModel scenarioModel){
 		if (scenarioModel != null) {
 			final TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);

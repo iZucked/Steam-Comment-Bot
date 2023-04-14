@@ -13,6 +13,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -24,12 +25,15 @@ import org.eclipse.ui.PartInitException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.ui.util.CargoTransferUtil;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
@@ -79,11 +83,9 @@ public class ExportScheduleHelper {
 			@Nullable final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser) throws Exception {
 		// Original data
 
+		final CompoundCommand scheduleUpdateCommand = new CompoundCommand();
 		final LNGScenarioModel o_scenarioModel = scenarioResult.getTypedRoot(LNGScenarioModel.class);
 		final ScheduleModel o_scheduleModel = scenarioResult.getTypedResult(ScheduleModel.class);
-		if (o_scenarioModel != null) {
-			final CargoModel o_cargoModel = ScenarioModelUtil.getCargoModel(o_scenarioModel);
-		}
 		final ScenarioInstance scenarioInstance = scenarioResult.getScenarioInstance();
 
 		@Nullable
@@ -111,6 +113,10 @@ public class ExportScheduleHelper {
 		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 
 		final Schedule schedule = source_scheduleModel.getSchedule();
+		
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRANSFER_MODEL)) {
+			scheduleUpdateCommand.append(LNGSchedulerJobUtils.processTransfers(editingDomain, scenarioModel, schedule));
+		}
 
 		//
 		for (final Sequence seq : schedule.getSequences()) {
@@ -198,8 +204,8 @@ public class ExportScheduleHelper {
 		}
 
 		// TODO: Need injector for correct post export processors
-		final Command command = LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule);
-		editingDomain.getCommandStack().execute(command);
+		scheduleUpdateCommand.append(LNGSchedulerJobUtils.exportSchedule(null, scenarioModel, editingDomain, schedule));
+		editingDomain.getCommandStack().execute(scheduleUpdateCommand);
 
 		// Re-check after the customiser has run.
 		for (final Cargo cargo : cargoModel.getCargoes()) {
