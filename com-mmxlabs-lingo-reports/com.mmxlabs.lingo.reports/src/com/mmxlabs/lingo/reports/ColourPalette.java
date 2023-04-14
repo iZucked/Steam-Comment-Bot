@@ -65,6 +65,7 @@ public final class ColourPalette {
 	private static final RGB Light_Grey = new RGB(240, 240, 240);
 	private static final RGB Light_Orange = new RGB(255, 197, 168);
 	private static final RGB Orange = new RGB(255, 168, 64);
+	private static final RGB White = new RGB(255, 255, 255);
 
 	private static ColourPalette instance;
 	private static final Map<String, ColourPalette> namedInstances = new ConcurrentHashMap<>();
@@ -91,8 +92,16 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background, Vessel_Ballast_Journey);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background, Vessel_Ballast_Idle);
 
+		setItemColour(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Foreground, White);
+		setItemColour(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Foreground, White);
+		setItemColour(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Foreground, Black);
+
 		setItemColour(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background, Vessel_Generated_Charter_Out);
 		setItemColour(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background, Vessel_Charter_Length);
+
+		setItemColour(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Foreground, White);
+		setItemColour(ColourPaletteItems.Voyage_CharterLength, ColourElements.Foreground, Black);
 
 		setItemColour(ColourPaletteItems.Voyage_Discharge, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_Load, ColourElements.Background, Slot_White);
@@ -100,10 +109,21 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_End, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_Cooldown, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_Purge, ColourElements.Background, Slot_White);
+		
+		setItemColour(ColourPaletteItems.Voyage_Discharge, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_Load, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_Start, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_End, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_Cooldown, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_Purge, ColourElements.Foreground, Black);
 
 		setItemColour(ColourPaletteItems.Event_CharterOut, ColourElements.Background, Vessel_Charter_Out);
 		setItemColour(ColourPaletteItems.Event_Maintenance, ColourElements.Background, Vessel_Maintenance);
 		setItemColour(ColourPaletteItems.Event_DryDock, ColourElements.Background, Vessel_Dry_Dock);
+
+		setItemColour(ColourPaletteItems.Event_CharterOut, ColourElements.Foreground, White);
+		setItemColour(ColourPaletteItems.Event_Maintenance, ColourElements.Foreground, White);
+		setItemColour(ColourPaletteItems.Event_DryDock, ColourElements.Foreground, White);
 
 		setItemColour(ColourPaletteItems.Event_Locked, ColourElements.Border, Locked_White);
 		setItemColour(ColourPaletteItems.FOB_Sale, ColourElements.Border, FOBDES_Grey);

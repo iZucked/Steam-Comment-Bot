@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui.analytics;
+package com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -24,6 +26,7 @@ import org.eclipse.ui.PlatformUI;
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
@@ -36,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
+import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -54,6 +58,11 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUni
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Meta;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.ScenarioMeta;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSON;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSONTransformer;
+import com.mmxlabs.models.lng.transformer.ui.headless.common.ScenarioMetaUtils;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -249,7 +258,7 @@ public class SandboxDefineRunner {
 				}
 				skipRun = true;
 			}
-//tasks.add(0, model.getBaseCase());
+			// tasks.add(0, model.getBaseCase());
 			// ScheduleSpecification baseSpecification;
 			if (model.getBaseCase().isKeepExistingScenario()) {
 				final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(originalScenarioDataProvider, mapper);
@@ -442,8 +451,7 @@ public class SandboxDefineRunner {
 		}
 	}
 
-	private static void recursiveTaskCreator(final int listIdx, final List<List<Runnable>> combinations,
-			final BaseCase templateBaseCase, final List<BaseCase> tasks) {
+	private static void recursiveTaskCreator(final int listIdx, final List<List<Runnable>> combinations, final BaseCase templateBaseCase, final List<BaseCase> tasks) {
 		if (listIdx == combinations.size()) {
 			final BaseCase copy = EMFCopier.copy(templateBaseCase);
 
@@ -526,5 +534,64 @@ public class SandboxDefineRunner {
 
 	public LNGScenarioToOptimiserBridge getBridge() {
 		return scenarioToOptimiserBridge;
+	}
+
+	public static Function<IProgressMonitor, AbstractSolutionSet> createSandboxJobFunction(final int threadsAvailable, final IScenarioDataProvider sdp,
+			final @Nullable ScenarioInstance scenarioInstance, final SandboxSettings sandboxSettings, final OptionAnalysisModel model, @Nullable Meta meta,
+			@Nullable Consumer<Object> registerLogging) {
+
+		final HeadlessSandboxJSON json;
+		if (registerLogging != null) {
+
+			final HeadlessSandboxJSONTransformer transformer = new HeadlessSandboxJSONTransformer();
+			json = transformer.createJSONResultObject(sandboxSettings);
+			if (meta != null) {
+				json.setMeta(meta);
+			}
+			json.getParams().setCores(threadsAvailable);
+			// Should grab this from the task
+			json.setType("sandbox:define");
+			registerLogging.accept(json);
+		} else {
+			json = null;
+		}
+
+		final SandboxResult sandboxResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
+		sandboxResult.setUseScenarioBase(false);
+
+		boolean allowCaching = false;
+		UserSettings userSettings = sandboxSettings.getUserSettings();
+		return SandboxRunnerUtil.createSandboxFunction(sdp, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
+
+			final SandboxDefineRunner defineRunner = new SandboxDefineRunner(scenarioInstance, sdp, userSettings, mapper, model);
+
+			return new SandboxJob() {
+				@Override
+				public LNGScenarioToOptimiserBridge getScenarioRunner() {
+					return defineRunner.getBridge();
+				}
+
+				@Override
+				public IMultiStateResult run(final IProgressMonitor monitor) {
+					final long startTime = System.currentTimeMillis();
+					try {
+						return defineRunner.runSandbox(monitor);
+					} finally {
+						final long runTime = System.currentTimeMillis() - startTime;
+
+						if (json != null) {
+							json.getMetrics().setRuntime(runTime);
+
+							final ScenarioMeta scenarioMeta = ScenarioMetaUtils.writeOptimisationMetrics( //
+									defineRunner.getBridge().getOptimiserScenario(), //
+									userSettings);
+
+							json.setScenarioMeta(scenarioMeta);
+
+						}
+					}
+				}
+			};
+		}, null, allowCaching);
 	}
 }

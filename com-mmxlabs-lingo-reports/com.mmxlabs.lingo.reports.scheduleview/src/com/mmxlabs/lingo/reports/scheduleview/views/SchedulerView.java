@@ -91,6 +91,7 @@ import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
+import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderComparator;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
@@ -110,8 +111,10 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -178,8 +181,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	/**
-	 * Basic colour only items. Other are rendered directly once the ganttchart has
-	 * been created
+	 * Basic colour only items. Other are rendered directly once the ganttchart has been created
 	 */
 	private static final List<ILegendItem> basiclegendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
@@ -271,7 +273,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							selectedObjects.add(obj);
 						}
 
-//						selectedObjects.add(obj);
+						// selectedObjects.add(obj);
 					}
 
 				}
@@ -380,7 +382,16 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						}
 					}
 				}
+				// Canal events are always selected with journeys 
+				final List<Object> additionalElements = l.stream() //
+						.filter(Journey.class::isInstance) //
+						.map(Journey.class::cast) //
+						.map(Journey::getCanalJourneyEvent) //
+						.filter(Objects::nonNull) //
+						.map(Object.class::cast) //
+						.toList();
 
+				l.addAll(additionalElements);
 				// Apply alpha.
 				// - Fade out objects which are not selected.
 				// - Fade out pinned scenario objects more.
@@ -393,7 +404,12 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 					if (!l.isEmpty() && currentSelectedDataProvider != null && (currentSelectedDataProvider.getSelectedChangeSetRows() != null || !currentSelectedDataProvider.inPinDiffMode())) {
 						for (final GanttEvent ganttEvent : ganttChart.getGanttComposite().getEvents()) {
-							ganttEvent.setStatusAlpha(130);
+							// Render CanalJourneyEvent without change to alpha
+							if (!(ganttEvent.getData() instanceof CanalJourneyEvent)) {
+								ganttEvent.setStatusAlpha(130);
+							} else {
+								ganttEvent.setStatusAlpha(255);
+							}
 							if (ganttEvent.getData() instanceof final EObject evt) {
 								// Change alpha for pinned elements
 								if (currentSelectedDataProvider.isPinnedObject(evt)) {
@@ -527,6 +543,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			}
 
 		};
+		viewer.getGanttChart().getGanttComposite().setRenderOrderComparator(new DefaultRenderOrderComparator());
 
 		viewer.getGanttChart().getGanttComposite().setMenuAction((menu, event) -> {
 
@@ -612,9 +629,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 								return Collections.singletonList(ee.getSequence().getVesselCharter());
 							}
 						}
-						
+
 						return Collections.emptyList();
-						
+
 					};
 
 					for (final Object event : result) {
@@ -1280,8 +1297,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Helper method to expand cargo selections to include the whole set of events
-	 * representing the cargo
+	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
 	 * 
 	 * @param selectedObjects
 	 * @return
@@ -1316,8 +1332,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to
-	 * reset pin mode data
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
 	 * 
 	 */
 	private void clearPinModeData() {
@@ -1460,6 +1475,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				ge.setSpecialDrawMode(viewer.getSpecialDrawMode((ILabelProvider) viewer.getLabelProvider(), e));
 				ge.setStatusBorderColor(viewer.getLabelProviderBorderColor((ILabelProvider) viewer.getLabelProvider(), e));
 				ge.setStatusColor(viewer.getLabelProviderColor((ILabelProvider) viewer.getLabelProvider(), e));
+				ge.setStatusForegroundColour(viewer.getLabelProviderForegroundColour((ILabelProvider) viewer.getLabelProvider(), e));
 				l2.add(ge);
 			}
 
@@ -1489,6 +1505,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		ge.setSpecialDrawMode(viewer.getSpecialDrawMode((ILabelProvider) viewer.getLabelProvider(), object));
 		ge.setStatusBorderColor(viewer.getLabelProviderBorderColor((ILabelProvider) viewer.getLabelProvider(), object));
 		ge.setStatusColor(viewer.getLabelProviderColor((ILabelProvider) viewer.getLabelProvider(), object));
+		ge.setStatusForegroundColour(viewer.getLabelProviderForegroundColour((ILabelProvider) viewer.getLabelProvider(), object));
 
 		return new ILegendItem() {
 

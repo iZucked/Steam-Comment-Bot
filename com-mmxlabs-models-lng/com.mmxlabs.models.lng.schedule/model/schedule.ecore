@@ -341,6 +341,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currencyUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dealType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//DealType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SlotAllocationType">
     <eLiterals name="PURCHASE"/>

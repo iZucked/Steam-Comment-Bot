@@ -60,7 +60,6 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.rcp.common.actions.CopyTransposedGridToJSONUtil;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
@@ -85,6 +84,7 @@ public class ExposureDetailReportView extends ViewPart {
 
 		createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
 		createColumn("Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
+		createColumn("Date", SchedulePackage.Literals.EXPOSURE_DETAIL__LOCAL_DATE);
 		final GridColumnGroup volumeGroup = createGroup("Volume");
 
 		createColumn("Native", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);

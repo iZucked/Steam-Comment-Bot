@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -13,6 +14,8 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -36,6 +39,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
+import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreatePaperStripDialog.StripType;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
@@ -50,10 +54,13 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.impl.TextualReferenceInlineEditor;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.YearMonthAttributeManipulator;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.LockableAction;
@@ -72,13 +79,28 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 
 		addNameManipulator("Name");
 		addColumn("Type", createPaperDealTypeFormatter(), null);
-		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), getCommandHandler()));
-		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), getCommandHandler()));
-		addTypicalColumn("Month", new YearMonthAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingMonth(), getCommandHandler()));
-		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler()));
-		addTypicalColumn("MtM curve", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler()));
-		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler()));
-
+		//addTypicalColumn("Pricing start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), getCommandHandler()));
+		//addTypicalColumn("Pricing end", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), getCommandHandler()));
+		addTypicalColumn("Month", new YearMonthAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingMonth(), getCommandHandler())).setEditingSupport(null);;
+		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler())).setEditingSupport(null);;
+		addTypicalColumn("MtM curve", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler())).setEditingSupport(null);;
+		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler())).setEditingSupport(null);;
+		addTypicalColumn("Pricing", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingType(), getCommandHandler()) {
+			//@Override
+			@Override
+			public String render(final Object object) {
+				if (object instanceof PaperDeal pd) {
+					return switch(pd.getPricingType()) {
+					case INSTRUMENT -> pd.getInstrument().getName();
+					case CALENDAR -> "Calendar";
+					case PERIOD_AVG -> "Period daily average";
+					default -> throw new IllegalArgumentException("Unexpected value: " + pd.getPricingType());
+					};
+				}
+				return null;
+			}
+		}).setEditingSupport(null);
+		
 		setTitle("Paper", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		final CreatePaperStripMenuAction cpsma = new CreatePaperStripMenuAction("Bulk add");
@@ -94,8 +116,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 		extraActions.add(new Action("Selected from generated", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
-				if (gSelection instanceof IStructuredSelection) {
-					final IStructuredSelection ss = (IStructuredSelection) gSelection;
+				if (gSelection instanceof IStructuredSelection ss) {
 					final StringBuilder sb = new StringBuilder();
 					processSelection(ss, sb);
 					if (sb.length() != 0) {
@@ -112,8 +133,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 	private void processSelection(final IStructuredSelection ss, final StringBuilder sb) {
 		final Iterator iter = ss.iterator();
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof final LNGScenarioModel scenarioModel) {
 			final Schedule schedule = scenarioModel.getScheduleModel().getSchedule();
 			if (schedule != null) {
 				final CompoundCommand cc = new CompoundCommand();
@@ -121,8 +141,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 					final Object obj = iter.next();
 					if (obj instanceof PaperDealAllocation) {
 						processSelectedPaperDealAllocation(scenarioModel, schedule, cc, obj, sb);
-					} else if (obj instanceof PaperDealAllocationEntry) {
-						final PaperDealAllocationEntry pdae = (PaperDealAllocationEntry) obj;
+					} else if (obj instanceof PaperDealAllocationEntry pdae) {
 						processSelectedPaperDealAllocation(scenarioModel, schedule, cc, pdae.eContainer(), sb);
 					}
 				}
@@ -134,8 +153,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 	}
 
 	private void processSelectedPaperDealAllocation(final LNGScenarioModel scenarioModel, final Schedule schedule, final CompoundCommand cc, final Object obj, final StringBuilder sb) {
-		if (obj instanceof PaperDealAllocation) {
-			final PaperDealAllocation pda = (PaperDealAllocation) obj;
+		if (obj instanceof final PaperDealAllocation pda) {
 			final PaperDeal pd = pda.getPaperDeal();
 			if (pd.eContainmentFeature() == SchedulePackage.eINSTANCE.getSchedule_GeneratedPaperDeals()) {
 				if (pda.eContainer() != null && schedule == pda.eContainer()) {
@@ -296,5 +314,21 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 			}
 		}
 		gSelection = SelectionHelper.adaptSelection(selection);
+	}
+	
+	private class PaperPricingTypeEnumManipulator extends ValueListAttributeManipulator {
+
+		public PaperPricingTypeEnumManipulator(EAttribute field, ICommandHandler commandHandler) {
+			super(field, commandHandler, getValues((EEnum) field.getEAttributeType()));
+		}
+		
+		private static List<Pair<String, Object>> getValues(final EEnum eenum) {
+			final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
+			values.add(new Pair<String, Object>("Calendar", PaperPricingType.CALENDAR));
+			values.add(new Pair<String, Object>("Instrument", PaperPricingType.INSTRUMENT));
+			values.add(new Pair<String, Object>("Period daily average", PaperPricingType.PERIOD_AVG));
+			return values;
+		}
+		
 	}
 }

@@ -5328,13 +5328,22 @@ public interface SchedulePackage extends EPackage {
 	int EXPOSURE_DETAIL__DEAL_TYPE = 8;
 
 	/**
+	 * The feature id for the '<em><b>Local Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__LOCAL_DATE = 9;
+
+	/**
 	 * The number of structural features of the '<em>Exposure Detail</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPOSURE_DETAIL_FEATURE_COUNT = 9;
+	int EXPOSURE_DETAIL_FEATURE_COUNT = 10;
 
 	/**
 	 * The number of operations of the '<em>Exposure Detail</em>' class.
@@ -10058,6 +10067,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getExposureDetail_DealType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getLocalDate <em>Local Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Local Date</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getLocalDate()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_LocalDate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails <em>Charter Contract Fee Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12571,6 +12591,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXPOSURE_DETAIL__DEAL_TYPE = eINSTANCE.getExposureDetail_DealType();
+
+		/**
+		 * The meta object literal for the '<em><b>Local Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__LOCAL_DATE = eINSTANCE.getExposureDetail_LocalDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterContractFeeDetailsImpl <em>Charter Contract Fee Details</em>}' class.

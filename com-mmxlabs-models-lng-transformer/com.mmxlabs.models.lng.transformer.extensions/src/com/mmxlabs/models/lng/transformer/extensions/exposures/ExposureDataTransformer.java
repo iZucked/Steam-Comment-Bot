@@ -77,16 +77,16 @@ public class ExposureDataTransformer implements ISlotTransformer {
 				VolumeTierSlotParams p = SlotContractParamsHelper.findSlotContractParams(exposedSlot, VolumeTierSlotParams.class, VolumeTierPriceParameters.class);
 				if (p != null && p.isOverrideContract()) {
 					if (p.getVolumeLimitsUnit() == VolumeUnits.M3) {
-						priceExpression = String.format("VOLUMETIERM3(%s,%f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
+						priceExpression = String.format("VOLUMETIERM3(%s,<= %f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
 					} else {
-						priceExpression = String.format("VOLUMETIERMMBTU(%s,%f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
+						priceExpression = String.format("VOLUMETIERMMBTU(%s,<= %f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
 					}
 				} else {
 					if (vtContract.getVolumeLimitsUnit() == VolumeUnits.M3) {
-						priceExpression = String.format("VOLUMETIERM3(%s,%f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
+						priceExpression = String.format("VOLUMETIERM3(%s,<= %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
 								generateSafeExpression(vtContract.getHighExpression()));
 					} else {
-						priceExpression = String.format("VOLUMETIERMMBTU(%s,%f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
+						priceExpression = String.format("VOLUMETIERMMBTU(%s,<= %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
 								generateSafeExpression(vtContract.getHighExpression()));
 					}
 				}
@@ -139,7 +139,7 @@ public class ExposureDataTransformer implements ISlotTransformer {
 					}
 					pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
 							.forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-									idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
+									idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
 					pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null)//
 							.forEach(idx -> lookupData.currencyList.add(idx.getName().toLowerCase()));
 					pricingModel.getConversionFactors().forEach(f -> lookupData.conversionMap.put(//

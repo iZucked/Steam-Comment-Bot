@@ -1609,13 +1609,22 @@ public interface PricingPackage extends EPackage {
 	int COMMODITY_CURVE__MARKET_INDEX = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Adjustment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE__ADJUSTMENT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Commodity Curve</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMODITY_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 1;
+	int COMMODITY_CURVE_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl <em>Charter Curve</em>}' class.
@@ -3514,6 +3523,17 @@ public interface PricingPackage extends EPackage {
 	EReference getCommodityCurve_MarketIndex();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CommodityCurve#getAdjustment <em>Adjustment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Adjustment</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CommodityCurve#getAdjustment()
+	 * @see #getCommodityCurve()
+	 * @generated
+	 */
+	EAttribute getCommodityCurve_Adjustment();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CharterCurve <em>Charter Curve</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4809,6 +4829,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMMODITY_CURVE__MARKET_INDEX = eINSTANCE.getCommodityCurve_MarketIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Adjustment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COMMODITY_CURVE__ADJUSTMENT = eINSTANCE.getCommodityCurve_Adjustment();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CharterCurveImpl <em>Charter Curve</em>}' class.

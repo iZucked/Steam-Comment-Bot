@@ -404,6 +404,7 @@ public class ChangeSetView extends ViewPart {
 					for (final ChangeSetTableRow csr : group.getRows()) {
 						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType(), csr.getBeforeVesselCharterNumber()));
 						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType(), csr.getAfterVesselCharterNumber()));
+						columnHelper.collectExposures(csr, group);
 					}
 				}
 			}
@@ -413,11 +414,16 @@ public class ChangeSetView extends ViewPart {
 					for (final ChangeSetTableRow csr : group.getRows()) {
 						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType(), csr.getBeforeVesselCharterNumber()));
 						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType(), csr.getAfterVesselCharterNumber()));
+						columnHelper.collectExposures(csr, group);
 					}
 				}
 			}
 
 			columnHelper.updateVesselColumns(vesselnames);
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
+				columnHelper.updateExposuresColumns();
+			}
+			
 
 			for (final GridColumn gc : viewer.getGrid().getColumns()) {
 				gc.setWidth(gc.getWidth());

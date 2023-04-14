@@ -456,7 +456,7 @@ public class BasicExposuresTest {
 				.stream()
 				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
+						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
 		pricingModel.getCurrencyCurves()
 				.stream()
 				.filter(idx -> idx.getName() != null)//
@@ -524,7 +524,7 @@ public class BasicExposuresTest {
 				.stream()
 				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
+						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
 		pricingModel.getCurrencyCurves()
 				.stream()
 				.filter(idx -> idx.getName() != null)//
