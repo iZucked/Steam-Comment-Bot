@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.providers.*;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCharterLengthElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCounterPartyVolumeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCounterPartyWindowProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
@@ -178,6 +179,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IReturnElementProviderEditor returnElementProvider = new HashMapReturnElementProviderEditor();
 		bind(IReturnElementProvider.class).toInstance(returnElementProvider);
 		bind(IReturnElementProviderEditor.class).toInstance(returnElementProvider);
+		
+		final ICharterLengthElementProviderEditor charterLengthElementProvider = new DefaultCharterLengthElementProviderEditor();
+		bind(ICharterLengthElementProvider.class).toInstance(charterLengthElementProvider);
+		bind(ICharterLengthElementProviderEditor.class).toInstance(charterLengthElementProvider);
 
 		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);

@@ -17,12 +17,13 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 @NonNullByDefault
 public class CharterLengthPortSlot extends VesselEventPortSlot implements ICharterLengthEventPortSlot {
-
+	final IPort port;
 	public CharterLengthPortSlot(String id, @Nullable ITimeWindow timeWindow, IPort port) {
-		super(id, PortType.CharterLength, port, timeWindow, new CharterLengthEvent(timeWindow, port));
+		this(id, timeWindow, port, new CharterLengthEvent(timeWindow, port));
 	}
 	public CharterLengthPortSlot(String id, @Nullable ITimeWindow timeWindow, IPort port, final CharterLengthEvent event) {
 		super(id, PortType.CharterLength, port, timeWindow, event);
+		this.port = port;
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class CharterLengthPortSlot extends VesselEventPortSlot implements IChart
 	}
 	@Override
 	public IPort getPort() {
-		return getVesselEvent().getEndPort();
+		return port;
 	}
 
 	@Override

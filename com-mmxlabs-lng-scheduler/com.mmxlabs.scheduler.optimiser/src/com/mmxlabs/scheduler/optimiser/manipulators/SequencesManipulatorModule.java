@@ -23,6 +23,7 @@ public class SequencesManipulatorModule extends AbstractModule {
 		bind(StartLocationRemovingSequenceManipulator.class);
 		bind(EndLocationSequenceManipulator.class);
 		bind(ShortCargoSequenceManipulator.class);
+		bind(CharterLengthLocationSequenceManipulator.class);
 	}
 
 	/**
@@ -41,7 +42,7 @@ public class SequencesManipulatorModule extends AbstractModule {
 	@Provides
 //	@Singleton
 	private ChainedSequencesManipulator provideChainedSequencesManipulator(final Injector injector, final StartLocationRemovingSequenceManipulator startLocationRemovingSequenceManipulator,
-			final EndLocationSequenceManipulator endLocationSequenceManipulator, ShortCargoSequenceManipulator shortCargoSequenceManipulator) {
+			final EndLocationSequenceManipulator endLocationSequenceManipulator, ShortCargoSequenceManipulator shortCargoSequenceManipulator, final CharterLengthLocationSequenceManipulator charterLengthLocationSequenceManipulator) {
 		/**
 		 * A chained manipulator, because we need several manipulators
 		 */
@@ -50,7 +51,8 @@ public class SequencesManipulatorModule extends AbstractModule {
 		chainedManipulator.addDelegate(startLocationRemovingSequenceManipulator);
 		chainedManipulator.addDelegate(endLocationSequenceManipulator);
 		chainedManipulator.addDelegate(shortCargoSequenceManipulator);
-
+		chainedManipulator.addDelegate(charterLengthLocationSequenceManipulator);
+		
 		return chainedManipulator;
 
 	}

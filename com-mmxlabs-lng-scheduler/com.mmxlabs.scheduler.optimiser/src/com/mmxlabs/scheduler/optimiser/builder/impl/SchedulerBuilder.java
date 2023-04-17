@@ -24,9 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.common.curves.UnitLongCurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -112,6 +110,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterLengthElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyVolumeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
@@ -373,6 +372,9 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private ICharterRateCalculator charterRateCalculator;
+
+	@Inject
+	private ICharterLengthElementProviderEditor charterLengthElementProviderEditor;
 
 	/**
 	 * Constant used during end date of scenario calculations -
@@ -679,6 +681,31 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		return element;
 	}
 
+	private void createCharterLengthLocationElements() {
+		for (IVesselEventPortSlot vesselEventSlot : vesselEvents) {
+			if (vesselEventSlot instanceof CharterLengthPortSlot charterLengthSlot) {
+				for (IPort port : portProvider.getAllPorts()) {
+					assert port != null;
+					charterLengthElementProviderEditor.setCharterLengthLocationElement(charterLengthSlot.getVesselEvent(), port,
+							createCharterLengthLocationElement(charterLengthSlot.getId(), charterLengthSlot, port));
+				}
+			}
+		}
+	}
+
+	private ISequenceElement createCharterLengthLocationElement(final String eventName, final CharterLengthPortSlot portSlot, final IPort port) {
+		final String name = String.format("charter-length-%s-at-%s", eventName, port.getName());
+		final SequenceElement element = new SequenceElement(indexingContext, name);
+		final CharterLengthEvent event = (CharterLengthEvent) portSlot.getVesselEvent();
+		final CharterLengthPortSlot charterLengthPortSlot = new CharterLengthPortSlot(name, event.getTimeWindow(), port, event);
+		elementDurationsProvider.setElementDuration(element, event.getDurationHours());
+		elementPortProvider.setPortForElement(port, element);
+		portSlotsProvider.setPortSlot(element, charterLengthPortSlot);
+		portTypeProvider.setPortType(element, PortType.CharterLength);
+		charterLengthElementProviderEditor.setOriginalCharterLengthPortSlot(portSlot, charterLengthPortSlot);
+		return element;
+	}
+
 	/**
 	 * Method to set common properties etc for {@link Port} implementations.
 	 * 
@@ -961,6 +988,8 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		createReturnElements();
 
 		createRoundtripCargoReturnElements();
+		
+		createCharterLengthLocationElements();
 
 		// Patch up end time windows
 		// The return time should be the soonest we can get back to the previous load,

@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
 import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.ICharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
@@ -57,6 +58,7 @@ import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord.LatenessRecor
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterLengthElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -77,6 +79,9 @@ public class VisitEventExporter {
 
 	@Inject
 	private CargoTypeUtil cargoTypeUtil;
+	
+	@Inject
+	private ICharterLengthElementProvider charterLengthProvider;
 
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<>();
 
@@ -203,10 +208,19 @@ public class VisitEventExporter {
 				final VesselEventVisit vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();
 				vev.setVesselEvent(event);
 				portVisit = vev;
-			} else {
+			} else if(slot instanceof ICharterLengthEventPortSlot clSlot) {
+				final ICharterLengthEventPortSlot originalSlot = charterLengthProvider.getOriginalCharterLengthSlot(clSlot);
+				final VesselEvent event = modelEntityMap.getModelObject(originalSlot != null ? originalSlot : slot, VesselEvent.class);
+				final VesselEventVisit vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();
+				vev.setVesselEvent(event);
+				portVisit = vev;
+			}
+			else {
 				final VesselEvent event = modelEntityMap.getModelObject(slot, VesselEvent.class);
-				if (event == null)
+				
+				if (event == null) {
 					return null;
+				}
 				final VesselEventVisit vev;
 				if (event instanceof CharterOutEvent) {
 					final CharterOutEvent charterOut = (CharterOutEvent) event;
