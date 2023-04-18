@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>6.4.2-SNAPSHOT</version>
+		<version>6.4.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.target-definition</artifactId>

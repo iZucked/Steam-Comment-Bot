@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.commands;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
