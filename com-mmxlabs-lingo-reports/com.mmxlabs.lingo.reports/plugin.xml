@@ -189,6 +189,14 @@
             name="PNL Calcs"
             restorable="true">
       </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.flows.FlowsReport"
+            icon="icons:/16/flows"
+            id="com.mmxlabs.lingo.reports.views.flows.FlowsReport"
+            name="Flows"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
