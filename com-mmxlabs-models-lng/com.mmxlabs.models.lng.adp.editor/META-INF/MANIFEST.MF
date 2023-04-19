@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ADP Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.adp.editor;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.adp.editor
-Bundle-Version: 6.4.3.qualifier
+Bundle-Version: 6.4.3.RELEASE
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17
