@@ -98,7 +98,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
 
-	private EventHandler todayHandler;
+	protected EventHandler todayHandler;
 	
 	private boolean isInPinDiffMode = false;
 
