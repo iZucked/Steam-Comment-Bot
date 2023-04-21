@@ -49,7 +49,7 @@
 -->
       </category>
       <view
-            name="Volume Tracking"
+            name="Contract Vols"
             icon="icons:/icons/legacy/16x16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.VolumeTrackingReportView"
