@@ -42,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.components.ICharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
@@ -51,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterLengthElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -74,6 +76,9 @@ public class TradingExporterExtension implements IExporterExtension {
 
 	@Inject
 	private IPortSlotEventProvider portSlotEventProvider;
+	
+	@Inject
+	private ICharterLengthElementProvider charterLengthProvider;
 
 	@Override
 	public void startExporting(final Schedule outputSchedule, final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
@@ -170,7 +175,14 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							} else {
 								
-								final IPortSlot slotToFetch = slot instanceof IMaintenanceVesselEventPortSlot ? ((IMaintenanceVesselEventPortSlot) slot).getFormerPortSlot() : slot;
+								final IPortSlot slotToFetch;
+								if(slot instanceof IMaintenanceVesselEventPortSlot mSlot) {
+									slotToFetch = mSlot.getFormerPortSlot();
+								} else if(slot instanceof ICharterLengthEventPortSlot clSlot) {
+									slotToFetch = charterLengthProvider.getOriginalCharterLengthSlot(clSlot);
+								} else {
+									slotToFetch = slot;
+								}
 								final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slotToFetch, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 								VesselEventVisit visit = null;
 								//
@@ -183,6 +195,9 @@ public class TradingExporterExtension implements IExporterExtension {
 											}
 										}
 									}
+								}
+								if(slot instanceof ICharterLengthEventPortSlot) {
+									setPandLentries(profitAndLoss, visit);
 								}
 								if (visit != null) {
 									

@@ -12,5 +12,5 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 @NonNullByDefault
 public interface ICharterLengthElementProvider extends IDataComponentProvider {
 	@Nullable ISequenceElement getCharterLengthLocationElement(ICharterLengthEvent event, IPort port);
-	@Nullable ICharterLengthEventPortSlot getOriginalCharterLengthSlot(ICharterLengthEventPortSlot portSlot);
+	ICharterLengthEventPortSlot getOriginalCharterLengthSlot(ICharterLengthEventPortSlot portSlot);
 }

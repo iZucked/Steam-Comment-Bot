@@ -210,9 +210,10 @@ public class VisitEventExporter {
 				portVisit = vev;
 			} else if(slot instanceof ICharterLengthEventPortSlot clSlot) {
 				final ICharterLengthEventPortSlot originalSlot = charterLengthProvider.getOriginalCharterLengthSlot(clSlot);
-				final VesselEvent event = modelEntityMap.getModelObject(originalSlot != null ? originalSlot : slot, VesselEvent.class);
+				final VesselEvent event = modelEntityMap.getModelObject(originalSlot, VesselEvent.class);
 				final VesselEventVisit vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();
 				vev.setVesselEvent(event);
+				portSlotEventProvider.addEventToPortSlot(originalSlot, VesselEventVisit.class, vev);
 				portVisit = vev;
 			}
 			else {

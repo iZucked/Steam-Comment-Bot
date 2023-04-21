@@ -36,8 +36,8 @@ public class DefaultCharterLengthElementProviderEditor implements ICharterLength
 	}
 
 	@Override
-	public @Nullable ICharterLengthEventPortSlot getOriginalCharterLengthSlot(ICharterLengthEventPortSlot portSlot) {
-		return originalPortSlotMap.get(portSlot);
+	public ICharterLengthEventPortSlot getOriginalCharterLengthSlot(ICharterLengthEventPortSlot portSlot) {
+		return originalPortSlotMap.getOrDefault(portSlot, portSlot);
 	}
 
 	@Override

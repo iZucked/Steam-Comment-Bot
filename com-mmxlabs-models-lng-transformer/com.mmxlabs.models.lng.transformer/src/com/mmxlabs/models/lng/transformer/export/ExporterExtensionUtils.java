@@ -42,6 +42,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossSlotDetailsAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.ICharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -51,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterLengthElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -61,6 +63,9 @@ public class ExporterExtensionUtils {
 
 	@Inject
 	private IPortSlotEventProvider portSlotEventProvider;
+	
+	@Inject
+	private ICharterLengthElementProvider charterLengthElementProvider;
 
 	public static double convertHoursToDays(final int hours) {
 		final int days = hours / 24;
@@ -111,6 +116,9 @@ public class ExporterExtensionUtils {
 				return gco;
 			} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
 				return portSlotEventProvider.getEventFromPortSlot(slot, CharterLengthEvent.class);
+			} else if (slot instanceof ICharterLengthEventPortSlot clSlot) {
+				final ICharterLengthEventPortSlot originalSlot = charterLengthElementProvider.getOriginalCharterLengthSlot(clSlot);
+				return portSlotEventProvider.getEventFromPortSlot(originalSlot, VesselEventVisit.class);
 			} else {
 				final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 				VesselEventVisit visit = null;
