@@ -17,6 +17,7 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.ICharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -126,14 +127,16 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 		// Check idle length. Note: This is idle based on current speed. While we could
 		// speed up the vessel to get more idle time, this is not what we want to do.
-		if (SPLIT_ON_RUNDRY) {
-			if ((ballastDetails.getIdleTime() - ballastDetails.getIdleNBOHours()) < minIdleTimeInHours) {
-				return null;
-			}
-		} else {
-			// Exclude panama idle from charter length time
-			if (ballastDetails.getIdleTime() - ballastDetails.getOptions().getPanamaIdleHours() < minIdleTimeInHours) {
-				return null;
+		if (!(ballastDetails.getOptions().getFromPortSlot() instanceof ICharterLengthEventPortSlot) && !(ballastDetails.getOptions().getToPortSlot() instanceof ICharterLengthEventPortSlot)) {
+			if (SPLIT_ON_RUNDRY) {
+				if ((ballastDetails.getIdleTime() - ballastDetails.getIdleNBOHours()) < minIdleTimeInHours) {
+					return null;
+				}
+			} else {
+				// Exclude panama idle from charter length time
+				if (ballastDetails.getIdleTime() - ballastDetails.getOptions().getPanamaIdleHours() < minIdleTimeInHours) {
+					return null;
+				}
 			}
 		}
 
@@ -471,8 +474,8 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			currentPlan.setIgnoreEnd(true);
 
 			// Calculate voyage plan
-			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
-					portTimesRecord1, partialSequenceUpToCharterLength.toArray(new IDetailsSequenceElement[0]));
+			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT, portTimesRecord1,
+					partialSequenceUpToCharterLength.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != null;
 
 			// Make sure this is still the same
@@ -532,8 +535,8 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 
 			// Calculate voyage plan
-			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
-					portTimesRecord2, partialSequenceFromCharterLength.toArray(new IDetailsSequenceElement[0]));
+			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselCharter.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT, portTimesRecord2,
+					partialSequenceFromCharterLength.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != null;
 
 			charterPlans.add(Pair.of(currentPlan, portTimesRecord2));
@@ -570,7 +573,6 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	}
 
 	private boolean validatePlans(final IVessel vessel, final VoyagePlan originalPlan, final List<Pair<VoyagePlan, IPortTimesRecord>> charterPlans, final long charterLengthHeelInM3) {
-
 
 		long originalLNGUse = 0;
 		final long[] bunkers = new long[baseFuelProvider.getNumberOfBaseFuels()];
