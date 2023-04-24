@@ -102,6 +102,9 @@ public abstract class AbstractVerticalReportVisualiser {
 			if (vesselEvent instanceof MaintenanceEvent) {
 				return colourPalette.getColourFor(ColourPaletteItems.Event_Maintenance, ColourElements.Background);
 			}
+			if (vesselEvent instanceof com.mmxlabs.models.lng.cargo.CharterLengthEvent) {
+				return colourPalette.getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
+			}
 		}
 		if (event instanceof GeneratedCharterOut) {
 			return colourPalette.getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
@@ -180,6 +183,8 @@ public abstract class AbstractVerticalReportVisualiser {
 				return "Dry Dock";
 			} else if (vesselEvent instanceof MaintenanceEvent) {
 				return "Maintenance";
+			} else if (vesselEvent instanceof com.mmxlabs.models.lng.cargo.CharterLengthEvent) {
+				return String.format("Length - %s", event.name());
 			}
 
 		} else if (event instanceof GeneratedCharterOut) {
