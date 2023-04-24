@@ -21,7 +21,6 @@ import java.util.function.Consumer;
 import java.util.function.ToLongFunction;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -50,11 +49,11 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
@@ -155,7 +154,7 @@ public final class ChangeSetTransformerUtil {
 						// Keep going!
 					} else if (event instanceof GeneratedCharterOut) {
 						// Keep going!
-					} else if (event instanceof CharterLengthEvent) {
+					} else if (event instanceof GeneratedCharterLengthEvent) {
 						// Keep going!
 					} else if (event instanceof SlotVisit) {
 						// Already processed
@@ -369,7 +368,7 @@ public final class ChangeSetTransformerUtil {
 					}
 				}
 			} else if (target instanceof final Event event) {
-				if (event instanceof final CharterLengthEvent charterLengthEvent) {
+				if (event instanceof final GeneratedCharterLengthEvent charterLengthEvent) {
 					// Record these events so we can group them up later
 					extraLengthEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents()
 							.addAll(charterLengthEvent.getEvents());
@@ -402,7 +401,7 @@ public final class ChangeSetTransformerUtil {
 			long pnl1 = 0L;
 			long pnl2 = 0L;
 			for (final Event e : cle.getEvents()) {
-				if (e instanceof final CharterLengthEvent c) {
+				if (e instanceof final GeneratedCharterLengthEvent c) {
 					cle.setLinkedSequence(c.getSequence());
 				}
 				if (e instanceof final ProfitAndLossContainer c) {
@@ -1464,7 +1463,7 @@ public final class ChangeSetTransformerUtil {
 						if ((beforeData.getLhsEvent() instanceof GeneratedCharterOut) || (afterData.getLhsEvent() instanceof GeneratedCharterOut)) {
 							continue;
 						}
-						if ((beforeData.getLhsEvent() instanceof CharterLengthEvent) || (afterData.getLhsEvent() instanceof CharterLengthEvent)) {
+						if ((beforeData.getLhsEvent() instanceof GeneratedCharterLengthEvent) || (afterData.getLhsEvent() instanceof GeneratedCharterLengthEvent)) {
 							continue;
 						}
 						if ((beforeData.getLhsEvent() instanceof GroupedCharterLengthEvent) || (afterData.getLhsEvent() instanceof GroupedCharterLengthEvent)) {

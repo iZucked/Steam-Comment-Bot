@@ -8,8 +8,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
@@ -36,7 +36,7 @@ public final class PNLDeltaUtils {
 				|| object instanceof GeneratedCharterOut //
 				|| object instanceof GroupedCharterLengthEvent //
 				|| object instanceof GroupedCharterOutEvent //
-				|| object instanceof CharterLengthEvent //
+				|| object instanceof GeneratedCharterLengthEvent //
 				|| object instanceof OpenSlotAllocation || object instanceof EndEvent) {
 			container = (ProfitAndLossContainer) object;
 		}

@@ -202,10 +202,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//GeneratedCharterOut/revenue"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//GeneratedCharterOut/charterOutMarket"/>
     </genClasses>
-    <genClasses ecoreClass="schedule.ecore#//CharterLengthEvent">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterLengthEvent/duration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterLengthEvent/laden"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterLengthEvent/contingencyHours"/>
+    <genClasses ecoreClass="schedule.ecore#//GeneratedCharterLengthEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//GeneratedCharterLengthEvent/duration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//GeneratedCharterLengthEvent/laden"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//GeneratedCharterLengthEvent/contingencyHours"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Cooldown">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Cooldown/volume"/>

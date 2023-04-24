@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
@@ -32,6 +31,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -68,7 +68,7 @@ public class ScheduleModelUtils {
 			return true;
 		} else if (event instanceof GeneratedCharterOut) {
 			return true;
-		} else if (event instanceof CharterLengthEvent) {
+		} else if (event instanceof GeneratedCharterLengthEvent) {
 			return true;
 		} else if (event instanceof StartEvent) {
 			return true;
@@ -160,8 +160,8 @@ public class ScheduleModelUtils {
 		} else if (scheduleModelObject instanceof GeneratedCharterOut) {
 			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) scheduleModelObject;
 			return generatedCharterOut;
-		} else if (scheduleModelObject instanceof CharterLengthEvent) {
-			final CharterLengthEvent charterLength = (CharterLengthEvent) scheduleModelObject;
+		} else if (scheduleModelObject instanceof GeneratedCharterLengthEvent) {
+			final GeneratedCharterLengthEvent charterLength = (GeneratedCharterLengthEvent) scheduleModelObject;
 			return charterLength;
 		} else if (scheduleModelObject instanceof EndEvent) {
 			final EndEvent endEvent = (EndEvent) scheduleModelObject;
@@ -256,7 +256,7 @@ public class ScheduleModelUtils {
 				|| object instanceof VesselEventVisit //
 				|| object instanceof StartEvent //
 				|| object instanceof GeneratedCharterOut //
-				|| object instanceof CharterLengthEvent //
+				|| object instanceof GeneratedCharterLengthEvent //
 				|| object instanceof OpenSlotAllocation //
 				|| object instanceof EndEvent) {
 			container = (ProfitAndLossContainer) object;
@@ -497,7 +497,7 @@ public class ScheduleModelUtils {
 			}
 			if (lastEvent != null && includeCharterOutInBallastIdle) {
 				final Event ne = lastEvent.getNextEvent();
-				if (ne instanceof CharterLengthEvent) {
+				if (ne instanceof GeneratedCharterLengthEvent) {
 					result[3] += ne.getDuration();
 				}
 			}
@@ -549,7 +549,7 @@ public class ScheduleModelUtils {
 			}
 			if (lastEvent != null && includeCharterOutInBallastIdle) {
 				final Event ne = lastEvent.getNextEvent();
-				if (ne instanceof CharterLengthEvent) {
+				if (ne instanceof GeneratedCharterLengthEvent) {
 					result[3] += ne.getDuration();
 				}
 			}

@@ -19,8 +19,8 @@ import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -98,7 +98,7 @@ public class ScheduleReportJSONGeneratorV2 {
 
 			List<Event> visitJourneys = sequence.getEvents().stream().filter(x -> x instanceof SlotVisit).collect(Collectors.toList());
 			List<Event> charterJourneys = sequence.getEvents().stream().filter(x -> x instanceof GeneratedCharterOut).collect(Collectors.toList());
-			List<Event> charterLengthJourneys = sequence.getEvents().stream().filter(x -> x instanceof CharterLengthEvent).collect(Collectors.toList());
+			List<Event> charterLengthJourneys = sequence.getEvents().stream().filter(x -> x instanceof GeneratedCharterLengthEvent).collect(Collectors.toList());
 			List<VesselEventVisit> vesselEvents = sequence.getEvents().stream().filter(x -> x instanceof VesselEventVisit).map(x -> (VesselEventVisit) x).collect(Collectors.toList());
 
 			for (Event ladenJourney : ladenJourneys) {

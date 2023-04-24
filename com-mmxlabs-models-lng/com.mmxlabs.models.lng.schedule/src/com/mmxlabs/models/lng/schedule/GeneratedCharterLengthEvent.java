@@ -1,49 +1,41 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule;
 
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Charter Length Event</b></em>'.
+ * A representation of the model object '<em><b>Generated Charter Length Event</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#getDuration <em>Duration</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#isLaden <em>Laden</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#getContingencyHours <em>Contingency Hours</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getDuration <em>Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#isLaden <em>Laden</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getContingencyHours <em>Contingency Hours</em>}</li>
  * </ul>
  *
- * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCharterLengthEvent()
+ * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getGeneratedCharterLengthEvent()
  * @model
  * @generated
  */
-public interface CharterLengthEvent extends PortVisit, ProfitAndLossContainer, EventGrouping, FuelUsage {
+public interface GeneratedCharterLengthEvent extends PortVisit, ProfitAndLossContainer, EventGrouping, FuelUsage {
 	/**
 	 * Returns the value of the '<em><b>Duration</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Duration</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Duration</em>' attribute.
 	 * @see #setDuration(int)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCharterLengthEvent_Duration()
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getGeneratedCharterLengthEvent_Duration()
 	 * @model
 	 * @generated
 	 */
 	int getDuration();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#getDuration <em>Duration</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getDuration <em>Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Duration</em>' attribute.
@@ -55,21 +47,17 @@ public interface CharterLengthEvent extends PortVisit, ProfitAndLossContainer, E
 	/**
 	 * Returns the value of the '<em><b>Laden</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Laden</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Laden</em>' attribute.
 	 * @see #setLaden(boolean)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCharterLengthEvent_Laden()
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getGeneratedCharterLengthEvent_Laden()
 	 * @model required="true"
 	 * @generated
 	 */
 	boolean isLaden();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#isLaden <em>Laden</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#isLaden <em>Laden</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Laden</em>' attribute.
@@ -84,14 +72,14 @@ public interface CharterLengthEvent extends PortVisit, ProfitAndLossContainer, E
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Contingency Hours</em>' attribute.
 	 * @see #setContingencyHours(int)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCharterLengthEvent_ContingencyHours()
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getGeneratedCharterLengthEvent_ContingencyHours()
 	 * @model
 	 * @generated
 	 */
 	int getContingencyHours();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#getContingencyHours <em>Contingency Hours</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getContingencyHours <em>Contingency Hours</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Contingency Hours</em>' attribute.
@@ -100,4 +88,4 @@ public interface CharterLengthEvent extends PortVisit, ProfitAndLossContainer, E
 	 */
 	void setContingencyHours(int value);
 
-} // CharterLengthEvent
+} // GeneratedCharterLengthEvent

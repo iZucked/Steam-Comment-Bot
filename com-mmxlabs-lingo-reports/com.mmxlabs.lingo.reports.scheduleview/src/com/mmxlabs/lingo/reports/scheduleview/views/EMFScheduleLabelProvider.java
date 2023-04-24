@@ -68,12 +68,12 @@ import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -980,7 +980,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 				eventText.append("\n");
 				eventText.append(getFuelsString(idle));
-			} else if (element instanceof CharterLengthEvent charterLength) {
+			} else if (element instanceof GeneratedCharterLengthEvent charterLength) {
 				eventText.append("Duration: " + durationTime);
 				eventText.append("\n");
 				if (charterLength.getContingencyHours() > 0) {

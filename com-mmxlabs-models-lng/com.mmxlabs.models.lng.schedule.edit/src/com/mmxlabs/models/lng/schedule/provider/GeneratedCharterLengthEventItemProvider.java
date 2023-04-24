@@ -1,13 +1,9 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
@@ -20,25 +16,26 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.CharterLengthEvent} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CharterLengthEventItemProvider extends PortVisitItemProvider {
+public class GeneratedCharterLengthEventItemProvider extends PortVisitItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterLengthEventItemProvider(AdapterFactory adapterFactory) {
+	public GeneratedCharterLengthEventItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -117,9 +114,9 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterLengthEvent_duration_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterLengthEvent_duration_feature", "_UI_CharterLengthEvent_type"),
-				 SchedulePackage.Literals.CHARTER_LENGTH_EVENT__DURATION,
+				 getString("_UI_GeneratedCharterLengthEvent_duration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeneratedCharterLengthEvent_duration_feature", "_UI_GeneratedCharterLengthEvent_type"),
+				 SchedulePackage.Literals.GENERATED_CHARTER_LENGTH_EVENT__DURATION,
 				 true,
 				 false,
 				 false,
@@ -139,9 +136,9 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterLengthEvent_laden_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterLengthEvent_laden_feature", "_UI_CharterLengthEvent_type"),
-				 SchedulePackage.Literals.CHARTER_LENGTH_EVENT__LADEN,
+				 getString("_UI_GeneratedCharterLengthEvent_laden_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeneratedCharterLengthEvent_laden_feature", "_UI_GeneratedCharterLengthEvent_type"),
+				 SchedulePackage.Literals.GENERATED_CHARTER_LENGTH_EVENT__LADEN,
 				 true,
 				 false,
 				 false,
@@ -161,9 +158,9 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterLengthEvent_contingencyHours_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterLengthEvent_contingencyHours_feature", "_UI_CharterLengthEvent_type"),
-				 SchedulePackage.Literals.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS,
+				 getString("_UI_GeneratedCharterLengthEvent_contingencyHours_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeneratedCharterLengthEvent_contingencyHours_feature", "_UI_GeneratedCharterLengthEvent_type"),
+				 SchedulePackage.Literals.GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS,
 				 true,
 				 false,
 				 false,
@@ -205,14 +202,14 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 	}
 
 	/**
-	 * This returns CharterLengthEvent.gif.
+	 * This returns GeneratedCharterLengthEvent.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CharterLengthEvent"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/GeneratedCharterLengthEvent"));
 	}
 
 	/**
@@ -223,11 +220,11 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		ZonedDateTime labelValue = ((CharterLengthEvent)object).getStart();
+		ZonedDateTime labelValue = ((GeneratedCharterLengthEvent)object).getStart();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CharterLengthEvent_type") :
-			getString("_UI_CharterLengthEvent_type") + " " + label;
+			getString("_UI_GeneratedCharterLengthEvent_type") :
+			getString("_UI_GeneratedCharterLengthEvent_type") + " " + label;
 	}
 
 
@@ -242,15 +239,15 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(CharterLengthEvent.class)) {
-			case SchedulePackage.CHARTER_LENGTH_EVENT__DURATION:
-			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
-			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+		switch (notification.getFeatureID(GeneratedCharterLengthEvent.class)) {
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__DURATION:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__LADEN:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
-			case SchedulePackage.CHARTER_LENGTH_EVENT__FUELS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}

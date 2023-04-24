@@ -181,8 +181,8 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createGeneratedCharterOutAdapter();
 			}
 			@Override
-			public Adapter caseCharterLengthEvent(CharterLengthEvent object) {
-				return createCharterLengthEventAdapter();
+			public Adapter caseGeneratedCharterLengthEvent(GeneratedCharterLengthEvent object) {
+				return createGeneratedCharterLengthEventAdapter();
 			}
 			@Override
 			public Adapter caseCooldown(Cooldown object) {
@@ -495,16 +495,16 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent <em>Charter Length Event</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent <em>Generated Charter Length Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.CharterLengthEvent
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent
 	 * @generated
 	 */
-	public Adapter createCharterLengthEventAdapter() {
+	public Adapter createGeneratedCharterLengthEventAdapter() {
 		return null;
 	}
 

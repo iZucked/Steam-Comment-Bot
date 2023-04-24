@@ -117,7 +117,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SLOT_VISIT: return createSlotVisit();
 			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
 			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
-			case SchedulePackage.CHARTER_LENGTH_EVENT: return createCharterLengthEvent();
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT: return createGeneratedCharterLengthEvent();
 			case SchedulePackage.COOLDOWN: return createCooldown();
 			case SchedulePackage.PURGE: return createPurge();
 			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
@@ -328,9 +328,9 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	@Override
-	public CharterLengthEvent createCharterLengthEvent() {
-		CharterLengthEventImpl charterLengthEvent = new CharterLengthEventImpl();
-		return charterLengthEvent;
+	public GeneratedCharterLengthEvent createGeneratedCharterLengthEvent() {
+		GeneratedCharterLengthEventImpl generatedCharterLengthEvent = new GeneratedCharterLengthEventImpl();
+		return generatedCharterLengthEvent;
 	}
 
 	/**

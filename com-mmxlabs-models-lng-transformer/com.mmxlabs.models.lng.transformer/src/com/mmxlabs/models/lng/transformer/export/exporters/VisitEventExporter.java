@@ -21,10 +21,10 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
@@ -199,9 +199,9 @@ public class VisitEventExporter {
 				portVisit = generatedCharterOutEvent;
 				portSlotEventProvider.addEventToPortSlot(slot, GeneratedCharterOut.class, generatedCharterOutEvent);
 			} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
-				final CharterLengthEvent charterLengthEvent = ScheduleFactory.eINSTANCE.createCharterLengthEvent();
+				final GeneratedCharterLengthEvent charterLengthEvent = ScheduleFactory.eINSTANCE.createGeneratedCharterLengthEvent();
 				portVisit = charterLengthEvent;
-				portSlotEventProvider.addEventToPortSlot(slot, CharterLengthEvent.class, charterLengthEvent);
+				portSlotEventProvider.addEventToPortSlot(slot, GeneratedCharterLengthEvent.class, charterLengthEvent);
 			} else if (slot instanceof IMaintenanceVesselEventPortSlot) {
 				final MaintenanceEvent event = modelEntityMap.getModelObject(((IMaintenanceVesselEventPortSlot) slot).getFormerPortSlot(), MaintenanceEvent.class);
 				assert event != null;

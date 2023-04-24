@@ -17,11 +17,11 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -115,7 +115,7 @@ public class ExporterExtensionUtils {
 				final GeneratedCharterOut gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterOut.class);
 				return gco;
 			} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
-				return portSlotEventProvider.getEventFromPortSlot(slot, CharterLengthEvent.class);
+				return portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterLengthEvent.class);
 			} else if (slot instanceof ICharterLengthEventPortSlot clSlot) {
 				final ICharterLengthEventPortSlot originalSlot = charterLengthElementProvider.getOriginalCharterLengthSlot(clSlot);
 				return portSlotEventProvider.getEventFromPortSlot(originalSlot, VesselEventVisit.class);

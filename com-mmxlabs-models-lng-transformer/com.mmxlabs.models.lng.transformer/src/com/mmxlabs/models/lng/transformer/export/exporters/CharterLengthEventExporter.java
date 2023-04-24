@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
@@ -32,7 +32,7 @@ public class CharterLengthEventExporter {
 	@Inject
 	private ModelEntityMap modelEntityMap;
 
-	public void update(CharterLengthEvent event, final VoyageDetails voyageDetails, VolumeAllocatedSequence volumeAllocatedSequence, int currentTime) {
+	public void update(GeneratedCharterLengthEvent event, final VoyageDetails voyageDetails, VolumeAllocatedSequence volumeAllocatedSequence, int currentTime) {
 		final @NonNull VoyageOptions options = voyageDetails.getOptions();
 		Port ePort = modelEntityMap.getModelObject(options.getToPortSlot().getPort(), Port.class);
 

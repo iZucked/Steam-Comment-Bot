@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -169,7 +169,7 @@ public class TradingExporterExtension implements IExporterExtension {
 									setPandLentries(profitAndLoss, gco);
 								}
 							} else if (slot instanceof IGeneratedCharterLengthEventPortSlot) {
-								final CharterLengthEvent gco = portSlotEventProvider.getEventFromPortSlot(slot, CharterLengthEvent.class);
+								final GeneratedCharterLengthEvent gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterLengthEvent.class);
 								if (gco != null) {
 									setPandLentries(profitAndLoss, gco);
 								}

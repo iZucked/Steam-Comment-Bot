@@ -12,8 +12,8 @@ import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
@@ -46,7 +46,7 @@ public class RowTypeFormatter extends BaseFormatter {
 			return "Charter Out (virt)";
 		} else if (object instanceof GroupedCharterOutEvent) {
 			return "Charter Out (virt)";
-		} else if (object instanceof CharterLengthEvent) {
+		} else if (object instanceof GeneratedCharterLengthEvent) {
 			return "Charter length";
 		} else if (object instanceof GroupedCharterLengthEvent) {
 			return "Charter length";

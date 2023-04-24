@@ -45,13 +45,13 @@ import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Purge;
@@ -141,7 +141,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		evaluate(true);
 		final Schedule withSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
 		Assertions.assertNotNull(withSchedule);
-		final CharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
+		final GeneratedCharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
 
 		final CargoAllocation withCargo = findCargoAllocation(dischargeSlot, withSchedule);
 
@@ -216,7 +216,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		evaluate(true);
 		final Schedule withSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
 		Assertions.assertNotNull(withSchedule);
-		final CharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
+		final GeneratedCharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
 		final Idle withIdle = findIdleEvent(dischargeSlot, withSchedule);
 
 		final CargoAllocation withCargo = findCargoAllocation(dischargeSlot, withSchedule);
@@ -294,7 +294,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Journey withJourney = findJourneyEvent(dischargeSlot, withSchedule);
 		Assertions.assertEquals(RouteOption.PANAMA, withJourney.getRouteOption());
 
-		final CharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
+		final GeneratedCharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
 		final Idle withIdle = findIdleEvent(dischargeSlot, withSchedule);
 
 		final CargoAllocation withCargo = findCargoAllocation(dischargeSlot, withSchedule);
@@ -395,7 +395,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final Journey withJourney = findJourneyEvent(dischargeSlot, withSchedule);
 		Assertions.assertEquals(RouteOption.PANAMA, withJourney.getRouteOption());
 
-		final CharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
+		final GeneratedCharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
 		Purge withPurge = (Purge) charterLengthEvent.getNextEvent();
 		Assertions.assertEquals(24, withPurge.getDuration());
 
@@ -498,7 +498,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		evaluate(true);
 		final Schedule withSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
 		Assertions.assertNotNull(withSchedule);
-		final CharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
+		final GeneratedCharterLengthEvent charterLengthEvent = findCharterLengthEvent(dischargeSlot, withSchedule);
 		final CargoAllocation withCargo = findCargoAllocation(dischargeSlot, withSchedule);
 
 		Assertions.assertEquals(500, charterLengthEvent.getHeelAtEnd());
@@ -710,7 +710,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		final List<@NonNull Class<? extends Event>> expectedEventSequence = new ArrayList<>();
 		expectedEventSequence.add(StartEvent.class);
 		expectedEventSequence.add(Idle.class);
-		expectedEventSequence.add(CharterLengthEvent.class);
+		expectedEventSequence.add(GeneratedCharterLengthEvent.class);
 		expectedEventSequence.add(Cooldown.class);
 		expectedEventSequence.add(EndEvent.class);
 
@@ -730,7 +730,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		}
 	}
 
-	public static @NonNull CharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {
+	public static @NonNull GeneratedCharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {
 		final Optional<Event> discharge = schedule.getSequences().stream() //
 				.flatMap(s -> s.getEvents().stream()) //
 				.filter(evt -> (evt instanceof SlotVisit && (((SlotVisit) evt).getSlotAllocation().getSlot() == slot))) //
@@ -745,8 +745,8 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 			// There is still an empty idle event generated.
 			evt = evt.getNextEvent();
 		}
-		if (evt instanceof CharterLengthEvent) {
-			return (CharterLengthEvent) evt;
+		if (evt instanceof GeneratedCharterLengthEvent) {
+			return (GeneratedCharterLengthEvent) evt;
 		}
 		Assertions.fail("");
 		throw new IllegalStateException();
@@ -928,7 +928,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		evaluate(true);
 		final Schedule withSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
 		Assertions.assertNotNull(withSchedule);
-		final CharterLengthEvent charterLengthEvent = findFirstEventOnSameSequence(slot, withSchedule, CharterLengthEvent.class);
+		final GeneratedCharterLengthEvent charterLengthEvent = findFirstEventOnSameSequence(slot, withSchedule, GeneratedCharterLengthEvent.class);
 
 		// Lets make sure everything matches up - the charter length should have
 		// replaced the idle

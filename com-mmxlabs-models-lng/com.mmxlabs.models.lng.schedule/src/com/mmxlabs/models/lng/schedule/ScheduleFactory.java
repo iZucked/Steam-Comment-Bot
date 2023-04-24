@@ -105,13 +105,13 @@ public interface ScheduleFactory extends EFactory {
 	GeneratedCharterOut createGeneratedCharterOut();
 
 	/**
-	 * Returns a new object of class '<em>Charter Length Event</em>'.
+	 * Returns a new object of class '<em>Generated Charter Length Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Charter Length Event</em>'.
+	 * @return a new object of class '<em>Generated Charter Length Event</em>'.
 	 * @generated
 	 */
-	CharterLengthEvent createCharterLengthEvent();
+	GeneratedCharterLengthEvent createGeneratedCharterLengthEvent();
 
 	/**
 	 * Returns a new object of class '<em>Fuel Usage</em>'.

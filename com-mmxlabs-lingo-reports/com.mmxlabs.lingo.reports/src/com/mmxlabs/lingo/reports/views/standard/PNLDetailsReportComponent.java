@@ -26,9 +26,9 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
@@ -66,7 +66,7 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 				// map to events
 				if (adaptedObject instanceof CargoAllocation || adaptedObject instanceof OpenSlotAllocation || adaptedObject instanceof VesselEventVisit //
 						|| adaptedObject instanceof StartEvent || adaptedObject instanceof EndEvent || adaptedObject instanceof GeneratedCharterOut //
-						|| adaptedObject instanceof CharterLengthEvent) {
+						|| adaptedObject instanceof GeneratedCharterLengthEvent) {
 					adaptedObjects.add(adaptedObject);
 				} else if (adaptedObject instanceof final SlotAllocation slotAllocation) {
 					adaptedObjects.add(slotAllocation.getCargoAllocation());

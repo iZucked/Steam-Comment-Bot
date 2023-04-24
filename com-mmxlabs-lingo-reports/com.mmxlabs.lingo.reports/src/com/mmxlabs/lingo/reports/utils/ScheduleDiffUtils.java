@@ -17,9 +17,9 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
@@ -70,9 +70,9 @@ public class ScheduleDiffUtils {
 			return false;
 		}
 
-		if (pinnedObject instanceof CharterLengthEvent || otherObject instanceof CharterLengthEvent) {
-			final CharterLengthEvent pinnedCharterOut = (CharterLengthEvent) pinnedObject;
-			final CharterLengthEvent otherCharterOut = (CharterLengthEvent) otherObject;
+		if (pinnedObject instanceof GeneratedCharterLengthEvent || otherObject instanceof GeneratedCharterLengthEvent) {
+			final GeneratedCharterLengthEvent pinnedCharterOut = (GeneratedCharterLengthEvent) pinnedObject;
+			final GeneratedCharterLengthEvent otherCharterOut = (GeneratedCharterLengthEvent) otherObject;
 
 			if (pinnedCharterOut.getDuration() != otherCharterOut.getDuration()) {
 				return true;

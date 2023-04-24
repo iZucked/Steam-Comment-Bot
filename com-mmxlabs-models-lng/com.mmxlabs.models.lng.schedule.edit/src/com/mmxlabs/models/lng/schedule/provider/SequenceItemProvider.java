@@ -307,7 +307,7 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createCharterLengthEvent()));
+				 ScheduleFactory.eINSTANCE.createGeneratedCharterLengthEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter

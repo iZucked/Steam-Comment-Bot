@@ -3859,14 +3859,14 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl <em>Charter Length Event</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl <em>Generated Charter Length Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterLengthEvent()
+	 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterLengthEvent()
 	 * @generated
 	 */
-	int CHARTER_LENGTH_EVENT = 18;
+	int GENERATED_CHARTER_LENGTH_EVENT = 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3875,7 +3875,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__EXTENSIONS = PORT_VISIT__EXTENSIONS;
+	int GENERATED_CHARTER_LENGTH_EVENT__EXTENSIONS = PORT_VISIT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -3884,7 +3884,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__START = PORT_VISIT__START;
+	int GENERATED_CHARTER_LENGTH_EVENT__START = PORT_VISIT__START;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
@@ -3893,7 +3893,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__END = PORT_VISIT__END;
+	int GENERATED_CHARTER_LENGTH_EVENT__END = PORT_VISIT__END;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -3902,7 +3902,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__PORT = PORT_VISIT__PORT;
+	int GENERATED_CHARTER_LENGTH_EVENT__PORT = PORT_VISIT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
@@ -3911,7 +3911,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__PREVIOUS_EVENT = PORT_VISIT__PREVIOUS_EVENT;
+	int GENERATED_CHARTER_LENGTH_EVENT__PREVIOUS_EVENT = PORT_VISIT__PREVIOUS_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
@@ -3920,7 +3920,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__NEXT_EVENT = PORT_VISIT__NEXT_EVENT;
+	int GENERATED_CHARTER_LENGTH_EVENT__NEXT_EVENT = PORT_VISIT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
@@ -3929,7 +3929,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__SEQUENCE = PORT_VISIT__SEQUENCE;
+	int GENERATED_CHARTER_LENGTH_EVENT__SEQUENCE = PORT_VISIT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
@@ -3938,7 +3938,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__CHARTER_COST = PORT_VISIT__CHARTER_COST;
+	int GENERATED_CHARTER_LENGTH_EVENT__CHARTER_COST = PORT_VISIT__CHARTER_COST;
 
 	/**
 	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
@@ -3947,7 +3947,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__HEEL_AT_START = PORT_VISIT__HEEL_AT_START;
+	int GENERATED_CHARTER_LENGTH_EVENT__HEEL_AT_START = PORT_VISIT__HEEL_AT_START;
 
 	/**
 	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
@@ -3956,7 +3956,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__HEEL_AT_END = PORT_VISIT__HEEL_AT_END;
+	int GENERATED_CHARTER_LENGTH_EVENT__HEEL_AT_END = PORT_VISIT__HEEL_AT_END;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -3965,7 +3965,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__VIOLATIONS = PORT_VISIT__VIOLATIONS;
+	int GENERATED_CHARTER_LENGTH_EVENT__VIOLATIONS = PORT_VISIT__VIOLATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
@@ -3974,7 +3974,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__PORT_COST = PORT_VISIT__PORT_COST;
+	int GENERATED_CHARTER_LENGTH_EVENT__PORT_COST = PORT_VISIT__PORT_COST;
 
 	/**
 	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
@@ -3983,7 +3983,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__LATENESS = PORT_VISIT__LATENESS;
+	int GENERATED_CHARTER_LENGTH_EVENT__LATENESS = PORT_VISIT__LATENESS;
 
 	/**
 	 * The feature id for the '<em><b>Heel Cost</b></em>' attribute.
@@ -3992,7 +3992,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__HEEL_COST = PORT_VISIT__HEEL_COST;
+	int GENERATED_CHARTER_LENGTH_EVENT__HEEL_COST = PORT_VISIT__HEEL_COST;
 
 	/**
 	 * The feature id for the '<em><b>Heel Revenue</b></em>' attribute.
@@ -4001,7 +4001,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__HEEL_REVENUE = PORT_VISIT__HEEL_REVENUE;
+	int GENERATED_CHARTER_LENGTH_EVENT__HEEL_REVENUE = PORT_VISIT__HEEL_REVENUE;
 
 	/**
 	 * The feature id for the '<em><b>Heel Cost Unit Price</b></em>' attribute.
@@ -4010,7 +4010,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__HEEL_COST_UNIT_PRICE = PORT_VISIT__HEEL_COST_UNIT_PRICE;
+	int GENERATED_CHARTER_LENGTH_EVENT__HEEL_COST_UNIT_PRICE = PORT_VISIT__HEEL_COST_UNIT_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Heel Revenue Unit Price</b></em>' attribute.
@@ -4019,7 +4019,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__HEEL_REVENUE_UNIT_PRICE = PORT_VISIT__HEEL_REVENUE_UNIT_PRICE;
+	int GENERATED_CHARTER_LENGTH_EVENT__HEEL_REVENUE_UNIT_PRICE = PORT_VISIT__HEEL_REVENUE_UNIT_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
@@ -4028,7 +4028,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS = PORT_VISIT_FEATURE_COUNT + 0;
+	int GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS = PORT_VISIT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -4037,7 +4037,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS = PORT_VISIT_FEATURE_COUNT + 1;
+	int GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS = PORT_VISIT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -4046,7 +4046,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__EVENTS = PORT_VISIT_FEATURE_COUNT + 2;
+	int GENERATED_CHARTER_LENGTH_EVENT__EVENTS = PORT_VISIT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -4055,7 +4055,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__FUELS = PORT_VISIT_FEATURE_COUNT + 3;
+	int GENERATED_CHARTER_LENGTH_EVENT__FUELS = PORT_VISIT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -4064,7 +4064,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__DURATION = PORT_VISIT_FEATURE_COUNT + 4;
+	int GENERATED_CHARTER_LENGTH_EVENT__DURATION = PORT_VISIT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Laden</b></em>' attribute.
@@ -4073,7 +4073,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__LADEN = PORT_VISIT_FEATURE_COUNT + 5;
+	int GENERATED_CHARTER_LENGTH_EVENT__LADEN = PORT_VISIT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Contingency Hours</b></em>' attribute.
@@ -4082,16 +4082,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS = PORT_VISIT_FEATURE_COUNT + 6;
+	int GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS = PORT_VISIT_FEATURE_COUNT + 6;
 
 	/**
-	 * The number of structural features of the '<em>Charter Length Event</em>' class.
+	 * The number of structural features of the '<em>Generated Charter Length Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 7;
+	int GENERATED_CHARTER_LENGTH_EVENT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4100,7 +4100,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PORT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int GENERATED_CHARTER_LENGTH_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PORT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -4109,7 +4109,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PORT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int GENERATED_CHARTER_LENGTH_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PORT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -4118,7 +4118,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___ECONTAINER_OP = PORT_VISIT___ECONTAINER_OP;
+	int GENERATED_CHARTER_LENGTH_EVENT___ECONTAINER_OP = PORT_VISIT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -4127,7 +4127,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___GET_TIME_ZONE__EATTRIBUTE = PORT_VISIT___GET_TIME_ZONE__EATTRIBUTE;
+	int GENERATED_CHARTER_LENGTH_EVENT___GET_TIME_ZONE__EATTRIBUTE = PORT_VISIT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
@@ -4136,7 +4136,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___GET_DURATION = PORT_VISIT___GET_DURATION;
+	int GENERATED_CHARTER_LENGTH_EVENT___GET_DURATION = PORT_VISIT___GET_DURATION;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -4145,7 +4145,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___TYPE = PORT_VISIT___TYPE;
+	int GENERATED_CHARTER_LENGTH_EVENT___TYPE = PORT_VISIT___TYPE;
 
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
@@ -4154,7 +4154,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___NAME = PORT_VISIT___NAME;
+	int GENERATED_CHARTER_LENGTH_EVENT___NAME = PORT_VISIT___NAME;
 
 	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
@@ -4163,16 +4163,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT___GET_FUEL_COST = PORT_VISIT_OPERATION_COUNT + 0;
+	int GENERATED_CHARTER_LENGTH_EVENT___GET_FUEL_COST = PORT_VISIT_OPERATION_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Charter Length Event</em>' class.
+	 * The number of operations of the '<em>Generated Charter Length Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 1;
+	int GENERATED_CHARTER_LENGTH_EVENT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -8623,47 +8623,47 @@ public interface SchedulePackage extends EPackage {
 	EReference getGeneratedCharterOut_CharterOutMarket();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent <em>Charter Length Event</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent <em>Generated Charter Length Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Charter Length Event</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CharterLengthEvent
+	 * @return the meta object for class '<em>Generated Charter Length Event</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent
 	 * @generated
 	 */
-	EClass getCharterLengthEvent();
+	EClass getGeneratedCharterLengthEvent();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#getDuration <em>Duration</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getDuration <em>Duration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Duration</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CharterLengthEvent#getDuration()
-	 * @see #getCharterLengthEvent()
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getDuration()
+	 * @see #getGeneratedCharterLengthEvent()
 	 * @generated
 	 */
-	EAttribute getCharterLengthEvent_Duration();
+	EAttribute getGeneratedCharterLengthEvent_Duration();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#isLaden <em>Laden</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#isLaden <em>Laden</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Laden</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CharterLengthEvent#isLaden()
-	 * @see #getCharterLengthEvent()
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#isLaden()
+	 * @see #getGeneratedCharterLengthEvent()
 	 * @generated
 	 */
-	EAttribute getCharterLengthEvent_Laden();
+	EAttribute getGeneratedCharterLengthEvent_Laden();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#getContingencyHours <em>Contingency Hours</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getContingencyHours <em>Contingency Hours</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Contingency Hours</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CharterLengthEvent#getContingencyHours()
-	 * @see #getCharterLengthEvent()
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent#getContingencyHours()
+	 * @see #getGeneratedCharterLengthEvent()
 	 * @generated
 	 */
-	EAttribute getCharterLengthEvent_ContingencyHours();
+	EAttribute getGeneratedCharterLengthEvent_ContingencyHours();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.FuelUsage <em>Fuel Usage</em>}'.
@@ -11467,14 +11467,14 @@ public interface SchedulePackage extends EPackage {
 		EReference GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET = eINSTANCE.getGeneratedCharterOut_CharterOutMarket();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl <em>Charter Length Event</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl <em>Generated Charter Length Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterLengthEvent()
+		 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterLengthEvent()
 		 * @generated
 		 */
-		EClass CHARTER_LENGTH_EVENT = eINSTANCE.getCharterLengthEvent();
+		EClass GENERATED_CHARTER_LENGTH_EVENT = eINSTANCE.getGeneratedCharterLengthEvent();
 
 		/**
 		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
@@ -11482,7 +11482,7 @@ public interface SchedulePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHARTER_LENGTH_EVENT__DURATION = eINSTANCE.getCharterLengthEvent_Duration();
+		EAttribute GENERATED_CHARTER_LENGTH_EVENT__DURATION = eINSTANCE.getGeneratedCharterLengthEvent_Duration();
 
 		/**
 		 * The meta object literal for the '<em><b>Laden</b></em>' attribute feature.
@@ -11490,7 +11490,7 @@ public interface SchedulePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHARTER_LENGTH_EVENT__LADEN = eINSTANCE.getCharterLengthEvent_Laden();
+		EAttribute GENERATED_CHARTER_LENGTH_EVENT__LADEN = eINSTANCE.getGeneratedCharterLengthEvent_Laden();
 
 		/**
 		 * The meta object literal for the '<em><b>Contingency Hours</b></em>' attribute feature.
@@ -11498,7 +11498,7 @@ public interface SchedulePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS = eINSTANCE.getCharterLengthEvent_ContingencyHours();
+		EAttribute GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS = eINSTANCE.getGeneratedCharterLengthEvent_ContingencyHours();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.

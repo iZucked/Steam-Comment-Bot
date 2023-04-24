@@ -34,10 +34,10 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
@@ -152,7 +152,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			return rowFilterInfo.contains(ROW_FILTER_CHARTER_OUT_ROW.id);
 		} else if (event instanceof GroupedCharterOutEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_CHARTER_OUT_ROW.id);
-		} else if (event instanceof CharterLengthEvent) {
+		} else if (event instanceof GeneratedCharterLengthEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_CHARTER_LENGTH.id);
 		} else if (event instanceof GroupedCharterLengthEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_CHARTER_LENGTH.id);

@@ -7,12 +7,10 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,16 +27,13 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
-import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -76,8 +71,8 @@ public class ScheduleReportTransformer {
 		final Set<EObject> allEvents = new HashSet<>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
-				if (event instanceof CharterLengthEvent) {
-					// final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
+				if (event instanceof GeneratedCharterLengthEvent) {
+					// final GeneratedCharterLengthEvent charterLengthEvent = (GeneratedCharterLengthEvent) event;
 					// extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().add(charterLengthEvent);
 					// continue;
 					interestingEvents.add(event);
@@ -291,8 +286,8 @@ public class ScheduleReportTransformer {
 			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) a;
 			equivalents.add(generatedCharterOut);
 			equivalents.addAll(generatedCharterOut.getEvents());
-		} else if (a instanceof CharterLengthEvent) {
-			final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) a;
+		} else if (a instanceof GeneratedCharterLengthEvent) {
+			final GeneratedCharterLengthEvent charterLengthEvent = (GeneratedCharterLengthEvent) a;
 			equivalents.add(charterLengthEvent);
 			equivalents.addAll(charterLengthEvent.getEvents());
 		} else if (a instanceof GroupedCharterLengthEvent) {
@@ -329,7 +324,7 @@ public class ScheduleReportTransformer {
 			return true;
 		} else if (event instanceof GeneratedCharterOut) {
 			return true;
-		} else if (event instanceof CharterLengthEvent) {
+		} else if (event instanceof GeneratedCharterLengthEvent) {
 			return true;
 		} else if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;

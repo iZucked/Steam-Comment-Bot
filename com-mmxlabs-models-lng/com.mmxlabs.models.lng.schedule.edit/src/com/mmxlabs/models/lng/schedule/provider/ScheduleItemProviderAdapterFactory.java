@@ -295,26 +295,26 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterLengthEvent} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CharterLengthEventItemProvider charterLengthEventItemProvider;
+	protected GeneratedCharterLengthEventItemProvider generatedCharterLengthEventItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CharterLengthEvent}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createCharterLengthEventAdapter() {
-		if (charterLengthEventItemProvider == null) {
-			charterLengthEventItemProvider = new CharterLengthEventItemProvider(this);
+	public Adapter createGeneratedCharterLengthEventAdapter() {
+		if (generatedCharterLengthEventItemProvider == null) {
+			generatedCharterLengthEventItemProvider = new GeneratedCharterLengthEventItemProvider(this);
 		}
 
-		return charterLengthEventItemProvider;
+		return generatedCharterLengthEventItemProvider;
 	}
 
 	/**
@@ -1456,7 +1456,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (slotVisitItemProvider != null) slotVisitItemProvider.dispose();
 		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
 		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
-		if (charterLengthEventItemProvider != null) charterLengthEventItemProvider.dispose();
+		if (generatedCharterLengthEventItemProvider != null) generatedCharterLengthEventItemProvider.dispose();
 		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
 		if (purgeItemProvider != null) purgeItemProvider.dispose();
 		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();

@@ -42,8 +42,8 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -791,7 +791,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 			// We could have a rounding error of a couple of dollars
 			Assertions.assertEquals(0.0, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 2.0);
 
-			CharterLengthEvent charterLength = CharterLengthTests.findCharterLengthEvent(cargoAllocation.getSlotAllocations().get(1).getSlot(), option.getScheduleModel().getSchedule());
+			GeneratedCharterLengthEvent charterLength = CharterLengthTests.findCharterLengthEvent(cargoAllocation.getSlotAllocations().get(1).getSlot(), option.getScheduleModel().getSchedule());
 			Assertions.assertNotNull(charterLength);
 		}
 	}

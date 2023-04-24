@@ -1,24 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.port.Location;
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
+
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.Collection;
@@ -28,9 +21,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -41,24 +32,24 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Charter Length Event</b></em>'.
+ * An implementation of the model object '<em><b>Generated Charter Length Event</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getEvents <em>Events</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getFuels <em>Fuels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getDuration <em>Duration</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#isLaden <em>Laden</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getContingencyHours <em>Contingency Hours</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl#getEvents <em>Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl#getFuels <em>Fuels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl#getDuration <em>Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl#isLaden <em>Laden</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterLengthEventImpl#getContingencyHours <em>Contingency Hours</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class CharterLengthEventImpl extends PortVisitImpl implements CharterLengthEvent {
+public class GeneratedCharterLengthEventImpl extends PortVisitImpl implements GeneratedCharterLengthEvent {
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -164,7 +155,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CharterLengthEventImpl() {
+	protected GeneratedCharterLengthEventImpl() {
 		super();
 	}
 
@@ -175,7 +166,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return SchedulePackage.Literals.CHARTER_LENGTH_EVENT;
+		return SchedulePackage.Literals.GENERATED_CHARTER_LENGTH_EVENT;
 	}
 
 	/**
@@ -197,7 +188,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		GroupProfitAndLoss oldGroupProfitAndLoss = groupProfitAndLoss;
 		groupProfitAndLoss = newGroupProfitAndLoss;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, oldGroupProfitAndLoss, newGroupProfitAndLoss);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, oldGroupProfitAndLoss, newGroupProfitAndLoss);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -213,14 +204,14 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		if (newGroupProfitAndLoss != groupProfitAndLoss) {
 			NotificationChain msgs = null;
 			if (groupProfitAndLoss != null)
-				msgs = ((InternalEObject)groupProfitAndLoss).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
+				msgs = ((InternalEObject)groupProfitAndLoss).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
 			if (newGroupProfitAndLoss != null)
-				msgs = ((InternalEObject)newGroupProfitAndLoss).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
+				msgs = ((InternalEObject)newGroupProfitAndLoss).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, null, msgs);
 			msgs = basicSetGroupProfitAndLoss(newGroupProfitAndLoss, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, newGroupProfitAndLoss, newGroupProfitAndLoss));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS, newGroupProfitAndLoss, newGroupProfitAndLoss));
 	}
 
 	/**
@@ -231,7 +222,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
 		if (generalPNLDetails == null) {
-			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS);
+			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS);
 		}
 		return generalPNLDetails;
 	}
@@ -244,7 +235,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public EList<Event> getEvents() {
 		if (events == null) {
-			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS);
+			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__EVENTS);
 		}
 		return events;
 	}
@@ -257,7 +248,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public EList<FuelQuantity> getFuels() {
 		if (fuels == null) {
-			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.CHARTER_LENGTH_EVENT__FUELS);
+			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS);
 		}
 		return fuels;
 	}
@@ -282,7 +273,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		int oldDuration = duration;
 		duration = newDuration;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CHARTER_LENGTH_EVENT__DURATION, oldDuration, duration));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__DURATION, oldDuration, duration));
 	}
 
 	/**
@@ -305,7 +296,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		boolean oldLaden = laden;
 		laden = newLaden;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CHARTER_LENGTH_EVENT__LADEN, oldLaden, laden));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__LADEN, oldLaden, laden));
 	}
 
 	/**
@@ -328,7 +319,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		int oldContingencyHours = contingencyHours;
 		contingencyHours = newContingencyHours;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS, oldContingencyHours, contingencyHours));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS, oldContingencyHours, contingencyHours));
 	}
 
 	/**
@@ -348,59 +339,16 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String type() {
-		return "Charter length";
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String name() {
-
-		String prefix = "Charter Length - ";
-		// Work backwards through the events list to find a slot or cargo to get the name
-		final EObject container = this.eContainer();
-		if (container instanceof Sequence) {
-			final Sequence sequence = (Sequence) container;
-			prefix = prefix + " " + sequence.getName();
-		}
-
-		return prefix;
-
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public String getTimeZone(EAttribute attribute) {
-		Port p = getPort();
-		if (p == null) return "UTC";
- 		Location l = p.getLocation();
- 		if (l == null) return "UTC";
-		if (l.getTimeZone() == null) return "UTC";
-		if (l.getTimeZone().isEmpty()) return "UTC";
-		return l.getTimeZone();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
 				return ((InternalEList<?>)getGeneralPNLDetails()).basicRemove(otherEnd, msgs);
-			case SchedulePackage.CHARTER_LENGTH_EVENT__FUELS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS:
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -414,19 +362,19 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
 				return getGeneralPNLDetails();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__EVENTS:
 				return getEvents();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__FUELS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS:
 				return getFuels();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__DURATION:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__DURATION:
 				return getDuration();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__LADEN:
 				return isLaden();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
 				return getContingencyHours();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -441,28 +389,28 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
 				getGeneralPNLDetails().addAll((Collection<? extends GeneralPNLDetails>)newValue);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__EVENTS:
 				getEvents().clear();
 				getEvents().addAll((Collection<? extends Event>)newValue);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__FUELS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS:
 				getFuels().clear();
 				getFuels().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__DURATION:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__DURATION:
 				setDuration((Integer)newValue);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__LADEN:
 				setLaden((Boolean)newValue);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
 				setContingencyHours((Integer)newValue);
 				return;
 		}
@@ -477,25 +425,25 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__EVENTS:
 				getEvents().clear();
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__FUELS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS:
 				getFuels().clear();
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__DURATION:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__DURATION:
 				setDuration(DURATION_EDEFAULT);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__LADEN:
 				setLaden(LADEN_EDEFAULT);
 				return;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
 				setContingencyHours(CONTINGENCY_HOURS_EDEFAULT);
 				return;
 		}
@@ -510,19 +458,19 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS:
 				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__EVENTS:
 				return events != null && !events.isEmpty();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__FUELS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS:
 				return fuels != null && !fuels.isEmpty();
-			case SchedulePackage.CHARTER_LENGTH_EVENT__DURATION:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__DURATION:
 				return duration != DURATION_EDEFAULT;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__LADEN:
 				return laden != LADEN_EDEFAULT;
-			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
 				return contingencyHours != CONTINGENCY_HOURS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -537,20 +485,20 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (derivedFeatureID) {
-				case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
-				case SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
+				case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
+				case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
 		}
 		if (baseClass == EventGrouping.class) {
 			switch (derivedFeatureID) {
-				case SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS: return SchedulePackage.EVENT_GROUPING__EVENTS;
+				case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__EVENTS: return SchedulePackage.EVENT_GROUPING__EVENTS;
 				default: return -1;
 			}
 		}
 		if (baseClass == FuelUsage.class) {
 			switch (derivedFeatureID) {
-				case SchedulePackage.CHARTER_LENGTH_EVENT__FUELS: return SchedulePackage.FUEL_USAGE__FUELS;
+				case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS: return SchedulePackage.FUEL_USAGE__FUELS;
 				default: return -1;
 			}
 		}
@@ -566,20 +514,20 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseFeatureID) {
-				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS;
-				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
 		}
 		if (baseClass == EventGrouping.class) {
 			switch (baseFeatureID) {
-				case SchedulePackage.EVENT_GROUPING__EVENTS: return SchedulePackage.CHARTER_LENGTH_EVENT__EVENTS;
+				case SchedulePackage.EVENT_GROUPING__EVENTS: return SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__EVENTS;
 				default: return -1;
 			}
 		}
 		if (baseClass == FuelUsage.class) {
 			switch (baseFeatureID) {
-				case SchedulePackage.FUEL_USAGE__FUELS: return SchedulePackage.CHARTER_LENGTH_EVENT__FUELS;
+				case SchedulePackage.FUEL_USAGE__FUELS: return SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT__FUELS;
 				default: return -1;
 			}
 		}
@@ -605,7 +553,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		}
 		if (baseClass == FuelUsage.class) {
 			switch (baseOperationID) {
-				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.CHARTER_LENGTH_EVENT___GET_FUEL_COST;
+				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT___GET_FUEL_COST;
 				default: return -1;
 			}
 		}
@@ -620,7 +568,7 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case SchedulePackage.CHARTER_LENGTH_EVENT___GET_FUEL_COST:
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT___GET_FUEL_COST:
 				return getFuelCost();
 		}
 		return super.eInvoke(operationID, arguments);
@@ -646,4 +594,4 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		return result.toString();
 	}
 
-} //CharterLengthEventImpl
+} //GeneratedCharterLengthEventImpl

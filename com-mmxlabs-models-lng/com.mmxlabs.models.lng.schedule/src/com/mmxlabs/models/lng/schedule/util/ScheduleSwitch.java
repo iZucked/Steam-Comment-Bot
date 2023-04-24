@@ -284,17 +284,17 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.CHARTER_LENGTH_EVENT: {
-				CharterLengthEvent charterLengthEvent = (CharterLengthEvent)theEObject;
-				T result = caseCharterLengthEvent(charterLengthEvent);
-				if (result == null) result = casePortVisit(charterLengthEvent);
-				if (result == null) result = caseProfitAndLossContainer(charterLengthEvent);
-				if (result == null) result = caseEventGrouping(charterLengthEvent);
-				if (result == null) result = caseFuelUsage(charterLengthEvent);
-				if (result == null) result = caseEvent(charterLengthEvent);
-				if (result == null) result = caseCapacityViolationsHolder(charterLengthEvent);
-				if (result == null) result = caseMMXObject(charterLengthEvent);
-				if (result == null) result = caseITimezoneProvider(charterLengthEvent);
+			case SchedulePackage.GENERATED_CHARTER_LENGTH_EVENT: {
+				GeneratedCharterLengthEvent generatedCharterLengthEvent = (GeneratedCharterLengthEvent)theEObject;
+				T result = caseGeneratedCharterLengthEvent(generatedCharterLengthEvent);
+				if (result == null) result = casePortVisit(generatedCharterLengthEvent);
+				if (result == null) result = caseProfitAndLossContainer(generatedCharterLengthEvent);
+				if (result == null) result = caseEventGrouping(generatedCharterLengthEvent);
+				if (result == null) result = caseFuelUsage(generatedCharterLengthEvent);
+				if (result == null) result = caseEvent(generatedCharterLengthEvent);
+				if (result == null) result = caseCapacityViolationsHolder(generatedCharterLengthEvent);
+				if (result == null) result = caseMMXObject(generatedCharterLengthEvent);
+				if (result == null) result = caseITimezoneProvider(generatedCharterLengthEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -716,17 +716,17 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Length Event</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Generated Charter Length Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Length Event</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Generated Charter Length Event</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCharterLengthEvent(CharterLengthEvent object) {
+	public T caseGeneratedCharterLengthEvent(GeneratedCharterLengthEvent object) {
 		return null;
 	}
 

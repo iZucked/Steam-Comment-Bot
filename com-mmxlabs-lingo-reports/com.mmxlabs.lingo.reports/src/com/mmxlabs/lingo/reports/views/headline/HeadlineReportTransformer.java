@@ -11,8 +11,8 @@ import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView.ColumnType;
 import com.mmxlabs.lingo.reports.views.headline.extensions.HeadlineValueExtenderExtensionUtil;
 import com.mmxlabs.lingo.reports.views.headline.extensions.IHeadlineValueExtender;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
@@ -126,8 +126,8 @@ class HeadlineReportTransformer {
 					final Idle idle = (Idle) evt;
 					totalIdleHours += idle.getDuration();
 				}
-				if (evt instanceof CharterLengthEvent) {
-					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) evt;
+				if (evt instanceof GeneratedCharterLengthEvent) {
+					final GeneratedCharterLengthEvent charterLengthEvent = (GeneratedCharterLengthEvent) evt;
 					totalCharterLength += charterLengthEvent.getDuration();
 				}
 			}

@@ -29,6 +29,7 @@ import com.mmxlabs.common.time.Days;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -38,10 +39,10 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -109,7 +110,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		if (event instanceof GeneratedCharterOut) {
 			return colourPalette.getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
 		}
-		if (event instanceof CharterLengthEvent) {
+		if (event instanceof GeneratedCharterLengthEvent) {
 			return colourPalette.getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
 		}
 
@@ -183,13 +184,13 @@ public abstract class AbstractVerticalReportVisualiser {
 				return "Dry Dock";
 			} else if (vesselEvent instanceof MaintenanceEvent) {
 				return "Maintenance";
-			} else if (vesselEvent instanceof com.mmxlabs.models.lng.cargo.CharterLengthEvent) {
+			} else if (vesselEvent instanceof CharterLengthEvent) {
 				return String.format("Length - %s", event.name());
 			}
 
 		} else if (event instanceof GeneratedCharterOut) {
 			return "GCO";
-		} else if (event instanceof CharterLengthEvent) {
+		} else if (event instanceof GeneratedCharterLengthEvent) {
 			return "Length";
 		} else if (event instanceof StartEvent) {
 			final Port port = event.getPort();

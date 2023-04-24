@@ -27,12 +27,12 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -335,7 +335,7 @@ public class AnnotatedSolutionExporter {
 					} else if (event instanceof final GeneratedCharterOut evt) {
 						eventGrouping = evt;
 						eventGrouping.getEvents().add(event);
-					} else if (event instanceof final CharterLengthEvent evt) {
+					} else if (event instanceof final GeneratedCharterLengthEvent evt) {
 						eventGrouping = evt;
 						eventGrouping.getEvents().add(event);
 					} else {
@@ -530,7 +530,7 @@ public class AnnotatedSolutionExporter {
 
 		boolean exportingRedirectedCharterOut = false;
 		PortDetails redirectedCharterOutStart = null;
-		CharterLengthEvent charterLengthEvent = null;
+		GeneratedCharterLengthEvent charterLengthEvent = null;
 		VoyagePlanRecord previous = null;
 
 		while (vpi.hasNextObject()) {
@@ -564,7 +564,7 @@ public class AnnotatedSolutionExporter {
 				}
 
 				final PortVisit event = portDetailsExporter.export(details, scheduledSequence, annotatedSolution, output);
-				if (event instanceof final CharterLengthEvent cle) {
+				if (event instanceof final GeneratedCharterLengthEvent cle) {
 					charterLengthEvent = cle;
 				}
 				if (event != null) {

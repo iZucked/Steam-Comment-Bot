@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.CharterContractFeeDetails;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
@@ -45,6 +44,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
@@ -164,7 +164,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass charterLengthEventEClass = null;
+	private EClass generatedCharterLengthEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1179,8 +1179,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EClass getCharterLengthEvent() {
-		return charterLengthEventEClass;
+	public EClass getGeneratedCharterLengthEvent() {
+		return generatedCharterLengthEventEClass;
 	}
 
 	/**
@@ -1189,8 +1189,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCharterLengthEvent_Duration() {
-		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(0);
+	public EAttribute getGeneratedCharterLengthEvent_Duration() {
+		return (EAttribute)generatedCharterLengthEventEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1199,8 +1199,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCharterLengthEvent_Laden() {
-		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(1);
+	public EAttribute getGeneratedCharterLengthEvent_Laden() {
+		return (EAttribute)generatedCharterLengthEventEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1209,8 +1209,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCharterLengthEvent_ContingencyHours() {
-		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(2);
+	public EAttribute getGeneratedCharterLengthEvent_ContingencyHours() {
+		return (EAttribute)generatedCharterLengthEventEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -3542,10 +3542,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
 		createEReference(generatedCharterOutEClass, GENERATED_CHARTER_OUT__CHARTER_OUT_MARKET);
 
-		charterLengthEventEClass = createEClass(CHARTER_LENGTH_EVENT);
-		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__DURATION);
-		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__LADEN);
-		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS);
+		generatedCharterLengthEventEClass = createEClass(GENERATED_CHARTER_LENGTH_EVENT);
+		createEAttribute(generatedCharterLengthEventEClass, GENERATED_CHARTER_LENGTH_EVENT__DURATION);
+		createEAttribute(generatedCharterLengthEventEClass, GENERATED_CHARTER_LENGTH_EVENT__LADEN);
+		createEAttribute(generatedCharterLengthEventEClass, GENERATED_CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS);
 
 		cooldownEClass = createEClass(COOLDOWN);
 		createEAttribute(cooldownEClass, COOLDOWN__VOLUME);
@@ -3818,10 +3818,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		generatedCharterOutEClass.getESuperTypes().add(this.getPortVisit());
 		generatedCharterOutEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		generatedCharterOutEClass.getESuperTypes().add(this.getEventGrouping());
-		charterLengthEventEClass.getESuperTypes().add(this.getPortVisit());
-		charterLengthEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
-		charterLengthEventEClass.getESuperTypes().add(this.getEventGrouping());
-		charterLengthEventEClass.getESuperTypes().add(this.getFuelUsage());
+		generatedCharterLengthEventEClass.getESuperTypes().add(this.getPortVisit());
+		generatedCharterLengthEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		generatedCharterLengthEventEClass.getESuperTypes().add(this.getEventGrouping());
+		generatedCharterLengthEventEClass.getESuperTypes().add(this.getFuelUsage());
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		purgeEClass.getESuperTypes().add(this.getEvent());
@@ -4003,10 +4003,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGeneratedCharterOut_CharterOutMarket(), theSpotMarketsPackage.getCharterOutMarket(), null, "charterOutMarket", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(charterLengthEventEClass, CharterLengthEvent.class, "CharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCharterLengthEvent_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCharterLengthEvent_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCharterLengthEvent_ContingencyHours(), ecorePackage.getEInt(), "contingencyHours", null, 0, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(generatedCharterLengthEventEClass, GeneratedCharterLengthEvent.class, "GeneratedCharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGeneratedCharterLengthEvent_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, GeneratedCharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGeneratedCharterLengthEvent_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, GeneratedCharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGeneratedCharterLengthEvent_ContingencyHours(), ecorePackage.getEInt(), "contingencyHours", null, 0, 1, GeneratedCharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cooldownEClass, Cooldown.class, "Cooldown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCooldown_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

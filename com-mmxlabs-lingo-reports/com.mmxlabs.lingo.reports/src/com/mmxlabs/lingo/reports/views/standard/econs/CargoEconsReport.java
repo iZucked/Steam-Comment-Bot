@@ -65,9 +65,9 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
@@ -481,7 +481,7 @@ public class CargoEconsReport extends ViewPart {
 				obj = ScheduleModelUtils.getSegmentStart(e);
 			}
 			if (obj instanceof StartEvent || obj instanceof EndEvent //
-					|| obj instanceof GeneratedCharterOut || obj instanceof CharterLengthEvent || obj instanceof VesselEventVisit //
+					|| obj instanceof GeneratedCharterOut || obj instanceof GeneratedCharterLengthEvent || obj instanceof VesselEventVisit //
 					|| obj instanceof CargoAllocation || obj instanceof OpenSlotAllocation || obj instanceof PaperDealAllocation//
 					|| obj instanceof Purge) {
 				validObjects.add(obj);
@@ -869,7 +869,7 @@ public class CargoEconsReport extends ViewPart {
 			final List<OpenAllocationPair> openAllocationPairs = OpenAllocationPair.generateDeltaPairs(selectedDataProvider, openSlotAllocations);
 
 			final List<OtherPair> otherPairs4 = OtherPair.generateSingles(selectedDataProvider, validObjects.stream() //
-					.filter(CharterLengthEvent.class::isInstance) //
+					.filter(GeneratedCharterLengthEvent.class::isInstance) //
 					.map(Event.class::cast) //
 					.collect(Collectors.toList()));
 
@@ -1004,8 +1004,8 @@ public class CargoEconsReport extends ViewPart {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);
 				}
-			} else if (selectedObject instanceof CharterLengthEvent) {
-				final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) selectedObject;
+			} else if (selectedObject instanceof GeneratedCharterLengthEvent) {
+				final GeneratedCharterLengthEvent charterLengthEvent = (GeneratedCharterLengthEvent) selectedObject;
 
 				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(charterLengthEvent.name());
 				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
