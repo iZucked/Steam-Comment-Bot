@@ -698,6 +698,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		final SequenceElement element = new SequenceElement(indexingContext, name);
 		final CharterLengthEvent event = (CharterLengthEvent) portSlot.getVesselEvent();
 		final CharterLengthPortSlot charterLengthPortSlot = new CharterLengthPortSlot(name, event.getTimeWindow(), port, event);
+		charterLengthPortSlot.setEventSequenceElements(portSlot.getEventSequenceElements());
 		elementDurationsProvider.setElementDuration(element, event.getDurationHours());
 		elementPortProvider.setPortForElement(port, element);
 		portSlotsProvider.setPortSlot(element, charterLengthPortSlot);

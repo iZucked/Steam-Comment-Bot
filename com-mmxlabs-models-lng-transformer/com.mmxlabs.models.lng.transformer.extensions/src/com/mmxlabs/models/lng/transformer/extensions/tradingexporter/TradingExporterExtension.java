@@ -196,9 +196,6 @@ public class TradingExporterExtension implements IExporterExtension {
 										}
 									}
 								}
-								if(slot instanceof ICharterLengthEventPortSlot) {
-									setPandLentries(profitAndLoss, visit);
-								}
 								if (visit != null) {
 									
 									IVesselEventPortSlot veps = (IVesselEventPortSlot) slot;
