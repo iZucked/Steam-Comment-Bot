@@ -90,6 +90,23 @@
                      class="BaseEntityBook">
                </target>
             </constraint>
+            
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.EntityBusinessUnitsConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.EntityBusinessUnitsConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Entity Business Units Default"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="BaseLegalEntity">
+               </target>
+            </constraint>
 
             <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.ContractPortsConstraint"

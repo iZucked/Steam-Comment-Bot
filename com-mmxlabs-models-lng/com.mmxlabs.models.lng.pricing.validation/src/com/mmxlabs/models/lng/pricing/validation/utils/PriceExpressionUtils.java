@@ -216,9 +216,22 @@ public class PriceExpressionUtils {
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return ValidationResult.createErrorStatus("Price Expression is missing.");
 		}
+		String localPriceExpression = priceExpression;
+		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
+		if (eAnnotation != null) {
+			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.PARAMETERS_KEY);
+			if (value != null) {
+				final String[] values = value.split(",");
+				for (int i = 0; i < values.length; i++) {
+					if (values[i].equalsIgnoreCase(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE)) {
+						localPriceExpression = localPriceExpression.toLowerCase().replace(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE, "(1)"); 
+					}
+				}
+			}
+		}
 		// Check for illegal characters
 		{
-			final Matcher matcher = pattern.matcher(priceExpression);
+			final Matcher matcher = pattern.matcher(localPriceExpression);
 			if (matcher.find()) {
 				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
 				return ValidationResult.createErrorStatus(message);
@@ -226,9 +239,9 @@ public class PriceExpressionUtils {
 		}
 		// Test SHIFT function use
 		{
-			final Matcher matcherA = shiftDetectPattern.matcher(priceExpression);
+			final Matcher matcherA = shiftDetectPattern.matcher(localPriceExpression);
 			if (matcherA.find()) {
-				final Matcher matcherB = shiftUsePattern.matcher(priceExpression);
+				final Matcher matcherB = shiftUsePattern.matcher(localPriceExpression);
 				if (!matcherB.find()) {
 					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", priceExpression);
 					return ValidationResult.createErrorStatus(message);
@@ -241,7 +254,7 @@ public class PriceExpressionUtils {
 		// so we need to check these cases
 		final String multipleOperatorPattern = "([-/*+][-/*+]+)";
 		final Pattern pattern = Pattern.compile(multipleOperatorPattern);
-		final Matcher matcher = pattern.matcher(priceExpression);
+		final Matcher matcher = pattern.matcher(localPriceExpression);
 		if (matcher.find()) {
 			return ValidationResult.createErrorStatus(String.format("Unable to parse expression, consecutive %s operators found", matcher.group(0)));
 		}
@@ -251,13 +264,13 @@ public class PriceExpressionUtils {
 			ISeries parsed = null;
 			String hints = "";
 			try {
-				parsed = parser.asSeries(priceExpression);
+				parsed = parser.asSeries(localPriceExpression);
 			} catch (final UnknownSeriesException | GenericSeriesParsesException e) {
 				hints = e.getMessage();
 			} catch (final Exception e) {
 				final String operatorPattern = "([-/*+][-/*+]+)"; // TODO ask Simon if this is reachable
 				final Pattern p = Pattern.compile(operatorPattern);
-				final Matcher m = p.matcher(priceExpression);
+				final Matcher m = p.matcher(localPriceExpression);
 				if (m.find()) {
 					hints = "Consecutive operators: " + m.group(0);
 				} else {
@@ -276,7 +289,7 @@ public class PriceExpressionUtils {
 	/**
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
-			final Double maxValue, final YearMonth date, final List<IStatus> failures) {
+			final Double maxValue, final YearMonth date, final List<IStatus> failures, final PriceIndexType type) {
 
 		if (date == null) {
 			// No date, but try to parse expression as a number.
@@ -302,7 +315,7 @@ public class PriceExpressionUtils {
 			return;
 		}
 
-		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
+		final SeriesParser parser = getIndexParser(type);
 		try {
 			final ISeries parsed = parser.asSeries(priceExpression);
 
@@ -446,56 +459,48 @@ public class PriceExpressionUtils {
 		return null;
 
 	}
-//
-//	public static void checkCommodityExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate,
-//			final EStructuralFeature feature, final List<IStatus> failures) {
-//		checkCommodityExpressionAgainstPricingDate(ctx, priceExpression, slot, pricingDate, feature, failures, null);
-//	}
-//
-//	public static void checkCommodityExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate,
-//			final EStructuralFeature feature, final List<IStatus> failures, final @Nullable String typePrefix) {
-//		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
-//	final Map<AbstractYearMonthCurve, LocalDate> result1 = marketCurveProvider.getLinkedCurvesAndEarliestNeededDate(priceExpression, PriceIndexType.COMMODITY, pricingDate);
-//
-//		for (final Map.Entry<AbstractYearMonthCurve, LocalDate> e : result1.entrySet()) {
-//			final AbstractYearMonthCurve index = e.getKey();
-//
-//			if (index.isSetExpression()) {
-//				continue;
-//			}
-//
-//			String type = "index";
-//			if (index instanceof CommodityCurve) {
-//				type = "commodity pricing";
-//			} else if (index instanceof CurrencyCurve) {
-//				type = "currency";
-//			}
-//			if (typePrefix != null) {
-//				type = typePrefix + " " + type;
-//			}
-//			final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
-//			if (date == null) {
-//
-//				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-//						(IConstraintStatus) ctx.createFailureStatus(String.format("[Slot|%s] There is no %s data for curve %s", slot.getName(), type, index.getName())));
-//				dcsd.addEObjectAndFeature(slot, feature);
-//				failures.add(dcsd);
-//
-//			} else if (date.isAfter(YearMonth.from(e.getValue()))) {
-//				final String monthDisplayname = date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-//				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-//						.createFailureStatus(String.format("[Slot|%s] There is no %s data before %s %04d for curve %s", slot.getName(), type, monthDisplayname, date.getYear(), index.getName())));
-//				dcsd.addEObjectAndFeature(slot, feature);
-//				failures.add(dcsd);
-//			}
-//		}
-//	}
 
-//	public static ASTNode convertCommodityToASTNodes(final String expression) {
-//
-//		final SeriesParser seriesParser = getIndexParser(PriceIndexType.COMMODITY);
-//		return seriesParser.parse(expression);
-//	}
+	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature,
+			final List<IStatus> failures, final PriceIndexType indexType) {
+		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
+		final Map<AbstractYearMonthCurve, LocalDate> result1 = marketCurveProvider.getLinkedCurvesAndEarliestNeededDate(priceExpression, indexType, pricingDate);
+
+		for (final Map.Entry<AbstractYearMonthCurve, LocalDate> e : result1.entrySet()) {
+			final AbstractYearMonthCurve index = e.getKey();
+
+			if (index.isSetExpression()) {
+				continue;
+			}
+
+			String type = "index";
+			if (index instanceof CommodityCurve) {
+				type = "commodity pricing";
+			} else if (index instanceof CurrencyCurve) {
+				type = "currency";
+			}
+			final @Nullable YearMonth date = PriceExpressionUtils.getEarliestCurveDate(index);
+			if (date == null) {
+
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("[Slot|%s] There is no %s data for curve %s", slot.getName(), type, index.getName())));
+				dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+				failures.add(dcsd);
+
+			} else if (date.isAfter(YearMonth.from(e.getValue()))) {
+				final String monthDisplayname = date.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+						.createFailureStatus(String.format("[Slot|%s] There is no %s data before %s %04d for curve %s", slot.getName(), type, monthDisplayname, date.getYear(), index.getName())));
+				dcsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+				failures.add(dcsd);
+			}
+		}
+	}
+
+	public static ASTNode convertCommodityToASTNodes(final String expression) {
+
+		final SeriesParser seriesParser = getIndexParser(PriceIndexType.COMMODITY);
+		return seriesParser.parse(expression);
+	}
 
 	public static void validatePriceExpression(final IValidationContext ctx, final List<IStatus> failures, final EObject target, final String contractName,
 			final LNGPriceCalculatorParameters pricingParams, final EAttribute priceExprAttribute, final String priceExpr) {

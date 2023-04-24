@@ -31,7 +31,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage
  * @generated
  */
-public class TransfersSwitch<@Nullable T> extends Switch<T> {
+public class TransfersSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

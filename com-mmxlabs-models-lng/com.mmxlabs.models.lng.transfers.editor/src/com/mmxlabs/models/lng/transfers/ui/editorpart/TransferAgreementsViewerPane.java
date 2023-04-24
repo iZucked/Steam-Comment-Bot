@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferModel;
 import com.mmxlabs.models.lng.transfers.TransfersFactory;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
-import com.mmxlabs.models.lng.transfers.ui.manipulators.TransferIncotermEnumAttributeManipulator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
@@ -58,15 +57,24 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 		
 		addNameManipulator("Name");
 		addTypicalColumn("From", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_FromEntity(), //
-				getReferenceValueProviderCache(), getCommandHandler()));
+				getReferenceValueProviderCache(), getCommandHandler())).setEditingSupport(null);
 		addTypicalColumn("To", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_ToEntity(), //
-				getReferenceValueProviderCache(), getCommandHandler()));
+				getReferenceValueProviderCache(), getCommandHandler())).setEditingSupport(null);
 		addTypicalColumn("Price", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PriceExpression(), //
-				getCommandHandler()));
-		addTypicalColumn("Basis", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_PricingBasis(), //
-				getCommandHandler()));
-		addTypicalColumn("Inco", new TransferIncotermEnumAttributeManipulator(TransfersPackage.eINSTANCE.getTransferAgreement_Incoterm(), //
-				getCommandHandler()));
+				getCommandHandler()) {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof TransferAgreement ta) {
+					if (ta.getPriceExpression() == null && ta.getPricingBasis() != null) {
+						return ta.getPricingBasis();
+					}
+					if (ta.getPricingBasis() == null && ta.getPriceExpression() != null) {
+						return ta.getPriceExpression();
+					}
+				}
+				return null;
+			}
+		}).setEditingSupport(null);
 		
 		final ToolBarManager toolbar = getToolBarManager();
 		final ActionContributionItem filter = filterField.getContribution();
@@ -74,7 +82,6 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 			toolbar.remove(filter);
 			toolbar.update(true);
 		}
-
 	}
 
 	@Override

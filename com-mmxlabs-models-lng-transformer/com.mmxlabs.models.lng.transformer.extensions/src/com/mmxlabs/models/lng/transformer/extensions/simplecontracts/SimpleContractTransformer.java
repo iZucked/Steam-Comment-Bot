@@ -16,6 +16,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -32,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 
 /**
  * 
@@ -50,18 +53,23 @@ public class SimpleContractTransformer implements IContractTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Commodity)
 	private SeriesParser indices;
+	
+	@Inject
+	@Named(SchedulerConstants.Parser_PricingBasis)
+	private SeriesParser pricingBasisParser;
 
 	@Inject
 	private DateAndCurveHelper dateHelper;
 
 	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
 		if (priceInfo instanceof final ExpressionPriceParameters expressionPriceInfo) {
-			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve);
+			final boolean isBasis = isBasis(expressionPriceInfo);
+			return createPriceExpressionContract(isBasis ? expressionPriceInfo.getPricingBasis() : expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve, isBasis);
 
 		} else if (priceInfo instanceof final DateShiftExpressionPriceParameters expressionPriceInfo) {
 			if (expressionPriceInfo.getValue() == 0) {
 				// No shift set, return simple variant.
-				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve);
+				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), dateHelper::generateParameterisedExpressionCurve, false);
 			} else {
 				Function<ISeries, IParameterisedCurve> curveFactory;
 				if (expressionPriceInfo.isSpecificDay()) {
@@ -69,7 +77,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 				} else {
 					curveFactory = parsed -> dateHelper.generateShiftedCurve(parsed, date -> date.minusDays(expressionPriceInfo.getValue()));
 				}
-				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), curveFactory);
+				return createPriceExpressionContract(expressionPriceInfo.getPriceExpression(), curveFactory, false);
 			}
 		}
 
@@ -103,14 +111,28 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 *         the optimiser
 	 */
 	protected PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
-		return createPriceExpressionContract(priceExpression, dateHelper::generateParameterisedExpressionCurve);
+		return createPriceExpressionContract(priceExpression, dateHelper::generateParameterisedExpressionCurve, false);
 	}
 
-	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, IParameterisedCurve> curveFactory) {
+	private PriceExpressionContract createPriceExpressionContract(final String priceExpression, final Function<ISeries, IParameterisedCurve> curveFactory, final boolean isBasis) {
 
-		final var p = dateHelper.createCurveAndIntervals(indices, priceExpression, curveFactory);
+		final Pair<IParameterisedCurve, IIntegerIntervalCurve> p = dateHelper.createCurveAndIntervals(isBasis ? pricingBasisParser : indices, priceExpression, curveFactory);
+
 		final PriceExpressionContract contract = new PriceExpressionContract(p.getFirst(), p.getSecond());
 		injector.injectMembers(contract);
 		return contract;
 	}
+	
+	private boolean isBasis(final ExpressionPriceParameters expressionPriceInfo) {
+		final boolean isBasis;
+		if (expressionPriceInfo.getPricingBasis() != null && !expressionPriceInfo.getPricingBasis().isBlank()) {
+			isBasis = true;
+		} else if (expressionPriceInfo.getPriceExpression() != null && !expressionPriceInfo.getPriceExpression().isBlank()) {
+			isBasis = false;
+		} else {
+			throw new IllegalStateException("Missing the price data");
+		}
+		return isBasis;
+	}
+
 }

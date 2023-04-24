@@ -62,12 +62,12 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 				if (start != null) {
 					if (indexType == PriceIndexType.COMMODITY) {
 						final YearMonth key = YearMonth.from(start);
-						PriceExpressionUtils.constrainPriceExpression(ctx, slot, validationFeature, priceExpression, minExpressionValue, maxExpressionValue, key, failures);
+						PriceExpressionUtils.constrainPriceExpression(ctx, slot, validationFeature, priceExpression, minExpressionValue, maxExpressionValue, key, failures, indexType);
 					}
 				}
 			};
 
-			if (slot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
+			if ((slot.isSetPriceExpression() || slot.isSetPricingBasis()) && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
 				final String priceExpression = slot.getPriceExpression();
 				boolean checkExpression = true;
 				if ("??".equals(priceExpression)) {
@@ -82,20 +82,20 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 				}
 
 				if (checkExpression) {
-					action.accept(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression);
-				}
-			} else if (slot.getContract() != null) {
-				final EObject pricParams = slot.getContract().getPriceInfo();
-				if (pricParams != null) {
-					for (final EAttribute attrib : pricParams.eClass().getEAllAttributes()) {
-						if (attrib.getEType() == EcorePackage.Literals.ESTRING) {
-							if (PriceExpressionUtils.hasPriceAnnotation(attrib)) {
-								final String priceExpression = (String) pricParams.eGet(attrib);
-								action.accept(attrib, CargoPackage.Literals.SLOT__CARGO, priceExpression);
-
-							}
-						}
-
+					final String name = slot.getName();
+					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS) &&
+							slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
+						final String failureMessage = String.format("[%s]: only one of the two, price expression or pricing basis, should be set", name);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
+						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
+						failures.add(dsd);
+					}
+					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS)) {
+						validatePrice(ctx, failures, slot.getPricingBasis(), PriceIndexType.PRICING_BASIS, name, slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
+					}
+					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
+						validatePrice(ctx, failures, slot.getPriceExpression(), PriceIndexType.COMMODITY, name, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
 					}
 				}
 			} else if (slot instanceof SpotSlot spotSlot && spotSlot.getMarket() != null) {
@@ -112,6 +112,34 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 					}
 				}
 
+			}
+		}
+	}
+	
+	private void validatePrice(final IValidationContext ctx, final List<IStatus> failures, final String price, final PriceIndexType type, final String targetName, //
+			final Slot<?> slot, final EStructuralFeature feature) {
+		final ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, feature, price, type);
+		if (!result.isOk()) {
+			final String message = String.format("[Slot|'%s']%s", slot.getName(), result.getErrorDetails());
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			dsd.addEObjectAndFeature(slot, feature);
+			failures.add(dsd);
+		}
+		final ZonedDateTime start;
+		if (slot.isSetPricingDate()) {
+			start = slot.getPricingDateAsDateTime();
+		} else {
+			// Not strictly correct, may differ on pricing event and actual scheduled date
+			start = slot.getSchedulingTimeWindow().getStart();
+		}
+		if (start != null) {
+
+			final YearMonth key = YearMonth.from(start);
+			// type!
+			PriceExpressionUtils.constrainPriceExpression(ctx, slot, feature, price, minExpressionValue, maxExpressionValue, key, failures, type);
+
+			if (price != null && !price.trim().isEmpty()) {
+				PriceExpressionUtils.checkExpressionAgainstPricingDate(ctx, price, slot, start.toLocalDate(), feature, failures, type);
 			}
 		}
 	}

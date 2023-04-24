@@ -7,20 +7,13 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
-import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 
 public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportView {
 	

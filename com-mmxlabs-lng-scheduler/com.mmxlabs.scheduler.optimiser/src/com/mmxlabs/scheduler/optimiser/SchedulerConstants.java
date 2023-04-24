@@ -95,6 +95,8 @@ public final class SchedulerConstants {
 	public static final String IGNORE_HEDGE_PNL_AT_OPTI = "generated-papers-ignore-at-optimisation";
 	public static final String INDIVIDUAL_EXPOSURES = "individual-exposures";
 	
+	public static final String PRICING_BASES = "pricing-bases";
+	
 	public static final String PROCESS_TRANSFER_MODEL = "process-transfer-model";
 	
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";

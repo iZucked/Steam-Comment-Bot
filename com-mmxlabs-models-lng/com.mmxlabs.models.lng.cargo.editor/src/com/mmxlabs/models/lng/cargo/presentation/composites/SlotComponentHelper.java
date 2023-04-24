@@ -4,13 +4,16 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotExpressionWrapper;
+import com.mmxlabs.models.lng.cargo.editor.SlotPricingBasisWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
+import com.mmxlabs.models.lng.pricing.editor.PricingBasisInlineEditor;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -39,6 +42,8 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__ALLOWED_PORTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_HEDGE);
+		//TODO: check layout for the feature:
+		// ignoreFeatures.add(CargoPackage.Literals.SLOT__PRICING_BASIS);
 
 		addEditor(CargoPackage.Literals.SLOT__WINDOW_START, topClass -> {
 			if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
@@ -49,7 +54,26 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			}
 		});
 
-		addDefaultEditorWithWrapper(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, SlotExpressionWrapper::new);
+		addEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, topClass -> {
+			return new SlotExpressionWrapper(new TextInlineEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION) {
+				@Override
+				protected boolean updateOnChangeToFeature(final Object changedFeature) {
+					return CargoPackage.Literals.SLOT__CONTRACT.equals(changedFeature);
+				}
+
+				@Override
+				protected void updateDisplay(final Object value) {
+					if (value == null) {
+						updateValueDisplay(value);
+					} else {
+						super.updateDisplay(value);
+					}
+				}
+			});
+		});
+		
+		addEditorWithWrapperForLicenseFeature(KnownFeatures.FEATURE_PRICING_BASES, CargoPackage.Literals.SLOT__PRICING_BASIS, //
+				PricingBasisInlineEditor::new, SlotPricingBasisWrapper::new);
 
 		addEditor(CargoPackage.Literals.SLOT__NOTES, topClass -> new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
 

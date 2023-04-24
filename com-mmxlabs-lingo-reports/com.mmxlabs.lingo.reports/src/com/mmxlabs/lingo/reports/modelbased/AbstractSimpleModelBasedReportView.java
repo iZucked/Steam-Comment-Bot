@@ -5,9 +5,11 @@
 package com.mmxlabs.lingo.reports.modelbased;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.NonNull;
@@ -19,14 +21,17 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
+import org.osgi.service.event.EventHandler;
 
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContentsGenerators;
@@ -36,6 +41,9 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -46,6 +54,7 @@ import com.mmxlabs.rcp.common.WrappedSelectionProvider;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
@@ -68,6 +77,8 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 	protected FilterField filterField;
 
 	protected ColumnInfo columnInfo;
+	
+	protected EventHandler todayHandler;
 
 	public AbstractSimpleModelBasedReportView(final Class<M> modelClass) {
 		this.modelClass = modelClass;
@@ -133,6 +144,50 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		final ISelectionProvider wrappedSelectionProvider = new WrappedSelectionProvider(selectionMapper::adaptSelectionToExternal);
 		viewer.addSelectionChangedListener(e -> wrappedSelectionProvider.setSelection(e.getSelection()));
 		getSite().setSelectionProvider(wrappedSelectionProvider);
+		
+		// Adding an event broker for the snap-to-date event todayHandler
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
+		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+	}
+	
+	protected void snapTo(final LocalDate date) {
+		if (viewer == null) {
+			return;
+		}
+		final Grid grid = viewer.getGrid();
+		if (grid == null || grid.getItemCount() <= 0) {
+			return;
+		}
+
+		int pos = determineSelectionPosition(grid.getItems(), date);
+		if (pos != -1) {
+			grid.deselectAll();
+			grid.select(pos);
+			grid.showSelection();
+		}
+	}
+	
+	protected int determineSelectionPosition(final GridItem[] items, final LocalDate date) {
+		int pos = -1;
+		for (final GridItem item : items) {
+			final Object oData = item.getData();
+			if (oData instanceof final Row r) {
+				final SlotAllocation sa = r.getLoadAllocation();
+				if (sa == null) {
+					break;
+				}
+				final SlotVisit sv = sa.getSlotVisit();
+				if (sv == null) {
+					break;
+				}
+				if (sv.getStart().toLocalDate().isAfter(date)) {
+					break;
+				}
+				pos++;
+			}
+		}
+		return pos;
 	}
 
 	protected DefaultModelBasedSelectionMapper<M> createSelectionMapper(Viewer lviewer) {
@@ -208,6 +263,11 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		service.removePostSelectionListener(this);
 
 		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
+		
+		if (this.todayHandler != null) {
+			final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			eventBroker.unsubscribe(this.todayHandler);
+		}
 
 		super.dispose();
 	}

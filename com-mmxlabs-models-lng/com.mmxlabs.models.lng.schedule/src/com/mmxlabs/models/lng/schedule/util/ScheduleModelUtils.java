@@ -286,6 +286,17 @@ public class ScheduleModelUtils {
 		}
 		return null;
 	}
+	
+	public static Cargo getCargoFromCargoAllocation(final @NonNull CargoAllocation cargoAllocation) {
+		for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+			if (sa.getSlot() != null) {
+				if (sa.getSlot().getCargo() != null) {
+					return sa.getSlot().getCargo();
+				}
+			}
+		}
+		throw new IllegalStateException(String.format("%s: cargo allocation misses the cargo", ScheduleModelUtils.class.getCanonicalName()));
+	}
 
 	public static LoadSlot getLoadSlot(final Object allocation) {
 		LoadSlot slot = null;

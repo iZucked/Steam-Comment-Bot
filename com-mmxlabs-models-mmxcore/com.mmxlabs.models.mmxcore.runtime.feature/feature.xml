@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.mmxcore.runtime.feature"
       label="Models: MMXCore Runtime Feature"
-      version="6.3.4.qualifier"
+      version="6.4.4.qualifier"
       provider-name="Minimax Labs">
 
    <plugin

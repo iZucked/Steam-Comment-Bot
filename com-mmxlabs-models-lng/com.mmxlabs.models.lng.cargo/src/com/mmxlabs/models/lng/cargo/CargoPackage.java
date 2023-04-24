@@ -952,13 +952,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PRICING_BASIS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+
+	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
+	int SLOT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
@@ -967,7 +985,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
 
 	/**
 	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
@@ -976,7 +994,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
 
 	/**
 	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
@@ -985,7 +1003,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
+	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -994,7 +1012,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1231,13 +1249,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 22;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 23;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1636,6 +1663,24 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__BUSINESS_UNIT = SLOT__BUSINESS_UNIT;
+
+	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1985,6 +2030,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -2419,6 +2473,24 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__BUSINESS_UNIT = SLOT__BUSINESS_UNIT;
+
+	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2759,6 +2831,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -3265,6 +3346,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__WINDOW_COUNTER_PARTY = LOAD_SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PRICING_BASIS = LOAD_SLOT__PRICING_BASIS;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__BUSINESS_UNIT = LOAD_SLOT__BUSINESS_UNIT;
+
+	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3623,6 +3722,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = LOAD_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = LOAD_SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate CV</em>' operation.
@@ -4057,6 +4165,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = DISCHARGE_SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PRICING_BASIS = DISCHARGE_SLOT__PRICING_BASIS;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__BUSINESS_UNIT = DISCHARGE_SLOT__BUSINESS_UNIT;
+
+	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4406,6 +4532,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegate Min Cv</em>' operation.
@@ -8457,6 +8592,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_WindowCounterParty();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getPricingBasis()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_PricingBasis();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Business Unit</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_BusinessUnit();
+
+	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8719,6 +8876,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrDelegateAllowedPorts();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateBusinessUnit() <em>Get Slot Or Delegate Business Unit</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegate Business Unit</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateBusinessUnit()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegateBusinessUnit();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -11340,6 +11507,22 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__WINDOW_COUNTER_PARTY = eINSTANCE.getSlot_WindowCounterParty();
 
 		/**
+		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__PRICING_BASIS = eINSTANCE.getSlot_PricingBasis();
+
+		/**
+		 * The meta object literal for the '<em><b>Business Unit</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__BUSINESS_UNIT = eINSTANCE.getSlot_BusinessUnit();
+
+		/**
 		 * The meta object literal for the '<em><b>Allowed Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11546,6 +11729,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS = eINSTANCE.getSlot__GetSlotOrDelegateAllowedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegate Business Unit</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT = eINSTANCE.getSlot__GetSlotOrDelegateBusinessUnit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

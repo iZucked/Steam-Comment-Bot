@@ -73,7 +73,6 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 			}
 		}
 		
-		
 
 		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());

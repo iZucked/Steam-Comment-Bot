@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.ganttchart.SpecialDrawModes;
 import org.eclipse.swt.SWT;
@@ -44,14 +45,7 @@ public class VesselStateColourScheme extends ColourScheme {
 		return "Vessel State";
 	}
 
-	@Override
-	public Color getForeground(final Object element) {
-		return null;// ColourPalette.getInstance().Alert_Crimson);
-	}
-
-	@Override
-	public Color getBackground(final Object element) {
-
+	private Color getColorFor(final Object element, final @NonNull ColourElements colourElement) {
 		final OpenOrNonShippedType classification = classify(element);
 		if (classification != null) {
 			if (!classification.fob() || classification.multi()) {
@@ -65,45 +59,45 @@ public class VesselStateColourScheme extends ColourScheme {
 
 		if (element instanceof final Journey journey) {
 			if (journey.isLaden()) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, colourElement);
 			} else {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, colourElement);
 			}
 		} else if (element instanceof final Idle idle) {
 			if (idle.isLaden()) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, colourElement);
 			} else {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, colourElement);
 			}
 		} else if (element instanceof final VesselEventVisit vev) {
 			if (isOutsideTimeWindow(vev)) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, colourElement);
 			}
 			if (vev.getVesselEvent() instanceof DryDockEvent) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, colourElement);
 			} else if (vev.getVesselEvent() instanceof MaintenanceEvent) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, colourElement);
 			} else if (vev.getVesselEvent() instanceof CharterOutEvent) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_CharterOut, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_CharterOut, colourElement);
 			}
 		} else if (element instanceof GeneratedCharterOut) {
-			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, colourElement);
 		} else if (element instanceof CharterLengthEvent) {
-			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, colourElement);
 
 		} else if (element instanceof final CanalJourneyEvent canalBookingEvent) {
 			final Journey journey = canalBookingEvent.getLinkedJourney();
 			if (journey.isLaden()) {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, colourElement);
 			} else {
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, colourElement);
 			}
 		} else if (element instanceof CharterAvailableFromEvent) {
-			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Charter_Range, ColourElements.Background);
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Charter_Range, colourElement);
 		} else if (element instanceof CharterAvailableToEvent) {
-			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Charter_Range, ColourElements.Background);
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Charter_Range, colourElement);
 		} else if (element instanceof InventoryChangeEvent) {
-			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_Breach, ColourElements.Background);
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_Breach, colourElement);
 
 		}
 
@@ -111,20 +105,30 @@ public class VesselStateColourScheme extends ColourScheme {
 		if (element instanceof final SlotVisit visit) {
 			if (isOutsideTimeWindow(visit)) {
 				if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Load, ColourElements.Background);
+					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Load, colourElement);
 				} else if (visit.getSlotAllocation().getSlot() instanceof DischargeSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Discharge, ColourElements.Background);
+					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Discharge, colourElement);
 				}
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, ColourElements.Background);
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, colourElement);
 			} else {
 				if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Load, ColourElements.Background);
+					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Load, colourElement);
 				} else if (visit.getSlotAllocation().getSlot() instanceof DischargeSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, ColourElements.Background);
+					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, colourElement);
 				}
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Color getForeground(final Object element) {
+		return getColorFor(element, ColourElements.Foreground);
+	}
+
+	@Override
+	public Color getBackground(final Object element) {
+		return getColorFor(element, ColourElements.Background);
 	}
 
 	@Override
@@ -185,6 +189,9 @@ public class VesselStateColourScheme extends ColourScheme {
 					return ColourPalette.getInstance().getColour(ColourPalette.Black);
 				}
 			}
+			if (event instanceof SlotVisit) {
+				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
+			}
 		}
 
 		return null;
@@ -192,7 +199,6 @@ public class VesselStateColourScheme extends ColourScheme {
 
 	@Override
 	public int getBorderWidth(final Object element) {
-
 		return 1;
 	}
 

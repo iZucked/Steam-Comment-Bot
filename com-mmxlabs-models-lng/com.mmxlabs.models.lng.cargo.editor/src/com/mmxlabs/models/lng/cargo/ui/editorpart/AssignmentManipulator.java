@@ -18,7 +18,6 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -36,9 +35,7 @@ import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 public class AssignmentManipulator implements ICellRenderer, ICellManipulator, IImageProvider {
-	/**
-	 * 
-	 */
+
 	private final IScenarioEditingLocation location;
 	private final IReferenceValueProvider slotValueProvider;
 	private final IReferenceValueProvider cargoValueProvider;
@@ -47,12 +44,12 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator, I
 	private IExtraCommandsHook extraCommandsHook;
 	private Object parent;
 
-	private Image lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
+	private final Image lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
-		this.cargoValueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
-				CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType());
+		this.cargoValueProvider = location.getReferenceValueProviderCache()
+				.getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType());
 		this.slotValueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel());
 	}
 
@@ -74,18 +71,14 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator, I
 		}
 
 		storage.forEach(p -> {
-			if (p.getSecond() instanceof VesselCharter) {
-				final VesselCharter vesselCharter = (VesselCharter) p.getSecond();
+			if (p.getSecond() instanceof final VesselCharter vesselCharter) {
 				p.setFirst(AssignmentLabelProvider.getLabelFor(vesselCharter));
-			} else if (p.getSecond() instanceof CharterInMarketOverride) {
-				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) p.getSecond();
+			} else if (p.getSecond() instanceof final CharterInMarketOverride charterInMarketOverride) {
 				p.setFirst(AssignmentLabelProvider.getLabelFor(charterInMarketOverride));
-			} else if (p.getSecond() instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) p.getSecond();
+			} else if (p.getSecond() instanceof final CharterInMarket charterInMarket) {
 
 				int spotIndex = -2;
-				if (target instanceof AssignableElement) {
-					AssignableElement assignableElement = (AssignableElement) target;
+				if (target instanceof final AssignableElement assignableElement) {
 					spotIndex = assignableElement.getSpotIndex();
 				}
 
@@ -97,7 +90,7 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator, I
 	}
 
 	@Override
-	public boolean isValueUnset(Object object) {
+	public boolean isValueUnset(final Object object) {
 		return false;
 	}
 
@@ -157,8 +150,7 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator, I
 			if (pair.getSecond() == current) {
 
 				// HACKY BIT FOR NOW to show nominal allocation
-				if (object instanceof Cargo) {
-					Cargo cargo = (Cargo) object;
+				if (object instanceof final Cargo cargo) {
 					if (cargo.getVesselAssignmentType() instanceof CharterInMarket) {
 						if (cargo.getSpotIndex() == -1) {
 							return pair.getFirst().replace("spot", "nominal");
@@ -194,26 +186,25 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator, I
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return null;
 	}
 
 	@Override
-	public void setParent(Object parent, Object object) {
+	public void setParent(final Object parent, final Object object) {
 		this.parent = parent;
 
 	}
 
 	@Override
-	public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
+	public void setExtraCommandsHook(final IExtraCommandsHook extraCommandsHook) {
 		this.extraCommandsHook = extraCommandsHook;
 	}
 
 	@Override
-	public Image getImage(Object element) {
+	public Image getImage(final Object element) {
 
-		if (element instanceof AssignableElement) {
-			final AssignableElement assignableElement = (AssignableElement) element;
+		if (element instanceof final AssignableElement assignableElement) {
 
 			if (assignableElement.isLocked()) {
 				return lockedImage;

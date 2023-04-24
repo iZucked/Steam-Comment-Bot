@@ -456,7 +456,7 @@ public class BasicExposuresTest {
 				.stream()
 				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
+						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
 		pricingModel.getCurrencyCurves()
 				.stream()
 				.filter(idx -> idx.getName() != null)//
@@ -524,7 +524,7 @@ public class BasicExposuresTest {
 				.stream()
 				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
+						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
 		pricingModel.getCurrencyCurves()
 				.stream()
 				.filter(idx -> idx.getName() != null)//
@@ -849,6 +849,8 @@ public class BasicExposuresTest {
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(Boolean.FALSE);
+				// Pricing bases
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.PRICING_BASES)).toInstance(Boolean.FALSE);
 			}
 
 			@Provides

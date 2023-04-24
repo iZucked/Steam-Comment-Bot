@@ -8,16 +8,21 @@ package com.mmxlabs.models.lng.commercial.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
+import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,6 +37,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getTradingBook <em>Trading Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getUpstreamBook <em>Upstream Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#isThirdParty <em>Third Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getBusinessUnits <em>Business Units</em>}</li>
  * </ul>
  *
  * @generated
@@ -106,6 +112,16 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * @ordered
 	 */
 	protected boolean thirdParty = THIRD_PARTY_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getBusinessUnits() <em>Business Units</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBusinessUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<BusinessUnit> businessUnits;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -313,6 +329,19 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * @generated
 	 */
 	@Override
+	public EList<BusinessUnit> getBusinessUnits() {
+		if (businessUnits == null) {
+			businessUnits = new EObjectContainmentEList<BusinessUnit>(BusinessUnit.class, this, CommercialPackage.BASE_LEGAL_ENTITY__BUSINESS_UNITS);
+		}
+		return businessUnits;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
@@ -321,6 +350,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return basicSetTradingBook(null, msgs);
 			case CommercialPackage.BASE_LEGAL_ENTITY__UPSTREAM_BOOK:
 				return basicSetUpstreamBook(null, msgs);
+			case CommercialPackage.BASE_LEGAL_ENTITY__BUSINESS_UNITS:
+				return ((InternalEList<?>)getBusinessUnits()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -343,6 +374,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return getUpstreamBook();
 			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
 				return isThirdParty();
+			case CommercialPackage.BASE_LEGAL_ENTITY__BUSINESS_UNITS:
+				return getBusinessUnits();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -352,6 +385,7 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -369,6 +403,10 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return;
 			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
 				setThirdParty((Boolean)newValue);
+				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__BUSINESS_UNITS:
+				getBusinessUnits().clear();
+				getBusinessUnits().addAll((Collection<? extends BusinessUnit>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -397,6 +435,9 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
 				setThirdParty(THIRD_PARTY_EDEFAULT);
 				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__BUSINESS_UNITS:
+				getBusinessUnits().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -419,6 +460,8 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 				return upstreamBook != null;
 			case CommercialPackage.BASE_LEGAL_ENTITY__THIRD_PARTY:
 				return thirdParty != THIRD_PARTY_EDEFAULT;
+			case CommercialPackage.BASE_LEGAL_ENTITY__BUSINESS_UNITS:
+				return businessUnits != null && !businessUnits.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

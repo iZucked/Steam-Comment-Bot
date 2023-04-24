@@ -74,6 +74,7 @@ public class ExposureDetailItemProvider
 			addVolumeUnitPropertyDescriptor(object);
 			addCurrencyUnitPropertyDescriptor(object);
 			addDealTypePropertyDescriptor(object);
+			addLocalDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -277,6 +278,28 @@ public class ExposureDetailItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Local Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLocalDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ExposureDetail_localDate_feature"),
+				 getString("_UI_ExposureDetail_localDate_description"),
+				 SchedulePackage.Literals.EXPOSURE_DETAIL__LOCAL_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ExposureDetail.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -323,6 +346,7 @@ public class ExposureDetailItemProvider
 			case SchedulePackage.EXPOSURE_DETAIL__VOLUME_UNIT:
 			case SchedulePackage.EXPOSURE_DETAIL__CURRENCY_UNIT:
 			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
+			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.util;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,8 +54,16 @@ public class CargoTransferUtil {
 		return null;
 	}
 	
+	public static List<EObject> getTransferRecordsForSlot(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
+		return getTransferRecords(scenarioModel).stream().filter(tr -> tr.getLhs() == slot).collect(Collectors.toList());
+	}
+	
 	private static Optional<TransferRecord> getOptionalTransferRecordForSlot(final Slot<?> slot, final LNGScenarioModel scenarioModel) {
 		return getTransferRecords(scenarioModel).stream().filter(tr -> tr.getLhs() == slot).findFirst();
+	}
+	
+	public static List< ? extends EObject> getTransferRecordsAsEObjects(final LNGScenarioModel scenarioModel){
+		return getTransferRecords(scenarioModel);
 	}
 	
 	private static List<TransferRecord> getTransferRecords(final LNGScenarioModel scenarioModel){
@@ -77,7 +86,28 @@ public class CargoTransferUtil {
 		return Collections.emptyList();
 	}
 	
-	public static Pair<CompoundCommand, EObject> createTransferRecord(final String description, final LNGScenarioModel scenarioModel, //
+	public static List<Pair<CompoundCommand, EObject>> createTransferRecords(final String description, final LNGScenarioModel scenarioModel, //
+			final EditingDomain editingDomain, final List<Slot<?>> slots, final EObject transferAgreement) {
+		final List<Pair<CompoundCommand, EObject>> result = new LinkedList<>();
+		
+		for (final Slot<?> slot : slots) {
+			if (isSimpleCargo(slot)) {
+				Pair<CompoundCommand, EObject> pair = createTransferRecord(description, scenarioModel, editingDomain, slot, transferAgreement);
+				if (!pair.getFirst().isEmpty() && pair.getSecond() != null) {
+					result.add(pair);
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	// check that slot is not within a complex cargo
+	private static boolean isSimpleCargo(final Slot<?> slot) {
+		return (slot != null && slot.getCargo() != null && slot.getCargo().getSlots().size() == 2);
+	}
+	
+	private static Pair<CompoundCommand, EObject> createTransferRecord(final String description, final LNGScenarioModel scenarioModel, //
 			final EditingDomain editingDomain, final Slot<?> slot, final EObject transferAgreement) {
 		final CompoundCommand cc = new CompoundCommand(description);
 		
@@ -87,6 +117,7 @@ public class CargoTransferUtil {
 		if (transferAgreement instanceof TransferAgreement ta) {
 			tr.setTransferAgreement(ta);
 			bufferDays = getBufferDays(ta);
+			tr.setName(String.format("%s_%s", slot.getName(), ta.getName()));
 		}
 		if (slot.getPricingDate() != null) {
 			tr.setPricingDate(slot.getPricingDate().plusDays(bufferDays));

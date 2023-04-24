@@ -7,10 +7,6 @@ package com.mmxlabs.scheduler.optimiser.transfers;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
-/**
- * Basic representation of the transfer record
- */
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
@@ -19,7 +15,6 @@ public class BasicTransferRecord {
 	private final String name;
 	private final ITransferAgreement agreement;
 	
-	private final ICurve pricingSeries;
 	private final String priceExpression;
 	private final boolean isBasis;
 
@@ -46,7 +41,6 @@ public class BasicTransferRecord {
 		super();
 		this.name = name;
 		this.agreement = agreement;
-		this.pricingSeries = agreement.pricingSeries();
 		this.priceExpression = agreement.priceExpression();
 		this.isBasis = agreement.isBasis();
 		this.pricingDate = pricingDate;
@@ -54,12 +48,11 @@ public class BasicTransferRecord {
 		this.nextTransferName = nextTransferName;
 	}
 	
-	public BasicTransferRecord(String name, ITransferAgreement agreement, ICurve pricingSeries, String priceExpression, //
+	public BasicTransferRecord(String name, ITransferAgreement agreement, String priceExpression, //
 			int pricingDate, IPortSlot slot, String nextTransferName, boolean isBasis) {
 		super();
 		this.name = name;
 		this.agreement = agreement;
-		this.pricingSeries = pricingSeries;
 		this.priceExpression = priceExpression;
 		this.isBasis = isBasis;
 		this.pricingDate = pricingDate;
@@ -75,9 +68,6 @@ public class BasicTransferRecord {
 	}
 	public IEntity getToEntity() {
 		return this.agreement.toEntity();
-	}
-	public ICurve getPricingSeries() {
-		return pricingSeries;
 	}
 	public String getPriceExpression() {
 		return priceExpression;

@@ -99,6 +99,7 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eOperations>
+    <eOperations name="getSlotOrDelegateBusinessUnit" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
         unsettable="true">
       <eGenericType eTypeParameter="#//Slot/T"/>
@@ -246,6 +247,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancelled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowCounterParty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="pricingBasis"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="businessUnit" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedPorts" upperBound="-1"
         unsettable="true">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">

@@ -6,8 +6,10 @@ package com.mmxlabs.lingo.app.updater.auth;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -35,9 +37,16 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.security.auth.x500.X500Principal;
 
+import org.apache.http.HttpException;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestWrapper;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONObject;
 
@@ -47,6 +56,7 @@ import com.google.common.base.Splitter;
 import com.google.common.io.Files;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.LicenseManager;
+import com.mmxlabs.lingo.app.updater.internal.LiNGOUpdaterDebugContants;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
 public abstract class ClasspathKeystoreProvider implements IUpdateAuthenticationProvider {
@@ -159,10 +169,8 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 	}
 
 	/**
-	 * Method to generate a new keypair for JWT tokens. The keystore should be kept
-	 * in the client repo. The public key should be saved under "public_key" in the
-	 * AWS secret. The private key should be saved under "private_key" in the AWS
-	 * secret.
+	 * Method to generate a new keypair for JWT tokens. The keystore should be kept in the client repo. The public key should be saved under "public_key" in the AWS secret. The private key should be
+	 * saved under "private_key" in the AWS secret.
 	 * 
 	 * @param keystoreFile
 	 * @param publicKeyPath
@@ -220,13 +228,13 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 		try (FileOutputStream os = new FileOutputStream(keystoreFile)) {
 			keyStore.store(os, password);
 		}
-//		
-//		test!
-//		
-//		(need test connect code!)
-//		
-//		
-//		other clients too
+		//
+		// test!
+		//
+		// (need test connect code!)
+		//
+		//
+		// other clients too
 
 		// Print secret creation information
 		System.out.println("Execute the following command to create the secret in AWS");
@@ -237,19 +245,42 @@ public abstract class ClasspathKeystoreProvider implements IUpdateAuthentication
 
 	public void checkAuthWorks(final String code) throws Exception {
 
-		final URI url = new URI(String.format("https://update.minimaxlabs.com/LiNGO/%s/latest/version.json", code));
+		final URI url = new URI(String.format("https://update.minimaxlabs.com/LiNGO/%s/latest/update.zip.sha256.sig", code));
 		final HttpClientBuilder localHttpClient = HttpClientBuilder.create();
 
 		final HttpGet request = new HttpGet(url);
 
 		VersionHelper.getInstance().setClientCode(code);
 		final Pair<String, String> header = provideAuthenticationHeader(url);
-		if (header != null) {
-			request.addHeader(header.getFirst(), header.getSecond());
-		}
+		localHttpClient.addInterceptorFirst(new HttpRequestInterceptor() {
+
+			@Override
+			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+				try {
+
+					URI uri = new URI(request.getRequestLine().getUri());
+					if (request instanceof HttpRequestWrapper w) {
+						uri = new URI(w.getOriginal().getRequestLine().getUri());
+					}
+					if (!uri.getHost().contains("update.minimaxlabs.com")) {
+						// Adding a header also means the original request headers are discarded.
+						request.addHeader(HttpHeaders.RANGE, "bytes=0-512");
+					}
+					if (uri.getHost().contains("update.minimaxlabs.com")) {
+						request.addHeader(header.getFirst(), header.getSecond());
+					}
+				} catch (final URISyntaxException e) {
+					throw new IOException(e);
+				}
+			}
+
+		});
+
+		System.out.println("Printing response code and status. Expected return code of 200 or 206 if the file is present");
 		try (var httpClient = localHttpClient.build()) {
 			try (var response = httpClient.execute(request)) {
-				System.out.println(EntityUtils.toString(response.getEntity()));
+				System.out.println(response.getStatusLine().getStatusCode());
+				System.out.println(response.getStatusLine().getReasonPhrase());
 			}
 		}
 	}

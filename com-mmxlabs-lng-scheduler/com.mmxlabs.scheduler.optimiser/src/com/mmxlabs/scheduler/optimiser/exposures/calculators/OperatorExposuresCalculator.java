@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.exposures.InputRecord;
 public class OperatorExposuresCalculator {
 
 	public static @NonNull Pair<Long, IExposureNode> getExposureNode(final @NonNull OperatorASTNode operatorNode, final InputRecord inputRecord) {
+		//System.out.println(operatorNode.asString() + " " + inputRecord.volumeInMMBTU());
 
 		final var operator = operatorNode.getOperator();
 		final Pair<Long, IExposureNode> pc0 = ExposuresASTToCalculator.getExposureNode(operatorNode.getLHS(), inputRecord);

@@ -848,6 +848,17 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				}
 			}
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
+				for (final PaperDealAllocation pd : schedule.getPaperDealAllocations()) {
+					for (final var entry: pd.getEntries()) {
+						for (final ExposureDetail detail : entry.getExposures()) {
+							if (result == null || detail.getDate().isBefore(result)) {
+								result = detail.getDate();
+							}
+						}
+					}
+				}
+			}
 			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE))
 				return result;
 			for (final OpenSlotAllocation sa : schedule.getOpenSlotAllocations()) {
@@ -870,6 +881,17 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					for (final ExposureDetail detail : sa.getExposures()) {
 						if (result == null || detail.getDate().isAfter(result)) {
 							result = detail.getDate();
+						}
+					}
+				}
+			}
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
+				for (final PaperDealAllocation pd : schedule.getPaperDealAllocations()) {
+					for (final var entry: pd.getEntries()) {
+						for (final ExposureDetail detail : entry.getExposures()) {
+							if (result == null || detail.getDate().isAfter(result)) {
+								result = detail.getDate();
+							}
 						}
 					}
 				}

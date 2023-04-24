@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.schedule;
 
 import com.mmxlabs.models.lng.types.DealType;
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.emf.ecore.EObject;
@@ -29,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getVolumeUnit <em>Volume Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getCurrencyUnit <em>Currency Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getDealType <em>Deal Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getLocalDate <em>Local Date</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getExposureDetail()
@@ -272,5 +274,27 @@ public interface ExposureDetail extends EObject {
 	 * @generated
 	 */
 	void setDealType(DealType value);
+
+	/**
+	 * Returns the value of the '<em><b>Local Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Local Date</em>' attribute.
+	 * @see #setLocalDate(LocalDate)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getExposureDetail_LocalDate()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getLocalDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getLocalDate <em>Local Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Local Date</em>' attribute.
+	 * @see #getLocalDate()
+	 * @generated
+	 */
+	void setLocalDate(LocalDate value);
 
 } // ExposureDetail

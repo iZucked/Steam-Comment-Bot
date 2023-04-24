@@ -11,6 +11,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.IParameterisedCurve;
+import com.mmxlabs.common.parser.series.functions.VolumeTierSeries;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -33,8 +34,8 @@ public class SlotExpressionParamsHelper {
 	public Map<String, String> buildParameters(final IPortSlot portSlot, final @Nullable VoyagePlan plan, final @Nullable IPortTimesRecord ptr) {
 		final Map<String, String> params = new HashMap<>();
 		if (ptr instanceof final IAllocationAnnotation aa) {
-//			params.put(VolumeTierSeries.PARAM_VOLUME_M3, Double.toString(OptimiserUnitConvertor.convertToExternalFloatVolume(aa.getCommercialSlotVolumeInM3(portSlot))));
-//			params.put(VolumeTierSeries.PARAM_VOLUME_MMBTU, Double.toString(OptimiserUnitConvertor.convertToExternalFloatVolume(aa.getCommercialSlotVolumeInMMBTu(portSlot))));
+			params.put(VolumeTierSeries.PARAM_VOLUME_M3, Double.toString(OptimiserUnitConvertor.convertToExternalFloatVolume(aa.getCommercialSlotVolumeInM3(portSlot))));
+			params.put(VolumeTierSeries.PARAM_VOLUME_MMBTU, Double.toString(OptimiserUnitConvertor.convertToExternalFloatVolume(aa.getCommercialSlotVolumeInMMBTu(portSlot))));
 			params.put("CV", Double.toString(OptimiserUnitConvertor.convertToExternalConversionFactor(aa.getSlotCargoCV(portSlot))));
 		}
 //

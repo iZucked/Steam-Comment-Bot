@@ -950,8 +950,28 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSlot_PricingBasis() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(41);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSlot_BusinessUnit() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(42);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getSlot_AllowedPorts() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(41);
+		return (EReference)slotEClass.getEStructuralFeatures().get(43);
 	}
 
 	/**
@@ -961,7 +981,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_AllowedPortsOverride() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(42);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
 	}
 
 	/**
@@ -971,7 +991,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_ComputeExposure() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(43);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(45);
 	}
 
 	/**
@@ -981,7 +1001,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_ComputeHedge() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(46);
 	}
 
 	/**
@@ -1202,6 +1222,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EOperation getSlot__GetSlotOrDelegateAllowedPorts() {
 		return slotEClass.getEOperations().get(21);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getSlot__GetSlotOrDelegateBusinessUnit() {
+		return slotEClass.getEOperations().get(22);
 	}
 
 	/**
@@ -3359,6 +3389,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__LOCKED);
 		createEAttribute(slotEClass, SLOT__CANCELLED);
 		createEAttribute(slotEClass, SLOT__WINDOW_COUNTER_PARTY);
+		createEAttribute(slotEClass, SLOT__PRICING_BASIS);
+		createEReference(slotEClass, SLOT__BUSINESS_UNIT);
 		createEReference(slotEClass, SLOT__ALLOWED_PORTS);
 		createEAttribute(slotEClass, SLOT__ALLOWED_PORTS_OVERRIDE);
 		createEAttribute(slotEClass, SLOT__COMPUTE_EXPOSURE);
@@ -3385,6 +3417,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SCHEDULING_TIME_WINDOW);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_DAYS_BUFFER);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_ALLOWED_PORTS);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_BUSINESS_UNIT);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -3811,6 +3844,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Cancelled(), ecorePackage.getEBoolean(), "cancelled", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowCounterParty(), ecorePackage.getEBoolean(), "windowCounterParty", "false", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlot_BusinessUnit(), theCommercialPackage.getBusinessUnit(), null, "businessUnit", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
@@ -3874,6 +3909,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
+
+		initEOperation(getSlot__GetSlotOrDelegateBusinessUnit(), theCommercialPackage.getBusinessUnit(), "getSlotOrDelegateBusinessUnit", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4468,6 +4505,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getSlot_PricingBasis(),
+		   source,
+		   new String[] {
+			   "type", "pricingBasis"
 		   });
 		addAnnotation
 		  (getVesselCharter_TimeCharterRate(),

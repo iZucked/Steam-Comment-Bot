@@ -22,7 +22,7 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 public class TransferAgreementDetailCompositeFactory extends DefaultDisplayCompositeFactory {
 
 	@Override
-	public IDisplayComposite createSublevelComposite(Composite parent, EClass eClass, IDialogEditingContext dialogContext, final FormToolkit toolkit) {
-		return new TransferAgreementDetailComposite(parent, SWT.NONE, toolkit);
+	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		return new TransferAgreementTopDetailComposite(parent, SWT.NONE, dialogContext, toolkit);
 	}
 }
