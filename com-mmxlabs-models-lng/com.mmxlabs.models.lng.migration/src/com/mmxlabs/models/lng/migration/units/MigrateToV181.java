@@ -45,6 +45,9 @@ public class MigrateToV181 extends AbstractMigrationUnit {
 		return 181;
 	}
 
+	// Renames CharterLengthEvent to GeneratedCharterLengthEvent
+	// Adds CharterLengthEvent to cargo model
+	
 	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 		final EPackage schedulePackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
