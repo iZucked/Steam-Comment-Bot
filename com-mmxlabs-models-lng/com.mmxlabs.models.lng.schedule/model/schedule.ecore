@@ -188,7 +188,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation" eOpposite="#//SlotAllocation/slotVisit"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit #//ProfitAndLossContainer #//EventGrouping">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit #//ProfitAndLossContainer #//EventGrouping #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="redeliveryPort" lowerBound="1"

@@ -264,6 +264,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = casePortVisit(vesselEventVisit);
 				if (result == null) result = caseProfitAndLossContainer(vesselEventVisit);
 				if (result == null) result = caseEventGrouping(vesselEventVisit);
+				if (result == null) result = caseFuelUsage(vesselEventVisit);
 				if (result == null) result = caseEvent(vesselEventVisit);
 				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
 				if (result == null) result = caseCapacityViolationsHolder(vesselEventVisit);

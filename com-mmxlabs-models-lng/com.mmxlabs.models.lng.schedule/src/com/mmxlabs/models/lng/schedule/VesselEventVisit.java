@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.port.Port;
  * @model
  * @generated
  */
-public interface VesselEventVisit extends Event, PortVisit, ProfitAndLossContainer, EventGrouping {
+public interface VesselEventVisit extends Event, PortVisit, ProfitAndLossContainer, EventGrouping, FuelUsage {
 	/**
 	 * Returns the value of the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->

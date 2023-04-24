@@ -50,6 +50,7 @@ import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.formatters.ScheduleChartFormatters;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -962,6 +963,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						eventText.append(" \n");
 						eventText.append("LATE by " + LatenessUtils.formatLatenessHours(lateHours) + "\n");
 					}
+				}
+				if(vev.getVesselEvent() instanceof CharterLengthEvent) {
+					eventText.append(getFuelsString(vev));
 				}
 			} else if (element instanceof Idle idle) {
 				eventText.append("Idle time: " + durationTime);

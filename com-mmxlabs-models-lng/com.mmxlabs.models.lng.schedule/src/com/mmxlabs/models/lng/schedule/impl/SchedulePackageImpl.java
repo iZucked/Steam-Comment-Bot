@@ -3815,6 +3815,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		vesselEventVisitEClass.getESuperTypes().add(this.getPortVisit());
 		vesselEventVisitEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		vesselEventVisitEClass.getESuperTypes().add(this.getEventGrouping());
+		vesselEventVisitEClass.getESuperTypes().add(this.getFuelUsage());
 		generatedCharterOutEClass.getESuperTypes().add(this.getPortVisit());
 		generatedCharterOutEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		generatedCharterOutEClass.getESuperTypes().add(this.getEventGrouping());

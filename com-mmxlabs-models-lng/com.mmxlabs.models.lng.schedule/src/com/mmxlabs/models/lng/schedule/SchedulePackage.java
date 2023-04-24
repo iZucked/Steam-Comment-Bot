@@ -3481,13 +3481,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__EVENTS = EVENT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__FUELS = EVENT_FEATURE_COUNT + 10;
+
+	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 10;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Port</b></em>' reference.
@@ -3496,7 +3505,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__REDELIVERY_PORT = EVENT_FEATURE_COUNT + 11;
+	int VESSEL_EVENT_VISIT__REDELIVERY_PORT = EVENT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -3505,7 +3514,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 12;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 13;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3571,13 +3580,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT___NAME = EVENT___NAME;
 
 	/**
+	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT___GET_FUEL_COST = EVENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The number of operations of the '<em>Vessel Event Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+	int VESSEL_EVENT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.

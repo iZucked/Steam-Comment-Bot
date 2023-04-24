@@ -30,6 +30,8 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -37,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -56,6 +59,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getEvents <em>Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getVesselEvent <em>Vessel Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getRedeliveryPort <em>Redelivery Port</em>}</li>
  * </ul>
@@ -198,6 +202,15 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @ordered
 	 */
 	protected EList<Event> events;
+	/**
+	 * The cached value of the '{@link #getFuels() <em>Fuels</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFuels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<FuelQuantity> fuels;
 	/**
 	 * The cached value of the '{@link #getVesselEvent() <em>Vessel Event</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -495,6 +508,19 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @generated
 	 */
 	@Override
+	public EList<FuelQuantity> getFuels() {
+		if (fuels == null) {
+			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.VESSEL_EVENT_VISIT__FUELS);
+		}
+		return fuels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public VesselEvent getVesselEvent() {
 		if (vesselEvent != null && vesselEvent.eIsProxy()) {
 			InternalEObject oldVesselEvent = (InternalEObject)vesselEvent;
@@ -602,6 +628,20 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @generated
 	 */
 	@Override
+	public double getFuelCost() {
+		int sum = 0;
+		for (final FuelQuantity fq : getFuels()) {
+			sum += fq.getCost();
+		}
+		return sum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
@@ -612,6 +652,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return basicSetGroupProfitAndLoss(null, msgs);
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
 				return ((InternalEList<?>)getGeneralPNLDetails()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.VESSEL_EVENT_VISIT__FUELS:
+				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -645,6 +687,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return getGeneralPNLDetails();
 			case SchedulePackage.VESSEL_EVENT_VISIT__EVENTS:
 				return getEvents();
+			case SchedulePackage.VESSEL_EVENT_VISIT__FUELS:
+				return getFuels();
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				if (resolve) return getVesselEvent();
 				return basicGetVesselEvent();
@@ -696,6 +740,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				getEvents().clear();
 				getEvents().addAll((Collection<? extends Event>)newValue);
 				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__FUELS:
+				getFuels().clear();
+				getFuels().addAll((Collection<? extends FuelQuantity>)newValue);
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				setVesselEvent((VesselEvent)newValue);
 				return;
@@ -744,6 +792,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			case SchedulePackage.VESSEL_EVENT_VISIT__EVENTS:
 				getEvents().clear();
 				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__FUELS:
+				getFuels().clear();
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				setVesselEvent((VesselEvent)null);
 				return;
@@ -782,6 +833,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
 			case SchedulePackage.VESSEL_EVENT_VISIT__EVENTS:
 				return events != null && !events.isEmpty();
+			case SchedulePackage.VESSEL_EVENT_VISIT__FUELS:
+				return fuels != null && !fuels.isEmpty();
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
 				return vesselEvent != null;
 			case SchedulePackage.VESSEL_EVENT_VISIT__REDELIVERY_PORT:
@@ -827,6 +880,12 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				default: return -1;
 			}
 		}
+		if (baseClass == FuelUsage.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.VESSEL_EVENT_VISIT__FUELS: return SchedulePackage.FUEL_USAGE__FUELS;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -867,7 +926,63 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				default: return -1;
 			}
 		}
+		if (baseClass == FuelUsage.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.FUEL_USAGE__FUELS: return SchedulePackage.VESSEL_EVENT_VISIT__FUELS;
+				default: return -1;
+			}
+		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == CapacityViolationsHolder.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == PortVisit.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == ProfitAndLossContainer.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == EventGrouping.class) {
+			switch (baseOperationID) {
+				default: return -1;
+			}
+		}
+		if (baseClass == FuelUsage.class) {
+			switch (baseOperationID) {
+				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.VESSEL_EVENT_VISIT___GET_FUEL_COST;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case SchedulePackage.VESSEL_EVENT_VISIT___GET_FUEL_COST:
+				return getFuelCost();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

@@ -1747,6 +1747,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// vessel.getIdleConsumptionRate(VesselState.Ballast);
 			consumptionRateInMTPerDay = 0;
 			inPortNBORateInM3PerDay = 0;
+		} else if (portType == PortType.CharterLength) {
+			consumptionRateInMTPerDay = vessel.getIdleConsumptionRate(VesselState.Ballast);
+			inPortNBORateInM3PerDay = 0;
 		} else {
 			consumptionRateInMTPerDay = 0;
 			inPortNBORateInM3PerDay = 0;

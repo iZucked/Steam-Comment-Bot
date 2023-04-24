@@ -47,7 +47,7 @@ public class MigrateToV181 extends AbstractMigrationUnit {
 
 	// Renames CharterLengthEvent to GeneratedCharterLengthEvent
 	// Adds CharterLengthEvent to cargo model
-	
+	// Make FuelUsage a super type of VesselEventVisit 
 	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 		final EPackage schedulePackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
