@@ -37,12 +37,12 @@ public class SourceContractHighlighter extends ParameterisedColourScheme {
 			if (element instanceof SlotVisit slotVisit) {
 				final Slot<?> slot  = slotVisit.getSlotAllocation().getSlot();
 				if (slot instanceof LoadSlot && slot.getContract() == selectedObject) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Source_Contract_Based_Highlight_Journey, ColourElements.Background);
+					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Source_Contract_Based_Highlight_Idle, ColourElements.Background);
 				}
 			} else if (element instanceof NonShippedSlotVisit slotVisit) {
 				final Slot<?> slot = slotVisit.getSlot();
 				if (slot instanceof LoadSlot && slot.getContract() == selectedObject) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Source_Contract_Based_Highlight_Journey, ColourElements.Background);
+					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Source_Contract_Based_Highlight_Idle, ColourElements.Background);
 				}
 			}
 		}
