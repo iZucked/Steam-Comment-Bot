@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.scenario.exportWizards;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -15,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.osgi.framework.Bundle;
@@ -95,9 +97,40 @@ public class ExportLiNGOScenarioWizardPage extends WizardPage {
 		gd2.horizontalSpan = 2;
 		destination.setLayoutData(gd2);
 
-		final FileFieldEditor editor = new FileFieldEditor("destination-file", "Export to .lingo file:", destination);
+		editor = new FileFieldEditor("destination-file", "Export to .lingo file:", destination) {
+			@Override
+			protected String changePressed() {
+				File f = new File(getTextControl().getText());
+				if (!f.exists()) {
+					f = null;
+				}
+				File d = getFile(f);
+				if (d == null) {
+					return null;
+				}
+
+				return d.getAbsolutePath();
+			}
+			
+			private File getFile(File startingDirectory) {
+
+				FileDialog dialog = new FileDialog(getShell(), SWT.SAVE);
+				if (startingDirectory != null) {
+					dialog.setFileName(startingDirectory.getPath());
+				}
+				dialog.setFilterExtensions(new String[] { ".lingo" });
+				String file = dialog.open();
+				if (file != null) {
+					file = file.trim();
+					if (file.length() > 0) {
+						return new File(file);
+					}
+				}
+
+				return null;
+			}
+		};
 		editor.setFileExtensions(new String[] { ".lingo" });
-		this.editor = editor;
 		editor.getTextControl(destination).addModifyListener(e -> dialogChanged());
 
 		// get the default export directory from the settings
