@@ -1091,6 +1091,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			public int getHeaderDayHeight() {
 				return 22;
 			}
+			
+			@Override
+			public int getEventHeight() {
+				return super.getEventHeight() + 6;
+			}
 		};
 	}
 
