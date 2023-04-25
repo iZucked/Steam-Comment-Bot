@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.widgets.ganttchart.AdvancedTooltip;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
+import org.eclipse.nebula.widgets.ganttchart.GanttChartGeometry;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttEventListenerAdapter;
 import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
@@ -273,8 +274,8 @@ public class GanttChartViewer extends StructuredViewer {
 		try {
 
 			final Map<Object, GanttEvent> eventMap = new HashMap<>();
-			ganttChart.getGanttComposite().setFixedRowHeightOverride(21);
-			ganttChart.getGanttComposite().setEventSpacerOverride(0);
+			ganttChart.getGanttComposite().setFixedRowHeightOverride(GanttChartGeometry.getRowHeight());
+			ganttChart.getGanttComposite().setEventSpacerOverride(GanttChartGeometry.getEventSpacerSize());
 			for (final Object r : resources) {
 				final String rName = getLabelProviderText(labelProvider, r);
 				final GanttSection section = new GanttSection(ganttChart, rName);
