@@ -1168,7 +1168,7 @@ public class LNGScenarioTransformer {
 			} else if (event instanceof MaintenanceEvent) {
 				builderSlot = builder.createMaintenanceEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof CharterLengthEvent) {
-				builderSlot = builder.createCharterLengthEvent(event.getName(), window, port, durationHours);
+				builderSlot = builder.createCharterLengthEvent(event.getName(), window, (port != null) ? port : portProvider.getAnywherePort(), durationHours);
 			} else {
 				throw new RuntimeException("Unknown event type: " + event.getClass().getName());
 			}

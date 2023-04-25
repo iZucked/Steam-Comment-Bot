@@ -110,18 +110,29 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 /***
- * The PeriodTransformer aims to take a slice of the full scenario for optimisation. Given the user supplied dates (the boundary) we will add +/- 1 month (the cutoff) and remove cargoes, events etc
- * outside of this range. For slots or events outside of the boundary we will lockdown the variables (dates/windows, vessel, option to rewire). The aim of the boundary cargoes is to be able to take
- * into account any knock on P&L changes as a result of changes to the optimisable period without any direct changes.
+ * The PeriodTransformer aims to take a slice of the full scenario for
+ * optimisation. Given the user supplied dates (the boundary) we will add +/- 1
+ * month (the cutoff) and remove cargoes, events etc outside of this range. For
+ * slots or events outside of the boundary we will lockdown the variables
+ * (dates/windows, vessel, option to rewire). The aim of the boundary cargoes is
+ * to be able to take into account any knock on P&L changes as a result of
+ * changes to the optimisable period without any direct changes.
  * 
- * There are a number of gotchas etc in the period. We can never fully represent the behaviour of the full scenario within the period scenario, but aim to capture as much as possible.
+ * There are a number of gotchas etc in the period. We can never fully represent
+ * the behaviour of the full scenario within the period scenario, but aim to
+ * capture as much as possible.
  * 
- * Key points; - We lockdown dates before the period on the assumption they have already happened. We tend to just lock the vessel assignment after the period to allow some greater flexibility in
- * re-wiring. - We tend to work with the scheduled dates rather that original windows as lateness can shift cargoes/event in or out of the period in conflict with the original window - We reduce the
- * min/max duration values of a vessel by the usage time chopped out of the scenario. However the duration is whole days whereas the chopped elements time is counted in hours (and thus may not be
- * whole days)
+ * Key points; - We lockdown dates before the period on the assumption they have
+ * already happened. We tend to just lock the vessel assignment after the period
+ * to allow some greater flexibility in re-wiring. - We tend to work with the
+ * scheduled dates rather that original windows as lateness can shift
+ * cargoes/event in or out of the period in conflict with the original window -
+ * We reduce the min/max duration values of a vessel by the usage time chopped
+ * out of the scenario. However the duration is whole days whereas the chopped
+ * elements time is counted in hours (and thus may not be whole days)
  * 
- * -- TODO Note there are a few "compat with master" messages with old buggy behaviour.
+ * -- TODO Note there are a few "compat with master" messages with old buggy
+ * behaviour.
  * 
  * @author Simon Goodall
  * 
@@ -228,15 +239,20 @@ public class PeriodTransformer {
 
 	enum Status {
 		NotChecked, // Initial status. This should be updated by the end of the transformation
-		ToLockdown, // Some or all of the object should be locked down (dates if before the boundary, vessel, maybe wiring)
+		ToLockdown, // Some or all of the object should be locked down (dates if before the
+					// boundary, vessel, maybe wiring)
 		ToRemove, // Object is not needed in the final result
-		Readded, // Object is a calculation dependency and is to be re-added but fully locked down.
+		Readded, // Object is a calculation dependency and is to be re-added but fully locked
+					// down.
 		ToKeep // Object is a keeper and can be optimised
 	}
 
 	/**
-	 * A record created for each input in the scenario (cargo, vessel event or open slot). This records the links to the schedule model objects (if present), some handy object references to make some
-	 * code lookups easier later on. Most importantly it records the Status of the object i.e. what we will do with it for the purpose of the period (basically keep, lockdown or remove).
+	 * A record created for each input in the scenario (cargo, vessel event or open
+	 * slot). This records the links to the schedule model objects (if present),
+	 * some handy object references to make some code lookups easier later on. Most
+	 * importantly it records the Status of the object i.e. what we will do with it
+	 * for the purpose of the period (basically keep, lockdown or remove).
 	 */
 	static class InclusionRecord {
 		EObject object; // Vessel Event (may be open), Cargo or Open slot
@@ -248,7 +264,8 @@ public class PeriodTransformer {
 		Map<Slot<?>, SlotLockMode> slotLockMode = new HashMap<>();
 
 		Sequence sequence;
-		VesselCharter vesselCharter; // Current VA. This is not expected to be updated if status is Readded (to review)
+		VesselCharter vesselCharter; // Current VA. This is not expected to be updated if status is Readded (to
+										// review)
 		boolean isHeelSource = false;
 		boolean isHeelSink = false;
 	}
@@ -290,11 +307,14 @@ public class PeriodTransformer {
 		final Map<Cargo, CargoAllocation> sortedCargoes = new LinkedHashMap<>();
 		final List<HeelCarryCargoPair> heelCarryCargoPairs = new LinkedList<>();
 
-		// Create the basic records based on scheduled dates etc. No modifications are performed yet as following stages can update the records
+		// Create the basic records based on scheduled dates etc. No modifications are
+		// performed yet as following stages can update the records
 		final Map<EObject, InclusionRecord> records = generateInclusionRecords(schedule, cargoModel, periodRecord, sortedCargoes, heelCarryCargoPairs);
 
-		// Step two, some vessel events require the preceeding events to still be included. If they are marked to be removed, the upgrade to locked.
-		// Note this implicitly upgrades events marked as ToRemove and already skipped over if they are before an event to be included.
+		// Step two, some vessel events require the preceeding events to still be
+		// included. If they are marked to be removed, the upgrade to locked.
+		// Note this implicitly upgrades events marked as ToRemove and already skipped
+		// over if they are before an event to be included.
 		for (final InclusionRecord inclusionRecord : records.values()) {
 			if (inclusionRecord.object instanceof final VesselEvent event) {
 				// ...actually this is all current event types...
@@ -320,8 +340,12 @@ public class PeriodTransformer {
 		final List<VesselCharter> newVesselCharters = new LinkedList<>();
 		// Custom phase
 		if (true) {
-			// TODO: This code needs to be re-introduced. This is where any dependents to the P&L calculation need to have their status changed to "ReAdded" if they are marked ToRemove.
-			// Any cloned vessel charters should be configured here too. These will typically be a copy of the original vessel with the start and end heel set to match the boundary conditions of
+			// TODO: This code needs to be re-introduced. This is where any dependents to
+			// the P&L calculation need to have their status changed to "ReAdded" if they
+			// are marked ToRemove.
+			// Any cloned vessel charters should be configured here too. These will
+			// typically be a copy of the original vessel with the start and end heel set to
+			// match the boundary conditions of
 			// the cargo to allow an identical P&l calculation.
 
 			// TODO: Method naming and doc
@@ -384,7 +408,9 @@ public class PeriodTransformer {
 			assert r.status != Status.NotChecked;
 		}
 
-		// Reduce the spot charter-in markets based on removed cargoes and generate the re-numbering mapping (as by limiting the count we may have invalid sopt indices)
+		// Reduce the spot charter-in markets based on removed cargoes and generate the
+		// re-numbering mapping (as by limiting the count we may have invalid sopt
+		// indices)
 		updateSpotCharterInMarkets(mapping, records);
 
 		// Remove excluded cargoes, slots and events.
@@ -396,7 +422,9 @@ public class PeriodTransformer {
 		// Sort out Canal bookings
 		lockAndRemoveCanalBookings(records, output);
 
-		// Trim the spot market curves largely by converting the constant into a curve for the optimisation period and set the constant to 0 for outside of the period.
+		// Trim the spot market curves largely by converting the constant into a curve
+		// for the optimisation period and set the constant to 0 for outside of the
+		// period.
 		trimSpotMarketCurves(periodRecord, output, wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class), copiedExtraDataProvider, wholeExtraDataProvider);
 
 		// Add any vessel created from the ReAdded cargoes
@@ -408,7 +436,8 @@ public class PeriodTransformer {
 		output.getScheduleModel().setSchedule(null);
 		LNGSchedulerJobUtils.clearAnalyticsResults(output.getAnalyticsModel());
 
-		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
+		// Clear this date as we have fixed everything and it will conflict with rules
+		// in schedule transformer.
 		output.unsetSchedulingEndDate();
 
 		return new PeriodTransformResult(outputDataProvider, internalDomain, p.getSecond());
@@ -435,7 +464,9 @@ public class PeriodTransformer {
 						if (!lockDates) {
 							// Are any slots in the before position?
 							for (final Slot<?> slot : cargo.getSlots()) {
-								// Note this code is slightly different to the #getObjectInclusionType. We check window END in the slot case and window START in the cargo case for the BOUNDARY/BEFORE
+								// Note this code is slightly different to the #getObjectInclusionType. We check
+								// window END in the slot case and window START in the cargo case for the
+								// BOUNDARY/BEFORE
 								// combination.
 								lockDates = inclusionChecker.getSlotPosition(slot, periodRecord) == Position.Before;
 								if (lockDates) {
@@ -444,9 +475,12 @@ public class PeriodTransformer {
 							}
 						}
 
-						// Development assertion - can we replace the above loop with this check instead?
+						// Development assertion - can we replace the above loop with this check
+						// instead?
 						// We currently can not due to different in the check logic noted above.
-						// assert lockDates == (inclusionRecord.status == Status.Readded || inclusionRecord.position == Position.Before || inclusionRecord.position == Position.Both);
+						// assert lockDates == (inclusionRecord.status == Status.Readded ||
+						// inclusionRecord.position == Position.Before || inclusionRecord.position ==
+						// Position.Both);
 
 						lockDownCargoDates(inclusionRecord, cargo, lockDates);
 					} else {
@@ -455,8 +489,10 @@ public class PeriodTransformer {
 						// Will be set to true if any of the slots are IN the period
 						boolean oneIsIn = false;
 						final List<Slot<?>> slots = new LinkedList<>(cargo.getSortedSlots());
-						// Examine the slot "window" (rather than scheduled date - hmm is this the desired behaviour? 2021-08-17 -- SG)
-						// and if the cargo is partially optimisable, only lock down the slots which are not IN the period.
+						// Examine the slot "window" (rather than scheduled date - hmm is this the
+						// desired behaviour? 2021-08-17 -- SG)
+						// and if the cargo is partially optimisable, only lock down the slots which are
+						// not IN the period.
 						for (final Slot<?> slot : slots) {
 
 							final SlotLockMode mode = inclusionRecord.slotLockMode.getOrDefault(slot, SlotLockMode.UNSET);
@@ -501,18 +537,21 @@ public class PeriodTransformer {
 							charterOutEvent.getAllowedVessels().clear();
 							charterOutEvent.getAllowedVessels().add(vesselCharter.getVessel());
 						} else {
-							// Unused optional event, strip out as it can't be used and we do not have a "lock as unused" option.
+							// Unused optional event, strip out as it can't be used and we do not have a
+							// "lock as unused" option.
 							if (charterOutEvent.isOptional()) {
 								inclusionRecord.status = Status.ToRemove;
 							}
 						}
 						// Note this is new code by SG added 2021/08/12
 						final boolean lockDates = inclusionRecord.position != Position.After;
-						// Re-check lockdown status after optional charter out check as lockdown the event dates
+						// Re-check lockdown status after optional charter out check as lockdown the
+						// event dates
 						if (lockDates && inclusionRecord.status == Status.ToLockdown) {
 							// disabled due to compat with master
 							vesselEvent.setLocked(true);
-							// final ZonedDateTime localStart = inclusionRecord.event.get(vesselEvent).getStart();
+							// final ZonedDateTime localStart =
+							// inclusionRecord.event.get(vesselEvent).getStart();
 							// vesselEvent.setStartAfter(localStart.toLocalDateTime());
 							// vesselEvent.setStartBy(localStart.toLocalDateTime());
 						}
@@ -523,8 +562,10 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * This method removes any bookings associated with elements that are being removed from the optimisation so they are not available. Locked-down events will allocate the vessel to the booking.
-	 * Note: this does not strictly assign the booking to the event as we no longer have this capability.
+	 * This method removes any bookings associated with elements that are being
+	 * removed from the optimisation so they are not available. Locked-down events
+	 * will allocate the vessel to the booking. Note: this does not strictly assign
+	 * the booking to the event as we no longer have this capability.
 	 * 
 	 * @param records
 	 * @param output
@@ -607,8 +648,11 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * For spot charter markets where all cargoes on a used charter option are outside of the period we reduce the spot charter in count. As spot charter are index from 0 to spot count, we need to
-	 * maintain a mapping between the original scenario spot index and the period scenario spot index to avoid issues with merging on the period export.
+	 * For spot charter markets where all cargoes on a used charter option are
+	 * outside of the period we reduce the spot charter in count. As spot charter
+	 * are index from 0 to spot count, we need to maintain a mapping between the
+	 * original scenario spot index and the period scenario spot index to avoid
+	 * issues with merging on the period export.
 	 * 
 	 * @param periodMapping
 	 * @param cargoModel
@@ -616,7 +660,8 @@ public class PeriodTransformer {
 	 */
 	private void updateSpotCharterInMarkets(final IScenarioEntityMapping periodMapping, final Map<EObject, InclusionRecord> records) {
 
-		// // Generate the list of all spot charter ins used by all the cargoes in the scenario. An option may appear multiple times.
+		// // Generate the list of all spot charter ins used by all the cargoes in the
+		// scenario. An option may appear multiple times.
 		final List<Pair<CharterInMarket, Integer>> total = getSpotCharterInUseForCargoes(records, false);
 		//
 		final Map<Pair<CharterInMarket, Integer>, Long> counter = total.stream() //
@@ -625,7 +670,8 @@ public class PeriodTransformer {
 		// Just the numbers for the removed cargoes
 		final List<Pair<CharterInMarket, Integer>> spotCharterUse = getSpotCharterInUseForCargoes(records, true);
 
-		//// Next - determine which charter in vessels are no longer used (all allocated cargoes are outside of the period)
+		//// Next - determine which charter in vessels are no longer used (all allocated
+		//// cargoes are outside of the period)
 
 		// Mapping of charter market to spot index mapping
 		final Map<CharterInMarket, int[]> mapping = new HashMap<>();
@@ -719,8 +765,7 @@ public class PeriodTransformer {
 			@NonNull final IScenarioEntityMapping mapping, final Map<EObject, InclusionRecord> records) {
 		final Set<VesselCharter> vesselChartersToRemove = new HashSet<>();
 
-		LOOP_CHARTERS:
-		for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
+		LOOP_CHARTERS: for (final VesselCharter vesselCharter : cargoModel.getVesselCharters()) {
 			assert vesselCharter != null;
 			if (inclusionChecker.getVesselCharterInclusionType(vesselCharter, periodRecord).getFirst() == InclusionType.Out) {
 				// inclusionChecker.getObjectInclusionType(vesselCharter, periodRecord);
@@ -733,12 +778,11 @@ public class PeriodTransformer {
 			} else {
 				final VesselCharter originalFromCopy = mapping.getOriginalFromCopy(vesselCharter);
 				assert originalFromCopy != null; // We should not be null in the transformer
-				if (originalFromCopy.getMaxDuration() > 0 && (vesselCharter.getMaxDuration() == 0 
-						|| (vesselCharter.getStartBy() != null && vesselCharter.getStartBy().plusDays(vesselCharter.getMaxDuration()).atZone(ZONEID_UTC)
-						.isBefore(periodRecord.lowerCutoff)))) {
-					
+				if (originalFromCopy.getMaxDuration() > 0 && (vesselCharter.getMaxDuration() == 0
+						|| (vesselCharter.getStartBy() != null && vesselCharter.getStartBy().plusDays(vesselCharter.getMaxDuration()).atZone(ZONEID_UTC).isBefore(periodRecord.lowerCutoff)))) {
+
 					for (var ir : records.values()) {
-						if (ir.status ==Status.ToRemove) {
+						if (ir.status == Status.ToRemove) {
 							continue;
 						}
 						if (ir.vesselCharter == vesselCharter) {
@@ -746,10 +790,8 @@ public class PeriodTransformer {
 							continue LOOP_CHARTERS;
 						}
 					}
-					
-					
-					if (vesselCharter.getStartAfter() != null || vesselCharter.getEndBy() != null)
-					{
+
+					if (vesselCharter.getStartAfter() != null || vesselCharter.getEndBy() != null) {
 						// Assume that the vessel can no longer be used and is outside of period.
 
 						vesselChartersToRemove.add(vesselCharter);
@@ -765,8 +807,9 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * Scan through the slots processed and if still in use check for removed slots and cargoes which are required to e.g. complete P&L evaluation and bring them back in on dedicated round trip cargo
-	 * models.
+	 * Scan through the slots processed and if still in use check for removed slots
+	 * and cargoes which are required to e.g. complete P&L evaluation and bring them
+	 * back in on dedicated round trip cargo models.
 	 * 
 	 * @param records
 	 * @param newVesselCharters
@@ -835,7 +878,8 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * Remove the surplus slots and cargoes from the period scenario and record the deletion in the mapping object.
+	 * Remove the surplus slots and cargoes from the period scenario and record the
+	 * deletion in the mapping object.
 	 * 
 	 * @param internalDomain
 	 * @param mapping
@@ -902,8 +946,10 @@ public class PeriodTransformer {
 
 		// TODO: Look into lockDownSlotDates method. Lots of duplication!
 		for (final Slot<?> slot : cargo.getSlots()) {
-			// Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
-			// the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
+			// Load and discharge window are often part of the pricing for a DES purchase or
+			// FOB sale, so if we change
+			// the window, then the price incurred might change, hence we only fix one side
+			// of the cargo and leave the
 			// window untouched.
 			if (slot instanceof final LoadSlot loadSlot) {
 				if (loadSlot.isDESPurchase()) {
@@ -948,8 +994,10 @@ public class PeriodTransformer {
 	}
 
 	public void lockDownSlotDates(final Slot<?> slot, final SlotAllocation cargoSlotAllocation, final boolean doLockDates) {
-		// Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
-		// the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
+		// Load and discharge window are often part of the pricing for a DES purchase or
+		// FOB sale, so if we change
+		// the window, then the price incurred might change, hence we only fix one side
+		// of the cargo and leave the
 		// window untouched.
 		if (slot instanceof final LoadSlot loadSlot) {
 			if (loadSlot.isDESPurchase()) {
@@ -1021,7 +1069,8 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * Update the vessel dates. We need to take into account any lateness, trimed cargoes and events, schedule horizon, optimiser end dates etc.
+	 * Update the vessel dates. We need to take into account any lateness, trimed
+	 * cargoes and events, schedule horizon, optimiser end dates etc.
 	 * 
 	 * @param collectedAssignments
 	 * @param schedule
@@ -1032,8 +1081,10 @@ public class PeriodTransformer {
 	public void updateVesselCharters(@NonNull final List<CollectedAssignment> collectedAssignments, final Schedule schedule, final Map<EObject, InclusionRecord> records,
 			final PeriodRecord periodRecord, final IScenarioEntityMapping mapping) {
 
-		// Here we loop through all the collected assignments, trimming the vessel charter to anything outside of the date range.
-		// This can handle out-of-order assignments by checking to see whether or not a cargo has already been trimmed out of the date range before updating
+		// Here we loop through all the collected assignments, trimming the vessel
+		// charter to anything outside of the date range.
+		// This can handle out-of-order assignments by checking to see whether or not a
+		// cargo has already been trimmed out of the date range before updating
 		for (final CollectedAssignment collectedAssignment : collectedAssignments) {
 			// Find the matching sequence
 			Sequence sequence = null;
@@ -1094,7 +1145,8 @@ public class PeriodTransformer {
 				final Position position = inclusionRecord.position;
 
 				// Element has been removed from this sequence
-				// This *should* be working in sorted order. Thus keep that last #Before case and terminate loop at the first #After case
+				// This *should* be working in sorted order. Thus keep that last #Before case
+				// and terminate loop at the first #After case
 				if (position == Position.Before) {
 					// Overwrite any previous trimmed before call
 					mapping.setLastTrimmedBefore(collectedAssignment.getVesselAssignmentType(), collectedAssignment.getSpotIndex(), assignedObject);
@@ -1150,9 +1202,12 @@ public class PeriodTransformer {
 			// Disconnect charter contract
 			copyCharterContract(vesselCharter, updatedBefore, updatedAfter);
 
-			// If there is no explicit end date set, update with the implicit end dates (schedule horizon or the optimiser defined date - which should be the current end event start date)
+			// If there is no explicit end date set, update with the implicit end dates
+			// (schedule horizon or the optimiser defined date - which should be the current
+			// end event start date)
 			if (!updatedAfter) {
-				// Extend the vessel end date to cover late ending if present in input scenario. This does not cover max duration breaches.
+				// Extend the vessel end date to cover late ending if present in input scenario.
+				// This does not cover max duration breaches.
 
 				// (Note) This used to be done before the update end conditions call
 				// Do we have an end date set?
@@ -1205,12 +1260,14 @@ public class PeriodTransformer {
 				}
 			}
 
-			// If we have change the start or end conditions we may need to update the min/max durations
+			// If we have change the start or end conditions we may need to update the
+			// min/max durations
 			if (vesselCharter.getCharterOrDelegateMinDuration() != 0) {
 				int minDurationInDays = vesselCharter.getCharterOrDelegateMinDuration();
 
 				if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
-					// We've trimmed both ends of the vessel schedule, so min/max duration no longer applies
+					// We've trimmed both ends of the vessel schedule, so min/max duration no longer
+					// applies
 					vesselCharter.setMinDuration(0);
 				} else {
 					final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
@@ -1225,11 +1282,13 @@ public class PeriodTransformer {
 				int maxDurationInDays = vesselCharter.getCharterOrDelegateMaxDuration();
 
 				if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
-					// We've trimmed both ends of the vessel schedule, so min/max duration no longer applies
+					// We've trimmed both ends of the vessel schedule, so min/max duration no longer
+					// applies
 					vesselCharter.setMaxDuration(0);
 				} else {
 					final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
-					// Under-compensate the amount used to avoid constraint violation due to rounding
+					// Under-compensate the amount used to avoid constraint violation due to
+					// rounding
 					maxDurationInDays -= Math.floor(((double) hoursAlreadyUsed / 24.0));
 					maxDurationInDays = Math.max(maxDurationInDays, 0);
 
@@ -1240,7 +1299,8 @@ public class PeriodTransformer {
 	}
 
 	private void copyCharterContract(final VesselCharter vesselCharter, final boolean clearStart, final boolean clearEnd) {
-		// Create a copy of any shared charter contract to avoid changes impacting all vessels
+		// Create a copy of any shared charter contract to avoid changes impacting all
+		// vessels
 		GenericCharterContract gcc = null;
 		if (vesselCharter.isCharterContractOverride()) {
 			gcc = vesselCharter.getContainedCharterContract();
@@ -1249,7 +1309,8 @@ public class PeriodTransformer {
 				final Copier copier = new Copier();
 				gcc = (GenericCharterContract) copier.copy(vesselCharter.getGenericCharterContract());
 
-				// Min/max duration is ignored on contained charter contracts, so copy values then clear
+				// Min/max duration is ignored on contained charter contracts, so copy values
+				// then clear
 				if (!vesselCharter.isSetMinDuration()) {
 					vesselCharter.setMinDuration(gcc.getMinDuration());
 				}
@@ -1259,7 +1320,8 @@ public class PeriodTransformer {
 				gcc.unsetMinDuration();
 				gcc.unsetMaxDuration();
 
-				// Start and end heels are ignored on vessel charter contracts (contained or shared)
+				// Start and end heels are ignored on vessel charter contracts (contained or
+				// shared)
 				gcc.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
 				gcc.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
@@ -1280,7 +1342,8 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * For each cargo, open slot and vessel event determine whether or not it is part of the optimisation period
+	 * For each cargo, open slot and vessel event determine whether or not it is
+	 * part of the optimisation period
 	 * 
 	 * @param schedule
 	 * @param cargoModel
@@ -1292,7 +1355,8 @@ public class PeriodTransformer {
 
 		final Map<EObject, InclusionRecord> records = new HashMap<>();
 
-		// Create the basic object structure. Source object, child object and schedule mapping, real vessel allocation
+		// Create the basic object structure. Source object, child object and schedule
+		// mapping, real vessel allocation
 
 		//// Step 1, record the scheduled objects
 
@@ -1432,8 +1496,11 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * A vessel event typically need the previous cargo/event to work out heel information correctly. Return the list of prior events that are needed to compute this correctly. This could be zero to
-	 * many object depending on the sequence. We are looking for the cargo before the event (which could even be cargo, other event, other event, this event)
+	 * A vessel event typically need the previous cargo/event to work out heel
+	 * information correctly. Return the list of prior events that are needed to
+	 * compute this correctly. This could be zero to many object depending on the
+	 * sequence. We are looking for the cargo before the event (which could even be
+	 * cargo, other event, other event, this event)
 	 * 
 	 * @param ve
 	 * @param interestingVesselEventVisit
@@ -1510,7 +1577,8 @@ public class PeriodTransformer {
 
 		copier.copyReferences();
 
-		// Remove schedule model references from copier before passing into the mapping object.
+		// Remove schedule model references from copier before passing into the mapping
+		// object.
 		{
 			final Schedule schedule = wholeScenario.getScheduleModel().getSchedule();
 			if (schedule != null) {
@@ -1535,7 +1603,8 @@ public class PeriodTransformer {
 		mapping.createMappings(copier);
 
 		final ClonedScenarioDataProvider sdp = ClonedScenarioDataProvider.make(output, wholeScenarioDataProvider);
-		// Apply this base schedule to the scenario. This may be an alternative starting state e.g. from sandbox
+		// Apply this base schedule to the scenario. This may be an alternative starting
+		// state e.g. from sandbox
 		final Command updateCommand = LNGSchedulerJobUtils.derive(sdp.getEditingDomain(), sdp.getTypedScenario(MMXRootObject.class), copyBaseSchedule, ScenarioModelUtil.getCargoModel(sdp), null);
 		sdp.getEditingDomain().getCommandStack().execute(updateCommand);
 
@@ -1549,8 +1618,10 @@ public class PeriodTransformer {
 	}
 
 	/**
-	 * Given a vessel charter, update the starting conditions around the input AssignableElement which is assumed to be outside of the current optimisation period scope. We want to set the starting
-	 * point to be equal to the end conditions of the AssignableElement sequence.
+	 * Given a vessel charter, update the starting conditions around the input
+	 * AssignableElement which is assumed to be outside of the current optimisation
+	 * period scope. We want to set the starting point to be equal to the end
+	 * conditions of the AssignableElement sequence.
 	 * 
 	 * @param vesselCharter
 	 * @param assignedObject
@@ -1627,8 +1698,10 @@ public class PeriodTransformer {
 		}
 
 		vesselCharter.getEndAt().clear();
-		// Standard case
-		vesselCharter.getEndAt().add(portVisit.getPort());
+		if (portVisit.getPort() != null) {
+			// Standard case
+			vesselCharter.getEndAt().add(portVisit.getPort());
+		}
 		// Special case for charter outs start/end ports can differ
 		if (portVisit instanceof final VesselEventVisit vesselEventVisit) {
 			final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
@@ -1703,7 +1776,8 @@ public class PeriodTransformer {
 
 		if (wholeScenario != null) {
 			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimesForWholeScenario = LNGScenarioUtils.findEarliestAndLatestTimes(wholeScenario, wholeExtraDataProvider);
-			// Make sure the spot markets do no start any earlier than in the parent scenario
+			// Make sure the spot markets do no start any earlier than in the parent
+			// scenario
 			if (earliestAndLatestTimesForWholeScenario.getFirst().isAfter(earliestDate)) {
 				earliestDate = earliestAndLatestTimesForWholeScenario.getFirst();
 			}
@@ -1731,7 +1805,8 @@ public class PeriodTransformer {
 			for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
 				final SpotAvailability availability = spotMarket.getAvailability();
 
-				// If the constant is set, get the value and replace with zero. Later create new curve points with the original constant value.
+				// If the constant is set, get the value and replace with zero. Later create new
+				// curve points with the original constant value.
 				int constantValue = 0;
 				if (availability.isSetConstant() && availability.getConstant() > 0) {
 					constantValue = availability.getConstant();
