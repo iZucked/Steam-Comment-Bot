@@ -39,8 +39,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
-import com.mmxlabs.models.ui.tabular.columngeneration.MultiObjectEmfBlockColumnFactory;
-import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.SingleColumnFactoryBuilder;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -113,20 +112,25 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				}
 
 			};
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected", ColumnType.MULTIPLE,
-					containingScheduleFormatter);
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "Scenario").withTooltip("The scenario name. Only shown when multiple scenarios are selected")
+							.withColumnType(ColumnType.MULTIPLE)
+							.withCellRenderer(containingScheduleFormatter)
+							.build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.vessel":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Vessel").withCellRenderer(new VesselAssignmentFormatter()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.type":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Type", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent__Type());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "Type").withCellRenderer(Formatters.objectFormatter).withElementPath(sp.getEvent__Type()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.id":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "ID", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent__Name());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "ID").withCellRenderer(Formatters.objectFormatter).withElementPath(sp.getEvent__Name()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.contract":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Contract", null, ColumnType.NORMAL, new BaseFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Contract").withCellRenderer(new BaseFormatter() {
 				@Override
 				public String render(final Object object) {
 					final Event se = (Event) object;
@@ -148,11 +152,12 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					return str;
 				}
 
-			});
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.startdate":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Start Date", null, ColumnType.NORMAL,
-					new AsDateTimeFormatter(DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay()), true) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Start Date")
+
+					.withCellRenderer(new AsDateTimeFormatter(DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay()), true) {
 						@Override
 						public String render(final Object o) {
 							return super.render(((Event) o).getStart());
@@ -162,29 +167,32 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 						public Comparable getComparable(final Object object) {
 							return new EventStartDateComparator((Event) object);
 						}
-					});
+					})
+					.build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.enddate":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "End Date", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterWithTZ, sp.getEvent_End());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "End Date").withCellRenderer(Formatters.asDateTimeFormatterWithTZ).withElementPath(sp.getEvent_End()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.duration":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Duration", "Duration in days (or days:hours)", ColumnType.NORMAL, new BaseFormatter() {
-				@Override
-				public String render(final Object object) {
-					final Event se = (Event) object;
-					final int duration = se.getDuration();
-					return Formatters.formatAsDays(duration);
-				}
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "Duration").withTooltip("Duration in days (or days:hours)").withCellRenderer(new BaseFormatter() {
+						@Override
+						public String render(final Object object) {
+							final Event se = (Event) object;
+							final int duration = se.getDuration();
+							return Formatters.formatAsDays(duration);
+						}
 
-				@Override
-				public Comparable getComparable(final Object object) {
-					return ((Event) object).getDuration();
-				}
+						@Override
+						public Comparable getComparable(final Object object) {
+							return ((Event) object).getDuration();
+						}
 
-			});
+					}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.cv":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "CV", null, ColumnType.NORMAL, new NumberOfDPFormatter(2) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "CV").withCellRenderer(new NumberOfDPFormatter(2) {
 
 				@Override
 				public Double getDoubleValue(final Object object) {
@@ -198,15 +206,14 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.price":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Price", null, ColumnType.NORMAL, new NumberOfDPFormatter(2) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Price").withCellRenderer(new NumberOfDPFormatter(2) {
 
 				@Override
 				public Double getDoubleValue(final Object object) {
-					if (object instanceof SlotVisit) {
-						final SlotVisit sv = (SlotVisit) object;
+					if (object instanceof SlotVisit sv) {
 						final SlotAllocation sa = sv.getSlotAllocation();
 						if (sa == null) {
 							return null;
@@ -215,32 +222,38 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("$/mmBtu");
+			}).build());// .setTooltip("$/mmBtu");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.speed":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Speed", null, ColumnType.NORMAL, new NumberOfDPFormatter(1), sp.getJourney_Speed());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "Speed").withCellRenderer(new NumberOfDPFormatter(1)).withElementPath(sp.getJourney_Speed()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.distance":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Distance", null, ColumnType.NORMAL, Formatters.integerFormatter, sp.getJourney_Distance());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "Distance").withCellRenderer(Formatters.integerFormatter).withElementPath(sp.getJourney_Distance()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fromport":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "From Port", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent_Port(), name);
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "From Port").withCellRenderer(Formatters.objectFormatter).withElementPath(sp.getEvent_Port(), name).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.toport": {
 			final ETypedElement[][] paths = new ETypedElement[][] { //
 					{ SchedulePackage.Literals.VESSEL_EVENT_VISIT__REDELIVERY_PORT }, //
 					{ SchedulePackage.Literals.JOURNEY__DESTINATION } };
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "To Port", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, paths));
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "To Port").withCellRenderer(Formatters.namedObjectFormatter).withMultiElementPath(paths).build());
 		}
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.atport":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "At Port", null, ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent_Port(), name);
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "At Port").withCellRenderer(Formatters.objectFormatter).withElementPath(sp.getEvent_Port(), name).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.route":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Route", null, ColumnType.NORMAL, Formatters.namedObjectFormatter, sp.getJourney_RouteOption());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "Route").withCellRenderer(Formatters.namedObjectFormatter).withElementPath(sp.getJourney_RouteOption()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_m3":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Transfer Volume", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Transfer Volume").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof SlotVisit) {
@@ -253,10 +266,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			}).build());// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_mmbtu":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Transfer Energy", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Transfer Energy").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof SlotVisit) {
@@ -269,10 +282,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In mmBtu");
+			}).build());// .setTooltip("In mmBtu");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heelstart":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Volume on board Start", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Volume on board Start").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof Event) {
@@ -281,10 +294,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			}).build());// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heelend":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Volume on board End", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Volume on board End").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof Event) {
@@ -293,10 +306,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			}).build());// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heel_cost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Heel Cost").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof PortVisit) {
@@ -305,10 +318,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			}).build());// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heel_revenue":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel Revenue", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Heel Revenue").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof PortVisit) {
@@ -317,13 +330,13 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			}).build());// .setTooltip("In m³");
 			break;
 		case PortRotationBasedReportBuilder.COLUMN_BLOCK_FUELS:
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, builder.getEmptyFuelsColumnBlockFactory());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fuelcost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Fuel Cost", null, ColumnType.NORMAL, new NumberOfDPFormatter(0) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Fuel Cost").withCellRenderer(new NumberOfDPFormatter(0) {
 				@Override
 				public Double getDoubleValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -332,33 +345,36 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 						return null;
 					}
 				}
-			});
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.chartercost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Charter Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Charter Cost").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					return (int) ((Event) object).getCharterCost();
 				}
-			});
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.routecost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Canal Cost", null, ColumnType.NORMAL, new IntegerFormatter(), sp.getJourney_Toll());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
+					new SingleColumnFactoryBuilder(columnID, "Canal Cost").withCellRenderer(new IntegerFormatter()).withElementPath(sp.getJourney_Toll()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canalarrival":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Canal Arrival", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getJourney_CanalArrivalTime()));
+					new SingleColumnFactoryBuilder(columnID, "Canal Arrival").withCellRenderer(Formatters.asDateTimeFormatterNoTz).withElementPath(sp.getJourney_CanalArrivalTime()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canaldate":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Canal Date", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getJourney_CanalDateTime()));
+					new SingleColumnFactoryBuilder(columnID, "Canal Date").withCellRenderer(Formatters.asDateTimeFormatterNoTz).withElementPath(sp.getJourney_CanalDateTime()).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.latestpossiblecanaldate":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Latest Canal Date", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getJourney_LatestPossibleCanalDateTime()));
+					new SingleColumnFactoryBuilder(columnID, "Latest Canal Date").withCellRenderer(Formatters.asDateTimeFormatterNoTz)
+							.withElementPath(sp.getJourney_LatestPossibleCanalDateTime())
+							.build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canalentry":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Entry", null, ColumnType.NORMAL, new BaseFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Canal Entry").withCellRenderer(new BaseFormatter() {
 				@Override
 				public @Nullable String render(final Object object) {
 
@@ -376,13 +392,12 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 
 					return "";
 				}
-			}));
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.canal.booked":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Canal Booked", null, ColumnType.NORMAL, new BaseFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Canal Booked").withCellRenderer(new BaseFormatter() {
 				String getValue(final Object object) {
-					if (object instanceof Journey) {
-						final Journey journey = (Journey) object;
+					if (object instanceof Journey journey) {
 						final RouteOption routeOption = journey.getRouteOption();
 						if (routeOption == RouteOption.PANAMA) {
 							final CanalBookingSlot canalBooking = journey.getCanalBooking();
@@ -414,10 +429,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				public Comparable getComparable(final Object object) {
 					return getValue(object);
 				}
-			}));
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.portcosts":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Port Costs", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Port Costs").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof PortVisit) {
@@ -426,10 +441,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.totalcosts":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Total Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Total Cost").withCellRenderer(new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					long total = 0;
@@ -454,7 +469,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 
 					return (int) total;
 				}
-			});
+			}).build());
 			break;
 		}
 	}
