@@ -52,7 +52,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
-import org.eclipse.nebula.widgets.ganttchart.GanttChartGeometry;
+import org.eclipse.nebula.widgets.ganttchart.GanttChartParameters;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
@@ -967,7 +967,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	private ISettings createGanttSettings() {
-		return GanttChartGeometry.getSettings();
+		return GanttChartParameters.getSettings();
 	}
 
 	@Override

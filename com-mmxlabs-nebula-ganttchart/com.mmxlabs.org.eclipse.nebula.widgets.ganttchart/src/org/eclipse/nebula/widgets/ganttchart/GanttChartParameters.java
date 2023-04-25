@@ -6,20 +6,19 @@ import org.eclipse.swt.graphics.Color;
 /**
  * All numbers related to the sizes and spacings of ui elements of the Gantt chart
  * 
- * The goal is to describe the geometry in terms of margin and padding
- * 
  * @author Andrey Popov
  *
  */
-// TODO: Make geometry values dependent on User preferences
-public class GanttChartGeometry {
-	
-	private GanttChartGeometry() {
-		
-	}
+ // TODO: Make geometry values dependent on User preferences
+public class GanttChartParameters {
 	
 	private static final int STANDART_FIXED_ROW_HEIGHT = 28;
 	private static final int STANDART_EVENT_SPACER_SIZE = 0;
+	private static final int STANDART_EVENT_HEIGHT = 18;
+
+	private GanttChartParameters() {
+		
+	}
 	
 	public static int getRowHeight() {
 		return STANDART_FIXED_ROW_HEIGHT;
@@ -166,7 +165,7 @@ public class GanttChartGeometry {
 		
 		@Override
 		public int getEventHeight() {
-			return super.getEventHeight() + 6;
+			return STANDART_EVENT_HEIGHT;
 		}
 	}
 }
