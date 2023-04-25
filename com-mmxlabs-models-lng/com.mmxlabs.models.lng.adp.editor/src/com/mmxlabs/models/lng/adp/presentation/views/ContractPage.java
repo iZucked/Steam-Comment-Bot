@@ -290,60 +290,96 @@ public class ContractPage extends ADPComposite {
 				});
 			}
 			{
-				importAndGenerateButton = new Button(toolbarComposite, SWT.PUSH);
-				importAndGenerateButton.setText("Import and generate");
-				importAndGenerateButton.setEnabled(true);
-				importAndGenerateButton.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						if (editorData != null) {
-							final ADPModel adpModel = editorData.getAdpModel();
-							if (adpModel != null) {
-								final LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(adpModel);
-								if (sm == null) {
-									MessageDialog.openError(getShell(), "Error importing dates", "Could not find scenario");
-									return;
-								}
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_IMPORT_CONTRACT_DATES_FROM_CSV)) {
+					importAndGenerateButton = new Button(toolbarComposite, SWT.PUSH);
+					importAndGenerateButton.setText("Import and generate");
+					importAndGenerateButton.setEnabled(true);
+					importAndGenerateButton.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							if (editorData != null) {
+								final ADPModel adpModel = editorData.getAdpModel();
+								if (adpModel != null) {
+									final LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(adpModel);
+									if (sm == null) {
+										MessageDialog.openError(getShell(), "Error importing dates", "Could not find scenario");
+										return;
+									}
 
-								final FileDialog dialog = new FileDialog(getShell());
-								dialog.setFilterExtensions(new String[] { "*.csv" });
-								dialog.setText("Bulk import pre-defined slots from csv");
-								final String result = dialog.open();
-								if (result != null) {
-									final Set<String> knownPurchaseContracts = ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts().stream() //
-											.map(NamedObject::getName) //
-											.filter(Objects::nonNull) //
-											.map(String::toLowerCase) //
-											.collect(Collectors.toSet());
-									final Set<String> knownSaleContracts = ScenarioModelUtil.getCommercialModel(sm).getSalesContracts().stream() //
-											.map(NamedObject::getName) //
-											.map(String::toLowerCase) //
-											.filter(Objects::nonNull) //
-											.collect(Collectors.toSet());
-									final Map<String, List<LocalDate>> purchaseContractDates = new HashMap<>();
-									final Map<String, List<LocalDate>> saleContractDates = new HashMap<>();
-									final Map<Contract, List<LocalDate>> dates = new HashMap<>();
-									final List<String> errors = new LinkedList<>();
-									String currentContract = null;
-									try (CSVReader reader = new CSVReader(',', new FileInputStream(result))) {
-										final LocalDateAttributeImporter dateImporter = new LocalDateAttributeImporter();
-										for (IFieldMap row = reader.readRow(true); row != null; row = reader.readRow(true)) {
-											if (!row.containsKey("contract")) {
-												MessageDialog.openError(getShell(), "Error importing dates", "Could not find contract column");
-												return;
-											}
-											if (!row.containsKey("date")) {
-												MessageDialog.openError(getShell(), "Error importing dates", "Could not find date column");
-												return;
-											}
-											final String nextContract = row.get("contract");
-											if (nextContract != null && !nextContract.isBlank()) {
-												currentContract = nextContract;
-											}
-											Map<String, List<LocalDate>> mapToAddTo = null;
-											if (row.containsKey("is_purchase_contract")) {
-												final String isPurchaseContractStr = row.get("is_purchase_contract");
-												if (isPurchaseContractStr == null || isPurchaseContractStr.isBlank()) {
+									final FileDialog dialog = new FileDialog(getShell());
+									dialog.setFilterExtensions(new String[] { "*.csv" });
+									dialog.setText("Bulk import pre-defined slots from csv");
+									final String result = dialog.open();
+									if (result != null) {
+										final Set<String> knownPurchaseContracts = ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts().stream() //
+												.map(NamedObject::getName) //
+												.filter(Objects::nonNull) //
+												.map(String::toLowerCase) //
+												.collect(Collectors.toSet());
+										final Set<String> knownSaleContracts = ScenarioModelUtil.getCommercialModel(sm).getSalesContracts().stream() //
+												.map(NamedObject::getName) //
+												.map(String::toLowerCase) //
+												.filter(Objects::nonNull) //
+												.collect(Collectors.toSet());
+										final Map<String, List<LocalDate>> purchaseContractDates = new HashMap<>();
+										final Map<String, List<LocalDate>> saleContractDates = new HashMap<>();
+										final Map<Contract, List<LocalDate>> dates = new HashMap<>();
+										final List<String> errors = new LinkedList<>();
+										String currentContract = null;
+										try (CSVReader reader = new CSVReader(',', new FileInputStream(result))) {
+											final LocalDateAttributeImporter dateImporter = new LocalDateAttributeImporter();
+											for (IFieldMap row = reader.readRow(true); row != null; row = reader.readRow(true)) {
+												if (!row.containsKey("contract")) {
+													MessageDialog.openError(getShell(), "Error importing dates", "Could not find contract column");
+													return;
+												}
+												if (!row.containsKey("date")) {
+													MessageDialog.openError(getShell(), "Error importing dates", "Could not find date column");
+													return;
+												}
+												final String nextContract = row.get("contract");
+												if (nextContract != null && !nextContract.isBlank()) {
+													currentContract = nextContract;
+												}
+												Map<String, List<LocalDate>> mapToAddTo = null;
+												if (row.containsKey("is_purchase_contract")) {
+													final String isPurchaseContractStr = row.get("is_purchase_contract");
+													if (isPurchaseContractStr == null || isPurchaseContractStr.isBlank()) {
+														if (knownPurchaseContracts.contains(currentContract.toLowerCase())) {
+															if (knownSaleContracts.contains(currentContract.toLowerCase())) {
+																final String message = String.format("Ambiguous contract: %s. Please use is_purchase_contract column.", currentContract);
+																MessageDialog.openError(getShell(), "Error importing dates", message);
+																return;
+															}
+															mapToAddTo = purchaseContractDates;
+														} else if (knownSaleContracts.contains(currentContract.toLowerCase())) {
+															mapToAddTo = saleContractDates;
+														} else {
+															final String message = String.format("Unknown contract: %s", currentContract);
+															MessageDialog.openError(getShell(), "Error importing dates", message);
+															return;
+														}
+													} else {
+														if (isPurchaseContractStr.equalsIgnoreCase("true")) {
+															if (!knownPurchaseContracts.contains(currentContract.toLowerCase())) {
+																final String message = String.format("Unknown purchase contract: %s.", currentContract);
+																MessageDialog.openError(getShell(), "Error importing dates", message);
+																return;
+															}
+															mapToAddTo = purchaseContractDates;
+														} else if (isPurchaseContractStr.equalsIgnoreCase("false")) {
+															if (!knownSaleContracts.contains(currentContract.toLowerCase())) {
+																final String message = String.format("Unknown sale contract: %s.", currentContract);
+																MessageDialog.openError(getShell(), "Error importing dates", message);
+																return;
+															}
+															mapToAddTo = saleContractDates;
+														} else {
+															MessageDialog.openError(getShell(), "Error importing dates", "Invalid value for is_purchase_contract");
+															return;
+														}
+													}
+												} else {
 													if (knownPurchaseContracts.contains(currentContract.toLowerCase())) {
 														if (knownSaleContracts.contains(currentContract.toLowerCase())) {
 															final String message = String.format("Ambiguous contract: %s. Please use is_purchase_contract column.", currentContract);
@@ -358,180 +394,154 @@ public class ContractPage extends ADPComposite {
 														MessageDialog.openError(getShell(), "Error importing dates", message);
 														return;
 													}
-												} else {
-													if (isPurchaseContractStr.equalsIgnoreCase("true")) {
-														if (!knownPurchaseContracts.contains(currentContract.toLowerCase())) {
-															final String message = String.format("Unknown purchase contract: %s.", currentContract);
-															MessageDialog.openError(getShell(), "Error importing dates", message);
-															return;
-														}
-														mapToAddTo = purchaseContractDates;
-													} else if (isPurchaseContractStr.equalsIgnoreCase("false")) {
-														if (!knownSaleContracts.contains(currentContract.toLowerCase())) {
-															final String message = String.format("Unknown sale contract: %s.", currentContract);
-															MessageDialog.openError(getShell(), "Error importing dates", message);
-															return;
-														}
-														mapToAddTo = saleContractDates;
-													} else {
-														MessageDialog.openError(getShell(), "Error importing dates", "Invalid value for is_purchase_contract");
-														return;
-													}
 												}
-											} else {
-												if (knownPurchaseContracts.contains(currentContract.toLowerCase())) {
-													if (knownSaleContracts.contains(currentContract.toLowerCase())) {
-														final String message = String.format("Ambiguous contract: %s. Please use is_purchase_contract column.", currentContract);
-														MessageDialog.openError(getShell(), "Error importing dates", message);
-														return;
-													}
-													mapToAddTo = purchaseContractDates;
-												} else if (knownSaleContracts.contains(currentContract.toLowerCase())) {
-													mapToAddTo = saleContractDates;
-												} else {
-													final String message = String.format("Unknown contract: %s", currentContract);
-													MessageDialog.openError(getShell(), "Error importing dates", message);
+												final String dateStr = row.get("date");
+												try {
+													final LocalDate date = dateImporter.parseLocalDate(dateStr);
+													mapToAddTo.computeIfAbsent(currentContract.toLowerCase(), k -> new LinkedList<>()).add(date);
+												} catch (final ParseException exception) {
+													MessageDialog.openError(getShell(), "Error importing dates", String.format("Could not parse date: %s", dateStr));
 													return;
 												}
 											}
-											final String dateStr = row.get("date");
-											try {
-												final LocalDate date = dateImporter.parseLocalDate(dateStr);
-												mapToAddTo.computeIfAbsent(currentContract.toLowerCase(), k -> new LinkedList<>()).add(date);
-											} catch (final ParseException exception) {
-												MessageDialog.openError(getShell(), "Error importing dates", String.format("Could not parse date: %s", dateStr));
+										} catch (final FileNotFoundException exception) {
+											exception.printStackTrace();
+											MessageDialog.openError(getShell(), "Error importing dates", exception.getMessage());
+										} catch (final IOException exception) {
+											exception.printStackTrace();
+											MessageDialog.openError(getShell(), "Error importing dates", exception.getMessage());
+										}
+
+										final Map<String, PurchaseContractProfile> knownPurchaseContractProfiles = adpModel.getPurchaseContractProfiles().stream() //
+												.filter(pcp -> pcp.getContract() != null) //
+												.filter(pcp -> pcp.getContract().getName() != null && !pcp.getContract().getName().isBlank()) //
+												.collect(Collectors.toMap(pcp -> pcp.getContract().getName().toLowerCase(), Function.identity()));
+										final Map<String, SalesContractProfile> knownSalesContractProfiles = adpModel.getSalesContractProfiles().stream() //
+												.filter(scp -> scp.getContract() != null) //
+												.filter(scp -> scp.getContract().getName() != null && !scp.getContract().getName().isBlank()) //
+												.collect(Collectors.toMap(scp -> scp.getContract().getName().toLowerCase(), Function.identity()));
+										for (final Entry<String, List<LocalDate>> entry : purchaseContractDates.entrySet()) {
+											if (!knownPurchaseContractProfiles.containsKey(entry.getKey())) {
+												MessageDialog.openError(getShell(), "Error importing dates", String.format("No ADP contract profile data for: %s", entry.getKey()));
 												return;
 											}
 										}
-									} catch (final FileNotFoundException exception) {
-										exception.printStackTrace();
-										MessageDialog.openError(getShell(), "Error importing dates", exception.getMessage());
-									} catch (final IOException exception) {
-										exception.printStackTrace();
-										MessageDialog.openError(getShell(), "Error importing dates", exception.getMessage());
-									}
-
-									final Map<String, PurchaseContractProfile> knownPurchaseContractProfiles = adpModel.getPurchaseContractProfiles().stream() //
-											.filter(pcp -> pcp.getContract() != null) //
-											.filter(pcp -> pcp.getContract().getName() != null && !pcp.getContract().getName().isBlank()) //
-											.collect(Collectors.toMap(pcp -> pcp.getContract().getName().toLowerCase(), Function.identity()));
-									final Map<String, SalesContractProfile> knownSalesContractProfiles = adpModel.getSalesContractProfiles().stream() //
-											.filter(scp -> scp.getContract() != null) //
-											.filter(scp -> scp.getContract().getName() != null && !scp.getContract().getName().isBlank()) //
-											.collect(Collectors.toMap(scp -> scp.getContract().getName().toLowerCase(), Function.identity()));
-									for (final Entry<String, List<LocalDate>> entry : purchaseContractDates.entrySet()) {
-										if (!knownPurchaseContractProfiles.containsKey(entry.getKey())) {
-											MessageDialog.openError(getShell(), "Error importing dates", String.format("No ADP contract profile data for: %s", entry.getKey()));
-											return;
-										}
-									}
-									for (final Entry<String, List<LocalDate>> entry : saleContractDates.entrySet()) {
-										if (!knownSalesContractProfiles.containsKey(entry.getKey())) {
-											MessageDialog.openError(getShell(), "Error importing dates", String.format("No ADP contract profile data for: %s", entry.getKey()));
-											return;
-										}
-									}
-									final List<PurchaseContractProfile> purchaseProfilesToRegenerate = new LinkedList<>();
-									final List<SalesContractProfile> salesProfilesToRegenerate = new LinkedList<>();
-									final CompoundCommand cmd = new CompoundCommand();
-									for (final Entry<String, List<LocalDate>> entry : purchaseContractDates.entrySet()) {
-										final String contractName = entry.getKey();
-										final PurchaseContractProfile contractProfile = knownPurchaseContractProfiles.get(contractName);
-										final List<SubContractProfile<LoadSlot, PurchaseContract>> subcontractProfiles = contractProfile.getSubProfiles();
-										if (subcontractProfiles.size() != 1) {
-											MessageDialog.openError(getShell(), "Error importing dates", "Could not find generation parameters");
-											return;
-										}
-										final SubContractProfile<LoadSlot, PurchaseContract> subcontractProfile = subcontractProfiles.get(0);
-										final DistributionModel distributionModel = subcontractProfile.getDistributionModel();
-										if (distributionModel instanceof final @NonNull PreDefinedDistributionModel predefinedDistributionModel) {
-											final List<PreDefinedDate> oldDates = predefinedDistributionModel.getDates();
-											if (!oldDates.isEmpty()) {
-												cmd.append(RemoveCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), oldDates));
+										for (final Entry<String, List<LocalDate>> entry : saleContractDates.entrySet()) {
+											if (!knownSalesContractProfiles.containsKey(entry.getKey())) {
+												MessageDialog.openError(getShell(), "Error importing dates", String.format("No ADP contract profile data for: %s", entry.getKey()));
+												return;
 											}
-											final List<PreDefinedDate> newDates = entry.getValue().stream() //
-													.map(date -> {
-														final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
-														predefinedDate.setDate(date);
-														return predefinedDate;
-													}) //
-													.toList();
-											cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), newDates));
-										} else {
-											final @NonNull PreDefinedDistributionModel predefinedDistributionModel = ADPFactory.eINSTANCE.createPreDefinedDistributionModel();
-											cmd.append(SetCommand.create(editorData.getEditingDomain(), subcontractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL, predefinedDistributionModel));
-											final List<PreDefinedDate> newDates = entry.getValue().stream() //
-													.map(date -> {
-														final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
-														predefinedDate.setDate(date);
-														return predefinedDate;
-													}) //
-													.toList();
-											cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), newDates));
 										}
-										purchaseProfilesToRegenerate.add(contractProfile);
-									}
-									for (final Entry<String, List<LocalDate>> entry : saleContractDates.entrySet()) {
-										final String contractName = entry.getKey();
-										final SalesContractProfile contractProfile = knownSalesContractProfiles.get(contractName);
-										final List<SubContractProfile<DischargeSlot, SalesContract>> subcontractProfiles = contractProfile.getSubProfiles();
-										if (subcontractProfiles.size() != 1) {
-											MessageDialog.openError(getShell(), "Error importing dates", "Could not find generation parameters");
-											return;
-										}
-										final SubContractProfile<DischargeSlot, SalesContract> subcontractProfile = subcontractProfiles.get(0);
-										final DistributionModel distributionModel = subcontractProfile.getDistributionModel();
-										if (distributionModel instanceof final @NonNull PreDefinedDistributionModel predefinedDistributionModel) {
-											final List<PreDefinedDate> oldDates = predefinedDistributionModel.getDates();
-											if (!oldDates.isEmpty()) {
-												cmd.append(RemoveCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), oldDates));
+										final List<PurchaseContractProfile> purchaseProfilesToRegenerate = new LinkedList<>();
+										final List<SalesContractProfile> salesProfilesToRegenerate = new LinkedList<>();
+										final CompoundCommand cmd = new CompoundCommand();
+										for (final Entry<String, List<LocalDate>> entry : purchaseContractDates.entrySet()) {
+											final String contractName = entry.getKey();
+											final PurchaseContractProfile contractProfile = knownPurchaseContractProfiles.get(contractName);
+											final List<SubContractProfile<LoadSlot, PurchaseContract>> subcontractProfiles = contractProfile.getSubProfiles();
+											if (subcontractProfiles.size() != 1) {
+												MessageDialog.openError(getShell(), "Error importing dates", "Could not find generation parameters");
+												return;
 											}
-											final List<PreDefinedDate> newDates = entry.getValue().stream() //
-													.map(date -> {
-														final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
-														predefinedDate.setDate(date);
-														return predefinedDate;
-													}) //
-													.toList();
-											cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), newDates));
-										} else {
-											final @NonNull PreDefinedDistributionModel predefinedDistributionModel = ADPFactory.eINSTANCE.createPreDefinedDistributionModel();
-											cmd.append(SetCommand.create(editorData.getEditingDomain(), subcontractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL, predefinedDistributionModel));
-											final List<PreDefinedDate> newDates = entry.getValue().stream() //
-													.map(date -> {
-														final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
-														predefinedDate.setDate(date);
-														return predefinedDate;
-													}) //
-													.toList();
-											cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), newDates));
+											final SubContractProfile<LoadSlot, PurchaseContract> subcontractProfile = subcontractProfiles.get(0);
+											final DistributionModel distributionModel = subcontractProfile.getDistributionModel();
+											if (distributionModel instanceof final @NonNull PreDefinedDistributionModel predefinedDistributionModel) {
+												final List<PreDefinedDate> oldDates = predefinedDistributionModel.getDates();
+												if (!oldDates.isEmpty()) {
+													cmd.append(RemoveCommand.create(editorData.getEditingDomain(), predefinedDistributionModel,
+															ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), oldDates));
+												}
+												final List<PreDefinedDate> newDates = entry.getValue().stream() //
+														.map(date -> {
+															final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
+															predefinedDate.setDate(date);
+															return predefinedDate;
+														}) //
+														.toList();
+												cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(),
+														newDates));
+											} else {
+												final @NonNull PreDefinedDistributionModel predefinedDistributionModel = ADPFactory.eINSTANCE.createPreDefinedDistributionModel();
+												cmd.append(SetCommand.create(editorData.getEditingDomain(), subcontractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
+														predefinedDistributionModel));
+												final List<PreDefinedDate> newDates = entry.getValue().stream() //
+														.map(date -> {
+															final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
+															predefinedDate.setDate(date);
+															return predefinedDate;
+														}) //
+														.toList();
+												cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(),
+														newDates));
+											}
+											purchaseProfilesToRegenerate.add(contractProfile);
 										}
-										salesProfilesToRegenerate.add(contractProfile);
-									}
-									if (!cmd.isEmpty()) {
-										editorData.getDefaultCommandHandler().handleCommand(cmd);
-									}
-									final CompoundCommand regenerationCommand = new CompoundCommand("Regenerate slots");
-									for (final PurchaseContractProfile pcp : purchaseProfilesToRegenerate) {
-										final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), sm, adpModel, pcp);
-										if (populateModelCommand != null) {
-											regenerationCommand.append(populateModelCommand);
+										for (final Entry<String, List<LocalDate>> entry : saleContractDates.entrySet()) {
+											final String contractName = entry.getKey();
+											final SalesContractProfile contractProfile = knownSalesContractProfiles.get(contractName);
+											final List<SubContractProfile<DischargeSlot, SalesContract>> subcontractProfiles = contractProfile.getSubProfiles();
+											if (subcontractProfiles.size() != 1) {
+												MessageDialog.openError(getShell(), "Error importing dates", "Could not find generation parameters");
+												return;
+											}
+											final SubContractProfile<DischargeSlot, SalesContract> subcontractProfile = subcontractProfiles.get(0);
+											final DistributionModel distributionModel = subcontractProfile.getDistributionModel();
+											if (distributionModel instanceof final @NonNull PreDefinedDistributionModel predefinedDistributionModel) {
+												final List<PreDefinedDate> oldDates = predefinedDistributionModel.getDates();
+												if (!oldDates.isEmpty()) {
+													cmd.append(RemoveCommand.create(editorData.getEditingDomain(), predefinedDistributionModel,
+															ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(), oldDates));
+												}
+												final List<PreDefinedDate> newDates = entry.getValue().stream() //
+														.map(date -> {
+															final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
+															predefinedDate.setDate(date);
+															return predefinedDate;
+														}) //
+														.toList();
+												cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(),
+														newDates));
+											} else {
+												final @NonNull PreDefinedDistributionModel predefinedDistributionModel = ADPFactory.eINSTANCE.createPreDefinedDistributionModel();
+												cmd.append(SetCommand.create(editorData.getEditingDomain(), subcontractProfile, ADPPackage.Literals.SUB_CONTRACT_PROFILE__DISTRIBUTION_MODEL,
+														predefinedDistributionModel));
+												final List<PreDefinedDate> newDates = entry.getValue().stream() //
+														.map(date -> {
+															final PreDefinedDate predefinedDate = ADPFactory.eINSTANCE.createPreDefinedDate();
+															predefinedDate.setDate(date);
+															return predefinedDate;
+														}) //
+														.toList();
+												cmd.append(AddCommand.create(editorData.getEditingDomain(), predefinedDistributionModel, ADPPackage.eINSTANCE.getPreDefinedDistributionModel_Dates(),
+														newDates));
+											}
+											salesProfilesToRegenerate.add(contractProfile);
 										}
-									}
-									for (final SalesContractProfile scp : salesProfilesToRegenerate) {
-										final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), sm, adpModel, scp);
-										if (populateModelCommand != null) {
-											regenerationCommand.append(populateModelCommand);
+										if (!cmd.isEmpty()) {
+											editorData.getDefaultCommandHandler().handleCommand(cmd);
 										}
-									}
-									if (!regenerationCommand.isEmpty()) {
-										editorData.getDefaultCommandHandler().handleCommand(regenerationCommand);
+										final CompoundCommand regenerationCommand = new CompoundCommand("Regenerate slots");
+										for (final PurchaseContractProfile pcp : purchaseProfilesToRegenerate) {
+											final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), sm, adpModel, pcp);
+											if (populateModelCommand != null) {
+												regenerationCommand.append(populateModelCommand);
+											}
+										}
+										for (final SalesContractProfile scp : salesProfilesToRegenerate) {
+											final Command populateModelCommand = ADPModelUtil.populateModel(editorData.getEditingDomain(), sm, adpModel, scp);
+											if (populateModelCommand != null) {
+												regenerationCommand.append(populateModelCommand);
+											}
+										}
+										if (!regenerationCommand.isEmpty()) {
+											editorData.getDefaultCommandHandler().handleCommand(regenerationCommand);
+										}
 									}
 								}
 							}
 						}
-					}
-				});
+					});
+				}
 			}
 			{
 				ServiceHelper.withOptionalServiceConsumer(IAdpContractPageToolbarCustomiser.class, customiser -> {

@@ -191,4 +191,9 @@ public final class KnownFeatures {
 	
 	public static final String FEATURE_SCHEDULED_VOLUME = "features:scheduled-volume";
 
+	/**
+	 *  Temporary features
+	 */
+	public static final String FEATURE_ADP_IMPORT_CONTRACT_DATES_FROM_CSV = "features:adp-import-contract-dates-from-csv";
+
 }
