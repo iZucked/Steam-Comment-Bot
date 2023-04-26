@@ -478,6 +478,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
+				if (feature == CargoPackage.Literals.SLOT__PRICE_EXPRESSION || feature == CargoPackage.Literals.SLOT__PRICING_BASIS) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.widthHint = 150;
+					return gd;
+				}
 
 				return super.createEditorLayoutData(root, value, editor, control);
 			}

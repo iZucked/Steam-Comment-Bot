@@ -49,7 +49,7 @@
 -->
       </category>
       <view
-            name="Volume Tracking"
+            name="Contract Vols"
             icon="icons:/icons/legacy/16x16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.VolumeTrackingReportView"
@@ -187,6 +187,14 @@
             icon="icons:/icons/legacy/16x16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
             name="PNL Calcs"
+            restorable="true">
+      </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.flows.FlowsReport"
+            icon="icons:/16/flows"
+            id="com.mmxlabs.lingo.reports.views.flows.FlowsReport"
+            name="Flows"
             restorable="true">
       </view>
    </extension>

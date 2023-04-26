@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.ui.runtime.feature"
       label="Models: UI Runtime Feature"
-      version="6.4.3.qualifier"
+      version="6.4.4.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin

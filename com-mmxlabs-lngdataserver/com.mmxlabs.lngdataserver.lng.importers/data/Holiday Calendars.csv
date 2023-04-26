@@ -1,39 +1,52 @@
 name,description,date
 EURONEXT,Amsterdam Stock Exchange holidays,
 EURONEXT,Nieuwjaar,2019-01-01
+EURONEXT,Eerste Paasdag,2019-04-21
 EURONEXT,Tweede Paasdag,2019-04-22
+EURONEXT,Koningsdag,2019-04-27
 EURONEXT,Hemelvaartsdag,2019-05-30
+EURONEXT,Eerste Pinksterdag,2019-06-09
 EURONEXT,Tweede Pinksterdag,2019-06-10
 EURONEXT,Eerste Kerstdag,2019-12-25
 EURONEXT,Tweede Kerstdag,2019-12-26
 EURONEXT,Nieuwjaar,2020-01-01
+EURONEXT,Eerste Paasdag,2020-04-12
 EURONEXT,Tweede Paasdag,2020-04-13
 EURONEXT,Koningsdag,2020-04-27
 EURONEXT,Bevrijdingsdag,2020-05-05
 EURONEXT,Hemelvaartsdag,2020-05-21
+EURONEXT,Eerste Pinksterdag,2020-05-31
 EURONEXT,Tweede Pinksterdag,2020-06-01
 EURONEXT,Eerste Kerstdag,2020-12-25
+EURONEXT,Tweede Kerstdag,2020-12-26
+EURONEXT,New Year,2023-01-01
 EURONEXT,Good Friday,2023-04-07
 EURONEXT,Easter Monday,2023-04-10
 EURONEXT,Labour Day,2023-05-01
+EURONEXT,Christmas Eve,2023-12-24
 EURONEXT,Christmas Day,2023-12-25
 EURONEXT,Boxing Day,2023-12-26
+EURONEXT,New Year's Eve,2023-12-31
 EURONEXT,New Year,2024-01-01
 JPX,Japan Exchange Group holidays,
 JPX,New Year's Day observed,2023-01-02
 JPX,Market Holiday,2023-01-03
 JPX,Coming of Age Day,2023-01-09
+JPX,National Foundation Day,2023-02-11
 JPX,Emperor's Birthday,2023-02-23
 JPX,Vernal Equinox,2023-03-21
+JPX,Showa Day,2023-04-29
 JPX,Constitution Memorial Day,2023-05-03
 JPX,Greenery Day,2023-05-04
 JPX,Children's Day,2023-05-05
 JPX,Marine Day,2023-07-17
 JPX,Mountain Day,2023-08-11
 JPX,Respect for the Aged Day,2023-09-18
+JPX,Autumnal Equinox,2023-09-23
 JPX,Sports Day,2023-10-09
 JPX,Culture Day,2023-11-03
 JPX,Labor Thanksgiving Day,2023-11-23
+JPX,Market Holiday,2023-12-31
 JPX,New Year's Day,2024-01-01
 JPX,Market Holiday,2024-01-02
 JPX,Market Holiday,2024-01-03
@@ -43,6 +56,7 @@ JPX,Emperor's Birthday,2024-02-23
 JPX,Vernal Equinox,2024-03-20
 JPX,Showa Day,2024-04-29
 JPX,Constitution Memorial Day,2024-05-03
+JPX,Greenery Day,2024-05-04
 JPX,Children's Day observed,2024-05-06
 JPX,Marine Day,2024-07-15
 JPX,Mountain Day observed,2024-08-12
@@ -50,6 +64,7 @@ JPX,Respect for the Aged Day,2024-09-16
 JPX,Autumnal Equinox observed,2024-09-23
 JPX,Sports Day,2024-10-14
 JPX,Culture Day observed,2024-11-04
+JPX,Labor Thanksgiving Day,2024-11-23
 JPX,Market Holiday,2024-12-31
 LSE,London Stock Exchangee market holidays,
 LSE,New Year's Day,2019-01-01
@@ -76,6 +91,7 @@ LSE,Late May Bank Holiday,2021-05-31
 LSE,Summer Bank Holiday,2021-08-30
 LSE,Christmas,2021-12-27
 LSE,Boxing Day,2021-12-28
+LSE,New Year Day,2023-01-01
 LSE,Good Friday,2023-04-07
 LSE,Easter Monday,2023-04-10
 LSE,Early May Bank Holiday,2023-05-01
@@ -84,7 +100,8 @@ LSE,Spring Bank Holiday,2023-05-29
 LSE,Summer Bank Holiday,2023-08-28
 LSE,Christmas Day,2023-12-25
 LSE,Boxing Day,2023-12-26
-LSE,New Year's Day,2024-01-01
+LSE,New Year's Eve,2023-12-31
+LSE,New Year Day,2024-01-01
 NYSE,NYSE and NASDAQ holidays,
 NYSE,New Year's Day,2019-01-01
 NYSE,Martin Luther King Jr Day,2019-01-21
@@ -113,7 +130,7 @@ NYSE,Independece Day,2021-07-05
 NYSE,Labor Day,2021-09-06
 NYSE,Thanksgiving Day,2021-11-25
 NYSE,Christmas Day,2021-12-24
-NYSE,New Year's Day (New Year's Day holiday observed),2023-01-02
+NYSE,New Years Day (New Year’s Day holiday observed),2023-01-02
 NYSE,Martin Luther King Jr. Day,2023-01-16
 NYSE,Washington's Birthday,2023-02-20
 NYSE,Good Friday,2023-04-07
@@ -123,7 +140,7 @@ NYSE,Independence Day,2023-07-04
 NYSE,Labor Day,2023-09-04
 NYSE,Thanksgiving Day,2023-11-23
 NYSE,Christmas Day,2023-12-25
-NYSE,New Year's Day,2024-01-01
+NYSE,New Years Day,2024-01-01
 NYSE,Martin Luther King Jr. Day,2024-01-15
 NYSE,Washington's Birthday,2024-02-19
 NYSE,Good Friday,2024-03-29
@@ -133,7 +150,7 @@ NYSE,Independence Day,2024-07-04
 NYSE,Labor Day,2024-09-02
 NYSE,Thanksgiving Day,2024-11-28
 NYSE,Christmas Day,2024-12-25
-NYSE,New Year's Day,2025-01-01
+NYSE,New Years Day,2025-01-01
 NYSE,Martin Luther King Jr. Day,2025-01-20
 NYSE,Washington's Birthday,2025-02-17
 NYSE,Good Friday,2025-04-18

@@ -617,13 +617,11 @@ public class LNGSchedulerJobUtils {
 		
 		final Set<Slot> changedSlots = new HashSet<>();
 		final Set<Slot> slotsWTR = new HashSet<>();
-		// cargoes WITH transfer records from the ORIGINAL scenario
-		final Map<LoadSlot, Cargo> loadToCargo = new HashMap();
-		final Map<DischargeSlot, Cargo> dischargeToCargo = new HashMap();
-		final Set<Slot<?>> openSlots = new HashSet<>();
-		//original cargo model and transfer models
-		final CargoModel cargoModel = (CargoModel) scenario.eGetWithDefault(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CargoModel());
+		//original transfer models
 		final TransferModel tm = (TransferModel) scenario.eGetWithDefault(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_TransferModel());
+		if (tm == null) {
+			return IdentityCommand.INSTANCE;
+		}
 		
 		// collect slots referenced by transfer records
 		tm.getTransferRecords().stream().forEach( tr -> {
@@ -635,30 +633,6 @@ public class LNGSchedulerJobUtils {
 		if (slotsWTR.isEmpty()) {
 			return IdentityCommand.INSTANCE;
 		}
-		
-//		// collect cargoes which have slots referenced by transfer records
-//		cargoModel.getCargoes().stream().forEach( c -> {
-//			c.getSlots().stream().forEach( s -> {
-//				if (slotsWTR.contains(s)) {
-//					if (s instanceof final LoadSlot ls) {
-//						loadToCargo.put(ls, c);
-//					} else if (s instanceof final DischargeSlot ds) {
-//						dischargeToCargo.put(ds, c);
-//					}
-//				}
-//			});
-//		});
-//		// collect open slots which referenced by transfer records
-//		cargoModel.getLoadSlots().forEach( ls -> {
-//			if (slotsWTR.contains(ls) && ls.getCargo() == null) {
-//				openSlots.add(ls);
-//			}
-//		});
-//		cargoModel.getDischargeSlots().forEach( ds -> {
-//			if (slotsWTR.contains(ds) && ds.getCargo() == null) {
-//				openSlots.add(ds);
-//			}
-//		});
 		
 		// check that ORIGINALLY open slots are still open in the FOREIGN schedule
 		schedule.getOpenSlotAllocations().forEach( osa -> {
@@ -700,50 +674,6 @@ public class LNGSchedulerJobUtils {
 			
 		});
 		
-//		// go through the FOREIGN schedule and find changes to wiring in cargoes
-//		schedule.getCargoAllocations().forEach( ca -> {
-//			
-//			ca.getSlotAllocations().forEach( sa -> {
-//				final Slot s = sa.getSlot();
-//				if (slotsWTR.contains(s)) {
-//					//register change to slot's wiring and remove them from the map of cargoes
-//					if (s instanceof final LoadSlot ls) {
-//						if (ls.getCargo() != loadToCargo.get(ls)) {
-//							changedSlots.add(s);
-//							loadToCargo.remove(ls);
-//						}
-//					} else if (s instanceof final DischargeSlot ds) {
-//						if (ds.getCargo() != dischargeToCargo.get(ds)) {
-//							changedSlots.add(s);
-//							dischargeToCargo.remove(ds);
-//						}
-//					}
-//					// previously open slot is now wired in the FOREIGN schedule
-//					if (openSlots.contains(s)) {
-//						changedSlots.add(s);
-//						openSlots.remove(s);
-//					}
-//					
-//				}
-//			});
-//		});
-		
-//		// if any cargoes are left, check FOREIGN schedule
-//		if (!loadToCargo.isEmpty() && !dischargeToCargo.isEmpty()) {
-//			schedule.getOpenSlotAllocations().stream().forEach( osa -> {
-//				final Slot s = osa.getSlot();
-//				if (slotsWTR.contains(s)) {
-//					if (loadToCargo.get(s) != null) {
-//						changedSlots.add(s);
-//						loadToCargo.remove(s);
-//					} else if (dischargeToCargo.get(s) != null) {
-//						changedSlots.add(s);
-//						dischargeToCargo.remove(s);
-//					}
-//				}
-//			});
-//		}
-		
 		CompoundCommand cc = new CompoundCommand();
 		changedSlots.forEach(s -> {
 			tm.getTransferRecords().forEach( tr -> {
@@ -754,8 +684,6 @@ public class LNGSchedulerJobUtils {
 		});
 		
 		return cc;
-		
-		
 	}
 
 	public static @NonNull Pair<IAnnotatedSolution, IEvaluationState> evaluateCurrentState(@NonNull final Injector injector, @NonNull final ISequences rawSequences) {
