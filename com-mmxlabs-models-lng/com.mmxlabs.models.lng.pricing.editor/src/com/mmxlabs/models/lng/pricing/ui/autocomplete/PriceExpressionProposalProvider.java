@@ -223,6 +223,13 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 				list.add(new ContentProposal(c, proposal + "index,lowerbound,lowexpr,upperbound,midexpr,highexpr)", "Tiered pricing function. lowerbound and upperbound define the conditions (< or <= to a number value) against the value of index to select which expression to use (lowexpr, midexpr or highexpr).\nFor example TIER(Brent, < 40, 5, <= 90, Brent[301], 10) will use Brent[301] if Brent is 40 or above and less than 90. Otherwise use the constants.", c.length()));
 			}
 		}
+		{
+			final String proposal = "TIERBLEND(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "target,lowerexpr,threshold,upperexpr)", "Tiered blending pricing function. Computes the weighted average of lowerexpr and upperexpr based on the relative percentage of the value of target either side of threshold. If target less than or equal to thresold then only the lowerexpr is returned.", c.length()));
+			}
+		}
 
 		return list.toArray(new IContentProposal[list.size()]);
 

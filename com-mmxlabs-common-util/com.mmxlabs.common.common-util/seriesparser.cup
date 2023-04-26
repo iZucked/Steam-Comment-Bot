@@ -36,7 +36,7 @@ scan with {: return s.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
 terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, LBRACKET, RBRACKET, COMMA, COLON, PERCENT, QUESTION;
-terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, VOLUMETIERM3, VOLUMETIERMMBTU, TIER, BLEND;
+terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, TIER, TIERBLEND;
 terminal            SEMICOLON, EQUALS;
 terminal ComparisonOperators    LT, LTE, GT, GTE;
 
@@ -123,9 +123,7 @@ expr      ::= expr:lhs PLUS expr:rhs                      {: RESULT = new Operat
              | expr:lhs LBRACKET INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RBRACKET                {: RESULT =  new DatedAvgFunctionASTNode(lhs, n1, n2, n3, DatedAvgFunctionASTNode.InputMode.NOTATION_WITH_COMMA);       :}
              | expr:lhs LBRACKET INTEGER:a1 RBRACKET                                                  {: RESULT =  new DatedAvgFunctionASTNode(lhs, a1, DatedAvgFunctionASTNode.InputMode.NOTATION_WITHOUT_COMMA);       :}
              
-             | BLEND LPAREN expr:target COMMA expr:low COMMA NUMBER:n1 COMMA expr:high RPAREN      {: RESULT =  new BlendASTNode(target, low, n1, high);  :}
-             | VOLUMETIERM3 LPAREN expr:low COMMA LTOPS:op NUMBER:n1 COMMA expr:high RPAREN      {: RESULT =  new VolumeTierASTNode(true, low, op, n1, high);  :}
-             | VOLUMETIERMMBTU LPAREN expr:low COMMA LTOPS:op NUMBER:n1 COMMA expr:high RPAREN   {: RESULT =  new VolumeTierASTNode(false, low, op, n1, high); :}
+             | TIERBLEND LPAREN expr:target COMMA expr:low COMMA NUMBER:n1 COMMA expr:high RPAREN      {: RESULT =  new TierBlendASTNode(target, low, n1, high);  :}
 
              | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionASTNode(e1, e2, s); :}
              | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionASTNode(base, lower, higher, a1,b1,a2,b2,a3,b3); :}             

@@ -88,10 +88,8 @@ white_space = {new_line} | [ \t\f]
 "DATEDAVG"           { return symbol("datedavg",DATEDAVG); }
 "SPLITMONTH"           { return symbol("splitmonth", SPLITMONTH); }
 "S"           { return symbol("scurve", S); }
-"VOLUMETIERM3"           { return symbol("volumetierm3", VOLUMETIERM3); }
-"VOLUMETIERMMBTU"           { return symbol("volumetiermmbtu", VOLUMETIERMMBTU); }
 "TIER"           { return symbol("tier", TIER); }
-"BLEND"           { return symbol("blend", BLEND); }
+"TIERBLEND"           { return symbol("tierblend", TIERBLEND); }
  
  
  "JAN" { return symbol("jan",MONTH, Month.JANUARY); }

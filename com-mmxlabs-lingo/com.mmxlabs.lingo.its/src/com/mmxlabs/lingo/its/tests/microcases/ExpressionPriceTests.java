@@ -622,10 +622,10 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 	public static Iterable<Object[]> generateBlendPriceData() {
 		return Arrays.asList(new Object[][] { //
 
-				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 1_000_000, 10, YearMonth.of(2020, Month.JANUARY) }, //
-				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 1_500_000, 10, YearMonth.of(2020, Month.JANUARY) }, //
-				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 2_000_000, 12.5, YearMonth.of(2020, Month.JANUARY) }, //
-				{ LocalDate.of(2020, 1, 1), "BLEND(@VOLUME_MMBTU, TestLow, 1500000, TestHigh)", 3_000_000, 15, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh)", 1_000_000, 10, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh)", 1_500_000, 10, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh)", 2_000_000, 12.5, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh)", 3_000_000, 15, YearMonth.of(2020, Month.JANUARY) }, //
 
 		});
 	}

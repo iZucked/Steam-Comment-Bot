@@ -68,8 +68,8 @@ public class SeriesParserTest {
 				{ "s(20, 10.0, 20.0, 1.0, 2.0, 3.0,4.0,5.0,6.0)", 20.0 * 3.0 + 4.0 }, //
 				{ "s(21, 10.0, 20.0, 1.0, 2.0, 3.0,4.0,5.0,6.0)", 21.0 * 5.0 + 6.0 }, //
 				
-				{ "BLEND(50,1,50,2)", 1.0 }, // Expect lower bound
-				{ "BLEND(100,1,50,2)", 1.5 }, // Expect blended price
+				{ "TIERBLEND(50,1,50,2)", 1.0 }, // Expect lower bound
+				{ "TIERBLEND(100,1,50,2)", 1.5 }, // Expect blended price
 
 				
 		});
