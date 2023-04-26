@@ -16,6 +16,15 @@ public class GanttChartParameters {
 	private static final int STANDART_EVENT_SPACER_SIZE = 0;
 	private static final int STANDART_EVENT_HEIGHT = 18;
 
+	private static final int MINIMUM_SECTION_HEIGHT = 5;
+	private static final int SECTION_TEXT_SPACER_SIZE = 0;
+	private static final int SECTION_BAR_DIVIDER_HEIGHT = 1;
+	private static final int EVENTS_TOP_SPACER = 0;
+	private static final int EVENTS_BOTTOM_SPACER = 0;
+	private static final int SELECTION_LINE_WIDTH = 3;
+	private static final int HEADER_MONTH_HEIGHT = 22;
+	private static final int HEADER_DAY_HEIGHT = 22;
+
 	private GanttChartParameters() {
 		
 	}
@@ -34,6 +43,7 @@ public class GanttChartParameters {
 	
 	public static class Settings extends AbstractSettings {
 		
+
 		private Settings() {
 			
 		}
@@ -65,12 +75,12 @@ public class GanttChartParameters {
 
 		@Override
 		public int getSectionTextSpacer() {
-			return 0;
+			return SECTION_TEXT_SPACER_SIZE;
 		}
 
 		@Override
 		public int getMinimumSectionHeight() {
-			return 5;
+			return MINIMUM_SECTION_HEIGHT;
 		}
 
 		@Override
@@ -95,7 +105,7 @@ public class GanttChartParameters {
 
 		@Override
 		public int getSectionBarDividerHeight() {
-			return 1;
+			return SECTION_BAR_DIVIDER_HEIGHT;
 		}
 
 		@Override
@@ -120,12 +130,12 @@ public class GanttChartParameters {
 
 		@Override
 		public int getEventsTopSpacer() {
-			return 0;
+			return EVENTS_TOP_SPACER;
 		}
 
 		@Override
 		public int getEventsBottomSpacer() {
-			return 0;
+			return EVENTS_BOTTOM_SPACER;
 		}
 
 		@Override
@@ -145,7 +155,7 @@ public class GanttChartParameters {
 
 		@Override
 		public int getSelectionLineWidth() {
-			return 3;
+			return SELECTION_LINE_WIDTH;
 		}
 
 		@Override
@@ -155,12 +165,12 @@ public class GanttChartParameters {
 
 		@Override
 		public int getHeaderMonthHeight() {
-			return 22;
+			return HEADER_MONTH_HEIGHT;
 		}
 
 		@Override
 		public int getHeaderDayHeight() {
-			return 22;
+			return HEADER_DAY_HEIGHT;
 		}
 		
 		@Override
