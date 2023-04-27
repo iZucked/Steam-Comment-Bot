@@ -477,9 +477,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						final RouteOption routeOption = j.getRouteOption();
-						if (routeOption != RouteOption.DIRECT) {
-							return PortModelLabeller.getShortName(routeOption);
-						}
+						return PortModelLabeller.getShortName(routeOption);
 					}
 					return "";
 				}

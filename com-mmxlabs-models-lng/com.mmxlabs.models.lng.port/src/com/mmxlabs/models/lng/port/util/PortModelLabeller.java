@@ -73,11 +73,11 @@ public class PortModelLabeller {
 	public static String getShortName(final RouteOption routeOption) {
 		switch (routeOption) {
 		case DIRECT:
-			return "Dir";
+			return "";
 		case PANAMA:
-			return "Pan";
+			return "]P[";
 		case SUEZ:
-			return "Suez";
+			return "]S[";
 		}
 		throw new IllegalStateException();
 	}
