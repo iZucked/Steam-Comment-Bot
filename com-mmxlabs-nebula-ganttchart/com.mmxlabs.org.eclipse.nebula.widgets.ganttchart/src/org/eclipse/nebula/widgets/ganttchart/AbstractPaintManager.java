@@ -606,8 +606,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		 * Change font size to desired
 		 */
 		final Font f = 
-//				new Font(Display.getDefault(), new FontData(gc.getFont().getFontData()[0].getName(), GanttChartParameters.STANDART_EVENT_LABEL_FONT_HEIGHT, SWT.NORMAL));
-				new Font(Display.getDefault(), new FontData("Comic Sans Serrif", GanttChartParameters.STANDART_EVENT_LABEL_FONT_HEIGHT, SWT.NORMAL));
+				new Font(Display.getDefault(), new FontData("Comic Sans Serrif", GanttChartParameters.getStandartEventLabelFontHeight(), SWT.NORMAL));
 		gc.setFont(f);
 		event.setTextFont(f);
 		

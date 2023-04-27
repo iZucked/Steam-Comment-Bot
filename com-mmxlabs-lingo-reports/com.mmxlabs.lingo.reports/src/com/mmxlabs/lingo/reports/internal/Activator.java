@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.lingo.reports.internal;
 
+import javax.swing.event.DocumentEvent.EventType;
+
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -13,6 +15,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.nebula.widgets.ganttchart.EventLabelFontSize;
+import org.eclipse.nebula.widgets.ganttchart.GanttChartParameters;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.widgets.Display;
@@ -189,6 +193,8 @@ public final class Activator extends EMFPlugin {
 					}
 				} else if (PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT.equals(property)) {
 					updateNumDaysFormat(getPreferenceStore().getString(property));
+				} else if (PreferenceConstants.P_SCHEDULE_CHART_EVENT_LABEL_FONT_SIZE.equals(property)) {
+					updateEventLabelFontSize(getPreferenceStore().getString(property));
 				}
 			};
 			getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
@@ -206,7 +212,19 @@ public final class Activator extends EMFPlugin {
 			final Formatters.DurationMode mode = value == IPreferenceStore.STRING_DEFAULT_DEFAULT || value.isBlank() ? null : Formatters.DurationMode.valueOf(value);
 			ScheduleChartFormatters.setDurationMode(mode);
 		}
-
+		
+		private void updateEventLabelFontSize(final String value) {
+			EventLabelFontSize fontSize = EventLabelFontSize.MEDIUM;
+			switch (value) {
+			case "SMALL":
+				fontSize = EventLabelFontSize.SMALL;
+				break;
+			case "LARGE":
+				fontSize = EventLabelFontSize.LARGE;
+			}
+			GanttChartParameters.updateFontSize(fontSize);
+		}
+		
 		/**
 		 * Returns an image descriptor for the image file at the given plug-in relative path
 		 * 

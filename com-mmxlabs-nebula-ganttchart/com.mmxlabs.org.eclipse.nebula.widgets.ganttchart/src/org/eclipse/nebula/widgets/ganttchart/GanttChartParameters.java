@@ -1,5 +1,7 @@
 package org.eclipse.nebula.widgets.ganttchart;
 
+import org.eclipse.core.internal.preferences.EclipsePreferences;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
@@ -9,27 +11,17 @@ import org.eclipse.swt.graphics.Color;
  * @author Andrey Popov
  *
  */
- // TODO: Make geometry values dependent on User preferences
 public class GanttChartParameters {
-
-	/*
-	 * Preferably should be a number that is divisible by 4
-	 */
-	private static final int STANDART_EVENT_LABEL_FONT_HEIGHT_PIXELS = 16;
 	
-	/**
-	 * Size of the event label height in points
-	 */
-	public static final int STANDART_EVENT_LABEL_FONT_HEIGHT = 3 * STANDART_EVENT_LABEL_FONT_HEIGHT_PIXELS / 4;
-
-	private static final int STANDART_EVENT_SPACER_SIZE = 0;
-
-	private static final int STANDART_EVENT_V_PADDING = Math.max(8, STANDART_EVENT_LABEL_FONT_HEIGHT_PIXELS / 4);
-	private static final int STANDART_EVENT_HEIGHT = STANDART_EVENT_LABEL_FONT_HEIGHT_PIXELS + 2 * STANDART_EVENT_V_PADDING;
-
+	public static void updateFontSize(EventLabelFontSize size) {
+		fontSize = size;
+	}
+	
+	private static EventLabelFontSize fontSize = EventLabelFontSize.MEDIUM;
+	
 	private static final int STANDART_FIXED_ROW_V_PADDING = 8;
-	private static final int STANDART_FIXED_ROW_HEIGHT = STANDART_EVENT_HEIGHT + 2 * STANDART_FIXED_ROW_V_PADDING;
-
+	
+	private static final int STANDART_EVENT_SPACER_SIZE = 0;
 	private static final int MINIMUM_SECTION_HEIGHT = 5;
 	private static final int SECTION_TEXT_SPACER_SIZE = 0;
 	private static final int SECTION_BAR_DIVIDER_HEIGHT = 1;
@@ -43,8 +35,23 @@ public class GanttChartParameters {
 		
 	}
 	
+	/**
+	 * Size of the event label height in points
+	 */
+	public static int getStandartEventLabelFontHeight() {
+		return 3 * fontSize.getFontHeightInPixels() / 4;
+	}
+	
+	private static int getStandartEventVerticalPadding() {
+		return Math.max(8, fontSize.getFontHeightInPixels() / 4);
+	}
+	
+	private static int getStandartEventHeight() {
+		return fontSize.getFontHeightInPixels() + 2 * getStandartEventVerticalPadding();
+	}
+	
 	public static int getRowHeight() {
-		return STANDART_FIXED_ROW_HEIGHT;
+		return getStandartEventHeight() + 2 * STANDART_FIXED_ROW_V_PADDING;
 	}
 	
 	public static int getEventSpacerSize() {
@@ -189,7 +196,7 @@ public class GanttChartParameters {
 		
 		@Override
 		public int getEventHeight() {
-			return STANDART_EVENT_HEIGHT;
+			return getStandartEventHeight();
 		}
 	}
 }
