@@ -475,8 +475,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				@Override
 				public @NonNull String generateText(final @NonNull GanttEvent event) {
 					final Object object = event.getData();
-					if (object instanceof Journey j) {
-						final RouteOption routeOption = j.getRouteOption();
+					if (object instanceof final Journey journey) {
+						final RouteOption routeOption = journey.getRouteOption();
 						return PortModelLabeller.getShortName(routeOption);
 					}
 					return "";

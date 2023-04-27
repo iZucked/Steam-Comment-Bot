@@ -596,14 +596,21 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			oldFont = gc.getFont();
 			final FontData[] old = oldFont.getFontData();
 			old[0].setStyle(SWT.BOLD);
+			
 			final Font f = new Font(Display.getDefault(), old);
 			gc.setFont(f);
 			f.dispose();
 		}
-
-		if (event.getTextFont() != null) {
-			gc.setFont(event.getTextFont());
-		}
+		
+		/*
+		 * Change font size to desired
+		 */
+		final Font f = 
+//				new Font(Display.getDefault(), new FontData(gc.getFont().getFontData()[0].getName(), GanttChartParameters.STANDART_EVENT_LABEL_FONT_HEIGHT, SWT.NORMAL));
+				new Font(Display.getDefault(), new FontData("Comic Sans Serrif", GanttChartParameters.STANDART_EVENT_LABEL_FONT_HEIGHT, SWT.NORMAL));
+		gc.setFont(f);
+		event.setTextFont(f);
+		
 
 		final int textSpacer = composite.isConnected(event) ? settings.getTextSpacerConnected() : settings.getTextSpacerNonConnected();
 
@@ -612,7 +619,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				break;
 			}
 		}
-
+		f.dispose();
 		gc.setFont(oldFont);
 	}
 
