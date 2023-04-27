@@ -127,7 +127,10 @@ expr      ::= expr:lhs PLUS expr:rhs                      {: RESULT = new Operat
 
              | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionASTNode(e1, e2, s); :}
              | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionASTNode(base, lower, higher, a1,b1,a2,b2,a3,b3); :}             
-             
+/* new style */
+             | TIER LPAREN expr:target COMMA expr:lowValue COMMA LTOPS:lowOp NUMBER:low COMMA expr:highValue RPAREN                                                   {: RESULT =  new Tier2FunctionASTNode(target, lowOp, low, lowValue, highValue); :}             
+             | TIER LPAREN expr:target COMMA expr:lowValue COMMA LTOPS:lowOp NUMBER:low COMMA expr:midValue COMMA LTOPS:midOp NUMBER:mid COMMA expr:highValue RPAREN  {: RESULT =  new Tier3FunctionASTNode(target, lowOp, low, lowValue, midOp, mid, midValue, highValue); :}
+/* Old style */                          
              | TIER LPAREN expr:target COMMA LTOPS:lowOp NUMBER:low COMMA expr:lowValue COMMA expr:highValue RPAREN                                                   {: RESULT =  new Tier2FunctionASTNode(target, lowOp, low, lowValue, highValue); :}             
              | TIER LPAREN expr:target COMMA LTOPS:lowOp NUMBER:low COMMA expr:lowValue COMMA LTOPS:midOp NUMBER:mid COMMA expr:midValue COMMA expr:highValue RPAREN  {: RESULT =  new Tier3FunctionASTNode(target, lowOp, low, lowValue, midOp, mid, midValue, highValue); :}             
              

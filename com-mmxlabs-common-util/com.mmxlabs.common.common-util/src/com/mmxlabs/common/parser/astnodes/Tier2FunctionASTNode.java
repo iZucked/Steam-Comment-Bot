@@ -53,7 +53,7 @@ public class Tier2FunctionASTNode implements ASTNode {
 
 	@Override
 	public @NonNull String asString() {
-		return String.format("TIER(%s, %s %s,  %s, %s)", target.asString(), lowOp.asString(), low, lowValue.asString(), highValue.asString());
+		return String.format("TIER(%s, %s, %s %s, %s)", target.asString(), lowValue.asString(), lowOp.asString(), low, highValue.asString());
 	}
 
 	@Override

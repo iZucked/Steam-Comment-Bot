@@ -543,6 +543,11 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 		return Arrays.asList(new Object[][] { //
 
 				// Window/Pricing date, expression, expected value, exposure month
+				{ LocalDate.of(2020, 1, 1), "Tier(1,TestLow, <2, TestMid, <= 13, TestHigh)", 10, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "Tier(2,TestLow, <2, TestMid, <= 13, TestHigh)", 20, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "Tier(13,TestLow, <2, TestMid, <= 13, TestHigh)", 20, YearMonth.of(2020, Month.JANUARY) }, //
+				{ LocalDate.of(2020, 1, 1), "Tier(14,TestLow, <2, TestMid, <= 13, TestHigh)", 30, YearMonth.of(2020, Month.JANUARY) }, //
+				// Old style
 				{ LocalDate.of(2020, 1, 1), "Tier(1, <2, TestLow, <= 13, TestMid, TestHigh)", 10, YearMonth.of(2020, Month.JANUARY) }, //
 				{ LocalDate.of(2020, 1, 1), "Tier(2, <2, TestLow, <= 13, TestMid, TestHigh)", 20, YearMonth.of(2020, Month.JANUARY) }, //
 				{ LocalDate.of(2020, 1, 1), "Tier(13, <2, TestLow, <= 13, TestMid, TestHigh)", 20, YearMonth.of(2020, Month.JANUARY) }, //
