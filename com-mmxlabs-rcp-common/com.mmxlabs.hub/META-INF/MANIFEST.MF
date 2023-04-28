@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
 Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
-Bundle-Version: 6.4.5.qualifier
+Bundle-Version: 6.4.5.RELEASE
 Bundle-ClassPath: .,
  lib/json-20140107.jar
 Bundle-Activator: com.mmxlabs.hub.DataHubActivator
