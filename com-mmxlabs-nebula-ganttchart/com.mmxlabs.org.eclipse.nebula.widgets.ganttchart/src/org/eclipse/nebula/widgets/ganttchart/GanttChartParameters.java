@@ -17,7 +17,8 @@ public class GanttChartParameters {
 		fontSize = size;
 	}
 	
-	private static EventLabelFontSize fontSize = EventLabelFontSize.MEDIUM;
+	private static final EventLabelFontSize initialFontSize = EventLabelFontSize.MEDIUM;
+	private static EventLabelFontSize fontSize = initialFontSize;
 	
 	private static final int STANDART_FIXED_ROW_V_PADDING = 8;
 	
@@ -60,6 +61,10 @@ public class GanttChartParameters {
 	
 	public static ISettings getSettings() {
 		return new Settings();
+	}
+
+	public static int preferenceDependentEventYDrawPosCorrection() {
+		return (initialFontSize.getFontHeightInPixels() - fontSize.getFontHeightInPixels()) / 2;
 	}
 	
 	public static class Settings extends AbstractSettings {

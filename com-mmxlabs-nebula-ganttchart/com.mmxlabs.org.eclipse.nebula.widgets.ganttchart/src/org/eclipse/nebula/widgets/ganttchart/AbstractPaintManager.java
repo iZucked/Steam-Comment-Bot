@@ -40,6 +40,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		final boolean alpha = colorManager.useAlphaDrawing();
 
 		int xLoc = xStart;
+		//
+		// Some calls to draw methods still use y, not yLoc! TODO
+		int yLoc = y + GanttChartParameters.preferenceDependentEventYDrawPosCorrection();
 
 		// draw the border
 		Color cEventBorder = event.getStatusBorderColor();
@@ -156,7 +159,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 					gc.setLineWidth(event.getStatusBorderWidth());
 					/* It used to be `event.getBounds().height` instead of `settings.getEventHeight`,
 					 *  but it did not work on preference change, so maybe will lead to problems */
-					gc.drawRectangle(xLoc, y, eventWidth + event.getStatusBorderWidth() - 1, settings.getEventHeight() + event.getStatusBorderWidth() - 1);
+					gc.drawRectangle(xLoc, yLoc, eventWidth + event.getStatusBorderWidth() - 1, settings.getEventHeight() + event.getStatusBorderWidth() - 1);
 					if (alpha) {
 						gc.setAlpha(oldAlpha);
 					}
@@ -188,10 +191,10 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		if (eventWidth > 1) {
 			if (settings.showGradientEventBars()) {
 				gc.setForeground(gradient);
-				gc.fillGradientRectangle(xLoc, y, eventWidth, settings.getEventHeight(), true);
+				gc.fillGradientRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight(), true);
 				gc.setForeground(colorManager.getEventBorderColor()); // re-set foreground color
 			} else {
-				gc.fillRectangle(xLoc, y, eventWidth, settings.getEventHeight());
+				gc.fillRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight());
 			}
 		}
 		// Reset alpha
