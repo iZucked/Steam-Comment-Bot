@@ -154,7 +154,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 						gc.setAlpha(cEventAlpha);
 					}
 					gc.setLineWidth(event.getStatusBorderWidth());
-					gc.drawRectangle(xLoc, y, eventWidth + event.getStatusBorderWidth() - 1, event.getBounds().height + event.getStatusBorderWidth() - 1);
+					/* It used to be `event.getBounds().height` instead of `settings.getEventHeight`,
+					 *  but it did not work on preference change, so maybe will lead to problems */
+					gc.drawRectangle(xLoc, y, eventWidth + event.getStatusBorderWidth() - 1, settings.getEventHeight() + event.getStatusBorderWidth() - 1);
 					if (alpha) {
 						gc.setAlpha(oldAlpha);
 					}
