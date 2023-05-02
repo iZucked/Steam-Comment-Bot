@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.platform.feature"
       label="LiNGO Eclipse Platform Feature"
-      version="6.4.6.qualifier"
+      version="6.5.1.RELEASE"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
