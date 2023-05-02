@@ -67,7 +67,7 @@ JPX,Culture Day observed,2024-11-04
 JPX,Labor Thanksgiving Day,2024-11-23
 JPX,Market Holiday,2024-12-31
 LSE,London Stock Exchangee market holidays,
-LSE,New Year day,2019-01-01
+LSE,New Year's Day,2019-01-01
 LSE,Good Friday,2019-04-19
 LSE,Easter Monday,2019-04-22
 LSE,Early May Bank Holiday,2019-05-06
@@ -75,7 +75,7 @@ LSE,Late May Bank Holiday,2019-05-27
 LSE,Summer Bank Holiday,2019-08-26
 LSE,Christmas,2019-12-25
 LSE,Boxing Day,2019-12-26
-LSE,New Year day,2020-01-01
+LSE,New Year's Day,2020-01-01
 LSE,Good Friday,2020-04-10
 LSE,Easter Monday,2020-04-13
 LSE,Early May Bank Holiday,2020-05-08
@@ -83,7 +83,7 @@ LSE,Late May Bank Holiday,2020-05-25
 LSE,Summer Bank Holiday,2020-08-31
 LSE,Christmas,2020-12-25
 LSE,Boxing Day,2020-12-28
-LSE,New Year day,2021-01-01
+LSE,New Year's Day,2021-01-01
 LSE,Good Friday,2021-04-02
 LSE,Easter Monday,2021-04-05
 LSE,Early May Bank Holiday,2021-05-03
@@ -103,7 +103,7 @@ LSE,Boxing Day,2023-12-26
 LSE,New Year's Eve,2023-12-31
 LSE,New Year Day,2024-01-01
 NYSE,NYSE and NASDAQ holidays,
-NYSE,New Year day,2019-01-01
+NYSE,New Year's Day,2019-01-01
 NYSE,Martin Luther King Jr Day,2019-01-21
 NYSE,Washington Birthday,2019-02-18
 NYSE,Good Friday,2019-04-19
@@ -112,7 +112,7 @@ NYSE,Independece Day,2019-07-04
 NYSE,Labor Day,2019-09-02
 NYSE,Thanksgiving Day,2019-11-28
 NYSE,Christmas Day,2019-12-25
-NYSE,New Year day,2020-01-01
+NYSE,New Year's Day,2020-01-01
 NYSE,Martin Luther King Jr Day,2020-01-20
 NYSE,Washington Birthday,2020-02-17
 NYSE,Good Friday,2020-04-10
@@ -121,7 +121,7 @@ NYSE,Independece Day,2020-07-03
 NYSE,Labor Day,2020-09-07
 NYSE,Thanksgiving Day,2020-11-26
 NYSE,Christmas Day,2020-12-25
-NYSE,New Year day,2021-01-01
+NYSE,New Year's Day,2021-01-01
 NYSE,Martin Luther King Jr Day,2021-01-18
 NYSE,Washington Birthday,2021-02-15
 NYSE,Good Friday,2021-04-02
