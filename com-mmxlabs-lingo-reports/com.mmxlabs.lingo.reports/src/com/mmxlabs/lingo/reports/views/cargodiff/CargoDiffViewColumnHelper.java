@@ -17,6 +17,8 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper;
 import com.mmxlabs.lingo.reports.views.changeset.InsertionPlanGrouperAndFilter;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
@@ -29,6 +31,14 @@ public class CargoDiffViewColumnHelper extends ChangeSetViewColumnHelper {
 
 	@Override
 	protected void createNominationBreaksColumn() {
+	}
+
+	@Override
+	public void collectExposures(ChangeSetTableRow row, ChangeSetTableGroup group) {
+	}
+
+	@Override
+	public void updateExposuresColumns() {
 	}
 
 	@Override
