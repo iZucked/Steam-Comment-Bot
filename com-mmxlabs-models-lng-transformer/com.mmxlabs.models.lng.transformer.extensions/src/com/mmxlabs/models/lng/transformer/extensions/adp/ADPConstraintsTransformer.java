@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
+import com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -143,8 +144,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			}
 
 			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
-				if (profileConstraint instanceof MinCargoConstraint) {
-					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
+				if (profileConstraint instanceof MinCargoConstraint minCargoConstraint) {
 					switch (minCargoConstraint.getIntervalType()) {
 					case MONTHLY:
 						maxSlotConstraintEditor.addMinLoadSlotsPerMonth(contractProfile, profileConstraint, oSlots, startMonth, minCargoConstraint.getMinCargoes());
@@ -161,8 +161,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					default:
 						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + minCargoConstraint.getIntervalType());
 					}
-				} else if (profileConstraint instanceof MaxCargoConstraint) {
-					final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) profileConstraint;
+				} else if (profileConstraint instanceof MaxCargoConstraint maxCargoConstraint) {
 					switch (maxCargoConstraint.getIntervalType()) {
 					case MONTHLY:
 						maxSlotConstraintEditor.addMaxLoadSlotsPerMonth(contractProfile, profileConstraint, oSlots, startMonth, maxCargoConstraint.getMaxCargoes());
@@ -179,8 +178,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					default:
 						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + maxCargoConstraint.getIntervalType());
 					}
-				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint) {
-					PeriodDistributionProfileConstraint periodDistributionProfileConstraint = (PeriodDistributionProfileConstraint) profileConstraint;
+				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint periodDistributionProfileConstraint) {
 					MonthlyDistributionConstraint monthlyDistributionConstraint = new MonthlyDistributionConstraint();
 					for (PeriodDistribution periodDistribution : periodDistributionProfileConstraint.getDistributions()) {
 						List<Integer> months = periodDistribution.getRange().stream().map(m -> calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(m)))
@@ -191,6 +189,8 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 						}
 					}
 					maxSlotConstraintEditor.addMinMaxLoadSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, oSlots, monthlyDistributionConstraint);
+				} else if (profileConstraint instanceof VesselUsageDistributionProfileConstraint vesselUsageDistributionConstraint) {
+					
 				} else {
 					// Not handled here.
 				}
@@ -238,8 +238,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			}
 
 			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
-				if (profileConstraint instanceof MinCargoConstraint) {
-					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
+				if (profileConstraint instanceof MinCargoConstraint minCargoConstraint) {
 					switch (minCargoConstraint.getIntervalType()) {
 					case MONTHLY:
 						maxSlotConstraintEditor.addMinDischargeSlotsPerMonth(contractProfile, profileConstraint, oSlots, startMonth, minCargoConstraint.getMinCargoes());
@@ -256,8 +255,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					default:
 						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + minCargoConstraint.getIntervalType());
 					}
-				} else if (profileConstraint instanceof MaxCargoConstraint) {
-					final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) profileConstraint;
+				} else if (profileConstraint instanceof MaxCargoConstraint maxCargoConstraint) {
 					switch (maxCargoConstraint.getIntervalType()) {
 					case MONTHLY:
 						maxSlotConstraintEditor.addMaxDischargeSlotsPerMonth(contractProfile, profileConstraint, oSlots, startMonth, maxCargoConstraint.getMaxCargoes());
@@ -274,8 +272,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					default:
 						throw new IllegalStateException(UNSUPPORTED_INTERVAL_TYPE + maxCargoConstraint.getIntervalType());
 					}
-				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint) {
-					PeriodDistributionProfileConstraint periodDistributionProfileConstraint = (PeriodDistributionProfileConstraint) profileConstraint;
+				} else if (profileConstraint instanceof PeriodDistributionProfileConstraint periodDistributionProfileConstraint) {
 					MonthlyDistributionConstraint monthlyDistributionConstraint = new MonthlyDistributionConstraint();
 					for (PeriodDistribution periodDistribution : periodDistributionProfileConstraint.getDistributions()) {
 						List<Integer> months = periodDistribution.getRange().stream().map(m -> calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(m)))
@@ -287,6 +284,8 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					}
 
 					maxSlotConstraintEditor.addMinMaxDischargeSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, oSlots, monthlyDistributionConstraint);
+				} else if (profileConstraint instanceof VesselUsageDistributionProfileConstraint vesselUsageDistributionConstraint){
+					
 				} else {
 					// Not handled here.
 				}

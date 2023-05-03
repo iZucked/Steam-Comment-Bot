@@ -151,7 +151,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 				final IDisplayCompositeFactory displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(constraint.eClass());
 				final IDisplayComposite delegate1 = displayCompositeFactory.createSublevelComposite(g2, constraint.eClass(), dialogContext, toolkit);
-				delegate1.getComposite().setLayoutData(GridDataFactory.fillDefaults().create());
+				//delegate1.getComposite().setLayoutData(GridDataFactory.fillDefaults().create());
 				delegate1.setCommandHandler(commandHandler);
 				delegate1.display(dialogContext, root, constraint, range, dbc);
 				{

@@ -198,6 +198,19 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCargoes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselUsageDistributionProfileConstraint"
+      eSuperTypes="#//ProfileConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distributions" upperBound="-1"
+        eType="#//VesselUsageDistribution" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselUsageDistribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="LNGVolumeUnit">
     <eLiterals name="M3" literal="m3"/>
     <eLiterals name="MT" value="1" literal="MT"/>

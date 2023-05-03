@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.adp.ext.impl.PreDefinedSlotFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.PreDefinedSlotGenerator;
 import com.mmxlabs.models.lng.adp.ext.impl.TargetCargoOnVesselProfileConstraintFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.VesselRestrictionFactory;
+import com.mmxlabs.models.lng.adp.ext.impl.VesselUsageDistributionProfileConstraintFactory;
 
 public class ADPActivatorModule extends PeaberryActivationModule {
 
@@ -39,6 +40,7 @@ public class ADPActivatorModule extends PeaberryActivationModule {
 //		bindService(MinCargoProfileConstraintFactory.class).export();
 //		bindService(MaxCargoProfileConstraintFactory.class).export();
 		bindService(PeriodDistributionProfileConstraintFactory.class).export();
+		bindService(VesselUsageDistributionProfileConstraintFactory.class).export();
 
 		// Sub Profile Constraints
 		bindService(VesselRestrictionFactory.class).export();
