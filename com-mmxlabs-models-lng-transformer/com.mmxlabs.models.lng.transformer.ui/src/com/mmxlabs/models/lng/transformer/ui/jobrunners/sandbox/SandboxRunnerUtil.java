@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
@@ -154,7 +153,8 @@ public class SandboxRunnerUtil {
 			// specification may have extra spot slot instances not used in the schedule
 			// models.
 			addExtraData(sandboxResult.getBaseOption(), sandboxResult);
-			for (final SolutionOption opt : sandboxResult.getOptions()) {
+
+			final Consumer<SolutionOption> sandboxRefAction = opt -> {
 				addExtraData(opt, sandboxResult);
 
 				final ScheduleModel scheduleModel = opt.getScheduleModel();
@@ -208,7 +208,10 @@ public class SandboxRunnerUtil {
 						}
 					}
 				});
-			}
+			};
+
+			sandboxRefAction.accept(sandboxResult.getBaseOption());
+			sandboxResult.getOptions().forEach(sandboxRefAction);
 
 			if (dualPNLMode) {
 				SolutionSetExporterUnit.convertToSimpleResult(sandboxResult, dualPNLMode);

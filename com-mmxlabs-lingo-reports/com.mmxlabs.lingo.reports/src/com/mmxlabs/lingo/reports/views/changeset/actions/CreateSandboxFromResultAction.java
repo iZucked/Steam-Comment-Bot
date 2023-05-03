@@ -26,8 +26,10 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
@@ -37,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -86,8 +89,8 @@ public class CreateSandboxFromResultAction extends Action {
 			newModel.setName("Sandbox from solution");
 		}
 
-//		final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
-//		final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
+		// final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
+		// final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
 		final Map<BuyOption, BuyOption> sandboxBuyOptions = new HashMap<>();
 		final Map<SellOption, SellOption> sandboxSellOptions = new HashMap<>();
 		final Map<VesselEventOption, VesselEventOption> sandboxEventOptions = new HashMap<>();
@@ -128,7 +131,7 @@ public class CreateSandboxFromResultAction extends Action {
 				return op;
 			} else {
 				if (s instanceof SpotSlot spotSlot) {
-//					return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+					// return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
 					final SpotMarket mkt = spotSlot.getMarket();
 					final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
 					m.setMarket(mkt);
@@ -136,7 +139,7 @@ public class CreateSandboxFromResultAction extends Action {
 					newModel.getBuys().add(m);
 
 					return m;
-//					});
+					// });
 				} else {
 					final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
 					ref.setSlot(s);
@@ -152,7 +155,7 @@ public class CreateSandboxFromResultAction extends Action {
 				return op;
 			} else {
 				if (s instanceof SpotSlot spotSlot) {
-//					return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+					// return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
 					final SpotMarket mkt = spotSlot.getMarket();
 					final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
 					m.setMarket(mkt);
@@ -160,7 +163,7 @@ public class CreateSandboxFromResultAction extends Action {
 					newModel.getSells().add(m);
 
 					return m;
-//					});
+					// });
 				} else {
 					final SellReference ref = AnalyticsFactory.eINSTANCE.createSellReference();
 					ref.setSlot(s);
@@ -238,7 +241,7 @@ public class CreateSandboxFromResultAction extends Action {
 
 							boolean foundSandbox = false;
 							for (var ext : loadAllocation.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOption opt) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
 									bRow.setBuyOption(sandboxBuyGetter.apply(opt));
 									foundSandbox = true;
 									break;
@@ -248,11 +251,32 @@ public class CreateSandboxFromResultAction extends Action {
 								bRow.setBuyOption(buyGetter.apply(slot));
 							}
 						}
+
+						var osa = lhsData.getOpenLoadAllocation();
+						if (osa != null) {
+							boolean foundSandbox = false;
+							for (var ext : osa.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
+									bRow.setBuyOption(sandboxBuyGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+							if (!foundSandbox) {
+								final LoadSlot slot = (LoadSlot) osa.getSlot();
+								// TODO: Not sure why we have a null check here, it may be a bug
+								// as this will avoid creating an OpenBuy
+								if (slot != null) {
+									bRow.setBuyOption(buyGetter.apply(slot));
+								}
+							}
+						}
+
 						final Event evt = lhsData.getLhsEvent();
 						if (evt instanceof VesselEventVisit vesselEventVisit) {
 							boolean foundSandbox = false;
 							for (var ext : vesselEventVisit.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof VesselEventOption opt) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof CharterOutOpportunity opt) {
 									bRow.setVesselEventOption(sandboxEventGetter.apply(opt));
 									foundSandbox = true;
 									break;
@@ -279,13 +303,30 @@ public class CreateSandboxFromResultAction extends Action {
 						final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
 						boolean foundSandbox = false;
 						for (var ext : dischargeAllocation.getExtensions()) {
-							if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOption opt) {
+							if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOpportunity opt) {
 								bRow.setSellOption(sandboxSellGetter.apply(opt));
 								foundSandbox = true;
 								break;
 							}
 						}
 						if (!foundSandbox) {
+							bRow.setSellOption(sellGetter.apply(slot));
+						}
+					}
+
+					var osa = rhsData.getOpenDischargeAllocation();
+					if (osa != null) {
+						boolean foundSandbox = false;
+						for (var ext : osa.getExtensions()) {
+							if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOpportunity opt) {
+								bRow.setSellOption(sandboxSellGetter.apply(opt));
+								foundSandbox = true;
+								break;
+							}
+						}
+
+						if (!foundSandbox) {
+							final DischargeSlot slot = (DischargeSlot) osa.getSlot();
 							bRow.setSellOption(sellGetter.apply(slot));
 						}
 					}
@@ -318,7 +359,7 @@ public class CreateSandboxFromResultAction extends Action {
 							boolean foundSandbox = false;
 
 							for (var ext : vesselEventVisit.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof VesselEventOption opt) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof CharterOutOpportunity opt) {
 									pRow.getVesselEventOptions().add(sandboxEventGetter.apply(opt));
 									foundSandbox = true;
 									break;
@@ -333,7 +374,7 @@ public class CreateSandboxFromResultAction extends Action {
 						if (loadAllocation != null) {
 							boolean foundSandbox = false;
 							for (var ext : loadAllocation.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOption opt) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
 									pRow.getBuyOptions().add(sandboxBuyGetter.apply(opt));
 									foundSandbox = true;
 									break;
@@ -341,6 +382,26 @@ public class CreateSandboxFromResultAction extends Action {
 							}
 							if (!foundSandbox) {
 								final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
+								// TODO: Not sure why we have a null check here, it may be a bug
+								// as this will avoid creating an OpenBuy
+								if (slot != null) {
+									pRow.getBuyOptions().add(buyGetter.apply(slot));
+								}
+							}
+						}
+
+						var osa = lhsData.getOpenLoadAllocation();
+						if (osa != null) {
+							boolean foundSandbox = false;
+							for (var ext : osa.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
+									pRow.getBuyOptions().add(sandboxBuyGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+							if (!foundSandbox) {
+								final LoadSlot slot = (LoadSlot) osa.getSlot();
 								// TODO: Not sure why we have a null check here, it may be a bug
 								// as this will avoid creating an OpenBuy
 								if (slot != null) {
@@ -358,7 +419,7 @@ public class CreateSandboxFromResultAction extends Action {
 							boolean foundSandbox = false;
 
 							for (var ext : dischargeAllocation.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOption opt) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOpportunity opt) {
 									pRow.getSellOptions().add(sandboxSellGetter.apply(opt));
 									foundSandbox = true;
 									break;
@@ -367,6 +428,23 @@ public class CreateSandboxFromResultAction extends Action {
 
 							if (!foundSandbox) {
 								final DischargeSlot slot = (DischargeSlot) dischargeAllocation.getSlot();
+								pRow.getSellOptions().add(sellGetter.apply(slot));
+							}
+						}
+
+						var osa = rhsData.getOpenDischargeAllocation();
+						if (osa != null) {
+							boolean foundSandbox = false;
+							for (var ext : osa.getExtensions()) {
+								if (ext instanceof SandboxReference ref && ref.getReference() instanceof SellOpportunity opt) {
+									pRow.getSellOptions().add(sandboxSellGetter.apply(opt));
+									foundSandbox = true;
+									break;
+								}
+							}
+
+							if (!foundSandbox) {
+								final DischargeSlot slot = (DischargeSlot) osa.getSlot();
 								pRow.getSellOptions().add(sellGetter.apply(slot));
 							}
 						}

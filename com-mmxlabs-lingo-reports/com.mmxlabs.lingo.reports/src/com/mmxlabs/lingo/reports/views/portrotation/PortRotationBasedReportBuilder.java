@@ -88,83 +88,89 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 
 			Stream.of(Fuel.NBO, Fuel.FBO).forEach(fuelName -> {
 
-				ColumnHandler h1 = blockManager.createColumn(block, fuelName.toString(), new VariableNumberOfDPFormatter() {
+				ColumnHandler h1 = blockManager.createColumn(block, fuelName.toString()) //
+						.withCellRenderer(new VariableNumberOfDPFormatter() {
 
-					public String getFormatString(Object object) {
-						if (object instanceof FuelUsage) {
-							final FuelUsage mix = (FuelUsage) object;
-							for (final FuelQuantity q : mix.getFuels()) {
-								if (q.getFuel().equals(fuelName)) {
-									final FuelUnit unit = fuelQuanityUnits.get(fuelName);
-									if (unit == FuelUnit.MT) {
-										return "%.3G";
-									}
-								}
-							}
-						}
-						return "%.0f";
-					}
-
-					@Override
-					public Double getDoubleValue(final Object object) {
-						if (object instanceof FuelUsage) {
-							final FuelUsage mix = (FuelUsage) object;
-							for (final FuelQuantity q : mix.getFuels()) {
-								if (q.getFuel().equals(fuelName)) {
-									final FuelUnit unit = fuelQuanityUnits.get(fuelName);
-									for (final FuelAmount fa : q.getAmounts()) {
-										if (fa.getUnit() == unit) {
-											return fa.getQuantity();
+							public String getFormatString(Object object) {
+								if (object instanceof FuelUsage) {
+									final FuelUsage mix = (FuelUsage) object;
+									for (final FuelQuantity q : mix.getFuels()) {
+										if (q.getFuel().equals(fuelName)) {
+											final FuelUnit unit = fuelQuanityUnits.get(fuelName);
+											if (unit == FuelUnit.MT) {
+												return "%.3G";
+											}
 										}
 									}
 								}
+								return "%.0f";
 							}
 
-							return null;
-						} else {
-							return null;
-						}
-					}
-				});
-				h1.setTooltip("In " + fuelQuanityUnits.get(fuelName));
+							@Override
+							public Double getDoubleValue(final Object object) {
+								if (object instanceof FuelUsage) {
+									final FuelUsage mix = (FuelUsage) object;
+									for (final FuelQuantity q : mix.getFuels()) {
+										if (q.getFuel().equals(fuelName)) {
+											final FuelUnit unit = fuelQuanityUnits.get(fuelName);
+											for (final FuelAmount fa : q.getAmounts()) {
+												if (fa.getUnit() == unit) {
+													return fa.getQuantity();
+												}
+											}
+										}
+									}
+
+									return null;
+								} else {
+									return null;
+								}
+							}
+						}) //
+						.withTooltip("In " + fuelQuanityUnits.get(fuelName)) //
+						.build();
 				handlers.add(h1);
 
-				ColumnHandler h2 = blockManager.createColumn(block, fuelName + " Unit Price", new NumberOfDPFormatter(2) {
-					@Override
-					public Double getDoubleValue(final Object object) {
-						if (object instanceof FuelUsage) {
-							final FuelUsage mix = (FuelUsage) object;
-							for (final FuelQuantity q : mix.getFuels()) {
-								if (q.getFuel() == fuelName) {
-									final FuelUnit unit = fuelUnitPriceUnits.get(fuelName);
-									for (final FuelAmount fa : q.getAmounts()) {
-										if (fa.getUnit() == unit) {
-											return fa.getUnitPrice();
+				ColumnHandler h2 = blockManager.createColumn(block, fuelName + " Unit Price") //
+						.withCellRenderer(new NumberOfDPFormatter(2) {
+							@Override
+							public Double getDoubleValue(final Object object) {
+								if (object instanceof FuelUsage mix) {
+									for (final FuelQuantity q : mix.getFuels()) {
+										if (q.getFuel() == fuelName) {
+											final FuelUnit unit = fuelUnitPriceUnits.get(fuelName);
+											for (final FuelAmount fa : q.getAmounts()) {
+												if (fa.getUnit() == unit) {
+													return fa.getUnitPrice();
+												}
+											}
 										}
 									}
 								}
+								return null;
 							}
-						}
-						return null;
-					}
-				});
-				h2.setTooltip("Price per " + fuelUnitPriceUnits.get(fuelName));
+						}) //
+						.withTooltip("Price per " + fuelUnitPriceUnits.get(fuelName)) //
+						.build();
 				handlers.add(h2);
-				ColumnHandler h3 = blockManager.createColumn(block, fuelName + " Cost", new NumberOfDPFormatter(0) {
-					@Override
-					public Double getDoubleValue(final Object object) {
-						if (object instanceof FuelUsage) {
-							for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
-								if (q.getFuel().equals(fuelName)) {
-									return q.getCost();
+
+				ColumnHandler h3 = blockManager.createColumn(block, fuelName + " Cost") //
+						.withCellRenderer(new NumberOfDPFormatter(0) {
+							@Override
+							public Double getDoubleValue(final Object object) {
+								if (object instanceof FuelUsage) {
+									for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
+										if (q.getFuel().equals(fuelName)) {
+											return q.getCost();
+										}
+									}
+									return null;
+								} else {
+									return null;
 								}
 							}
-							return null;
-						} else {
-							return null;
-						}
-					}
-				});
+						}) //
+						.build();
 				handlers.add(h3);
 			});
 		}
@@ -190,76 +196,83 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 		baseFuelNames.add(fuelName);
 
 		List<ColumnHandler> cols = new ArrayList<>(3);
-		ColumnHandler ch1 = blockManager.createColumn(block, fuelName,  new VariableNumberOfDPFormatter() {
+		ColumnHandler ch1 = blockManager.createColumn(block, fuelName) //
+				.withCellRenderer(new VariableNumberOfDPFormatter() {
 
-			public String getFormatString(Object object) {
-				return "%.3G";
-			}
-
-			@Override
-			public Double getDoubleValue(final Object object) {
-				if (object instanceof FuelUsage mix) {
-					double total = 0.0;
-					for (final FuelQuantity q : mix.getFuels()) {
-						BaseFuel baseFuel = q.getBaseFuel();
-						if (baseFuel != null && baseFuel.getName().equals(fuelName)) {
-							final FuelUnit unit = FuelUnit.MT;
-							for (final FuelAmount fa : q.getAmounts()) {
-								if (fa.getUnit() == unit) {
-									total += fa.getQuantity();
-								}
-							}
-						}
+					public String getFormatString(Object object) {
+						return "%.3G";
 					}
 
-					return total == 0 ? null : total;
-				} else {
-					return null;
-				}
-			}
-		});
+					@Override
+					public Double getDoubleValue(final Object object) {
+						if (object instanceof FuelUsage mix) {
+							double total = 0.0;
+							for (final FuelQuantity q : mix.getFuels()) {
+								BaseFuel baseFuel = q.getBaseFuel();
+								if (baseFuel != null && baseFuel.getName().equals(fuelName)) {
+									final FuelUnit unit = FuelUnit.MT;
+									for (final FuelAmount fa : q.getAmounts()) {
+										if (fa.getUnit() == unit) {
+											total += fa.getQuantity();
+										}
+									}
+								}
+							}
 
-		ch1.setTooltip("In MT");
+							return total == 0 ? null : total;
+						} else {
+							return null;
+						}
+					}
+				}) //
+				.withTooltip("In MT") //
+				.build();
+
 		cols.add(ch1);
 
-		ColumnHandler ch2 = blockManager.createColumn(block, fuelName + " Unit Price", new NumberOfDPFormatter(2) {
-			@Override
-			public Double getDoubleValue(final Object object) {
-				if (object instanceof FuelUsage mix) {
-					for (final FuelQuantity q : mix.getFuels()) {
-						BaseFuel f = q.getBaseFuel();
-						if (f != null && fuelName.equals(f.getName())) {
-							final FuelUnit unit = FuelUnit.MT;
-							for (final FuelAmount fa : q.getAmounts()) {
-								if (fa.getUnit() == unit) {
-									return fa.getUnitPrice();
+		ColumnHandler ch2 = blockManager.createColumn(block, fuelName + " Unit Price") //
+				.withCellRenderer(new NumberOfDPFormatter(2) {
+					@Override
+					public Double getDoubleValue(final Object object) {
+						if (object instanceof FuelUsage mix) {
+							for (final FuelQuantity q : mix.getFuels()) {
+								BaseFuel f = q.getBaseFuel();
+								if (f != null && fuelName.equals(f.getName())) {
+									final FuelUnit unit = FuelUnit.MT;
+									for (final FuelAmount fa : q.getAmounts()) {
+										if (fa.getUnit() == unit) {
+											return fa.getUnitPrice();
+										}
+									}
 								}
 							}
 						}
+						return null;
 					}
-				}
-				return null;
-			}
-		});
-		ch2.setTooltip("Price per MT");
+				}) //
+				.withTooltip("Price per MT") //
+				.build();
+
 		cols.add(ch2);
-		ColumnHandler ch3 = blockManager.createColumn(block, fuelName + " Cost", new IntegerFormatter() {
-			@Override
-			public Integer getIntValue(final Object object) {
-				if (object instanceof FuelUsage) {
-					int total = 0;
-					for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
-						BaseFuel baseFuel = q.getBaseFuel();
-						if (baseFuel != null && baseFuel.getName().equals(fuelName)) {
-							total += q.getCost();
+		ColumnHandler ch3 = blockManager.createColumn(block, fuelName + " Cost") //
+				.withCellRenderer(new IntegerFormatter() {
+					@Override
+					public Integer getIntValue(final Object object) {
+						if (object instanceof FuelUsage) {
+							int total = 0;
+							for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
+								BaseFuel baseFuel = q.getBaseFuel();
+								if (baseFuel != null && baseFuel.getName().equals(fuelName)) {
+									total += q.getCost();
+								}
+							}
+							return total == 0 ? null : total;
+						} else {
+							return null;
 						}
 					}
-					return total == 0 ? null : total;
-				} else {
-					return null;
-				}
-			}
-		});
+				}) //
+				.build();
 		cols.add(ch3);
 		return cols;
 	}

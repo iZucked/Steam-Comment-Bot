@@ -77,16 +77,16 @@ public class ExposureDataTransformer implements ISlotTransformer {
 				VolumeTierSlotParams p = SlotContractParamsHelper.findSlotContractParams(exposedSlot, VolumeTierSlotParams.class, VolumeTierPriceParameters.class);
 				if (p != null && p.isOverrideContract()) {
 					if (p.getVolumeLimitsUnit() == VolumeUnits.M3) {
-						priceExpression = String.format("VOLUMETIERM3(%s,<= %f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
+						priceExpression = String.format("TIERBLEND(@VOL_M3:0, %s, %f, %s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
 					} else {
-						priceExpression = String.format("VOLUMETIERMMBTU(%s,<= %f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
+						priceExpression = String.format("TIERBLEND(@VOL_MMBTU:0, %s, %f, %s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
 					}
 				} else {
 					if (vtContract.getVolumeLimitsUnit() == VolumeUnits.M3) {
-						priceExpression = String.format("VOLUMETIERM3(%s,<= %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
+						priceExpression = String.format("TIERBLEND(@VOL_M3:0, %s, %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
 								generateSafeExpression(vtContract.getHighExpression()));
 					} else {
-						priceExpression = String.format("VOLUMETIERMMBTU(%s,<= %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
+						priceExpression = String.format("TIERBLEND(@VOL_MMBTU:0, %s, %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
 								generateSafeExpression(vtContract.getHighExpression()));
 					}
 				}

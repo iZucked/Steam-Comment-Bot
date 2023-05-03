@@ -134,15 +134,23 @@ public class PartialCaseWiringDiagram implements PaintListener {
 			return;
 		}
 
-		final Rectangle ca = getCanvasClientArea();
-
+		final Rectangle cca = getCanvasClientArea();
 		// Could be null is column is no longer visible.
-		if (ca == null) {
+		if (cca == null) {
 			return;
 		}
 
 		if (table == null) {
 			return;
+		}
+
+		final Rectangle ca = new Rectangle(cca.x, cca.y, cca.width, cca.height);
+		if (grid.getHeaderVisible()) {
+			// We don't adjust y as terminal positions already take into account header height.
+			ca.height -= grid.getHeaderHeight();
+		}
+		if (grid.getFooterVisible()) {
+			ca.height -= grid.getFooterHeight();
 		}
 
 		// Copy ref in case of concurrent change during paint
