@@ -42,7 +42,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		int xLoc = xStart;
 		//
 		// Some calls to draw methods still use y, not yLoc! TODO
-		int yLoc = y + GanttChartParameters.preferenceDependentEventYDrawPosCorrection();
+		int yLoc = y + 0 * GanttChartParameters.preferenceDependentEventYDrawPosCorrection();
 
 		// draw the border
 		Color cEventBorder = event.getStatusBorderColor();
@@ -710,13 +710,13 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		default:
 			break;
 		}
-		int yTextPos = y + (event.getHeight() / 2);
+		int yTextPos = y - (event.getHeight() / 2);
 		switch (event.getVerticalTextLocation()) {
 		case SWT.TOP:
 			yTextPos = event.getY() - size.y;
 			break;
 		case SWT.CENTER:
-			yTextPos -= (size.y / 2) + 1;
+			yTextPos -= GanttChartParameters.getTallestTextHeight(); //(GanttChartParameters.getTallestTextHeight() / 2 + size.y / 2) + 1;
 			break;
 		case SWT.BOTTOM:
 			yTextPos = event.getBottomY();
@@ -724,6 +724,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		default:
 			break;
 		}
+		yTextPos = y;
 		return new Point(textXStart, yTextPos);
 	}
 

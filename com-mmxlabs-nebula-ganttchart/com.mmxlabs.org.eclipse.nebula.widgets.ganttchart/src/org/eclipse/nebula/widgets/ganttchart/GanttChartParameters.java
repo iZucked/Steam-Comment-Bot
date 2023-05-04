@@ -2,6 +2,7 @@ package org.eclipse.nebula.widgets.ganttchart;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 
 /**
  * All numbers related to the sizes and spacings of ui elements of the Gantt
@@ -15,7 +16,11 @@ public class GanttChartParameters {
 	public static void updateFontSize(EventLabelFontSize size) {
 		fontSize = size;
 	}
+	
+	private static final String FAT_STRING = "B[j";
 
+	private static int currentTallestTextHeight = 0;
+	
 	private static final EventLabelFontSize initialFontSize = EventLabelFontSize.MEDIUM;
 	private static EventLabelFontSize fontSize = initialFontSize;
 
@@ -34,6 +39,14 @@ public class GanttChartParameters {
 	private GanttChartParameters() {
 
 	}
+	
+	public static int getStandartRowVerticalPadding() {
+		return STANDART_FIXED_ROW_V_PADDING;
+	}
+	
+	public static int getTallestTextHeight() {
+		return currentTallestTextHeight;
+	}
 
 	/**
 	 * Size of the event label height in points
@@ -47,7 +60,7 @@ public class GanttChartParameters {
 	}
 
 	private static int getStandartEventHeight() {
-		return fontSize.getFontHeightInPixels() + 2 * getStandartEventVerticalPadding();
+		return currentTallestTextHeight + 2 * getStandartEventVerticalPadding();
 	}
 
 	public static int getRowHeight() {
@@ -63,7 +76,7 @@ public class GanttChartParameters {
 	}
 
 	public static int preferenceDependentEventYDrawPosCorrection() {
-		return (initialFontSize.totalHeight() - fontSize.totalHeight()) / 2;
+		return currentTallestTextHeight * (initialFontSize.totalHeight() - fontSize.totalHeight()) / fontSize.totalHeight() / 2;
 	}
 
 	public static class Settings extends AbstractSettings {
@@ -201,5 +214,13 @@ public class GanttChartParameters {
 		public int getEventHeight() {
 			return getStandartEventHeight();
 		}
+	}
+
+	public static void updateEventHeight(GC gc) {
+		currentTallestTextHeight = gc.stringExtent(FAT_STRING).y;
+	}
+
+	public static int getEventHeight() {
+		return getStandartEventHeight();
 	}
 }
