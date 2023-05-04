@@ -20,6 +20,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
@@ -115,6 +116,21 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PRICING_EVENT);
 			editor.addNotificationChangedListener(new PricingEventInlineEditorChangedListener());
 			return editor;
+		});
+		addEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT, topClass -> {
+			return new ReferenceInlineEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT) {
+				@Override
+				protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+					if (currentlySettingValue) {
+						return;
+					}
+					if (value == null && !valueList.isEmpty()) {
+						doSetValue(valueList.get(0), forceCommandExecution);
+					} else {
+						doSetValue(value, forceCommandExecution);
+					}
+				}
+			};
 		});
 	}
 }

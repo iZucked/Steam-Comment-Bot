@@ -29,8 +29,17 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
  */
 public class RowGroupDisplayCompositeLayoutProviderBuilder {
 
+	public RowGroupDisplayCompositeLayoutProviderBuilder() {
+		this(false);
+	}
+	
+	public RowGroupDisplayCompositeLayoutProviderBuilder(boolean makeColumnsEqualWidth) {
+		this.makeColumnsEqualWidth = makeColumnsEqualWidth;
+	}
+
 	private int maxFeatures = 1;
 	private List<RowBuilder> rows = new LinkedList<>();
+	private boolean makeColumnsEqualWidth = false;
 
 	public class RowBuilder {
 
@@ -83,7 +92,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 		}
 		
 		/**
-		 * Define a feature for the row with a min width hint.
+		 * Define a feature for the row with a label override and min width hint.
 		 * 
 		 * @See {@link GridData#widthHint}
 		 * @param feature
@@ -133,7 +142,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 			@Override
 			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
 				// * 2 as each feature is the label and the editor control
-				return new GridLayout(maxFeatures * 2, false);
+				return new GridLayout(maxFeatures * 2, makeColumnsEqualWidth);
 			}
 
 			@Override

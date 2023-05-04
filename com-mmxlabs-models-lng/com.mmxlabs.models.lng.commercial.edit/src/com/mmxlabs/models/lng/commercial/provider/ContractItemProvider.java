@@ -78,6 +78,7 @@ public class ContractItemProvider
 			addPricingEventPropertyDescriptor(object);
 			addCancellationExpressionPropertyDescriptor(object);
 			addShippingDaysRestrictionPropertyDescriptor(object);
+			addBusinessUnitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -540,6 +541,28 @@ public class ContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Business Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBusinessUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_businessUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_businessUnit_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

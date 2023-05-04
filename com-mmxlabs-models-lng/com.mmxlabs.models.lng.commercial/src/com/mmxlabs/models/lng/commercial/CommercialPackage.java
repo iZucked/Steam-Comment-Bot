@@ -587,13 +587,22 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -865,6 +874,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__BUSINESS_UNIT = CONTRACT__BUSINESS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -1181,6 +1199,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__SHIPPING_DAYS_RESTRICTION = CONTRACT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__BUSINESS_UNIT = CONTRACT__BUSINESS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
@@ -3269,6 +3296,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_ShippingDaysRestriction();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.Contract#getBusinessUnit <em>Business Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Business Unit</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getBusinessUnit()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_BusinessUnit();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getContractYearStart <em>Contract Year Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4756,6 +4794,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT__SHIPPING_DAYS_RESTRICTION = eINSTANCE.getContract_ShippingDaysRestriction();
+
+		/**
+		 * The meta object literal for the '<em><b>Business Unit</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__BUSINESS_UNIT = eINSTANCE.getContract_BusinessUnit();
 
 		/**
 		 * The meta object literal for the '<em><b>Contract Year Start</b></em>' attribute feature.

@@ -104,7 +104,7 @@ public class SlotPricingBasisWrapper extends IInlineEditorEnablementWrapper {
 				if (priceInfo != null) {
 					
 					if (wrapped instanceof PricingBasisInlineEditor pbie //
-							&& priceInfo instanceof ExpressionPriceParameters epp) {
+							&& priceInfo instanceof final ExpressionPriceParameters epp) {
 						pbie.addValues(epp.getPreferredPBs(), true);
 					}
 

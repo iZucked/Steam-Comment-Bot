@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.emf.ecore.EClass;
 
 /**
@@ -12,6 +15,7 @@ import org.eclipse.emf.ecore.EClass;
  */
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -21,7 +25,7 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.license.features.KnownFeatures;
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -116,7 +120,6 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 					} else {
 						editor.setLabel(null);
 					}
-
 					return gd;
 				}
 				if (feature == CommercialPackage.Literals.CONTRACT__FULL_CARGO_LOT) {
@@ -198,11 +201,16 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 					return gd;
 				}
-				if (feature == CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE || feature == CommercialPackage.Literals.CONTRACT__ENTITY) {
+				if (feature == CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-					gd.horizontalSpan = 4;
+					gd.horizontalSpan = 9;
 
+					return gd;
+				}
+				if (feature == CommercialPackage.Literals.CONTRACT__ENTITY || feature == CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.horizontalSpan = 4;
 					return gd;
 				}
 				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS || feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
@@ -260,5 +268,31 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 				return gd;
 			}
 		};
+	}
+	
+	@Override
+	protected void sortEditors(List<IInlineEditor> editors) {
+		// Sub classes can sort the editor list prior to rendering
+		List<ETypedElement> orderedFeatures = Lists.newArrayList( //
+				MMXCorePackage.Literals.NAMED_OBJECT__NAME,//
+				CommercialPackage.Literals.CONTRACT__CODE,//
+				CommercialPackage.Literals.CONTRACT__COUNTERPARTY,//
+				CommercialPackage.Literals.CONTRACT__CN,//
+				CommercialPackage.Literals.CONTRACT__ENTITY,//
+				CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT
+		);
+
+		// Reverse the list so that we can move the editors to the head of the list
+		Collections.reverse(orderedFeatures);
+		for (var feature : orderedFeatures) {
+			for (var editor : editors) {
+				if (editor.getFeature() == feature) {
+					editors.remove(editor);
+					editors.add(0, editor);
+					break;
+				}
+			}
+		}
+
 	}
 }

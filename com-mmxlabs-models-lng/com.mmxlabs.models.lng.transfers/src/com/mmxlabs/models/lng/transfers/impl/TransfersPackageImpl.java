@@ -472,6 +472,16 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getTransferRecord_Code() {
+		return (EAttribute)transferRecordEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getTransferRecord__GetFromEntity() {
 		return transferRecordEClass.getEOperations().get(0);
 	}
@@ -638,6 +648,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEAttribute(transferRecordEClass, TRANSFER_RECORD__PRICING_BASIS);
 		createEReference(transferRecordEClass, TRANSFER_RECORD__FROM_BU);
 		createEReference(transferRecordEClass, TRANSFER_RECORD__TO_BU);
+		createEAttribute(transferRecordEClass, TRANSFER_RECORD__CODE);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_FROM_ENTITY);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_TO_ENTITY);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_COMPANY_STATUS);
@@ -731,6 +742,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEAttribute(getTransferRecord_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTransferRecord_FromBU(), theCommercialPackage.getBusinessUnit(), null, "fromBU", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTransferRecord_ToBU(), theCommercialPackage.getBusinessUnit(), null, "toBU", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTransferRecord_Code(), ecorePackage.getEString(), "code", null, 0, 1, TransferRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getTransferRecord__GetFromEntity(), theCommercialPackage.getBaseLegalEntity(), "getFromEntity", 0, 1, IS_UNIQUE, IS_ORDERED);
 

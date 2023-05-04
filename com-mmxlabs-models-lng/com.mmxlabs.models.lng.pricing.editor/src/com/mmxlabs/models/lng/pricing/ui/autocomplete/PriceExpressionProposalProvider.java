@@ -17,7 +17,9 @@ import org.eclipse.jface.fieldassist.IContentProposalProvider;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
+import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -130,6 +132,10 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			String type = "";
 			if (index instanceof CurrencyCurve) {
 				type = " (currency conversion)";
+			} else if (index instanceof final PricingBasis pb) {
+				type = ":[" + pb.getExpression() + "]";
+			} else if (index instanceof final CommodityCurve cc && cc.isSetExpression()) {
+				type = ":[" + cc.getExpression() + "]";
 			}
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = matchCase(contents, proposal.substring(contents.length()));
