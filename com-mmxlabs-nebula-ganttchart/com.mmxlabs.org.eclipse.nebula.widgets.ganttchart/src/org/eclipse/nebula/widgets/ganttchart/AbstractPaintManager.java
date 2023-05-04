@@ -42,7 +42,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		int xLoc = xStart;
 		//
 		// Some calls to draw methods still use y, not yLoc! TODO
-		int yLoc = y + 0 * GanttChartParameters.preferenceDependentEventYDrawPosCorrection();
+		int yLoc = y;
 
 		// draw the border
 		Color cEventBorder = event.getStatusBorderColor();
@@ -724,7 +724,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		default:
 			break;
 		}
-		yTextPos = y;
+		yTextPos = y - GanttChartParameters.getStandartEventVerticalPadding();
 		return new Point(textXStart, yTextPos);
 	}
 

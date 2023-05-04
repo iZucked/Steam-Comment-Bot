@@ -55,7 +55,7 @@ public class GanttChartParameters {
 		return 3 * fontSize.getFontHeightInPixels() / 4;
 	}
 
-	private static int getStandartEventVerticalPadding() {
+	public static int getStandartEventVerticalPadding() {
 		return fontSize.getMargin();
 	}
 
