@@ -198,9 +198,8 @@ public class PriceExpressionTests {
 	}
 
 	/**
-	 * Tests to make sure asString() returns the same input. There will be some
-	 * variation due to case (handled by toLowerCase() in assertion) and whitespace
-	 * (input expression whitespace needs to match output)
+	 * Tests to make sure asString() returns the same input. There will be some variation due to case (handled by toLowerCase() in assertion) and whitespace (input expression whitespace needs to match
+	 * output)
 	 * 
 	 * There are some expressions we can't handle in this simple test. E.g.
 	 * 
@@ -232,7 +231,10 @@ public class PriceExpressionTests {
 			"HH[3,0,1]", //
 			"DATEDAVG(HH, 3, 0, 1)", //
 			"S(HH, 1, 2.0, 3, 4, 5, 6, 7, 8)", //
-			"TIER(HH, < 40, 1, <= 90.4, 2, 3)", //
+			"TIER(HH, < 40, 1, 2)|TIER(HH, 1, < 40, 2)", // Old style will be replaced with new style
+			"TIER(HH, < 40, 1, <= 90.4, 2, 3)|TIER(HH, 1, < 40, 2, <= 90.4, 3)", // Old style will be replaced with new style
+			"TIER(HH, 1, < 40, 2, <= 90.4, 3)", //
+			"TIER(HH, 1, < 40, 2)", //
 			"5-6", //
 			"-6*-7", //
 			"-6*(7-6)", //
@@ -242,7 +244,18 @@ public class PriceExpressionTests {
 			"CAP(1,2)", //
 			"SPLITMONTH(HH, HH, 15)", //
 	})
-	public void testASTNodeAsString(final String expr) {
+	public void testASTNodeAsString(final String baseExpr) {
+
+		final String expr;
+		final String exprToCompare;
+		if (baseExpr.contains("|")) {
+			final String[] s = baseExpr.split("\\|");
+			expr = s[0];
+			exprToCompare = s[1];
+		} else {
+			expr = baseExpr;
+			exprToCompare = baseExpr;
+		}
 
 		final SeriesParserData data = new SeriesParserData();
 		final SeriesParser parser = new SeriesParser(data);
@@ -253,7 +266,7 @@ public class PriceExpressionTests {
 
 		final String nodeAsStr = node.asString();
 
-		Assertions.assertEquals(expr.toLowerCase(), nodeAsStr.toLowerCase());
+		Assertions.assertEquals(exprToCompare.toLowerCase(), nodeAsStr.toLowerCase());
 
 	}
 
@@ -275,29 +288,39 @@ public class PriceExpressionTests {
 				{ "MAX(2,1)", 2.0, null }, //
 				{ "CAP(1,2)", 2.0, null }, //
 
+				{ "Tier(1, 10, <2, 20)", 10.0, null }, //
+				{ "Tier(2, 10, <=2, 20)", 10.0, null }, //
+				{ "Tier(2, 10, <2, 20)", 20.0, null }, //
+				{ "Tier(3, 10, <=2, 20)", 20.0, null }, //
+
+				{ "Tier(1, 10, <2, 20, <= 3, 30)", 10.0, null }, //
+				{ "Tier(2, 10, <2, 20, <= 3, 30)", 20.0, null }, //
+				{ "Tier(3, 10, <2, 20, <= 3, 30)", 20.0, null }, //
+				{ "Tier(3.1, 10, <2, 20, <= 3, 30)", 30.0, null }, //
+				// Old style tier
 				{ "Tier(1, <2, 10, 20)", 10.0, null }, //
 				{ "Tier(2, <=2, 10, 20)", 10.0, null }, //
 				{ "Tier(2, <2, 10, 20)", 20.0, null }, //
 				{ "Tier(3, <=2, 10, 20)", 20.0, null }, //
-				
+
 				{ "Tier(1, <2, 10, <= 3, 20, 30)", 10.0, null }, //
 				{ "Tier(2, <2, 10, <= 3, 20, 30)", 20.0, null }, //
 				{ "Tier(3, <2, 10, <= 3, 20, 30)", 20.0, null }, //
 				{ "Tier(3.1, <2, 10, <= 3, 20, 30)", 30.0, null }, //
 				{ "HH", 5, null }, //
-				{ "SHIFT(Brent, 1)",  55.76, LocalDate.of(2017, 6, 1) }, //
+				{ "SHIFT(Brent, 1)", 55.76, LocalDate.of(2017, 6, 1) }, //
 				{ "SHIFT(Brent, -1)", 56.16, LocalDate.of(2017, 6, 1) }, //
-				{ "Brent[m0]",56.01, LocalDate.of(2017, 6, 1) }, //
-				{ "Brent[m-1]", 55.76,  LocalDate.of(2017, 6, 1) }, //
-				{ "Brent[m1]", 56.16,  LocalDate.of(2017, 6, 1) }, //
+				{ "Brent[m0]", 56.01, LocalDate.of(2017, 6, 1) }, //
+				{ "Brent[m-1]", 55.76, LocalDate.of(2017, 6, 1) }, //
+				{ "Brent[m1]", 56.16, LocalDate.of(2017, 6, 1) }, //
 				{ "10%HH", 0.5, null }, //
 				{ "10%-HH", -0.5, null }, //
 				{ "10%(6-HH[301])", 0.1, null }, //
 				{ "10%(6-HH[m-1])", 0.1, null }, //
-				{ "S(1, 2, 3, 3, 4, 5, 6, 7, 8)", 3*1+4, null }, //
-				{ "S(2, 2, 3, 3, 4, 5, 6, 7, 8)", 5*2+6, null }, //
-				{ "S(3, 2, 3, 3, 4, 5, 6, 7, 8)", 5*3+6, null }, //
-				{ "S(4, 2, 3, 3, 4, 5, 6, 7, 8)", 7*4+8, null }, //
+				{ "S(1, 2, 3, 3, 4, 5, 6, 7, 8)", 3 * 1 + 4, null }, //
+				{ "S(2, 2, 3, 3, 4, 5, 6, 7, 8)", 5 * 2 + 6, null }, //
+				{ "S(3, 2, 3, 3, 4, 5, 6, 7, 8)", 5 * 3 + 6, null }, //
+				{ "S(4, 2, 3, 3, 4, 5, 6, 7, 8)", 7 * 4 + 8, null }, //
 		});
 	}
 

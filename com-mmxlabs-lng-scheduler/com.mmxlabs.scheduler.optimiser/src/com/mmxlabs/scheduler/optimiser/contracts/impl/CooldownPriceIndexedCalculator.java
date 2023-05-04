@@ -32,10 +32,6 @@ public class CooldownPriceIndexedCalculator implements ICooldownCalculator {
 	@Override
 	public long calculateCooldownCost(final IVessel vessel, final IPort port, final int cooldownCV, final int time) {
 		final long volumeM3 = vessel.getCooldownVolume();
-//
-//		final Map<String, String> params = new HashMap<>();
-//		params.put(VolumeTierSeries.PARAM_VOLUME_M3, Double.toString(OptimiserUnitConvertor.convertToExternalFloatVolume(volumeM3)));
-//		params.put(VolumeTierSeries.PARAM_VOLUME_MMBTU, Double.toString(OptimiserUnitConvertor.convertToExternalFloatVolume(Calculator.convertM3ToMMBTu(volumeM3, cooldownCV))));
 
 		final int pricePerMMBTU = expressionCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(time, port));
 		final int priceM3 = Calculator.costPerM3FromMMBTu(pricePerMMBTU, cooldownCV);

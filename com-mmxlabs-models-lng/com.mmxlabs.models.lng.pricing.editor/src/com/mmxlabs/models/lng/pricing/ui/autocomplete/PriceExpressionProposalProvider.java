@@ -30,11 +30,12 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 
 /**
- * SimpleContentProposalProvider is a class designed to map a static list of
- * Strings to content proposals.
+ * SimpleContentProposalProvider is a class designed to map a static list of Strings to content proposals.
  *
  * @see IContentProposalProvider
  * @since 3.2
+ * 
+ *        Keep up to date with this document https://paper.dropbox.com/doc/Price-expressions-in-LiNGO--B3NEC1wjW1YlJN6uq2CkNTG4Ag-ON7W0PBebfujL8UOFqoP9
  *
  */
 public class PriceExpressionProposalProvider implements IMMXContentProposalProvider {
@@ -55,11 +56,10 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 	private final @NonNull PriceIndexType[] types;
 
 	/**
-	 * Construct a SimpleContentProposalProvider whose content proposals are always
-	 * the specified array of Objects.
+	 * Construct a SimpleContentProposalProvider whose content proposals are always the specified array of Objects.
 	 *
-	 * @param proposals the array of Strings to be returned whenever proposals are
-	 *                  requested.
+	 * @param proposals
+	 *            the array of Strings to be returned whenever proposals are requested.
 	 */
 	public PriceExpressionProposalProvider(final @NonNull PriceIndexType... types) {
 		super();
@@ -67,14 +67,13 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 	}
 
 	/**
-	 * Return an array of Objects representing the valid content proposals for a
-	 * field.
+	 * Return an array of Objects representing the valid content proposals for a field.
 	 *
-	 * @param contents the current contents of the field (only consulted if
-	 *                 filtering is set to <code>true</code>)
-	 * @param position the current cursor position within the field (ignored)
-	 * @return the array of Objects that represent valid proposals for the field
-	 *         given its current content.
+	 * @param contents
+	 *            the current contents of the field (only consulted if filtering is set to <code>true</code>)
+	 * @param position
+	 *            the current cursor position within the field (ignored)
+	 * @return the array of Objects that represent valid proposals for the field given its current content.
 	 */
 	@Override
 	public IContentProposal[] getProposals(final String full_contents, final int position) {
@@ -226,7 +225,25 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			final String proposal = "TIER(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = matchCase(contents, proposal.substring(contents.length()));
-				list.add(new ContentProposal(c, proposal + "index,lowerbound,lowexpr,upperbound,midexpr,highexpr)", "Tiered pricing function. lowerbound and upperbound define the conditions (< or <= to a number value) against the value of index to select which expression to use (lowexpr, midexpr or highexpr).\nFor example TIER(Brent, < 40, 5, <= 90, Brent[301], 10) will use Brent[301] if Brent is 40 or above and less than 90. Otherwise use the constants.", c.length()));
+				list.add(new ContentProposal(c, proposal + "target, lowexpr, < lowerbound, midexpr, < upperbound,highexpr)",
+						"""
+								Tiered pricing. lowerbound and upperbound define the conditions (< or <= to a number value) against the value of target (index or parameter with default e.g. @CV:22.6, etc.) to select which expression to use (lowexpr, midexpr or highexpr).
+
+								Pricing expression selected by value of target (index or parameter with default e.g. @CV:22.6) in ranges defined by lowerbound and upperbound.
+
+								For example TIER(Brent, 5, < 40, Brent[301], <= 90, 10) will use Brent[301] if Brent is 40 or above and less than 90. Otherwise use the constants.""",
+						c.length()));
+			}
+		}
+		{
+			final String proposal = "TIERBLEND(";
+			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
+				final String c = matchCase(contents, proposal.substring(contents.length()));
+				list.add(new ContentProposal(c, proposal + "target,lowerexpr,threshold,upperexpr)",
+						"""
+								Tiered pricing with blending. Computes the average of lowerexpr and upperexpr weighted by value of target (index e.g. “HH”, or parameter with default, e.g. @VOL_M3:160000, @VOL_MMBTU:0) either side of threshold. If target is less than or equal to threshold then only the lowerexpr is returned.
+									""",
+						c.length()));
 			}
 		}
 

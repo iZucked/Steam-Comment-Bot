@@ -131,11 +131,11 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 					// Reset any colouring
 					item.setBackground(null);
 					final int i = cell.getColumnIndex();
-					dv.setColumnSpan(item, i, 1);
+					dv.setColumnSpan(item, i, 0);
 
 					if (cell.getElement() instanceof final BaseCaseRow baseCaseRow) {
 						if (baseCaseRow.getVesselEventOption() != null) {
-							dv.setColumnSpan(item, i, 2);
+							dv.setColumnSpan(item, i, 1);
 							cell.setText(new VesselEventOptionDescriptionFormatter().render(baseCaseRow.getVesselEventOption()));
 						} else {
 							cell.setText(new BuyOptionDescriptionFormatter().render(baseCaseRow.getBuyOption()));

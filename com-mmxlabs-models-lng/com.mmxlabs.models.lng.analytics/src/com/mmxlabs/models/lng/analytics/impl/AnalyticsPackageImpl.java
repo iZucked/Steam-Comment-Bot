@@ -5567,6 +5567,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			   "formatString", "#0.###"
 		   });
 		addAnnotation
+		  (getBuyOpportunity_MinVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
+		  (getBuyOpportunity_MaxVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
 		  (getBuyOpportunity_WindowSize(),
 		   source,
 		   new String[] {
@@ -5577,6 +5589,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source,
 		   new String[] {
 			   "formatString", "##,##0"
+		   });
+		addAnnotation
+		  (getSellOpportunity_MinVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
+		  (getSellOpportunity_MaxVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
 		   });
 		addAnnotation
 		  (getSellOpportunity_WindowSize(),

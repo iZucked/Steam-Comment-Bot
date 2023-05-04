@@ -505,6 +505,7 @@ public abstract class AbstractScenarioDiff<T> extends ViewPart {
 		blackList1.add(PortPackage.eINSTANCE.getLocation_MmxId());
 		blackList1.add(FleetPackage.eINSTANCE.getVessel_MmxId());
 		blackList1.add(CargoPackage.eINSTANCE.getVesselCharter_ForceHireCostOnlyEndRule());
+		blackList1.add(CargoPackage.eINSTANCE.getSlot_ComputeExposure());
 		if (hideNotes) {
 			blackList1.add(CargoPackage.eINSTANCE.getSlot_Notes());
 			blackList1.add(CommercialPackage.eINSTANCE.getContract_Notes());
