@@ -42,8 +42,9 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
- * This is the central singleton for the model edit plugin.
- * <!-- begin-user-doc --> <!-- end-user-doc -->
+ * This is the central singleton for the model edit plugin. <!-- begin-user-doc
+ * --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public final class Activator extends EMFPlugin {
@@ -52,42 +53,33 @@ public final class Activator extends EMFPlugin {
 	public static final String PLUGIN_ID = "com.mmxlabs.lingo.reports"; //$NON-NLS-1$
 
 	/**
-	 * Keep track of the singleton.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static final Activator INSTANCE = new Activator();
 
 	/**
-	 * Keep track of the singleton.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private static Implementation plugin;
 
 	/**
-	 * Create the instance.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Create the instance. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Activator() {
-		super
-		  (new ResourceLocator [] {
-		     CargoEditPlugin.INSTANCE,
-		     CommercialEditPlugin.INSTANCE,
-		     FleetEditPlugin.INSTANCE,
-		     LNGTypesEditPlugin.INSTANCE,
-		     MmxcoreEditPlugin.INSTANCE,
-		     PortEditPlugin.INSTANCE,
-		     PricingEditPlugin.INSTANCE,
-		     ScheduleEditPlugin.INSTANCE,
-		     SpotMarketsEditPlugin.INSTANCE,
-		   });
+		super(new ResourceLocator[] { CargoEditPlugin.INSTANCE, CommercialEditPlugin.INSTANCE, FleetEditPlugin.INSTANCE, LNGTypesEditPlugin.INSTANCE, MmxcoreEditPlugin.INSTANCE,
+				PortEditPlugin.INSTANCE, PricingEditPlugin.INSTANCE, ScheduleEditPlugin.INSTANCE, SpotMarketsEditPlugin.INSTANCE, });
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * 
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -104,8 +96,9 @@ public final class Activator extends EMFPlugin {
 	}
 
 	/**
-	 * The actual implementation of the Eclipse <b>Plugin</b>.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The actual implementation of the Eclipse <b>Plugin</b>. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static class Implementation extends EclipsePlugin {
@@ -121,8 +114,8 @@ public final class Activator extends EMFPlugin {
 		private IPropertyChangeListener propertyChangeListener;
 
 		/**
-		 * Creates an instance.
-		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * Creates an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		public Implementation() {
@@ -163,7 +156,7 @@ public final class Activator extends EMFPlugin {
 			reg.put(IMAGE_PINNED_ROW, importImageDescriptor);
 
 		}
-		
+
 		@Override
 		public void stop(final BundleContext context) throws Exception {
 
@@ -212,24 +205,21 @@ public final class Activator extends EMFPlugin {
 			final Formatters.DurationMode mode = value == IPreferenceStore.STRING_DEFAULT_DEFAULT || value.isBlank() ? null : Formatters.DurationMode.valueOf(value);
 			ScheduleChartFormatters.setDurationMode(mode);
 		}
-		
+
 		private void updateEventLabelFontSize(final String value) {
-			EventLabelFontSize fontSize = EventLabelFontSize.MEDIUM;
-			switch (value) {
-			case "SMALL":
-				fontSize = EventLabelFontSize.SMALL;
-				break;
-			case "LARGE":
-				fontSize = EventLabelFontSize.LARGE;
-			}
+			final EventLabelFontSize fontSize = switch (value) {
+				case "SMALL" -> EventLabelFontSize.SMALL;
+				case "LARGE" ->	EventLabelFontSize.LARGE;
+				default -> EventLabelFontSize.MEDIUM;
+			};
 			GanttChartParameters.updateFontSize(fontSize);
 		}
-		
+
 		/**
-		 * Returns an image descriptor for the image file at the given plug-in relative path
+		 * Returns an image descriptor for the image file at the given plug-in relative
+		 * path
 		 * 
-		 * @param path
-		 *            the path
+		 * @param path the path
 		 * @return the image descriptor
 		 */
 		public static ImageDescriptor getImageDescriptor(final String path) {
@@ -237,14 +227,19 @@ public final class Activator extends EMFPlugin {
 		}
 
 		/**
-		 * Returns the preference store for this UI plug-in. This preference store is used to hold persistent settings for this plug-in in the context of a workbench. Some of these settings will be
-		 * user controlled, whereas others may be internal setting that are never exposed to the user.
+		 * Returns the preference store for this UI plug-in. This preference store is
+		 * used to hold persistent settings for this plug-in in the context of a
+		 * workbench. Some of these settings will be user controlled, whereas others may
+		 * be internal setting that are never exposed to the user.
 		 * <p>
-		 * If an error occurs reading the preference store, an empty preference store is quietly created, initialized with defaults, and returned.
+		 * If an error occurs reading the preference store, an empty preference store is
+		 * quietly created, initialized with defaults, and returned.
 		 * </p>
 		 * <p>
-		 * <strong>NOTE:</strong> As of Eclipse 3.1 this method is no longer referring to the core runtime compatibility layer and so plug-ins relying on Plugin#initializeDefaultPreferences will have
-		 * to access the compatibility layer themselves.
+		 * <strong>NOTE:</strong> As of Eclipse 3.1 this method is no longer referring
+		 * to the core runtime compatibility layer and so plug-ins relying on
+		 * Plugin#initializeDefaultPreferences will have to access the compatibility
+		 * layer themselves.
 		 * </p>
 		 * 
 		 * @return the preference store

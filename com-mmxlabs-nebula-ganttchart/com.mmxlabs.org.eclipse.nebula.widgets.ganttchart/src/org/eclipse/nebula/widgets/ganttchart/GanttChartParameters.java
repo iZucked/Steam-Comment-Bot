@@ -1,27 +1,26 @@
 package org.eclipse.nebula.widgets.ganttchart;
 
-import org.eclipse.core.internal.preferences.EclipsePreferences;
-import org.eclipse.core.runtime.Preferences;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
 /**
- * All numbers related to the sizes and spacings of ui elements of the Gantt chart
+ * All numbers related to the sizes and spacings of ui elements of the Gantt
+ * chart
  * 
  * @author Andrey Popov
  *
  */
 public class GanttChartParameters {
-	
+
 	public static void updateFontSize(EventLabelFontSize size) {
 		fontSize = size;
 	}
-	
+
 	private static final EventLabelFontSize initialFontSize = EventLabelFontSize.MEDIUM;
 	private static EventLabelFontSize fontSize = initialFontSize;
-	
+
 	private static final int STANDART_FIXED_ROW_V_PADDING = 8;
-	
+
 	private static final int STANDART_EVENT_SPACER_SIZE = 0;
 	private static final int MINIMUM_SECTION_HEIGHT = 5;
 	private static final int SECTION_TEXT_SPACER_SIZE = 0;
@@ -33,47 +32,46 @@ public class GanttChartParameters {
 	private static final int HEADER_DAY_HEIGHT = 22;
 
 	private GanttChartParameters() {
-		
+
 	}
-	
+
 	/**
 	 * Size of the event label height in points
 	 */
 	public static int getStandartEventLabelFontHeight() {
 		return 3 * fontSize.getFontHeightInPixels() / 4;
 	}
-	
+
 	private static int getStandartEventVerticalPadding() {
-		return Math.max(8, fontSize.getFontHeightInPixels() / 4);
+		return fontSize.getMargin();
 	}
-	
+
 	private static int getStandartEventHeight() {
 		return fontSize.getFontHeightInPixels() + 2 * getStandartEventVerticalPadding();
 	}
-	
+
 	public static int getRowHeight() {
 		return getStandartEventHeight() + 2 * STANDART_FIXED_ROW_V_PADDING;
 	}
-	
+
 	public static int getEventSpacerSize() {
 		return STANDART_EVENT_SPACER_SIZE;
 	}
-	
+
 	public static ISettings getSettings() {
 		return new Settings();
 	}
 
 	public static int preferenceDependentEventYDrawPosCorrection() {
-		return (initialFontSize.getFontHeightInPixels() - fontSize.getFontHeightInPixels()) / 2;
+		return (initialFontSize.totalHeight() - fontSize.totalHeight()) / 2;
 	}
-	
-	public static class Settings extends AbstractSettings {
-		
 
+	public static class Settings extends AbstractSettings {
+
+		// Private constructor to hide the public one
 		private Settings() {
-			
 		}
-		
+
 		@Override
 		public boolean enableResizing() {
 			return false;
@@ -198,7 +196,7 @@ public class GanttChartParameters {
 		public int getHeaderDayHeight() {
 			return HEADER_DAY_HEIGHT;
 		}
-		
+
 		@Override
 		public int getEventHeight() {
 			return getStandartEventHeight();
