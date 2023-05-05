@@ -1172,7 +1172,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		});
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
 
-		gotoPreferences = new RunnableAction("Prefs", () -> {
+		gotoPreferences = new RunnableAction("Preferences", () -> {
 			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage",
 					new String[] { "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage" }, null);
 			dialog.open();
