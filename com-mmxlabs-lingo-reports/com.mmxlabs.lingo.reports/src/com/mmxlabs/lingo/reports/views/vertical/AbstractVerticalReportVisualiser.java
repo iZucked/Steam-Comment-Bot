@@ -176,8 +176,8 @@ public abstract class AbstractVerticalReportVisualiser {
 			return result;
 		} else if (event instanceof Idle) {
 			return "";
-		} else if (event instanceof VesselEventVisit) {
-			final VesselEvent vesselEvent = ((VesselEventVisit) event).getVesselEvent();
+		} else if (event instanceof final VesselEventVisit vev) {
+			final VesselEvent vesselEvent = vev.getVesselEvent();
 			if (vesselEvent instanceof CharterOutEvent) {
 				return "CO";
 			} else if (vesselEvent instanceof DryDockEvent) {
@@ -185,7 +185,7 @@ public abstract class AbstractVerticalReportVisualiser {
 			} else if (vesselEvent instanceof MaintenanceEvent) {
 				return "Maintenance";
 			} else if (vesselEvent instanceof CharterLengthEvent) {
-				return String.format("Length - %s", event.name());
+				return event.name();
 			}
 
 		} else if (event instanceof GeneratedCharterOut) {
