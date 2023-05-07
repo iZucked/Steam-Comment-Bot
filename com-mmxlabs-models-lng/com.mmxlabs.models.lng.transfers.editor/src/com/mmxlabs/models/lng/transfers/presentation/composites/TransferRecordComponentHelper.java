@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.transfers.presentation.composites;
 
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.pricing.editor.PricingBasisInlineEditor;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.lng.transfers.editor.PricingBasisWrapper;
 import com.mmxlabs.models.lng.transfers.editor.factories.CompanyStatusInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.SimpleOperationInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
@@ -29,11 +31,41 @@ public class TransferRecordComponentHelper extends DefaultComponentHelper {
 				}
 			};
 		});
+		addEditor(TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU, topClass -> {
+			return new ReferenceInlineEditor(TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU) {
+				@Override
+				protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+					if (currentlySettingValue) {
+						return;
+					}
+					if (value == null && !valueList.isEmpty()) {
+						doSetValue(valueList.get(0), forceCommandExecution);
+					} else {
+						doSetValue(value, forceCommandExecution);
+					}
+				}
+			};
+		});
 		addEditor(TransfersPackage.Literals.TRANSFER_RECORD___GET_TO_ENTITY, topClass -> {
 			return new SimpleOperationInlineEditor("To", TransfersPackage.Literals.TRANSFER_RECORD___GET_TO_ENTITY) {
 				@Override
 				protected boolean updateOnChangeToFeature(final Object changedFeature) {
 					return TransfersPackage.Literals.TRANSFER_RECORD__TRANSFER_AGREEMENT.equals(changedFeature);
+				}
+			};
+		});
+		addEditor(TransfersPackage.Literals.TRANSFER_RECORD__TO_BU, topClass -> {
+			return new ReferenceInlineEditor(TransfersPackage.Literals.TRANSFER_RECORD__TO_BU) {
+				@Override
+				protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+					if (currentlySettingValue) {
+						return;
+					}
+					if (value == null && !valueList.isEmpty()) {
+						doSetValue(valueList.get(0), forceCommandExecution);
+					} else {
+						doSetValue(value, forceCommandExecution);
+					}
 				}
 			};
 		});

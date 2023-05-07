@@ -67,6 +67,7 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			addPricingBasisPropertyDescriptor(object);
 			addFromBUPropertyDescriptor(object);
 			addToBUPropertyDescriptor(object);
+			addCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -380,6 +381,28 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferRecord_code_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecord_code_feature", "_UI_TransferRecord_type"),
+				 TransfersPackage.Literals.TRANSFER_RECORD__CODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns TransferRecord.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -426,6 +449,7 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			case TransfersPackage.TRANSFER_RECORD__NOTES:
 			case TransfersPackage.TRANSFER_RECORD__STALE:
 			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
+			case TransfersPackage.TRANSFER_RECORD__CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

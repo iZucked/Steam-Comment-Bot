@@ -41,6 +41,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromBU <em>From BU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getToBU <em>To BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferRecord#getCode <em>Code</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord()
@@ -557,6 +558,28 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	boolean isSetToBU();
+
+	/**
+	 * Returns the value of the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Code</em>' attribute.
+	 * @see #setCode(String)
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferRecord_Code()
+	 * @model
+	 * @generated
+	 */
+	String getCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getCode <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Code</em>' attribute.
+	 * @see #getCode()
+	 * @generated
+	 */
+	void setCode(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

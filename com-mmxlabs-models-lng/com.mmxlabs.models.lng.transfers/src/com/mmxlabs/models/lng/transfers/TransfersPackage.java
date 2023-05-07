@@ -498,13 +498,22 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_RECORD__TO_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 13;
 
 	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD__CODE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Transfer Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 14;
+	int TRANSFER_RECORD_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -982,6 +991,17 @@ public interface TransfersPackage extends EPackage {
 	EReference getTransferRecord_ToBU();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getCode <em>Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Code</em>'.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getCode()
+	 * @see #getTransferRecord()
+	 * @generated
+	 */
+	EAttribute getTransferRecord_Code();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromEntity() <em>Get From Entity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1336,6 +1356,13 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TRANSFER_RECORD__TO_BU = eINSTANCE.getTransferRecord_ToBU();
+		/**
+		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD__CODE = eINSTANCE.getTransferRecord_Code();
 		/**
 		 * The meta object literal for the '<em><b>Get From Entity</b></em>' operation.
 		 * <!-- begin-user-doc -->

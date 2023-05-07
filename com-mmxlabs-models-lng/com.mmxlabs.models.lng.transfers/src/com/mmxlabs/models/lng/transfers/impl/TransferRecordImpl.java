@@ -56,6 +56,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getFromBU <em>From BU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getToBU <em>To BU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.impl.TransferRecordImpl#getCode <em>Code</em>}</li>
  * </ul>
  *
  * @generated
@@ -362,6 +363,26 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	 * @ordered
 	 */
 	protected boolean toBUESet;
+
+	/**
+	 * The default value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CODE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCode() <em>Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected String code = CODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1007,6 +1028,29 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCode(String newCode) {
+		String oldCode = code;
+		code = newCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TransfersPackage.TRANSFER_RECORD__CODE, oldCode, code));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -1134,6 +1178,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 			case TransfersPackage.TRANSFER_RECORD__TO_BU:
 				if (resolve) return getToBU();
 				return basicGetToBU();
+			case TransfersPackage.TRANSFER_RECORD__CODE:
+				return getCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1187,6 +1233,9 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return;
 			case TransfersPackage.TRANSFER_RECORD__TO_BU:
 				setToBU((BusinessUnit)newValue);
+				return;
+			case TransfersPackage.TRANSFER_RECORD__CODE:
+				setCode((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1242,6 +1291,9 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 			case TransfersPackage.TRANSFER_RECORD__TO_BU:
 				unsetToBU();
 				return;
+			case TransfersPackage.TRANSFER_RECORD__CODE:
+				setCode(CODE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1282,6 +1334,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return isSetFromBU();
 			case TransfersPackage.TRANSFER_RECORD__TO_BU:
 				return isSetToBU();
+			case TransfersPackage.TRANSFER_RECORD__CODE:
+				return CODE_EDEFAULT == null ? code != null : !CODE_EDEFAULT.equals(code);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1374,6 +1428,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 		result.append(stale);
 		result.append(", pricingBasis: ");
 		if (pricingBasisESet) result.append(pricingBasis); else result.append("<unset>");
+		result.append(", code: ");
+		result.append(code);
 		result.append(')');
 		return result.toString();
 	}

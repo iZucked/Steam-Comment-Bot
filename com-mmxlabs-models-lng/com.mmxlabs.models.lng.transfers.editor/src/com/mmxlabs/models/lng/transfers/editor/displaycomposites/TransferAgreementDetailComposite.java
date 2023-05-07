@@ -69,7 +69,7 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //
 				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__COMPANY_STATUS) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE) //
 				.makeRow()
 				//
 				.withRow()
@@ -87,8 +87,8 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS) //
 				.makeRow() //
 				.withRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__COMPANY_STATUS) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE) //
 				.makeRow() //
 				.make() //
 		;

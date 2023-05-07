@@ -4160,15 +4160,21 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				
 				@Override
 				public Object getValue(final EObject object) {
+					if (getContract() != null) {
+						final Contract o_contract = getContract();
+						if (o_contract != null && o_contract.eIsSet(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT)) {
+							return o_contract.eGet(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT);
+						}
+					}
 					if (getSlotOrDelegateEntity() != null) {
-						final BaseLegalEntity entity = getSlotOrDelegateEntity();
-						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
-							for (final var bu : entity.getBusinessUnits()) {
+						final BaseLegalEntity o_entity = getSlotOrDelegateEntity();
+						if (o_entity.getBusinessUnits() != null && !o_entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : o_entity.getBusinessUnits()) {
 								if (bu.isDefault()) {
 									return bu;
 								}
 							}
-							return entity.getBusinessUnits().get(0);
+							return o_entity.getBusinessUnits().get(0);
 						}
 					}
 					return null;
