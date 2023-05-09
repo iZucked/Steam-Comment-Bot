@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintInfoGetter;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselUsageSlotGroupConstraintChecker;
 
 public class CheckForViolatedConstraints {
 
@@ -34,7 +35,7 @@ public class CheckForViolatedConstraints {
 		final List<IConstraintChecker> failedConstraints = new ArrayList<>();
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker instanceof MinMaxSlotGroupConstraintChecker && !checker.checkConstraints(rawSequences, null, messages)) {
+			if ((checker instanceof MinMaxSlotGroupConstraintChecker || checker instanceof VesselUsageSlotGroupConstraintChecker) && !checker.checkConstraints(rawSequences, null, messages)) {
 				failedConstraints.add(checker);
 			}
 		}

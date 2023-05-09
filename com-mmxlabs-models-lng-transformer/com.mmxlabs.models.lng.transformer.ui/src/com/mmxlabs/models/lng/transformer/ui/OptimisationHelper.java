@@ -57,6 +57,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselUsageSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
@@ -398,6 +399,7 @@ public final class OptimisationHelper {
 			// Add in ADP constraints and objectives
 			ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
 			ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
+			ScenarioUtils.createOrUpdateAllConstraints(plan, VesselUsageSlotGroupConstraintCheckerFactory.NAME, true);
 			ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
 			ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 		} else {

@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultSpotCharterInMarket
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultThirdPartyCargoProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultTransferModelDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselUsageConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
@@ -325,6 +326,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultMaxSlotConstraintDataProviderEditor.class).in(Singleton.class);
 		bind(IMaxSlotCountConstraintDataProvider.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
 		bind(IMaxSlotConstraintDataProviderEditor.class).to(DefaultMaxSlotConstraintDataProviderEditor.class);
+		
+		bind(DefaultVesselUsageConstraintDataProviderEditor.class).in(Singleton.class);
+		bind(IVesselUsageConstraintDataProvider.class).to(DefaultVesselUsageConstraintDataProviderEditor.class);
+		bind(IVesselUsageConstraintDataProviderEditor.class).to(DefaultVesselUsageConstraintDataProviderEditor.class);
 
 		bind(DefaultLongTermVesselSlotCountFitnessProvider.class).in(Singleton.class);
 		bind(IVesselSlotCountFitnessProvider.class).to(DefaultLongTermVesselSlotCountFitnessProvider.class);

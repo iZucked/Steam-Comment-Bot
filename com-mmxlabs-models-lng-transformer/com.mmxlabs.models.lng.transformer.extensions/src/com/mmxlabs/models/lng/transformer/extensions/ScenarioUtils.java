@@ -59,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintChec
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselUsageSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
@@ -411,6 +412,7 @@ public class ScenarioUtils {
 
 	public static void updateObjectivesForDefaultADPOptimisation(final OptimisationPlan plan) {
 		ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
+		ScenarioUtils.createOrUpdateAllConstraints(plan, VesselUsageSlotGroupConstraintCheckerFactory.NAME, true);
 		ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
 		ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
 		ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);

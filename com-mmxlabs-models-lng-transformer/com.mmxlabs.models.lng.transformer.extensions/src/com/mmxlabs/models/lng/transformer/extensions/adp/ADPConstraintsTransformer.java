@@ -8,14 +8,18 @@ import java.time.YearMonth;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
@@ -26,6 +30,7 @@ import com.mmxlabs.models.lng.adp.ProfileConstraint;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
+import com.mmxlabs.models.lng.adp.VesselUsageDistribution;
 import com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -46,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselUsageConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
@@ -57,6 +63,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 	@Inject
 	private IMaxSlotConstraintDataProviderEditor maxSlotConstraintEditor;
+
+	@Inject
+	private IVesselUsageConstraintDataProviderEditor vesselConstraintDataProviderEditor;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -120,10 +129,11 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				}
 			}
 
-			// TODO: change to pair<IXOption,Integer> //second = month based on calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
+			// TODO: change to pair<IXOption,Integer> //second = month based on
+			// calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
 
 			final List<Pair<ILoadOption, Integer>> oSlots = slots.stream() //
-					.<Pair<ILoadOption, Integer>> map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class),
+					.<Pair<ILoadOption, Integer>>map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class),
 							calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())))) //
 					.collect(Collectors.toList());
 
@@ -136,7 +146,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				}
 			}
 
-			// Only soft required slots are the constrained ones. The optionality of these slots during optimisation is handled by NonOptionalFitnessCore by ignoring them in the fitness calculation.
+			// Only soft required slots are the constrained ones. The optionality of these
+			// slots during optimisation is handled by NonOptionalFitnessCore by ignoring
+			// them in the fitness calculation.
 			if (!contractProfile.getConstraints().isEmpty()) {
 				for (final Pair<ILoadOption, Integer> oSlot : oSlots) {
 					optionalElementsProvider.setSoftRequired(portSlotProvider.getElement(oSlot.getFirst()), true);
@@ -190,7 +202,13 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					}
 					maxSlotConstraintEditor.addMinMaxLoadSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, oSlots, monthlyDistributionConstraint);
 				} else if (profileConstraint instanceof VesselUsageDistributionProfileConstraint vesselUsageDistributionConstraint) {
-					
+					for (VesselUsageDistribution vesselDistribution : vesselUsageDistributionConstraint.getDistributions()) {
+						Set<IVessel> vessels = vesselDistribution.getVessels().stream()//
+								.flatMap(x -> x.collect(new BasicEList<>()).stream()).map(v -> modelEntityMap.getOptimiserObjectNullChecked(v, IVessel.class))//
+								.collect(Collectors.toSet());
+						final Set<ILoadOption> oVesselSlots = oSlots.stream().map(Pair::getFirst).collect(Collectors.toSet());
+						vesselConstraintDataProviderEditor.addLoadSlotVesselUses(contractProfile, profileConstraint, oVesselSlots, vessels, vesselDistribution.getCargoes());
+					}
 				} else {
 					// Not handled here.
 				}
@@ -217,7 +235,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 			// Convert from LNG model slots to optimiser DischargeOptions.
 			final List<Pair<IDischargeOption, Integer>> oSlots = slots.stream() //
-					.<Pair<IDischargeOption, Integer>> map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class),
+					.<Pair<IDischargeOption, Integer>>map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class),
 							calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())))) //
 					.collect(Collectors.toList());
 
@@ -230,7 +248,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				}
 			}
 
-			// Only soft required slots are the constrained ones. The optionality of these slots during optimisation is handled by NonOptionalFitnessCore by ignoring them in the fitness calculation.
+			// Only soft required slots are the constrained ones. The optionality of these
+			// slots during optimisation is handled by NonOptionalFitnessCore by ignoring
+			// them in the fitness calculation.
 			if (!contractProfile.getConstraints().isEmpty()) {
 				for (final Pair<IDischargeOption, Integer> oSlot : oSlots) {
 					optionalElementsProvider.setSoftRequired(portSlotProvider.getElement(oSlot.getFirst()), true);
@@ -284,8 +304,14 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					}
 
 					maxSlotConstraintEditor.addMinMaxDischargeSlotsPerMultiMonthPeriod(contractProfile, profileConstraint, oSlots, monthlyDistributionConstraint);
-				} else if (profileConstraint instanceof VesselUsageDistributionProfileConstraint vesselUsageDistributionConstraint){
-					
+				} else if (profileConstraint instanceof VesselUsageDistributionProfileConstraint vesselUsageDistributionConstraint) {
+					for (VesselUsageDistribution vesselDistribution : vesselUsageDistributionConstraint.getDistributions()) {
+						Set<IVessel> vessels = vesselDistribution.getVessels().stream()//
+								.flatMap(x -> x.collect(new BasicEList<>()).stream()).map(v -> modelEntityMap.getOptimiserObjectNullChecked(v, IVessel.class))//
+								.collect(Collectors.toSet());
+						final Set<IDischargeOption> oVesselSlots = oSlots.stream().map(Pair::getFirst).collect(Collectors.toSet());
+						vesselConstraintDataProviderEditor.addDischargeSlotVesselUses(contractProfile, profileConstraint, oVesselSlots, vessels, vesselDistribution.getCargoes());
+					}
 				} else {
 					// Not handled here.
 				}
@@ -318,7 +344,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 						if (vesselCharter.getVessel() == iDefaultVessel) {
 							if (vesselCharter.getSpotIndex() == -1) {
 								// Not strictly correct yet!
-								// longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(vesselCharter, ((TargetCargoesOnVesselConstraint) fleetConstraint).getTargetNumberOfCargoes(),
+								// longTermVesselSlotCountFitnessProviderEditor.setValuesForVessel(vesselCharter,
+								// ((TargetCargoesOnVesselConstraint)
+								// fleetConstraint).getTargetNumberOfCargoes(),
 								// (long) ((TargetCargoesOnVesselConstraint) fleetConstraint).getWeight());
 							}
 						}

@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintChec
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselUsageSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 
 /**
@@ -120,6 +121,8 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PreSequencedElementsConstraintCheckerFactory.class.getCanonicalName()))
 				.toProvider(Peaberry.service(new PreSequencedElementsConstraintCheckerFactory()).export());
-
+		
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(VesselUsageSlotGroupConstraintCheckerFactory.class.getCanonicalName()))
+		.toProvider(Peaberry.service(new VesselUsageSlotGroupConstraintCheckerFactory()).export());
 	}
 }
