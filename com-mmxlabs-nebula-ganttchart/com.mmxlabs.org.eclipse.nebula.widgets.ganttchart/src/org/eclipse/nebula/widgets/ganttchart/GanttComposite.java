@@ -3403,9 +3403,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			gradient = _settings.getDefaultGradientEventColor();
 		}
 
-		final int yDrawPos = ge.getY()
-				+ GanttChartParameters.preferenceDependentEventYDrawPosCorrection() 
-				- GanttChartParameters.getStandartRowVerticalPadding() / 2;
+		final int yDrawPos = ge.getY() + GanttChartParameters.getStandartRowVerticalPadding();
 
 		final int dw = getDayWidth();
 
@@ -3588,38 +3586,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			final boolean fixedHeight = (fixedRowHeight > 0);
 
 			ge.setHorizontalLineTopY(yStart);
-
-			if (fixedHeight) {
-				int extra = 0;
-
-				int halfExtra = ((fixedRowHeight / 2) - (_eventHeight / 2));
-
-				switch (verticalAlignment) {
-				case SWT.BOTTOM:
-					extra = halfExtra;
-					// Reduce size to avoid clipping
-					eventHeight += halfExtra - 1;
-
-					break;
-				case SWT.CENTER:
-					extra = halfExtra;// ((fixedRowHeight / 2) - (_eventHeight / 2));
-					break;
-				case SWT.NONE:
-				case SWT.TOP:
-					// extra = 0;//fixedRowHeight;//_eventSpacer - fixedRowHeight ;
-					eventHeight += halfExtra;
-					break;
-				default:
-					break;
-				}
-
-				if (extra < 0) {
-					extra = 0;
-				}
-				// eventHeight+= extra;
-				yDrawPos += extra;
-
-			}
 
 			// sub-events in a grouped event type where the group has a fixed row height, we
 			// just set the yStart to the last yStart, which actually
