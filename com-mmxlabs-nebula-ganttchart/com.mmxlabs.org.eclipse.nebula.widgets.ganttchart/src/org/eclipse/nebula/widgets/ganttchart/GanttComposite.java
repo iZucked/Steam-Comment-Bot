@@ -1036,9 +1036,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	// the repaint event, whenever the composite needs to refresh the contents
 	private void repaint(final PaintEvent event) {
 		_paintManager.redrawStarting();
-		final GC gc = event.gc;
-		GanttChartParameters.updateEventHeight(gc);
-		drawChartOntoGC(gc, null);
+		drawChartOntoGC(event.gc, null);
 	}
 
 	// draws the actual chart.. separated from the repaint event as the

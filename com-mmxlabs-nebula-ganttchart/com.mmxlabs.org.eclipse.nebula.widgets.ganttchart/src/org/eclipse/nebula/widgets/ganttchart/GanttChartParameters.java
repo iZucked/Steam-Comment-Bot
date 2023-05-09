@@ -3,6 +3,8 @@ package org.eclipse.nebula.widgets.ganttchart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * All numbers related to the sizes and spacings of ui elements of the Gantt
@@ -19,7 +21,7 @@ public class GanttChartParameters {
 	
 	private static final String FAT_STRING = "B[j";
 
-	private static int currentTallestTextHeight = 0;
+	private static int currentTallestTextHeight = initTallestTextHeight();
 	
 	private static final EventLabelFontSize initialFontSize = EventLabelFontSize.MEDIUM;
 	private static EventLabelFontSize fontSize = initialFontSize;
@@ -40,6 +42,20 @@ public class GanttChartParameters {
 
 	}
 	
+	/**
+	 * Just initialization of the static global variable
+	 */
+	private static int initTallestTextHeight() {
+		final int dummyImageSize = 2;
+		final Image temporaryImage = new Image(Display.getDefault(), dummyImageSize, dummyImageSize);
+		final GC temporaryGC = new GC(temporaryImage);
+		final int result = temporaryGC.stringExtent(FAT_STRING).y;
+		temporaryImage.dispose();
+		temporaryGC.dispose();
+		assert result > dummyImageSize;
+		return result;
+	}
+
 	public static int getStandartRowVerticalPadding() {
 		return STANDART_FIXED_ROW_V_PADDING;
 	}
@@ -73,10 +89,6 @@ public class GanttChartParameters {
 
 	public static ISettings getSettings() {
 		return new Settings();
-	}
-
-	public static int preferenceDependentEventYDrawPosCorrection() {
-		return currentTallestTextHeight * (initialFontSize.getFontHeightInPixels() - fontSize.getFontHeightInPixels()) / fontSize.getFontHeightInPixels() / 2;
 	}
 
 	public static class Settings extends AbstractSettings {
@@ -214,13 +226,5 @@ public class GanttChartParameters {
 		public int getEventHeight() {
 			return getStandartEventHeight();
 		}
-	}
-
-	public static void updateEventHeight(GC gc) {
-		currentTallestTextHeight = gc.stringExtent(FAT_STRING).y;
-	}
-
-	public static int getEventHeight() {
-		return getStandartEventHeight();
 	}
 }
