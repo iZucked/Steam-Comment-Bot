@@ -179,7 +179,7 @@ public class VesselUsageProfileConstraintDetailComposite extends Composite imple
 		{
 			rangeColumn.setEditingSupport(
 					new GridViewerEditingSupport(tableViewer, table, () -> new MultiAttributeInlineEditor(ADPPackage.Literals.VESSEL_USAGE_DISTRIBUTION__VESSELS, commandHandler, a -> {
-						return String.format(a instanceof VesselGroup ? "[Group] %s" : "[Vessel] %s", ((NamedObject) a).getName());
+						return String.format(a instanceof VesselGroup ? "[G] %s" : "[V] %s", ((NamedObject) a).getName());
 					}, () -> {
 						final FleetModel fleetModel = ScenarioModelUtil.getFleetModel((LNGScenarioModel) scenarioModel);
 						final List<Object> vesselsToAdd = new ArrayList<>();
@@ -218,11 +218,7 @@ public class VesselUsageProfileConstraintDetailComposite extends Composite imple
 				if (list == null) {
 					return new Object[0];
 				}
-				final Object[] things = list.toArray();
-				// Arrays.sort((PeriodDistribution[]) things, (a, b) -> a.getStart() == null ?
-				// -1 : b.getStart() == null ? 1 : a.getStart().compareTo(b.getStart()));
-
-				return things;
+				return list.toArray();
 			}
 		});
 
@@ -318,7 +314,6 @@ public class VesselUsageProfileConstraintDetailComposite extends Composite imple
 		removeAdapter();
 		oldValue = (VesselUsageDistributionProfileConstraint) value;
 		scenarioModel = root;
-		// delegate.display(dialogContext, root, value, range, dbc);
 		tableViewer.setInput(value);
 
 		value.eAdapters().add(adapter);
@@ -335,30 +330,19 @@ public class VesselUsageProfileConstraintDetailComposite extends Composite imple
 
 	@Override
 	public void setCommandHandler(final ICommandHandler commandHandler) {
-		// delegate.setCommandHandler(commandHandler);
 		this.commandHandler = commandHandler;
 	}
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
-		// delegate.displayValidationStatus(status);
 		statusProvider.fireStatusChanged(status);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.mmxlabs.models.ui.editors.IDisplayComposite#setEditorWrapper(com.mmxlabs.
-	 * models.ui.editors.IInlineEditorWrapper)
-	 */
 	@Override
 	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
-		// delegate.setEditorWrapper(wrapper);
 	}
 
 	@Override
 	public boolean checkVisibility(final IDialogEditingContext context) {
-		return true;// l.. delegate.checkVisibility(context);
+		return true;
 	}
 }
