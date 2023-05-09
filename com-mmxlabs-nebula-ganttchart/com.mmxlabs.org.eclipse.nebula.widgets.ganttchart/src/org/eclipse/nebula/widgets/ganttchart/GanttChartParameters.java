@@ -76,7 +76,7 @@ public class GanttChartParameters {
 	}
 
 	public static int preferenceDependentEventYDrawPosCorrection() {
-		return currentTallestTextHeight * (initialFontSize.totalHeight() - fontSize.totalHeight()) / fontSize.totalHeight() / 2;
+		return currentTallestTextHeight * (initialFontSize.getFontHeightInPixels() - fontSize.getFontHeightInPixels()) / fontSize.getFontHeightInPixels() / 2;
 	}
 
 	public static class Settings extends AbstractSettings {

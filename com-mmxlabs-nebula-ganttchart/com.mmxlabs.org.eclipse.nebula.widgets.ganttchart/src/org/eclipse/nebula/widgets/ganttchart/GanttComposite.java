@@ -3403,12 +3403,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			gradient = _settings.getDefaultGradientEventColor();
 		}
 
-		final int yDrawPos = 
-				0
-				+ ge.getY() 
-				+ ge.getHeight() 
+		final int yDrawPos = ge.getY()
 				+ GanttChartParameters.preferenceDependentEventYDrawPosCorrection() 
-				- GanttChartParameters.getStandartRowVerticalPadding();
+				- GanttChartParameters.getStandartRowVerticalPadding() / 2;
 
 		final int dw = getDayWidth();
 
