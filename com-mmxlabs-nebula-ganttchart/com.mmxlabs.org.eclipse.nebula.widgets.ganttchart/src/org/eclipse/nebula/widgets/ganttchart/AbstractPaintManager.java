@@ -710,21 +710,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		default:
 			break;
 		}
-		int yTextPos = y - (event.getHeight() / 2);
-		switch (event.getVerticalTextLocation()) {
-		case SWT.TOP:
-			yTextPos = event.getY() - size.y;
-			break;
-		case SWT.CENTER:
-			yTextPos -= GanttChartParameters.getTallestTextHeight(); //(GanttChartParameters.getTallestTextHeight() / 2 + size.y / 2) + 1;
-			break;
-		case SWT.BOTTOM:
-			yTextPos = event.getBottomY();
-			break;
-		default:
-			break;
-		}
-		yTextPos = y - GanttChartParameters.getStandartEventVerticalPadding();
+		int yTextPos = y - GanttChartParameters.getStandartEventVerticalPadding();
 		return new Point(textXStart, yTextPos);
 	}
 
