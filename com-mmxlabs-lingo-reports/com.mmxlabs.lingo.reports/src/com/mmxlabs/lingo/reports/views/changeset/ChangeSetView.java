@@ -397,7 +397,7 @@ public class ChangeSetView extends ViewPart {
 			// Extract vessel columns and generate.
 
 			final Set<VesselData> vesselnames = new LinkedHashSet<>();
-
+			columnHelper.resetExposures();
 			final ChangeSetTableRoot tableRootDefault = newViewState.tableRootDefault;
 			if (tableRootDefault != null) {
 				for (final ChangeSetTableGroup group : tableRootDefault.getGroups()) {
