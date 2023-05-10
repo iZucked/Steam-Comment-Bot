@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.lightweightscheduler;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -17,11 +16,14 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.IFullLightWeightConstraintChecker;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.IFullLightWeightConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintChecker;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightSequenceOptimiser;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.FullLightWeightConstraintCheckerRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightConstraintCheckerRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightFitnessFunctionRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightSchedulerOptimiser;
@@ -35,6 +37,7 @@ import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 public class LightWeightSchedulerStage2Module extends AbstractModule {
 	public static final String LIGHTWEIGHT_FITNESS_FUNCTION_NAMES = "LIGHTWEIGHT_FITNESS_FUNCTION_NAMES";
 	public static final String LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES = "LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES";
+	public static final String FULL_LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES = "FULL_LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES";
 	public static final String LIGHTWEIGHT_VESSELS = "LIGHTWEIGHT_VESSELS";
 	public static final String LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT = "LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT";
 	public static final String LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT = "LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT";
@@ -67,6 +70,24 @@ public class LightWeightSchedulerStage2Module extends AbstractModule {
 			for (ILightWeightConstraintCheckerFactory lightWeightConstraintCheckerFactory : constraintCheckerFactories) {
 				if (lightWeightConstraintCheckerFactory.getName().equals(name)) {
 					ILightWeightConstraintChecker constraintChecker = lightWeightConstraintCheckerFactory.createConstraintChecker();
+					injector.injectMembers(constraintChecker);
+					constraintCheckers.add(constraintChecker);
+				}
+			}
+		}
+		return constraintCheckers;
+	}
+	
+	@Provides
+	@Singleton
+	private List<IFullLightWeightConstraintChecker> getFullConstraintCheckers(Injector injector, FullLightWeightConstraintCheckerRegistry registry,
+			@Named(FULL_LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES) List<String> names) {
+		List<IFullLightWeightConstraintChecker> constraintCheckers = new LinkedList<>();
+		Collection<IFullLightWeightConstraintCheckerFactory> constraintCheckerFactories = registry.getConstraintCheckerFactories();
+		for (String name : names) {
+			for (IFullLightWeightConstraintCheckerFactory lightWeightConstraintCheckerFactory : constraintCheckerFactories) {
+				if (lightWeightConstraintCheckerFactory.getName().equals(name)) {
+					IFullLightWeightConstraintChecker constraintChecker = lightWeightConstraintCheckerFactory.createConstraintChecker();
 					injector.injectMembers(constraintChecker);
 					constraintCheckers.add(constraintChecker);
 				}

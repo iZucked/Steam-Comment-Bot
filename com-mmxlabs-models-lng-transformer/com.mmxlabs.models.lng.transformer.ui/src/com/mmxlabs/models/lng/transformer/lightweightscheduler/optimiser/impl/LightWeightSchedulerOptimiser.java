@@ -26,6 +26,7 @@ import com.google.inject.name.Named;
 import com.minimaxlabs.rnd.representation.LightWeightOutputData;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.IFullLightWeightConstraintChecker;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintChecker;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
@@ -77,6 +78,9 @@ public class LightWeightSchedulerOptimiser {
 
 	@Inject
 	private List<ILightWeightConstraintChecker> constraintCheckers;
+	
+	@Inject
+	private List<IFullLightWeightConstraintChecker> fullConstraintCheckers;
 
 	@Inject
 	private List<ILightWeightFitnessFunction> fitnessFunctions;
@@ -101,7 +105,7 @@ public class LightWeightSchedulerOptimiser {
 	 */
 	public Pair<ISequences, Long> optimise(final IVesselCharter pnlVessel, @NonNull final IProgressMonitor monitor, JobExecutor jobExecutor) {
 		// Get optimised sequences from our injected sequences optimiser
-		final List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, jobExecutor, monitor);
+		final List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fullConstraintCheckers, fitnessFunctions, jobExecutor, monitor);
 
 		// Export the pairings matrix to the raw sequences:
 

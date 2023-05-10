@@ -26,9 +26,12 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselUsageConstraintDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.VesselUsageConstraintInfo;
 
 /**
@@ -37,7 +40,7 @@ import com.mmxlabs.scheduler.optimiser.providers.VesselUsageConstraintInfo;
  * 
  * @author achurchill
  */
-public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstraintChecker, IResourceElementConstraintChecker {
+public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
 	private IVesselUsageConstraintDataProvider vesselUsageConstraintDataProvider;
@@ -60,60 +63,117 @@ public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstrain
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Set<VesselUsageConstraintInfo<?, ?, IDischargeOption>> allDischargeVesselUsesConstraintInfos = vesselUsageConstraintDataProvider.getAllDischargeVesselUses();
 		final Set<VesselUsageConstraintInfo<?, ?, ILoadOption>> allLoadVesselConstraintInfos = vesselUsageConstraintDataProvider.getAllLoadVesselUses();
 
 		final Map<Object, Integer> counts = new HashMap<>();
-
+		final Map<Object, Integer> nominalSlotsCount = new HashMap<>();
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence sequence = sequences.getSequence(resource);
+			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			final IVessel vessel = vesselCharter.getVessel();
 			for (final ISequenceElement element : sequence) {
 				final IPortSlot slot = portSlotProvider.getPortSlot(element);
-				final IVessel vessel = vesselProvider.getVesselCharter(resource).getVessel();
-				Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream())//
-						.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel))//
-						.map(x -> x.getProfileConstraint())//
-						.forEach(x -> counts.compute(x, (k, v) -> v == null ? 1 : v + 1));
+				if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && //
+						slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
+					Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream()) //
+							.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel)) //
+							.map(x -> x.getContractProfile()) //
+							.forEach(x -> nominalSlotsCount.compute(x, (k, v) -> v == null ? 1 : v + 1));
+				} else {
+					Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream())//
+							.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel))//
+							.map(x -> x.getProfileConstraint())//
+							.forEach(x -> counts.compute(x, (k, v) -> v == null ? 1 : v + 1));
+				}
 			}
+
 		}
 		for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraintInfo : allLoadVesselConstraintInfos) {
 			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraint()), 0);
-			if (vesselUses != constraintInfo.getBound()) {
+
+			if (vesselUses > constraintInfo.getBound()) {
 				if (messages != null) {
 					messages.add(String.format("%s: Load Slot Vessel Usage not equal to constraint", this.name));
 				}
 				return false;
+			} else if (vesselUses < constraintInfo.getBound()) {
+				int remainingNominalsCount = nominalSlotsCount.getOrDefault(constraintInfo.getContractProfile(), 0);
+				final int flex = constraintInfo.getBound() - vesselUses - remainingNominalsCount;
+				if (flex < 0) {
+					return false;
+				}
+				nominalSlotsCount.compute(constraintInfo.getContractProfile(), (k, v) -> v == null ? 0 : v - flex);
 			}
 		}
 		for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraintInfo : allDischargeVesselUsesConstraintInfos) {
 			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraint()), 0);
-			if (vesselUses != constraintInfo.getBound()) {
+
+			if (vesselUses > constraintInfo.getBound()) {
 				if (messages != null) {
 					messages.add(String.format("%s: Discharge Slot Vessel Usage not equal to constraint", this.name));
 				}
 				return false;
+			} else if (vesselUses < constraintInfo.getBound()) {
+				int remainingNominalsCount = nominalSlotsCount.getOrDefault(constraintInfo.getContractProfile(), 0);
+				final int flex = constraintInfo.getBound() -  - vesselUses - remainingNominalsCount;
+				if (flex < 0) {
+					return false;
+				}
+				nominalSlotsCount.compute(constraintInfo.getContractProfile(), (k, v) -> v == null ? 0 : v - flex);
 			}
 		}
 
 		return true;
+
 	}
+
+//	@Override
+//	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
+//		final Set<VesselUsageConstraintInfo<?, ?, IDischargeOption>> allDischargeVesselUsesConstraintInfos = vesselUsageConstraintDataProvider.getAllDischargeVesselUses();
+//		final Set<VesselUsageConstraintInfo<?, ?, ILoadOption>> allLoadVesselConstraintInfos = vesselUsageConstraintDataProvider.getAllLoadVesselUses();
+//
+//		final Map<Object, Integer> counts = new HashMap<>();
+//
+//		for (final IResource resource : sequences.getResources()) {
+//			final ISequence sequence = sequences.getSequence(resource);
+//			for (final ISequenceElement element : sequence) {
+//				final IPortSlot slot = portSlotProvider.getPortSlot(element);
+//				final IVessel vessel = vesselProvider.getVesselCharter(resource).getVessel();
+//				Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream())//
+//						.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel))//
+//						.map(x -> x.getProfileConstraint())//
+//						.forEach(x -> counts.compute(x, (k, v) -> v == null ? 1 : v + 1));
+//			}
+//		}
+//		for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraintInfo : allLoadVesselConstraintInfos) {
+//			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraint()), 0);
+//			if (vesselUses > constraintInfo.getBound()) {
+//				if (messages != null) {
+//					messages.add(String.format("%s: Load Slot Vessel Usage not equal to constraint", this.name));
+//				}
+//				return false;
+//			}
+//		}
+//		for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraintInfo : allDischargeVesselUsesConstraintInfos) {
+//			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraint()), 0);
+//			if (vesselUses > constraintInfo.getBound()) {
+//				if (messages != null) {
+//					messages.add(String.format("%s: Discharge Slot Vessel Usage not equal to constraint", this.name));
+//				}
+//				return false;
+//			}
+//		}
+//
+//		return true;
+//	}
 
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource, @Nullable List<@NonNull String> messages) {
 		return true;
 	}
 
-	@Override
-	public boolean checkElement(@NonNull ISequenceElement element, @NonNull IResource resource, @Nullable List<@NonNull String> messages) {
-		final IPortSlot slot = portSlotProvider.getPortSlot(element);
-		final IVessel vessel = vesselProvider.getVesselCharter(resource).getVessel();
-		final Set<VesselUsageConstraintInfo<?, ?, IDischargeOption>> allDischargeVesselUsesConstraintInfos = vesselUsageConstraintDataProvider.getAllDischargeVesselUses();
-		final Set<VesselUsageConstraintInfo<?, ?, ILoadOption>> allLoadVesselConstraintInfos = vesselUsageConstraintDataProvider.getAllLoadVesselUses();
-
-		return Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream())//
-				.noneMatch(x -> x.getBound() == 0 && x.getVessels().contains(vessel) && x.getSlots().contains(slot));
-	}
 
 //	public @NonNull List<@NonNull Object> getFailedConstraintInfos(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources) {
 //		List<Object> failedConstraintInfos = new ArrayList<>();

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.adp.ext.impl;
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ContractProfile;
+import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ext.IProfileConstraintFactory;
 
@@ -17,7 +18,7 @@ public class VesselUsageDistributionProfileConstraintFactory implements IProfile
 
 	@Override
 	public boolean validFor(ContractProfile<?, ?> profile) {
-		return true;
+		return profile instanceof SalesContractProfile;
 	}
 
 	@Override
