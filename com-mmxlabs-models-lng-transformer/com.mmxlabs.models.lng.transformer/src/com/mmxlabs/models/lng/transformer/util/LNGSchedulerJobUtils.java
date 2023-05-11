@@ -674,6 +674,10 @@ public class LNGSchedulerJobUtils {
 			
 		});
 		
+		if (changedSlots.isEmpty()) {
+			return IdentityCommand.INSTANCE;
+		}
+		
 		CompoundCommand cc = new CompoundCommand();
 		changedSlots.forEach(s -> {
 			tm.getTransferRecords().forEach( tr -> {

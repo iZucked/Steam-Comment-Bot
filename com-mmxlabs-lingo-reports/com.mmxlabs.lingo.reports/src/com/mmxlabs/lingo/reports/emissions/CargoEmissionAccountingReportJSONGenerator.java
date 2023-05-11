@@ -20,23 +20,28 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class CargoEmissionAccountingReportJSONGenerator{
 	
-	public static List<CargoEmissionAccountingReportModelV1> createReportData(final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull ScheduleModel scheduleModel) {
+	public static List<CargoEmissionAccountingReportModelV1> createReportData(final @NonNull ScheduleModel scheduleModel, final boolean isPinned, final String scenarioName) {
 		final List<CargoEmissionAccountingReportModelV1> models = new LinkedList<>();
 
-		if (scheduleModel.getSchedule() == null) {
+		final Schedule schedule = scheduleModel.getSchedule();
+		if (schedule == null) {
 			return models;
 		}
 		
 		for (final CargoAllocation cargoAllocation : scheduleModel.getSchedule().getCargoAllocations()) {
-			final CargoEmissionAccountingReportModelV1 model = createCargoAllocationReportData(scenarioDataProvider, cargoAllocation);
+			final CargoEmissionAccountingReportModelV1 model = createCargoAllocationReportData(cargoAllocation);
 			if (model != null) {
+				model.scenarioName = scenarioName;
+				model.schedule = schedule;
+				model.isPinned = isPinned;
+				model.otherID = cargoAllocation.getName();
 				models.add(model);
 			}
 		}
@@ -44,7 +49,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		return models;
 	}
 	
-	public static CargoEmissionAccountingReportModelV1 createCargoAllocationReportData(final @NonNull IScenarioDataProvider scenarioDataProvider, final CargoAllocation cargoAllocation) {
+	public static CargoEmissionAccountingReportModelV1 createCargoAllocationReportData(final CargoAllocation cargoAllocation) {
 		final CargoEmissionAccountingReportModelV1 model = new CargoEmissionAccountingReportModelV1();
 		
 		final EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
