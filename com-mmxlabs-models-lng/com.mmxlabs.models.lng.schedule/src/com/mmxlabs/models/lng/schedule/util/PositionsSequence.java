@@ -22,12 +22,19 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class PositionsSequence {
+
+	private static final SlotAllocationPredicateProvider SLOT_ALLOCATION_PREDICATE_PROVIDER = new SlotAllocationPredicateProvider();
+	private static final OpenSlotAllocationPredicateProvider OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER = new OpenSlotAllocationPredicateProvider();
+
 	private final List<Object> elements;
 	private final String lbl;
 	private final Schedule schedule;
@@ -49,22 +56,20 @@ public class PositionsSequence {
 		return elements;
 	}
 
-	public static PositionsSequence makeBuySequence(final Schedule schedule) {
-		return makeSequence(schedule, true);
-	}
-
-	public static PositionsSequence makeSellSequence(final Schedule schedule) {
-		return makeSequence(schedule, false);
+	public static List<PositionsSequence> makeBuySellSequences(final Schedule schedule) {
+		return List.of(makeSequence(schedule, true), makeSequence(schedule, false));
 	}
 	
-	public static List<PositionsSequence> makeSequencesFromPortGroups(final Schedule schedule, List<PortGroup> portGroups, boolean allowOverlap, boolean addOtherGroup) {
-		List<@NonNull Predicate<SlotAllocation>> predicates = portGroups.stream().map(PositionsSequencePredicateUtils::isInPortGroup).collect(Collectors.toList());
+	public static List<PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, List<PortGroup> portGroups, boolean allowOverlap, boolean addOtherGroup) {
+		List<Predicate<SlotAllocation>> slotAllocationPredicates = portGroups.stream().map(SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
+		List<Predicate<OpenSlotAllocation>> openSlotAllocationPredicates = portGroups.stream().map(OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
 		List<String> descriptions = portGroups.stream().map(NamedObject::getName).collect(Collectors.toList());
 		if (addOtherGroup) {
-			predicates.add(PositionsSequencePredicateUtils.isNotInPortGroups(portGroups));
+			slotAllocationPredicates.add(sa -> slotAllocationPredicates.stream().noneMatch(p -> p.test(sa)));
+			openSlotAllocationPredicates.add(sa -> openSlotAllocationPredicates.stream().noneMatch(p -> p.test(sa)));
 			descriptions.add("Other");
 		}
-		return makeSequencesFromExtraPredicates(schedule, predicates, descriptions, allowOverlap);
+		return makeSequencesFromExtraPredicates(schedule, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap);
 	}
 	
 	public Schedule getSchedule() {
@@ -75,45 +80,45 @@ public class PositionsSequence {
 		return isBuy;
 	}
 
-	private static List<PositionsSequence> makeSequencesFromExtraPredicates(final Schedule schedule, List<@NonNull Predicate<SlotAllocation>> extraPredicates, List<String> descriptions,
+	private static List<PositionsSequence> makeSequencesFromExtraPredicates(final Schedule schedule, List<Predicate<SlotAllocation>> extraSlotAllocationPredicates, List<Predicate<OpenSlotAllocation>> extraOpenSlotAllocationPredicates, List<String> descriptions,
 			boolean allowOverlap) {
-		assert extraPredicates.size() == descriptions.size();
+		assert extraSlotAllocationPredicates.size() == descriptions.size() && extraOpenSlotAllocationPredicates.size() == descriptions.size();
 		List<PositionsSequence> positionsSequences = new ArrayList<>();
 
 		Set<Object> seen = allowOverlap ? new HashSet<>() : null;
-		for (int i = 0; i < extraPredicates.size(); i++) {
-			positionsSequences.add(makeSequence(schedule, " - " + descriptions.get(i), true, extraPredicates.get(i), seen));
-			positionsSequences.add(makeSequence(schedule, " - " + descriptions.get(i), false, extraPredicates.get(i), seen));
+		for (int i = 0; i < descriptions.size(); i++) {
+			positionsSequences.add(makeSequence(schedule, " - " + descriptions.get(i), true, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen));
+			positionsSequences.add(makeSequence(schedule, " - " + descriptions.get(i), false, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen));
 		}
 
 		return positionsSequences;
 	}
 
 	private static PositionsSequence makeSequence(final Schedule schedule, boolean isBuy) {
-		return makeSequence(schedule, "", isBuy, x -> true, null);
+		return makeSequence(schedule, "", isBuy, x -> true, x -> true, null);
 	}
 
-	private static PositionsSequence makeSequence(final Schedule schedule, String description, boolean isBuy, @NonNull Predicate<SlotAllocation> extraFilter, Set<Object> seen) {
+	private static PositionsSequence makeSequence(final Schedule schedule, String description, boolean isBuy, Predicate<SlotAllocation> extraFilterSlotAllocation, Predicate<OpenSlotAllocation> extraFilterOpenSlotAllocation, Set<Object> seen) {
 		final Map<LocalDate, List<Object>> collectedDates = new TreeMap<>();
-		collectDatesForOpenSlotAllocations(collectedDates, schedule, isBuy, seen);
 
-		Predicate<SlotAllocation> filter = (isBuy ? PositionsSequencePredicateUtils.buy() : PositionsSequencePredicateUtils.sell());
-		collectDatesForCargoAllocations(collectedDates, schedule, filter.and(extraFilter), seen);
+		final var filterSlotAllocation = isBuy ? SLOT_ALLOCATION_PREDICATE_PROVIDER.buy() : SLOT_ALLOCATION_PREDICATE_PROVIDER.sell();
+		final var filterOpenSlotAllocation = isBuy ? OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER.buy() : OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER.sell();
+		collectDatesForOpenSlotAllocations(collectedDates, schedule, filterOpenSlotAllocation.and(extraFilterOpenSlotAllocation), seen);
+		collectDatesForCargoAllocations(collectedDates, schedule, filterSlotAllocation.and(extraFilterSlotAllocation), seen);
 
 		final List<Object> elements = createElementList(collectedDates);
 		return new PositionsSequence((isBuy ? "Buy" : "Sell") + description, isBuy, schedule, elements);
 	}
 
-	private static void collectDatesForOpenSlotAllocations(final Map<LocalDate, List<Object>> collectedDates, final Schedule schedule, boolean isBuy, Set<Object> seen) {
+	private static void collectDatesForOpenSlotAllocations(final Map<LocalDate, List<Object>> collectedDates, final Schedule schedule, Predicate<OpenSlotAllocation> extraFilter, Set<Object> seen) {
 		boolean allowOverlap = seen == null;
-		Class<?> slotClass = isBuy ? LoadSlot.class : DischargeSlot.class;
-		schedule.getOpenSlotAllocations().stream().filter(sa -> slotClass.isInstance(sa.getSlot())).forEach(sa -> {
-			if (allowOverlap || !seen.contains(sa)) {
+		for (final OpenSlotAllocation sa : schedule.getOpenSlotAllocations()) {
+			if (extraFilter.test(sa) && (allowOverlap || !seen.contains(sa))) {
 				collectedDates.computeIfAbsent(sa.getSlot().getWindowStart(), k -> new LinkedList<>()).add(sa);
 				if (!allowOverlap)
 					seen.add(sa);
 			}
-		});
+		}
 	}
 
 	private static void collectDatesForCargoAllocations(final Map<LocalDate, List<Object>> collectedDates, final Schedule schedule, Predicate<SlotAllocation> filterFunc, Set<Object> seen) {
@@ -125,6 +130,7 @@ public class PositionsSequence {
 					if (sa.getSpotMarket() != null) {
 						continue;
 					}
+
 					if (filterFunc.test(sa) && (allowOverlap || !seen.contains(sa))) {
 						final SlotVisit sv = sa.getSlotVisit();
 						collectedDates.computeIfAbsent(sv.getStart().toLocalDate(), k -> new LinkedList<>()).add(sv);
@@ -147,6 +153,50 @@ public class PositionsSequence {
 			}
 		}
 		return elements;
+	}
+	
+	private static interface PositionSequencePredicateProvider<T> {
+		Predicate<T> buy();
+		Predicate<T> sell();
+		Predicate<T> isInPortGroup(PortGroup portGroup);
+	}
+	
+	private static class SlotAllocationPredicateProvider implements PositionSequencePredicateProvider<SlotAllocation> {
+
+		@Override
+		public Predicate<SlotAllocation> buy() {
+			return sa -> sa.getSlotAllocationType() == SlotAllocationType.PURCHASE;
+		}
+
+		@Override
+		public Predicate<SlotAllocation> sell() {
+			return sa -> sa.getSlotAllocationType() == SlotAllocationType.SALE;
+		}
+
+		@Override
+		public Predicate<SlotAllocation> isInPortGroup(PortGroup portGroup) {
+			Set<?> ports = SetUtils.getObjects(portGroup);
+			return sa -> ports.contains(sa.getSlotVisit().getPort());
+		}
+	}
+	
+	private static class OpenSlotAllocationPredicateProvider implements PositionSequencePredicateProvider<OpenSlotAllocation> {
+
+		@Override
+		public Predicate<OpenSlotAllocation> buy() {
+			return LoadSlot.class::isInstance;
+		}
+
+		@Override
+		public Predicate<OpenSlotAllocation> sell() {
+			return DischargeSlot.class::isInstance;
+		}
+
+		@Override
+		public Predicate<OpenSlotAllocation> isInPortGroup(PortGroup portGroup) {
+			Set<?> ports = SetUtils.getObjects(portGroup);
+			return sa -> ports.contains(sa.getSlot().getPort());
+		}
 	}
 
 }

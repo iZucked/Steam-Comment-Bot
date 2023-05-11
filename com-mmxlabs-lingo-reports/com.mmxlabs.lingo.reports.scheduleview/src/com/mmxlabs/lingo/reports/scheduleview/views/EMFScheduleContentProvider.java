@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.scheduleview.views;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
@@ -31,7 +33,9 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -122,14 +126,10 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 					// for (InventoryEvents inventory : schedule.getInventoryLevels()) {
 					// result.add(inventory);
 					// }
-					PositionsSequence buys = PositionsSequence.makeBuySequence(schedule);
-					PositionsSequence sells = PositionsSequence.makeSellSequence(schedule);
-					if (!buys.getElements().isEmpty()) {
-						result.add(buys);
-					}
-					if (!sells.getElements().isEmpty()) {
-						result.add(sells);
-					}
+
+					// List<@NonNull PositionsSequence> seqs = PositionsSequence.makeBuySellSequences(schedule).stream().filter(p -> !p.getElements().isEmpty()).toList();
+					List<PositionsSequence> seqs = getPositionSequences(schedule);
+					result.addAll(seqs);
 				}
 //				result.addAll(Schedule)
 			}
@@ -259,6 +259,15 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 		}
 		return null;
+	}
+
+	private List<PositionsSequence> getPositionSequences(Schedule schedule) {
+		// get the settings from preferences instead, below is a test string
+		String portGroupsString = "alpha1, alpha2";
+
+		Set<String> portGroupNames = Arrays.stream(portGroupsString.split(", ")).collect(Collectors.toSet());
+		List<PortGroup> portGroups = ScenarioModelUtil.findReferenceModel(schedule).getPortModel().getPortGroups().stream().filter(pg -> portGroupNames.contains(pg.getName())).toList();
+		return PositionsSequence.makeBuySellSequencesFromPortGroups(schedule, portGroups, true, true);
 	}
 
 	@Override
