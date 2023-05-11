@@ -85,7 +85,7 @@ public final class CargoEditorPlugin extends AbstractUIPlugin {
 
 	private void initImageRegistry(final ImageRegistry imageRegistry) {
 		imageRegistry.put(IMAGE_CARGO_LINK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/wired.gif"));
-		imageRegistry.put(IMAGE_CARGO_LOCK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/assigned.gif"));
+		imageRegistry.put(IMAGE_CARGO_LOCK, CommonImages.getImageDescriptor(IconPaths.Lock_12, IconMode.Enabled));
 		imageRegistry.put(IMAGE_CARGO_NOTES, CommonImages.getImageDescriptor(IconPaths.Notes_12, IconMode.Enabled));
 		imageRegistry.put(IMAGE_CARGO_TRANSFER, CommonImages.getImageDescriptor(IconPaths.Transfer_12, IconMode.Enabled));
 		imageRegistry.put(IMAGE_CARGO_NOTES_AND_TRANSFER, CommonImages.getImageDescriptor(IconPaths.NotesAndTransfer, IconMode.Enabled));

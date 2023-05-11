@@ -51,6 +51,7 @@ public final class CommonImages {
 		PinnedRow(8, "icons/8x8/pin.png"), //
 		
 		// 12x12
+		Lock_12(12, "icons/12x12/lock.png"), //
 		Transfer_12(12, "icons/12x12/transfer.png"), //
 		Notes_12(12, "icons/12x12/notes.png"), //
 		HeelCarry_12(12, "icons/12x12/heel_carry.png"), //
