@@ -86,6 +86,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/pricingEvent"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cancellationExpression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/shippingDaysRestriction"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/businessUnit"/>
+      <genOperations ecoreOperation="commercial.ecore#//Contract/getContractOrDelegateBusinessUnit"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>

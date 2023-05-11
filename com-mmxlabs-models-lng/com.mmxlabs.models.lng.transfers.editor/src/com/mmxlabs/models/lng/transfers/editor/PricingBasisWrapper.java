@@ -94,7 +94,7 @@ public class PricingBasisWrapper extends IInlineEditorEnablementWrapper {
 			final TransferAgreement agreement = record.getTransferAgreement();
 			if (agreement != null) {
 
-				if (wrapped instanceof PricingBasisInlineEditor pbie) {
+				if (wrapped instanceof final PricingBasisInlineEditor pbie) {
 					pbie.addValues(agreement.getPreferredPBs(), true);
 				}
 

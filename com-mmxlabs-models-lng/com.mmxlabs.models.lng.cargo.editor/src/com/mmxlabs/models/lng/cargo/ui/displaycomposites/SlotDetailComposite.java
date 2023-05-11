@@ -513,6 +513,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					unshippedWindowFeatures.add(new ETypedElement[] { f });
 					shippedWindowFeatures.add(new ETypedElement[] { f });
 					break;
+				case NAME:
+					nameFeatures.add(new ETypedElement[] {f} );
+					break;
 				case OTHER:
 				default:
 					missedFeaturesList.add(f);
@@ -676,7 +679,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	private enum Section {
-		OTHER, MAIN, PRICING, WINDOW, TERMS
+		OTHER, MAIN, PRICING, WINDOW, TERMS, NAME
 	}
 
 	private Section getSectionFor(ETypedElement feature) {
@@ -694,6 +697,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					return Section.WINDOW;
 				case "terms":
 					return Section.TERMS;
+				case "name":
+					return Section.NAME;
 				}
 			}
 		}

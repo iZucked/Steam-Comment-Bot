@@ -397,7 +397,7 @@ public class ChangeSetView extends ViewPart {
 			// Extract vessel columns and generate.
 
 			final Set<VesselData> vesselnames = new LinkedHashSet<>();
-
+			columnHelper.resetExposures();
 			final ChangeSetTableRoot tableRootDefault = newViewState.tableRootDefault;
 			if (tableRootDefault != null) {
 				for (final ChangeSetTableGroup group : tableRootDefault.getGroups()) {
@@ -419,10 +419,11 @@ public class ChangeSetView extends ViewPart {
 				}
 			}
 
-			columnHelper.updateVesselColumns(vesselnames);
+			// Make sure these are called in the same order they were originally added to the table
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
 				columnHelper.updateExposuresColumns();
 			}
+			columnHelper.updateVesselColumns(vesselnames);
 			
 
 			for (final GridColumn gc : viewer.getGrid().getColumns()) {
