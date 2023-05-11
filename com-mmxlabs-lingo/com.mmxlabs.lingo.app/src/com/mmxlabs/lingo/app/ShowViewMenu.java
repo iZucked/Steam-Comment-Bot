@@ -76,8 +76,10 @@ import com.google.common.collect.Sets;
 public class ShowViewMenu extends ContributionItem {
 
 	// These are the display names for the category. The API's used here do no get the underlying id.
-	private static final String USER_REPORTS = "User Reports";
-	private static final String TEAM_REPORTS = "Team Reports";
+	private static final String CAT_USER_REPORTS = "User Reports";
+	private static final String CAT_TEAM_REPORTS = "Team Reports";
+	private static final String CAT_SCHEDULE = "Schedule";
+	private static final String CAT_GENERAL = "General";
 
 	// Part ids to always ignore
 	private static final Set<String> IGNORED = Sets.newHashSet(IIntroConstants.INTRO_VIEW_ID);
@@ -148,7 +150,7 @@ public class ShowViewMenu extends ContributionItem {
 
 		final ParameterizedCommand cmd = getCommand(commandService, makeFast);
 
-		showDlgAction = new Action(WorkbenchMessages.ShowView_title) {
+		showDlgAction = new Action("Search...") {
 			@Override
 			public void run() {
 				try {
@@ -200,7 +202,11 @@ public class ShowViewMenu extends ContributionItem {
 		if (page.getPerspective() == null) {
 			return;
 		}
-
+		// String[] perspectiveShortcuts = page.getPerspective().getShortcuts();
+		// String[] perspectiveShortcuts = page.getPerspectiveShortcuts();
+		// var desc = page.getPerspective();
+		// String id2 = desc.getId();
+		// window.getWorkbench().getPerspectiveRegistry().revertPerspective(null);
 		// Get visible actions from perspective
 		List<String> viewIds = Arrays.asList(page.getShowViewShortcuts());
 
@@ -212,7 +218,7 @@ public class ShowViewMenu extends ContributionItem {
 			final IViewRegistry reg = WorkbenchPlugin.getDefault().getViewRegistry();
 			for (final var cat : reg.getViews()) {
 				if (cat.getCategoryPath().length > 0) {
-					if (cat.getCategoryPath()[0].equals(TEAM_REPORTS) || cat.getCategoryPath()[0].equals(USER_REPORTS)) {
+					if (cat.getCategoryPath()[0].equals(CAT_TEAM_REPORTS) || cat.getCategoryPath()[0].equals(CAT_USER_REPORTS)) {
 						viewIds.add(cat.getId());
 					}
 				}
@@ -230,16 +236,26 @@ public class ShowViewMenu extends ContributionItem {
 			getItem(id, m);
 		}
 
-		// Sort alphabetically, but move User and Team reports to the top
-		List<String> keys = new LinkedList<>(m.keySet());
+		// Sort alphabetically...
+		final List<String> keys = new LinkedList<>(m.keySet());
 		Collections.sort(keys);
-		if (keys.contains(TEAM_REPORTS)) {
-			keys.remove(TEAM_REPORTS);
-			keys.add(0, TEAM_REPORTS);
+		// .. but move some specific ones to the top...
+		if (keys.contains(CAT_SCHEDULE)) {
+			keys.remove(CAT_SCHEDULE);
+			keys.add(0, CAT_SCHEDULE);
 		}
-		if (keys.contains(USER_REPORTS)) {
-			keys.remove(USER_REPORTS);
-			keys.add(0, USER_REPORTS);
+		if (keys.contains(CAT_TEAM_REPORTS)) {
+			keys.remove(CAT_TEAM_REPORTS);
+			keys.add(0, CAT_TEAM_REPORTS);
+		}
+		if (keys.contains(CAT_USER_REPORTS)) {
+			keys.remove(CAT_USER_REPORTS);
+			keys.add(0, CAT_USER_REPORTS);
+		}
+		// ... and others to the bottom
+		if (keys.contains(CAT_GENERAL)) {
+			keys.remove(CAT_GENERAL);
+			keys.add(CAT_GENERAL);
 		}
 
 		for (final String key : keys) {
@@ -251,7 +267,8 @@ public class ShowViewMenu extends ContributionItem {
 			}
 
 			Collections.sort(views, actionComparator);
-			if (key.equals(USER_REPORTS) || key.equals(TEAM_REPORTS)) {
+			// These categories become sub menus rather than inlined.
+			if (key.equals(CAT_USER_REPORTS) || key.equals(CAT_TEAM_REPORTS)) {
 				final MenuManager minimgr = new MenuManager(key);
 				innerMgr.add(minimgr);
 				for (final var ccip : views) {
@@ -417,7 +434,7 @@ public class ShowViewMenu extends ContributionItem {
 
 	@Override
 	public void fill(final Menu menu, int index) {
-		if (getParent() instanceof MenuManager mgr) {
+		if (getParent() instanceof final MenuManager mgr) {
 			mgr.addMenuListener(menuListener);
 		}
 
