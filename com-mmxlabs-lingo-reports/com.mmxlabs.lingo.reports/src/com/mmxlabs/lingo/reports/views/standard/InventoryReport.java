@@ -2234,10 +2234,10 @@ public class InventoryReport extends ViewPart {
 			}
 		}
 		calculateMonthEndEntitlement(list, adpStart);
-		calculateOverliftCF(list, adpStart, initialAllocation);
-		calculateCumulativeDelta(list, adpStart, initialAllocation, fclValue);
 		final Map<BaseLegalEntity, Integer> mappedInitialAllocation = new HashMap<>();
 		entitiesOrdered.stream().forEach(e -> mappedInitialAllocation.put(e, initialAllocation.get(entityEntityMap.get(e))));
+		calculateOverliftCF(list, adpStart, mappedInitialAllocation);
+		calculateCumulativeDelta(list, adpStart, mappedInitialAllocation, fclValue);
 		calculateCarriedEntitlement(list, adpStart, mappedInitialAllocation);
 	}
 

@@ -66,6 +66,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 
 		addTypicalColumn("Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler())));
+		
+		addTypicalColumn("Short Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_ShortName(), getCommandHandler())));
 
 		addTypicalColumn("Country", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getCommandHandler())),
 				PortPackage.eINSTANCE.getPort_Location());

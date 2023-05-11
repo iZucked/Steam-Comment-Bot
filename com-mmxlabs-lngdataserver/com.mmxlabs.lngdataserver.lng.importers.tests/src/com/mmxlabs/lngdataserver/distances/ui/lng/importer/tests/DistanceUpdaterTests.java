@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.lngdataserver.distances.ui.lng.importer.tests;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lngdataserver.data.distances.DataLoader;
@@ -23,46 +25,31 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class DistanceUpdaterTests {
 
-	@Test
-	public void test2021aTo2021b() throws Exception {
-		performTest("2021a", "2021b");
+	/**
+	 * Constant used for "current" dataset as null doesn't look nice in the test name
+	 */
+	private static final String CURRENT = "Current";
+
+	public static Iterable<Object[]> distanceTransitions() {
+		return Arrays.asList(new Object[][] { //
+				{ "2021a", "2021b", 0 }, //
+				{ "2021b", "2021c", 2 }, // Expect two lost distances here
+				{ "2021c", "2021d", 0 }, //
+				{ "2021d", "2022a", 0 }, //
+				{ "2022a", "2022b", 0 }, //
+				{ "2022b", "2023a", 0 }, //
+				{ "2023a", "2023b", 0 }, //
+				{ "2023b", "2023c", 0 }, //
+				{ "2023a", "2023c", 0 }, //
+				{ "2023a", CURRENT, 0 }, //
+				{ "2023b", CURRENT, 0 }, //
+				{ "2023c", CURRENT, 0 }, //
+
+		});
 	}
 
-	@Test
-	public void test2021bTo2021c() throws Exception {
-		// Expect two lost distances here
-		performTest("2021b", "2021c", 2);
-	}
-
-	@Test
-	public void test2021cTo2021d() throws Exception {
-		performTest("2021c", "2021d");
-	}
-
-	@Test
-	public void test2021dTo2022a() throws Exception {
-		performTest("2021d", "2022a");
-	}
-
-	@Test
-	public void test2022aTo2022b() throws Exception {
-		performTest("2022a", "2022b");
-	}
-
-	@Test
-	public void test2022bTo2023a() throws Exception {
-		performTest("2022b", "2023a");
-	}
-
-	@Test
-	public void test2023aToCurrent() throws Exception {
-		performTest("2023a", null);
-	}
-
-	void performTest(String from, String to) throws Exception {
-		performTest(from, to, 0);
-	}
-
+	@ParameterizedTest(name = "test {0} To {1}")
+	@MethodSource("distanceTransitions")
 	void performTest(String from, String to, int tolerance) throws Exception {
 
 		// Load in the scenario
@@ -95,7 +82,7 @@ public class DistanceUpdaterTests {
 		}
 
 		// Replace with after data
-		if (to == null) {
+		if (to == null || to == CURRENT) {
 			ScenarioBuilder.reloadPortsAndDistances(sdp);
 		} else {
 			ScenarioBuilder.reloadPortsAndDistances(sdp, DataLoader.class.getResourceAsStream("/" + to + "/ports.json"), //
@@ -117,8 +104,8 @@ public class DistanceUpdaterTests {
 
 		// Make sure we have not lost any distance lines from the totals count
 		for (var ro : RouteOption.values()) {
-			// System.out.printf("%s %,d -> %,d%n", ro.getName(), before.get(ro), after.get(ro));
-			// Assertions.assertTrue(after.get(ro) >= before.get(ro));
+//			 System.out.printf("%s %,d -> %,d%n", ro.getName(), before.get(ro), after.get(ro));
+			 Assertions.assertTrue(after.get(ro) >= before.get(ro));
 		}
 		int lost = 0;
 		for (var e : counter.entrySet()) {

@@ -59,7 +59,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerPriceCurveSetRunner;
 import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.AbstractJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner.SandboxJob;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJob;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -224,7 +224,7 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 			final List<Long> portfolioPnls = new ArrayList<>();
 
 			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
-				final List<Future<?>> jobs = new LinkedList<>();
+				final List<@Nullable Future<?>> jobs = new LinkedList<>();
 				if (results != null) {
 					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
@@ -313,11 +313,11 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 
 		if (model.getBaseCase().isKeepExistingScenario()) {
 			final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(scenarioDataProvider, mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase());
+			baseScheduleSpecification = builder.generate(model.getBaseCase(), false);
 		} else {
 
 			final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase());
+			baseScheduleSpecification = builder.generate(model.getBaseCase(), false);
 		}
 		return baseScheduleSpecification;
 	}

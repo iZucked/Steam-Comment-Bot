@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,6 +23,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getUpstreamBook <em>Upstream Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#isThirdParty <em>Third Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getBusinessUnits <em>Business Units</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity()
@@ -129,4 +131,16 @@ public interface BaseLegalEntity extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setThirdParty(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Business Units</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.BusinessUnit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Business Units</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity_BusinessUnits()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<BusinessUnit> getBusinessUnits();
 } // BaseLegalEntity

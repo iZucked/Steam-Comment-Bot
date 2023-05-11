@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.util;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
@@ -12,8 +12,13 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteOption;
 
+@NonNullByDefault
 public class PortModelLabeller {
-	public static @NonNull String getName(@NonNull RouteOption routeOption) {
+
+	private PortModelLabeller() {
+	}
+
+	public static String getName(final RouteOption routeOption) {
 		switch (routeOption) {
 		case DIRECT:
 			return "Direct";
@@ -25,7 +30,7 @@ public class PortModelLabeller {
 		throw new IllegalStateException();
 	}
 
-	public static @NonNull String getName(@NonNull CanalEntry canalEntry) {
+	public static String getName(final CanalEntry canalEntry) {
 		switch (canalEntry) {
 		case NORTHSIDE:
 			return "Northside";
@@ -37,7 +42,7 @@ public class PortModelLabeller {
 
 	// Returns directions labels (opposite to entry point, i.e. northbound direction
 	// is southside entry)
-	public static @NonNull String getDirection(@NonNull final CanalEntry canalEntry) {
+	public static String getDirection(final CanalEntry canalEntry) {
 		switch (canalEntry) {
 		case NORTHSIDE:
 			return "Southbound";
@@ -47,7 +52,7 @@ public class PortModelLabeller {
 		throw new IllegalStateException();
 	}
 
-	public static @NonNull String getUserName(@NonNull RouteOption routeOption, @NonNull CanalEntry canalEntry, @NonNull PortModel portModel) {
+	public static String getUserName(final RouteOption routeOption, final CanalEntry canalEntry, final PortModel portModel) {
 		for (Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() == routeOption) {
 				EntryPoint entryPoint = null;
@@ -63,5 +68,17 @@ public class PortModelLabeller {
 			}
 		}
 		return "";
+	}
+
+	public static String getShortName(final RouteOption routeOption) {
+		switch (routeOption) {
+		case DIRECT:
+			return "Dir";
+		case PANAMA:
+			return "Pan";
+		case SUEZ:
+			return "Suez";
+		}
+		throw new IllegalStateException();
 	}
 }

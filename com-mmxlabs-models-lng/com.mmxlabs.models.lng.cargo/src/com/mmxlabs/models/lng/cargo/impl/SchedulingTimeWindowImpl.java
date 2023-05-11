@@ -30,7 +30,11 @@ public class SchedulingTimeWindowImpl implements SchedulingTimeWindow {
 	public int getDuration() {
 		//NB: must reference original slot values.
 		if (slot.isWindowCounterParty()) {
-			return convertToHours(slot.getWindowSize(), slot.getWindowSizeUnits()) + getSlotOrDelegateDuration();
+			if(slot.isSetWindowSizeUnits()) {
+				return convertToHours(slot.getWindowSize(), slot.getWindowSizeUnits()) + getSlotOrDelegateDuration();
+			} else {
+				return convertToHours(slot.getWindowSize(), slot.getPort().getDefaultWindowSizeUnits()) + getSlotOrDelegateDuration();
+			}
 		}
 		else {
 			return getSlotOrDelegateDuration();

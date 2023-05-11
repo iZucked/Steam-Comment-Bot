@@ -27,6 +27,7 @@ public class InternalDataConstants {
 	// Ports
 	public static final String PORT_ALTAMIRA = "L_MX_Altam";
 	public static final String PORT_BALBOA = "L_CP_Balbo";
+	public static final String PORT_BAHIA_BLANCA = "L_AR_Bahia";
 	public static final String PORT_BARCELONA = "L_ES_Barce";
 	public static final String PORT_BORYEONG = "L_KR_Borye";
 	public static final String PORT_BONNY = "L_NG_Bonny";
@@ -34,6 +35,7 @@ public class InternalDataConstants {
 	public static final String PORT_DAMIETTA = "L_EG_Damie";
 	public static final String PORT_DAS_ISLAND = "L_AE_AbuDh";
 	public static final String PORT_DUNKIRK = "L_FR_Dunki";
+	public static final String PORT_ESCOBAR = "L_AR_Escob";
 	public static final String PORT_GWANGYANG = "L_KR_Gwang";
 	public static final String PORT_HAMMERFEST = "L_NO_Hamme";
 	public static final String PORT_INCHEON = "L_KR_Inche";

@@ -8,13 +8,13 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.DivertibleContractInlineEditorChangedListener;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.dates.MonthInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.PlaceholderInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
@@ -49,6 +49,21 @@ public class ContractComponentHelper extends DefaultComponentHelper {
 			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__SHIPPING_DAYS_RESTRICTION);
 			editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
 			return editor;
+		});
+		addEditor(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT, topClass -> {
+			return new ReferenceInlineEditor(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT) {
+				@Override
+				protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+					if (currentlySettingValue) {
+						return;
+					}
+					if (value == null && !valueList.isEmpty()) {
+						doSetValue(valueList.get(0), forceCommandExecution);
+					} else {
+						doSetValue(value, forceCommandExecution);
+					}
+				}
+			};
 		});
 
 	}

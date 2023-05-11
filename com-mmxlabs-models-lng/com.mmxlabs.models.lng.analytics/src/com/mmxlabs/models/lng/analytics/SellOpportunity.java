@@ -321,7 +321,7 @@ public interface SellOpportunity extends UUIDObject, SellOption {
 	 * @return the value of the '<em>Min Volume</em>' attribute.
 	 * @see #setMinVolume(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_MinVolume()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMinVolume();
@@ -347,7 +347,7 @@ public interface SellOpportunity extends UUIDObject, SellOption {
 	 * @return the value of the '<em>Max Volume</em>' attribute.
 	 * @see #setMaxVolume(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_MaxVolume()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMaxVolume();

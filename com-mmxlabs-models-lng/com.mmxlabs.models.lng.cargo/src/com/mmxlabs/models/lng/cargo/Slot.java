@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
@@ -73,8 +74,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isWindowCounterParty <em>Window Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isComputeExposure <em>Compute Exposure</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isComputeHedge <em>Compute Hedge</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1785,6 +1790,105 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	void setWindowCounterParty(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Pricing Basis</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Basis</em>' attribute.
+	 * @see #isSetPricingBasis()
+	 * @see #unsetPricingBasis()
+	 * @see #setPricingBasis(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PricingBasis()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='pricingBasis'"
+	 * @generated
+	 */
+	String getPricingBasis();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Basis</em>' attribute.
+	 * @see #isSetPricingBasis()
+	 * @see #unsetPricingBasis()
+	 * @see #getPricingBasis()
+	 * @generated
+	 */
+	void setPricingBasis(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPricingBasis()
+	 * @see #getPricingBasis()
+	 * @see #setPricingBasis(String)
+	 * @generated
+	 */
+	void unsetPricingBasis();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pricing Basis</em>' attribute is set.
+	 * @see #unsetPricingBasis()
+	 * @see #getPricingBasis()
+	 * @see #setPricingBasis(String)
+	 * @generated
+	 */
+	boolean isSetPricingBasis();
+
+	/**
+	 * Returns the value of the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Business Unit</em>' reference.
+	 * @see #isSetBusinessUnit()
+	 * @see #unsetBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_BusinessUnit()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	BusinessUnit getBusinessUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Business Unit</em>' reference.
+	 * @see #isSetBusinessUnit()
+	 * @see #unsetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @generated
+	 */
+	void setBusinessUnit(BusinessUnit value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @generated
+	 */
+	void unsetBusinessUnit();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Business Unit</em>' reference is set.
+	 * @see #unsetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @generated
+	 */
+	boolean isSetBusinessUnit();
+
+	/**
 	 * Returns the value of the '<em><b>Allowed Ports</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
@@ -1840,6 +1944,50 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	void setAllowedPortsOverride(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Compute Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Compute Exposure</em>' attribute.
+	 * @see #setComputeExposure(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ComputeExposure()
+	 * @model
+	 * @generated
+	 */
+	boolean isComputeExposure();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isComputeExposure <em>Compute Exposure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Compute Exposure</em>' attribute.
+	 * @see #isComputeExposure()
+	 * @generated
+	 */
+	void setComputeExposure(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Compute Hedge</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Compute Hedge</em>' attribute.
+	 * @see #setComputeHedge(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ComputeHedge()
+	 * @model
+	 * @generated
+	 */
+	boolean isComputeHedge();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isComputeHedge <em>Compute Hedge</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Compute Hedge</em>' attribute.
+	 * @see #isComputeHedge()
+	 * @generated
+	 */
+	void setComputeHedge(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2018,6 +2166,14 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	EList<APortSet<Port>> getSlotOrDelegateAllowedPorts();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BusinessUnit getSlotOrDelegateBusinessUnit();
 
 } // end of  Slot
 

@@ -15,7 +15,6 @@ import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -81,6 +80,7 @@ public class TransfersDataTransformer implements ISlotTransformer {
 	@Override
 	public void finishTransforming() {
 		if (processTransferModel) {
+			transferModelDataProviderEditor.setSeriesParsers(commodityParser, pricingBasisParser);
 			if (lngScenarioModel != null) {
 				final TransferModel transferModel = lngScenarioModel.getTransferModel();
 				if (transferModel != null) {					
@@ -88,6 +88,7 @@ public class TransfersDataTransformer implements ISlotTransformer {
 					seenSlots.forEach(transferModelDataProviderEditor::reconsileIPortSlotWithLookupData);
 				}
 			}
+			
 		}
 	}
 
@@ -122,12 +123,10 @@ public class TransfersDataTransformer implements ISlotTransformer {
 				} else {
 					throw new IllegalStateException(String.format("Transfer agreement %s is missing the price data", ta.getName()));
 				}
-				final ICurve curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, isBasis ? pricingBasisParser : commodityParser);
-				assert curve != null;
 				final IEntity fromEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getFromEntity(), IEntity.class);
 				final IEntity toEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getToEntity(), IEntity.class);
 				final BasicTransferAgreement basicTA = new BasicTransferAgreement(ta.getName(), fromEntity, //
-						toEntity, curve, priceExpression, isBasis);
+						toEntity, priceExpression, isBasis);
 				agreements.add(basicTA);
 				modelEntityMap.addModelObject(ta, basicTA);
 			}
@@ -164,9 +163,11 @@ public class TransfersDataTransformer implements ISlotTransformer {
 					priceExpression = tr.getPricingBasis();
 				} else if (ta.getPriceExpression() != null && !ta.getPriceExpression().isBlank()) {
 					pricingOverride = false;
+					priceExpression = ta.getPriceExpression();
 					isBasis = false;
 				} else if (ta.getPricingBasis() != null && !ta.getPricingBasis().isBlank()) {
 					pricingOverride = false;
+					priceExpression = ta.getPricingBasis();
 					isBasis = true;
 				} else {
 					throw new IllegalStateException(String.format("Transfer record %s is missing the price data", tr.getName()));
@@ -177,19 +178,13 @@ public class TransfersDataTransformer implements ISlotTransformer {
 					final BasicTransferAgreement basicTA = modelEntityMap.getOptimiserObjectNullChecked(ta, BasicTransferAgreement.class);
 					final Slot<?> slot = tr.getLhs();
 					final IPortSlot portSlot = modelToOptimiserSlots.get(slot);
-					ICurve curve = null;
-					if (pricingOverride) {
-						curve = dateAndCurveHelper.generateExpressionCurve(priceExpression, isBasis ? pricingBasisParser : commodityParser);
-						if (curve == null) {
-							throw new IllegalStateException(String.format("Transfer record %s is missing the pricing expression", tr.getName()));
-						}
-					}
 					
 					final int pricingDate = dateAndCurveHelper.convertTime(tr.getPricingDate());
 					final String nextTransferName = tr.getRhs() == null ? "" : tr.getRhs().getName();
 					final BasicTransferRecord basicTR;
-					if (pricingOverride && curve != null) {
-						basicTR = new BasicTransferRecord(tr.getName(), basicTA, curve, priceExpression, pricingDate, portSlot, nextTransferName, isBasis);
+					
+					if (pricingOverride) {
+						basicTR = new BasicTransferRecord(tr.getName(), basicTA, priceExpression, pricingDate, portSlot, nextTransferName, isBasis);
 					} else {
 						basicTR = new BasicTransferRecord(tr.getName(), basicTA, pricingDate, portSlot, nextTransferName);
 					}

@@ -192,8 +192,8 @@ public class ChangeSetView extends ViewPart {
 			// If both rows of the same parent group..
 			if (e1 instanceof ChangeSetTableRow r1 && e2 instanceof ChangeSetTableRow r2) {
 				// Retain original ordering in the datamodel
-				if (r1.eContainer() == r2.eContainer()) {
-					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
+				if (r1.getTableGroup() == r2.getTableGroup()) {
+					final ChangeSetTableGroup g = r1.getTableGroup();
 					if (sortByVesselAndDate) {
 						final Pair<String, Integer> r1Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r1));
 						final Pair<String, Integer> r2Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r2));
@@ -264,10 +264,10 @@ public class ChangeSetView extends ViewPart {
 				slotAllocation = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLoadAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getCurrentRhsBefore() != null ? tableRow.getCurrentRhsBefore().getDischargeAllocation() : null;
 			}
 			if (slotAllocation == null) {
-				slotAllocation = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getDischargeAllocation() : null;
+				slotAllocation = tableRow.getCurrentRhsAfter() != null ? tableRow.getCurrentRhsAfter().getDischargeAllocation() : null;
 			}
 			if (slotAllocation != null && slotAllocation.getSlotVisit() != null) {
 				return slotAllocation.getSlotVisit().getStart();
@@ -278,7 +278,7 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	public enum ViewMode {
-		COMPARE, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
+		COMPARE, NEW_ACTION_SET, OPTIONISER, GENERIC, SANDBOX
 	}
 
 	public static class ViewState {
@@ -333,7 +333,7 @@ public class ChangeSetView extends ViewPart {
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			if (!inChangingChangeSetSelection.get()) {
 				setViewMode(ViewMode.COMPARE, false);
-				setPartName("Changes");
+				setPartName(getChangeSetPartName());
 
 				final ScenarioResult pin = selectedDataProvider.getPinnedScenarioResult();
 
@@ -342,7 +342,7 @@ public class ChangeSetView extends ViewPart {
 				} else {
 					final ScenarioResult other = selectedDataProvider.getOtherScenarioResults().get(0);
 					setNewDataData(pin, (monitor, targetSlotId) -> {
-						final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+						final IPinDiffResultPlanTransformer transformer = getPinDiffResultPlanTransformer();
 						final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 						return new ViewState(newRoot, SortMode.BY_GROUP);
 					}, !block, null);
@@ -356,6 +356,10 @@ public class ChangeSetView extends ViewPart {
 			// Nothing to do here
 		}
 	};
+
+	protected IPinDiffResultPlanTransformer getPinDiffResultPlanTransformer() {
+		return new PinDiffResultPlanTransformer();
+	}
 
 	private ViewMode viewMode = ViewMode.COMPARE;
 	private IAdditionalAttributeProvider additionalAttributeProvider;
@@ -372,9 +376,11 @@ public class ChangeSetView extends ViewPart {
 
 	public final class ViewUpdateRunnable implements Runnable {
 		private final ViewState newViewState;
+		private final boolean applyToScenarioComparisionService;
 
-		public ViewUpdateRunnable(final ViewState newViewState) {
+		public ViewUpdateRunnable(final ViewState newViewState, final boolean applyToScenarioComparisonService) {
 			this.newViewState = newViewState;
+			this.applyToScenarioComparisionService = applyToScenarioComparisonService;
 		}
 
 		@Override
@@ -384,18 +390,21 @@ public class ChangeSetView extends ViewPart {
 			}
 
 			// Reset selection
-			scenarioComparisonService.setSelection(new StructuredSelection());
+			if (applyToScenarioComparisionService) {
+				scenarioComparisonService.setSelection(new StructuredSelection());
+			}
 
 			// Extract vessel columns and generate.
 
 			final Set<VesselData> vesselnames = new LinkedHashSet<>();
-
+			columnHelper.resetExposures();
 			final ChangeSetTableRoot tableRootDefault = newViewState.tableRootDefault;
 			if (tableRootDefault != null) {
 				for (final ChangeSetTableGroup group : tableRootDefault.getGroups()) {
 					for (final ChangeSetTableRow csr : group.getRows()) {
 						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType(), csr.getBeforeVesselCharterNumber()));
 						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType(), csr.getAfterVesselCharterNumber()));
+						columnHelper.collectExposures(csr, group);
 					}
 				}
 			}
@@ -405,11 +414,17 @@ public class ChangeSetView extends ViewPart {
 					for (final ChangeSetTableRow csr : group.getRows()) {
 						vesselnames.add(new VesselData(csr.getBeforeVesselName(), csr.getBeforeVesselShortName(), csr.getBeforeVesselType(), csr.getBeforeVesselCharterNumber()));
 						vesselnames.add(new VesselData(csr.getAfterVesselName(), csr.getAfterVesselShortName(), csr.getAfterVesselType(), csr.getAfterVesselCharterNumber()));
+						columnHelper.collectExposures(csr, group);
 					}
 				}
 			}
 
+			// Make sure these are called in the same order they were originally added to the table
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
+				columnHelper.updateExposuresColumns();
+			}
 			columnHelper.updateVesselColumns(vesselnames);
+			
 
 			for (final GridColumn gc : viewer.getGrid().getColumns()) {
 				gc.setWidth(gc.getWidth());
@@ -510,6 +525,10 @@ public class ChangeSetView extends ViewPart {
 
 	}
 
+	protected boolean shouldPropagateSelectionsToScenarioComparisionService() {
+		return true;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
@@ -524,8 +543,8 @@ public class ChangeSetView extends ViewPart {
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
 						final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, null, SortMode.BY_GROUP);
-						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, null, SortMode.BY_GROUP);
+						final ChangeSetTableRoot tableRootDefault = changeSetToTableTransformer.createViewDataModel(newRoot, false, SortMode.BY_GROUP);
+						final ChangeSetTableRoot tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newRoot, true, SortMode.BY_GROUP);
 						changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
 						newViewState.postProcess.accept(tableRootDefault);
@@ -534,7 +553,7 @@ public class ChangeSetView extends ViewPart {
 						newViewState.tableRootDefault = tableRootDefault;
 						newViewState.tableRootAlternative = tableRootAlternative;
 
-						RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
+						RunnerHelper.exec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()), true);
 					}
 				};
 			}
@@ -655,121 +674,14 @@ public class ChangeSetView extends ViewPart {
 		// Create content provider
 		viewer.setContentProvider(createContentProvider());
 
-		columnHelper = new ChangeSetViewColumnHelper(this, viewer);
+		columnHelper = createColumnHelper();
 		insertionPlanFilter = new InsertionPlanGrouperAndFilter();
 		columnHelper.makeColumns(insertionPlanFilter);
 
 		// Selection listener for pin/diff driver.
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		addSelectionChangeListenerToViewer();
 
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				final ISelection selection = event.getSelection();
-				if (selection instanceof IStructuredSelection iStructuredSelection) {
-
-					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected
-					// rows
-					ISelection newSelection;
-					{
-						final Set<Object> selectedElements = new LinkedHashSet<>();
-						final Iterator<?> itr = iStructuredSelection.iterator();
-						while (itr.hasNext()) {
-							final Object o = itr.next();
-							if (o instanceof ChangeSetTableRow changeSetRow) {
-								selectRow(selectedElements, changeSetRow);
-							} else if (o instanceof ChangeSetTableGroup group) {
-								final List<ChangeSetTableRow> rows = group.getRows();
-								for (final ChangeSetTableRow changeSetRow : rows) {
-									selectRow(selectedElements, changeSetRow);
-								}
-							}
-						}
-
-						while (selectedElements.remove(null))
-							;
-
-						newSelection = new StructuredSelection(new ArrayList<>(selectedElements));
-					}
-
-					if (viewMode != ViewMode.COMPARE) {
-						final Iterator<?> itr = iStructuredSelection.iterator();
-						while (itr.hasNext()) {
-							Object o = itr.next();
-							if (o instanceof ChangeSetTableRow row) {
-								o = row.eContainer();
-							}
-							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
-
-								// Set the flag so we don't end up in compare mode.
-								if (inChangingChangeSetSelection.compareAndSet(false, true)) {
-									try {
-										// This is a bit inefficient if we are just changing selected row(s) rather than
-										// change set.
-										scenarioComparisonService.setSelection(newSelection);
-										scenarioComparisonService.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), newSelection, true);
-									} finally {
-										inChangingChangeSetSelection.set(false);
-									}
-								}
-								break;
-							}
-						}
-					} else {
-						// Update selected elements
-						scenarioComparisonService.setSelectionWithChangeSet(newSelection);
-					}
-				}
-			}
-
-		});
-
-		final ViewerFilter[] filters = new ViewerFilter[2];
-		filters[0] = new ViewerFilter() {
-
-			@Override
-			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-
-				if (!showNegativePNLChanges) {
-
-					if (element instanceof ChangeSetTableGroup changeSet) {
-						final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
-						if (totalPNLDelta <= 0) {
-							return false;
-						}
-					} else {
-
-						if (parentElement instanceof ChangeSetTableGroup changeSet) {
-							final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
-							if (totalPNLDelta <= 0) {
-								return false;
-							}
-						}
-					}
-				}
-				if (!showMinorChanges) {
-					if (element instanceof ChangeSetTableRow row) {
-						if (!row.isMajorChange()) {
-							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
-									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
-							long totalPNLDelta = 0;
-							if (parentElement instanceof ChangeSetTableGroup changeSet) {
-								totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
-							}
-							if (Math.abs(delta) < 250_000L) {
-								// Exclude if less than 10% of PNL change.
-								if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
-									return false;
-								}
-							}
-						}
-					}
-				}
-				return true;
-			}
-		};
-		filters[1] = insertionPlanFilter;
-
-		viewer.setFilters(filters);
+		viewer.setFilters(createViewerFilters());
 
 		viewer.setComparator(new ChangeSetComparator(this.sortByVesselAndDate));
 
@@ -864,20 +776,19 @@ public class ChangeSetView extends ViewPart {
 					final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 					Object element = selection.getFirstElement();
 					if (element instanceof ChangeSetTableRow) {
-						element = ((ChangeSetTableRow) element).eContainer();
+						element = ((ChangeSetTableRow) element).getTableGroup();
 					}
 					int idx = 0;
 					ChangeSetTableGroup changeSetTableGroup = null;
 					if (element instanceof ChangeSetTableGroup) {
 						changeSetTableGroup = (ChangeSetTableGroup) element;
-						final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+						final ChangeSetTableRoot root = changeSetTableGroup.getTableRoot();
 						if (root != null) {
 							idx = root.getGroups().indexOf(changeSetTableGroup);
 						}
 						element = changeSetTableGroup.getChangeSet();
 					}
-					if (element instanceof ChangeSet) {
-						final ChangeSet changeSet = (ChangeSet) element;
+					if (element instanceof ChangeSet changeSet) {
 
 						final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
 
@@ -896,62 +807,205 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
+	protected void addSelectionChangeListenerToViewer() {
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				final ISelection selection = event.getSelection();
+				if (selection instanceof IStructuredSelection iStructuredSelection) {
+
+					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected
+					// rows
+					ISelection newSelection;
+					{
+						final Set<Object> selectedElements = new LinkedHashSet<>();
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							final Object o = itr.next();
+							if (o instanceof ChangeSetTableRow changeSetRow) {
+								selectRow(selectedElements, changeSetRow);
+							} else if (o instanceof ChangeSetTableGroup group) {
+								final List<ChangeSetTableRow> rows = group.getRows();
+								for (final ChangeSetTableRow changeSetRow : rows) {
+									selectRow(selectedElements, changeSetRow);
+								}
+							}
+						}
+
+						while (selectedElements.remove(null))
+							;
+
+						newSelection = new StructuredSelection(new ArrayList<>(selectedElements));
+					}
+
+					if (viewMode != ViewMode.COMPARE) {
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							Object o = itr.next();
+							if (o instanceof ChangeSetTableRow row) {
+								o = row.getTableGroup();
+							}
+							if (o instanceof ChangeSetTableGroup changeSetTableGroup) {
+
+								// Set the flag so we don't end up in compare mode.
+								if (inChangingChangeSetSelection.compareAndSet(false, true)) {
+									try {
+										// This is a bit inefficient if we are just changing selected row(s) rather than
+										// change set.
+										scenarioComparisonService.setSelection(newSelection);
+										scenarioComparisonService.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), newSelection, true);
+									} finally {
+										inChangingChangeSetSelection.set(false);
+									}
+								}
+								break;
+							}
+						}
+					} else {
+						// Update selected elements
+						scenarioComparisonService.setSelectionWithChangeSet(newSelection);
+					}
+				}
+			}
+
+		});
+	}
+
+	protected ChangeSetViewColumnHelper createColumnHelper() {
+		return new ChangeSetViewColumnHelper(this, viewer);
+	}
+
 	public void makeActions() {
 		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("start"));
 
-		{
+		makeAndAddPackAction();
+		makeAndAddToggleAltPnlAction();
+		makeAndAddExpandAndCollapseActions();
+		makeAndAddCopyAction();
+		makeAndAddReEvaluateAction();
+		makeAndAddFilterMenuAction();
+		getViewSite().getActionBars().getToolBarManager().update(true);
+	}
 
-			final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+	protected String getChangeSetPartName() {
+		return "Changes";
+	}
 
-			getViewSite().getActionBars().getToolBarManager().add(packAction);
-		}
+	protected ViewerFilter[] createViewerFilters() {
+		final ViewerFilter[] filters = new ViewerFilter[2];
+		filters[0] = new ViewerFilter() {
 
-		{
-			toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, ChangeSetView.this::doToggleDiffToBase);
-			toggleAltPNLBaseAction.setToolTipText("Toggle comparing to base or previous case");
-			toggleAltPNLBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
-			final GroupMarker group = new GroupMarker("diffToBaseGroup");
-			getViewSite().getActionBars().getToolBarManager().add(group);
-			toggleAltPNLBaseActionItem = new ActionContributionItem(toggleAltPNLBaseAction);
-			if (showToggleAltPNLBaseAction) {
-				getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleAltPNLBaseActionItem);
+			@Override
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+
+				if (!showNegativePNLChanges) {
+
+					if (element instanceof ChangeSetTableGroup changeSet) {
+						final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+						if (totalPNLDelta <= 0) {
+							return false;
+						}
+					} else {
+
+						if (parentElement instanceof ChangeSetTableGroup changeSet) {
+							final long totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+							if (totalPNLDelta <= 0) {
+								return false;
+							}
+						}
+					}
+				}
+				if (!showMinorChanges) {
+					if (element instanceof ChangeSetTableRow r) {
+						if (!r.isMajorChange()) {
+
+							Collection<ChangeSetTableRow> rows = r.getWiringGroup().getRows();
+//							if (r.getCargoGroup() != null) {
+//								rows = r.getCargoGroup().getRows();
+//							} else {
+//								rows = Collections.singleton(r);
+//							}
+
+							int small = 0;
+							for (var row : rows) {
+								final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
+										- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
+								long totalPNLDelta = 0;
+								if (parentElement instanceof ChangeSetTableGroup changeSet) {
+									totalPNLDelta = changeSet.getDeltaMetrics().getPnlDelta();
+								}
+								if (Math.abs(delta) < 250_000L) {
+									// Exclude if less than 10% of PNL change.
+									if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
+										++small;
+									}
+								}
+							}
+							if (small == rows.size()) {
+								return false;
+							}
+						}
+					}
+				}
+				return true;
 			}
-			toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
+		};
+		filters[1] = insertionPlanFilter;
+		return filters;
+	}
 
+	protected void makeAndAddCopyAction() {
+		copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
+			columnHelper.setTextualVesselMarkers(true);
+			ViewerHelper.refresh(viewer, true);
+		}, () -> {
+			columnHelper.setTextualVesselMarkers(false);
+			ViewerHelper.refresh(viewer, true);
+		});
+		getViewSite().getActionBars().getToolBarManager().add(copyAction);
+	}
+
+	protected void makeAndAddPackAction() {
+		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+		getViewSite().getActionBars().getToolBarManager().add(packAction);
+	}
+
+	private void makeAndAddToggleAltPnlAction() {
+		toggleAltPNLBaseAction = new RunnableAction("Change Mode", SWT.PUSH, ChangeSetView.this::doToggleDiffToBase);
+		toggleAltPNLBaseAction.setToolTipText("Toggle comparing to base or previous case");
+		toggleAltPNLBaseAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/compare_to_base.gif"));
+		final GroupMarker group = new GroupMarker("diffToBaseGroup");
+		getViewSite().getActionBars().getToolBarManager().add(group);
+		toggleAltPNLBaseActionItem = new ActionContributionItem(toggleAltPNLBaseAction);
+		if (showToggleAltPNLBaseAction) {
+			getViewSite().getActionBars().getToolBarManager().appendToGroup("diffToBaseGroup", toggleAltPNLBaseActionItem);
 		}
+		toggleAltPNLBaseAction.setToolTipText(altPNLToolTipBase + " Currently " + altPNLToolTipBaseMode[showAlternativeChangeModel ? 1 : 0]);
+	}
 
-		{
-			final Action collapseAll = new Action("Collapse All") {
-				@Override
-				public void run() {
-					viewer.collapseAll();
-				}
-			};
-			final Action expandAll = new Action("Expand All") {
-				@Override
-				public void run() {
-					viewer.expandAll();
-				}
-			};
+	private void makeAndAddExpandAndCollapseActions() {
+		final Action collapseAll = new Action("Collapse All") {
+			@Override
+			public void run() {
+				viewer.collapseAll();
+			}
+		};
+		final Action expandAll = new Action("Expand All") {
+			@Override
+			public void run() {
+				viewer.expandAll();
+			}
+		};
 
-			CommonImages.setImageDescriptors(collapseAll, IconPaths.CollapseAll);
-			CommonImages.setImageDescriptors(expandAll, IconPaths.ExpandAll);
+		CommonImages.setImageDescriptors(collapseAll, IconPaths.CollapseAll);
+		CommonImages.setImageDescriptors(expandAll, IconPaths.ExpandAll);
 
-			getViewSite().getActionBars().getToolBarManager().add(collapseAll);
-			getViewSite().getActionBars().getToolBarManager().add(expandAll);
-		}
+		getViewSite().getActionBars().getToolBarManager().add(collapseAll);
+		getViewSite().getActionBars().getToolBarManager().add(expandAll);
+	}
 
-		{
-			copyAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), true, () -> {
-				columnHelper.setTextualVesselMarkers(true);
-				ViewerHelper.refresh(viewer, true);
-			}, () -> {
-				columnHelper.setTextualVesselMarkers(false);
-				ViewerHelper.refresh(viewer, true);
-			});
-			getViewSite().getActionBars().getToolBarManager().add(copyAction);
-		}
-
+	private void makeAndAddReEvaluateAction() {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_EVALUATE_SOLUTIONS)) {
 			reEvaluateAction = new RunnableAction("Re-evaluate", () -> {
 				final AnalyticsSolution solution = currentViewState.lastSolution;
@@ -971,90 +1025,87 @@ public class ChangeSetView extends ViewPart {
 			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
 			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
+	}
 
-		{
-			getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
-			filterMenu = new AbstractMenuAction("Filter...") {
+	private void makeAndAddFilterMenuAction() {
+		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
+		filterMenu = new AbstractMenuAction("Filter...") {
 
-				@Override
-				protected void populate(final Menu menu) {
-					if (showGroupByMenu) {
-						final AbstractMenuAction groupModeAction = new AbstractMenuAction("Group by") {
+			@Override
+			protected void populate(final Menu menu) {
+				if (showGroupByMenu) {
+					final AbstractMenuAction groupModeAction = new AbstractMenuAction("Group by") {
+						@Override
+						protected void populate(final Menu menu2) {
+							final RunnableAction mode_Target = new RunnableAction("Target", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Target));
+
+							final RunnableAction mode_TargetComplexity = new RunnableAction("Target and complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.TargetAndComplexity));
+							final RunnableAction mode_Complextiy = new RunnableAction("Complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Complexity));
+
+							switch (insertionPlanFilter.getGroupMode()) {
+							case Complexity:
+								mode_Complextiy.setChecked(true);
+								break;
+							case Target:
+								mode_Target.setChecked(true);
+								break;
+							case TargetAndComplexity:
+								mode_TargetComplexity.setChecked(true);
+								break;
+							default:
+								break;
+							}
+							addActionToMenu(mode_Target, menu2);
+							addActionToMenu(mode_TargetComplexity, menu2);
+							addActionToMenu(mode_Complextiy, menu2);
+						}
+					};
+					groupModeAction.setToolTipText("Change the grouping choice");
+					addActionToMenu(groupModeAction, menu);
+				}
+				final RunnableAction toggleMinorChanges = new RunnableAction("Show minor changes", ChangeSetView.this::doShowMinorChangesToggle);
+				toggleMinorChanges.setToolTipText("Toggling filtering of minor changes");
+				toggleMinorChanges.setChecked(showMinorChanges);
+				addActionToMenu(toggleMinorChanges, menu);
+
+				final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
+				toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
+				toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
+				addActionToMenu(toggleSortByVesselAndDate, menu);
+
+				if (showNegativePNLChangesMenu) {
+					final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
+					toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
+					toggleNegativePNL.setChecked(showNegativePNLChanges);
+					addActionToMenu(toggleNegativePNL, menu);
+				}
+				if (showChangeTargetMenu) {
+					if (currentViewState != null && currentViewState.allTargetElements.size() > 1) {
+
+						final AbstractMenuAction targetMenu = new AbstractMenuAction("Target... ") {
 							@Override
 							protected void populate(final Menu menu2) {
-								final RunnableAction mode_Target = new RunnableAction("Target", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Target));
 
-								final RunnableAction mode_TargetComplexity = new RunnableAction("Target and complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.TargetAndComplexity));
-								final RunnableAction mode_Complextiy = new RunnableAction("Complexity", SWT.PUSH, () -> doSwitchGroupByModel(GroupMode.Complexity));
-
-								switch (insertionPlanFilter.getGroupMode()) {
-								case Complexity:
-									mode_Complextiy.setChecked(true);
-									break;
-								case Target:
-									mode_Target.setChecked(true);
-									break;
-								case TargetAndComplexity:
-									mode_TargetComplexity.setChecked(true);
-									break;
-								default:
-									break;
+								for (final NamedObject target : currentViewState.allTargetElements) {
+									final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH, () -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
+									if (currentViewState.lastTargetElement == target) {
+										action.setChecked(true);
+										action.setEnabled(false);
+									}
+									addActionToMenu(action, menu2);
 								}
-								addActionToMenu(mode_Target, menu2);
-								addActionToMenu(mode_TargetComplexity, menu2);
-								addActionToMenu(mode_Complextiy, menu2);
 							}
 						};
-						groupModeAction.setToolTipText("Change the grouping choice");
-						addActionToMenu(groupModeAction, menu);
+						targetMenu.setToolTipText("Select target element");
+						addActionToMenu(targetMenu, menu);
 					}
-					final RunnableAction toggleMinorChanges = new RunnableAction("Show minor changes", ChangeSetView.this::doShowMinorChangesToggle);
-					toggleMinorChanges.setToolTipText("Toggling filtering of minor changes");
-					toggleMinorChanges.setChecked(showMinorChanges);
-					addActionToMenu(toggleMinorChanges, menu);
-
-					final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
-					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
-					toggleSortByVesselAndDate.setChecked(sortByVesselAndDate);
-					addActionToMenu(toggleSortByVesselAndDate, menu);
-
-					if (showNegativePNLChangesMenu) {
-						final RunnableAction toggleNegativePNL = new RunnableAction("Show negative PNL Changes", ChangeSetView.this::doShowNegativePNLToggle);
-						toggleNegativePNL.setToolTipText("Toggling filtering of negative PNL");
-						toggleNegativePNL.setChecked(showNegativePNLChanges);
-						addActionToMenu(toggleNegativePNL, menu);
-					}
-					if (showChangeTargetMenu) {
-						if (currentViewState != null && currentViewState.allTargetElements.size() > 1) {
-
-							final AbstractMenuAction targetMenu = new AbstractMenuAction("Target... ") {
-								@Override
-								protected void populate(final Menu menu2) {
-
-									for (final NamedObject target : currentViewState.allTargetElements) {
-										final RunnableAction action = new RunnableAction(target.getName(), SWT.PUSH,
-												() -> openAnalyticsSolution(currentViewState.lastSolution, true, target.getName()));
-										if (currentViewState.lastTargetElement == target) {
-											action.setChecked(true);
-											action.setEnabled(false);
-										}
-										addActionToMenu(action, menu2);
-									}
-								}
-							};
-							targetMenu.setToolTipText("Select target element");
-							addActionToMenu(targetMenu, menu);
-						}
-					}
-
 				}
-			};
-			filterMenu.setToolTipText("Change filters");
-			filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
-			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
-		}
 
-		getViewSite().getActionBars().getToolBarManager().update(true);
+			}
+		};
+		filterMenu.setToolTipText("Change filters");
+		filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
+		getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 	}
 
 	public void setNewDataData(final Object target, final BiFunction<IProgressMonitor, @Nullable String, ViewState> action, final boolean runAsync, final @Nullable String targetSlotId) {
@@ -1064,12 +1115,12 @@ public class ChangeSetView extends ViewPart {
 		} else {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			final Shell activeShell = display.getActiveShell();
-			final ICoreRunnable runnable = (monitor) -> {
+			final ICoreRunnable runnable = monitor -> {
 				try {
 					final ViewState newViewState = action.apply(monitor, targetSlotId);
 					final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
-					newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.lastTargetElement, newViewState.displaySortMode);
-					newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.lastTargetElement, newViewState.displaySortMode);
+					newViewState.tableRootAlternative = changeSetToTableTransformer.createViewDataModel(newViewState.root, true, newViewState.displaySortMode);
+					newViewState.tableRootDefault = changeSetToTableTransformer.createViewDataModel(newViewState.root, false, newViewState.displaySortMode);
 
 					changeSetToTableTransformer.bindModels(newViewState.tableRootDefault, newViewState.tableRootAlternative);
 
@@ -1077,9 +1128,9 @@ public class ChangeSetView extends ViewPart {
 					newViewState.postProcess.accept(newViewState.tableRootAlternative);
 
 					if (runAsync) {
-						RunnerHelper.asyncExec(new ViewUpdateRunnable(newViewState));
+						RunnerHelper.asyncExec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()));
 					} else {
-						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState));
+						RunnerHelper.syncExec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()));
 					}
 				} catch (final ScenarioNotEvaluatedException cause) {
 					RunnerHelper.asyncExec(new Runnable() {
@@ -1112,7 +1163,7 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
-	private void setEmptyData() {
+	protected void setEmptyData() {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		final ChangeSetTableRoot newTableRoot = ChangesetFactory.eINSTANCE.createChangeSetTableRoot();
 
@@ -1121,7 +1172,7 @@ public class ChangeSetView extends ViewPart {
 		newViewState.tableRootAlternative = newTableRoot;
 		newViewState.tableRootDefault = newTableRoot;
 
-		RunnerHelper.exec(new ViewUpdateRunnable(newViewState), true);
+		RunnerHelper.exec(new ViewUpdateRunnable(newViewState, shouldPropagateSelectionsToScenarioComparisionService()), true);
 	}
 
 	public void cleanUp(final ViewState viewState) {
@@ -1167,47 +1218,7 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	private ITreeContentProvider createContentProvider() {
-		return new ITreeContentProvider() {
-
-			@Override
-			public boolean hasChildren(final Object element) {
-				if (element instanceof ChangeSetTableRoot) {
-					return true;
-				}
-				if (element instanceof ChangeSetTableGroup) {
-					return true;
-				}
-
-				return false;
-			}
-
-			@Override
-			public Object getParent(final Object element) {
-				if (element instanceof EObject eObject) {
-					return eObject.eContainer();
-				}
-				return null;
-			}
-
-			@Override
-			public Object[] getElements(final Object inputElement) {
-
-				if (inputElement instanceof ChangeSetTableRoot changeSetRoot) {
-					return changeSetRoot.getGroups().toArray();
-				}
-
-				return new Object[0];
-			}
-
-			@Override
-			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof ChangeSetTableGroup group) {
-					final List<ChangeSetTableRow> rows = group.getRows();
-					return rows.toArray();
-				}
-				return null;
-			}
-		};
+		return new DefaultChangeSetContentProvider();
 	}
 
 	@Inject
@@ -1362,11 +1373,11 @@ public class ChangeSetView extends ViewPart {
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
 
-					if (obj instanceof ChangeSetTableGroup) {
-						selectedSets.add((ChangeSetTableGroup) obj);
-						directSelectedGroups.add((ChangeSetTableGroup) obj);
+					if (obj instanceof ChangeSetTableGroup group) {
+						selectedSets.add(group);
+						directSelectedGroups.add(group);
 					} else if (obj instanceof ChangeSetTableRow changeSetRow) {
-						selectedSets.add((ChangeSetTableGroup) changeSetRow.eContainer());
+						selectedSets.add(changeSetRow.getTableGroup());
 						directSelectedRows.add(changeSetRow);
 					}
 				}
@@ -1526,13 +1537,13 @@ public class ChangeSetView extends ViewPart {
 			if (canExportChangeSet) {
 				final ChangeSetTableGroup changeSetTableGroup = selectedSets.iterator().next();
 				int idx = 0;
-				final ChangeSetTableRoot root = (ChangeSetTableRoot) changeSetTableGroup.eContainer();
+				final ChangeSetTableRoot root = changeSetTableGroup.getTableRoot();
 				if (root != null) {
 					idx = root.getGroups().indexOf(changeSetTableGroup);
 				}
 				final String name = columnHelper.getChangeSetColumnLabelProvider().apply(changeSetTableGroup, idx);
 				boolean showSimple = true;
-				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
+				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.OPTIONISER) {
 					// Only offer this for dual model insertions.
 					final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
 					if (scenarioResult.getResultRoot() instanceof ScheduleModel scheduleModel) {
@@ -1693,7 +1704,7 @@ public class ChangeSetView extends ViewPart {
 					return viewState;
 				}, runAsync, slotId);
 			} else if (plan instanceof SlotInsertionOptions slotInsertionOptions) {
-				setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
+				setViewMode(ViewMode.OPTIONISER, slotInsertionOptions.isHasDualModeSolutions());
 				final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
 				insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
 
@@ -1812,7 +1823,7 @@ public class ChangeSetView extends ViewPart {
 
 	private void resetView() {
 		setViewMode(ViewMode.COMPARE, false);
-		setPartName("Changes");
+		setPartName(getChangeSetPartName());
 		setEmptyData();
 	}
 
@@ -1846,7 +1857,7 @@ public class ChangeSetView extends ViewPart {
 			// handleEvents = true;
 			canExportChangeSet = false;
 			break;
-		case INSERTIONS:
+		case OPTIONISER:
 			insertionPlanFilter.setInsertionModeActive(true);
 			insertionPlanFilter.setMultipleSolutionView(false);
 			insertionPlanFilter.setMaxComplexity(4);
@@ -1919,7 +1930,7 @@ public class ChangeSetView extends ViewPart {
 			}
 		}
 
-		if (viewMode == ViewMode.INSERTIONS) {
+		if (viewMode == ViewMode.OPTIONISER) {
 			columnHelper.showCompareColumns(false);
 		} else {
 			columnHelper.showCompareColumns(true);
@@ -1930,8 +1941,8 @@ public class ChangeSetView extends ViewPart {
 		selectedElements.add(tableRow);
 		selectRow(selectedElements, tableRow.getLhsBefore());
 		selectRow(selectedElements, tableRow.getLhsAfter());
-		selectRow(selectedElements, tableRow.getRhsBefore());
-		selectRow(selectedElements, tableRow.getRhsAfter());
+		selectRow(selectedElements, tableRow.getCurrentRhsBefore());
+		selectRow(selectedElements, tableRow.getCurrentRhsAfter());
 	}
 
 	private void selectAfterRows(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
@@ -1939,7 +1950,7 @@ public class ChangeSetView extends ViewPart {
 		// selectRow(selectedElements, tableRow.getLhsBefore());
 		selectRow(selectedElements, tableRow.getLhsAfter());
 		// selectRow(selectedElements, tableRow.getRhsBefore());
-		selectRow(selectedElements, tableRow.getRhsAfter());
+		selectRow(selectedElements, tableRow.getCurrentRhsAfter());
 	}
 
 	private void selectRow(final Set<Object> selectedElements, final ChangeSetRowData rowData) {

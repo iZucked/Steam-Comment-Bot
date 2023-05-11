@@ -45,6 +45,18 @@
 			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PurchaseContractComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.EndHeelOptions"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.EndHeelOptions" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters" />
 	
  <componentHelper
        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"
@@ -76,6 +88,12 @@
           factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.GenericCharterContractValueProviderFactory"
           id="com.mmxlabs.models.lng.commercial.ui.valueproviders.GenericCharterContractValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.commercial.Contract"
+          referenceEClass="com.mmxlabs.models.lng.commercial.BusinessUnit">
     </valueProvider>
  </extension>
  <extension

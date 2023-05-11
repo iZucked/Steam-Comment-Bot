@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.common.parser.astnodes;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.parser.IExpression;
@@ -22,7 +21,7 @@ public final class CommoditySeriesASTNode extends NamedSeriesASTNode {
 	}
 
 	@Override
-	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull SeriesParser seriesParser) {
+	public IExpression<ISeries> asExpression(SeriesParser seriesParser) {
 		ISeriesContainer seriesContainer = seriesParser.getSeries(getName());
 		assert seriesContainer.getType() == SeriesType.COMMODITY;
 		return new NamedSeriesExpression(seriesContainer, getName());

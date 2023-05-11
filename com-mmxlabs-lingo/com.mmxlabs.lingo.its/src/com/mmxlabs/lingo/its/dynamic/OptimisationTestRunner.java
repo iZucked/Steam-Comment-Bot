@@ -27,6 +27,8 @@ import org.junit.jupiter.api.DynamicTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.lingo.its.cloud.CloudRunnerITSUtil;
@@ -34,11 +36,20 @@ import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
+import com.mmxlabs.lingo.its.tests.microcases.valuematrix.ValueMatrixTestUtil;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.Mapper;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.parameters.util.UserSettingsMixin;
@@ -47,13 +58,21 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.SwapValueMatrixUnit;
+import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleSpecificationHelper;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optimisation.OptimisationJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.SandboxJobRunner;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.valuematrix.ValueMatrixTask;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 
 public class OptimisationTestRunner {
 	private OptimisationTestRunner() {
@@ -67,7 +86,7 @@ public class OptimisationTestRunner {
 			final List<DynamicNode> childCases = new LinkedList<>();
 
 			// Basic optimisation
-			childCases.add(DynamicTest.dynamicTest("Base", () -> {
+			childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Base", () -> {
 				final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 					final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -102,7 +121,7 @@ public class OptimisationTestRunner {
 
 			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
-				childCases.add(DynamicTest.dynamicTest("CloudHeadlessApp", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " CloudHeadlessApp", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 						final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -161,7 +180,7 @@ public class OptimisationTestRunner {
 				// influence the result.
 				if (isADPOptimisation) {
 
-					childCases.add(DynamicTest.dynamicTest("ADP - unpair cargoes", () -> {
+					childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " ADP - unpair cargoes", () -> {
 						final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 							final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -195,7 +214,7 @@ public class OptimisationTestRunner {
 				}
 
 				// Test the anonymised, re-optimised, de-anonymised solution is also the same
-				childCases.add(DynamicTest.dynamicTest("Anonymised", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Anonymised", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 						final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -287,7 +306,7 @@ public class OptimisationTestRunner {
 
 			final List<DynamicNode> childCases = new LinkedList<>();
 
-			childCases.add(DynamicTest.dynamicTest("Base", () -> {
+			childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Base", () -> {
 				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 
 					final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
@@ -310,7 +329,7 @@ public class OptimisationTestRunner {
 
 			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
-				childCases.add(DynamicTest.dynamicTest("CloudHeadlessApp", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " CloudHeadlessApp", () -> {
 					final CheckedBiConsumer<ScenarioModelRecord, IScenarioDataProvider, Exception> action = (modelRecord, scenarioDataProvider) -> {
 						final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 						resultsFolder.mkdir();
@@ -344,7 +363,7 @@ public class OptimisationTestRunner {
 
 			if (TestingModes.OptimisationTestMode == TestMode.Run) {
 
-				childCases.add(DynamicTest.dynamicTest("Anonymised", () -> {
+				childCases.add(DynamicTest.dynamicTest(paramsFile.getName() + " Anonymised", () -> {
 					ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 
 						final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
@@ -407,6 +426,42 @@ public class OptimisationTestRunner {
 			}
 		}
 		// Try to sort repeatably as filesystem order can change
+		allCases.sort((a, b) -> a.getDisplayName().compareTo(b.getDisplayName()));
+		return allCases;
+	}
+
+	public static List<DynamicNode> runValueMatrixTests(final File baseDirectory) {
+		final TriConsumer<List<DynamicNode>, File, File> consumer = (cases, scenarioFile, paramsFile) -> {
+			final List<DynamicNode> childCases = new LinkedList<>();
+			childCases.add(DynamicTest.dynamicTest("Base", () -> {
+				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
+					runValueMatrixCacheComparison(modelRecord, scenarioDataProvider);
+				});
+			}));
+			cases.add(DynamicContainer.dynamicContainer(paramsFile.getName(), childCases));
+		};
+		final List<DynamicNode> allCases = new LinkedList<>();
+		if (baseDirectory.exists() && baseDirectory.isDirectory()) {
+			for (final File f : baseDirectory.listFiles()) {
+				if (f.isDirectory()) {
+					final String name = f.getName();
+					final File scenario = new File(f, "scenario.lingo");
+					if (scenario.exists()) {
+						final List<DynamicNode> cases = new LinkedList<>();
+						for (final File params : f.listFiles()) {
+							if (params.getName().startsWith("value-matrix-") && params.getName().endsWith(".json")) {
+								consumer.accept(cases, scenario, params);
+							}
+						}
+
+						if (!cases.isEmpty()) {
+							cases.sort((a, b) -> a.getDisplayName().compareTo(b.getDisplayName()));
+							allCases.add(DynamicContainer.dynamicContainer(name, cases));
+						}
+					}
+				}
+			}
+		}
 		allCases.sort((a, b) -> a.getDisplayName().compareTo(b.getDisplayName()));
 		return allCases;
 	}
@@ -516,6 +571,56 @@ public class OptimisationTestRunner {
 		final AbstractSolutionSet solutionSet = runner.run(0, new NullProgressMonitor());
 
 		checkSandboxResult(solutionSet, modelRecord, existingCompareContent, saver, preCompareAction);
+	}
+
+	public static void runValueMatrixCacheComparison(final ScenarioModelRecord modelRecord, final IScenarioDataProvider sdp) throws Exception {
+		final List<SwapValueMatrixModel> models = sdp.getTypedScenario(LNGScenarioModel.class).getAnalyticsModel().getSwapValueMatrixModels();
+		Assertions.assertEquals(1, models.size());
+		final SwapValueMatrixModel model = models.get(0);
+
+		ValueMatrixTestUtil.verifyPermutations(model, (m, permutation) -> evaluateValueMatrixWithOrder(sdp, m, permutation, true));
+	}
+
+	private static void evaluateValueMatrixWithOrder(final IScenarioDataProvider scenarioDataProvider, final @NonNull SwapValueMatrixModel valueMatrixModel,
+			final @NonNull Iterable<Pair<Integer, Integer>> order, final boolean sequential) {
+		
+		UserSettings userSettings = OptimisationHelper.getEvaluationSettings(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), false, true);
+		
+		if (userSettings == null) {
+			userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+			userSettings.setGenerateCharterOuts(false);
+			userSettings.setShippingOnly(false);
+			userSettings.setSimilarityMode(SimilarityMode.OFF);
+		}
+		final UserSettings pUserSettings = userSettings;
+		
+
+		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+		lngScenarioModel.setUserSettings(userSettings);
+		final IMapperClass mapper = new Mapper(lngScenarioModel, false);
+
+		@NonNull
+		final Pair<@NonNull LoadSlot, @NonNull DischargeSlot> swapCargo = ValueMatrixTask.buildFullScenario(lngScenarioModel, valueMatrixModel, mapper);
+
+		final ScheduleSpecificationHelper helper = new ScheduleSpecificationHelper(scenarioDataProvider);
+		helper.processExtraDataProvider(mapper.getExtraDataProvider());
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
+		final ConstraintAndFitnessSettings constraintAndFitnessSettings = ScenarioUtils.createDefaultConstraintAndFitnessSettings(false);
+		final JobExecutorFactory jobExecutorFactory;
+		if (sequential) {
+			jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService(1);
+		} else {
+			jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
+		}
+		helper.generateWith(null, userSettings, scenarioDataProvider.getEditingDomain(), hints, bridge -> {
+			final LNGDataTransformer dataTransformer = bridge.getDataTransformer();
+			bridge.getFullDataTransformer().getLifecyleManager().startPhase("value-matrix", hints);
+			final SwapValueMatrixUnit unit = new SwapValueMatrixUnit(scenarioDataProvider, dataTransformer, "swap-value-matrix", pUserSettings, constraintAndFitnessSettings, jobExecutorFactory,
+					dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+			unit.run(valueMatrixModel, swapCargo, mapper, new NullProgressMonitor(), bridge, order);
+		});
 	}
 
 	public static void checkSandboxResult(final AbstractSolutionSet solutionSet, final ScenarioModelRecord modelRecord, final String existingCompareContent, final Consumer<String> saver,

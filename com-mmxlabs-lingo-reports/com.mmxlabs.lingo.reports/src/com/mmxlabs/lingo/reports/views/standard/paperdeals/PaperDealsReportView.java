@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -224,8 +225,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				cell.setText("");
 
 				final Object element = cell.getElement();
-				if (element instanceof PaperDealAllocation) {
-					PaperDealAllocation paperDealAllocation = (PaperDealAllocation) element;
+				if (element instanceof final PaperDealAllocation paperDealAllocation) {
 					PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
 					if (reference == SchedulePackage.eINSTANCE.getPaperDealAllocationEntry_Date()) {
 						cell.setText(paperDeal == null ? "<Unknown deal>" : String.format("%s (@$%,.1f)", paperDeal.getName(), paperDeal.getPrice()));
@@ -238,10 +238,11 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 					} else if (reference == SchedulePackage.eINSTANCE.getPaperDealAllocationEntry_Price()) {
 						cell.setText(paperDeal == null ? "" : paperDeal.getIndex());
 					}
-				} else if (element instanceof PaperDealAllocationEntry) {
-					PaperDealAllocationEntry paperDealAllocationEntry = (PaperDealAllocationEntry) element;
+				} else if (element instanceof final PaperDealAllocationEntry paperDealAllocationEntry) {
 					if (reference == SchedulePackage.eINSTANCE.getPaperDealAllocationEntry_Date()) {
-						cell.setText(paperDealAllocationEntry.getDate().toString());
+						final LocalDateTextFormatter formatter = new LocalDateTextFormatter("yyyy-MM-dd");
+						formatter.setValue(paperDealAllocationEntry.getDate());
+						cell.setText(formatter.getDisplayString());
 					} else if (reference == SchedulePackage.eINSTANCE.getPaperDealAllocationEntry_Quantity()) {
 						cell.setText(String.format("%,.1f", paperDealAllocationEntry.getQuantity()));
 					} else if (reference == SchedulePackage.eINSTANCE.getPaperDealAllocationEntry_Value()) {

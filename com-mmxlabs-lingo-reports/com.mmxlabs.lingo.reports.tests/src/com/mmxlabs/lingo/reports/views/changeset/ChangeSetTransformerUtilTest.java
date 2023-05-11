@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -19,7 +18,6 @@ import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetTransformerUtil.MappingModel;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -93,16 +91,15 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Collections.singleton(oldCargoAllocation));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 
-		final ChangeSetTableRow row = changeSetTableRows.get(0);
+		final ChangeSetTableRow row = rows.get(0);
 		Assertions.assertEquals("load", row.getLhsName());
-		Assertions.assertEquals("discharge", row.getRhsName());
+		Assertions.assertEquals("discharge", row.getCurrentRhsName());
 		Assertions.assertEquals("sequence", row.getBeforeVesselName());
 		Assertions.assertEquals("sequence", row.getAfterVesselName());
 
@@ -119,8 +116,8 @@ public class ChangeSetTransformerUtilTest {
 		Assertions.assertSame(newLoadSlotAllocation, row.getLhsAfter().getLoadAllocation());
 		Assertions.assertSame(oldLoadSlotAllocation, row.getLhsBefore().getLoadAllocation());
 
-		Assertions.assertSame(newDischargeSlotAllocation, row.getRhsAfter().getDischargeAllocation());
-		Assertions.assertSame(oldDischargeSlotAllocation, row.getRhsBefore().getDischargeAllocation());
+		Assertions.assertSame(newDischargeSlotAllocation, row.getCurrentRhsAfter().getDischargeAllocation());
+		Assertions.assertSame(oldDischargeSlotAllocation, row.getPreviousRhsBefore().getDischargeAllocation());
 	}
 
 	@Test
@@ -148,16 +145,15 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Collections.singleton(oldOpenSlotAllocation));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 
-		final ChangeSetTableRow row = changeSetTableRows.get(0);
+		final ChangeSetTableRow row = rows.get(0);
 		Assertions.assertEquals("load", row.getLhsName());
-		Assertions.assertNull(row.getRhsName());
+		Assertions.assertNull(row.getCurrentRhsName());
 		Assertions.assertNull(row.getBeforeVesselName());
 		Assertions.assertNull(row.getAfterVesselName());
 		// Assertions.assertNull(row.getNextLHS());
@@ -192,23 +188,22 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Collections.singleton(oldOpenSlotAllocation));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 
-		final ChangeSetTableRow row = changeSetTableRows.get(0);
+		final ChangeSetTableRow row = rows.get(0);
 		Assertions.assertNull(row.getLhsName());
-		Assertions.assertEquals("discharge", row.getRhsName());
+		Assertions.assertEquals("discharge", row.getCurrentRhsName());
 		Assertions.assertNull(row.getBeforeVesselName());
 		Assertions.assertNull(row.getAfterVesselName());
 		// Assertions.assertNull(row.getNextLHS());
 		// Assertions.assertNull(row.getPreviousRHS());
 		//
-		Assertions.assertSame(newOpenSlotAllocation, row.getRhsAfter().getOpenDischargeAllocation());
-		Assertions.assertSame(oldOpenSlotAllocation, row.getRhsBefore().getOpenDischargeAllocation());
+		Assertions.assertSame(newOpenSlotAllocation, row.getCurrentRhsAfter().getOpenDischargeAllocation());
+		Assertions.assertSame(oldOpenSlotAllocation, row.getCurrentRhsBefore().getOpenDischargeAllocation());
 	}
 
 	@Test
@@ -256,20 +251,18 @@ public class ChangeSetTransformerUtilTest {
 			oldCargoAllocation = createCargoAllocation(cargo, sequence, oldLoadSlotAllocation, oldDischargeSlotAllocation);
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Collections.singleton(oldCargoAllocation));
 		}
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(2, changeSetTableRows.size());
+		Assertions.assertEquals(2, rows.size());
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(0);
+			final ChangeSetTableRow row = rows.get(0);
 			Assertions.assertEquals("load", row.getLhsName());
-			Assertions.assertEquals("discharge2", row.getRhsName());
+			Assertions.assertEquals("discharge2", row.getCurrentRhsName());
 			Assertions.assertEquals("sequence", row.getBeforeVesselName());
 			Assertions.assertEquals("sequence", row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertSame(changeSetTableRows.get(1), row.getPreviousRHS());
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(1)));
 
 			Assertions.assertSame(newCargoAllocation, row.getLhsAfter().getLhsGroupProfitAndLoss());
 			Assertions.assertSame(oldCargoAllocation, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -279,20 +272,22 @@ public class ChangeSetTransformerUtilTest {
 			Assertions.assertSame(newLoadSlotAllocation, row.getLhsAfter().getLoadAllocation());
 			Assertions.assertSame(oldLoadSlotAllocation, row.getLhsBefore().getLoadAllocation());
 
-			Assertions.assertSame(newDischargeSlotAllocation, row.getRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(newDischargeSlotAllocation, row.getCurrentRhsAfter().getDischargeAllocation());
 			Assertions.assertSame(oldDischargeSlotAllocation, row.getLhsBefore().getDischargeAllocation());
+			Assertions.assertSame(oldDischargeSlotAllocation, row.getPreviousRhsBefore().getDischargeAllocation());
 		}
 		// Open "discharge"
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(1);
+			final ChangeSetTableRow row = rows.get(1);
 			Assertions.assertNull(row.getLhsName());
-			Assertions.assertEquals("discharge", row.getRhsName());
+			Assertions.assertEquals("discharge", row.getCurrentRhsName());
 			Assertions.assertNull(row.getAfterVesselName());
 			Assertions.assertNull(row.getBeforeVesselName());
 			// Assertions.assertSame(changeSetTableRows.get(0), row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(0)));
 
-			Assertions.assertSame(oldDischargeSlotAllocation, row.getRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(oldDischargeSlotAllocation, row.getCurrentRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(oldLoadSlotAllocation, row.getCurrentRhsBefore().getLoadAllocation());
 			// Assertions.assertNull(row.getLhsBefore().getLhsGroupProfitAndLoss());
 			//
 			// Assertions.assertNull(row.getLhsAfter().getEventGrouping());
@@ -346,20 +341,18 @@ public class ChangeSetTransformerUtilTest {
 
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(2, changeSetTableRows.size());
+		Assertions.assertEquals(2, rows.size());
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(0);
+			final ChangeSetTableRow row = rows.get(0);
 			Assertions.assertEquals("load", row.getLhsName());
-			Assertions.assertNull(row.getRhsName());
+			Assertions.assertNull(row.getCurrentRhsName());
 			Assertions.assertEquals("sequence", row.getBeforeVesselName());
 			Assertions.assertNull(row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertSame(changeSetTableRows.get(1), row.getPreviousRHS());
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(1)));
 
 			Assertions.assertSame(newOpenAllocation1, row.getLhsAfter().getOpenLoadAllocation());
 			Assertions.assertSame(oldCargoAllocation, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -374,15 +367,14 @@ public class ChangeSetTransformerUtilTest {
 		}
 		// Open "discharge"
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(1);
+			final ChangeSetTableRow row = rows.get(1);
 			Assertions.assertNull(row.getLhsName());
-			Assertions.assertEquals("discharge", row.getRhsName());
+			Assertions.assertEquals("discharge", row.getCurrentRhsName());
 			Assertions.assertNull(row.getBeforeVesselName());
 			Assertions.assertNull(row.getAfterVesselName());
-			Assertions.assertSame(changeSetTableRows.get(0), row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(0)));
 
-			Assertions.assertSame(newOpenAllocation2, row.getRhsAfter().getOpenDischargeAllocation());
+			Assertions.assertSame(newOpenAllocation2, row.getCurrentRhsAfter().getOpenDischargeAllocation());
 			// Assertions.assertNull(row.getLhsBefore().getLhsGroupProfitAndLoss());
 			//
 			// Assertions.assertNull(row.getLhsAfter().getEventGrouping());
@@ -433,36 +425,37 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldOpenAllocation1, oldOpenAllocation2));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(0);
+			final ChangeSetTableRow row = rows.get(0);
 			Assertions.assertEquals("load", row.getLhsName());
-			Assertions.assertEquals("discharge", row.getRhsName());
+			Assertions.assertEquals("discharge", row.getCurrentRhsName());
 			Assertions.assertNull(row.getBeforeVesselName());
 			Assertions.assertEquals("sequence", row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+
+			Assertions.assertEquals(1, row.getWiringGroup().getRows().size());
 
 			Assertions.assertSame(newCargoAllocation, row.getLhsAfter().getLhsGroupProfitAndLoss());
 			Assertions.assertSame(newCargoAllocation, row.getLhsAfter().getEventGrouping());
 
 			Assertions.assertSame(oldOpenAllocation1, row.getLhsBefore().getOpenLoadAllocation());
-			Assertions.assertSame(oldOpenAllocation2, row.getRhsBefore().getOpenDischargeAllocation());
+			Assertions.assertSame(oldOpenAllocation2, row.getCurrentRhsBefore().getOpenDischargeAllocation());
+			Assertions.assertNull(row.getPreviousRhsBefore());
 
 			Assertions.assertSame(oldOpenAllocation1, row.getLhsBefore().getLhsGroupProfitAndLoss());
-			Assertions.assertSame(oldOpenAllocation2, row.getRhsBefore().getRhsGroupProfitAndLoss());
+//			TEST IN UI - does this case work?z
+			Assertions.assertSame(oldOpenAllocation2, row.getCurrentRhsBefore().getRhsGroupProfitAndLoss());
 
 			Assertions.assertNull(row.getLhsBefore().getEventGrouping());
 
 			Assertions.assertSame(newLoadSlotAllocation, row.getLhsAfter().getLoadAllocation());
 			Assertions.assertNull(row.getLhsBefore().getLoadAllocation());
 
-			Assertions.assertSame(newDischargeSlotAllocation, row.getRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(newDischargeSlotAllocation, row.getCurrentRhsAfter().getDischargeAllocation());
 			Assertions.assertNull(row.getLhsBefore().getDischargeAllocation());
 		}
 	}
@@ -543,16 +536,15 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(old_Load1_To_SpotFOB, old_Load2_To_RealSlot));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(3, changeSetTableRows.size());
+		Assertions.assertEquals(3, rows.size());
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(1);
+			final ChangeSetTableRow row = rows.get(0);
 			Assertions.assertEquals("load2", row.getLhsName());
-			Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 			Assertions.assertEquals("Cargo", row.getBeforeVesselName());
 			Assertions.assertEquals("FOBSequence", row.getAfterVesselName());
 			// Assertions.assertNull(row.getNextLHS());
@@ -570,9 +562,9 @@ public class ChangeSetTransformerUtilTest {
 			// Assertions.assertNull(row.getRhsBefore().getDischargeAllocation());
 		}
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(0);
+			final ChangeSetTableRow row = rows.get(1);
 			Assertions.assertEquals("load1", row.getLhsName());
-			Assertions.assertNull(row.getRhsName());
+			Assertions.assertNull(row.getCurrentRhsName());
 			Assertions.assertEquals("FOBSequence", row.getBeforeVesselName());
 			Assertions.assertNull(row.getAfterVesselName());
 			// Assertions.assertNull(row.getNextLHS());
@@ -592,9 +584,9 @@ public class ChangeSetTransformerUtilTest {
 
 		// Different market type caused second row to be created
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(2);
+			final ChangeSetTableRow row = rows.get(2);
 			Assertions.assertNull(row.getLhsName());
-			Assertions.assertEquals("RealSlot", row.getRhsName());
+			Assertions.assertEquals("RealSlot", row.getCurrentRhsName());
 			Assertions.assertNull(row.getBeforeVesselName());
 			Assertions.assertNull(row.getAfterVesselName());
 			// Assertions.assertSame(changeSetTableRows.get(0), row.getNextLHS());
@@ -656,20 +648,18 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldCargoAllocation));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(2, changeSetTableRows.size());
+		Assertions.assertEquals(2, rows.size());
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(0);
+			final ChangeSetTableRow row = rows.get(0);
 			Assertions.assertEquals("load", row.getLhsName());
-			Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 			Assertions.assertEquals("sequence", row.getBeforeVesselName());
 			Assertions.assertEquals("sequence", row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertSame(changeSetTableRows.get(1), row.getPreviousRHS());
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(1)));
 
 			Assertions.assertSame(newCargoAllocation, row.getLhsAfter().getLhsGroupProfitAndLoss());
 			Assertions.assertSame(oldCargoAllocation, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -679,29 +669,38 @@ public class ChangeSetTransformerUtilTest {
 			Assertions.assertSame(newLoadSlotAllocation, row.getLhsAfter().getLoadAllocation());
 			Assertions.assertSame(oldLoadSlotAllocation, row.getLhsBefore().getLoadAllocation());
 
-			Assertions.assertSame(newDischargeSlotAllocation, row.getRhsAfter().getDischargeAllocation());
-			Assertions.assertNull(row.getRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(newDischargeSlotAllocation, row.getCurrentRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(oldDischargeSlotAllocation, row.getPreviousRhsBefore().getDischargeAllocation());
+			Assertions.assertNull(row.getPreviousRhsAfter().getDischargeAllocation());
+			Assertions.assertNull(row.getCurrentRhsBefore().getDischargeAllocation());
 		}
 
 		// Different market type caused second row to be created
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(1);
+			final ChangeSetTableRow row = rows.get(1);
 			Assertions.assertNull(row.getLhsName());
-			Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 			Assertions.assertNull(row.getBeforeVesselName());
 			Assertions.assertNull(row.getAfterVesselName());
-			Assertions.assertSame(changeSetTableRows.get(0), row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(0)));
 
 			Assertions.assertNull(row.getLhsBefore());
-			Assertions.assertNull(row.getLhsAfter().getLhsGroupProfitAndLoss());
+			Assertions.assertNull(row.getLhsAfter());
+			Assertions.assertNotNull(row.getCurrentRhsAfter());
+			Assertions.assertNotNull(row.getCurrentRhsBefore());
+			Assertions.assertNull(row.getPreviousRhsBefore());
+			Assertions.assertNull(row.getPreviousRhsAfter());
 
-			Assertions.assertNull(row.getLhsAfter().getEventGrouping());
-
-			Assertions.assertNull(row.getLhsAfter().getLoadAllocation());
-
-			Assertions.assertNull(row.getRhsAfter().getDischargeAllocation());
-			Assertions.assertSame(oldDischargeSlotAllocation, row.getRhsBefore().getDischargeAllocation());
+			// Slot attribs
+			Assertions.assertTrue(row.getCurrentRhsAfter().isRhsSlot());
+			Assertions.assertTrue(row.getCurrentRhsAfter().isRhsSpot());
+			// No slot as it does not exist in after
+			Assertions.assertNull(row.getCurrentRhsAfter().getDischargeAllocation());
+			// No load either
+			Assertions.assertNull(row.getCurrentRhsAfter().getLoadAllocation());
+			// But before case is present
+			Assertions.assertSame(oldDischargeSlotAllocation, row.getCurrentRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(oldLoadSlotAllocation, row.getCurrentRhsBefore().getLoadAllocation());
 		}
 	}
 
@@ -749,20 +748,18 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldCargoAllocation));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results - same market type, same market name, same month, same as no change.
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 
-		final ChangeSetTableRow row = changeSetTableRows.get(0);
+		final ChangeSetTableRow row = rows.get(0);
 		Assertions.assertEquals("load", row.getLhsName());
-		Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+		Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 		Assertions.assertEquals("sequence", row.getBeforeVesselName());
 		Assertions.assertEquals("sequence", row.getAfterVesselName());
-		Assertions.assertNull(row.getNextLHS());
-		Assertions.assertNull(row.getPreviousRHS());
+		Assertions.assertEquals(1, row.getWiringGroup().getRows().size());
 
 		Assertions.assertSame(newCargoAllocation, row.getLhsAfter().getLhsGroupProfitAndLoss());
 		Assertions.assertSame(oldCargoAllocation, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -859,21 +856,19 @@ public class ChangeSetTransformerUtilTest {
 
 		beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldCargoAllocation1, oldCargoAllocation2));
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(3, changeSetTableRows.size());
+		Assertions.assertEquals(3, rows.size());
 
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(0);
+			final ChangeSetTableRow row = rows.get(0);
 			Assertions.assertEquals("load1", row.getLhsName());
-			Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 			Assertions.assertEquals("sequence", row.getBeforeVesselName());
 			Assertions.assertEquals("sequence", row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+			Assertions.assertEquals(1, row.getWiringGroup().getRows().size());
 
 			Assertions.assertSame(newCargoAllocation1, row.getLhsAfter().getLhsGroupProfitAndLoss());
 			Assertions.assertSame(oldCargoAllocation1, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -883,17 +878,17 @@ public class ChangeSetTransformerUtilTest {
 			Assertions.assertSame(newLoadSlotAllocation1, row.getLhsAfter().getLoadAllocation());
 			Assertions.assertSame(oldLoadSlotAllocation1, row.getLhsBefore().getLoadAllocation());
 
-			Assertions.assertSame(newDischargeSlotAllocation1, row.getRhsAfter().getDischargeAllocation());
-			Assertions.assertSame(oldDischargeSlotAllocation1, row.getRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(newDischargeSlotAllocation1, row.getCurrentRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(oldDischargeSlotAllocation1, row.getPreviousRhsBefore().getDischargeAllocation());
 		}
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(1);
+			final ChangeSetTableRow row = rows.get(1);
 			Assertions.assertEquals("load2", row.getLhsName());
-			Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 			Assertions.assertEquals("sequence", row.getBeforeVesselName());
 			Assertions.assertEquals("sequence", row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertSame(changeSetTableRows.get(2), row.getPreviousRHS());
+//			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(0)));
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(2)));
 
 			Assertions.assertSame(newCargoAllocation2, row.getLhsAfter().getLhsGroupProfitAndLoss());
 			Assertions.assertSame(oldCargoAllocation2, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -903,27 +898,24 @@ public class ChangeSetTransformerUtilTest {
 			Assertions.assertSame(newLoadSlotAllocation2, row.getLhsAfter().getLoadAllocation());
 			Assertions.assertSame(oldLoadSlotAllocation2, row.getLhsBefore().getLoadAllocation());
 
-			Assertions.assertSame(newDischargeSlotAllocation2, row.getRhsAfter().getDischargeAllocation());
-			Assertions.assertNull(row.getRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(newDischargeSlotAllocation2, row.getCurrentRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(oldDischargeSlotAllocation2, row.getPreviousRhsBefore().getDischargeAllocation());
 		}
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(2);
+			final ChangeSetTableRow row = rows.get(2);
 			Assertions.assertNull(row.getLhsName());
-			Assertions.assertEquals("discharge", row.getRhsName());
+			Assertions.assertEquals("discharge", row.getCurrentRhsName());
 			Assertions.assertNull(row.getBeforeVesselName());
 			Assertions.assertNull(row.getAfterVesselName());
-			Assertions.assertSame(changeSetTableRows.get(1), row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+//			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(0)));
+			Assertions.assertTrue(row.getWiringGroup().getRows().contains(rows.get(1)));
+//			Assertions.assertSame(row.getWiringGroup().getRows().get(2), row);
 
 			Assertions.assertNull(row.getLhsBefore());
-			Assertions.assertNull(row.getLhsAfter().getLhsGroupProfitAndLoss());
+			Assertions.assertNull(row.getLhsAfter());
 
-			Assertions.assertNull(row.getLhsAfter().getEventGrouping());
-
-			Assertions.assertNull(row.getLhsAfter().getLoadAllocation());
-
-			Assertions.assertNull(row.getRhsAfter().getDischargeAllocation());
-			Assertions.assertSame(oldDischargeSlotAllocation2, row.getRhsBefore().getDischargeAllocation());
+			Assertions.assertNull(row.getCurrentRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(oldLoadSlotAllocation2, row.getCurrentRhsBefore().getLoadAllocation());
 		}
 	}
 
@@ -1014,20 +1006,18 @@ public class ChangeSetTransformerUtilTest {
 		// Verify results
 		// Expect two independent rows as spot slots are equivalent
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
-		Assertions.assertEquals(2, changeSetTableRows.size());
+		Assertions.assertEquals(2, rows.size());
 
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(0);
+			final ChangeSetTableRow row = rows.get(0);
 			Assertions.assertEquals("load1", row.getLhsName());
-			Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 			Assertions.assertEquals("sequence", row.getBeforeVesselName());
 			Assertions.assertEquals("sequence", row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+			Assertions.assertEquals(1, row.getWiringGroup().getRows().size());
 
 			Assertions.assertSame(newCargoAllocation1, row.getLhsAfter().getLhsGroupProfitAndLoss());
 			Assertions.assertSame(oldCargoAllocation1, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -1037,17 +1027,16 @@ public class ChangeSetTransformerUtilTest {
 			Assertions.assertSame(newLoadSlotAllocation1, row.getLhsAfter().getLoadAllocation());
 			Assertions.assertSame(oldLoadSlotAllocation1, row.getLhsBefore().getLoadAllocation());
 
-			Assertions.assertSame(newDischargeSlotAllocation1, row.getRhsAfter().getDischargeAllocation());
-			Assertions.assertSame(oldDischargeSlotAllocation1, row.getRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(newDischargeSlotAllocation1, row.getCurrentRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(oldDischargeSlotAllocation1, row.getPreviousRhsBefore().getDischargeAllocation());
 		}
 		{
-			final ChangeSetTableRow row = changeSetTableRows.get(1);
+			final ChangeSetTableRow row = rows.get(1);
 			Assertions.assertEquals("load2", row.getLhsName());
-			Assertions.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assertions.assertEquals("SPOT-2015-11", row.getCurrentRhsName());
 			Assertions.assertEquals("sequence", row.getBeforeVesselName());
 			Assertions.assertEquals("sequence", row.getAfterVesselName());
-			Assertions.assertNull(row.getNextLHS());
-			Assertions.assertNull(row.getPreviousRHS());
+			Assertions.assertEquals(1, row.getWiringGroup().getRows().size());
 
 			Assertions.assertSame(newCargoAllocation2, row.getLhsAfter().getLhsGroupProfitAndLoss());
 			Assertions.assertSame(oldCargoAllocation2, row.getLhsBefore().getLhsGroupProfitAndLoss());
@@ -1057,8 +1046,8 @@ public class ChangeSetTransformerUtilTest {
 			Assertions.assertSame(newLoadSlotAllocation2, row.getLhsAfter().getLoadAllocation());
 			Assertions.assertSame(oldLoadSlotAllocation2, row.getLhsBefore().getLoadAllocation());
 
-			Assertions.assertSame(newDischargeSlotAllocation2, row.getRhsAfter().getDischargeAllocation());
-			Assertions.assertSame(oldDischargeSlotAllocation2, row.getRhsBefore().getDischargeAllocation());
+			Assertions.assertSame(newDischargeSlotAllocation2, row.getCurrentRhsAfter().getDischargeAllocation());
+			Assertions.assertSame(oldDischargeSlotAllocation2, row.getPreviousRhsBefore().getDischargeAllocation());
 		}
 	}
 
@@ -1089,20 +1078,18 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldStartEvent));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 
-		final ChangeSetTableRow row = changeSetTableRows.get(0);
+		final ChangeSetTableRow row = rows.get(0);
 		Assertions.assertEquals("Start sequence", row.getLhsName());
-		Assertions.assertNull(row.getRhsName());
+		Assertions.assertNull(row.getCurrentRhsName());
 		Assertions.assertEquals("sequence", row.getBeforeVesselName());
 		Assertions.assertEquals("sequence", row.getAfterVesselName());
-		Assertions.assertNull(row.getNextLHS());
-		Assertions.assertNull(row.getPreviousRHS());
+		Assertions.assertEquals(1, row.getWiringGroup().getRows().size());
 
 		Assertions.assertSame(newStartEvent, row.getLhsAfter().getEventGrouping());
 		Assertions.assertSame(oldStartEvent, row.getLhsBefore().getEventGrouping());
@@ -1137,20 +1124,18 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldEvent));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 
-		final ChangeSetTableRow row = changeSetTableRows.get(0);
+		final ChangeSetTableRow row = rows.get(0);
 		Assertions.assertEquals("Drydock-1", row.getLhsName());
-		Assertions.assertNull(row.getRhsName());
+		Assertions.assertNull(row.getCurrentRhsName());
 		Assertions.assertEquals("sequence", row.getBeforeVesselName());
 		Assertions.assertEquals("sequence", row.getAfterVesselName());
-		Assertions.assertNull(row.getNextLHS());
-		Assertions.assertNull(row.getPreviousRHS());
+		Assertions.assertEquals(1, row.getWiringGroup().getRows().size());
 
 		Assertions.assertSame(newEvent, row.getLhsAfter().getEventGrouping());
 		Assertions.assertSame(oldEvent, row.getLhsBefore().getEventGrouping());
@@ -1185,20 +1170,17 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldEndEvent));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
 
 		// Verify results
-		Assertions.assertEquals(1, changeSetTableRows.size());
+		Assertions.assertEquals(1, rows.size());
 
-		final ChangeSetTableRow row = changeSetTableRows.get(0);
+		final ChangeSetTableRow row = rows.get(0);
 		Assertions.assertEquals("End sequence", row.getLhsName());
-		Assertions.assertNull(row.getRhsName());
+		Assertions.assertNull(row.getCurrentRhsName());
 		Assertions.assertEquals("sequence", row.getBeforeVesselName());
 		Assertions.assertEquals("sequence", row.getAfterVesselName());
-		Assertions.assertNull(row.getNextLHS());
-		Assertions.assertNull(row.getPreviousRHS());
 
 		Assertions.assertSame(newEndEvent, row.getLhsAfter().getEventGrouping());
 		Assertions.assertSame(oldEndEvent, row.getLhsBefore().getEventGrouping());
@@ -1246,12 +1228,12 @@ public class ChangeSetTransformerUtilTest {
 			beforeMapping = ChangeSetTransformerUtil.generateMappingModel(Lists.newArrayList(oldEndEvent));
 		}
 
-		final List<ChangeSetRow> _rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
-		ChangeSetTransformerUtil.setRowFlags(_rows);
-		final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeMapping, afterMapping);
+		ChangeSetTransformerUtil.setRowFlags(rows);
+		// final List<ChangeSetTableRow> changeSetTableRows = new ChangeSetToTableTransformer().convertRows(_rows);
 
 		// Verify results -- Charter in end events filtered out.
-		Assertions.assertEquals(0, changeSetTableRows.size());
+		Assertions.assertEquals(0, rows.size());
 	}
 
 	private @NonNull VesselEventVisit createDryDockEvent(final Sequence sequence, final String name) {

@@ -49,7 +49,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
-import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.SingleColumnFactoryBuilder;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
@@ -134,21 +134,36 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		switch (columnID) {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-id": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all except discharge slots", ColumnType.NORMAL, LOAD_START_GROUP,
-					DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan, rendMan, "Load ID", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "ID").withTooltip("The main ID for all except discharge slots")
+							.withBlockType(LOAD_START_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Load ID")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-port": {
 			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider,
 					scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Port", "Load Port", ColumnType.NORMAL, LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, "Load Port", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Port").withTooltip("Load Port")
+							.withBlockType(LOAD_PORT_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Load Port")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-cv": {
 			final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getLoadSlot_CargoCV(), scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "CV", "Load CV", ColumnType.NORMAL, LOAD_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, "Load CV", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "CV").withTooltip("Load CV")
+							.withBlockType(LOAD_PORT_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Load CV")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-vol": {
@@ -158,7 +173,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_VOLUME_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Load Volume");
+						block = blockManager.createBlock(columnID, "", LOAD_VOLUME_GROUP, null, null, ColumnType.NORMAL, "Load Volume");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -167,48 +182,58 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					{
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Volume", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(true);
-						createColumn.column.getColumn().setDetail(false);
+						final ColumnHandler handler = blockManager.createColumn(block, "Volume") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asSummaryOnly() //
+								.build();
 
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
+						handler.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
 
 							@Override
 							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Volume");
+								handler.column.getColumn().getColumnGroup().setText("Volume");
 							}
 
 							@Override
 							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
+								handler.column.getColumn().getColumnGroup().setText("");
 							}
 						});
 					}
 					{
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Min", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Min") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Max", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Max") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(),
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((VolumeUnits) e));
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Units") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_OperationalTolerance(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Op. Tol.", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Op. Tol.") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					return null;
 				}
@@ -225,7 +250,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_WINDOW_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Load date");
+						block = blockManager.createBlock(columnID, "", LOAD_WINDOW_GROUP, null, null, ColumnType.NORMAL, "Load date");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -254,86 +279,87 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return v;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Window", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
 
-						final EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
-								new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
-						createColumn.column.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, path);
-						createColumn.column.getColumn().setSummary(true);
-						createColumn.column.getColumn().setDetail(false);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Window");
-
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Window") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withMultiPathForSorting(new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
+										new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()))) //
+								.asSummaryOnly() //
+								.withGroupExpandedLabel("Window") //
+								.build();
 					}
 					{
 						final LocalDateAttributeManipulator rendMan = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Date", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-
-						final EMFMultiPath path = new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
-								new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
-						createColumn.column.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, path);
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Date") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withMultiPathForSorting(new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
+										new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()))) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final HoursSingleReferenceManipulator rendMan = new HoursSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_WindowStartTime(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Time", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Time") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Size", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Size") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(),
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Units") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Duration", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.setTooltip("Visit duration in hours");
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Duration") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withTooltip("Visit duration in hours")
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlex(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Flex", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Flex") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlexUnits(),
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Units") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowCounterParty(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Counter Party", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Counter Party") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					return null;
 				}
@@ -349,7 +375,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Purchase contract");
+						block = blockManager.createBlock(columnID, "", LOAD_PRICING_GROUP, null, null, ColumnType.NORMAL, "Purchase contract");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -358,40 +384,31 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					{
 						final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, scenarioEditingLocation.getDefaultCommandHandler());
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Buy at", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-
-						createColumn.column.getColumn().setSummary(true);
-						createColumn.column.getColumn().setDetail(false);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Buy at");
-
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Buy at") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asSummaryOnly() //
+								.withGroupExpandedLabel("Buy at") //
+								.build();
 					}
 
 					{
 						final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Contract(), referenceValueProvider,
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Contract", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Contract") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final PriceAttributeManipulator rendMan = new PriceAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Expression", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.setTooltip("Price expression");
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Expression") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withTooltip("Price expression") //
+								.asDetailOnly() //
+								.build();
 					}
 					return null;
 				}
@@ -401,26 +418,46 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-entity": {
 			final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Entity(), referenceValueProvider,
 					scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Entity", "Load entity", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, "Purchase Entity", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Entity").withTooltip("Load entity")
+							.withBlockType(LOAD_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Purchase Entity")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchasecounterparty": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Counterparty", "Purchase counterparty", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE,
-					DEFAULT_ORDER_KEY, rendMan, rendMan, "Purchase Counterparty", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Counterparty").withTooltip("Purchase counterparty")
+							.withBlockType(LOAD_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Purchase Counterparty")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.purchase-cn": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__CN, scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "CN", "Purchase CN", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, "Purchase CN", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "CN").withTooltip("Purchase CN")
+							.withBlockType(LOAD_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Purchase CN")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-cancelled": {
 			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Cancelled(), scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Cancelled", "Purchase is cancelled", ColumnType.NORMAL, LOAD_PRICING_GROUP, DEFAULT_BLOCK_TYPE,
-					DEFAULT_ORDER_KEY, rendMan, rendMan, "Cancelled", CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Cancelled").withTooltip("Purchase is cancelled")
+							.withBlockType(LOAD_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Cancelled")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-restrictions": {
@@ -431,7 +468,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Load restrictions");
+						block = blockManager.createBlock(columnID, "", LOAD_EXTRA_GROUP, null, null, ColumnType.NORMAL, "Load restrictions");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -440,46 +477,40 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					{
 						final ICellRenderer rendMan = new HasRestrictionsFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Restrictions", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(false);
-						createColumn.column.getColumn().setSummary(true);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Restrictions");
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
-
+						blockManager.createColumn(block, "Restrictions") //
+								.withCellRenderer(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asSummaryOnly() //
+								.withGroupExpandedLabel("Restrictions") //
+								.build();
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Keep open", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Keep open") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedVessels(), referenceValueProvider,
 								scenarioEditingLocation.getDefaultCommandHandler(), MMXCorePackage.eINSTANCE.getNamedObject_Name());
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Vessels", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Vessels") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsOverride(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Override", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Override") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 
 					}
 
@@ -496,9 +527,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider,
@@ -513,18 +546,22 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, " Ports", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, " Ports") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 
 					}
 
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPortsOverride(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Override", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Override") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 
 					}
 
@@ -541,9 +578,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					{
@@ -559,17 +598,21 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Contracts", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Contracts") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContractsOverride(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Override", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Override") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 
 					}
 
@@ -586,9 +629,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					return null;
@@ -600,15 +645,24 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-id": {
 			final BasicAttributeManipulator rendMan = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE,
-					DISCHARGE_START_GROUP + "_1", rendMan, rendMan, "Discharge ID", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "ID").withBlockType(DISCHARGE_START_GROUP)
+							.withOrderKey(DISCHARGE_START_GROUP + "_1")
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Discharge ID")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-port": {
 			final TextualSingleReferenceManipulator rendMan = new TextualPortSingleReferenceManipulatorExtension(CargoPackage.eINSTANCE.getSlot_Port(), referenceValueProvider,
 					scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Port", "", ColumnType.NORMAL, DISCHARGE_PORT_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, "Discharge Port", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Port").withBlockType(DISCHARGE_PORT_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Discharge Port")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-vol": {
@@ -619,7 +673,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", DISCHARGE_VOLUME_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Discharge volume");
+						block = blockManager.createBlock(columnID, "", DISCHARGE_VOLUME_GROUP, null, null, ColumnType.NORMAL, "Discharge volume");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -628,50 +682,47 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 					{
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Volume", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(true);
-						createColumn.column.getColumn().setDetail(false);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Volume");
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Volume") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asSummaryOnly()
+								.withGroupExpandedLabel("Volume") //
+								.build();
 					}
 					{
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Min", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Min") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Max", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Max") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(),
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((VolumeUnits) e));
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Units") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_OperationalTolerance(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Op. Tol.", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Op. Tol.") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					return null;
 				}
@@ -688,7 +739,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", DISCHARGE_WINDOW_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Discharge date");
+						block = blockManager.createBlock(columnID, "", DISCHARGE_WINDOW_GROUP, null, null, ColumnType.NORMAL, "Discharge date");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -717,79 +768,81 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return v;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Window", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-
-						createColumn.column.getColumn().setSummary(true);
-						createColumn.column.getColumn().setDetail(false);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Window");
-
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Window") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asSummaryOnly()
+								.withGroupExpandedLabel("Window")
+								.build();
 					}
 					{
 						final LocalDateAttributeManipulator rendMan = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Date", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Date") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final HoursSingleReferenceManipulator rendMan = new HoursSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_WindowStartTime(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Time", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Time") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Size", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Size") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(),
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Units") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Duration", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.setTooltip("Visit duration in hours");
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Duration") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlex(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Flex", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Flex") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final TextualEnumAttributeManipulator rendMan = new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlexUnits(),
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Units", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Units") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowCounterParty(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Counter Party", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Counter Party") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					return null;
 				}
@@ -806,7 +859,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Sales contract");
+						block = blockManager.createBlock(columnID, "", DISCHARGE_PRICING_GROUP, null, null, ColumnType.NORMAL, "Sales contract");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -814,41 +867,30 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 					{
 						final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, scenarioEditingLocation.getDefaultCommandHandler());
-
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Sell at", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-
-						createColumn.column.getColumn().setSummary(true);
-						createColumn.column.getColumn().setDetail(false);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Sell at");
-
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Sell at") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asSummaryOnly() //
+								.withGroupExpandedLabel("Sell at") //
+								.build();
 					}
 
 					{
 						final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Contract(), referenceValueProvider,
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Contract", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Contract") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Expression", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.setTooltip("Price expression");
-						createColumn.column.getColumn().setSummary(false);
-						createColumn.column.getColumn().setDetail(true);
+						blockManager.createColumn(block, "Expression") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					return null;
 				}
@@ -858,26 +900,44 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-entity": {
 			final TextualSingleReferenceManipulator rendMan = new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Entity(), referenceValueProvider,
 					scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Entity", "", ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, "Sales Entity", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Entity").withBlockType(DISCHARGE_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Sales Entity")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.salescounterparty": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__COUNTERPARTY, scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Counterparty", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY,
-					rendMan, rendMan, "Sales counterparty", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Counterparty").withBlockType(DISCHARGE_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Sales counterparty")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.sales-cn": {
 			final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.Literals.SLOT__CN, scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "CN", null, ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, "Sales CN", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "CN").withBlockType(DISCHARGE_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Sales CN")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-cancelled": {
 			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Cancelled(), scenarioEditingLocation.getDefaultCommandHandler());
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Cancelled", "Sale is cancelled", ColumnType.NORMAL, DISCHARGE_PRICING_GROUP, DEFAULT_BLOCK_TYPE,
-					DEFAULT_ORDER_KEY, rendMan, rendMan, "Cancelled", CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Cancelled").withTooltip("Sale is cancelled")
+							.withBlockType(DISCHARGE_PRICING_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Cancelled")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
+			break;
 		}
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-restrictions": {
 
@@ -887,7 +947,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", DISCHARGE_EXTRA_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, ColumnType.NORMAL, "Discharge restrictions");
+						block = blockManager.createBlock(columnID, "", DISCHARGE_EXTRA_GROUP, null, null, ColumnType.NORMAL, "Discharge restrictions");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -895,45 +955,39 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 					{
 						final ICellRenderer rendMan = new HasRestrictionsFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Restrictions", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(false);
-						createColumn.column.getColumn().setSummary(true);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Restrictions");
-
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Restrictions") //
+								.withCellRenderer(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()) //
+								.asSummaryOnly() //
+								.withGroupExpandedLabel("Restrictions") //
+								.build();
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Keep open", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Keep open") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedVessels(), referenceValueProvider,
 								scenarioEditingLocation.getDefaultCommandHandler(), MMXCorePackage.eINSTANCE.getNamedObject_Name());
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Vessels", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Vessels") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsOverride(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Override", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Override") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					{
@@ -949,9 +1003,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Permissive") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), referenceValueProvider,
@@ -966,17 +1022,21 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, " Ports", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, " Ports") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPortsOverride(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Override", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Override") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive(),
@@ -991,9 +1051,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Permissive") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final MultipleReferenceManipulator rendMan = new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), referenceValueProvider,
@@ -1008,16 +1070,20 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							}
 
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Contracts", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Contracts") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_RestrictedContractsOverride(),
 								scenarioEditingLocation.getDefaultCommandHandler());
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Override", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Override") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					{
@@ -1033,9 +1099,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								return false;
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Permissive") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					return null;
@@ -1047,17 +1115,21 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.assignment": {
 
 			final AssignmentManipulator rendMan = new AssignmentManipulator(scenarioEditingLocation);
-			columnManager.registerColumn(REPORT_TYPE, new SimpleEmfBlockColumnFactory(columnID, "Assignment", null, ColumnType.NORMAL, CARGO_END_GROUP, DEFAULT_BLOCK_TYPE, DEFAULT_ORDER_KEY, rendMan,
-					rendMan, "Assignment", CargoBulkEditorPackage.eINSTANCE.getRow__GetAssignableObject()));
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Assignment").withBlockType(CARGO_END_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Assignment")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow__GetAssignableObject())
+							.build());
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-terminal": {
-			columnManager.registerColumn(REPORT_TYPE, createWiringColumn(columnID, "L-Type", report, true, LOAD_END_GROUP, DEFAULT_BLOCK_TYPE, LOAD_END_GROUP + "_1"));
+			columnManager.registerColumn(REPORT_TYPE, createWiringColumn(columnID, "L-Type", report, true, LOAD_END_GROUP, null, LOAD_END_GROUP + "_1"));
 		}
 			break;
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.discharge-terminal": {
 
-			columnManager.registerColumn(REPORT_TYPE, createWiringColumn(columnID, "D-Type", report, false, DISCHARGE_START_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_START_GROUP + "_0"));
+			columnManager.registerColumn(REPORT_TYPE, createWiringColumn(columnID, "D-Type", report, false, DISCHARGE_START_GROUP, null, DISCHARGE_START_GROUP + "_0"));
 			break;
 		}
 		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.load-divertible": {
@@ -1068,7 +1140,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", LOAD_DIVERSION_GROUP, DEFAULT_BLOCK_TYPE, LOAD_DIVERSION_GROUP + "_0", ColumnType.NORMAL, "Load divertible");
+						block = blockManager.createBlock(columnID, "", LOAD_DIVERSION_GROUP, null, LOAD_DIVERSION_GROUP + "_0", ColumnType.NORMAL, "Load divertible");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -1076,24 +1148,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 					{
 						final ICellRenderer rendMan = new DivertibleFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Diversion", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(false);
-						createColumn.column.getColumn().setSummary(true);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Diversion");
-
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Diversion") //
+								.withCellRenderer(rendMan)
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.asSummaryOnly() //
+								.withGroupExpandedLabel("Diversion")
+								.build();
 
 					}
 					{
@@ -1102,30 +1162,27 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							@Override
 							public boolean canEdit(final Object object) {
 
-								if (object instanceof LoadSlot) {
-									final LoadSlot loadSlot = (LoadSlot) object;
+								if (object instanceof LoadSlot loadSlot) {
 									return loadSlot.isDESPurchase();
-
 								}
 								return false;
 							}
 
 							@Override
 							public String render(final Object object) {
-								if (object instanceof LoadSlot) {
-									final LoadSlot loadSlot = (LoadSlot) object;
+								if (object instanceof LoadSlot loadSlot) {
 									if (loadSlot.isDESPurchase()) {
 										return super.render(object);
-
 									}
-
 								}
 								return "";
 							}
 						};
-						final ColumnHandler createColumn = blockManager.createColumn(block, "DES type", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "DES type") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 
 					}
 					{
@@ -1134,8 +1191,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							@Override
 							public boolean canEdit(final Object object) {
 
-								if (object instanceof LoadSlot) {
-									final LoadSlot loadSlot = (LoadSlot) object;
+								if (object instanceof LoadSlot loadSlot) {
 									return loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE;
 
 								}
@@ -1144,8 +1200,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 							@Override
 							public String render(final Object object) {
-								if (object instanceof LoadSlot) {
-									final LoadSlot loadSlot = (LoadSlot) object;
+								if (object instanceof LoadSlot loadSlot) {
 									if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 										return super.render(object);
 
@@ -1156,9 +1211,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							}
 						};
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Ship days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Ship days") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					return null;
@@ -1175,7 +1232,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(columnID);
 					if (block == null) {
-						block = blockManager.createBlock(columnID, "", DISCHARGE_DIVERSION_GROUP, DEFAULT_BLOCK_TYPE, DISCHARGE_DIVERSION_GROUP + "_0", ColumnType.NORMAL, "Discharge divertible");
+						block = blockManager.createBlock(columnID, "", DISCHARGE_DIVERSION_GROUP, null, DISCHARGE_DIVERSION_GROUP + "_0", ColumnType.NORMAL, "Discharge divertible");
 					}
 					block.setPlaceholder(true);
 					block.setExpandable(true);
@@ -1183,24 +1240,12 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					block.setForceGroup(true);
 					{
 						final ICellRenderer rendMan = new DivertibleFormatter();
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Diversion", rendMan, (ICellManipulator) null, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(false);
-						createColumn.column.getColumn().setSummary(true);
-
-						createColumn.column.getColumn().getColumnGroup().addTreeListener(new TreeListener() {
-
-							@Override
-							public void treeExpanded(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("Diversion");
-
-							}
-
-							@Override
-							public void treeCollapsed(final TreeEvent e) {
-								createColumn.column.getColumn().getColumnGroup().setText("");
-
-							}
-						});
+						blockManager.createColumn(block, "Diversion") //
+								.withCellRenderer(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()) //
+								.asSummaryOnly() //
+								.withGroupExpandedLabel("Diversion") //
+								.build();
 
 					}
 					{
@@ -1210,8 +1255,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							@Override
 							public boolean canEdit(final Object object) {
 
-								if (object instanceof DischargeSlot) {
-									final DischargeSlot dischargeSlot = (DischargeSlot) object;
+								if (object instanceof DischargeSlot dischargeSlot) {
 									return dischargeSlot.isFOBSale();
 
 								}
@@ -1220,8 +1264,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 							@Override
 							public String render(final Object object) {
-								if (object instanceof DischargeSlot) {
-									final DischargeSlot dischargeSlot = (DischargeSlot) object;
+								if (object instanceof DischargeSlot dischargeSlot) {
 									if (dischargeSlot.isFOBSale()) {
 										return super.render(object);
 									}
@@ -1231,9 +1274,11 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							}
 						};
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "FOB type", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "FOB type") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 					{
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction(),
@@ -1241,8 +1286,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							@Override
 							public boolean canEdit(final Object object) {
 
-								if (object instanceof DischargeSlot) {
-									final DischargeSlot dischargeSlot = (DischargeSlot) object;
+								if (object instanceof DischargeSlot dischargeSlot) {
 									return dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST;
 								}
 								return false;
@@ -1250,8 +1294,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 							@Override
 							public String render(final Object object) {
-								if (object instanceof DischargeSlot) {
-									final DischargeSlot dischargeSlot = (DischargeSlot) object;
+								if (object instanceof DischargeSlot dischargeSlot) {
 									if (dischargeSlot.isFOBSale() && dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 										return super.render(object);
 									}
@@ -1261,30 +1304,77 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							}
 						};
 
-						final ColumnHandler createColumn = blockManager.createColumn(block, "Ship days", rendMan, rendMan, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot());
-						createColumn.column.getColumn().setDetail(true);
-						createColumn.column.getColumn().setSummary(false);
+						blockManager.createColumn(block, "Ship days") //
+								.withCellEditor(rendMan) //
+								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.asDetailOnly() //
+								.build();
 					}
 
 					return null;
 				}
 
 			});
-		}
 			break;
+		}
+
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-exposures": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeExposure(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Exposure").withTooltip("Compute Exposures")
+							.withBlockType(LOAD_END_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Exposure")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
+			break;
+		}
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-exposures": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeExposure(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Exposure").withTooltip("Compute Exposures")
+							.withBlockType(DISCHARGE_END_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Exposure")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
+			break;
+		}
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.l-hedge": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeHedge(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Hedging").withTooltip("Generate Hedge")
+							.withBlockType(LOAD_END_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Hedging")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.build());
+			break;
+		}
+		case "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.d-hedge": {
+			final BooleanFlagAttributeManipulator rendMan = new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getSlot_ComputeHedge(), scenarioEditingLocation.getDefaultCommandHandler());
+			columnManager.registerColumn(REPORT_TYPE,
+					new SingleColumnFactoryBuilder(columnID, "Hedging").withTooltip("Generate Hedge")
+							.withBlockType(DISCHARGE_END_GROUP)
+							.withCellEditor(rendMan)
+							.withBlockConfigurationName("Hedging")
+							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.build());
+			break;
+		}
 
 		}
 	}
 
-	private SimpleEmfBlockColumnFactory createWiringColumn(final String columnID, final String columnName, final IAdaptable report, final boolean isLoad, final String blockGroup,
-			final String blockType, final String orderKey) {
-		return new SimpleEmfBlockColumnFactory(columnID, columnName, null, ColumnType.NORMAL, blockGroup, blockType, orderKey, null, null, null, (ETypedElement[]) null) {
+	private EmfBlockColumnFactory createWiringColumn(final String columnID, final String columnName, final IAdaptable report, final boolean isLoad, final String blockGroup, final String blockType,
+			final String orderKey) {
+		return new EmfBlockColumnFactory() {
 
 			@Override
 			public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
-				final ColumnBlock block = blockManager.createBlock(blockID, blockDisplayName, blockType, blockGroup, orderKey, columnType, blockDisplayName);
+				final ColumnBlock block = blockManager.createBlock(columnID, columnName, blockType, blockGroup, orderKey, ColumnType.NORMAL, null);
 
-				return blockManager.configureHandler(block, new ColumnHandler(block, (ICellRenderer) null, (ICellManipulator) null, new ETypedElement[0], blockDisplayName, new IColumnFactory() {
+				return blockManager.configureHandler(block, new ColumnHandler(block, null, (ICellRenderer) null, (ICellManipulator) null, new ETypedElement[0], columnName, new IColumnFactory() {
 
 					@Override
 					public void destroy(final GridViewerColumn gvc) {
@@ -1360,28 +1450,20 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 	private static String mapName(final VolumeUnits units) {
 
-		switch (units) {
-		case M3:
-			return "m³";
-		case MMBTU:
-			return "mmBtu";
-		}
-		return units.getName();
+		return switch (units) {
+		case M3 -> "m³";
+		case MMBTU -> "mmBtu";
+		default -> units.getName();
+		};
 	}
 
 	private static String mapName(final TimePeriod units) {
 
-		switch (units) {
-		case DAYS:
-			return "Days";
-		case HOURS:
-			return "Hours";
-		case MONTHS:
-			return "Months";
-		default:
-			break;
-
-		}
-		return units.getName();
+		return switch (units) {
+		case DAYS -> "Days";
+		case HOURS -> "Hours";
+		case MONTHS -> "Months";
+		default -> units.getName();
+		};
 	}
 }

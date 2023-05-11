@@ -58,8 +58,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * 
  * @author Simon McGregor
  * 
- *         Utility class to provide methods for help when validating contract
- *         constraints.
+ *         Utility class to provide methods for help when validating contract constraints.
  * 
  */
 public class PriceExpressionUtils {
@@ -114,6 +113,15 @@ public class PriceExpressionUtils {
 			final @NonNull EObject target, final EAttribute feature, final boolean missingIsOk, @Nullable final String constraintKey, final Pair<EObject, EStructuralFeature>... otherFeatures) {
 		final PriceIndexType priceIndexType = getPriceIndexType(feature);
 		validatePriceExpression(ctx, failures, factory, target, feature, priceIndexType, missingIsOk, constraintKey, otherFeatures);
+	}
+
+	public static boolean hasPriceAnnotation(final EAttribute feature) {
+		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
+		if (eAnnotation != null) {
+			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.ANNOTATION_KEY);
+			return value != null;
+		}
+		return false;
 	}
 
 	public static @NonNull PriceIndexType getPriceIndexType(final EAttribute feature) {
@@ -188,13 +196,18 @@ public class PriceExpressionUtils {
 	 * 
 	 *         Validates a price expression for a given EMF object
 	 * 
-	 * @param ctx             A validation context.
-	 * @param object          The EMF object to associate validation failures with.
-	 * @param feature         The structural feature to attach validation failures
-	 *                        to.
-	 * @param priceExpression The price expression to validate.
-	 * @param parser          A parser for price expressions.
-	 * @param failures        The list of validation failures to append to.
+	 * @param ctx
+	 *            A validation context.
+	 * @param object
+	 *            The EMF object to associate validation failures with.
+	 * @param feature
+	 *            The structural feature to attach validation failures to.
+	 * @param priceExpression
+	 *            The price expression to validate.
+	 * @param parser
+	 *            A parser for price expressions.
+	 * @param failures
+	 *            The list of validation failures to append to.
 	 */
 	@NonNull
 	public static ValidationResult validatePriceExpression(final @NonNull IValidationContext ctx, final @NonNull EObject object, final @NonNull EStructuralFeature feature,
@@ -203,9 +216,22 @@ public class PriceExpressionUtils {
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return ValidationResult.createErrorStatus("Price Expression is missing.");
 		}
+		String localPriceExpression = priceExpression;
+		final EAnnotation eAnnotation = feature.getEAnnotation(ExpressionAnnotationConstants.ANNOTATION_NAME);
+		if (eAnnotation != null) {
+			final String value = eAnnotation.getDetails().get(ExpressionAnnotationConstants.PARAMETERS_KEY);
+			if (value != null) {
+				final String[] values = value.split(",");
+				for (int i = 0; i < values.length; i++) {
+					if (values[i].equalsIgnoreCase(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE)) {
+						localPriceExpression = localPriceExpression.toLowerCase().replace(ExpressionAnnotationConstants.PARAMETER_SALES_PRICE, "(1)"); 
+					}
+				}
+			}
+		}
 		// Check for illegal characters
 		{
-			final Matcher matcher = pattern.matcher(priceExpression);
+			final Matcher matcher = pattern.matcher(localPriceExpression);
 			if (matcher.find()) {
 				final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
 				return ValidationResult.createErrorStatus(message);
@@ -213,9 +239,9 @@ public class PriceExpressionUtils {
 		}
 		// Test SHIFT function use
 		{
-			final Matcher matcherA = shiftDetectPattern.matcher(priceExpression);
+			final Matcher matcherA = shiftDetectPattern.matcher(localPriceExpression);
 			if (matcherA.find()) {
-				final Matcher matcherB = shiftUsePattern.matcher(priceExpression);
+				final Matcher matcherB = shiftUsePattern.matcher(localPriceExpression);
 				if (!matcherB.find()) {
 					final String message = String.format("[Price expression|'%s'] Unexpected use of SHIFT function. Expect SHIFT(<index name>, <number of months>.", priceExpression);
 					return ValidationResult.createErrorStatus(message);
@@ -228,7 +254,7 @@ public class PriceExpressionUtils {
 		// so we need to check these cases
 		final String multipleOperatorPattern = "([-/*+][-/*+]+)";
 		final Pattern pattern = Pattern.compile(multipleOperatorPattern);
-		final Matcher matcher = pattern.matcher(priceExpression);
+		final Matcher matcher = pattern.matcher(localPriceExpression);
 		if (matcher.find()) {
 			return ValidationResult.createErrorStatus(String.format("Unable to parse expression, consecutive %s operators found", matcher.group(0)));
 		}
@@ -238,13 +264,13 @@ public class PriceExpressionUtils {
 			ISeries parsed = null;
 			String hints = "";
 			try {
-				parsed = parser.asSeries(priceExpression);
+				parsed = parser.asSeries(localPriceExpression);
 			} catch (final UnknownSeriesException | GenericSeriesParsesException e) {
 				hints = e.getMessage();
 			} catch (final Exception e) {
 				final String operatorPattern = "([-/*+][-/*+]+)"; // TODO ask Simon if this is reachable
 				final Pattern p = Pattern.compile(operatorPattern);
-				final Matcher m = p.matcher(priceExpression);
+				final Matcher m = p.matcher(localPriceExpression);
 				if (m.find()) {
 					hints = "Consecutive operators: " + m.group(0);
 				} else {
@@ -263,7 +289,7 @@ public class PriceExpressionUtils {
 	/**
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
-			final Double maxValue, final YearMonth date, final List<IStatus> failures) {
+			final Double maxValue, final YearMonth date, final List<IStatus> failures, final PriceIndexType type) {
 
 		if (date == null) {
 			// No date, but try to parse expression as a number.
@@ -289,7 +315,7 @@ public class PriceExpressionUtils {
 			return;
 		}
 
-		final SeriesParser parser = getIndexParser(PriceIndexType.COMMODITY);
+		final SeriesParser parser = getIndexParser(type);
 		try {
 			final ISeries parsed = parser.asSeries(priceExpression);
 
@@ -373,8 +399,7 @@ public class PriceExpressionUtils {
 			if (!result.isOk()) {
 				final EObject eContainer = target.eContainer();
 				final DetailConstraintStatusDecorator dsd;
-				if (eContainer instanceof Contract) {
-					final Contract contract = (Contract) eContainer;
+				if (eContainer instanceof Contract contract) {
 					final String message = String.format("[Contract|'%s']%s", contract.getName(), result.getErrorDetails());
 					dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dsd.addEObjectAndFeature(eContainer, attribute);
@@ -413,9 +438,9 @@ public class PriceExpressionUtils {
 		return true;
 	}
 
-	public static Collection<@NonNull AbstractYearMonthCurve> getLinkedCurves(final String priceExpression) {
+	public static Collection<@NonNull AbstractYearMonthCurve> getLinkedCurves(final String priceExpression, PriceIndexType type) {
 		final ModelMarketCurveProvider modelMarketCurveProvider = getMarketCurveProvider();
-		return modelMarketCurveProvider.getLinkedCurves(priceExpression);
+		return modelMarketCurveProvider.getLinkedCurves(priceExpression, type);
 
 	}
 
@@ -436,9 +461,9 @@ public class PriceExpressionUtils {
 	}
 
 	public static void checkExpressionAgainstPricingDate(final IValidationContext ctx, final String priceExpression, final Slot slot, final LocalDate pricingDate, final EStructuralFeature feature,
-			final List<IStatus> failures) {
+			final List<IStatus> failures, final PriceIndexType indexType) {
 		final ModelMarketCurveProvider marketCurveProvider = PriceExpressionUtils.getMarketCurveProvider();
-		final Map<AbstractYearMonthCurve, LocalDate> result1 = marketCurveProvider.getLinkedCurvesAndEarliestNeededDate(priceExpression, pricingDate);
+		final Map<AbstractYearMonthCurve, LocalDate> result1 = marketCurveProvider.getLinkedCurvesAndEarliestNeededDate(priceExpression, indexType, pricingDate);
 
 		for (final Map.Entry<AbstractYearMonthCurve, LocalDate> e : result1.entrySet()) {
 			final AbstractYearMonthCurve index = e.getKey();

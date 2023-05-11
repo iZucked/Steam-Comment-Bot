@@ -51,7 +51,9 @@ public class SettleStrategyStartDayWrapper extends IInlineEditorEnablementWrappe
 				dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 				dialogContext.getDialogController().updateEditorVisibility();
 				super.display(dialogContext, scenario, instrument, range);
-				getLabel().pack();
+				if (getLabel() != null) {
+					getLabel().pack();
+				}
 				dialogContext.getDialogController().relayout();
 			} else {
 				dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
@@ -75,8 +77,7 @@ public class SettleStrategyStartDayWrapper extends IInlineEditorEnablementWrappe
 		this.range = range;
 
 		enabled = false;
-		if (object instanceof SettleStrategy && getFeature() == PricingPackage.eINSTANCE.getSettleStrategy_DayOfTheMonth()) {
-			final SettleStrategy instrument = (SettleStrategy) object;
+		if (object instanceof final SettleStrategy instrument && getFeature() == PricingPackage.eINSTANCE.getSettleStrategy_DayOfTheMonth()) {
 			enabled = !instrument.isLastDayOfTheMonth();
 			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), enabled);
 			super.display(dialogContext, scenario, object, range);

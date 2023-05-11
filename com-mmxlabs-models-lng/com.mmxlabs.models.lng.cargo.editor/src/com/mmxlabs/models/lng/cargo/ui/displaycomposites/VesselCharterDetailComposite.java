@@ -99,13 +99,13 @@ public class VesselCharterDetailComposite extends DefaultDetailComposite {
 				.makeRow() //
 				//
 				.withRow() //
-				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__START_AFTER, "After (UTC)") //
-				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__START_BY, "By") //
+				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__START_AFTER, "From") //
+				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__START_BY, "To") //
 				.makeRow() //
 				//
 				.withRow() //
-				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__END_AFTER, "After (UTC)") //
-				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__END_BY, "By") //
+				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__END_AFTER, "From") //
+				.withFeature(CargoPackage.Literals.VESSEL_CHARTER__END_BY, "To") //
 				.makeRow() //
 				//
 				.withRow() //

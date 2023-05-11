@@ -84,7 +84,8 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 								|| !analyticsModel.getBreakevenModels().isEmpty() //
 								|| !analyticsModel.getOptionModels().isEmpty() //
 								|| analyticsModel.getViabilityModel() != null
-								|| analyticsModel.getMtmModel() != null) {
+								|| analyticsModel.getMtmModel() != null
+								|| analyticsModel.getMarketabilityModel() != null) {
 
 							boolean result = promptClearModels();
 							if (!result) {
@@ -120,6 +121,9 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 		}
 		if (!analyticsModel.getBreakevenModels().isEmpty()) {
 			delete.addAll(analyticsModel.getBreakevenModels());
+		}
+		if(analyticsModel.getMarketabilityModel() != null) {
+			delete.addAll(analyticsModel.getMarketabilityModel().getRows());
 		}
 		// Clear sandbox results, but not the sandbox itself
 		if (!analyticsModel.getOptionModels().isEmpty()) {

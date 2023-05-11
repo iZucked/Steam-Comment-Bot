@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupSortValue <em>Group Sort Value</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getGroupObject <em>Group Object</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#isGroupAlternative <em>Group Alternative</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getTableRoot <em>Table Root</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup()
@@ -41,17 +42,19 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ChangeSetTableGroup extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Rows</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Rows</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getTableGroup <em>Table Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Rows</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rows</em>' containment reference list.
+	 * @return the value of the '<em>Rows</em>' reference list.
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_Rows()
-	 * @model containment="true"
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getTableGroup
+	 * @model opposite="tableGroup"
 	 * @generated
 	 */
 	EList<ChangeSetTableRow> getRows();
@@ -367,5 +370,29 @@ public interface ChangeSetTableGroup extends EObject {
 	 * @generated
 	 */
 	void setGroupAlternative(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Table Root</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot#getGroups <em>Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Table Root</em>' container reference.
+	 * @see #setTableRoot(ChangeSetTableRoot)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableGroup_TableRoot()
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot#getGroups
+	 * @model opposite="groups" transient="false"
+	 * @generated
+	 */
+	ChangeSetTableRoot getTableRoot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup#getTableRoot <em>Table Root</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Table Root</em>' container reference.
+	 * @see #getTableRoot()
+	 * @generated
+	 */
+	void setTableRoot(ChangeSetTableRoot value);
 
 } // ChangeSetTableGroup

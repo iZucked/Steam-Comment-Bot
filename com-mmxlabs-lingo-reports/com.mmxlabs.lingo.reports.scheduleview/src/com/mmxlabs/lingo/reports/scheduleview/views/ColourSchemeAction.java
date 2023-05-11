@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 
@@ -45,8 +46,10 @@ class ColourSchemeAction extends SchedulerViewAction {
 
 	@Override
 	protected void createMenuItems(final Menu menu) {
+		Action canalAction;
+		Action destinationLabelsAction;
 		{
-			final Action canalAction = new Action("Show Canals", IAction.AS_CHECK_BOX) {
+			canalAction = new Action("Canals", IAction.AS_CHECK_BOX) {
 				@Override
 				public void run() {
 					lp.toggleShowCanals();
@@ -60,20 +63,41 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 		{
-			final Action showDaysOnEventsAction = new Action("Show Days on Events", IAction.AS_CHECK_BOX) {
+			destinationLabelsAction = new Action("Cargoes", IAction.AS_CHECK_BOX) {
+
 				@Override
 				public void run() {
-					final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
-					viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(!b);
-					viewer.getGanttChart().getGanttComposite().redraw();
+					lp.toggleShowDestinationLabels();
+					setChecked(lp.showDestinationLabels());
+					viewer.setInput(viewer.getInput());
+					schedulerView.redraw();
 				}
 			};
-			showDaysOnEventsAction.setChecked(viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
+			destinationLabelsAction.setChecked(lp.showDestinationLabels());
+
+			final ActionContributionItem aci = new ActionContributionItem(destinationLabelsAction);
+			aci.fill(menu, -1);
+		}
+		{
+			final Action showDaysOnEventsAction = new Action("Days", IAction.AS_CHECK_BOX) {
+				@Override
+				public void run() {
+					lp.toggleShowDays();
+					setChecked(lp.showDays());
+					viewer.setInput(viewer.getInput());
+					schedulerView.redraw();
+				}
+			};
+			showDaysOnEventsAction.setChecked(lp.showDays());
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(showDaysOnEventsAction);
 			actionContributionItem.fill(menu, -1);
 		}
 		{
-			final Action toggleShowNominalsByDefaultAction = new Action("Show Nominals", SWT.CHECK) {
+			final Separator separator = new Separator();
+			separator.fill(menu, -1);
+		}
+		{
+			final Action toggleShowNominalsByDefaultAction = new Action("Nominals", SWT.CHECK) {
 				@Override
 				public void run() {
 					// TODO: Tidy all this state up.
@@ -89,4 +113,5 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 	}
+
 }

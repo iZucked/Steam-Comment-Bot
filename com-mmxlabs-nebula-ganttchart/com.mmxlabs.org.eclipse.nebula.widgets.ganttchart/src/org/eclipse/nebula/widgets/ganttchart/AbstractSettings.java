@@ -130,11 +130,11 @@ public abstract class AbstractSettings implements ISettings {
 	}
 
 	public int getTextSpacerConnected() {
-		return 9;
+		return 3;
 	}
 
 	public int getTextSpacerNonConnected() {
-		return 9;
+		return 3;
 	}
 
 	public int getYearMonthDayWidth() {

@@ -37,18 +37,22 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 	protected void sortEditors(List<IInlineEditor> editors) {
 		// Sub classes can sort the editor list prior to rendering
 		List<ETypedElement> orderedFeatures = Lists.newArrayList( //
-				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
+				MMXCorePackage.Literals.NAMED_OBJECT__NAME,//
+				TransfersPackage.Literals.TRANSFER_RECORD__CODE,//
+				
 				TransfersPackage.Literals.TRANSFER_RECORD__TRANSFER_AGREEMENT,//
+				TransfersPackage.Literals.TRANSFER_RECORD___GET_COMPANY_STATUS, //
 				
 				TransfersPackage.Literals.TRANSFER_RECORD___GET_FROM_ENTITY,//
 				TransfersPackage.Literals.TRANSFER_RECORD___GET_TO_ENTITY,//
 				
-				TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE,//
-				TransfersPackage.Literals.TRANSFER_RECORD___GET_COMPANY_STATUS, //
+				TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU,//
+				TransfersPackage.Literals.TRANSFER_RECORD__TO_BU,//
 				
 				TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION,//
 				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS,//
 				
+				TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE,//
 				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE				
 		);
 
@@ -72,6 +76,7 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //
 				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CODE) //
 				.makeRow() //
 				//
 				.withRow() //
@@ -79,7 +84,6 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				.makeRow() //
 				//
 				.withRow() //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD___GET_COMPANY_STATUS) //
 				.makeRow() //
 				//
@@ -89,13 +93,26 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				.makeRow() //
 				//
 				.withRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__TO_BU) //
+				.makeRow() //
+				//
+				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS) //
 				.makeRow() //
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__LHS) //
+				.makeRow() //
+				//
+				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__RHS) //
+				.makeRow() //
+				//
+				.withRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE) //
 				.makeRow() //
 				//
 				.withRow() //

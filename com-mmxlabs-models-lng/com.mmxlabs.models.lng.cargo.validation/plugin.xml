@@ -77,6 +77,12 @@
                <message>
                   {0}
                </message>
+               <target
+                     class="LoadSlot">
+               </target>
+               <target
+                     class="DischargeSlot">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoSpotCharterConstraint"
@@ -294,7 +300,7 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.CurveDataExistsConstraint"
+                  class="com.mmxlabs.models.lng.cargo.validation.SlotCurveDataExistsConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CurveDataExistsConstraint"
                   lang="Java"
                   mode="Batch"
@@ -304,12 +310,6 @@
                <message>
                   {0}
                </message>
-               <description>
-                  
-               </description>
-               <target
-                     class="Cargo">
-               </target>
                <target
                      class="Slot">
                </target>

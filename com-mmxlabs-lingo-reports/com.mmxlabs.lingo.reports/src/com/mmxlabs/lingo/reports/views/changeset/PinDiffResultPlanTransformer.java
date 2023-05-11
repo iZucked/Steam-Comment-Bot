@@ -10,8 +10,9 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
-public class PinDiffResultPlanTransformer {
+public class PinDiffResultPlanTransformer implements IPinDiffResultPlanTransformer {
 
+	@Override
 	public ChangeSetRoot createDataModel(ScenarioResult pin, ScenarioResult other, final IProgressMonitor monitor) {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();

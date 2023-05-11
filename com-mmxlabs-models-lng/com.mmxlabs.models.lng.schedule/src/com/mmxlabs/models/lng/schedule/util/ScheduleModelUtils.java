@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -74,13 +75,14 @@ public class ScheduleModelUtils {
 			return true;
 		} else if (event instanceof EndEvent) {
 			return true;
-		} else if (event instanceof SlotVisit) {
-			final SlotAllocation slotAllocation = ((SlotVisit) event).getSlotAllocation();
-			if (slotAllocation != null) {
-				if (slotAllocation.getSlot() instanceof LoadSlot) {
-					return true;
-				}
+		} else if (event instanceof @NonNull final SlotVisit slotVisit) {
+			final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+			if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
+				return true;
 			}
+		} else if (event instanceof @NonNull final PortVisit portVisit && portVisit.getNextEvent() == null) {
+			// The expected preceding sequence associated with this case is a nominal vessel cargo
+			return true;
 		}
 		return false;
 	}
@@ -285,6 +287,17 @@ public class ScheduleModelUtils {
 		}
 		return null;
 	}
+	
+	public static Cargo getCargoFromCargoAllocation(final @NonNull CargoAllocation cargoAllocation) {
+		for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+			if (sa.getSlot() != null) {
+				if (sa.getSlot().getCargo() != null) {
+					return sa.getSlot().getCargo();
+				}
+			}
+		}
+		throw new IllegalStateException(String.format("%s: cargo allocation misses the cargo", ScheduleModelUtils.class.getCanonicalName()));
+	}
 
 	public static LoadSlot getLoadSlot(final Object allocation) {
 		LoadSlot slot = null;
@@ -297,13 +310,11 @@ public class ScheduleModelUtils {
 					}
 				}
 			}
-		} else if (allocation instanceof SlotAllocation) {
-			final SlotAllocation sa = (SlotAllocation) allocation;
+		} else if (allocation instanceof final SlotAllocation sa) {
 			if (sa.getSlot() instanceof LoadSlot) {
 				slot = (LoadSlot) sa.getSlot();
 			}
-		} else if (allocation instanceof OpenSlotAllocation) {
-			final OpenSlotAllocation sa = (OpenSlotAllocation) allocation;
+		} else if (allocation instanceof final OpenSlotAllocation sa) {
 			if (sa.getSlot() instanceof LoadSlot) {
 				slot = (LoadSlot) sa.getSlot();
 			}
@@ -415,8 +426,7 @@ public class ScheduleModelUtils {
 	}
 
 	public static Vessel getVesselFromAllocation(final Object allocation) {
-		if (allocation instanceof CargoAllocation) {
-			final CargoAllocation cargoAllocation = (CargoAllocation) allocation;
+		if (allocation instanceof final CargoAllocation cargoAllocation) {
 			return getVessel(cargoAllocation.getSequence());
 		}
 		return null;
@@ -457,44 +467,9 @@ public class ScheduleModelUtils {
 	 */
 	public static int[] getJourneyDays(final CargoAllocation cargoAllocation, final boolean includeCharterOutInBallastIdle) {
 		final int[] result = new int[7];
-		if (cargoAllocation != null) {
-			Event lastEvent = null;
-			for (final Event e : cargoAllocation.getEvents()) {
-				lastEvent = e;
-				if (e instanceof Journey) {
-					if (((Journey) e).isLaden()) {
-						result[0] = e.getDuration();
-					} else {
-						result[1] = e.getDuration();
-					}
-				} else if (e instanceof Idle) {
-					if (((Idle) e).isLaden()) {
-						result[2] = e.getDuration();
-					} else {
-						result[3] = e.getDuration();
-					}
-				} else if (e instanceof SlotVisit) {
-					final SlotVisit s = (SlotVisit) e;
-					final SlotAllocation sa = s.getSlotAllocation();
-					if (sa.getSlot() instanceof DischargeSlot) {
-						result[4] = e.getDuration();
-					} else if (sa.getSlot() instanceof LoadSlot) {
-						result[5] = e.getDuration();
-					}
-				}
-			}
-			if (lastEvent != null && includeCharterOutInBallastIdle) {
-				final Event ne = lastEvent.getNextEvent();
-				if (ne instanceof CharterLengthEvent) {
-					result[3] += ne.getDuration();
-				}
-			}
-		}
-		for (int i = 0; i < 6; i++) {
-			result[6] += result[i];
-		}
+		final double[] durationInHours = getRawJourneyHours(cargoAllocation, includeCharterOutInBallastIdle);
 		for (int i = 0; i < 7; i++) {
-			result[i] = (int) Math.ceil(result[i] / 24.0);
+			result[i] = (int) Math.ceil(durationInHours[i] / 24.0);
 		}
 		return result;
 	}
@@ -508,45 +483,80 @@ public class ScheduleModelUtils {
 	 * 
 	 */
 	public static double[] getRawJourneyDays(final CargoAllocation cargoAllocation, final boolean includeCharterOutInBallastIdle) {
+		final double[] result = getRawJourneyHours(cargoAllocation, includeCharterOutInBallastIdle);
+		// get the journey length in days
+		for (int i = 0; i < 7; i++) {
+			result[i] = result[i] / 24.0;
+		}
+		return result;
+	}
+	
+	/**
+	 * Returns the journey legs' duration in hours (real values)
+	 * 
+	 * @param cargoAllocation
+	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge;
+	 *         5-Loading; 6-Total
+	 * 
+	 */
+	public static double[] getRawJourneyHours(final CargoAllocation cargoAllocation, final boolean includeCharterOutInBallastIdle) {
 		final double[] result = new double[7];
+		final Event[] events = getEvents(cargoAllocation);
+		// set duration for legs
+		for (int i = 0; i < 6; i++) {
+			result[i] = events[i].getDuration();
+			result[6] += result[i];
+		}
+		// account for the charter length in ballast idle
+		if (events[6] != null && includeCharterOutInBallastIdle) {
+			result[3] += events[6].getDuration();
+			result[6] += result[3];
+		}
+		return result;
+	}
+	
+	/**
+	 * Returns the journey legs
+	 * Sixth event is a charter length
+	 * 
+	 * @param cargoAllocation
+	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge;
+	 *         5-Loading; 6-charter length event
+	 * 
+	 */
+	public static Event[] getEvents(final CargoAllocation cargoAllocation) {
+		final Event[] result = new Event[7];
 		if (cargoAllocation != null) {
 			Event lastEvent = null;
 			for (final Event e : cargoAllocation.getEvents()) {
 				lastEvent = e;
-				if (e instanceof Journey) {
-					if (((Journey) e).isLaden()) {
-						result[0] = e.getDuration();
+				if (e instanceof final Journey journey) {
+					if (journey.isLaden()) {
+						result[0] = e;
 					} else {
-						result[1] = e.getDuration();
+						result[1] = e;
 					}
-				} else if (e instanceof Idle) {
-					if (((Idle) e).isLaden()) {
-						result[2] = e.getDuration();
+				} else if (e instanceof final Idle idle) {
+					if (idle.isLaden()) {
+						result[2] = e;
 					} else {
-						result[3] = e.getDuration();
+						result[3] = e;
 					}
-				} else if (e instanceof SlotVisit) {
-					final SlotVisit s = (SlotVisit) e;
+				} else if (e instanceof final SlotVisit s) {
 					final SlotAllocation sa = s.getSlotAllocation();
 					if (sa.getSlot() instanceof DischargeSlot) {
-						result[4] = e.getDuration();
+						result[4] = e;
 					} else if (sa.getSlot() instanceof LoadSlot) {
-						result[5] = e.getDuration();
+						result[5] = e;
 					}
 				}
 			}
-			if (lastEvent != null && includeCharterOutInBallastIdle) {
+			if (lastEvent != null) {
 				final Event ne = lastEvent.getNextEvent();
 				if (ne instanceof CharterLengthEvent) {
-					result[3] += ne.getDuration();
+					result[6] = ne;
 				}
 			}
-		}
-		for (int i = 0; i < 6; i++) {
-			result[6] += result[i];
-		}
-		for (int i = 0; i < 7; i++) {
-			result[i] = result[i] / 24.0;
 		}
 		return result;
 	}
@@ -583,5 +593,42 @@ public class ScheduleModelUtils {
 		final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);
 		assert event instanceof EndEvent;
 		return (EndEvent) event;
+	}
+	
+	public static Double getBaseFuelUsageMT(final Object object) {
+		if (object instanceof FuelUsage mix) {
+			double total = 0.0;
+			for (final FuelQuantity q : mix.getFuels()) {
+				if (q.getFuel() == Fuel.BASE_FUEL) {
+					for (final FuelAmount fa : q.getAmounts()) {
+						if (fa.getUnit() == FuelUnit.MT) {
+							total += fa.getQuantity();
+						}
+					}
+				}
+			}
+
+			return total == 0 ? null : total;
+		} else {
+			return null;
+		}
+	}
+	
+	public static Double getBoilOffMMBTU(final Object object) {
+		if (object instanceof FuelUsage mix) {
+			double total = 0.0;
+			for (final FuelQuantity q : mix.getFuels()) {
+				if (q.getFuel() == Fuel.FBO || q.getFuel() == Fuel.NBO) {
+					for (final FuelAmount fa : q.getAmounts()) {
+						if (fa.getUnit() == FuelUnit.MMBTU) {
+							total += fa.getQuantity();
+						}
+					}
+				}
+			}
+			return total == 0 ? null : total;
+		} else {
+			return null;
+		}
 	}
 }

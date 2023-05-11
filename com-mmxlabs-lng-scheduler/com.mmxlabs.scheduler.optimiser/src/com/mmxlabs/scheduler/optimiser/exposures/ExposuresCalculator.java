@@ -188,7 +188,6 @@ public class ExposuresCalculator {
 
 	private Collection<BasicExposureRecord> createOptimiserExposureRecord(final String name, final @NonNull ASTNode node, InputRecord inputRecord, final boolean isLong) {
 		final List<BasicExposureRecord> results = new LinkedList<>();
-
 		final IExposureNode enode = ExposuresASTToCalculator.getExposureNode(node, inputRecord).getSecond();
 		if (enode instanceof final ExposureRecords exposureRecords) {
 			for (final ExposureRecord record : exposureRecords.records) {
@@ -204,6 +203,9 @@ public class ExposuresCalculator {
 				exposure.setVolumeMMBTU(isLong ? -record.mmbtuVolume() / 10 : record.mmbtuVolume() / 10);
 				exposure.setVolumeNative(isLong ? -record.nativeVolume() / 10 : record.nativeVolume() / 10);
 				exposure.setVolumeValueNative(isLong ? -record.nativeValue() / 10 : record.nativeValue() / 10);
+				if (inputRecord.lookupData().commodityMap.get(record.curveName()) != null){
+					exposure.setAdjustment(inputRecord.lookupData().commodityMap.get(record.curveName()).getAdjustment());
+				}
 
 				final BasicHolidayCalendar holidays = inputRecord.lookupData().holidayCalendars.get(record.curveName());
 				final BasicPricingCalendar pricingCalendar = inputRecord.lookupData().pricingCalendars.get(record.curveName());

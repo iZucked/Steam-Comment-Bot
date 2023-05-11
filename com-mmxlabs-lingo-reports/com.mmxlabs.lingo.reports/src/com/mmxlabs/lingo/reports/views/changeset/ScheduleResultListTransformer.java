@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,9 +14,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetTransformerUtil.MappingModel;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -123,10 +124,11 @@ public class ScheduleResultListTransformer {
 		final MappingModel beforeDifferences = ChangeSetTransformerUtil.generateMappingModel(beforeTargets);
 		final MappingModel afterDifferences = ChangeSetTransformerUtil.generateMappingModel(afterTargets);
 
-		final List<ChangeSetRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
+		final List<ChangeSetTableRow> rows = ChangeSetTransformerUtil.generateChangeSetRows(beforeDifferences, afterDifferences);
 		// Other PNL segment
 		{
-			ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+			ChangeSetTableRow row = ChangesetFactory.eINSTANCE.createChangeSetTableRow();
+			row.setWiringGroup(ChangesetFactory.eINSTANCE.createChangeSetWiringGroup());
 			ChangeSetRowDataGroup afterGroup = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
 			ChangeSetRowDataGroup beforeGroup = ChangesetFactory.eINSTANCE.createChangeSetRowDataGroup();
 			ChangeSetRowData beforeData = ChangesetFactory.eINSTANCE.createChangeSetRowData();
@@ -137,20 +139,23 @@ public class ScheduleResultListTransformer {
 
 			beforeData.setLhsGroupProfitAndLoss(beforeSchedule.getOtherPNL());
 			afterData.setLhsGroupProfitAndLoss(afterSchedule.getOtherPNL());
-			
+
 			beforeGroup.getMembers().add(beforeData);
 			afterGroup.getMembers().add(afterData);
-			
-			row.setBeforeData(beforeGroup);
-			row.setAfterData(afterGroup);
-			
+
+			row.setLhsBefore(beforeData);
+			row.setLhsAfter(afterData);
+
 			beforeData.setLhsName("Knock-on P&L");
 			afterData.setLhsName("Knock-on P&L");
-			
+
 			rows.add(row);
 		}
 
-		// //
+		// Determine change types
+		ChangeSetTransformerUtil.setRowFlags(rows);
+		
+		ChangeSetTransformerUtil.sortRows(rows, targetToSortFirst);
 
 		// Add to data model
 		if (isAlternative) {
@@ -159,9 +164,6 @@ public class ScheduleResultListTransformer {
 			changeSet.getChangeSetRowsToDefaultBase().addAll(rows);
 		}
 
-		ChangeSetTransformerUtil.setRowFlags(rows);
-		// // ChangeSetTransformerUtil.filterRows(rows);
-		// // ChangeSetTransformerUtil.sortRows(rows);
 		// Build metrics
 		ChangeSetTransformerUtil.calculateMetrics(changeSet, beforeSchedule, afterSchedule, isAlternative);
 	}

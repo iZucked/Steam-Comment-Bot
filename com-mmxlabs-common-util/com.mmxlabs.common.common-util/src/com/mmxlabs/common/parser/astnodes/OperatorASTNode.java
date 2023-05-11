@@ -7,6 +7,7 @@ package com.mmxlabs.common.parser.astnodes;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.parser.IExpression;
@@ -14,6 +15,7 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesOperatorExpression;
 import com.mmxlabs.common.parser.series.SeriesParser;
 
+@NonNullByDefault
 public final class OperatorASTNode implements ASTNode {
 
 	private ASTNode lhs;
@@ -60,11 +62,11 @@ public final class OperatorASTNode implements ASTNode {
 	}
 
 	@Override
-	public @NonNull IExpression<@NonNull ISeries> asExpression(@NonNull final SeriesParser seriesParser) {
+	public IExpression<ISeries> asExpression(final SeriesParser seriesParser) {
 		return new SeriesOperatorExpression(operator.asChar(), lhs.asExpression(seriesParser), rhs.asExpression(seriesParser));
 	}
 
-	private String wrap(ASTNode node) {
+	private String wrap(final ASTNode node) {
 		if (node instanceof OperatorASTNode) {
 			return String.format("(%s)", node.asString());
 		}

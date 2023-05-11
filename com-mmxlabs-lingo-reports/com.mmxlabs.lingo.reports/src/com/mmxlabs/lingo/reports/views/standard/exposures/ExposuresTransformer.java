@@ -207,6 +207,8 @@ public class ExposuresTransformer {
 			return data;
 		case BY_MONTH:
 			return addAnnualQuarterTotals(data);
+		case BY_CALENDAR_YEAR:
+			return addAnnualTotals(data);
 		case BY_DEALSET:
 			return reTransformByDealSet(data, scenarioResult);
 		default:
@@ -322,6 +324,33 @@ public class ExposuresTransformer {
 			result.addAll(output.stream() //
 					.filter(a -> a.date.getYear() == ifin) //
 					.collect(Collectors.toList()));
+		}
+		return result;
+	}
+	protected static List<IndexExposureData> addAnnualTotals(final List<IndexExposureData> output) {
+		if (output.isEmpty()) {
+			return output;
+		}
+		
+		int firstYear = output.get(0).year;
+		int lastYear = output.get(output.size() - 1).year;
+		
+		List<IndexExposureData> result = new LinkedList<>();
+		
+		for (int i = firstYear; i < lastYear + 1; i++) {
+			final int ifin = i;
+			
+			IndexExposureData ied = null;
+			Iterator<IndexExposureData> foo1 = output.stream().filter(a -> a.date.getYear() == ifin).iterator();
+			while (foo1.hasNext()) {
+				if (ied == null) {
+					ied = new IndexExposureData(foo1.next());
+					ied.setType(IndexExposureType.ANNUAL);
+				} else {
+					mergeExposures(ied, foo1.next());
+				}
+			}
+			result.add(ied);
 		}
 		return result;
 	}

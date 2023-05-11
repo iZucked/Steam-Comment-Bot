@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.parseutils.IndexConversion;
-import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.parseutils.PricingDataCache;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 
@@ -109,24 +109,25 @@ public class IndexConversionsTest {
 	@Test
 	public void test__GraphRearrangement__MX() {
 		final String expression = "?%HH";
-		@Nullable
-		final ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X, 10.0);
+		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X, 10.0);
+		Assertions.assertNotNull(testGraphRearrangement);
 		Assertions.assertEquals("10.0/(1.0%HH)", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
 	public void test__GraphRearrangement__MX_PLUS_C_1() {
 		final String expression = "?%HH+5";
-		@Nullable
-		final ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
+		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
+		Assertions.assertNotNull(testGraphRearrangement);
 		Assertions.assertEquals("(10.0-5)/(1.0%HH)", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
 	@Test
 	public void test__GraphRearrangement__MX_PLUS_C_2() {
 		final String expression = "100%HH+?";
-		@Nullable
-		final ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
+		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10.0);
+		Assertions.assertNotNull(testGraphRearrangement);
+
 		Assertions.assertEquals("10.0-(100%HH)", IndexConversion.getExpression(testGraphRearrangement));
 	}
 
@@ -143,6 +144,8 @@ public class IndexConversionsTest {
 	public void test__calculation_QX_PLUS_C() {
 		final String expression = "?%HH+3";
 		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
+		Assertions.assertNotNull(testGraphRearrangement);
+
 		final String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
 		Assertions.assertEquals("(10.0-3)/(1.0%HH)", rearrangedExpression);
 		final double parseExpression = parseExpression(rearrangedExpression);
@@ -153,6 +156,8 @@ public class IndexConversionsTest {
 	public void test__calculation_MX_PLUS_Q() {
 		final String expression = "100%(HH*FX_EURO_to_USD*mwh_to_mmbtu)+?";
 		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.M_X_PLUS_C, 10);
+		Assertions.assertNotNull(testGraphRearrangement);
+
 		final String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
 		Assertions.assertEquals("10.0-(100%((HH*FX_EURO_to_USD)*mwh_to_mmbtu))", rearrangedExpression);
 		System.out.println(rearrangedExpression);
@@ -164,6 +169,8 @@ public class IndexConversionsTest {
 	public void test__calculation_X_PLUS_Q() {
 		final String expression = "HH+?";
 		final @Nullable ASTNode testGraphRearrangement = testGraphRearrangement(expression, Form.X_PLUS_C, 10);
+		Assertions.assertNotNull(testGraphRearrangement);
+
 		final String rearrangedExpression = IndexConversion.getExpression(testGraphRearrangement);
 		System.out.println(rearrangedExpression);
 		Assertions.assertEquals("10.0-(1*HH)", rearrangedExpression);
@@ -226,8 +233,8 @@ public class IndexConversionsTest {
 		makeFXCurve("EURO", "USD", 1.111, pricingModel);
 
 		@NonNull
-		final LookupData lookupData = LookupData.createLookupData(pricingModel);
-//		// Parse the expression
+		final PricingDataCache lookupData = PricingDataCache.createLookupData(pricingModel);
+		// // Parse the expression
 		final SeriesParser commodityIndices = makeCommodityParser(lookupData);
 		return commodityIndices.parse(expression);
 	}
@@ -246,9 +253,9 @@ public class IndexConversionsTest {
 		makeFXCurve("p", "USD", 1.3 / 100.0, pricingModel);
 		makeFXCurve("EURO", "USD", 1.111, pricingModel);
 
-		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
+		final @NonNull PricingDataCache lookupData = PricingDataCache.createLookupData(pricingModel);
 
-		final SeriesParser p = PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
+		final SeriesParser p = lookupData.getSeriesParser(PriceIndexType.COMMODITY);
 		final IExpression<ISeries> series = p.asIExpression(expression);
 		double unitPrice = 0.0;
 		if (series instanceof final SeriesOperatorExpression opExpr) {
@@ -301,7 +308,7 @@ public class IndexConversionsTest {
 		return index;
 	}
 
-	private static SeriesParser makeCommodityParser(final LookupData lookupData) {
-		return PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
+	private static SeriesParser makeCommodityParser(final PricingDataCache lookupData) {
+		return lookupData.getSeriesParser(PriceIndexType.COMMODITY);
 	}
 }

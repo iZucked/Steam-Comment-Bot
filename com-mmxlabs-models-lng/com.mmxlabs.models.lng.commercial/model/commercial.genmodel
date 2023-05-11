@@ -39,6 +39,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/tradingBook"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/upstreamBook"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BaseLegalEntity/thirdParty"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/businessUnits"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LegalEntity"/>
     <genClasses ecoreClass="commercial.ecore#//Contract">
@@ -85,6 +86,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/pricingEvent"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/cancellationExpression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/shippingDaysRestriction"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/businessUnit"/>
+      <genOperations ecoreOperation="commercial.ecore#//Contract/getContractOrDelegateBusinessUnit"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>
@@ -96,6 +99,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/salesDeliveryType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/desPurchaseDealType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/cargoCV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/upstreamEmissionRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PurchaseContract/pipelineEmissionRate"/>
+      <genOperations ecoreOperation="commercial.ecore#//PurchaseContract/getContractOrDelegateUpstreamEmissionRate"/>
+      <genOperations ecoreOperation="commercial.ecore#//PurchaseContract/getContractOrDelegatePipelineEmissionRate"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//TaxRate">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//TaxRate/date"/>
@@ -104,6 +111,8 @@
     <genClasses image="false" ecoreClass="commercial.ecore#//LNGPriceCalculatorParameters"/>
     <genClasses ecoreClass="commercial.ecore#//ExpressionPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/priceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/pricingBasis"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ExpressionPriceParameters/preferredPBs"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//VolumeTierPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierPriceParameters/lowExpression"/>
@@ -172,6 +181,7 @@
     <genClasses ecoreClass="commercial.ecore#//LumpSumBallastBonusTerm"/>
     <genClasses ecoreClass="commercial.ecore#//NotionalJourneyBallastBonusTerm">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalJourneyBallastBonusTerm/returnPorts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusTerm/isFirstLoadPort"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusTerm">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusTerm/month"/>
@@ -187,21 +197,34 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//OriginPortRepositioningFeeTerm/originPort"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//EndHeelOptions">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/tankState"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/minimumEndHeel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/maximumEndHeel"/>
+      <genFeatures createChild="false" propertyDescription="Tank state at the end of the charter"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/tankState"/>
+      <genFeatures createChild="false" propertyDescription="Minimum volume at the end of the charter"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/minimumEndHeel"/>
+      <genFeatures createChild="false" propertyDescription="Maximum volume at the end of the charter"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/maximumEndHeel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/useLastHeelPrice"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/priceExpression"/>
+      <genFeatures createChild="false" propertyDescription="Price of the end heel gas, per mmBtu"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/priceExpression"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//StartHeelOptions">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/cvValue"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/minVolumeAvailable"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/maxVolumeAvailable"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/priceExpression"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="Heel CV"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/cvValue"/>
+      <genFeatures createChild="false" propertyDescription="Minimum available heel at the charter start"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/minVolumeAvailable"/>
+      <genFeatures createChild="false" propertyCategory="" propertyDescription="Maximum available heel at the charter start"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/maxVolumeAvailable"/>
+      <genFeatures createChild="false" propertyDescription="Price of the start heel gas, per mmBtu"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/priceExpression"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//RegasPricingParams">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RegasPricingParams/priceExpression"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RegasPricingParams/numPricingDays"/>
     </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//BusinessUnit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BusinessUnit/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BusinessUnit/default"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//PreferredPricingBasesWrapper"/>
   </genPackages>
 </genmodel:GenModel>

@@ -114,10 +114,8 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 			// Check if ports are different
 			// Check distances using injected provider, or actual/max speed.
 
-			if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeSlot) {
+			if (firstSlot instanceof ILoadOption desPurchase && secondSlot instanceof IDischargeSlot desSale) {
 				// DES Purchase
-				final ILoadOption desPurchase = (ILoadOption) firstSlot;
-				final IDischargeSlot desSale = (IDischargeSlot) secondSlot;
 
 				if (shippingHoursRestrictionProvider.isDivertible(first)) {
 					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);

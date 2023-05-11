@@ -70,7 +70,7 @@ public class ScheduleReportTransformer {
 		if (schedule == null) {
 			return Collections.emptyList();
 		}
-//		final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
+		// final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
 
 		final List<EObject> interestingEvents = new LinkedList<>();
 		final Set<EObject> allEvents = new HashSet<>();
@@ -93,7 +93,7 @@ public class ScheduleReportTransformer {
 					allEvents.add(event);
 					continue;
 				}
-				
+
 				if (showEvent(event)) {
 					interestingEvents.add(event);
 				}
@@ -105,36 +105,36 @@ public class ScheduleReportTransformer {
 			interestingEvents.add(openSlotAllocation);
 			allEvents.add(openSlotAllocation);
 		}
-//		for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
-//			long pnl1 = 0L;
-//			long pnl2 = 0L;
-//			for (final Event e : cle.getEvents()) {
-//				final CharterLengthEvent c = (CharterLengthEvent) e;
-//				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
-//				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
-//				cle.setLinkedSequence(c.getSequence());
-//			}
-//			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
-//			groupProfitAndLoss.setProfitAndLoss(pnl1);
-//			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
-//			cle.setGroupProfitAndLoss(groupProfitAndLoss);
-//		}
-//		for (final GroupedCharterOutEvent cle : extraEvents.values()) {
-//			long pnl1 = 0L;
-//			long pnl2 = 0L;
-//			for (final Event e : cle.getEvents()) {
-//				final CharterLengthEvent c = (CharterLengthEvent) e;
-//				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
-//				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
-//				cle.setLinkedSequence(c.getSequence());
-//			}
-//			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
-//			groupProfitAndLoss.setProfitAndLoss(pnl1);
-//			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
-//			cle.setGroupProfitAndLoss(groupProfitAndLoss);
-//		}
-//		allEvents.addAll(extraEvents.values());
-//		interestingEvents.addAll(extraEvents.values());
+		// for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
+		// long pnl1 = 0L;
+		// long pnl2 = 0L;
+		// for (final Event e : cle.getEvents()) {
+		// final CharterLengthEvent c = (CharterLengthEvent) e;
+		// pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+		// pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+		// cle.setLinkedSequence(c.getSequence());
+		// }
+		// final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+		// groupProfitAndLoss.setProfitAndLoss(pnl1);
+		// groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+		// cle.setGroupProfitAndLoss(groupProfitAndLoss);
+		// }
+		// for (final GroupedCharterOutEvent cle : extraEvents.values()) {
+		// long pnl1 = 0L;
+		// long pnl2 = 0L;
+		// for (final Event e : cle.getEvents()) {
+		// final CharterLengthEvent c = (CharterLengthEvent) e;
+		// pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+		// pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+		// cle.setLinkedSequence(c.getSequence());
+		// }
+		// final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+		// groupProfitAndLoss.setProfitAndLoss(pnl1);
+		// groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+		// cle.setGroupProfitAndLoss(groupProfitAndLoss);
+		// }
+		// allEvents.addAll(extraEvents.values());
+		// interestingEvents.addAll(extraEvents.values());
 
 		return generateRows(scenarioResult, schedule, interestingEvents, allEvents, isPinned);
 	}
@@ -172,6 +172,8 @@ public class ScheduleReportTransformer {
 					row.setTarget(cargoAllocation);
 					row.setCargoAllocation(cargoAllocation);
 					row.setRowGroup(group);
+					
+					final Set<EObject> equivalents = new LinkedHashSet<>();
 					if (i < loadSlots.size()) {
 						final SlotAllocation slot = loadSlots.get(i);
 						row.setLoadAllocation(slot);
@@ -186,6 +188,9 @@ public class ScheduleReportTransformer {
 								break;
 							}
 						}
+						equivalents.add(slot);
+						equivalents.add(slot.getSlot());
+						equivalents.add(slot.getSlotVisit());
 					}
 					if (i < dischargeSlots.size()) {
 						final SlotAllocation slot = dischargeSlots.get(i);
@@ -201,14 +206,18 @@ public class ScheduleReportTransformer {
 								break;
 							}
 						}
+						equivalents.add(slot);
+						equivalents.add(slot.getSlot());
+						equivalents.add(slot.getSlotVisit());
 					}
 					rows.add(row);
-					addInputEquivalents(row, cargoAllocation);
 
+					if (i == 0) {
+						equivalents.addAll(cargoAllocation.getEvents());
+					}
+					row.getInputEquivalents().addAll(equivalents);
 				}
-			} else if (element instanceof OpenSlotAllocation) {
-
-				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+			} else if (element instanceof OpenSlotAllocation openSlotAllocation) {
 
 				final Row row = ScheduleReportFactory.eINSTANCE.createRow();
 				row.setTarget(openSlotAllocation);
@@ -234,8 +243,7 @@ public class ScheduleReportTransformer {
 				}
 				addInputEquivalents(row, openSlotAllocation);
 				rows.add(row);
-			} else if (element instanceof Event) {
-				final Event event = (Event) element;
+			} else if (element instanceof Event event) {
 				final Row row = ScheduleReportFactory.eINSTANCE.createRow();
 				row.setSequence(event.getSequence());
 				row.setTarget(event);
@@ -265,17 +273,16 @@ public class ScheduleReportTransformer {
 
 		// map to events
 		final Set<EObject> equivalents = new LinkedHashSet<>();
-		if (a instanceof CargoAllocation) {
-			final CargoAllocation allocation = (CargoAllocation) a;
-
+		if (a instanceof CargoAllocation allocation) {
 			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 				equivalents.add(slotAllocation.getSlot());
 				equivalents.add(slotAllocation.getSlotVisit());
 			}
 			equivalents.addAll(allocation.getEvents());
-		} else if (a instanceof SlotVisit) {
-			final SlotVisit slotVisit = (SlotVisit) a;
-
+		} else if (a instanceof SlotAllocation slotAllocation) {
+			equivalents.add(slotAllocation.getSlot());
+			equivalents.add(slotAllocation.getSlotVisit());
+		} else if (a instanceof SlotVisit slotVisit) {
 			final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
 			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 				equivalents.add(slotAllocation.getSlot());
@@ -283,33 +290,27 @@ public class ScheduleReportTransformer {
 			}
 			equivalents.addAll(allocation.getEvents());
 			// equivalents.add(allocation.getInputCargo());
-		} else if (a instanceof VesselEventVisit) {
-			final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
+		} else if (a instanceof VesselEventVisit vesselEventVisit) {
 			equivalents.addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
 			equivalents.addAll(vesselEventVisit.getEvents());
-		} else if (a instanceof GeneratedCharterOut) {
-			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) a;
+		} else if (a instanceof GeneratedCharterOut generatedCharterOut) {
 			equivalents.add(generatedCharterOut);
 			equivalents.addAll(generatedCharterOut.getEvents());
-		} else if (a instanceof CharterLengthEvent) {
-			final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) a;
+		} else if (a instanceof CharterLengthEvent charterLengthEvent) {
 			equivalents.add(charterLengthEvent);
 			equivalents.addAll(charterLengthEvent.getEvents());
 		} else if (a instanceof GroupedCharterLengthEvent) {
 			final GroupedCharterLengthEvent charterLengthEvent = (GroupedCharterLengthEvent) a;
 			equivalents.addAll(charterLengthEvent.getEvents());
-		} else if (a instanceof StartEvent) {
-			final StartEvent startEvent = (StartEvent) a;
+		} else if (a instanceof StartEvent startEvent) {
 			equivalents.addAll(startEvent.getEvents());
 			final VesselCharter vesselCharter = startEvent.getSequence().getVesselCharter();
 			if (vesselCharter != null) {
 				equivalents.addAll(Lists.<EObject> newArrayList(startEvent, vesselCharter.getVessel()));
 			}
-		} else if (a instanceof EndEvent) {
-			final EndEvent endEvent = (EndEvent) a;
+		} else if (a instanceof EndEvent endEvent) {
 			equivalents.add(endEvent);
-		} else if (a instanceof OpenSlotAllocation) {
-			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
+		} else if (a instanceof OpenSlotAllocation openSlotAllocation) {
 			equivalents.addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
 		} else {
 			equivalents.addAll(Lists.<EObject> newArrayList(a));
@@ -331,8 +332,7 @@ public class ScheduleReportTransformer {
 			return true;
 		} else if (event instanceof CharterLengthEvent) {
 			return true;
-		} else if (event instanceof SlotVisit) {
-			final SlotVisit slotVisit = (SlotVisit) event;
+		} else if (event instanceof SlotVisit slotVisit) {
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 				return true;
 			}

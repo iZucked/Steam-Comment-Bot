@@ -36,6 +36,10 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	@Inject
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
 	private boolean generatedPapersInPNL;
+	
+	@Inject
+	@Named(SchedulerConstants.IGNORE_HEDGE_PNL_AT_OPTI)
+	private boolean ignoreHedgePNL;
 
 	private long accumulator = 0;
 
@@ -96,7 +100,7 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	
 	private long computePaperPnL(final ProfitAndLossSequences profitAndLossSequences) {
 		long paperPnL = 0;
-		if (generatedPapersInPNL) {
+		if (generatedPapersInPNL && !ignoreHedgePNL) {
 			final Map<BasicPaperDealData, List<BasicPaperDealAllocationEntry>> paperDealAllocations = profitAndLossSequences.getPaperDealRecords();
 			
 			for (final BasicPaperDealData basicPaperDealData : paperDealAllocations.keySet()) {

@@ -20,8 +20,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -75,9 +74,24 @@ public class ChangeSetTableRootImpl extends MinimalEObjectImpl.Container impleme
 	@Override
 	public EList<ChangeSetTableGroup> getGroups() {
 		if (groups == null) {
-			groups = new EObjectContainmentEList<ChangeSetTableGroup>(ChangeSetTableGroup.class, this, ChangesetPackage.CHANGE_SET_TABLE_ROOT__GROUPS);
+			groups = new EObjectContainmentWithInverseEList<ChangeSetTableGroup>(ChangeSetTableGroup.class, this, ChangesetPackage.CHANGE_SET_TABLE_ROOT__GROUPS, ChangesetPackage.CHANGE_SET_TABLE_GROUP__TABLE_ROOT);
 		}
 		return groups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ChangesetPackage.CHANGE_SET_TABLE_ROOT__GROUPS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getGroups()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

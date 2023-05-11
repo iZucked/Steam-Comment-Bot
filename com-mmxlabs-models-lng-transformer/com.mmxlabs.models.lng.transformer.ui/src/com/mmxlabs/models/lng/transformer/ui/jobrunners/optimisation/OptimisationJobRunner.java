@@ -245,7 +245,7 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 		try {
 
-			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
+			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp, scenarioInstance) //
 					.withRunnerHook(runnerHook) //
 					.withOptimiserInjectorService(localOverrides) //
 					.withHints(hints.toArray(new String[hints.size()])) //

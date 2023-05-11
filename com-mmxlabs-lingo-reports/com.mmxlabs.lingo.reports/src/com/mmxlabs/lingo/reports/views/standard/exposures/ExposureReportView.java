@@ -789,23 +789,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	private void setAggregationModeActionText(final Action a) {
-		String modeStr = null;
-		switch (viewMode) {
-		case BY_MONTH:
-			modeStr = "Month";
-			break;
-		case BY_DEALSET:
-			modeStr = "Deal Set";
-			break;
-		case BY_MONTH_NO_TOTAL:
-			modeStr = "Month (No total)";
-			break;
-		default:
-			assert false;
-			break;
-
-		}
-		assert modeStr != null;
+		final String modeStr = switch (viewMode) {
+		case BY_MONTH -> "Month";
+		case BY_CALENDAR_YEAR -> "Calendar Year";
+		case BY_DEALSET -> "Deal Set";
+		case BY_MONTH_NO_TOTAL -> "Month (No total)";
+		default -> throw new IllegalArgumentException();
+		};
 		a.setText("Group: " + modeStr);
 	}
 
@@ -858,6 +848,17 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 				}
 			}
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
+				for (final PaperDealAllocation pd : schedule.getPaperDealAllocations()) {
+					for (final var entry: pd.getEntries()) {
+						for (final ExposureDetail detail : entry.getExposures()) {
+							if (result == null || detail.getDate().isBefore(result)) {
+								result = detail.getDate();
+							}
+						}
+					}
+				}
+			}
 			if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPEN_SLOT_EXPOSURE))
 				return result;
 			for (final OpenSlotAllocation sa : schedule.getOpenSlotAllocations()) {
@@ -880,6 +881,17 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					for (final ExposureDetail detail : sa.getExposures()) {
 						if (result == null || detail.getDate().isAfter(result)) {
 							result = detail.getDate();
+						}
+					}
+				}
+			}
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
+				for (final PaperDealAllocation pd : schedule.getPaperDealAllocations()) {
+					for (final var entry: pd.getEntries()) {
+						for (final ExposureDetail detail : entry.getExposures()) {
+							if (result == null || detail.getDate().isAfter(result)) {
+								result = detail.getDate();
+							}
 						}
 					}
 				}

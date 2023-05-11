@@ -47,8 +47,8 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
 		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
-		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
-		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.emptySet());
 
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 
@@ -78,8 +78,8 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
 		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
-		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> singleton(element2));
-		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.singleton(element2));
+		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.emptySet());
 
 		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
@@ -115,8 +115,8 @@ public class RestrictedElementsConstraintCheckerTest {
 
 		Mockito.when(vesselProvider.getVesselCharter(resource1)).thenReturn(vesselCharter1);
 		Mockito.when(vesselCharter1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
-		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
-		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
+		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.singleton(element1));
 
 		Assertions.assertFalse(checker.checkPairwiseConstraint(element1, element2, resource1, new ArrayList<>()));
 		Assertions.assertTrue(checker.checkPairwiseConstraint(element2, element1, resource1, new ArrayList<>()));
@@ -164,8 +164,8 @@ public class RestrictedElementsConstraintCheckerTest {
 		Mockito.when(vesselProvider.getVesselCharter(resource2)).thenReturn(vesselCharter2);
 		Mockito.when(vesselCharter2.getVesselInstanceType()).thenReturn(VesselInstanceType.ROUND_TRIP);
 
-		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
-		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
+		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.emptySet());
+		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.singleton(element1));
 
 		// First case, Discharge -> Load does not apply on cargo shorts
 		Mockito.when(portTypeProvider.getPortType(element1)).thenReturn(PortType.Discharge);

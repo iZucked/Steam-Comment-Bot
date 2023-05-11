@@ -22,7 +22,7 @@ public class RiskModelPerspective implements IPerspectiveFactory {
 		 if (layout instanceof ModeledPageLayout) {
 			 final ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
 			 modeledPageLayout.stackView("com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView", IPageLayout.ID_EDITOR_AREA, true);
-			 modeledPageLayout.stackView("com.mmxlabs.models.lng.cargo.editor.risk.CargoSelectionTableEditorView", IPageLayout.ID_EDITOR_AREA, true);
+			 //modeledPageLayout.stackView("com.mmxlabs.models.lng.cargo.editor.risk.CargoSelectionTableEditorView", IPageLayout.ID_EDITOR_AREA, true);
 		 }
 		
 		editorsAreaBottom.addView("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView");

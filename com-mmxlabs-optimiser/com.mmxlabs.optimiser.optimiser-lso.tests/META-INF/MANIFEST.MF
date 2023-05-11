@@ -7,7 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-lso.tests
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-lso.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 6.1.4.qualifier
+Bundle-Version: 6.5.3.qualifier
 Fragment-Host: com.mmxlabs.optimiser.optimiser-lso
 Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  ch.qos.logback.classic;bundle-version="1.0.0",
@@ -20,5 +20,4 @@ Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  javax.annotation;bundle-version="1.2.0",
  com.google.guava.failureaccess;bundle-version="1.0.1"
 Import-Package: org.junit.jupiter.api;version="5.1.0",
- org.junit.jupiter.api.function;version="5.1.0",
- org.junit.runner.manipulation;version="4.12.0"
+ org.junit.jupiter.api.function;version="5.1.0"

@@ -11,5 +11,7 @@ public class TransferAgreementComponentHelper extends DefaultComponentHelper {
 
 	public TransferAgreementComponentHelper() {
 		super(TransfersPackage.Literals.TRANSFER_AGREEMENT);
+		
+		ignoreFeatures.add(TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_PBS);
 	}
 }

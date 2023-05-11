@@ -19,8 +19,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractDetailComposite.ContractDetailGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -38,7 +45,22 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	 * {@link IDisplayComposite} to contain elements for the bottom of the editor
 	 */
 	protected IDisplayComposite restrictionsLevel = null;
-
+	
+	
+	protected IDisplayComposite emissionsLevel = null;
+	
+	private Runnable resizeAction = () -> {
+		if (!ContractTopLevelComposite.this.isDisposed()) {
+			ContractTopLevelComposite.this.layout(true, true);
+		}
+	};
+	private IStatus status;
+	private DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
+		@Override
+		public IStatus getStatus() {
+			return status;
+		}
+	};
 	/**
 	 * {@link Composite} to contain the sub editors
 	 */
@@ -73,7 +95,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-
+		
 		// Initialise middle composite
 		middle = toolkit.createComposite(this);
 		final int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
@@ -82,15 +104,31 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		middle.setLayout(new GridLayout(numChildren, true));
 		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
 		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		doDisplay(middle, object);
 
 		final Composite myComposite = new Composite(this, SWT.NONE);
 		toolkit.adapt(myComposite);
 		myComposite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
 		
+		if(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EMISSIONS) && object instanceof PurchaseContract) {
+			final Group g3 = new Group(middle, SWT.NONE);
+			toolkit.adapt(g3);
+			g3.setText("Emission rates");
+			g3.setLayout(new FillLayout());
+			g3.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
+			g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
+			emissionsLevel = new ContractDetailComposite(g3, SWT.NONE, ContractDetailGroup.EMISSIONS, toolkit);
+			emissionsLevel.setCommandHandler(commandHandler);
+			emissionsLevel.setEditorWrapper(editorWrapper);
+			
+			emissionsLevel.display(dialogContext, root, object, range, dbc);
+		}
+		
 		final Group g2 = new Group(middle, SWT.NONE);
-
 		toolkit.adapt(g2);
-
+		
 		g2.setText("Restrictions");
 		g2.setLayout(new FillLayout());
 		g2.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_HORIZONTAL));
@@ -100,17 +138,31 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		restrictionsLevel.setCommandHandler(commandHandler);
 		restrictionsLevel.setEditorWrapper(editorWrapper);
 		
+		
 		//
 		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(3, false));
 		myComposite.setLayout(new GridLayout(1, false));
 		
 		topLevel.display(dialogContext, root, object, range, dbc);
+		
 		restrictionsLevel.display(dialogContext, root, object, range, dbc);
 
 		//
 		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
 //		this.setLayout(new GridLayout(3, false));
+	}
+	
+	protected void doDisplay(final Composite parent, final EObject object) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES) && //
+				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_PRICING_BASES)) {
+			if (!this.dialogContext.isMultiEdit() && object instanceof final Contract contract && contract.getPriceInfo() instanceof final ExpressionPriceParameters epp) {
+				PreferredPricingBasisTableCreator.createPrefferedPBsTable(parent, toolkit, dialogContext, commandHandler, epp, //
+						CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS, //
+						statusProvider, resizeAction);
+			}
+			resizeAction.run();
+		}
 	}
 
 	// @Override
@@ -121,6 +173,8 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	@Override
 	public void displayValidationStatus(final IStatus status) {
 		super.displayValidationStatus(status);
+		this.status = status;
+		statusProvider.fireStatusChanged(status);
 		restrictionsLevel.displayValidationStatus(status);
 	}
 

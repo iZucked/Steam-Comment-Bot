@@ -147,7 +147,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private VesselEventOptionsComponent eventsComponent;
 
 	private BaseCaseComponent baseCaseComponent;
-	private PartialCaseCompoment partialCaseComponent;
+	private PartialCaseComponent partialCaseComponent;
 
 	protected Collection<Consumer<Boolean>> lockedListeners = Sets.newConcurrentHashSet();
 
@@ -321,7 +321,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				hook.accept(baseCaseComponent, true);
 			}
 			{
-				partialCaseComponent = new PartialCaseCompoment(OptionModellerView.this, validationErrors, this::getModel);
+				partialCaseComponent = new PartialCaseComponent(OptionModellerView.this, validationErrors, this::getModel);
 				hook.accept(partialCaseComponent, true);
 			}
 		}
@@ -917,7 +917,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					} else if (mode == SandboxModeConstants.MODE_OPTIONISE && !m.getBaseCase().isKeepExistingScenario()) {
 						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optionise mode needs portfolio link enabled");
 					} else {
-						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
+						if (mode != SandboxModeConstants.MODE_DEFINE || partialCaseValid) {
 							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
 								WhatIfEvaluator.runSandbox(OptionModellerView.this, m);
 								if (m != null && m.getResults() != null) {
@@ -974,7 +974,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optimise mode needs portfolio link enabled");
 					} else {
 
-						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
+						if (mode != SandboxModeConstants.MODE_DEFINE || partialCaseValid) {
 							if (pushToCloudRunner != null) {
 								pushToCloudRunner.run(scenarioInstance, m);
 							}
@@ -986,7 +986,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 							// case SandboxModeConstants.MODE_OPTIMISE:
 							// WhatIfEvaluator.doOptimise(OptionModellerView.this, m, false);
 							// break;
-							// case SandboxModeConstants.MODE_DERIVE:
+							// case SandboxModeConstants.MODE_DEFINE:
 							// default:
 							// WhatIfEvaluator.evaluate(OptionModellerView.this, m);
 							// break;
@@ -1169,7 +1169,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			if (am instanceof OptionAnalysisModel optionAnalysisModel) {
 				final int mode = optionAnalysisModel.getMode();
 				combo.select(mode);
-				partialCaseComponent.setVisible(mode == SandboxModeConstants.MODE_DERIVE);
+				partialCaseComponent.setVisible(mode == SandboxModeConstants.MODE_DEFINE);
 				if (beModeToggle != null) {
 					beModeToggle.setVisible(mode != SandboxModeConstants.MODE_OPTIMISE);
 				}

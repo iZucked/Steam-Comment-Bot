@@ -36,7 +36,6 @@ import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.BasicExposureRecord;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
-import com.mmxlabs.common.parser.astnodes.ASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
@@ -49,7 +48,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
-import com.mmxlabs.models.lng.pricing.parseutils.LookupData;
+import com.mmxlabs.models.lng.pricing.parseutils.PricingDataCache;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -65,8 +64,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExposureDataProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 
 /**
- * JUnit tests for the financial exposures calculations. There should not be
- * curves with one letter as a name
+ * JUnit tests for the financial exposures calculations. There should not be curves with one letter as a name
  * 
  * @author Simon McGregor, Simon Goodall, FM
  * @author Mihnea-Teodor
@@ -141,8 +139,8 @@ public class BasicExposuresTest {
 						indicesOf(makeHH(), makeIndex("curveA", "$", "mmBtu", "(curveB+5)*curveC"), makeIndex("curveB", "$", "mmBtu", "20%curveC"), makeIndex("curveC", "$", "mmBtu", "5")) },
 
 				// TODO fix this test, probably failing because of some overflow error?
-//				{ "UserDefinedCurve (3)", "curveA*HH", "HH", multi(calcExpected("HH", 5.0, 875)), indicesOf(makeHH(), makeIndex("curveA", "$","mmBtu","curveB*curveC"), 
-//						makeIndex("curveB", "$","mmBtu","curveC+10"), makeIndex("curveC", "$","mmBtu","25"))},
+				// { "UserDefinedCurve (3)", "curveA*HH", "HH", multi(calcExpected("HH", 5.0, 875)), indicesOf(makeHH(), makeIndex("curveA", "$","mmBtu","curveB*curveC"),
+				// makeIndex("curveB", "$","mmBtu","curveC+10"), makeIndex("curveC", "$","mmBtu","25"))},
 
 				{ "UserDefinedCurve (4)", "curveA*HH", "HH", multi(calcExpected("HH", 5.0, 30)), indicesOf(makeHH(), makeIndex("curveA", "$", "mmBtu", "MAX(curveB+10, MIN(curveC, curveD))"), // curveD
 																																																// = 21,
@@ -180,7 +178,8 @@ public class BasicExposuresTest {
 				{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 1", "SHIFT(HH,1)", "HH", single(calcExpected("HH", YearMonth.of(2016, 3), 6, 1, 6)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 				{ "HH - Shift 2", "SHIFT(HH,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
-				{ "Var HH - Shift 2", "#A=HH ; SHIFT(#A,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
+				{ "Var HH - Shift 2", "#A=HH ; SHIFT(#A,2)", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)),
+						indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 
 				{ "HH[m-2]", "HH[m-2]", "HH", single(calcExpected("HH", YearMonth.of(2016, 2), 5, 1, 5)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 
@@ -356,8 +355,8 @@ public class BasicExposuresTest {
 
 		});
 	}
-//	
-//	{ "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
+	//
+	// { "HH - Shift 0", "SHIFT(HH,0)", "HH", single(calcExpected("HH", YearMonth.of(2016, 4), 7, 1, 7)), indicesOf(makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 2), 5, 6, 7, 8)) }, //
 
 	public static Collection generateTestsWithDay() {
 		return Arrays.asList(new Object[][] { //
@@ -449,19 +448,25 @@ public class BasicExposuresTest {
 		// Sale
 		final boolean isPurchase = false;
 
-		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
+		final @NonNull PricingDataCache lookupData = PricingDataCache.createLookupData(pricingModel);
 
 		// Creating exposures lookup data
 		final ExposuresLookupData exLookupData = new ExposuresLookupData();
-		pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
+		pricingModel.getCommodityCurves()
+				.stream()
+				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
-		pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null)//
+						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
+		pricingModel.getCurrencyCurves()
+				.stream()
+				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.currencyList.add(idx.getName().toLowerCase()));
-		pricingModel.getConversionFactors().forEach(f -> exLookupData.conversionMap.put(//
-				PriceIndexUtils.createConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
-		pricingModel.getConversionFactors().forEach(f -> exLookupData.reverseConversionMap.put(//
-				PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
+		pricingModel.getConversionFactors()
+				.forEach(f -> exLookupData.conversionMap.put(//
+						PriceIndexUtils.createConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
+		pricingModel.getConversionFactors()
+				.forEach(f -> exLookupData.reverseConversionMap.put(//
+						PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
 
 		final SeriesParser commodityParser = makeCommodityParser(lookupData);
 		final SeriesParser currencyParser = makeCurrencyParser(lookupData);
@@ -511,19 +516,25 @@ public class BasicExposuresTest {
 		// Sale
 		final boolean isPurchase = false;
 
-		final @NonNull LookupData lookupData = LookupData.createLookupData(pricingModel);
+		final @NonNull PricingDataCache lookupData = PricingDataCache.createLookupData(pricingModel);
 
 		// Creating exposures lookup data
 		final ExposuresLookupData exLookupData = new ExposuresLookupData();
-		pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
+		pricingModel.getCommodityCurves()
+				.stream()
+				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
-						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));
-		pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null)//
+						idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
+		pricingModel.getCurrencyCurves()
+				.stream()
+				.filter(idx -> idx.getName() != null)//
 				.forEach(idx -> exLookupData.currencyList.add(idx.getName().toLowerCase()));
-		pricingModel.getConversionFactors().forEach(f -> exLookupData.conversionMap.put(//
-				PriceIndexUtils.createConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
-		pricingModel.getConversionFactors().forEach(f -> exLookupData.reverseConversionMap.put(//
-				PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
+		pricingModel.getConversionFactors()
+				.forEach(f -> exLookupData.conversionMap.put(//
+						PriceIndexUtils.createConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
+		pricingModel.getConversionFactors()
+				.forEach(f -> exLookupData.reverseConversionMap.put(//
+						PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), new BasicUnitConversionData(f.getFrom(), f.getTo(), f.getFactor())));
 
 		final SeriesParser commodityParser = makeCommodityParser(lookupData);
 		final SeriesParser currencyParser = makeCurrencyParser(lookupData);
@@ -612,12 +623,12 @@ public class BasicExposuresTest {
 		return index;
 	}
 
-	private static SeriesParser makeCommodityParser(final LookupData lookupData) {
-		return PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.COMMODITY);
+	private static SeriesParser makeCommodityParser(final PricingDataCache lookupData) {
+		return lookupData.getSeriesParser(PriceIndexType.COMMODITY);
 	}
 
-	private static SeriesParser makeCurrencyParser(final LookupData lookupData) {
-		return PriceIndexUtils.getParserFor(lookupData.pricingModel, PriceIndexType.CURRENCY);
+	private static SeriesParser makeCurrencyParser(final PricingDataCache lookupData) {
+		return lookupData.getSeriesParser(PriceIndexType.CURRENCY);
 	}
 
 	private static CurrencyCurve makeCurrencyIndex(final String name, final String currencyUnit, final String volumeUnit, final YearMonth startDate, final double... values) {
@@ -647,10 +658,6 @@ public class BasicExposuresTest {
 	private static class ResultChecker {
 
 		List<ExpectedResult> results;
-
-		public ResultChecker(final ExpectedResult single) {
-			results = Collections.singletonList(single);
-		}
 
 		public ResultChecker(final ExpectedResult... multiple) {
 			results = new LinkedList<>();
@@ -842,6 +849,8 @@ public class BasicExposuresTest {
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(Boolean.FALSE);
+				// Pricing bases
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.PRICING_BASES)).toInstance(Boolean.FALSE);
 			}
 
 			@Provides

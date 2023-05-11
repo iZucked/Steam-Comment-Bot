@@ -36,8 +36,7 @@ public class ChangeSetKPIUtil {
 	}
 
 	public enum FlexType {
-		TotalIfFlexInsufficient, 
-		TotalIfWithinFlex
+		TotalIfFlexInsufficient, TotalIfWithinFlex
 	}
 
 	public static long getPNL(@Nullable final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
@@ -58,13 +57,17 @@ public class ChangeSetKPIUtil {
 		default:
 			throw new IllegalArgumentException();
 		}
+		// Loop over all rows in the group to get final value. For LDD cargoes there is only one load, so the second row should not have a LHS and we skip the sum
+		long sum = 0L;
 		if (rowData != null) {
-			SlotAllocation allocation = rowData.getDischargeAllocation();
-			if (allocation != null) {
-				return allocation.getVolumeValue();
+			for (final ChangeSetRowData m : rowData.getRowDataGroup().getMembers()) {
+				final SlotAllocation allocation = m.getDischargeAllocation();
+				if (allocation != null) {
+					sum += allocation.getVolumeValue();
+				}
 			}
 		}
-		return 0L;
+		return sum;
 	}
 
 	public static long getPurchaseCost(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
@@ -81,13 +84,17 @@ public class ChangeSetKPIUtil {
 		default:
 			throw new IllegalArgumentException();
 		}
+		// Loop over all rows in the group to get final value. For LDD cargoes there is only one load, so the second row should not have a LHS and we skip the sum
+		long sum = 0L;
 		if (rowData != null) {
-			SlotAllocation allocation = rowData.getLoadAllocation();
-			if (allocation != null) {
-				return allocation.getVolumeValue();
+			for (final ChangeSetRowData m : rowData.getRowDataGroup().getMembers()) {
+				final SlotAllocation allocation = m.getLoadAllocation();
+				if (allocation != null) {
+					sum += allocation.getVolumeValue();
+				}
 			}
 		}
-		return 0L;
+		return sum;
 	}
 
 	public static long getAdditionalUpsidePNL(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
@@ -111,9 +118,9 @@ public class ChangeSetKPIUtil {
 				rows.add(row.getLhsAfter().getLhsGroupProfitAndLoss());
 				rows.add(row.getLhsAfter().getOpenLoadAllocation());
 			}
-			if (row.getRhsAfter() != null) {
-				rows.add(row.getRhsAfter().getRhsGroupProfitAndLoss());
-				rows.add(row.getRhsAfter().getOpenDischargeAllocation());
+			if (row.getCurrentRhsAfter() != null) {
+				rows.add(row.getCurrentRhsAfter().getRhsGroupProfitAndLoss());
+				rows.add(row.getCurrentRhsAfter().getOpenDischargeAllocation());
 			}
 			break;
 		case Before:
@@ -121,25 +128,14 @@ public class ChangeSetKPIUtil {
 				rows.add(row.getLhsBefore().getLhsGroupProfitAndLoss());
 				rows.add(row.getLhsBefore().getOpenLoadAllocation());
 			}
-			if (row.getRhsBefore() != null) {
-				rows.add(row.getRhsBefore().getRhsGroupProfitAndLoss());
-				rows.add(row.getRhsBefore().getOpenDischargeAllocation());
+			if (row.getCurrentRhsBefore() != null) {
+				rows.add(row.getCurrentRhsBefore().getRhsGroupProfitAndLoss());
+				rows.add(row.getCurrentRhsBefore().getOpenDischargeAllocation());
 			}
 			break;
 		default:
 			throw new IllegalArgumentException();
 		}
-		//
-		// final Set<ProfitAndLossContainer> containers = new HashSet<ProfitAndLossContainer>();
-		// for (final ChangeSetRowData d : rows) {
-		// if (d == null) {
-		// continue;
-		// }
-		// containers.add(d.getLhsGroupProfitAndLoss());
-		// containers.add(d.getRhsGroupProfitAndLoss());
-		// containers.add(d.getOpenLoadAllocation());
-		// containers.add(d.getOpenDischargeAllocation());
-		// }
 
 		long sum = 0L;
 		for (final ProfitAndLossContainer c : rows) {
@@ -163,8 +159,9 @@ public class ChangeSetKPIUtil {
 		}
 		return 0L;
 	}
-	public static long getShipping(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, ShippingCostType shippingCostType) {
-		
+
+	public static long getShipping(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, final ShippingCostType shippingCostType) {
+
 		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
 		if (eventGrouping != null) {
 			return ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, true, shippingCostType);
@@ -203,66 +200,61 @@ public class ChangeSetKPIUtil {
 	public static long getTax(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 		return getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupProfitAndLoss) - getRowProfitAndLossValue(tableRow, type, ScheduleModelKPIUtils::getGroupPreTaxProfitAndLoss);
 	}
-	
+
 	public static long getFlexAvailableInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, @NonNull final String slotName) {
 
 		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
 		long result = 0;
-		
+
 		if (eventGrouping != null) {
 			result = LatenessUtils.getEventGroupingFlexInHours(eventGrouping, slotName);
 		}
-		
-		return result;	
-	}	
-	
+
+		return result;
+	}
+
 	public static long getLatenessInHours(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type, @NonNull final String slotName) {
 
 		final EventGrouping eventGrouping = getEventGrouping(tableRow, type);
 		long result = 0;
-		
+
 		if (eventGrouping != null) {
 			result = LatenessUtils.getEventGroupingLatenessInHours(eventGrouping, slotName);
 		}
-		
+
 		switch (type) {
 		case After:
 			if (tableRow.getLhsAfter() != null && slotName.equals(tableRow.getLhsName())) {
-				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
-					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
+				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL otherPNL) {
 					result += LatenessUtils.getLatenessInHours(otherPNL);
 				}
 			}
-			if (tableRow.getRhsAfter() != null && slotName.equals(tableRow.getRhsName())) {
-				if (tableRow.getRhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
-					OtherPNL otherPNL = (OtherPNL) tableRow.getRhsAfter().getRhsGroupProfitAndLoss();
+			if (tableRow.getCurrentRhsAfter() != null && slotName.equals(tableRow.getCurrentRhsName())) {
+				if (tableRow.getCurrentRhsAfter().getRhsGroupProfitAndLoss() instanceof OtherPNL otherPNL) {
 					result += LatenessUtils.getLatenessInHours(otherPNL);
 				}
 			}
 			break;
 		case Before:
 			if (tableRow.getLhsBefore() != null && slotName.equals(tableRow.getLhsName())) {
-				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
-					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
+				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL otherPNL) {
 					result += LatenessUtils.getLatenessInHours(otherPNL);
 				}
 			}
-			if (tableRow.getRhsBefore() != null && slotName.equals(tableRow.getRhsName())) {
-				if (tableRow.getRhsBefore().getRhsGroupProfitAndLoss() instanceof OtherPNL) {
-					OtherPNL otherPNL = (OtherPNL) tableRow.getRhsBefore().getRhsGroupProfitAndLoss();
+			if (tableRow.getCurrentRhsBefore() != null && slotName.equals(tableRow.getCurrentRhsName())) {
+				if (tableRow.getCurrentRhsBefore().getRhsGroupProfitAndLoss() instanceof OtherPNL otherPNL) {
 					result += LatenessUtils.getLatenessInHours(otherPNL);
 				}
 			}
 			break;
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
-	 * Get the lateness with and without flex 
-	 * e.g. 1 day window, 5 days flex, 3 days late, WithFlex = 3 days, withoutflex = 0.
-	 * If 6 days late, then WithFlex = Undefined as optimiser doesn't care, WithoutFlex = 6 days
+	 * Get the lateness with and without flex e.g. 1 day window, 5 days flex, 3 days late, WithFlex = 3 days, withoutflex = 0. If 6 days late, then WithFlex = Undefined as optimiser doesn't care,
+	 * WithoutFlex = 6 days
 	 * 
 	 * @param tableRow
 	 * @param type
@@ -277,12 +269,11 @@ public class ChangeSetKPIUtil {
 			result[FlexType.TotalIfWithinFlex.ordinal()] = LatenessUtils.getLatenessAfterFlex(eventGrouping);
 			result[FlexType.TotalIfFlexInsufficient.ordinal()] = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 		}
-		
+
 		switch (type) {
 		case After:
 			if (tableRow.getLhsAfter() != null) {
-				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
-					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsAfter().getLhsGroupProfitAndLoss();
+				if (tableRow.getLhsAfter().getLhsGroupProfitAndLoss() instanceof final OtherPNL otherPNL) {
 					result[FlexType.TotalIfFlexInsufficient.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
 					result[FlexType.TotalIfWithinFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
 				}
@@ -290,15 +281,14 @@ public class ChangeSetKPIUtil {
 			break;
 		case Before:
 			if (tableRow.getLhsBefore() != null) {
-				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof OtherPNL) {
-					OtherPNL otherPNL = (OtherPNL) tableRow.getLhsBefore().getLhsGroupProfitAndLoss();
+				if (tableRow.getLhsBefore().getLhsGroupProfitAndLoss() instanceof final OtherPNL otherPNL) {
 					result[FlexType.TotalIfFlexInsufficient.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
 					result[FlexType.TotalIfWithinFlex.ordinal()] += LatenessUtils.getLatenessExcludingFlex(otherPNL);
 				}
 			}
 			break;
 		}
-		
+
 		return result;
 	}
 
@@ -312,7 +302,7 @@ public class ChangeSetKPIUtil {
 		return 0L;
 	}
 
-	public static long getPNLSum(@NonNull ChangeSetTableRow tableRow, @NonNull ResultType type) {
+	public static long getPNLSum(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
 
 		long pnl = 0L;
 		pnl -= getPurchaseCost(tableRow, type);
@@ -326,16 +316,110 @@ public class ChangeSetKPIUtil {
 		return pnl;
 	}
 
-	public static long getNominalVesselCount(@NonNull ChangeSetTableRow change, @NonNull ResultType type) {
+	public static long getNominalVesselCount(@NonNull final ChangeSetTableRow change, @NonNull final ResultType type) {
 		switch (type) {
 		case Before:
-			ChangeSetVesselType vesselTypeBefore = change.getBeforeVesselType();
+			final ChangeSetVesselType vesselTypeBefore = change.getBeforeVesselType();
 			return vesselTypeBefore == ChangeSetVesselType.NOMINAL ? 1 : 0;
 		case After:
-			ChangeSetVesselType vesselTypeAfter = change.getAfterVesselType();
-			return vesselTypeAfter == ChangeSetVesselType.NOMINAL ? 1 : 0;			
+			final ChangeSetVesselType vesselTypeAfter = change.getAfterVesselType();
+			return vesselTypeAfter == ChangeSetVesselType.NOMINAL ? 1 : 0;
 		default:
-			throw new IllegalArgumentException("Not supported ResultType: "+type.toString());
+			throw new IllegalArgumentException("Not supported ResultType: " + type.toString());
 		}
+	}
+
+	public static @Nullable Double getPurchasePrice(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		ChangeSetRowData rowData;
+		switch (type) {
+		case After: {
+			rowData = tableRow.getLhsAfter();
+			break;
+		}
+		case Before: {
+			rowData = tableRow.getLhsBefore();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException();
+		}
+		if (rowData != null) {
+			final SlotAllocation allocation = rowData.getLoadAllocation();
+			if (allocation != null) {
+				return allocation.getPrice();
+			}
+		}
+		return null;
+	}
+
+	public static @Nullable Double getSalesPrice(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		ChangeSetRowData rowData;
+		switch (type) {
+		case After: {
+			rowData = tableRow.getCurrentRhsAfter();
+			break;
+		}
+		case Before: {
+			rowData = tableRow.getPreviousRhsBefore();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException();
+		}
+		if (rowData != null) {
+			final SlotAllocation allocation = rowData.getDischargeAllocation();
+			if (allocation != null) {
+				return allocation.getPrice();
+			}
+		}
+		return null;
+	}
+
+	public static @Nullable Integer getPurchaseVolume(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+
+		ChangeSetRowData rowData;
+		switch (type) {
+		case After: {
+			rowData = tableRow.getLhsAfter();
+			break;
+		}
+		case Before: {
+			rowData = tableRow.getLhsBefore();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException();
+		}
+		if (rowData != null) {
+			final SlotAllocation allocation = rowData.getLoadAllocation();
+			if (allocation != null) {
+				return allocation.getEnergyTransferred();
+			}
+		}
+		return null;
+	}
+
+	public static @Nullable Integer getSalesVolume(@NonNull final ChangeSetTableRow tableRow, @NonNull final ResultType type) {
+		ChangeSetRowData rowData;
+		switch (type) {
+		case After: {
+			rowData = tableRow.getCurrentRhsAfter();
+			break;
+		}
+		case Before: {
+			rowData = tableRow.getPreviousRhsBefore();
+			break;
+		}
+		default:
+			throw new IllegalArgumentException();
+		}
+		if (rowData != null) {
+			final SlotAllocation allocation = rowData.getDischargeAllocation();
+			if (allocation != null) {
+				return allocation.getEnergyTransferred();
+			}
+		}
+		return null;
 	}
 }

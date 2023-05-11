@@ -7,8 +7,10 @@
 package com.mmxlabs.models.lng.analytics.impl;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult;
 import com.mmxlabs.models.lng.analytics.SwapValueMatrixResult;
 
+import com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -31,61 +33,19 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getBaseDischargePrice <em>Base Discharge Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapMarketPrice <em>Swap Market Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapPnlMinusBasePnl <em>Swap Pnl Minus Base Pnl</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getBaseLoadPrice <em>Base Load Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapFobLoadPrice <em>Swap Fob Load Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getBaseFobLoadVolume <em>Base Fob Load Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapFobLoadVolume <em>Swap Fob Load Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getMarketBuyVolume <em>Market Buy Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getMarketSellVolume <em>Market Sell Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getBaseDesSellVolume <em>Base Des Sell Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getBasePrecedingPnl <em>Base Preceding Pnl</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getBaseSucceedingPnl <em>Base Succeeding Pnl</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapPrecedingPnl <em>Swap Preceding Pnl</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapSucceedingPnl <em>Swap Succeeding Pnl</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getBaseCargo <em>Base Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapDiversionCargo <em>Swap Diversion Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SwapValueMatrixResultImpl#getSwapBackfillCargo <em>Swap Backfill Cargo</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapValueMatrixResult {
-	/**
-	 * The default value of the '{@link #getBaseDischargePrice() <em>Base Discharge Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseDischargePrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int BASE_DISCHARGE_PRICE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getBaseDischargePrice() <em>Base Discharge Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseDischargePrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected int baseDischargePrice = BASE_DISCHARGE_PRICE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSwapMarketPrice() <em>Swap Market Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSwapMarketPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SWAP_MARKET_PRICE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSwapMarketPrice() <em>Swap Market Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSwapMarketPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected int swapMarketPrice = SWAP_MARKET_PRICE_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getSwapPnlMinusBasePnl() <em>Swap Pnl Minus Base Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -107,144 +67,114 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	protected long swapPnlMinusBasePnl = SWAP_PNL_MINUS_BASE_PNL_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getBaseLoadPrice() <em>Base Load Price</em>}' attribute.
+	 * The default value of the '{@link #getBasePrecedingPnl() <em>Base Preceding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseLoadPrice()
+	 * @see #getBasePrecedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double BASE_LOAD_PRICE_EDEFAULT = 0.0;
+	protected static final long BASE_PRECEDING_PNL_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getBaseLoadPrice() <em>Base Load Price</em>}' attribute.
+	 * The cached value of the '{@link #getBasePrecedingPnl() <em>Base Preceding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseLoadPrice()
+	 * @see #getBasePrecedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected double baseLoadPrice = BASE_LOAD_PRICE_EDEFAULT;
+	protected long basePrecedingPnl = BASE_PRECEDING_PNL_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getSwapFobLoadPrice() <em>Swap Fob Load Price</em>}' attribute.
+	 * The default value of the '{@link #getBaseSucceedingPnl() <em>Base Succeeding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSwapFobLoadPrice()
+	 * @see #getBaseSucceedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double SWAP_FOB_LOAD_PRICE_EDEFAULT = 0.0;
+	protected static final long BASE_SUCCEEDING_PNL_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getSwapFobLoadPrice() <em>Swap Fob Load Price</em>}' attribute.
+	 * The cached value of the '{@link #getBaseSucceedingPnl() <em>Base Succeeding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSwapFobLoadPrice()
+	 * @see #getBaseSucceedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected double swapFobLoadPrice = SWAP_FOB_LOAD_PRICE_EDEFAULT;
+	protected long baseSucceedingPnl = BASE_SUCCEEDING_PNL_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getBaseFobLoadVolume() <em>Base Fob Load Volume</em>}' attribute.
+	 * The default value of the '{@link #getSwapPrecedingPnl() <em>Swap Preceding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseFobLoadVolume()
+	 * @see #getSwapPrecedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int BASE_FOB_LOAD_VOLUME_EDEFAULT = 0;
+	protected static final long SWAP_PRECEDING_PNL_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getBaseFobLoadVolume() <em>Base Fob Load Volume</em>}' attribute.
+	 * The cached value of the '{@link #getSwapPrecedingPnl() <em>Swap Preceding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseFobLoadVolume()
+	 * @see #getSwapPrecedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected int baseFobLoadVolume = BASE_FOB_LOAD_VOLUME_EDEFAULT;
+	protected long swapPrecedingPnl = SWAP_PRECEDING_PNL_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getSwapFobLoadVolume() <em>Swap Fob Load Volume</em>}' attribute.
+	 * The default value of the '{@link #getSwapSucceedingPnl() <em>Swap Succeeding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSwapFobLoadVolume()
+	 * @see #getSwapSucceedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int SWAP_FOB_LOAD_VOLUME_EDEFAULT = 0;
+	protected static final long SWAP_SUCCEEDING_PNL_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getSwapFobLoadVolume() <em>Swap Fob Load Volume</em>}' attribute.
+	 * The cached value of the '{@link #getSwapSucceedingPnl() <em>Swap Succeeding Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSwapFobLoadVolume()
+	 * @see #getSwapSucceedingPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected int swapFobLoadVolume = SWAP_FOB_LOAD_VOLUME_EDEFAULT;
+	protected long swapSucceedingPnl = SWAP_SUCCEEDING_PNL_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getMarketBuyVolume() <em>Market Buy Volume</em>}' attribute.
+	 * The cached value of the '{@link #getBaseCargo() <em>Base Cargo</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarketBuyVolume()
+	 * @see #getBaseCargo()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MARKET_BUY_VOLUME_EDEFAULT = 0;
+	protected SwapValueMatrixShippedCargoResult baseCargo;
 
 	/**
-	 * The cached value of the '{@link #getMarketBuyVolume() <em>Market Buy Volume</em>}' attribute.
+	 * The cached value of the '{@link #getSwapDiversionCargo() <em>Swap Diversion Cargo</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarketBuyVolume()
+	 * @see #getSwapDiversionCargo()
 	 * @generated
 	 * @ordered
 	 */
-	protected int marketBuyVolume = MARKET_BUY_VOLUME_EDEFAULT;
+	protected SwapValueMatrixShippedCargoResult swapDiversionCargo;
 
 	/**
-	 * The default value of the '{@link #getMarketSellVolume() <em>Market Sell Volume</em>}' attribute.
+	 * The cached value of the '{@link #getSwapBackfillCargo() <em>Swap Backfill Cargo</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMarketSellVolume()
+	 * @see #getSwapBackfillCargo()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int MARKET_SELL_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getMarketSellVolume() <em>Market Sell Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMarketSellVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int marketSellVolume = MARKET_SELL_VOLUME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getBaseDesSellVolume() <em>Base Des Sell Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseDesSellVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int BASE_DES_SELL_VOLUME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getBaseDesSellVolume() <em>Base Des Sell Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseDesSellVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected int baseDesSellVolume = BASE_DES_SELL_VOLUME_EDEFAULT;
+	protected SwapValueMatrixNonShippedCargoResult swapBackfillCargo;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -263,52 +193,6 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	@Override
 	protected EClass eStaticClass() {
 		return AnalyticsPackage.Literals.SWAP_VALUE_MATRIX_RESULT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getBaseDischargePrice() {
-		return baseDischargePrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setBaseDischargePrice(int newBaseDischargePrice) {
-		int oldBaseDischargePrice = baseDischargePrice;
-		baseDischargePrice = newBaseDischargePrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE, oldBaseDischargePrice, baseDischargePrice));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getSwapMarketPrice() {
-		return swapMarketPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSwapMarketPrice(int newSwapMarketPrice) {
-		int oldSwapMarketPrice = swapMarketPrice;
-		swapMarketPrice = newSwapMarketPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE, oldSwapMarketPrice, swapMarketPrice));
 	}
 
 	/**
@@ -340,8 +224,8 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public double getBaseLoadPrice() {
-		return baseLoadPrice;
+	public long getBasePrecedingPnl() {
+		return basePrecedingPnl;
 	}
 
 	/**
@@ -350,11 +234,11 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public void setBaseLoadPrice(double newBaseLoadPrice) {
-		double oldBaseLoadPrice = baseLoadPrice;
-		baseLoadPrice = newBaseLoadPrice;
+	public void setBasePrecedingPnl(long newBasePrecedingPnl) {
+		long oldBasePrecedingPnl = basePrecedingPnl;
+		basePrecedingPnl = newBasePrecedingPnl;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE, oldBaseLoadPrice, baseLoadPrice));
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL, oldBasePrecedingPnl, basePrecedingPnl));
 	}
 
 	/**
@@ -363,8 +247,8 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public double getSwapFobLoadPrice() {
-		return swapFobLoadPrice;
+	public long getBaseSucceedingPnl() {
+		return baseSucceedingPnl;
 	}
 
 	/**
@@ -373,11 +257,11 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public void setSwapFobLoadPrice(double newSwapFobLoadPrice) {
-		double oldSwapFobLoadPrice = swapFobLoadPrice;
-		swapFobLoadPrice = newSwapFobLoadPrice;
+	public void setBaseSucceedingPnl(long newBaseSucceedingPnl) {
+		long oldBaseSucceedingPnl = baseSucceedingPnl;
+		baseSucceedingPnl = newBaseSucceedingPnl;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE, oldSwapFobLoadPrice, swapFobLoadPrice));
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL, oldBaseSucceedingPnl, baseSucceedingPnl));
 	}
 
 	/**
@@ -386,8 +270,8 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public int getBaseFobLoadVolume() {
-		return baseFobLoadVolume;
+	public long getSwapPrecedingPnl() {
+		return swapPrecedingPnl;
 	}
 
 	/**
@@ -396,11 +280,11 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public void setBaseFobLoadVolume(int newBaseFobLoadVolume) {
-		int oldBaseFobLoadVolume = baseFobLoadVolume;
-		baseFobLoadVolume = newBaseFobLoadVolume;
+	public void setSwapPrecedingPnl(long newSwapPrecedingPnl) {
+		long oldSwapPrecedingPnl = swapPrecedingPnl;
+		swapPrecedingPnl = newSwapPrecedingPnl;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME, oldBaseFobLoadVolume, baseFobLoadVolume));
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL, oldSwapPrecedingPnl, swapPrecedingPnl));
 	}
 
 	/**
@@ -409,8 +293,8 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public int getSwapFobLoadVolume() {
-		return swapFobLoadVolume;
+	public long getSwapSucceedingPnl() {
+		return swapSucceedingPnl;
 	}
 
 	/**
@@ -419,11 +303,11 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public void setSwapFobLoadVolume(int newSwapFobLoadVolume) {
-		int oldSwapFobLoadVolume = swapFobLoadVolume;
-		swapFobLoadVolume = newSwapFobLoadVolume;
+	public void setSwapSucceedingPnl(long newSwapSucceedingPnl) {
+		long oldSwapSucceedingPnl = swapSucceedingPnl;
+		swapSucceedingPnl = newSwapSucceedingPnl;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME, oldSwapFobLoadVolume, swapFobLoadVolume));
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL, oldSwapSucceedingPnl, swapSucceedingPnl));
 	}
 
 	/**
@@ -432,8 +316,23 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public int getMarketBuyVolume() {
-		return marketBuyVolume;
+	public SwapValueMatrixShippedCargoResult getBaseCargo() {
+		return baseCargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetBaseCargo(SwapValueMatrixShippedCargoResult newBaseCargo, NotificationChain msgs) {
+		SwapValueMatrixShippedCargoResult oldBaseCargo = baseCargo;
+		baseCargo = newBaseCargo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO, oldBaseCargo, newBaseCargo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -442,11 +341,18 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public void setMarketBuyVolume(int newMarketBuyVolume) {
-		int oldMarketBuyVolume = marketBuyVolume;
-		marketBuyVolume = newMarketBuyVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME, oldMarketBuyVolume, marketBuyVolume));
+	public void setBaseCargo(SwapValueMatrixShippedCargoResult newBaseCargo) {
+		if (newBaseCargo != baseCargo) {
+			NotificationChain msgs = null;
+			if (baseCargo != null)
+				msgs = ((InternalEObject)baseCargo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO, null, msgs);
+			if (newBaseCargo != null)
+				msgs = ((InternalEObject)newBaseCargo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO, null, msgs);
+			msgs = basicSetBaseCargo(newBaseCargo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO, newBaseCargo, newBaseCargo));
 	}
 
 	/**
@@ -455,8 +361,23 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public int getMarketSellVolume() {
-		return marketSellVolume;
+	public SwapValueMatrixShippedCargoResult getSwapDiversionCargo() {
+		return swapDiversionCargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSwapDiversionCargo(SwapValueMatrixShippedCargoResult newSwapDiversionCargo, NotificationChain msgs) {
+		SwapValueMatrixShippedCargoResult oldSwapDiversionCargo = swapDiversionCargo;
+		swapDiversionCargo = newSwapDiversionCargo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO, oldSwapDiversionCargo, newSwapDiversionCargo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -465,11 +386,18 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public void setMarketSellVolume(int newMarketSellVolume) {
-		int oldMarketSellVolume = marketSellVolume;
-		marketSellVolume = newMarketSellVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME, oldMarketSellVolume, marketSellVolume));
+	public void setSwapDiversionCargo(SwapValueMatrixShippedCargoResult newSwapDiversionCargo) {
+		if (newSwapDiversionCargo != swapDiversionCargo) {
+			NotificationChain msgs = null;
+			if (swapDiversionCargo != null)
+				msgs = ((InternalEObject)swapDiversionCargo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO, null, msgs);
+			if (newSwapDiversionCargo != null)
+				msgs = ((InternalEObject)newSwapDiversionCargo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO, null, msgs);
+			msgs = basicSetSwapDiversionCargo(newSwapDiversionCargo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO, newSwapDiversionCargo, newSwapDiversionCargo));
 	}
 
 	/**
@@ -478,8 +406,23 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public int getBaseDesSellVolume() {
-		return baseDesSellVolume;
+	public SwapValueMatrixNonShippedCargoResult getSwapBackfillCargo() {
+		return swapBackfillCargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSwapBackfillCargo(SwapValueMatrixNonShippedCargoResult newSwapBackfillCargo, NotificationChain msgs) {
+		SwapValueMatrixNonShippedCargoResult oldSwapBackfillCargo = swapBackfillCargo;
+		swapBackfillCargo = newSwapBackfillCargo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO, oldSwapBackfillCargo, newSwapBackfillCargo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -488,11 +431,36 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	 * @generated
 	 */
 	@Override
-	public void setBaseDesSellVolume(int newBaseDesSellVolume) {
-		int oldBaseDesSellVolume = baseDesSellVolume;
-		baseDesSellVolume = newBaseDesSellVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME, oldBaseDesSellVolume, baseDesSellVolume));
+	public void setSwapBackfillCargo(SwapValueMatrixNonShippedCargoResult newSwapBackfillCargo) {
+		if (newSwapBackfillCargo != swapBackfillCargo) {
+			NotificationChain msgs = null;
+			if (swapBackfillCargo != null)
+				msgs = ((InternalEObject)swapBackfillCargo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO, null, msgs);
+			if (newSwapBackfillCargo != null)
+				msgs = ((InternalEObject)newSwapBackfillCargo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO, null, msgs);
+			msgs = basicSetSwapBackfillCargo(newSwapBackfillCargo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO, newSwapBackfillCargo, newSwapBackfillCargo));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO:
+				return basicSetBaseCargo(null, msgs);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO:
+				return basicSetSwapDiversionCargo(null, msgs);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO:
+				return basicSetSwapBackfillCargo(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -503,26 +471,22 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE:
-				return getBaseDischargePrice();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE:
-				return getSwapMarketPrice();
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL:
 				return getSwapPnlMinusBasePnl();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE:
-				return getBaseLoadPrice();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE:
-				return getSwapFobLoadPrice();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME:
-				return getBaseFobLoadVolume();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME:
-				return getSwapFobLoadVolume();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME:
-				return getMarketBuyVolume();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME:
-				return getMarketSellVolume();
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME:
-				return getBaseDesSellVolume();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL:
+				return getBasePrecedingPnl();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL:
+				return getBaseSucceedingPnl();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL:
+				return getSwapPrecedingPnl();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL:
+				return getSwapSucceedingPnl();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO:
+				return getBaseCargo();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO:
+				return getSwapDiversionCargo();
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO:
+				return getSwapBackfillCargo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -535,35 +499,29 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE:
-				setBaseDischargePrice((Integer)newValue);
-				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE:
-				setSwapMarketPrice((Integer)newValue);
-				return;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL:
 				setSwapPnlMinusBasePnl((Long)newValue);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE:
-				setBaseLoadPrice((Double)newValue);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL:
+				setBasePrecedingPnl((Long)newValue);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE:
-				setSwapFobLoadPrice((Double)newValue);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL:
+				setBaseSucceedingPnl((Long)newValue);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME:
-				setBaseFobLoadVolume((Integer)newValue);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL:
+				setSwapPrecedingPnl((Long)newValue);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME:
-				setSwapFobLoadVolume((Integer)newValue);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL:
+				setSwapSucceedingPnl((Long)newValue);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME:
-				setMarketBuyVolume((Integer)newValue);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO:
+				setBaseCargo((SwapValueMatrixShippedCargoResult)newValue);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME:
-				setMarketSellVolume((Integer)newValue);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO:
+				setSwapDiversionCargo((SwapValueMatrixShippedCargoResult)newValue);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME:
-				setBaseDesSellVolume((Integer)newValue);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO:
+				setSwapBackfillCargo((SwapValueMatrixNonShippedCargoResult)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -577,35 +535,29 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE:
-				setBaseDischargePrice(BASE_DISCHARGE_PRICE_EDEFAULT);
-				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE:
-				setSwapMarketPrice(SWAP_MARKET_PRICE_EDEFAULT);
-				return;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL:
 				setSwapPnlMinusBasePnl(SWAP_PNL_MINUS_BASE_PNL_EDEFAULT);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE:
-				setBaseLoadPrice(BASE_LOAD_PRICE_EDEFAULT);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL:
+				setBasePrecedingPnl(BASE_PRECEDING_PNL_EDEFAULT);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE:
-				setSwapFobLoadPrice(SWAP_FOB_LOAD_PRICE_EDEFAULT);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL:
+				setBaseSucceedingPnl(BASE_SUCCEEDING_PNL_EDEFAULT);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME:
-				setBaseFobLoadVolume(BASE_FOB_LOAD_VOLUME_EDEFAULT);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL:
+				setSwapPrecedingPnl(SWAP_PRECEDING_PNL_EDEFAULT);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME:
-				setSwapFobLoadVolume(SWAP_FOB_LOAD_VOLUME_EDEFAULT);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL:
+				setSwapSucceedingPnl(SWAP_SUCCEEDING_PNL_EDEFAULT);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME:
-				setMarketBuyVolume(MARKET_BUY_VOLUME_EDEFAULT);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO:
+				setBaseCargo((SwapValueMatrixShippedCargoResult)null);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME:
-				setMarketSellVolume(MARKET_SELL_VOLUME_EDEFAULT);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO:
+				setSwapDiversionCargo((SwapValueMatrixShippedCargoResult)null);
 				return;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME:
-				setBaseDesSellVolume(BASE_DES_SELL_VOLUME_EDEFAULT);
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO:
+				setSwapBackfillCargo((SwapValueMatrixNonShippedCargoResult)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -619,26 +571,22 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DISCHARGE_PRICE:
-				return baseDischargePrice != BASE_DISCHARGE_PRICE_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_MARKET_PRICE:
-				return swapMarketPrice != SWAP_MARKET_PRICE_EDEFAULT;
 			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PNL_MINUS_BASE_PNL:
 				return swapPnlMinusBasePnl != SWAP_PNL_MINUS_BASE_PNL_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_LOAD_PRICE:
-				return baseLoadPrice != BASE_LOAD_PRICE_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_PRICE:
-				return swapFobLoadPrice != SWAP_FOB_LOAD_PRICE_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_FOB_LOAD_VOLUME:
-				return baseFobLoadVolume != BASE_FOB_LOAD_VOLUME_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_FOB_LOAD_VOLUME:
-				return swapFobLoadVolume != SWAP_FOB_LOAD_VOLUME_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_BUY_VOLUME:
-				return marketBuyVolume != MARKET_BUY_VOLUME_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__MARKET_SELL_VOLUME:
-				return marketSellVolume != MARKET_SELL_VOLUME_EDEFAULT;
-			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_DES_SELL_VOLUME:
-				return baseDesSellVolume != BASE_DES_SELL_VOLUME_EDEFAULT;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_PRECEDING_PNL:
+				return basePrecedingPnl != BASE_PRECEDING_PNL_EDEFAULT;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_SUCCEEDING_PNL:
+				return baseSucceedingPnl != BASE_SUCCEEDING_PNL_EDEFAULT;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_PRECEDING_PNL:
+				return swapPrecedingPnl != SWAP_PRECEDING_PNL_EDEFAULT;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_SUCCEEDING_PNL:
+				return swapSucceedingPnl != SWAP_SUCCEEDING_PNL_EDEFAULT;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__BASE_CARGO:
+				return baseCargo != null;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_DIVERSION_CARGO:
+				return swapDiversionCargo != null;
+			case AnalyticsPackage.SWAP_VALUE_MATRIX_RESULT__SWAP_BACKFILL_CARGO:
+				return swapBackfillCargo != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -653,26 +601,16 @@ public class SwapValueMatrixResultImpl extends UUIDObjectImpl implements SwapVal
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (baseDischargePrice: ");
-		result.append(baseDischargePrice);
-		result.append(", swapMarketPrice: ");
-		result.append(swapMarketPrice);
-		result.append(", swapPnlMinusBasePnl: ");
+		result.append(" (swapPnlMinusBasePnl: ");
 		result.append(swapPnlMinusBasePnl);
-		result.append(", baseLoadPrice: ");
-		result.append(baseLoadPrice);
-		result.append(", swapFobLoadPrice: ");
-		result.append(swapFobLoadPrice);
-		result.append(", baseFobLoadVolume: ");
-		result.append(baseFobLoadVolume);
-		result.append(", swapFobLoadVolume: ");
-		result.append(swapFobLoadVolume);
-		result.append(", marketBuyVolume: ");
-		result.append(marketBuyVolume);
-		result.append(", marketSellVolume: ");
-		result.append(marketSellVolume);
-		result.append(", baseDesSellVolume: ");
-		result.append(baseDesSellVolume);
+		result.append(", basePrecedingPnl: ");
+		result.append(basePrecedingPnl);
+		result.append(", baseSucceedingPnl: ");
+		result.append(baseSucceedingPnl);
+		result.append(", swapPrecedingPnl: ");
+		result.append(swapPrecedingPnl);
+		result.append(", swapSucceedingPnl: ");
+		result.append(swapSucceedingPnl);
 		result.append(')');
 		return result.toString();
 	}

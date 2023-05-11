@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -17,6 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -95,7 +97,8 @@ public class ScheduleModelKPIUtils {
 				}
 			}
 		}
-		// for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+		// for (final MarketAllocation marketAllocation :
+		// schedule.getMarketAllocations()) {
 		// totalMtMPNL += getElementTradingPNL(marketAllocation);
 		// totalMtMPNL += getElementShippingPNL(marketAllocation);
 		// }
@@ -121,6 +124,31 @@ public class ScheduleModelKPIUtils {
 		return result;
 	}
 
+	public static long getVesselCharterProfitAndLoss(@NonNull final Schedule schedule, @NonNull final VesselCharter vesselCharter) {
+		final List<@NonNull Sequence> vesselCharterSequences = schedule.getSequences().stream() //
+				.filter(seq -> seq.getVesselCharter() == vesselCharter) //
+				.toList();
+		if (vesselCharterSequences.size() > 1) {
+			throw new IllegalStateException("Vessel charter should not have more than one schedule");
+		}
+		return vesselCharterSequences.isEmpty() ? 0L : getSequenceProfitAndLoss(vesselCharterSequences.get(0));
+	}
+
+	private static long getSequenceProfitAndLoss(@NonNull final Sequence sequence) {
+		long totalPnl = 0L;
+		for (final Event event : sequence.getEvents()) {
+			if (event instanceof SlotVisit slotVisit) {
+				if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+					final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+					totalPnl += getElementPNL(cargoAllocation);
+				}
+			} else if (event instanceof ProfitAndLossContainer pnlContainer) {
+				totalPnl += getElementPNL(pnlContainer);
+			}
+		}
+		return totalPnl;
+	}
+
 	public static long getScheduleProfitAndLoss(@NonNull final Schedule schedule) {
 
 		long totalPNL = 0L;
@@ -128,20 +156,7 @@ public class ScheduleModelKPIUtils {
 			return totalPNL;
 		}
 		for (final Sequence seq : schedule.getSequences()) {
-
-			for (final Event evt : seq.getEvents()) {
-				if (evt instanceof SlotVisit) {
-					final SlotVisit visit = (SlotVisit) evt;
-
-					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-						totalPNL += getElementPNL(cargoAllocation);
-					}
-
-				} else if (evt instanceof ProfitAndLossContainer) {
-					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
-				}
-			}
+			totalPNL += getSequenceProfitAndLoss(seq);
 		}
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
 			totalPNL += getElementPNL(openSlotAllocation);
@@ -473,14 +488,69 @@ public class ScheduleModelKPIUtils {
 		return null;
 	}
 
+	public static Integer calculateLegCost(final PortVisit portVisit, Journey journey, Idle idle) {
+		if (portVisit != null) {
+			int total = 0;
+			if (portVisit instanceof FuelUsage fu) {
+				total += fu.getFuelCost();
+			}
+			total += portVisit.getCharterCost();
+			total += portVisit.getPortCost();
+
+			if (journey != null) {
+				total += journey.getFuelCost();
+				total += journey.getCharterCost();
+				total += journey.getToll();
+			}
+			if (idle != null) {
+				total += idle.getFuelCost();
+				total += idle.getCharterCost();
+			}
+			return total;
+		}
+		return null;
+	}
+
 	public static Integer calculateLegFuel(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef, final ShippingCostType shippingCostType,
 			@NonNull final TotalType totalType) {
-		if (object instanceof EObject) {
-			final EObject eObject = (EObject) object;
+		if (object instanceof EObject eObject) {
 			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
 			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
 			return calculateLegFuel(cargoAllocation, allocation, shippingCostType, totalType);
 
+		}
+		return null;
+	}
+
+	public static Integer calculateLegFuel(final PortVisit portVisit, Journey journey, Idle idle, final ShippingCostType shippingCostType, @NonNull final TotalType totalType) {
+		if (portVisit != null) {
+			int total = 0;
+			if (portVisit instanceof FuelUsage fu) {
+				if (shippingCostType == ShippingCostType.LNG_COSTS) {
+					total += getFuelDetails(fu, totalType, Fuel.NBO, Fuel.FBO);
+				}
+				if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+					total += getFuelDetails(fu, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+
+			if (journey != null) {
+				if (shippingCostType == ShippingCostType.LNG_COSTS) {
+					total += getFuelDetails(journey, totalType, Fuel.NBO, Fuel.FBO);
+				}
+				if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+					total += getFuelDetails(journey, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+			if (idle != null) {
+				if (shippingCostType == ShippingCostType.LNG_COSTS) {
+					total += getFuelDetails(idle, totalType, Fuel.NBO, Fuel.FBO);
+				}
+				if (shippingCostType == ShippingCostType.BUNKER_COSTS) {
+					total += getFuelDetails(idle, totalType, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+				}
+			}
+			return total;
 		}
 		return null;
 	}
@@ -572,6 +642,13 @@ public class ScheduleModelKPIUtils {
 					}
 				}
 			}
+		}
+		return null;
+	}
+
+	public static Double calculateLegSpeed(@Nullable Journey journey) {
+		if (journey != null) {
+			return journey.getSpeed();
 		}
 		return null;
 	}
@@ -876,4 +953,12 @@ public class ScheduleModelKPIUtils {
 			}
 		}
 	}
+
+	public static <T> int getOrZero(final T object, final ToIntFunction<@NonNull T> func) {
+		if (object != null) {
+			return func.applyAsInt(object);
+		}
+		return 0;
+	}
+
 }

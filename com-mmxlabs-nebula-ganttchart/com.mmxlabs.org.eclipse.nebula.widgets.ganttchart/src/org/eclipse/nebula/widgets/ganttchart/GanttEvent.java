@@ -83,6 +83,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
 	private int _x, _y, _width, _height;
 	private int _earliestStartX, _latestEndX, _actualWidth;
 	private Color _statusColor;
+	private Color _statusForegroundColour;
 	private Color _statusBorderColor;
 	private int _statusAlpha = 255;
 	private int _statusBorderWidth = 1;
@@ -953,6 +954,14 @@ public	void setBounds(final Rectangle bounds) {
 	 */
 	public void setStatusColor(final Color statusColor) {
 		_statusColor = statusColor;
+	}
+
+	public Color getStatusForegroundColour() {
+		return _statusForegroundColour;
+	}
+
+	public void setStatusForegroundColour(final Color statusForegroundColour) {
+		_statusForegroundColour = statusForegroundColour;
 	}
 
 	/**

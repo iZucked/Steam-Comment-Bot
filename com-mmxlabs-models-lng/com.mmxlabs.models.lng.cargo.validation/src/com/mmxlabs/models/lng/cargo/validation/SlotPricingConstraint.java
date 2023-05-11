@@ -49,13 +49,13 @@ public class SlotPricingConstraint extends AbstractModelMultiConstraint {
 				// Skip check!
 			} else {
 
-				if (!slot.isSetPriceExpression() && !slot.isSetContract()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("Slot \"" + slot.getName() + "\" - A contract or price expression must be set"));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
-					statuses.add(dsd);
-				}
+//				if (!slot.isSetPriceExpression() && !slot.isSetContract()) {
+//					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+//							(IConstraintStatus) ctx.createFailureStatus("Slot \"" + slot.getName() + "\" - A contract or price expression must be set"));
+//					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
+//					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
+//					statuses.add(dsd);
+//				}
 			}
 		}
 	}

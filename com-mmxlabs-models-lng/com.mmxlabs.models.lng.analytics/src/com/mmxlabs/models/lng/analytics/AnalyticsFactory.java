@@ -259,6 +259,78 @@ public interface AnalyticsFactory extends EFactory {
 	BreakEvenResult createBreakEvenResult();
 
 	/**
+	 * Returns a new object of class '<em>Marketability Result Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Result Container</em>'.
+	 * @generated
+	 */
+	MarketabilityResultContainer createMarketabilityResultContainer();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Event</em>'.
+	 * @generated
+	 */
+	MarketabilityEvent createMarketabilityEvent();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Assignable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Assignable Element</em>'.
+	 * @generated
+	 */
+	MarketabilityAssignableElement createMarketabilityAssignableElement();
+
+	/**
+	 * Returns a new object of class '<em>Marketability End Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability End Event</em>'.
+	 * @generated
+	 */
+	MarketabilityEndEvent createMarketabilityEndEvent();
+
+	/**
+	 * Returns a new object of class '<em>Swap Value Matrix Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Swap Value Matrix Parameters</em>'.
+	 * @generated
+	 */
+	SwapValueMatrixParameters createSwapValueMatrixParameters();
+
+	/**
+	 * Returns a new object of class '<em>Range</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Range</em>'.
+	 * @generated
+	 */
+	Range createRange();
+
+	/**
+	 * Returns a new object of class '<em>Swap Value Matrix Shipped Cargo Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Swap Value Matrix Shipped Cargo Result</em>'.
+	 * @generated
+	 */
+	SwapValueMatrixShippedCargoResult createSwapValueMatrixShippedCargoResult();
+
+	/**
+	 * Returns a new object of class '<em>Swap Value Matrix Non Shipped Cargo Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Swap Value Matrix Non Shipped Cargo Result</em>'.
+	 * @generated
+	 */
+	SwapValueMatrixNonShippedCargoResult createSwapValueMatrixNonShippedCargoResult();
+
+	/**
 	 * Returns a new object of class '<em>Option Analysis Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -464,6 +536,33 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	ViabilityModel createViabilityModel();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Model</em>'.
+	 * @generated
+	 */
+	MarketabilityModel createMarketabilityModel();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Row</em>'.
+	 * @generated
+	 */
+	MarketabilityRow createMarketabilityRow();
+
+	/**
+	 * Returns a new object of class '<em>Marketability Result</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Marketability Result</em>'.
+	 * @generated
+	 */
+	MarketabilityResult createMarketabilityResult();
 
 	/**
 	 * Returns a new object of class '<em>Viability Row</em>'.

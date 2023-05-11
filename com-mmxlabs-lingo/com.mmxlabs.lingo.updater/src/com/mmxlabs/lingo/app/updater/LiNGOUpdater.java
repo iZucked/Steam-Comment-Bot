@@ -50,6 +50,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.internal.p2.operations.IStatusCodes;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -81,6 +82,7 @@ import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.lingo.app.updater.auth.IUpdateAuthenticationProvider;
+import com.mmxlabs.lingo.app.updater.internal.LiNGOUpdaterDebugContants;
 import com.mmxlabs.lingo.app.updater.model.UpdateVersion;
 import com.mmxlabs.lingo.app.updater.model.Version;
 import com.mmxlabs.lingo.app.updater.util.SignatureByteProcessor;
@@ -98,7 +100,7 @@ public class LiNGOUpdater {
 		// Might be best in Application?
 		Security.addProvider(new BouncyCastleProvider());
 	}
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiNGOUpdater.class);
+	private static final Logger LOG = LoggerFactory.getLogger(LiNGOUpdater.class);
 
 	public static RSAPublicKey readPublicKey(final String resource) throws Exception {
 		byte[] keyBytes;
@@ -216,14 +218,24 @@ public class LiNGOUpdater {
 				for (final URI u : updateSites) {
 					final UpdateVersion version = getVersion(u);
 					if (version != null) {
+						if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
+							LOG.trace(String.format("Version for %s is (%s)", u.toString(), version.toString()));
+						}
 						if (updateVersion == null || version.isBetter(updateVersion)) {
 							updateVersion = version;
 							url = u;
 						}
 					}
 				}
-
 			}
+			if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
+				if (updateVersion != null) {
+					LOG.trace(String.format("Update to version %s found", updateVersion.getVersion()));
+				} else {
+					LOG.trace("No update found");
+				}
+			}
+
 			if (updateVersion != null) {
 				final UpdateVersion pUpdateVersion = updateVersion;
 				{
@@ -289,9 +301,13 @@ public class LiNGOUpdater {
 						}
 					});
 				}
+			} else {
+				Display.getDefault()
+						.asyncExec(() -> MessageDialog.openError(Display.getDefault().getActiveShell(), "Error updating",
+								"No update packages found at update sites or not permitted to access update sites."));
 			}
 		} catch (final Exception e) {
-			LOGGER.error("Error updating " + e.getMessage(), e);
+			LOG.error("Error updating " + e.getMessage(), e);
 			Display.getDefault().asyncExec(() -> MessageDialog.openError(Display.getDefault().getActiveShell(), "Error updating", e.getMessage() + "\nPlease try again"));
 		} finally {
 			// Always try to clean up download folder
@@ -322,7 +338,7 @@ public class LiNGOUpdater {
 					}
 				});
 			} catch (final IOException e) {
-				LOGGER.error("Error cleaning updates folder " + e.getMessage(), e);
+				LOG.error("Error cleaning updates folder " + e.getMessage(), e);
 			}
 		}
 	}
@@ -390,10 +406,34 @@ public class LiNGOUpdater {
 	}
 
 	private HttpClientBuilder createHttpBuilder(final URI url) {
-		
+
 		final boolean needsClientAuth = url.getHost().contains("updates.minimaxlabs.com");
 		final HttpHost httpHost = URIUtils.extractHost(url);
-		return HttpClientUtil.createBasicHttpClient(httpHost, needsClientAuth);
+		var builder = HttpClientUtil.createBasicHttpClient(httpHost, needsClientAuth);
+		builder.addInterceptorFirst(new HttpRequestInterceptor() {
+
+			@Override
+			public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+				try {
+					URI uri = new URI(request.getRequestLine().getUri());
+
+					if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace(String.format("Download requested URL %s", uri.toString()));
+					}
+
+					if (request instanceof HttpRequestWrapper w) {
+						uri = new URI(w.getOriginal().getRequestLine().getUri());
+					}
+					if (uri.getHost().contains("update.minimaxlabs.com")) {
+						withAuthHeader(url, request);
+					}
+				} catch (final URISyntaxException e) {
+					throw new IOException(e);
+				}
+			}
+
+		});
+		return builder;
 	}
 
 	private void downloadVersionSignature(final URI baseUrl, final UpdateVersion uv, final IProgressMonitor monitor) throws Exception {
@@ -409,7 +449,6 @@ public class LiNGOUpdater {
 
 		try (var httpClient = builder.build()) {
 			final HttpGet request = new HttpGet(url);
-			withAuthHeader(url, request);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final ProgressHttpEntityWrapper w = new ProgressHttpEntityWrapper(response.getEntity(), progressListener);
 				response.setEntity(w);
@@ -444,7 +483,11 @@ public class LiNGOUpdater {
 				@Override
 				public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
 					try {
+
 						URI uri = new URI(request.getRequestLine().getUri());
+						if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
+							LOG.trace(String.format("Check version: Requested URL %s", uri.toString()));
+						}
 						if (request instanceof HttpRequestWrapper w) {
 							uri = new URI(w.getOriginal().getRequestLine().getUri());
 						}
@@ -465,6 +508,11 @@ public class LiNGOUpdater {
 				final HttpGet request = new HttpGet(url);
 				try (CloseableHttpResponse response = httpClient.execute(request)) {
 					final int statusCode = response.getStatusLine().getStatusCode();
+
+					if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
+						LOG.trace(String.format("Checking %s returns %d (%s)", url.toString(), statusCode, response.getStatusLine().getReasonPhrase()));
+					}
+
 					if (statusCode < 200 && statusCode >= 300) {
 						Display.getDefault().asyncExec(() -> {
 							final String msg = String.format("Failed to connect to update server - HTTP Error %d", statusCode);
@@ -556,6 +604,11 @@ public class LiNGOUpdater {
 			return urls;
 
 		} catch (final Exception e) {
+
+			if (Platform.getDebugBoolean(LiNGOUpdaterDebugContants.DEBUG_DOWNLOAD)) {
+				LOG.trace(String.format("Exception listing update sites: %s", e.getMessage()), e);
+			}
+
 			throw new RuntimeException(e);
 		}
 
@@ -628,7 +681,7 @@ public class LiNGOUpdater {
 			}
 
 		} catch (final Exception e) {
-			LOGGER.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			Display.getDefault().asyncExec(() -> {
 				MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Exception during update " + e.getMessage());
 			});

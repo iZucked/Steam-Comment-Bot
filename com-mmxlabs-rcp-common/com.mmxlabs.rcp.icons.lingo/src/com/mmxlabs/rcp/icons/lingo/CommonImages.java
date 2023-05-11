@@ -96,6 +96,7 @@ public final class CommonImages {
 		PNLDetails(16, "icons/16x16/pnl_details.png"), //
 		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
 		ResetWiring(16, "icons/16x16/reset_wiring.png"), //
+		Flows(16, "icons/16x16/flows.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
 		ScenarioDiff(16, "icons/16x16/scenario_diff.png"), //

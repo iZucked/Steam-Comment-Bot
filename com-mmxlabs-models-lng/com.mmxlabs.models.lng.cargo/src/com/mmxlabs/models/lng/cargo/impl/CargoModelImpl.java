@@ -56,8 +56,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getPaperDeals <em>Paper Deals</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDealSets <em>Deal Sets</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoesForExposures <em>Cargoes For Exposures</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoesForHedging <em>Cargoes For Hedging</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}</li>
  * </ul>
  *
@@ -185,26 +183,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	protected EList<DealSet> dealSets;
 
 	
-	/**
-	 * The cached value of the '{@link #getCargoesForExposures() <em>Cargoes For Exposures</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCargoesForExposures()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Cargo> cargoesForExposures;
-
-	/**
-	 * The cached value of the '{@link #getCargoesForHedging() <em>Cargoes For Hedging</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCargoesForHedging()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Cargo> cargoesForHedging;
-
 	/**
 	 * The cached value of the '{@link #getGroupedDischargeSlots() <em>Grouped Discharge Slots</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -470,32 +448,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @generated
 	 */
 	@Override
-	public EList<Cargo> getCargoesForExposures() {
-		if (cargoesForExposures == null) {
-			cargoesForExposures = new EObjectResolvingEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES_FOR_EXPOSURES);
-		}
-		return cargoesForExposures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Cargo> getCargoesForHedging() {
-		if (cargoesForHedging == null) {
-			cargoesForHedging = new EObjectResolvingEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_MODEL__CARGOES_FOR_HEDGING);
-		}
-		return cargoesForHedging;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<GroupedDischargeSlotsConstraint> getGroupedDischargeSlots() {
 		if (groupedDischargeSlots == null) {
 			groupedDischargeSlots = new EObjectContainmentEList.Resolving<GroupedDischargeSlotsConstraint>(GroupedDischargeSlotsConstraint.class, this, CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS);
@@ -618,10 +570,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getPaperDeals();
 			case CargoPackage.CARGO_MODEL__DEAL_SETS:
 				return getDealSets();
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_EXPOSURES:
-				return getCargoesForExposures();
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_HEDGING:
-				return getCargoesForHedging();
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				return getGroupedDischargeSlots();
 		}
@@ -684,14 +632,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getDealSets().clear();
 				getDealSets().addAll((Collection<? extends DealSet>)newValue);
 				return;
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_EXPOSURES:
-				getCargoesForExposures().clear();
-				getCargoesForExposures().addAll((Collection<? extends Cargo>)newValue);
-				return;
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_HEDGING:
-				getCargoesForHedging().clear();
-				getCargoesForHedging().addAll((Collection<? extends Cargo>)newValue);
-				return;
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				getGroupedDischargeSlots().clear();
 				getGroupedDischargeSlots().addAll((Collection<? extends GroupedDischargeSlotsConstraint>)newValue);
@@ -744,12 +684,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__DEAL_SETS:
 				getDealSets().clear();
 				return;
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_EXPOSURES:
-				getCargoesForExposures().clear();
-				return;
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_HEDGING:
-				getCargoesForHedging().clear();
-				return;
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				getGroupedDischargeSlots().clear();
 				return;
@@ -789,10 +723,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return paperDeals != null && !paperDeals.isEmpty();
 			case CargoPackage.CARGO_MODEL__DEAL_SETS:
 				return dealSets != null && !dealSets.isEmpty();
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_EXPOSURES:
-				return cargoesForExposures != null && !cargoesForExposures.isEmpty();
-			case CargoPackage.CARGO_MODEL__CARGOES_FOR_HEDGING:
-				return cargoesForHedging != null && !cargoesForHedging.isEmpty();
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				return groupedDischargeSlots != null && !groupedDischargeSlots.isEmpty();
 		}

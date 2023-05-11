@@ -2614,7 +2614,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				};
 				addActionToMenu(newFOBSale, menu);
 			}
-
+			addActionToMenu(new CreateStripMenuAction("Create Strip"), menu);
 		}
 
 		private final void initialiseSlot(final Slot<?> newSlot, final boolean isLoad, final RowData referenceRowData) {
@@ -2877,5 +2877,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	@Override
 	protected Action createDuplicateAction() {
 		return null;
+	}
+	
+	@Override
+	protected void lookAtMySelection(final ISelection selection) {
+		// nothing
+		if (selection != null && !selection.isEmpty()) {
+			
+		}
 	}
 }

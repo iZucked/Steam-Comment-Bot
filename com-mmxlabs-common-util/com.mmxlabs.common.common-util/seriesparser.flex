@@ -88,9 +88,8 @@ white_space = {new_line} | [ \t\f]
 "DATEDAVG"           { return symbol("datedavg",DATEDAVG); }
 "SPLITMONTH"           { return symbol("splitmonth", SPLITMONTH); }
 "S"           { return symbol("scurve", S); }
-"VOLUMETIERM3"           { return symbol("volumetierm3", VOLUMETIERM3); }
-"VOLUMETIERMMBTU"           { return symbol("volumetiermmbtu", VOLUMETIERMMBTU); }
 "TIER"           { return symbol("tier", TIER); }
+"TIERBLEND"           { return symbol("tierblend", TIERBLEND); }
  
  
  "JAN" { return symbol("jan",MONTH, Month.JANUARY); }
@@ -130,9 +129,9 @@ white_space = {new_line} | [ \t\f]
 "/"               { return symbol("div",DIVIDE  ); }
 "%"               { return symbol("percent",PERCENT  ); }
 "?"               { return symbol("question",QUESTION  ); }
-{PARAM}        { return symbol("param", PARAM, new String(yytext()).replace("@","") ); }
+{PARAM}        { return symbol("param", PARAM, yytext().replace("@","") ); }
 
-{VAR}        { return symbol("var", VAR, new String(yytext()).replace("#","") ); }
+{VAR}        { return symbol("var", VAR, yytext().replace("#","") ); }
 m        { return symbol("m", M, Integer.valueOf(0) ); }
 {MValue}        { return symbol("m", M, Integer.valueOf(yytext().replace("m","")) ); }
 

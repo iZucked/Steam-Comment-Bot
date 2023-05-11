@@ -58,6 +58,7 @@ import com.mmxlabs.common.parser.series.SeriesType;
 import com.mmxlabs.common.parser.series.ThreadLocalLazyExpressionContainer;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -252,47 +253,39 @@ public class LNGScenarioTransformer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
-	public static final String EXTRA_CHARTER_IN_MARKET_OVERRIDES = "extra_charter_in_market_overrides";
-	public static final String EXTRA_CHARTER_IN_MARKETS = "extra_charter_in_markets";
-	public static final String EXTRA_SPOT_CARGO_MARKETS = "extra_spot_cargo_markets";
-	public static final String EXTRA_VESSEL_CHARTERS = "extra_vessel_availabilities";
-	public static final String EXTRA_VESSEL_EVENTS = "extra_vessel_events";
-	public static final String EXTRA_LOAD_SLOTS = "extra_load_slots";
-	public static final String EXTRA_DISCHARGE_SLOTS = "extra_discharge_slots";
-	public static final String EXTRA_PRICE_CURVES = "extra_price_curves";
 
 	private final @NonNull LNGScenarioModel rootObject;
 
 	@Inject
-	@Named(EXTRA_VESSEL_CHARTERS)
+	@Named(ExtraDataProvider.EXTRA_VESSEL_CHARTERS)
 	private List<VesselCharter> extraVesselCharters;
 
 	@Inject
-	@Named(EXTRA_VESSEL_EVENTS)
+	@Named(ExtraDataProvider.EXTRA_VESSEL_EVENTS)
 	private List<VesselEvent> extraVesselEvents;
 
 	@Inject
-	@Named(EXTRA_CHARTER_IN_MARKETS)
+	@Named(ExtraDataProvider.EXTRA_CHARTER_IN_MARKETS)
 	private List<CharterInMarket> extraCharterInMarkets;
 
 	@Inject
-	@Named(EXTRA_SPOT_CARGO_MARKETS)
+	@Named(ExtraDataProvider.EXTRA_SPOT_CARGO_MARKETS)
 	private List<SpotMarket> extraSpotMarkets;
 
 	@Inject
-	@Named(EXTRA_CHARTER_IN_MARKET_OVERRIDES)
+	@Named(ExtraDataProvider.EXTRA_CHARTER_IN_MARKET_OVERRIDES)
 	private List<CharterInMarketOverride> extraCharterInMarketOverrides;
 
 	@Inject
-	@Named(EXTRA_LOAD_SLOTS)
+	@Named(ExtraDataProvider.EXTRA_LOAD_SLOTS)
 	private List<LoadSlot> extraLoadSlots;
 
 	@Inject
-	@Named(EXTRA_DISCHARGE_SLOTS)
+	@Named(ExtraDataProvider.EXTRA_DISCHARGE_SLOTS)
 	private List<DischargeSlot> extraDischargeSlots;
 
 	@Inject(optional = true)
-	@Named(EXTRA_PRICE_CURVES)
+	@Named(ExtraDataProvider.EXTRA_PRICE_CURVES)
 	private List<CommodityCurveOverlay> extraPriceCurves;
 
 	@Inject
@@ -1599,33 +1592,26 @@ public class LNGScenarioTransformer {
 		final ISalesPriceCalculator dischargePriceCalculator;
 
 		final boolean isSpot = (dischargeSlot instanceof SpotSlot);
-		if (dischargeSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(dischargeSlot)) {
+		if ((dischargeSlot.isSetPriceExpression() || dischargeSlot.isSetPricingBasis())&& SlotContractParamsHelper.isSlotExpressionUsed(dischargeSlot)) {
 
-			final String priceExpression = dischargeSlot.getPriceExpression();
+			if (dischargeSlot.isSetPriceExpression()) {
+				final String priceExpression = dischargeSlot.getPriceExpression();
 
-			if ("??".equals(priceExpression)) {
-				dischargePriceCalculator = new ChangeablePriceCalculator();
-			} else if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
-				if (portfolioBreakevenFlag) {
-					dischargePriceCalculator = new PortfolioBreakEvenSalesPriceCalculator();
+				if ("??".equals(priceExpression)) {
+					dischargePriceCalculator = new ChangeablePriceCalculator();
+				} else if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
+					if (portfolioBreakevenFlag) {
+						dischargePriceCalculator = new PortfolioBreakEvenSalesPriceCalculator();
+					} else {
+						dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
+					}
 				} else {
-					dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
+					dischargePriceCalculator = getSalesPriceCalculatorForExpression(priceExpression, false);
 				}
+			} else if (dischargeSlot.isSetPricingBasis()) {
+				dischargePriceCalculator = getSalesPriceCalculatorForExpression(dischargeSlot.getPricingBasis(), true);
 			} else {
-
-				final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-				dynamicContract.setPriceExpression(priceExpression);
-
-				final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
-				if (transformer == null) {
-					throw new IllegalStateException("No Price Parameters transformer registered for  " + dynamicContract.eClass().getName());
-				}
-				final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(null, dynamicContract);
-				if (calculator == null) {
-					throw new IllegalStateException("Unable to transform contract");
-				}
-
-				dischargePriceCalculator = calculator;
+				dischargePriceCalculator = null;
 			}
 		} else if (dischargeSlot instanceof final SpotSlot spotSlot) {
 			final SpotMarket market = spotSlot.getMarket();
@@ -1783,6 +1769,25 @@ public class LNGScenarioTransformer {
 		}
 		return discharge;
 	}
+	
+	private ISalesPriceCalculator getSalesPriceCalculatorForExpression(final String priceExpression, final boolean isBasis) {
+		final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		if (isBasis) {
+			dynamicContract.setPricingBasis(priceExpression);
+		} else {
+			dynamicContract.setPriceExpression(priceExpression);
+		}
+
+		final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
+		if (transformer == null) {
+			throw new IllegalStateException("No Price Parameters transformer registered for  " + dynamicContract.eClass().getName());
+		}
+		final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(null, dynamicContract);
+		if (calculator == null) {
+			throw new IllegalStateException("Unable to transform contract");
+		}
+		return calculator;
+	}
 
 	@NonNull
 	private ILoadOption createLoadOption(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
@@ -1797,33 +1802,27 @@ public class LNGScenarioTransformer {
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
-		if (loadSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(loadSlot)) {
+		if ((loadSlot.isSetPriceExpression() || loadSlot.isSetPricingBasis())  && SlotContractParamsHelper.isSlotExpressionUsed(loadSlot)) {
 
-			final String priceExpression = loadSlot.getPriceExpression();
-			if ("??".equals(priceExpression)) {
-				loadPriceCalculator = new ChangeablePriceCalculator();
-			} else if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
-				if (portfolioBreakevenFlag) {
-					loadPriceCalculator = new PortfolioBreakEvenLoadPriceCalculator();
+			if (loadSlot.isSetPriceExpression()) {
+				final String priceExpression = loadSlot.getPriceExpression();
+				if ("??".equals(priceExpression)) {
+					loadPriceCalculator = new ChangeablePriceCalculator();
+				} else if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
+					if (portfolioBreakevenFlag) {
+						loadPriceCalculator = new PortfolioBreakEvenLoadPriceCalculator();
+					} else {
+						loadPriceCalculator = new BreakEvenLoadPriceCalculator();
+					}
 				} else {
-					loadPriceCalculator = new BreakEvenLoadPriceCalculator();
+
+					loadPriceCalculator = getPurchasePriceCalculatorForExpression(priceExpression, false);
 				}
+			} else if (loadSlot.isSetPricingBasis()) {
+				loadPriceCalculator = getPurchasePriceCalculatorForExpression(loadSlot.getPricingBasis(), true);
 			} else {
-
-				final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-				dynamicContract.setPriceExpression(priceExpression);
-
-				final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
-				if (transformer == null) {
-					throw new IllegalStateException("No Price Parameters transformer registered for  " + dynamicContract.eClass().getName());
-				}
-				final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(null, dynamicContract);
-				if (calculator == null) {
-					throw new IllegalStateException("Unable to transform contract");
-				}
-
-				loadPriceCalculator = calculator;
-
+				loadPriceCalculator = null;
+			}
 //				final ICurve curve;
 //				IIntegerIntervalCurve priceIntervals;
 //				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
@@ -1849,7 +1848,7 @@ public class LNGScenarioTransformer {
 //				loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 //				injector.injectMembers(loadPriceCalculator);
 
-			}
+			
 
 		} else if (loadSlot instanceof final SpotSlot spotSlot) {
 			final SpotMarket market = spotSlot.getMarket();
@@ -1979,6 +1978,25 @@ public class LNGScenarioTransformer {
 			}
 		}
 		return load;
+	}
+
+	private ILoadPriceCalculator getPurchasePriceCalculatorForExpression(final String priceExpression, final boolean isBasis) {
+		final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
+		if (isBasis) {
+			dynamicContract.setPricingBasis(priceExpression);
+		} else {
+			dynamicContract.setPriceExpression(priceExpression);
+		}
+
+		final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
+		if (transformer == null) {
+			throw new IllegalStateException("No Price Parameters transformer registered for  " + dynamicContract.eClass().getName());
+		}
+		final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(null, dynamicContract);
+		if (calculator == null) {
+			throw new IllegalStateException("Unable to transform contract");
+		}
+		return calculator;
 	}
 
 	private void registerSpotMarketSlot(final ModelEntityMap modelEntityMap, final Slot<?> modelSlot, final IPortSlot portSlot) {

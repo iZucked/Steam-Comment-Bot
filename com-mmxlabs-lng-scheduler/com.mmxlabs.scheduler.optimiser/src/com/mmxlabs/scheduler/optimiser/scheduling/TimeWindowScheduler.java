@@ -42,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IAllowedPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -129,10 +130,15 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		// Construct new bookings data object
 		final CurrentBookingData data = new CurrentBookingData();
 
+		final IAllowedPanamaBookingsProvider allowedBookingsProvider = sequences.getProviders().getProvider(IAllowedPanamaBookingsProvider.class);
 		if (useCanalBasedWindowTrimming) {
-			for (final var entrance : this.panamaSlotsProvider.getAllBookings().keySet()) {
-				for (final var booking : this.panamaSlotsProvider.getAllBookings().get(entrance)) {
-					data.addBooking(booking);
+			if (allowedBookingsProvider != null) {
+				allowedBookingsProvider.getAllowedPanamaBookings().forEach(x -> data.addBooking(x));
+			} else {
+				for (final var entrance : this.panamaSlotsProvider.getAllBookings().keySet()) {
+					for (final var booking : this.panamaSlotsProvider.getAllBookings().get(entrance)) {
+						data.addBooking(booking);
+					}
 				}
 			}
 		}

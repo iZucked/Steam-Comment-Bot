@@ -65,6 +65,9 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			addNotesPropertyDescriptor(object);
 			addStalePropertyDescriptor(object);
 			addPricingBasisPropertyDescriptor(object);
+			addFromBUPropertyDescriptor(object);
+			addToBUPropertyDescriptor(object);
+			addCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -323,8 +326,74 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_TransferRecord_pricingBasis_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecord_pricingBasis_feature", "_UI_TransferRecord_type"),
+				 getString("_UI_TransferRecord_pricingBasis_description"),
 				 TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the From BU feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFromBUPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferRecord_fromBU_feature"),
+				 getString("_UI_TransferRecord_fromBU_description"),
+				 TransfersPackage.Literals.TRANSFER_RECORD__FROM_BU,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the To BU feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addToBUPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferRecord_toBU_feature"),
+				 getString("_UI_TransferRecord_toBU_description"),
+				 TransfersPackage.Literals.TRANSFER_RECORD__TO_BU,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_TransferRecord_code_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_TransferRecord_code_feature", "_UI_TransferRecord_type"),
+				 TransfersPackage.Literals.TRANSFER_RECORD__CODE,
 				 true,
 				 false,
 				 false,
@@ -380,6 +449,7 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			case TransfersPackage.TRANSFER_RECORD__NOTES:
 			case TransfersPackage.TRANSFER_RECORD__STALE:
 			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
+			case TransfersPackage.TRANSFER_RECORD__CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

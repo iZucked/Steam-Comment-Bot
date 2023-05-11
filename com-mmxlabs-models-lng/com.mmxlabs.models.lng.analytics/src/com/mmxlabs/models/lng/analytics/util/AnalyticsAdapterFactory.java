@@ -73,8 +73,8 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AnalyticsSwitch<@Nullable Adapter> modelSwitch =
-		new AnalyticsSwitch<@Nullable Adapter>() {
+	protected AnalyticsSwitch<Adapter> modelSwitch =
+		new AnalyticsSwitch<Adapter>() {
 			@Override
 			public Adapter caseAnalyticsModel(AnalyticsModel object) {
 				return createAnalyticsModelAdapter();
@@ -374,6 +374,54 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSwapValueMatrixResultSet(SwapValueMatrixResultSet object) {
 				return createSwapValueMatrixResultSetAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityModel(MarketabilityModel object) {
+				return createMarketabilityModelAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityRow(MarketabilityRow object) {
+				return createMarketabilityRowAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityResult(MarketabilityResult object) {
+				return createMarketabilityResultAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityResultContainer(MarketabilityResultContainer object) {
+				return createMarketabilityResultContainerAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityEvent(MarketabilityEvent object) {
+				return createMarketabilityEventAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityAssignableElement(MarketabilityAssignableElement object) {
+				return createMarketabilityAssignableElementAdapter();
+			}
+			@Override
+			public Adapter caseMarketabilityEndEvent(MarketabilityEndEvent object) {
+				return createMarketabilityEndEventAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixParameters(SwapValueMatrixParameters object) {
+				return createSwapValueMatrixParametersAdapter();
+			}
+			@Override
+			public Adapter caseRange(Range object) {
+				return createRangeAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixCargoResult(SwapValueMatrixCargoResult object) {
+				return createSwapValueMatrixCargoResultAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixShippedCargoResult(SwapValueMatrixShippedCargoResult object) {
+				return createSwapValueMatrixShippedCargoResultAdapter();
+			}
+			@Override
+			public Adapter caseSwapValueMatrixNonShippedCargoResult(SwapValueMatrixNonShippedCargoResult object) {
+				return createSwapValueMatrixNonShippedCargoResultAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -814,6 +862,132 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityResultContainer <em>Marketability Result Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResultContainer
+	 * @generated
+	 */
+	public Adapter createMarketabilityResultContainerAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityEvent <em>Marketability Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityEvent
+	 * @generated
+	 */
+	public Adapter createMarketabilityEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement <em>Marketability Assignable Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityAssignableElement
+	 * @generated
+	 */
+	public Adapter createMarketabilityAssignableElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityEndEvent <em>Marketability End Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityEndEvent
+	 * @generated
+	 */
+	public Adapter createMarketabilityEndEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters <em>Swap Value Matrix Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixParameters
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.Range <em>Range</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.Range
+	 * @generated
+	 */
+	public Adapter createRangeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult <em>Swap Value Matrix Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixCargoResult
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixCargoResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult <em>Swap Value Matrix Shipped Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixShippedCargoResult
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixShippedCargoResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult <em>Swap Value Matrix Non Shipped Cargo Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SwapValueMatrixNonShippedCargoResult
+	 * @generated
+	 */
+	public Adapter createSwapValueMatrixNonShippedCargoResultAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -1118,6 +1292,48 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createViabilityModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityModel <em>Marketability Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityModel
+	 * @generated
+	 */
+	public Adapter createMarketabilityModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityRow <em>Marketability Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityRow
+	 * @generated
+	 */
+	public Adapter createMarketabilityRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.MarketabilityResult <em>Marketability Result</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.MarketabilityResult
+	 * @generated
+	 */
+	public Adapter createMarketabilityResultAdapter() {
 		return null;
 	}
 

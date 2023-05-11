@@ -236,6 +236,12 @@
            referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
      </valueProvider>
      <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotBusinessUnitValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotBusinessUnitValueProviderFactory"
+           ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+           referenceEClass="com.mmxlabs.models.lng.commercial.BusinessUnit">
+     </valueProvider>
+     <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
            id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory_VesselCharter"
            referenceEClass="com.mmxlabs.models.lng.cargo.VesselCharter">
@@ -601,6 +607,14 @@
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VolumeTierContractCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.VolumeTierContractCommandProvider">
     </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider">
+    </ModelCommandProvider>
     <!--<ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider">
@@ -668,12 +682,5 @@
             plugin.xml="risk.plugin.xml">
       </PluginXMLEnablement>
    </extension>
-   
-    <extension point="com.mmxlabs.models.common.modelcommandprovider">
-    	<ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider">
-    	</ModelCommandProvider>
-    </extension>
 
 </plugin>
