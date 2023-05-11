@@ -4,11 +4,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.label.AsDecimalGenerator;
 import org.eclipse.nebula.widgets.ganttchart.label.EEventLabelAlignment;
@@ -28,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
+@NonNullByDefault
 public interface IScheduleLabelAlignmentMapFactory {
 
 	default List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> buildShowDaysLabelAlignmentMaps() {
@@ -40,12 +43,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 				
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.CENTRE;
 				}
 				
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					return textGenerator.generateText(event);
 				}
 			});
@@ -63,12 +66,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.LEFT;
 				}
 
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						if (!j.isLaden()) {
@@ -81,8 +84,8 @@ public interface IScheduleLabelAlignmentMapFactory {
 							}
 						} else {
 							if (j.getPreviousEvent() instanceof final SlotVisit sv) {
-								final @NonNull StringBuilder sb = new StringBuilder();
-								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
+								final StringBuilder sb = new StringBuilder();
+								final String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
 								if (!firstPart.isBlank()) {
 									sb.append(firstPart);
 									sb.append(" ");
@@ -101,12 +104,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.RIGHT;
 				}
 
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						if (!j.isLaden()) {
@@ -123,8 +126,8 @@ public interface IScheduleLabelAlignmentMapFactory {
 								next = next.getNextEvent();
 							}
 							if (next instanceof final SlotVisit sv) {
-								final @NonNull StringBuilder sb = new StringBuilder();
-								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
+								final StringBuilder sb = new StringBuilder();
+								final String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
 								if (!firstPart.isBlank()) {
 									sb.append(firstPart);
 									sb.append(" ");
@@ -147,12 +150,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.LEFT;
 				}
 
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						if (!j.isLaden()) {
@@ -165,8 +168,8 @@ public interface IScheduleLabelAlignmentMapFactory {
 							}
 						} else {
 							if (j.getPreviousEvent() instanceof final SlotVisit sv) {
-								final @NonNull StringBuilder sb = new StringBuilder();
-								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
+								final StringBuilder sb = new StringBuilder();
+								final String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
 								if (!firstPart.isBlank()) {
 									sb.append(firstPart);
 									sb.append(" ");
@@ -187,12 +190,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.RIGHT;
 				}
 
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						if (!j.isLaden()) {
@@ -209,8 +212,8 @@ public interface IScheduleLabelAlignmentMapFactory {
 								next = next.getNextEvent();
 							}
 							if (next instanceof final SlotVisit sv) {
-								final @NonNull StringBuilder sb = new StringBuilder();
-								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
+								final StringBuilder sb = new StringBuilder();
+								final String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
 								if (!firstPart.isBlank()) {
 									sb.append(firstPart);
 									sb.append(" ");
@@ -235,12 +238,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.LEFT;
 				}
 
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						if (!j.isLaden()) {
@@ -253,7 +256,7 @@ public interface IScheduleLabelAlignmentMapFactory {
 							}
 						} else {
 							if (j.getPreviousEvent() instanceof final SlotVisit sv) {
-								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
+								final String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getPort);
 								if (!firstPart.isBlank()) {
 									return firstPart;
 								}
@@ -266,12 +269,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.RIGHT;
 				}
 
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						if (!j.isLaden()) {
@@ -288,7 +291,7 @@ public interface IScheduleLabelAlignmentMapFactory {
 								next = next.getNextEvent();
 							}
 							if (next instanceof final SlotVisit sv) {
-								final @NonNull String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
+								final String firstPart = getCpOrPort(sv.getSlotAllocation().getSlot().getSlotOrDelegateCounterparty(), j::getDestination);
 								if (!firstPart.isBlank()) {
 									return firstPart;
 								}
@@ -312,12 +315,12 @@ public interface IScheduleLabelAlignmentMapFactory {
 			alignment.add(new IEventTextPropertiesGenerator() {
 
 				@Override
-				public @NonNull EEventLabelAlignment getAlignment() {
+				public EEventLabelAlignment getAlignment() {
 					return EEventLabelAlignment.CENTRE;
 				}
 
 				@Override
-				public @NonNull String generateText(final @NonNull GanttEvent event) {
+				public String generateText(final GanttEvent event) {
 					final Object object = event.getData();
 					if (object instanceof Journey j) {
 						final RouteOption routeOption = j.getRouteOption();
@@ -335,7 +338,7 @@ public interface IScheduleLabelAlignmentMapFactory {
 				.toList();
 	}
 	
-	public static @NonNull String getCpOrPort(final String counterparty, final @NonNull Supplier<Port> portProvider) {
+	public static String getCpOrPort(final String counterparty, final Supplier<Port> portProvider) {
 		if (counterparty == null || counterparty.isBlank()) {
 			final Port port = portProvider.get();
 			if (port != null) {
