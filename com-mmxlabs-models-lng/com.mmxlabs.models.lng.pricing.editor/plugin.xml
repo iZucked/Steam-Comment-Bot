@@ -345,7 +345,7 @@
           class="com.mmxlabs.models.lng.pricing.ui.views.CooldownCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.CooldownCostsView"
           name="Cooldown Costs"
-          icon="icons:/icons/16x16/table.png"
+          icon="icons:/16/report"
           restorable="true">
     </view>
     <view
@@ -353,7 +353,7 @@
           class="com.mmxlabs.models.lng.pricing.ui.views.PortCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.PortCostsView"
           name="Port Costs"
-          icon="icons:/icons/16x16/table.png"
+          icon="icons:/16/report"
           restorable="true">
     </view>
     <view
@@ -361,7 +361,7 @@
           class="com.mmxlabs.models.lng.pricing.ui.views.CanalCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.CanalCostsView"
           name="Canal Costs"
-          icon="icons:/icons/16x16/table.png"
+          icon="icons:/16/report"
           restorable="true">
     </view>
  </extension>

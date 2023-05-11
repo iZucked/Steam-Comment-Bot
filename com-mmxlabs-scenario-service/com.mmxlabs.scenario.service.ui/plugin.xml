@@ -170,7 +170,7 @@
       </image>
       <image
             commandId="com.mmxlabs.scenario.service.ui.lock"
-            icon="icons/commands/lock.gif">
+            icon="icons:/12/lock_12">
       </image>
    </extension>
    <extension

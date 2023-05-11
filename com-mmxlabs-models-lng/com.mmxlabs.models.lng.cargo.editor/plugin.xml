@@ -653,6 +653,7 @@
       <view
             category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.models.lng.cargo.editor.editors.routeslots.RouteOptionsEditorView"
+            icon="icons:/16/report"
             id="com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView"
             name="Panama Bookings"
             restorable="true">

@@ -139,6 +139,7 @@
     <view
           category="com.mmxlabs.lngdataserver.views.dataserver"
           class="com.mmxlabs.models.lng.port.editor.views.PortView"
+          icon="icons:/16/report"
           id="com.mmxlabs.models.lng.port.editor.views.PortView"
           name="Ports">
     </view>

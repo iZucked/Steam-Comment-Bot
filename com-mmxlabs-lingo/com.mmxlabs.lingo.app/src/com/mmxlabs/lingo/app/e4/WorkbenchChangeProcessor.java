@@ -57,7 +57,8 @@ public class WorkbenchChangeProcessor {
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.analytics.editor/icons/sandbox.png", "icons:/16/sandbox");
 		iconMapping.put("platform:/plugin/com.mmxlabs.models.lng.nominations.editor/icons/cview16/ihigh_obj.gif", "icons:/16/nominations");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.ui/icons/risk.png", "icons:/24/risk");
-		
+		iconMapping.put("platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_flow_view.gif", "icons:/16/report");
+		iconMapping.put("icons:/icons/legacy/16x16/exec_flow_view.gif", "icons:/16/report");
 		
 		
 		mapIcons(application, iconMapping);
@@ -69,6 +70,29 @@ public class WorkbenchChangeProcessor {
 		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", "icons:/16/PNLDetails");
 		setElementIcon(application, "com.mmxlabs.models.lng.nominations.editor.NominationSpecsView", "icons:/16/NominationSpecifications");
 		setElementIcon(application, "com.mmxlabs.models.lng.transfers.editor.views.TransferRecordsView", "icons:/16/transfer");
+		setElementIcon(application, "com.mmxlabs.lingo.reports.views.standard.InventoryReport", "icons:/16/inventory");
+		
+		setElementIcon(application, "com.mmxlabs.models.lng.cargo.editor.risk.DealSetTableEditorView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.cargo.editor.risk.CargoSelectionTableEditorView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.lingo.reports.pricesensitivity.PriceSensitivityReport", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.pricing.editor.CooldownCostsView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.pricing.editor.PortCostsView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.pricing.editor.CanalCostsView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.port.editor.views.PortView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.lngdataserver.browser.ui.DataBrowser", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.pricing.editor.SettledPricesView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.pricing.editor.HolidayCalendarsView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.pricing.editor.PricingCalendarsView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.models.lng.actuals.editor.ActualsEditorView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.EndHeelReportView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", "icons:/16/report");
+		setElementIcon(application, "com.mmxlabs.shiplingo.platform.reports.views.ExposureDetailReportView", "icons:/16/report");
 		
 		// Change to new part ID
 		forEach(application, "com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView",
