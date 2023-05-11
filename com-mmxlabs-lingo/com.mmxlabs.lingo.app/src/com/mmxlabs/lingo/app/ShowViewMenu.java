@@ -7,12 +7,10 @@ package com.mmxlabs.lingo.app;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +26,9 @@ import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.descriptor.basic.MPartDescriptor;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.ContributionItem;
@@ -41,6 +41,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IPluginContribution;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPage;
@@ -49,10 +51,14 @@ import org.eclipse.ui.activities.WorkbenchActivityHelper;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
+import org.eclipse.ui.internal.PerspectiveExtensionReader;
 import org.eclipse.ui.internal.WorkbenchMessages;
+import org.eclipse.ui.internal.WorkbenchPage;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.WorkbenchWindow;
+import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
 import org.eclipse.ui.internal.intro.IIntroConstants;
+import org.eclipse.ui.internal.registry.PerspectiveDescriptor;
 import org.eclipse.ui.internal.registry.ViewDescriptor;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
@@ -83,6 +89,7 @@ public class ShowViewMenu extends ContributionItem {
 
 	// Part ids to always ignore
 	private static final Set<String> IGNORED = Sets.newHashSet(IIntroConstants.INTRO_VIEW_ID);
+	private static final Set<String> ALWAYS = Sets.newHashSet("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView");
 
 	public static final String SHOW_VIEW_ID = "com.mmxlabs.rcp.common.openview";
 
@@ -103,7 +110,7 @@ public class ShowViewMenu extends ContributionItem {
 	private final Action showDlgAction;
 
 	// Maps pages to a list of opened views
-	private final Map<IWorkbenchPage, List<String>> openedViews = new HashMap<>();
+	// private final Map<IWorkbenchPage, List<String>> openedViews = new HashMap<>();
 
 	private MenuManager menuManager;
 
@@ -115,6 +122,7 @@ public class ShowViewMenu extends ContributionItem {
 
 	private final EModelService eModelService;
 	private final MApplication eApplication;
+	private final EPartService ePartService;
 
 	/**
 	 * Creates a Show View menu.
@@ -147,6 +155,7 @@ public class ShowViewMenu extends ContributionItem {
 
 		eApplication = window.getService(MApplication.class);
 		eModelService = window.getService(EModelService.class);
+		ePartService = window.getService(EPartService.class);
 
 		final ParameterizedCommand cmd = getCommand(commandService, makeFast);
 
@@ -202,17 +211,43 @@ public class ShowViewMenu extends ContributionItem {
 		if (page.getPerspective() == null) {
 			return;
 		}
-		// String[] perspectiveShortcuts = page.getPerspective().getShortcuts();
-		// String[] perspectiveShortcuts = page.getPerspectiveShortcuts();
-		// var desc = page.getPerspective();
-		// String id2 = desc.getId();
-		// window.getWorkbench().getPerspectiveRegistry().revertPerspective(null);
-		// Get visible actions from perspective
-		List<String> viewIds = Arrays.asList(page.getShowViewShortcuts());
+		// Construct the sub-set of views we are interested in.
+		// Add views we always want
+		final Set<String> viewIds = new HashSet<>(ALWAYS);
 
-		// add all open views
-		viewIds = addOpenedViews(page, viewIds);
+		// Add the views based on the perspective.
+		// We don't use the following as this is the persisted state rather the hard-coded state.
 
+		// viewIds.addAll(Arrays.asList(page.getShowViewShortcuts()));
+
+		// Instead, use this snippet from page.resetPerspective() to create a new model element and then read the shortcuts from it.
+		{
+			final MPerspective dummyPerspective = eModelService.createModelElement(MPerspective.class);
+			dummyPerspective.setElementId(page.getPerspective().getId());
+			final IPerspectiveDescriptor desc = page.getPerspective();
+			final IPerspectiveFactory factory = ((PerspectiveDescriptor) desc).createFactory();
+
+			// The initial perspective factory definition
+			final ModeledPageLayout modelLayout = new ModeledPageLayout(((WorkbenchPage) page).getWindowModel(), eModelService, ePartService, dummyPerspective, desc, (WorkbenchPage) page, false);
+			factory.createInitialLayout(modelLayout);
+
+			// Then add in any perspective extensions
+			final PerspectiveExtensionReader reader = new PerspectiveExtensionReader();
+			reader.extendLayout(window.getExtensionTracker(), desc.getId(), modelLayout);
+
+			// Finally the perspective shortcuts are tags in the format prefix:viewid
+			dummyPerspective.getTags()
+					.stream() //
+					.filter(t -> t.startsWith(ModeledPageLayout.SHOW_VIEW_TAG)) //
+					.map(t -> t.substring(ModeledPageLayout.SHOW_VIEW_TAG.length())) //
+					.forEach(viewIds::add);
+		}
+		//
+		// // add all open views
+		// viewIds = addOpenedViews(page, viewIds);
+		for (var viewRef : page.getViewReferences()) {
+			viewIds.add(viewRef.getId());
+		}
 		// Add all user and team reports.
 		{
 			final IViewRegistry reg = WorkbenchPlugin.getDefault().getViewRegistry();
@@ -225,14 +260,12 @@ public class ShowViewMenu extends ContributionItem {
 			}
 		}
 
-		// Next from the collection of id's, find the category and put the info in a grouped map
 		// Filter out views we are not interested in.
+		viewIds.removeAll(IGNORED);
+
+		// Next from the collection of id's, find the category and put the info in a grouped map
 		final Map<String, List<CommandContributionItemParameter>> m = new HashMap<>();
-		for (final Iterator<String> i = viewIds.iterator(); i.hasNext();) {
-			final String id = i.next();
-			if (IGNORED.contains(id)) {
-				continue;
-			}
+		for (final String id : viewIds) {
 			getItem(id, m);
 		}
 
@@ -411,26 +444,26 @@ public class ShowViewMenu extends ContributionItem {
 		return true;
 	}
 
-	private List<String> addOpenedViews(final IWorkbenchPage page, final List<String> actions) {
-		final List<String> views = getParts(page);
-		final List<String> result = new ArrayList<>(views.size() + actions.size());
-
-		for (final String element : actions) {
-			if (!result.contains(element)) {
-				result.add(element);
-			}
-		}
-		for (final String element : views) {
-			if (!result.contains(element)) {
-				result.add(element);
-			}
-		}
-		return result;
-	}
-
-	private List<String> getParts(final IWorkbenchPage page) {
-		return openedViews.computeIfAbsent(page, k -> new LinkedList<>());
-	}
+	// private List<String> addOpenedViews(final IWorkbenchPage page, final List<String> actions) {
+	// final List<String> views = getParts(page);
+	// final List<String> result = new ArrayList<>(views.size() + actions.size());
+	//
+	// for (final String element : actions) {
+	// if (!result.contains(element)) {
+	// result.add(element);
+	// }
+	// }
+	// for (final String element : views) {
+	// if (!result.contains(element)) {
+	// result.add(element);
+	// }
+	// }
+	// return result;
+	// }
+	//
+	// private List<String> getParts(final IWorkbenchPage page) {
+	// return openedViews.computeIfAbsent(page, k -> new LinkedList<>());
+	// }
 
 	@Override
 	public void fill(final Menu menu, int index) {
