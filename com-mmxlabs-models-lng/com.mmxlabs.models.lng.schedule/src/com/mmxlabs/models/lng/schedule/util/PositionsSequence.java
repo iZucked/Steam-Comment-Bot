@@ -31,17 +31,19 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class PositionsSequence {
+	
+	public static final String OTHER_GROUP_DESCRIPTION = "Other";
 
 	private static final SlotAllocationPredicateProvider SLOT_ALLOCATION_PREDICATE_PROVIDER = new SlotAllocationPredicateProvider();
 	private static final OpenSlotAllocationPredicateProvider OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER = new OpenSlotAllocationPredicateProvider();
 
 	private final List<Object> elements;
-	private final String lbl;
+	private final String description;
 	private final Schedule schedule;
 	private final boolean isBuy;
 
-	public PositionsSequence(final String lbl, final boolean isBuy, final Schedule schedule, final List<Object> elements) {
-		this.lbl = lbl;
+	public PositionsSequence(final String description, final boolean isBuy, final Schedule schedule, final List<Object> elements) {
+		this.description = description;
 		this.isBuy = isBuy;
 		this.elements = elements;
 		this.schedule = schedule;
@@ -49,11 +51,24 @@ public class PositionsSequence {
 
 	@Override
 	public @NonNull String toString() {
-		return lbl;
+		final String side = isBuy ? "Buy" : "Sell";
+		return (description == null || description.isBlank()) ? side : side + " - " + description;
+	}
+	
+	public String getDescription() {
+		return description;
 	}
 
 	public List<?> getElements() {
 		return elements;
+	}
+
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public boolean isBuy() {
+		return isBuy;
 	}
 
 	public static List<PositionsSequence> makeBuySellSequences(final Schedule schedule) {
@@ -67,19 +82,11 @@ public class PositionsSequence {
 		if (addOtherGroup) {
 			slotAllocationPredicates.add(sa -> slotAllocationPredicates.stream().noneMatch(p -> p.test(sa)));
 			openSlotAllocationPredicates.add(sa -> openSlotAllocationPredicates.stream().noneMatch(p -> p.test(sa)));
-			descriptions.add("Other");
+			descriptions.add(OTHER_GROUP_DESCRIPTION);
 		}
 		return makeSequencesFromExtraPredicates(schedule, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap);
 	}
 	
-	public Schedule getSchedule() {
-		return schedule;
-	}
-
-	public boolean isBuy() {
-		return isBuy;
-	}
-
 	private static List<PositionsSequence> makeSequencesFromExtraPredicates(final Schedule schedule, List<Predicate<SlotAllocation>> extraSlotAllocationPredicates, List<Predicate<OpenSlotAllocation>> extraOpenSlotAllocationPredicates, List<String> descriptions,
 			boolean allowOverlap) {
 		assert extraSlotAllocationPredicates.size() == descriptions.size() && extraOpenSlotAllocationPredicates.size() == descriptions.size();
@@ -87,13 +94,13 @@ public class PositionsSequence {
 
 		Set<Object> seen = allowOverlap ? new HashSet<>() : null;
 		for (int i = 0; i < descriptions.size(); i++) {
-			positionsSequences.add(makeSequence(schedule, " - " + descriptions.get(i), true, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen));
-			positionsSequences.add(makeSequence(schedule, " - " + descriptions.get(i), false, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen));
+			positionsSequences.add(makeSequence(schedule, descriptions.get(i), true, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen));
+			positionsSequences.add(makeSequence(schedule, descriptions.get(i), false, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen));
 		}
 
 		return positionsSequences;
 	}
-
+	
 	private static PositionsSequence makeSequence(final Schedule schedule, boolean isBuy) {
 		return makeSequence(schedule, "", isBuy, x -> true, x -> true, null);
 	}
@@ -107,7 +114,7 @@ public class PositionsSequence {
 		collectDatesForCargoAllocations(collectedDates, schedule, filterSlotAllocation.and(extraFilterSlotAllocation), seen);
 
 		final List<Object> elements = createElementList(collectedDates);
-		return new PositionsSequence((isBuy ? "Buy" : "Sell") + description, isBuy, schedule, elements);
+		return new PositionsSequence(description, isBuy, schedule, elements);
 	}
 
 	private static void collectDatesForOpenSlotAllocations(final Map<LocalDate, List<Object>> collectedDates, final Schedule schedule, Predicate<OpenSlotAllocation> extraFilter, Set<Object> seen) {

@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.reports.scheduleview.views;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -15,8 +14,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
@@ -127,8 +126,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 					// result.add(inventory);
 					// }
 
-					// List<@NonNull PositionsSequence> seqs = PositionsSequence.makeBuySellSequences(schedule).stream().filter(p -> !p.getElements().isEmpty()).toList();
-					List<PositionsSequence> seqs = getPositionSequences(schedule);
+					List<@NonNull PositionsSequence> seqs = getPositionSequences(schedule).stream().filter(Predicate.not(p -> p.getDescription().equals("") && p.getElements().isEmpty())).toList();
 					result.addAll(seqs);
 				}
 //				result.addAll(Schedule)
@@ -262,12 +260,10 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	}
 
 	private List<PositionsSequence> getPositionSequences(Schedule schedule) {
-		// get the settings from preferences instead, below is a test string
-		String portGroupsString = "alpha1, alpha2";
-
-		Set<String> portGroupNames = Arrays.stream(portGroupsString.split(", ")).collect(Collectors.toSet());
-		List<PortGroup> portGroups = ScenarioModelUtil.findReferenceModel(schedule).getPortModel().getPortGroups().stream().filter(pg -> portGroupNames.contains(pg.getName())).toList();
-		return PositionsSequence.makeBuySellSequencesFromPortGroups(schedule, portGroups, true, true);
+		// get the settings from preferences instead, below is a test predicate
+		Predicate<PortGroup> startsWithPartition = pg -> pg.getName().startsWith("partition");
+		List<PortGroup> portGroups = ScenarioModelUtil.findReferenceModel(schedule).getPortModel().getPortGroups().stream().filter(startsWithPartition).toList();
+		return (portGroups.isEmpty()) ? PositionsSequence.makeBuySellSequences(schedule) : PositionsSequence.makeBuySellSequencesFromPortGroups(schedule, portGroups, true, false);
 	}
 
 	@Override
