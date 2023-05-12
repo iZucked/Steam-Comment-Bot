@@ -686,7 +686,9 @@ public class LNGSchedulerJobUtils {
 				}
 			});
 		});
-		
+		if (cc.isEmpty()) {
+			return IdentityCommand.INSTANCE;
+		}
 		return cc;
 	}
 
