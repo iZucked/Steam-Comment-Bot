@@ -8149,7 +8149,18 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			if (event.getGanttSection() != null && !event.getGanttSection().isVisible()) {
 				continue;
 			}
-			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
+			final SpecialDrawModes sdm = event.getSpecialDrawMode();
+			final Rectangle r;
+			if (sdm != SpecialDrawModes.NONE) {
+				final int width = 3;
+				final int height = event.getBounds().height + 2;
+				final int x = event.getX() - 1;
+				final int y = event.getY();
+				r = new Rectangle(x, y, width, height);
+			} else {
+				r = new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight());
+			}
+			if (isInside(me.x, me.y, r)) {
 				showTooltip(event, me);
 				return;
 			}
