@@ -3459,7 +3459,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		// draw the text if any, o
 		if (ge.getParsedString() != null) {
 			_paintManager.drawEventLabel(this, _settings, ge, gc, this.textGeneratorCollection, xStart, yDrawPos, xEventWidth);
-//			_paintManager.drawEventString(this, _settings, _colorManager, ge, gc, ge.getParsedString(), _threeDee, xStart, yDrawPos, xEventWidth, bounds);
+			// _paintManager.drawEventString(this, _settings, _colorManager, ge, gc, ge.getParsedString(), _threeDee, xStart, yDrawPos, xEventWidth, bounds);
 		}
 
 		// reset font
@@ -5848,7 +5848,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		for (int i = 0; i < _ganttEvents.size(); i++) {
 			final GanttEvent event = _ganttEvents.get(i);
 
-			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
+			if (isInside(me.x, me.y, getBoundingRectangle(event))) {
 				for (int j = 0; j < _eventListeners.size(); j++) {
 					_eventListeners.get(j).eventDoubleClicked(event, me);
 				}
@@ -6021,7 +6021,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				continue;
 			}
 
-			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
+			if (isInside(me.x, me.y, getBoundingRectangle(event))) {
 				final GC gc = new GC(this);
 
 				// if it's a scope and menu is allowed, we can finish right here
@@ -8149,22 +8149,24 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			if (event.getGanttSection() != null && !event.getGanttSection().isVisible()) {
 				continue;
 			}
-			final SpecialDrawModes sdm = event.getSpecialDrawMode();
-			final Rectangle r;
-			if (sdm != SpecialDrawModes.NONE) {
-				final int width = 3;
-				final int height = event.getBounds().height + 2;
-				final int x = event.getX() - 1;
-				final int y = event.getY();
-				r = new Rectangle(x, y, width, height);
-			} else {
-				r = new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight());
-			}
-			if (isInside(me.x, me.y, r)) {
+
+			if (isInside(me.x, me.y, getBoundingRectangle(event))) {
 				showTooltip(event, me);
 				return;
 			}
 		}
+	}
+
+	private Rectangle getBoundingRectangle(final GanttEvent event) {
+		final SpecialDrawModes sdm = event.getSpecialDrawMode();
+		if (sdm != SpecialDrawModes.NONE) {
+			final int width = 3;
+			final int height = event.getBounds().height + 2;
+			final int x = event.getX() - 1;
+			final int y = event.getY();
+			return new Rectangle(x, y, width, height);
+		}
+		return new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight());
 	}
 
 	private void showTooltip(final GanttEvent event, final MouseEvent me) {
