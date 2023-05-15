@@ -84,7 +84,7 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("Pilot Light")
 	public Long pilotLightEmission;
 	
-	@ColumnName("Total CO2e kg")
+	@ColumnName("Total CO2e t")
 	public Long totalEmission;
 	
 	@JsonIgnore

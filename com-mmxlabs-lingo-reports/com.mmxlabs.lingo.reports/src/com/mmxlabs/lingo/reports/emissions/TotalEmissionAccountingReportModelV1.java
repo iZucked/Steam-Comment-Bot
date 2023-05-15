@@ -86,7 +86,7 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("Shipping")
 	public Long shippingEmission;
 	
-	@ColumnName("Total CO2e kg")
+	@ColumnName("Total CO2e t")
 	public Long totalEmission;
 	
 	@JsonIgnore

@@ -1289,21 +1289,21 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVessel_BaseFuelEmissionRate(),
 		   source,
 		   new String[] {
-			   "unit", "kg/MT",
+			   "unit", "t/MT",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getVessel_BogEmissionRate(),
 		   source,
 		   new String[] {
-			   "unit", "kg/m\u00b3",
+			   "unit", "t/m\u00b3",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getVessel_PilotLightEmissionRate(),
 		   source,
 		   new String[] {
-			   "unit", "kg/MT",
+			   "unit", "t/MT",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation

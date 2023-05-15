@@ -1135,7 +1135,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #setBaseFuelEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BaseFuelEmissionRate()
 	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='####0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/MT' formatString='####0.###'"
 	 * @generated
 	 */
 	double getBaseFuelEmissionRate();
@@ -1185,7 +1185,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #setBogEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BogEmissionRate()
 	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/m\263' formatString='####0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/m\263' formatString='####0.###'"
 	 * @generated
 	 */
 	double getBogEmissionRate();
@@ -1235,7 +1235,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #setPilotLightEmissionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_PilotLightEmissionRate()
 	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/MT' formatString='####0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/MT' formatString='####0.###'"
 	 * @generated
 	 */
 	double getPilotLightEmissionRate();

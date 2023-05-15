@@ -69,19 +69,19 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="liquefactionEmissionRate"
         lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="kg/mmBtu"/>
+        <details key="unit" value="t/mmBtu"/>
         <details key="formatString" value="####0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="upstreamEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="kg/mmBtu"/>
+        <details key="unit" value="t/mmBtu"/>
         <details key="formatString" value="####0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pipelineEmissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="kg/mmBtu"/>
+        <details key="unit" value="t/mmBtu"/>
         <details key="formatString" value="####0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
