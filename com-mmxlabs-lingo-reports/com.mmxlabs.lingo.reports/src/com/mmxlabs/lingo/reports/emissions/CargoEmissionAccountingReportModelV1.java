@@ -55,6 +55,9 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("ID")
 	public String eventID;
 	
+	@ColumnName("CH4E slip kg/mmBtu")
+	public Double methaneSlip;
+	
 	@ColumnName("Start")
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
@@ -166,7 +169,13 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 		return group;
 	}
 	
+	@Override
 	public void setGroup(int group) {
 		this.group = group;
+	}
+	
+	@Override
+	public double getMethaneSlip() {
+		return this.methaneSlip;
 	}
 }

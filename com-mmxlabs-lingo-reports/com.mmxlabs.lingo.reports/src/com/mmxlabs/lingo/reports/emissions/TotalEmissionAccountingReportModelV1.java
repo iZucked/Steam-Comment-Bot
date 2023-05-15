@@ -89,6 +89,9 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("Total CO2e t")
 	public Long totalEmission;
 	
+	@ColumnName("CH4E slip kg/mmBtu")
+	public Double methaneSlip;
+	
 	@JsonIgnore
 	@LingoIgnore
 	public double upstreamEmissionRate;
@@ -182,5 +185,10 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	
 	public void setGroup(int group) {
 		this.group = group;
+	}
+
+	@Override
+	public double getMethaneSlip() {
+		return this.methaneSlip;
 	}
 }

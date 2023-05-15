@@ -60,6 +60,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.bogEmission = 0L;
 					model.pilotLightEmission = 0L;
 					model.totalEmission = 0L;
+					model.methaneSlip = 0D;
 
 					if (e instanceof FuelUsage fu) {
 						processUsage(model, fu.getFuels());

@@ -85,6 +85,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.bogEmission = 0L;
 		model.pilotLightEmission = 0L;
 		model.totalEmission = 0L;
+		model.methaneSlip = 0D;
 		LocalDateTime eventStart = null;
 		
 		for (final Event e : cargoAllocation.getEvents()) {

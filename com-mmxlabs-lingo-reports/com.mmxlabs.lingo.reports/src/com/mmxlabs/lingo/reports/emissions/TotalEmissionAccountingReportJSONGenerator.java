@@ -77,6 +77,7 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		model.shippingEmission = 0L;
 		model.upstreamEmission = 0L;
 		model.totalEmission = 0L;
+		model.methaneSlip = 0D;
 		final LoadSlot loadSlot = ScheduleModelUtils.getLoadSlot(cargoAllocation);
 		int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
 
