@@ -55,9 +55,6 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("ID")
 	public String eventID;
 	
-	@ColumnName("CH4E slip kg/mmBtu")
-	public Double methaneSlip;
-	
 	@ColumnName("Start")
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
@@ -86,6 +83,9 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	
 	@ColumnName("Pilot Light")
 	public Long pilotLightEmission;
+	
+	@ColumnName("CH4E slip kg/mmBtu")
+	public Double methaneSlip;
 	
 	@ColumnName("Total CO2e t")
 	public Long totalEmission;

@@ -80,11 +80,11 @@ public class VesselEmissionAccountingReportModelV1 implements IVesselEmission, I
 	@ColumnName("Pilot Light")
 	public Long pilotLightEmission;
 	
-	@ColumnName("Total CO2e t")
-	public Long totalEmission;
-	
 	@ColumnName("CH4E slip kg/mmBtu")
 	public Double methaneSlip;
+	
+	@ColumnName("Total CO2e t")
+	public Long totalEmission;
 	
 	@JsonIgnore
 	@LingoIgnore
