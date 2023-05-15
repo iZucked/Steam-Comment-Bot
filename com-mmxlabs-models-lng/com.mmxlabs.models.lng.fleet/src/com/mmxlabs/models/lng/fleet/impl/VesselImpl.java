@@ -944,14 +944,33 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean pilotLightEmissionRateESet;
 
 	/**
-	 * The cached value of the '{@link #getMethaneSlip() <em>Methane Slip</em>}' attribute list.
+	 * The default value of the '{@link #getMethaneSlip() <em>Methane Slip</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getMethaneSlip()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Double> methaneSlip;
+	protected static final double METHANE_SLIP_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMethaneSlip() <em>Methane Slip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMethaneSlip()
+	 * @generated
+	 * @ordered
+	 */
+	protected double methaneSlip = METHANE_SLIP_EDEFAULT;
+
+	/**
+	 * This is true if the Methane Slip attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean methaneSlipESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2400,11 +2419,48 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public EList<Double> getMethaneSlip() {
-		if (methaneSlip == null) {
-			methaneSlip = new EDataTypeUniqueEList<Double>(Double.class, this, FleetPackage.VESSEL__METHANE_SLIP);
-		}
+	public double getMethaneSlip() {
 		return methaneSlip;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMethaneSlip(double newMethaneSlip) {
+		double oldMethaneSlip = methaneSlip;
+		methaneSlip = newMethaneSlip;
+		boolean oldMethaneSlipESet = methaneSlipESet;
+		methaneSlipESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__METHANE_SLIP, oldMethaneSlip, methaneSlip, !oldMethaneSlipESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMethaneSlip() {
+		double oldMethaneSlip = methaneSlip;
+		boolean oldMethaneSlipESet = methaneSlipESet;
+		methaneSlip = METHANE_SLIP_EDEFAULT;
+		methaneSlipESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__METHANE_SLIP, oldMethaneSlip, METHANE_SLIP_EDEFAULT, oldMethaneSlipESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMethaneSlip() {
+		return methaneSlipESet;
 	}
 
 	/**
@@ -3085,8 +3141,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				setPilotLightEmissionRate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL__METHANE_SLIP:
-				getMethaneSlip().clear();
-				getMethaneSlip().addAll((Collection<? extends Double>)newValue);
+				setMethaneSlip((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -3217,7 +3272,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				unsetPilotLightEmissionRate();
 				return;
 			case FleetPackage.VESSEL__METHANE_SLIP:
-				getMethaneSlip().clear();
+				unsetMethaneSlip();
 				return;
 		}
 		super.eUnset(featureID);
@@ -3309,7 +3364,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				return isSetPilotLightEmissionRate();
 			case FleetPackage.VESSEL__METHANE_SLIP:
-				return methaneSlip != null && !methaneSlip.isEmpty();
+				return isSetMethaneSlip();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3384,7 +3439,7 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(", pilotLightEmissionRate: ");
 		if (pilotLightEmissionRateESet) result.append(pilotLightEmissionRate); else result.append("<unset>");
 		result.append(", methaneSlip: ");
-		result.append(methaneSlip);
+		if (methaneSlipESet) result.append(methaneSlip); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

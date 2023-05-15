@@ -1277,17 +1277,54 @@ public interface Vessel extends AVesselSet<Vessel> {
 	boolean isSetPilotLightEmissionRate();
 
 	/**
-	 * Returns the value of the '<em><b>Methane Slip</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.Double}.
+	 * Returns the value of the '<em><b>Methane Slip</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Methane Slip</em>' attribute list.
+	 * @return the value of the '<em>Methane Slip</em>' attribute.
+	 * @see #isSetMethaneSlip()
+	 * @see #unsetMethaneSlip()
+	 * @see #setMethaneSlip(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MethaneSlip()
-	 * @model default="0.0"
+	 * @model unique="false" unsettable="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
-	EList<Double> getMethaneSlip();
+	double getMethaneSlip();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Methane Slip</em>' attribute.
+	 * @see #isSetMethaneSlip()
+	 * @see #unsetMethaneSlip()
+	 * @see #getMethaneSlip()
+	 * @generated
+	 */
+	void setMethaneSlip(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMethaneSlip()
+	 * @see #getMethaneSlip()
+	 * @see #setMethaneSlip(double)
+	 * @generated
+	 */
+	void unsetMethaneSlip();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Methane Slip</em>' attribute is set.
+	 * @see #unsetMethaneSlip()
+	 * @see #getMethaneSlip()
+	 * @see #setMethaneSlip(double)
+	 * @generated
+	 */
+	boolean isSetMethaneSlip();
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.

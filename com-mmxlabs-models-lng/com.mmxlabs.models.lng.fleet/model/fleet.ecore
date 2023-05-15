@@ -220,8 +220,8 @@
         <details key="formatString" value="####0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methaneSlip" upperBound="-1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0.0">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methaneSlip" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="t/mmBtu"/>
         <details key="formatString" value="####0.###"/>
