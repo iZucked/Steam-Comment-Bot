@@ -58,6 +58,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -1274,6 +1275,19 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	boolean isSetPilotLightEmissionRate();
+
+	/**
+	 * Returns the value of the '<em><b>Methane Slip</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.Double}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Methane Slip</em>' attribute list.
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MethaneSlip()
+	 * @model default="0.0"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
+	 * @generated
+	 */
+	EList<Double> getMethaneSlip();
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.

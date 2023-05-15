@@ -78,6 +78,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMethaneSlip <em>Methane Slip</em>}</li>
  * </ul>
  *
  * @generated
@@ -941,6 +942,16 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean pilotLightEmissionRateESet;
+
+	/**
+	 * The cached value of the '{@link #getMethaneSlip() <em>Methane Slip</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMethaneSlip()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Double> methaneSlip;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2389,6 +2400,19 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
+	public EList<Double> getMethaneSlip() {
+		if (methaneSlip == null) {
+			methaneSlip = new EDataTypeUniqueEList<Double>(Double.class, this, FleetPackage.VESSEL__METHANE_SLIP);
+		}
+		return methaneSlip;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getScnt() {
 		return scnt;
 	}
@@ -2926,6 +2950,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getBogEmissionRate();
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				return getPilotLightEmissionRate();
+			case FleetPackage.VESSEL__METHANE_SLIP:
+				return getMethaneSlip();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3058,6 +3084,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				setPilotLightEmissionRate((Double)newValue);
 				return;
+			case FleetPackage.VESSEL__METHANE_SLIP:
+				getMethaneSlip().clear();
+				getMethaneSlip().addAll((Collection<? extends Double>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3186,6 +3216,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				unsetPilotLightEmissionRate();
 				return;
+			case FleetPackage.VESSEL__METHANE_SLIP:
+				getMethaneSlip().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3275,6 +3308,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetBogEmissionRate();
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				return isSetPilotLightEmissionRate();
+			case FleetPackage.VESSEL__METHANE_SLIP:
+				return methaneSlip != null && !methaneSlip.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3348,6 +3383,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (bogEmissionRateESet) result.append(bogEmissionRate); else result.append("<unset>");
 		result.append(", pilotLightEmissionRate: ");
 		if (pilotLightEmissionRateESet) result.append(pilotLightEmissionRate); else result.append("<unset>");
+		result.append(", methaneSlip: ");
+		result.append(methaneSlip);
 		result.append(')');
 		return result.toString();
 	}

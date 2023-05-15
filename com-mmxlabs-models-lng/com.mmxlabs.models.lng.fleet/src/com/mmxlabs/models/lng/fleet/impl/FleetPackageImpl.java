@@ -487,6 +487,16 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getVessel_MethaneSlip() {
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(39);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getVessel_Scnt() {
 		return (EAttribute)vesselEClass.getEStructuralFeatures().get(6);
 	}
@@ -942,6 +952,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselEClass, VESSEL__BASE_FUEL_EMISSION_RATE);
 		createEAttribute(vesselEClass, VESSEL__BOG_EMISSION_RATE);
 		createEAttribute(vesselEClass, VESSEL__PILOT_LIGHT_EMISSION_RATE);
+		createEAttribute(vesselEClass, VESSEL__METHANE_SLIP);
 
 		vesselGroupEClass = createEClass(VESSEL_GROUP);
 		createEReference(vesselGroupEClass, VESSEL_GROUP__VESSELS);
@@ -1072,6 +1083,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVessel_BaseFuelEmissionRate(), ecorePackage.getEDouble(), "baseFuelEmissionRate", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_BogEmissionRate(), ecorePackage.getEDouble(), "bogEmissionRate", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_PilotLightEmissionRate(), ecorePackage.getEDouble(), "pilotLightEmissionRate", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_MethaneSlip(), ecorePackage.getEDouble(), "methaneSlip", "0.0", 0, -1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(vesselEClass, ecorePackage.getEString(), "getShortenedName", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1304,6 +1316,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source,
 		   new String[] {
 			   "unit", "t/MT",
+			   "formatString", "####0.###"
+		   });
+		addAnnotation
+		  (getVessel_MethaneSlip(),
+		   source,
+		   new String[] {
+			   "unit", "kg/mmBtu",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation
