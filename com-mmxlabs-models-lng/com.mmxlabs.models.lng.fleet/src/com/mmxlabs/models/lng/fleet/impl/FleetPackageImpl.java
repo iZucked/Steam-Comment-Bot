@@ -1322,7 +1322,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVessel_MethaneSlip(),
 		   source,
 		   new String[] {
-			   "unit", "kg/mmBtu",
+			   "unit", "t/mmBtu",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation

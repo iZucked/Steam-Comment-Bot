@@ -1284,7 +1284,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @return the value of the '<em>Methane Slip</em>' attribute list.
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MethaneSlip()
 	 * @model default="0.0"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kg/mmBtu' formatString='####0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
 	EList<Double> getMethaneSlip();

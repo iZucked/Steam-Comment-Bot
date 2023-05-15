@@ -86,7 +86,7 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("Shipping")
 	public Long shippingEmission;
 	
-	@ColumnName("CH4E slip kg/mmBtu")
+	@ColumnName("CH4E slip t/mmBtu")
 	public Double methaneSlip;
 	
 	@ColumnName("Total CO2e t")
