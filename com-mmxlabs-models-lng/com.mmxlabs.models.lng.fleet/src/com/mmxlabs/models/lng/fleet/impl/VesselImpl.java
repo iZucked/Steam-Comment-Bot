@@ -79,6 +79,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMethaneSlipRate <em>Methane Slip Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getDeadWeight <em>Dead Weight</em>}</li>
  * </ul>
  *
  * @generated
@@ -971,6 +972,35 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean methaneSlipRateESet;
+
+	/**
+	 * The default value of the '{@link #getDeadWeight() <em>Dead Weight</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDeadWeight()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DEAD_WEIGHT_EDEFAULT = 86655;
+
+	/**
+	 * The cached value of the '{@link #getDeadWeight() <em>Dead Weight</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDeadWeight()
+	 * @generated
+	 * @ordered
+	 */
+	protected int deadWeight = DEAD_WEIGHT_EDEFAULT;
+
+	/**
+	 * This is true if the Dead Weight attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean deadWeightESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2482,6 +2512,56 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
+	public int getDeadWeight() {
+		return deadWeight;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDeadWeight(int newDeadWeight) {
+		int oldDeadWeight = deadWeight;
+		deadWeight = newDeadWeight;
+		boolean oldDeadWeightESet = deadWeightESet;
+		deadWeightESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__DEAD_WEIGHT, oldDeadWeight, deadWeight, !oldDeadWeightESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetDeadWeight() {
+		int oldDeadWeight = deadWeight;
+		boolean oldDeadWeightESet = deadWeightESet;
+		deadWeight = DEAD_WEIGHT_EDEFAULT;
+		deadWeightESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__DEAD_WEIGHT, oldDeadWeight, DEAD_WEIGHT_EDEFAULT, oldDeadWeightESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetDeadWeight() {
+		return deadWeightESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getScnt() {
 		return scnt;
 	}
@@ -3021,6 +3101,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getPilotLightEmissionRate();
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				return getMethaneSlipRate();
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				return getDeadWeight();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3156,6 +3238,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				setMethaneSlipRate((Double)newValue);
 				return;
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				setDeadWeight((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3287,6 +3372,9 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				unsetMethaneSlipRate();
 				return;
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				unsetDeadWeight();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3378,6 +3466,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetPilotLightEmissionRate();
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				return isSetMethaneSlipRate();
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				return isSetDeadWeight();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3453,6 +3543,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (pilotLightEmissionRateESet) result.append(pilotLightEmissionRate); else result.append("<unset>");
 		result.append(", methaneSlipRate: ");
 		if (methaneSlipRateESet) result.append(methaneSlipRate); else result.append("<unset>");
+		result.append(", deadWeight: ");
+		if (deadWeightESet) result.append(deadWeight); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

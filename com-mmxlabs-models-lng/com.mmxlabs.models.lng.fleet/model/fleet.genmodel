@@ -79,6 +79,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/bogEmissionRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/pilotLightEmissionRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/methaneSlipRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/deadWeight"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortenedName"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateInaccessiblePorts"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateInaccessibleRoutes"/>

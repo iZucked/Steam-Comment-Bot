@@ -613,13 +613,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__METHANE_SLIP_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 39;
 
 	/**
+	 * The feature id for the '<em><b>Dead Weight</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__DEAD_WEIGHT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 40;
+
+	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 40;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 41;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -1268,6 +1277,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVessel_MethaneSlipRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getDeadWeight <em>Dead Weight</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dead Weight</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getDeadWeight()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_DeadWeight();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}'.
@@ -1976,6 +1996,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL__METHANE_SLIP_RATE = eINSTANCE.getVessel_MethaneSlipRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Dead Weight</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__DEAD_WEIGHT = eINSTANCE.getVessel_DeadWeight();
 
 		/**
 		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.

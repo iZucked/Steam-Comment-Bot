@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getDeadWeight <em>Dead Weight</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -1325,6 +1326,57 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	boolean isSetMethaneSlipRate();
+
+	/**
+	 * Returns the value of the '<em><b>Dead Weight</b></em>' attribute.
+	 * The default value is <code>"86655"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Dead Weight</em>' attribute.
+	 * @see #isSetDeadWeight()
+	 * @see #unsetDeadWeight()
+	 * @see #setDeadWeight(int)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_DeadWeight()
+	 * @model default="86655" unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t' formatString='###,##0'"
+	 * @generated
+	 */
+	int getDeadWeight();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getDeadWeight <em>Dead Weight</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Dead Weight</em>' attribute.
+	 * @see #isSetDeadWeight()
+	 * @see #unsetDeadWeight()
+	 * @see #getDeadWeight()
+	 * @generated
+	 */
+	void setDeadWeight(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getDeadWeight <em>Dead Weight</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetDeadWeight()
+	 * @see #getDeadWeight()
+	 * @see #setDeadWeight(int)
+	 * @generated
+	 */
+	void unsetDeadWeight();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getDeadWeight <em>Dead Weight</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Dead Weight</em>' attribute is set.
+	 * @see #unsetDeadWeight()
+	 * @see #getDeadWeight()
+	 * @see #setDeadWeight(int)
+	 * @generated
+	 */
+	boolean isSetDeadWeight();
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.

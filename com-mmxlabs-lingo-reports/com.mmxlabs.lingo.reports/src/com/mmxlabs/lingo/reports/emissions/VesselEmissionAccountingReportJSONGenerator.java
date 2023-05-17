@@ -120,11 +120,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						continue; 
 					}
 					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
-					int capacity = vessel.getCapacity();
-					if (capacity == 0) {
-						capacity = 10000;
-					}
-					model.attainedCII = model.totalEmission * journeyDistance * capacity;
+					model.attainedCII = model.totalEmission * journeyDistance * vessel.getDeadWeight();
 					models.add(model);
 				}
 			}

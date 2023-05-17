@@ -88,6 +88,7 @@ public class VesselItemProvider
 			addBogEmissionRatePropertyDescriptor(object);
 			addPilotLightEmissionRatePropertyDescriptor(object);
 			addMethaneSlipRatePropertyDescriptor(object);
+			addDeadWeightPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -775,6 +776,28 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Dead Weight feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDeadWeightPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_deadWeight_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_deadWeight_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__DEAD_WEIGHT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Scnt feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1028,6 +1051,7 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
