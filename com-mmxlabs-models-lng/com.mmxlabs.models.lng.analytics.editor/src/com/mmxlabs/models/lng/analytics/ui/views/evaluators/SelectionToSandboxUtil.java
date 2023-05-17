@@ -79,7 +79,7 @@ public class SelectionToSandboxUtil {
 
 			LOOP_SELECTION: while (itr.hasNext()) {
 				Object obj = itr.next();
-				
+
 				if (obj instanceof CargoModelRowTransformer.RowData rowData) {
 					// Note - not strictly correct, row may contain independent an load and discharge
 					if (rowData.getCargo() != null) {
@@ -89,13 +89,12 @@ public class SelectionToSandboxUtil {
 					} else {
 						obj = rowData.getDischargeSlot();
 					}
-					
+
 				}
-				
+
 				if (obj instanceof EObject eObject) {
 					scenarios.add(findScenarioModel(eObject));
 				}
-				
 
 				// Check for schedule model objects before looking at underlying objects. E.g. sandbox from a result.
 				if (obj instanceof Cargo || obj instanceof Slot) {
@@ -147,7 +146,7 @@ public class SelectionToSandboxUtil {
 				LOOP_SELECTION: while (itr.hasNext()) {
 
 					Object obj = itr.next();
-					
+
 					if (obj instanceof CargoModelRowTransformer.RowData rowData) {
 						// Note - not strictly correct, row may contain independent an load and discharge
 						if (rowData.getCargo() != null) {
@@ -157,9 +156,9 @@ public class SelectionToSandboxUtil {
 						} else {
 							obj = rowData.getDischargeSlot();
 						}
-						
+
 					}
-					
+
 					// Check for schedule model objects before looking at underlying objects. E.g. sandbox from a result.
 					if (obj instanceof Cargo || obj instanceof Slot) {
 						objectsForPass2.add(obj);
@@ -220,13 +219,11 @@ public class SelectionToSandboxUtil {
 							final Sequence sequence = cargoAllocation.getSequence();
 							if (sequence != null) {
 								final VesselCharter vesselCharter = sequence.getVesselCharter();
+								final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 								if (vesselCharter != null) {
 									setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
-								} else {
-									final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-									if (charterInMarket != null) {
-										setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, sequence.getSpotIndex());
-									}
+								} else if (charterInMarket != null) {
+									setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, sequence.getSpotIndex());
 								}
 							}
 						}
@@ -276,12 +273,9 @@ public class SelectionToSandboxUtil {
 						// Get vessel allocation
 						final VesselAssignmentType sequence = cargo.getVesselAssignmentType();
 						if (sequence instanceof VesselCharter vesselCharter) {
-							if (vesselCharter != null) {
-								setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
-							} else if (sequence instanceof CharterInMarket) {
-								final CharterInMarket charterInMarket = (CharterInMarket) sequence;
-								setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, cargo.getSpotIndex());
-							}
+							setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
+						} else if (sequence instanceof CharterInMarket charterInMarket) {
+							setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, cargo.getSpotIndex());
 						}
 
 					} else if (slot != null) {
