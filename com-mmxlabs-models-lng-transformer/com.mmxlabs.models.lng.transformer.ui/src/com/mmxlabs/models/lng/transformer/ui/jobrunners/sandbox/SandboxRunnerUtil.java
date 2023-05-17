@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSpecification;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.Mapper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
@@ -222,17 +221,9 @@ public class SandboxRunnerUtil {
 	}
 
 	private static ScheduleSpecification createBaseScheduleSpecification(final IScenarioDataProvider scenarioDataProvider, final OptionAnalysisModel model, final IMapperClass mapper) {
-		ScheduleSpecification baseScheduleSpecification;
 
-		if (model.getBaseCase().isKeepExistingScenario()) {
-			final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(scenarioDataProvider, mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase(), model.getMode() == SandboxModeConstants.MODE_OPTIONISE);
-		} else {
-
-			final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase(), model.getMode() == SandboxModeConstants.MODE_OPTIONISE);
-		}
-		return baseScheduleSpecification;
+		final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(scenarioDataProvider, mapper);
+		return builder.generate(model.getBaseCase(), model.getBaseCase().isKeepExistingScenario(), model.getMode() == SandboxModeConstants.MODE_OPTIONISE);
 	}
 
 	/**
