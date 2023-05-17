@@ -84,7 +84,7 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("Pilot Light")
 	public Long pilotLightEmission;
 	
-	@ColumnName("CH4e slip t")
+	@ColumnName("Methane Slip")
 	public Long methaneSlip;
 	
 	@ColumnName("Total CO2e t")
