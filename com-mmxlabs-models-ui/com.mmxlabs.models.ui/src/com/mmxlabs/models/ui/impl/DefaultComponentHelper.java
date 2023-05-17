@@ -252,7 +252,7 @@ public class DefaultComponentHelper implements IComponentHelper {
 		// Reverse the list so that we can move the editors to the head of the list
 		Collections.reverse(orderedFeatures);
 		for (final var feature : orderedFeatures) {
-			// There may be multiple editors for the same featire, so gather them here...
+			// There may be multiple editors for the same feature, so gather them here...
 			final List<IInlineEditor> editorsForFeature = new LinkedList<>();
 			for (final var editor : editors) {
 				if (editor.getFeature() == feature) {
