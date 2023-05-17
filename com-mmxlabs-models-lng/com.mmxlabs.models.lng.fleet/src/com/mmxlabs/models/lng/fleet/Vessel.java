@@ -58,7 +58,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -1277,54 +1277,54 @@ public interface Vessel extends AVesselSet<Vessel> {
 	boolean isSetPilotLightEmissionRate();
 
 	/**
-	 * Returns the value of the '<em><b>Methane Slip</b></em>' attribute.
+	 * Returns the value of the '<em><b>Methane Slip Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Methane Slip</em>' attribute.
-	 * @see #isSetMethaneSlip()
-	 * @see #unsetMethaneSlip()
-	 * @see #setMethaneSlip(double)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MethaneSlip()
+	 * @return the value of the '<em>Methane Slip Rate</em>' attribute.
+	 * @see #isSetMethaneSlipRate()
+	 * @see #unsetMethaneSlipRate()
+	 * @see #setMethaneSlipRate(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MethaneSlipRate()
 	 * @model unique="false" unsettable="true"
 	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
-	double getMethaneSlip();
+	double getMethaneSlipRate();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Methane Slip</em>' attribute.
-	 * @see #isSetMethaneSlip()
-	 * @see #unsetMethaneSlip()
-	 * @see #getMethaneSlip()
+	 * @param value the new value of the '<em>Methane Slip Rate</em>' attribute.
+	 * @see #isSetMethaneSlipRate()
+	 * @see #unsetMethaneSlipRate()
+	 * @see #getMethaneSlipRate()
 	 * @generated
 	 */
-	void setMethaneSlip(double value);
+	void setMethaneSlipRate(double value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetMethaneSlip()
-	 * @see #getMethaneSlip()
-	 * @see #setMethaneSlip(double)
+	 * @see #isSetMethaneSlipRate()
+	 * @see #getMethaneSlipRate()
+	 * @see #setMethaneSlipRate(double)
 	 * @generated
 	 */
-	void unsetMethaneSlip();
+	void unsetMethaneSlipRate();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Methane Slip</em>' attribute is set.
-	 * @see #unsetMethaneSlip()
-	 * @see #getMethaneSlip()
-	 * @see #setMethaneSlip(double)
+	 * @return whether the value of the '<em>Methane Slip Rate</em>' attribute is set.
+	 * @see #unsetMethaneSlipRate()
+	 * @see #getMethaneSlipRate()
+	 * @see #setMethaneSlipRate(double)
 	 * @generated
 	 */
-	boolean isSetMethaneSlip();
+	boolean isSetMethaneSlipRate();
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.
@@ -1834,6 +1834,14 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	double getVesselOrDelegatePilotLightEmissionRate();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	double getVesselOrDelegateMethaneSlipEmissionRate();
 
 } // end of  Vessel
 

@@ -77,7 +77,7 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		model.shippingEmission = 0L;
 		model.upstreamEmission = 0L;
 		model.totalEmission = 0L;
-		model.methaneSlip = 0D;
+		model.methaneSlip = 0L;
 		final LoadSlot loadSlot = ScheduleModelUtils.getLoadSlot(cargoAllocation);
 		int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
 
@@ -119,6 +119,7 @@ public class TotalEmissionAccountingReportJSONGenerator {
 			model.baseFuelEmissionRate = EmissionsUtils.getBaseFuelEmissionRate(vessel);
 			model.bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
 			model.pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
+			model.methaneSlipRate = EmissionsUtils.getMethaneSlipEmissionRate(vessel);
 			for (final Event e : cargoAllocation.getEvents()) {
 				if (e instanceof FuelUsage fu) {
 					model.shippingEmission += EmissionsUtils.getBaseFuelEmission(model, fu.getFuels());
@@ -126,6 +127,9 @@ public class TotalEmissionAccountingReportJSONGenerator {
 					model.shippingEmission += EmissionsUtils.getPilotLightEmission(model, fu.getFuels());
 				}
 			}
+			slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
+				model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
+			});
 			model.totalEmission += model.shippingEmission;
 		}
 

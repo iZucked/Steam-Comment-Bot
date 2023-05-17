@@ -87,7 +87,7 @@ public class VesselItemProvider
 			addBaseFuelEmissionRatePropertyDescriptor(object);
 			addBogEmissionRatePropertyDescriptor(object);
 			addPilotLightEmissionRatePropertyDescriptor(object);
-			addMethaneSlipPropertyDescriptor(object);
+			addMethaneSlipRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -753,19 +753,19 @@ public class VesselItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Methane Slip feature.
+	 * This adds a property descriptor for the Methane Slip Rate feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMethaneSlipPropertyDescriptor(Object object) {
+	protected void addMethaneSlipRatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Vessel_methaneSlip_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_methaneSlip_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__METHANE_SLIP,
+				 getString("_UI_Vessel_methaneSlipRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_methaneSlipRate_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__METHANE_SLIP_RATE,
 				 true,
 				 false,
 				 false,
@@ -1027,7 +1027,7 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
 			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-			case FleetPackage.VESSEL__METHANE_SLIP:
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:

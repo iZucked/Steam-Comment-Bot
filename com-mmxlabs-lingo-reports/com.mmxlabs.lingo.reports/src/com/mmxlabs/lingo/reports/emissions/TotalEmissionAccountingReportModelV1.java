@@ -73,7 +73,6 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventEnd;
 	
-	
 	@ColumnName("Upstream")
 	public Long upstreamEmission;
 	
@@ -86,12 +85,16 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("Shipping")
 	public Long shippingEmission;
 	
-	@ColumnName("CH4E slip t/mmBtu")
-	public Double methaneSlip;
+	@ColumnName("CH4e slip")
+	public Long methaneSlip;
 	
 	@ColumnName("Total CO2e t")
 	public Long totalEmission;
 	
+	@JsonIgnore
+	@LingoIgnore
+	public double methaneSlipRate;
+
 	@JsonIgnore
 	@LingoIgnore
 	public double upstreamEmissionRate;

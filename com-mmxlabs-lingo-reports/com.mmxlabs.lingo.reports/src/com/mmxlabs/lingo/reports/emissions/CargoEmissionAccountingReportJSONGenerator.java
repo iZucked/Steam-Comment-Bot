@@ -81,11 +81,12 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.baseFuelEmissionRate = EmissionsUtils.getBaseFuelEmissionRate(vessel);
 		model.bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
 		model.pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
+		model.methaneSlipRate = EmissionsUtils.getMethaneSlipEmissionRate(vessel);
 		model.baseFuelEmission = 0L;
 		model.bogEmission = 0L;
 		model.pilotLightEmission = 0L;
 		model.totalEmission = 0L;
-		model.methaneSlip = 0D;
+		model.methaneSlip = 0L;
 		LocalDateTime eventStart = null;
 		
 		for (final Event e : cargoAllocation.getEvents()) {
@@ -98,6 +99,9 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				processUsage(model, fu.getFuels());
 			}
 		}
+		slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
+			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
+		});
 		model.eventStart = eventStart;
 		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
 		

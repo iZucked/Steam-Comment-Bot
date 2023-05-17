@@ -78,7 +78,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMethaneSlip <em>Methane Slip</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMethaneSlipRate <em>Methane Slip Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -944,33 +944,33 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean pilotLightEmissionRateESet;
 
 	/**
-	 * The default value of the '{@link #getMethaneSlip() <em>Methane Slip</em>}' attribute.
+	 * The default value of the '{@link #getMethaneSlipRate() <em>Methane Slip Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMethaneSlip()
+	 * @see #getMethaneSlipRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double METHANE_SLIP_EDEFAULT = 0.0;
+	protected static final double METHANE_SLIP_RATE_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getMethaneSlip() <em>Methane Slip</em>}' attribute.
+	 * The cached value of the '{@link #getMethaneSlipRate() <em>Methane Slip Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMethaneSlip()
+	 * @see #getMethaneSlipRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected double methaneSlip = METHANE_SLIP_EDEFAULT;
+	protected double methaneSlipRate = METHANE_SLIP_RATE_EDEFAULT;
 
 	/**
-	 * This is true if the Methane Slip attribute has been set.
+	 * This is true if the Methane Slip Rate attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean methaneSlipESet;
+	protected boolean methaneSlipRateESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -2065,6 +2065,19 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getVesselOrDelegateMethaneSlipEmissionRate() {
+		if (getReference() != null && !isSetMethaneSlipRate()) {
+			return getReference().getMethaneSlipRate();
+		}
+		return getMethaneSlipRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -2419,8 +2432,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public double getMethaneSlip() {
-		return methaneSlip;
+	public double getMethaneSlipRate() {
+		return methaneSlipRate;
 	}
 
 	/**
@@ -2429,13 +2442,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public void setMethaneSlip(double newMethaneSlip) {
-		double oldMethaneSlip = methaneSlip;
-		methaneSlip = newMethaneSlip;
-		boolean oldMethaneSlipESet = methaneSlipESet;
-		methaneSlipESet = true;
+	public void setMethaneSlipRate(double newMethaneSlipRate) {
+		double oldMethaneSlipRate = methaneSlipRate;
+		methaneSlipRate = newMethaneSlipRate;
+		boolean oldMethaneSlipRateESet = methaneSlipRateESet;
+		methaneSlipRateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__METHANE_SLIP, oldMethaneSlip, methaneSlip, !oldMethaneSlipESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__METHANE_SLIP_RATE, oldMethaneSlipRate, methaneSlipRate, !oldMethaneSlipRateESet));
 	}
 
 	/**
@@ -2444,13 +2457,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public void unsetMethaneSlip() {
-		double oldMethaneSlip = methaneSlip;
-		boolean oldMethaneSlipESet = methaneSlipESet;
-		methaneSlip = METHANE_SLIP_EDEFAULT;
-		methaneSlipESet = false;
+	public void unsetMethaneSlipRate() {
+		double oldMethaneSlipRate = methaneSlipRate;
+		boolean oldMethaneSlipRateESet = methaneSlipRateESet;
+		methaneSlipRate = METHANE_SLIP_RATE_EDEFAULT;
+		methaneSlipRateESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__METHANE_SLIP, oldMethaneSlip, METHANE_SLIP_EDEFAULT, oldMethaneSlipESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__METHANE_SLIP_RATE, oldMethaneSlipRate, METHANE_SLIP_RATE_EDEFAULT, oldMethaneSlipRateESet));
 	}
 
 	/**
@@ -2459,8 +2472,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public boolean isSetMethaneSlip() {
-		return methaneSlipESet;
+	public boolean isSetMethaneSlipRate() {
+		return methaneSlipRateESet;
 	}
 
 	/**
@@ -3006,8 +3019,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getBogEmissionRate();
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				return getPilotLightEmissionRate();
-			case FleetPackage.VESSEL__METHANE_SLIP:
-				return getMethaneSlip();
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				return getMethaneSlipRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3140,8 +3153,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				setPilotLightEmissionRate((Double)newValue);
 				return;
-			case FleetPackage.VESSEL__METHANE_SLIP:
-				setMethaneSlip((Double)newValue);
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				setMethaneSlipRate((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -3271,8 +3284,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				unsetPilotLightEmissionRate();
 				return;
-			case FleetPackage.VESSEL__METHANE_SLIP:
-				unsetMethaneSlip();
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				unsetMethaneSlipRate();
 				return;
 		}
 		super.eUnset(featureID);
@@ -3363,8 +3376,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isSetBogEmissionRate();
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 				return isSetPilotLightEmissionRate();
-			case FleetPackage.VESSEL__METHANE_SLIP:
-				return isSetMethaneSlip();
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				return isSetMethaneSlipRate();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3438,8 +3451,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		if (bogEmissionRateESet) result.append(bogEmissionRate); else result.append("<unset>");
 		result.append(", pilotLightEmissionRate: ");
 		if (pilotLightEmissionRateESet) result.append(pilotLightEmissionRate); else result.append("<unset>");
-		result.append(", methaneSlip: ");
-		if (methaneSlipESet) result.append(methaneSlip); else result.append("<unset>");
+		result.append(", methaneSlipRate: ");
+		if (methaneSlipRateESet) result.append(methaneSlipRate); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

@@ -39,6 +39,10 @@ public class EmissionsUtils {
 		return vessel.getVesselOrDelegatePilotLightEmissionRate();
 	}
 	
+	public static double getMethaneSlipEmissionRate(final @NonNull Vessel vessel) {
+		return vessel.getVesselOrDelegateMethaneSlipEmissionRate();
+	}
+	
 	public static long getBaseFuelEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
 		long result = 0L;
 		for (final FuelQuantity fq : fuelQuantity) {

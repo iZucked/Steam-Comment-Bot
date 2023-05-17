@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -44,6 +45,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 				final double baseFuelEmissionRate = EmissionsUtils.getBaseFuelEmissionRate(vessel);
 				final double bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
 				final double pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
+				final double methaneSlipEmissionRate = EmissionsUtils.getMethaneSlipEmissionRate(vessel);
 				for (final Event e : seq.getEvents()) {
 					final VesselEmissionAccountingReportModelV1 model = new VesselEmissionAccountingReportModelV1();
 					model.scenarioName = scenarioName;
@@ -53,6 +55,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.baseFuelEmissionRate = baseFuelEmissionRate;
 					model.bogEmissionRate = bogEmissionRate;
 					model.pilotLightEmissionRate = pilotLightEmissionRate;
+					model.methaneSlipRate = methaneSlipEmissionRate;
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
 
@@ -60,7 +63,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.bogEmission = 0L;
 					model.pilotLightEmission = 0L;
 					model.totalEmission = 0L;
-					model.methaneSlip = 0D;
+					model.methaneSlip = 0L;
 
 					if (e instanceof FuelUsage fu) {
 						processUsage(model, fu.getFuels());
@@ -76,6 +79,9 @@ public class VesselEmissionAccountingReportJSONGenerator {
 								if (slot.getCargo() != null) {
 									model.otherID = slot.getCargo().getUuid();
 								}
+							}
+							if (slot instanceof LoadSlot) {
+								model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 							}
 						}
 					} else if (e instanceof final StartEvent se) {

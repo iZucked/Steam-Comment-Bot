@@ -604,13 +604,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__PILOT_LIGHT_EMISSION_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 38;
 
 	/**
-	 * The feature id for the '<em><b>Methane Slip</b></em>' attribute.
+	 * The feature id for the '<em><b>Methane Slip Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__METHANE_SLIP = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 39;
+	int VESSEL__METHANE_SLIP_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 39;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -1259,15 +1259,15 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_PilotLightEmissionRate();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip <em>Methane Slip</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Methane Slip</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlip()
+	 * @return the meta object for the attribute '<em>Methane Slip Rate</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate()
 	 * @see #getVessel()
 	 * @generated
 	 */
-	EAttribute getVessel_MethaneSlip();
+	EAttribute getVessel_MethaneSlipRate();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}'.
@@ -1970,12 +1970,12 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__PILOT_LIGHT_EMISSION_RATE = eINSTANCE.getVessel_PilotLightEmissionRate();
 
 		/**
-		 * The meta object literal for the '<em><b>Methane Slip</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Methane Slip Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL__METHANE_SLIP = eINSTANCE.getVessel_MethaneSlip();
+		EAttribute VESSEL__METHANE_SLIP_RATE = eINSTANCE.getVessel_MethaneSlipRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.

@@ -84,8 +84,8 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@ColumnName("Pilot Light")
 	public Long pilotLightEmission;
 	
-	@ColumnName("CH4E slip t/mmBtu")
-	public Double methaneSlip;
+	@ColumnName("CH4e slip t")
+	public Long methaneSlip;
 	
 	@ColumnName("Total CO2e t")
 	public Long totalEmission;
@@ -99,6 +99,9 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@JsonIgnore
 	@LingoIgnore
 	public double pilotLightEmissionRate;
+	@JsonIgnore
+	@LingoIgnore
+	public double methaneSlipRate;
 	
 	@JsonIgnore
 	@Override
