@@ -64,6 +64,8 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.pilotLightEmission = 0L;
 					model.totalEmission = 0L;
 					model.methaneSlip = 0L;
+					model.attainedCII = 0L;
+					int journeyDistance = 0;
 
 					if (e instanceof FuelUsage fu) {
 						processUsage(model, fu.getFuels());
@@ -103,6 +105,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						if (j.getPreviousEvent() instanceof final SlotVisit sv && sv.getSlotAllocation() != null) {
 							model.otherID = sv.getSlotAllocation().getName();
 						}
+						journeyDistance = j.getDistance();
 					} else if (e instanceof final Idle i) {
 						if (i.isLaden()) {
 							model.eventID = "Laden Idle";
@@ -117,6 +120,11 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						continue; 
 					}
 					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
+					int capacity = vessel.getCapacity();
+					if (capacity == 0) {
+						capacity = 10000;
+					}
+					model.attainedCII = model.totalEmission * journeyDistance * capacity;
 					models.add(model);
 				}
 			}

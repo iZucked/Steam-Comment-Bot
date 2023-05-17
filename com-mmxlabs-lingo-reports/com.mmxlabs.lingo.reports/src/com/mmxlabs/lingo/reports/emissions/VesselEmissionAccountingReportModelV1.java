@@ -86,6 +86,9 @@ public class VesselEmissionAccountingReportModelV1 implements IVesselEmission, I
 	@ColumnName("Total CO2e t")
 	public Long totalEmission;
 	
+	@ColumnName("Attained CII")
+	public Long attainedCII;
+	
 	@JsonIgnore
 	@LingoIgnore
 	public double baseFuelEmissionRate;
