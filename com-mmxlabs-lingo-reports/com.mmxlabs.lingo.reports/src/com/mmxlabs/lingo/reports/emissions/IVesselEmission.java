@@ -9,5 +9,5 @@ public interface IVesselEmission {
 	double getBaseFuelEmissionRate();
 	double getBOGEmissionRate();
 	double getPilotLightEmissionRate();
-	double getMethaneSlip();
+	double getMethaneSlipRate();
 }

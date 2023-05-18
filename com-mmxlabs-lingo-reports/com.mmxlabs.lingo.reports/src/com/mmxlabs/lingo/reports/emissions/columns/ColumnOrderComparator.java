@@ -30,8 +30,8 @@ public class ColumnOrderComparator implements Comparator<Field> {
 		if (secondFieldColumnLevel == null) {
 			return 1;
 		}
-		final int firstLevel = firstFieldColumnLevel.level().getLevelValue();
-		final int secondLevel = secondFieldColumnLevel.level().getLevelValue();
+		final int firstLevel = firstFieldColumnLevel.value().getLevelValue();
+		final int secondLevel = secondFieldColumnLevel.value().getLevelValue();
 		return Integer.compare(firstLevel, secondLevel);
 	}
 	

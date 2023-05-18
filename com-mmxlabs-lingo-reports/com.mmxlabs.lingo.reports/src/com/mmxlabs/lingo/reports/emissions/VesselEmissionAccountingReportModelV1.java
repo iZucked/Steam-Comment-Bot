@@ -177,7 +177,7 @@ public class VesselEmissionAccountingReportModelV1 implements IVesselEmission, I
 	}
 	
 	@Override
-	public double getMethaneSlip() {
+	public double getMethaneSlipRate() {
 		return this.methaneSlip;
 	}
 }

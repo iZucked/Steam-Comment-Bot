@@ -178,7 +178,7 @@ public class CargoEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	}
 	
 	@Override
-	public double getMethaneSlip() {
+	public double getMethaneSlipRate() {
 		return this.methaneSlip;
 	}
 }

@@ -1,7 +1,3 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
- */
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.time.LocalDateTime;
@@ -12,24 +8,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoEquivalents;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
-import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 import com.mmxlabs.models.lng.schedule.Schedule;
 
-/**
- * Cargo emissions report data
- * YES it looks exactly the same as Vessel emissions report model
- * But it will most probably be changed
- */
-@SchemaVersion(1)
-public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IEmissionReportIDData {
+public class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission {
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -38,7 +27,7 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	
 	@JsonIgnore
 	@LingoIgnore
-	public boolean isPinned = false;
+	public boolean isPinnedFlag = false;
 	@JsonIgnore
 	@LingoIgnore
 	public Schedule schedule;
@@ -47,66 +36,92 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	public String otherID;
 	
 	@ColumnName("Scenario")
+	@ColumnOrderLevel(ColumnOrder.START)
 	public String scenarioName;
 	
 	@ColumnName("Vessel")
+	@ColumnOrderLevel(ColumnOrder.START)
 	public String vesselName;
 	
 	@ColumnName("ID")
+	@ColumnOrderLevel(ColumnOrder.START)
 	public String eventID;
 	
 	@ColumnName("Start")
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
-
+	@ColumnOrderLevel(ColumnOrder.START)
 	@ColumnSortOrder(value = 1)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventStart;
 	
 	@ColumnName("End")
+	@ColumnOrderLevel(ColumnOrder.START)
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
-
 	@ColumnSortOrder(value = 1)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventEnd;
 	
-	@ColumnName("Upstream")
-	public Long upstreamEmission;
-	
-	@ColumnName("Pipeline")
-	public Long pipelineEmission;
-	
-	@ColumnName("Liquefaction")
-	public Long liquefactionEmission;
-	
-	@ColumnName("Shipping")
-	public Long shippingEmission;
-	
 	@ColumnName("Methane Slip")
+	@ColumnOrderLevel(ColumnOrder.END)
 	public Long methaneSlip;
 	
 	@ColumnName("Total CO2e t")
+	@ColumnOrderLevel(ColumnOrder.END)
 	public Long totalEmission;
 	
 	@JsonIgnore
-	@LingoIgnore
-	public double methaneSlipRate;
+	@Override
+	public boolean isPinned() {
+		return this.isPinnedFlag;
+	}
+
+	@JsonIgnore
+	@Override
+	public Schedule getSchedule() {
+		return this.schedule;
+	}
+	
+	@JsonIgnore
+	@Override
+	public String getScenarioName() {
+		return scenarioName;
+	}
+	
+	@Override
+	public String getVesselName() {
+		return vesselName;
+	}
+
+	@Override
+	public String getEventID() {
+		return eventID;
+	}
+
+	@JsonIgnore
+	@Override
+	public String getOtherID() {
+		return otherID;
+	}
 
 	@JsonIgnore
 	@LingoIgnore
-	public double upstreamEmissionRate;
+	public int group = Integer.MAX_VALUE;
 	
 	@JsonIgnore
-	@LingoIgnore
-	public double pipelineEmissionRate;
+	@Override
+	public int getGroup() {
+		return group;
+	}
 	
-	@JsonIgnore
-	@LingoIgnore
-	public double liquefactionEmissionRate;
-	
+	@Override
+	public void setGroup(int group) {
+		this.group = group;
+	}
+
 	@JsonIgnore
 	@LingoIgnore
 	public double baseFuelEmissionRate;
@@ -116,7 +131,9 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	@JsonIgnore
 	@LingoIgnore
 	public double pilotLightEmissionRate;
-	
+	@JsonIgnore
+	@LingoIgnore
+	public double methaneSlipRate;
 	
 	@JsonIgnore
 	@Override
@@ -138,61 +155,7 @@ public class TotalEmissionAccountingReportModelV1 implements IVesselEmission, IE
 	
 	@JsonIgnore
 	@Override
-	public boolean isPinned() {
-		return this.isPinned;
-	}
-
-	@JsonIgnore
-	@Override
-	public Schedule getSchedule() {
-		return this.schedule;
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getScenarioName() {
-		return scenarioName;
-	}
-
-	@Override
-	public String getVesselName() {
-		return vesselName;
-	}
-
-	@Override
-	public String getEventID() {
-		return eventID;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getOtherID() {
-		return otherID;
-	}
-
-	public static void main(String args[]) throws Exception {
-
-		SchemaGenerator gen = new SchemaGenerator();
-		String json = gen.generateHubSchema(TotalEmissionAccountingReportModelV1.class, Mode.FULL);
-		System.out.println(json);
-	}
-	
-	@JsonIgnore
-	@LingoIgnore
-	public int group = Integer.MAX_VALUE;
-	
-	@JsonIgnore
-	@Override
-	public int getGroup() {
-		return group;
-	}
-	
-	public void setGroup(int group) {
-		this.group = group;
-	}
-
-	@Override
 	public double getMethaneSlipRate() {
-		return this.methaneSlip;
+		return methaneSlipRate;
 	}
 }
