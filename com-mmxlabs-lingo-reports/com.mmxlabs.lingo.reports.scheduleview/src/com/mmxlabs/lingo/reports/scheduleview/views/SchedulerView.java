@@ -228,6 +228,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			if (memento.getChild(SchedulerViewConstants.Highlight_) == null) {
 				memento.createChild(SchedulerViewConstants.Highlight_);
 			}
+			if (memento.getChild(SchedulerViewConstants.Partition_) == null) {
+				memento.createChild(SchedulerViewConstants.Partition_);
+			}
 
 			this.showNominalsByDefault = memento.getBoolean(SchedulerViewConstants.Show_Nominals);
 		}
@@ -245,6 +248,14 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
 		memento.putString(SchedulerViewConstants.SortMode, viewerComparator.getMode().toString());
 		memento.putString(SchedulerViewConstants.SortCategory, viewerComparator.getCategory().toString());
+		
+		// Only save the settings for providers where there are no errors
+		IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
+		for (var entry: contentProvider.enabledPositionsSequenceProviders.entrySet()) {
+			if (entry.getValue().isEmpty()) {
+				partitionSettings.putBoolean(entry.getKey(), true);
+			}
+		}
 
 		super.saveState(memento);
 	}
@@ -710,6 +721,21 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		};
 
 		viewer.setContentProvider(contentProvider);
+		
+		// Restore positions sequence (partition) settings
+		{
+			final IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
+			if (partitionSettings != null) {
+				for (final var ext : positionsSequenceProviderExtensions) {
+					ISchedulePositionsSequenceProvider provider = ext.createInstance();
+					if (partitionSettings.getBoolean(provider.getId()) == Boolean.TRUE) {
+						// Only restore if an error hasn't been found
+						contentProvider.enabledPositionsSequenceProviders.putIfAbsent(provider.getId(), Optional.empty());
+					}
+				}
+			}
+		}
+		
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, scenarioComparisonService);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
