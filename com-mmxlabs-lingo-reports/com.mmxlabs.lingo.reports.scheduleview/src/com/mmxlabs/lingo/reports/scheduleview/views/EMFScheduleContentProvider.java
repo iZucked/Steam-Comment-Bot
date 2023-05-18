@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
@@ -30,8 +30,9 @@ import org.eclipse.swt.SWT;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -70,9 +71,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	private final WeakHashMap<Slot<?>, SlotVisit> cachedElements = new WeakHashMap<>();
 	
-	@Inject
-	private Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
-	protected Set<String> enabledPositionsSequenceProviders = new HashSet<>();
+	protected Map<String, Optional<PositionsSequenceProviderException>> enabledPositionsSequenceProviders = new HashMap<>();
 	
 	protected boolean showNominalsByDefault = false;
 
@@ -83,9 +82,6 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public Object @Nullable [] getChildren(final Object parent) {
-
-		// Inject the extension points
-		Activator.getDefault().getInjector().injectMembers(this);
 
 		if (parent instanceof final Collection<?> collection) {
 			final List<Object> result = new ArrayList<>();
@@ -138,12 +134,8 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 					// result.add(inventory);
 					// }
 					
-					result.addAll(new BuySellSplit().provide(schedule));
-					if (positionsSequenceProviderExtensions.iterator().hasNext()) {
-						for (var ext: positionsSequenceProviderExtensions) {
-							result.addAll(ext.createInstance().provide(schedule));
-						}
-					}
+					result.addAll(getPositionsSequences(schedule));
+					
 					
 				}
 //				result.addAll(Schedule)
@@ -343,6 +335,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		cachedElements.clear();
+		enabledPositionsSequenceProviders.values().removeIf(v -> v.isPresent());
 	}
 
 	@Override
@@ -468,10 +461,16 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 		if (!showNominalsByDefault && resource instanceof final Sequence sequence) {
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
 		} else if (resource instanceof PositionsSequence ps) {
-			return enabledPositionsSequenceProviders.contains(ps.getProviderId()) || enabledPositionsSequenceProviders.isEmpty() && !ps.isPartition();
+			return isProviderEnabledWithNoError(ps.getProviderId()) || (enabledPositionsSequenceProviders.values().stream().noneMatch(Optional::isEmpty) && !ps.isPartition());
 		}
 		return true;
 	}
 	
+	public boolean isProviderEnabledWithNoError(String positionsSequenceProviderId) {
+		return enabledPositionsSequenceProviders.containsKey(positionsSequenceProviderId) && enabledPositionsSequenceProviders.get(positionsSequenceProviderId).isEmpty();
+	}
+	
 	public abstract IScenarioDataProvider getScenarioDataProviderFor(Object obj);
+	
+	public abstract List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule);
 }

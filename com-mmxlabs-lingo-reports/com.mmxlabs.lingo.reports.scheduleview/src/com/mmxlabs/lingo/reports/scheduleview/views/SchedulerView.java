@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -43,6 +44,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -68,6 +70,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -98,6 +101,7 @@ import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerView
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -518,7 +522,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 								}
 							} else if (d instanceof PositionsSequence ps) {
 								var cp = (EMFScheduleContentProvider) getContentProvider();
-								visible = cp.enabledPositionsSequenceProviders.contains(ps.getProviderId()) || cp.enabledPositionsSequenceProviders.isEmpty() && !ps.isPartition();
+								visible = cp.isProviderEnabledWithNoError(ps.getProviderId())
+										|| cp.enabledPositionsSequenceProviders.values().stream().noneMatch(Optional::isEmpty) && !ps.isPartition();
 							}
 
 							ganttSection.setVisible(visible);
@@ -540,7 +545,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							}
 						} else if (d instanceof final PositionsSequence ps) { 
 							var cp = (EMFScheduleContentProvider) getContentProvider();
-							visible = cp.enabledPositionsSequenceProviders.contains(ps.getProviderId()) || cp.enabledPositionsSequenceProviders.isEmpty() && !ps.isPartition();
+							visible = cp.isProviderEnabledWithNoError(ps.getProviderId()) || cp.enabledPositionsSequenceProviders.values().stream().noneMatch(Optional::isEmpty) && !ps.isPartition();
 						}
 
 						ganttSection.setVisible(visible);
@@ -677,6 +682,29 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 				}
 				return null;
+			}
+			
+			@Override
+			public final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
+				List<@NonNull PositionsSequence> result = new ArrayList<>();
+				
+				try {
+					result.addAll(new BuySellSplit().provide(schedule));
+				} catch (PositionsSequenceProviderException e) {
+					// BuySellSplit should never throw this
+				}
+
+				if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+					for (var ext: positionsSequenceProviderExtensions) {
+						ISchedulePositionsSequenceProvider provider = ext.createInstance();
+						try {
+							result.addAll(provider.provide(schedule));
+						} catch (PositionsSequenceProviderException e1) {
+							enabledPositionsSequenceProviders.put(provider.getId(), Optional.of(e1));
+						}
+					}
+				}
+				return result;
 			}
 			
 		};

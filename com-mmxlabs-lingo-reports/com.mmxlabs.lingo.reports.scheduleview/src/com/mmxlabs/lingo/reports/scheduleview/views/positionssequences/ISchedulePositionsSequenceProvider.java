@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 
 public interface ISchedulePositionsSequenceProvider {
 	
-	default List<@NonNull PositionsSequence> provide(Schedule schedule) {
+	default List<@NonNull PositionsSequence> provide(Schedule schedule) throws PositionsSequenceProviderException {
 		return PositionsSequence.makeBuySellSequences(schedule, getId()).stream().filter(Predicate.not(p -> p.getDescription().equals("") && p.getElements().isEmpty())).toList();
 	}
 	

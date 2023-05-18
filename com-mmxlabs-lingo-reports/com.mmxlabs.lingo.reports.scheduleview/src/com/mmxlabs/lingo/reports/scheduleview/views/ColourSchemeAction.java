@@ -5,18 +5,22 @@
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -116,24 +120,33 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 		
+		Map<String, Optional<PositionsSequenceProviderException>> enabled = schedulerView.contentProvider.enabledPositionsSequenceProviders;
+
 		for (ISchedulePositionsSequenceProviderExtension ext: schedulerView.positionsSequenceProviderExtensions) {
-			Set<String> enabled = schedulerView.contentProvider.enabledPositionsSequenceProviders;
 			if (ext.showMenuItem().equals("true")) {
 				ISchedulePositionsSequenceProvider provider = ext.createInstance();
 				final Action toggleShowPartition = new Action(ext.getName(), SWT.CHECK) {
 					@Override
 					public void run() {
-						if (enabled.contains(provider.getId())) {
+						if (enabled.containsKey(provider.getId())) {
+							var optError = enabled.get(provider.getId());
+							if (optError.isPresent()) {
+								PositionsSequenceProviderException e = optError.get();
+								MessageDialog dialog = new MessageDialog(menu.getShell(), e.getTitle(), null, e.getDescription(), 0, 0, "OK");
+								dialog.create();
+								dialog.open();
+								return;
+							}
 							enabled.remove(provider.getId());
 						} else {
-							enabled.add(provider.getId());
+							enabled.put(provider.getId(), Optional.empty());
 						}
-						setChecked(enabled.contains(provider.getId()));
+						setChecked(schedulerView.contentProvider.isProviderEnabledWithNoError(provider.getId()));
 						schedulerView.refresh();
 					}
 				};
 				toggleShowPartition.setToolTipText("Partitions the unshipped cargoes based on a given split when selected");
-				toggleShowPartition.setChecked(enabled.contains(provider.getId()));
+				toggleShowPartition.setChecked(schedulerView.contentProvider.isProviderEnabledWithNoError(provider.getId()));
 				final ActionContributionItem actionContributionItem = new ActionContributionItem(toggleShowPartition);
 				actionContributionItem.fill(menu, -1);
 			}
