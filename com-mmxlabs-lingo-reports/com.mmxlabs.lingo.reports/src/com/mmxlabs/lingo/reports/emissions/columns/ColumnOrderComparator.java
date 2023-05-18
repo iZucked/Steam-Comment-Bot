@@ -4,9 +4,17 @@ import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/**
+ * Used as a provider of a priority queue for ordering
+ * the fields of emission models to be used in the reflection.
+ * @author Andrey Popov
+ *
+ */
 public class ColumnOrderComparator implements Comparator<Field> {
 	
-	private ColumnOrderComparator() {}
+	private ColumnOrderComparator() {
+		// Hiding public constructor
+	}
 	
 	@SuppressWarnings({ "unused", "null" })
 	@Override
@@ -27,7 +35,11 @@ public class ColumnOrderComparator implements Comparator<Field> {
 		return Integer.compare(firstLevel, secondLevel);
 	}
 	
+	/**
+	 * Creates new priority queue for ordering the columns by its column level value
+	 * @return the priority queue itself
+	 */
 	public static PriorityQueue<Field> priorityQueue() {
-		return new PriorityQueue<Field>(new ColumnOrderComparator());
+		return new PriorityQueue<>(new ColumnOrderComparator());
 	}
 }
