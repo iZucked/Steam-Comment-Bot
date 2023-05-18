@@ -263,6 +263,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselEvent/port"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startAfter"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startBy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/notes"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartByAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartAfterAsDateTime"/>
     </genClasses>

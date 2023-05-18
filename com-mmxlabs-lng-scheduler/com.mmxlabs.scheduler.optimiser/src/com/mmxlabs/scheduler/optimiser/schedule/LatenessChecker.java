@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -111,27 +112,30 @@ public class LatenessChecker {
 			final VoyagePlanRecord vpr = volumeAllocatedSequence.getVoyagePlanRecords().get(volumeAllocatedSequence.getVoyagePlanRecords().size() - 1);
 			final IPortSlot portSlot = vpr.getPortTimesRecord().getFirstSlot();
 
-			int latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
+			final int latenessMaxDurationInHours = getLatenessMaxDurationInHours(volumeAllocatedSequence, resource);
+			if (latenessMaxDurationInHours > 0) {
+				final ITimeWindow tw = getTW(portSlot, resource);
+				// Where in the scenario does the lateness occur?
+				final Interval interval;
+				if (tw == null) {
+					// No time window, but if we got here there was a max duration issue. Use the end event time as the time window for interval.
+					final List<VoyagePlanRecord> voyagePlanRecords = volumeAllocatedSequence.getVoyagePlanRecords();
+					final IPortTimesRecord endPortTimesRecord = voyagePlanRecords.get(voyagePlanRecords.size() - 1).getPortTimesRecord();
+					final int t = endPortTimesRecord.getFirstSlotTime();
+					interval = getInterval(new TimeWindow(t, t + 1));
+				} else {
+					interval = getInterval(tw);
+				}
+				// For fitness component
+				final long weightedLateness = getWeightedLateness(interval, latenessMaxDurationInHours);
 
-			final ITimeWindow tw = getTW(portSlot, resource);
-			if (tw == null) {
-				return;
-			}
-
-			// Where in the scenario does the lateness occur?
-			final Interval interval = getInterval(tw);
-
-			// For fitness component
-			final long weightedLateness = getWeightedLateness(interval, latenessMaxDurationInHours);
-
-			// For own just add the max duration violation to the general lateness
-			if (weightedLateness != 0 || latenessMaxDurationInHours != 0) {
+				// For own just add the max duration violation to the general lateness
 				volumeAllocatedSequence.addMaxDurationLateness(weightedLateness, interval, latenessMaxDurationInHours);
-			}
 
-			if (annotatedSolution != null) {
-				final ILatenessAnnotation annotation = new LatenessAnnotation(latenessMaxDurationInHours, weightedLateness, interval, latenessMaxDurationInHours, interval);
-				setLatenessAnnotationsOnAnnotatedSolution(annotatedSolution, annotation);
+				if (annotatedSolution != null) {
+					final ILatenessAnnotation annotation = new LatenessAnnotation(latenessMaxDurationInHours, weightedLateness, interval, latenessMaxDurationInHours, interval);
+					setLatenessAnnotationsOnAnnotatedSolution(annotatedSolution, annotation);
+				}
 			}
 		}
 	}
@@ -171,7 +175,7 @@ public class LatenessChecker {
 			}
 		} else if (portSlot instanceof IEndPortSlot) {
 			final IEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
-			if (req.hasTimeRequirement() || req.isMinDurationSet() || req.isMaxDurationSet()) {
+			if (req.hasTimeRequirement()) {
 				tw = req.getTimeWindow();
 			}
 		} else {

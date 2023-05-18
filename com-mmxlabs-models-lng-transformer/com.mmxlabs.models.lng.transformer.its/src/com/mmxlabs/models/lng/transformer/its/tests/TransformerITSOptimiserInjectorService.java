@@ -34,7 +34,6 @@ import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.inject.IPostExportProcessorFactory;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
-import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;

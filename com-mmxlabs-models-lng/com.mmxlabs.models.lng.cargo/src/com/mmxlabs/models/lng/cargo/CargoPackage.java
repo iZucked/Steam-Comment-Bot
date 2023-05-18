@@ -5083,13 +5083,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5261,6 +5270,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAINTENANCE_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__NOTES = VESSEL_EVENT__NOTES;
 
 	/**
 	 * The number of structural features of the '<em>Maintenance Event</em>' class.
@@ -5443,6 +5461,15 @@ public interface CargoPackage extends EPackage {
 	int DRY_DOCK_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__NOTES = VESSEL_EVENT__NOTES;
+
+	/**
 	 * The number of structural features of the '<em>Dry Dock Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5621,6 +5648,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__NOTES = VESSEL_EVENT__NOTES;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -9562,6 +9598,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselEvent_StartBy();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getNotes()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_Notes();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12203,6 +12250,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_EVENT__START_BY = eINSTANCE.getVesselEvent_StartBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__NOTES = eINSTANCE.getVesselEvent_Notes();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.

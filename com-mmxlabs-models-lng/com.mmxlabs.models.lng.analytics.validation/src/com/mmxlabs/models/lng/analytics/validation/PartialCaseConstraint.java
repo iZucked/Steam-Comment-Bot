@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -39,7 +38,7 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof @NonNull PartialCase partialCase && SandboxConstraintUtils.shouldValidate(partialCase)) {
+		if (target instanceof @NonNull final PartialCase partialCase && SandboxConstraintUtils.shouldValidate(partialCase)) {
 
 			final Set<BuyOption> loadSlots = new HashSet<>();
 			final Set<SellOption> dischargeSlots = new HashSet<>();
@@ -67,20 +66,21 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 
 			// First pass, find problem slots
 			processPartialCase(partialCase, (row, slot) -> {
-				if (slot != null && slot instanceof BuyOpportunity buyOpp) {
+				if (slot != null && slot instanceof final BuyOpportunity buyOpp) {
 					final String priceExpression = buyOpp.getPriceExpression();
 					if (priceExpression != null && priceExpression.contains("?")) {
 						loadQuestion.add(row);
 					}
 				}
 			}, (row, slot) -> {
-				if (slot != null && slot instanceof SellOpportunity sellOpp) {
+				if (slot != null && slot instanceof final SellOpportunity sellOpp) {
 					final String priceExpression = sellOpp.getPriceExpression();
 					if (priceExpression != null && priceExpression.contains("?")) {
 						dischargeQuestion.add(row);
 					}
 				}
 			});
+
 			// Second pass, report problem slots
 			if (!loadQuestion.isEmpty() && !dischargeQuestion.isEmpty()) {
 				// just add on distinct rows
@@ -94,31 +94,27 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 					}
 				});
 			}
-
-			if (!partialCase.isKeepExistingScenario()) {
-				processPartialShipping(partialCase, ctx, statuses);
-			}
 		}
 	}
 
 	public static Predicate<BuyOption> isFOBPurchase() {
-		return b -> ((b instanceof BuyReference buyRef && buyRef.getSlot() != null && !buyRef.getSlot().isDESPurchase()) //
-				|| (b instanceof BuyOpportunity buyOpp && !buyOpp.isDesPurchase()));
+		return b -> ((b instanceof final BuyReference buyRef && buyRef.getSlot() != null && !buyRef.getSlot().isDESPurchase()) //
+				|| (b instanceof final BuyOpportunity buyOpp && !buyOpp.isDesPurchase()));
 	}
 
 	public static Predicate<BuyOption> isDESPurchase() {
-		return b -> ((b instanceof BuyReference buyRef && buyRef.getSlot() != null && buyRef.getSlot().isDESPurchase()) //
-				|| (b instanceof BuyOpportunity buyOpp && buyOpp.isDesPurchase()));
+		return b -> ((b instanceof final BuyReference buyRef && buyRef.getSlot() != null && buyRef.getSlot().isDESPurchase()) //
+				|| (b instanceof final BuyOpportunity buyOpp && buyOpp.isDesPurchase()));
 	}
 
 	public static Predicate<SellOption> isFOBSale() {
-		return s -> ((s instanceof SellReference sellRef && sellRef.getSlot() != null && sellRef.getSlot().isFOBSale()) //
-				|| (s instanceof SellOpportunity sellOpp && sellOpp.isFobSale()));
+		return s -> ((s instanceof final SellReference sellRef && sellRef.getSlot() != null && sellRef.getSlot().isFOBSale()) //
+				|| (s instanceof final SellOpportunity sellOpp && sellOpp.isFobSale()));
 	}
 
 	public static Predicate<SellOption> isDESSale() {
-		return s -> ((s instanceof SellReference sellRef && sellRef.getSlot() != null && !sellRef.getSlot().isFOBSale()) //
-				|| (s instanceof SellOpportunity sellOpp && !sellOpp.isFobSale()));
+		return s -> ((s instanceof final SellReference sellRef && sellRef.getSlot() != null && !sellRef.getSlot().isFOBSale()) //
+				|| (s instanceof final SellOpportunity sellOpp && !sellOpp.isFobSale()));
 	}
 
 	public void processPartialCase(final PartialCase partialCase, final BiConsumer<PartialCaseRow, BuyOption> visitLoadSlot, final BiConsumer<PartialCaseRow, SellOption> visitDischargeSlot) {
@@ -131,29 +127,6 @@ public class PartialCaseConstraint extends AbstractModelMultiConstraint {
 			{
 				for (final SellOption sell : row.getSellOptions()) {
 					visitDischargeSlot.accept(row, sell);
-				}
-			}
-		}
-	}
-
-	public void processPartialShipping(final PartialCase partialCase, @NonNull final IValidationContext ctx, @NonNull final List<IStatus> statuses) {
-		final Set<ShippingOption> shippingOptions = new HashSet<>();
-		final Set<ShippingOption> duplicatedShippingOptions = new HashSet<>();
-		for (final PartialCaseRow row : partialCase.getPartialCase()) {
-			for (final ShippingOption shipping : row.getShipping()) {
-				if (shipping != null && !shippingOptions.add(shipping)) {
-					duplicatedShippingOptions.add(shipping);
-				}
-			}
-		}
-
-		for (final PartialCaseRow row : partialCase.getPartialCase()) {
-			for (final ShippingOption shipping : row.getShipping()) {
-				if (shipping != null && duplicatedShippingOptions.contains(shipping)) {
-					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(String.format("%s - shipping option used multiple times.", viewName)));
-					deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-					statuses.add(deco);
 				}
 			}
 		}

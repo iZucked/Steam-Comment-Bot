@@ -73,16 +73,14 @@ public class SelectionToSandboxUtil {
 		boolean foundValidObject = false;
 		final Set<LNGScenarioModel> scenarios = new HashSet<>();
 
-		if (selection instanceof IStructuredSelection) {
+		if (selection instanceof IStructuredSelection ss) {
 
-			final IStructuredSelection ss = (IStructuredSelection) selection;
 			final Iterator<?> itr = ss.iterator();
 
 			LOOP_SELECTION: while (itr.hasNext()) {
 				Object obj = itr.next();
-				
-				if (obj instanceof CargoModelRowTransformer.RowData) {
-					CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) obj;
+
+				if (obj instanceof CargoModelRowTransformer.RowData rowData) {
 					// Note - not strictly correct, row may contain independent an load and discharge
 					if (rowData.getCargo() != null) {
 						obj = rowData.getCargo();
@@ -91,14 +89,12 @@ public class SelectionToSandboxUtil {
 					} else {
 						obj = rowData.getDischargeSlot();
 					}
-					
+
 				}
-				
-				if (obj instanceof EObject) {
-					final EObject eObject = (EObject) obj;
+
+				if (obj instanceof EObject eObject) {
 					scenarios.add(findScenarioModel(eObject));
 				}
-				
 
 				// Check for schedule model objects before looking at underlying objects. E.g. sandbox from a result.
 				if (obj instanceof Cargo || obj instanceof Slot) {
@@ -106,8 +102,7 @@ public class SelectionToSandboxUtil {
 					continue;
 				}
 
-				if (obj instanceof Event) {
-					Event evt = (Event) obj;
+				if (obj instanceof Event evt) {
 					while (evt != null && !(evt instanceof PortVisit)) {
 						evt = evt.getPreviousEvent();
 					}
@@ -133,8 +128,7 @@ public class SelectionToSandboxUtil {
 
 	public static void selectionToSandbox(final ISelection selection, final boolean portfolioMode, final IScenarioDataProvider sdp) {
 
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection ss = (IStructuredSelection) selection;
+		if (selection instanceof IStructuredSelection ss) {
 
 			final BaseCase baseCase = AnalyticsFactory.eINSTANCE.createBaseCase();
 			baseCase.setKeepExistingScenario(portfolioMode);
@@ -152,9 +146,8 @@ public class SelectionToSandboxUtil {
 				LOOP_SELECTION: while (itr.hasNext()) {
 
 					Object obj = itr.next();
-					
-					if (obj instanceof CargoModelRowTransformer.RowData) {
-						CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) obj;
+
+					if (obj instanceof CargoModelRowTransformer.RowData rowData) {
 						// Note - not strictly correct, row may contain independent an load and discharge
 						if (rowData.getCargo() != null) {
 							obj = rowData.getCargo();
@@ -163,17 +156,16 @@ public class SelectionToSandboxUtil {
 						} else {
 							obj = rowData.getDischargeSlot();
 						}
-						
+
 					}
-					
+
 					// Check for schedule model objects before looking at underlying objects. E.g. sandbox from a result.
 					if (obj instanceof Cargo || obj instanceof Slot) {
 						objectsForPass2.add(obj);
 						continue;
 					}
 
-					if (obj instanceof Event) {
-						Event evt = (Event) obj;
+					if (obj instanceof Event evt) {
 						while (evt != null && !(evt instanceof PortVisit)) {
 							evt = evt.getPreviousEvent();
 						}
@@ -182,8 +174,7 @@ public class SelectionToSandboxUtil {
 						}
 					}
 
-					if (obj instanceof OpenSlotAllocation) {
-						final OpenSlotAllocation sa = (OpenSlotAllocation) obj;
+					if (obj instanceof OpenSlotAllocation sa) {
 						Slot<?> slot = sa.getSlot();
 						if (!seenObjects.add(slot)) {
 							continue LOOP_SELECTION;
@@ -192,8 +183,7 @@ public class SelectionToSandboxUtil {
 						// Create a new row
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						baseCase.getBaseCase().add(row);
-						if (slot instanceof LoadSlot) {
-							final LoadSlot loadSlot = (LoadSlot) slot;
+						if (slot instanceof LoadSlot loadSlot) {
 							final BuyOption option = loadSlotToOption(loadSlot, buyMap);
 							row.setBuyOption(option);
 						} else {
@@ -202,8 +192,7 @@ public class SelectionToSandboxUtil {
 							row.setSellOption(option);
 						}
 					} else if (obj instanceof PortVisit) {
-						if (obj instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) obj;
+						if (obj instanceof SlotVisit slotVisit) {
 							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 							// Have we seen any of the slots before?
 							for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
@@ -216,8 +205,7 @@ public class SelectionToSandboxUtil {
 							baseCase.getBaseCase().add(row);
 							for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 								final Slot<?> slot = sa.getSlot();
-								if (slot instanceof LoadSlot) {
-									final LoadSlot loadSlot = (LoadSlot) slot;
+								if (slot instanceof LoadSlot loadSlot) {
 									final BuyOption option = loadSlotToOption(loadSlot, buyMap);
 									row.setBuyOption(option);
 								} else {
@@ -231,13 +219,11 @@ public class SelectionToSandboxUtil {
 							final Sequence sequence = cargoAllocation.getSequence();
 							if (sequence != null) {
 								final VesselCharter vesselCharter = sequence.getVesselCharter();
+								final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 								if (vesselCharter != null) {
 									setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
-								} else {
-									final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-									if (charterInMarket != null) {
-										setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, sequence.getSpotIndex());
-									}
+								} else if (charterInMarket != null) {
+									setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, sequence.getSpotIndex());
 								}
 							}
 						}
@@ -275,8 +261,7 @@ public class SelectionToSandboxUtil {
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						baseCase.getBaseCase().add(row);
 						for (final Slot<?> s : cargo.getSlots()) {
-							if (s instanceof LoadSlot) {
-								final LoadSlot loadSlot = (LoadSlot) s;
+							if (s instanceof LoadSlot loadSlot) {
 								final BuyOption option = loadSlotToOption(loadSlot, buyMap);
 								row.setBuyOption(option);
 							} else {
@@ -287,14 +272,10 @@ public class SelectionToSandboxUtil {
 						}
 						// Get vessel allocation
 						final VesselAssignmentType sequence = cargo.getVesselAssignmentType();
-						if (sequence instanceof VesselCharter) {
-							final VesselCharter vesselCharter = (VesselCharter) sequence;
-							if (vesselCharter != null) {
-								setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
-							} else if (sequence instanceof CharterInMarket) {
-								final CharterInMarket charterInMarket = (CharterInMarket) sequence;
-								setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, cargo.getSpotIndex());
-							}
+						if (sequence instanceof VesselCharter vesselCharter) {
+							setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
+						} else if (sequence instanceof CharterInMarket charterInMarket) {
+							setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, cargo.getSpotIndex());
 						}
 
 					} else if (slot != null) {
@@ -306,8 +287,7 @@ public class SelectionToSandboxUtil {
 						// Create a new row
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						baseCase.getBaseCase().add(row);
-						if (slot instanceof LoadSlot) {
-							final LoadSlot loadSlot = (LoadSlot) slot;
+						if (slot instanceof LoadSlot loadSlot) {
 							final BuyOption option = loadSlotToOption(loadSlot, buyMap);
 							row.setBuyOption(option);
 						} else {
@@ -389,8 +369,7 @@ public class SelectionToSandboxUtil {
 			return map.get(slot);
 		}
 
-		if (slot instanceof SpotLoadSlot) {
-			final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) slot;
+		if (slot instanceof SpotLoadSlot spotLoadSlot) {
 			final SpotMarket market = spotLoadSlot.getMarket();
 			// TODO: AnalyticsScenarioEvaluator Code currently assumes we use a market option once rather than multiple times. I.e. it will filter out combinations where the market option is used more
 			// than once.
@@ -418,8 +397,7 @@ public class SelectionToSandboxUtil {
 			return map.get(slot);
 		}
 
-		if (slot instanceof SpotDischargeSlot) {
-			final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) slot;
+		if (slot instanceof SpotDischargeSlot spotDischargeSlot) {
 			final SpotMarket market = spotDischargeSlot.getMarket();
 			// TODO: AnalyticsScenarioEvaluator Code currently assumes we use a market option once rather than multiple times. I.e. it will filter out combinations where the market option is used more
 			// than once.

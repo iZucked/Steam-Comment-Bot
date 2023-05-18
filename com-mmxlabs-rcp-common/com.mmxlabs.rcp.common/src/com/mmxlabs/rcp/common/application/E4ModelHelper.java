@@ -53,6 +53,10 @@ public class E4ModelHelper {
 						parent.getChildren().remove(placeholder);
 						if (parent.getSelectedElement() == placeholder) {
 							parent.setSelectedElement(null);
+							// Pick another child to be the selected element
+							if (!parent.getChildren().isEmpty()) {
+								parent.setSelectedElement(parent.getChildren().get(0));
+							}
 						}
 						placeholder.setRef(null);
 					}
@@ -91,7 +95,7 @@ public class E4ModelHelper {
 				if (parent.getSelectedElement() == part) {
 					boolean foundElement = false;
 					for (MUIElement element : parent.getChildren()) {
-						if (element.isVisible()) {
+						if (element.isVisible() && element.isToBeRendered()) {
 							parent.setSelectedElement(element);
 							foundElement = true;
 							break;

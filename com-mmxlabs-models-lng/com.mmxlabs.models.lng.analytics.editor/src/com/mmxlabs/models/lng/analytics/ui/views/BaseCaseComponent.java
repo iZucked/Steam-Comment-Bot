@@ -104,7 +104,10 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		GridViewerHelper.configureLookAndFeel(baseCaseViewer);
 		baseCaseViewer.getGrid().setHeaderVisible(true);
 		baseCaseViewer.getGrid().setRowHeaderVisible(true);
+		baseCaseViewer.getGrid().setFooterVisible(true); // To allow DND to create a new row when table is full
 
+		baseCaseViewer.getGrid().setEmptyColumnFooterRenderer(new SandboxFooterRenderer());
+		
 		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
 		optioniseCol.getColumn().setAlignment(SWT.CENTER);
 		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
@@ -214,6 +217,11 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 				}
 			});
 
+		}
+
+		baseCaseViewer.getGrid().setBottomLeftRenderer(new SandboxBottomLeftRenderer());
+		for (var g : baseCaseViewer.getGrid().getColumns()) {
+			g.setFooterRenderer(new SandboxFooterRenderer());
 		}
 
 		return baseCaseViewer.getGrid();
