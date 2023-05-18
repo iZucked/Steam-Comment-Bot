@@ -51,7 +51,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 				for (final Event e : seq.getEvents()) {
 					final VesselEmissionAccountingReportModelV1 model = new VesselEmissionAccountingReportModelV1();
 					model.scenarioName = scenarioName;
-					model.isPinned = isPinned;
+					model.isPinnedFlag = isPinned;
 					model.schedule = schedule;
 					model.vesselName = vesselName;
 					model.baseFuelEmissionRate = baseFuelEmissionRate;

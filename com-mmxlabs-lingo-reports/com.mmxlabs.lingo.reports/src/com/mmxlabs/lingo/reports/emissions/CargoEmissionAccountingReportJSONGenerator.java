@@ -40,7 +40,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 			if (model != null) {
 				model.scenarioName = scenarioName;
 				model.schedule = schedule;
-				model.isPinned = isPinned;
+				model.isPinnedFlag = isPinned;
 				model.otherID = cargoAllocation.getName();
 				models.add(model);
 			}
