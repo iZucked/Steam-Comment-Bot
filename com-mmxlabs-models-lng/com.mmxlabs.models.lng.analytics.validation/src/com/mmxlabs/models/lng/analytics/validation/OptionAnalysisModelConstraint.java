@@ -15,10 +15,12 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -33,6 +35,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -140,6 +143,30 @@ public class OptionAnalysisModelConstraint extends AbstractModelMultiConstraint 
 									(IConstraintStatus) ctx.createFailureStatus(String.format("Vessel charter already exists (%s).", vesselName)));
 							deco.addEObjectAndFeature(cOpt, AnalyticsPackage.Literals.EXISTING_VESSEL_CHARTER_OPTION__VESSEL_CHARTER);
 							statuses.add(deco);
+						}
+					}
+				}
+			}
+			{
+				final Set<Pair<CharterInMarket, Integer>> seen = new HashSet<>();
+				for (final var opt : model.getShippingTemplates()) {
+					if (opt instanceof final ExistingCharterMarketOption cOpt && cOpt.getCharterInMarket() != null) {
+						final Pair<CharterInMarket, Integer> key = Pair.of(cOpt.getCharterInMarket(), cOpt.getSpotIndex());
+						if (!seen.add(key)) {
+							final String vesselName = (cOpt.getCharterInMarket().getVessel() == null) ? "<no vessel>" : cOpt.getCharterInMarket().getVessel().getName();
+							if (cOpt.getSpotIndex() == -1) {
+								final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+										(IConstraintStatus) ctx.createFailureStatus(String.format("Market charter already exists (%s - nominal ).", vesselName)));
+								deco.addEObjectAndFeature(cOpt, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET);
+								deco.addEObjectAndFeature(cOpt, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
+								statuses.add(deco);
+							} else {
+								final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+										(IConstraintStatus) ctx.createFailureStatus(String.format("Market charter already exists (%s opt %d).", vesselName, cOpt.getSpotIndex() + 1)));
+								deco.addEObjectAndFeature(cOpt, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET);
+								deco.addEObjectAndFeature(cOpt, AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__SPOT_INDEX);
+								statuses.add(deco);
+							}
 						}
 					}
 				}
