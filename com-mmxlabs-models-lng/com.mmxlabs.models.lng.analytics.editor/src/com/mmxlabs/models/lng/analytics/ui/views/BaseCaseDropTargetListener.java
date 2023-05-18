@@ -160,7 +160,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 
 					AnalyticsBuilder.applyShipping(scenarioEditingLocation, optionAnalysisModel, existing, vessel);
 
-				} else if (o instanceof ShippingOption) {
+				} else if (o instanceof ShippingOption option) {
 					if (existing != null) {
 						ShippingOption opt = null;
 						if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.NonShipped) {
@@ -169,19 +169,26 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 							}
 						} else if (AnalyticsBuilder.isNonShipped(existing) == ShippingType.Shipped) {
 
-							if (o instanceof RoundTripShippingOption || o instanceof SimpleVesselCharterOption
-									|| o instanceof ExistingVesselCharterOption || o instanceof FullVesselCharterOption
+							if (o instanceof RoundTripShippingOption || o instanceof SimpleVesselCharterOption || o instanceof ExistingVesselCharterOption || o instanceof FullVesselCharterOption
 									|| o instanceof ExistingCharterMarketOption) {
 								opt = (ShippingOption) o;
 							}
 						} else if (existing.getVesselEventOption() instanceof VesselEventOption) {
 							opt = (ShippingOption) o;
+						} else {
+							opt = (ShippingOption) o;
 						}
 						if (opt != null) {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), existing, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, opt), existing,
+											AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						}
+					} else {
+						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+						final CompoundCommand cmd = new CompoundCommand();
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__BASE_CASE, row));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, option));
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, optionAnalysisModel, null);
 					}
 				} else if (o instanceof VesselEvent vesselEvent) {
 					// Lazily evaluated command to avoid adding shipping multiple times.
@@ -306,7 +313,7 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 			final IStructuredSelection selection = (IStructuredSelection) LocalSelectionTransfer.getTransfer().nativeToJava(event.currentDataType);
 			if (selection.size() == 1) {
 				final Object o = selection.getFirstElement();
-				if (o instanceof OpenBuy|| o instanceof OpenSell) {
+				if (o instanceof OpenBuy || o instanceof OpenSell) {
 					event.detail = DND.DROP_NONE;
 					return;
 				}
