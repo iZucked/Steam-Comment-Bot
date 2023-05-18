@@ -28,6 +28,8 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class VesselEmissionAccountingReportJSONGenerator {
+	
+	private static final long TONS_TO_GRAMS = 1_000_000;
 
 	public static List<VesselEmissionAccountingReportModelV1> createReportData(final @NonNull ScheduleModel scheduleModel, final boolean isPinned, final String scenarioName) {
 		final List<VesselEmissionAccountingReportModelV1> models = new LinkedList<>();
@@ -120,11 +122,11 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						continue; 
 					}
 					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
-					final long denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
-					if (denominatorForCIICalculation == 0L) {
+					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
+					if (denominatorForCIICalculation == 0) {
 						model.attainedCII = 0L;
 					} else {						
-						model.attainedCII = model.totalEmission / denominatorForCIICalculation;
+						model.attainedCII = TONS_TO_GRAMS * model.baseFuelEmission / denominatorForCIICalculation;
 					}
 					models.add(model);
 				}
