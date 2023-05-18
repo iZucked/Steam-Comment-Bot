@@ -11,12 +11,15 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -26,15 +29,16 @@ import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.swt.SWT;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
+import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -65,7 +69,11 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public abstract class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	private final WeakHashMap<Slot<?>, SlotVisit> cachedElements = new WeakHashMap<>();
-
+	
+	@Inject
+	private Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
+	protected Set<String> enabledPositionsSequenceProviders = new HashSet<>();
+	
 	protected boolean showNominalsByDefault = false;
 
 	@Override
@@ -75,6 +83,9 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public Object @Nullable [] getChildren(final Object parent) {
+
+		// Inject the extension points
+		Activator.getDefault().getInjector().injectMembers(this);
 
 		if (parent instanceof final Collection<?> collection) {
 			final List<Object> result = new ArrayList<>();
@@ -122,12 +133,18 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 							result.add(cs);
 						}
 					}
+
 					// for (InventoryEvents inventory : schedule.getInventoryLevels()) {
 					// result.add(inventory);
 					// }
-
-					List<@NonNull PositionsSequence> seqs = getPositionSequences(schedule).stream().filter(Predicate.not(p -> p.getDescription().equals("") && p.getElements().isEmpty())).toList();
-					result.addAll(seqs);
+					
+					result.addAll(new BuySellSplit().provide(schedule));
+					if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+						for (var ext: positionsSequenceProviderExtensions) {
+							result.addAll(ext.createInstance().provide(schedule));
+						}
+					}
+					
 				}
 //				result.addAll(Schedule)
 			}
@@ -257,13 +274,6 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 		}
 		return null;
-	}
-
-	private List<PositionsSequence> getPositionSequences(Schedule schedule) {
-		// get the settings from preferences instead, below is a test predicate
-		Predicate<PortGroup> startsWithPartition = pg -> pg.getName().startsWith("partition");
-		List<PortGroup> portGroups = ScenarioModelUtil.findReferenceModel(schedule).getPortModel().getPortGroups().stream().filter(startsWithPartition).toList();
-		return (portGroups.isEmpty()) ? PositionsSequence.makeBuySellSequences(schedule) : PositionsSequence.makeBuySellSequencesFromPortGroups(schedule, portGroups, true, false);
 	}
 
 	@Override
@@ -457,9 +467,11 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	public boolean isVisibleByDefault(final Object resource) {
 		if (!showNominalsByDefault && resource instanceof final Sequence sequence) {
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
+		} else if (resource instanceof PositionsSequence ps) {
+			return enabledPositionsSequenceProviders.contains(ps.getProviderId()) || enabledPositionsSequenceProviders.isEmpty() && !ps.isPartition();
 		}
 		return true;
 	}
-
+	
 	public abstract IScenarioDataProvider getScenarioDataProviderFor(Object obj);
 }

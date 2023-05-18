@@ -95,6 +95,9 @@ import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderCompar
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -125,6 +128,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.MultiEvent;
+import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
@@ -167,6 +171,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemeExtensions;
 
+	@Inject
+	protected Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
+	
 	private HighlightAction highlightAction;
 
 	private int numberOfSchedules;
@@ -176,7 +183,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private ReentrantSelectionManager selectionManager;
 
 	boolean showNominalsByDefault = false;
-
+	
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
@@ -509,6 +516,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 										visible = true;
 									}
 								}
+							} else if (d instanceof PositionsSequence ps) {
+								var cp = (EMFScheduleContentProvider) getContentProvider();
+								visible = cp.enabledPositionsSequenceProviders.contains(ps.getProviderId()) || cp.enabledPositionsSequenceProviders.isEmpty() && !ps.isPartition();
 							}
 
 							ganttSection.setVisible(visible);
@@ -528,7 +538,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									visible = true;
 								}
 							}
+						} else if (d instanceof final PositionsSequence ps) { 
+							var cp = (EMFScheduleContentProvider) getContentProvider();
+							visible = cp.enabledPositionsSequenceProviders.contains(ps.getProviderId()) || cp.enabledPositionsSequenceProviders.isEmpty() && !ps.isPartition();
 						}
+
 						ganttSection.setVisible(visible);
 					}
 				}
@@ -664,7 +678,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				}
 				return null;
 			}
+			
 		};
+
 		viewer.setContentProvider(contentProvider);
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, scenarioComparisonService);
 
