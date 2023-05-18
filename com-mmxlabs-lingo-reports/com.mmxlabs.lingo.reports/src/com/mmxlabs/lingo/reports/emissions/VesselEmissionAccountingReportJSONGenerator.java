@@ -120,7 +120,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						continue; 
 					}
 					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
-					model.attainedCII = model.totalEmission * journeyDistance * vessel.getDeadWeight();
+					final long denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
+					if (denominatorForCIICalculation == 0L) {
+						model.attainedCII = 0L;
+					} else {						
+						model.attainedCII = model.totalEmission / denominatorForCIICalculation;
+					}
 					models.add(model);
 				}
 			}

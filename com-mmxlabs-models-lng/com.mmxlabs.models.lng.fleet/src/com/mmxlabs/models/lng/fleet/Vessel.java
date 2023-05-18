@@ -1895,6 +1895,14 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 */
 	double getVesselOrDelegateMethaneSlipEmissionRate();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	int getVesselOrDelegateDeadWeight();
+
 } // end of  Vessel
 
 // finish type fixing

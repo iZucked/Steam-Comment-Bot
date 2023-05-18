@@ -86,6 +86,7 @@ public class TotalEmissionAccountingReportView extends AbstractSimpleModelBasedR
 							model.liquefactionEmission = r2.liquefactionEmission - r1.liquefactionEmission;
 							model.shippingEmission = r2.shippingEmission - r1.shippingEmission;
 							model.totalEmission = r2.totalEmission - r1.totalEmission;
+							model.methaneSlip = r2.methaneSlip - r1.methaneSlip;
 
 							if (model.upstreamEmission != 0 || model.pipelineEmission != 0 || model.liquefactionEmission != 0 || model.shippingEmission != 0|| model.totalEmission != 0) {
 								if (!result.contains(r1) || !result.contains(r2)) {

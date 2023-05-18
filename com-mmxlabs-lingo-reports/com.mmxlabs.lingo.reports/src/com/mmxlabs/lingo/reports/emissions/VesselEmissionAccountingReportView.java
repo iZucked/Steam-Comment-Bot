@@ -86,6 +86,8 @@ public class VesselEmissionAccountingReportView extends AbstractSimpleModelBased
 							model.bogEmission = r2.bogEmission - r1.bogEmission;
 							model.pilotLightEmission = r2.pilotLightEmission - r1.pilotLightEmission;
 							model.totalEmission = r2.totalEmission - r1.totalEmission;
+							model.methaneSlip = r2.methaneSlip - r1.methaneSlip;
+							model.attainedCII = r2.attainedCII - r1.attainedCII;
 
 							if (model.baseFuelEmission != 0 || model.bogEmission != 0 || model.pilotLightEmission != 0 || model.totalEmission != 0) {
 								if (!result.contains(r1) || !result.contains(r2)) {

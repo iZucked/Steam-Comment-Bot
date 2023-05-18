@@ -2091,6 +2091,19 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		}
 		return getPilotLightEmissionRate();
 	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getVesselOrDelegateDeadWeight() {
+		if (getReference() != null && !isSetDeadWeight()) {
+			return getReference().getDeadWeight();
+		}
+		return getDeadWeight();
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
