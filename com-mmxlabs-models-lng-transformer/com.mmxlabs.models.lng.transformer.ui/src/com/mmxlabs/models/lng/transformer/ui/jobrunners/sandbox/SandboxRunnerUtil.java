@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -66,7 +67,7 @@ public class SandboxRunnerUtil {
 			final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction, @Nullable final Consumer<AbstractSolutionSet> abortedHandler,
 			final boolean allowCaching) {
 
-		return monitor -> {
+		return parentMonitor -> {
 
 			final boolean dualPNLMode = false;
 
@@ -75,148 +76,158 @@ public class SandboxRunnerUtil {
 			final ScheduleSpecification baseScheduleSpecification = createBaseScheduleSpecification(sdp, model, mapper);
 
 			final SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
+			SubMonitor subMonitor = SubMonitor.convert(parentMonitor);
+			subMonitor.beginTask("Optionise", 100);
+			try {
+				final IMultiStateResult results = sandboxJob.run(subMonitor.split(90));
 
-			final IMultiStateResult results = sandboxJob.run(monitor);
+				if (results == null || subMonitor.isCanceled()) {
+					sandboxResult.setName("SandboxResult");
+					sandboxResult.setHasDualModeSolutions(dualPNLMode);
+					sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
 
-			if (results == null || monitor.isCanceled()) {
+					if (abortedHandler != null) {
+						abortedHandler.accept(sandboxResult);
+					}
+
+					return sandboxResult;
+				}
+
+				final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
+				final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
+
+				final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings,
+						dualPNLMode ? AnalyticsFactory.eINSTANCE::createDualModeSolutionOption : AnalyticsFactory.eINSTANCE::createSolutionOption, dualPNLMode, true /* enableChangeDescription */);
+
+				exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
+				sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
+
+				// Disable caches for the export phase
+				// TODO: Maybe we need a cache-config event?
+				final List<String> hints = new LinkedList<>(scenarioToOptimiserBridge.getDataTransformer().getHints());
+				hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
+				scenarioToOptimiserBridge.getFullDataTransformer().getLifecyleManager().startPhase("export", hints);
+				SubMonitor exportMonitor = subMonitor.split(10);
+				if (results != null) {
+					try {
+						exportMonitor.beginTask("Export results", results.getSolutions().size());
+						try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
+
+							final List<Future<@Nullable SolutionOption>> jobs = new LinkedList<>();
+
+							final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
+							for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
+								jobs.add(jobExecutor.submit(() -> {
+									return exporter.computeOption(p.getFirst());
+								}));
+							}
+
+							jobs.forEach(f -> {
+								try {
+									sandboxResult.getOptions().add(f.get());
+								} catch (final Exception e) {
+									// Ignore exceptions;
+								}
+								exportMonitor.worked(1);
+							});
+						}
+						exporter.applyPostTasks(sandboxResult);
+					} finally {
+						exportMonitor.done();
+					}
+				}
+
 				sandboxResult.setName("SandboxResult");
 				sandboxResult.setHasDualModeSolutions(dualPNLMode);
 				sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+				sandboxResult.setPortfolioBreakEvenMode(model.isUseTargetPNL());
 
-				if (abortedHandler != null) {
-					abortedHandler.accept(sandboxResult);
-				}
+				// Request this now one all other parts have run to get correct data.
+				final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
-				return sandboxResult;
-			}
+				sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
+				sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
-			final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
-
-			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings,
-					dualPNLMode ? AnalyticsFactory.eINSTANCE::createDualModeSolutionOption : AnalyticsFactory.eINSTANCE::createSolutionOption, dualPNLMode, true /* enableChangeDescription */);
-
-			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
-			sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
-
-			// Disable caches for the export phase
-			// TODO: Maybe we need a cache-config event?
-			final List<String> hints = new LinkedList<>(scenarioToOptimiserBridge.getDataTransformer().getHints());
-			hints.add(SchedulerConstants.HINT_DISABLE_CACHES);
-			scenarioToOptimiserBridge.getFullDataTransformer().getLifecyleManager().startPhase("export", hints);
-
-			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
-
-				final List<Future<@Nullable SolutionOption>> jobs = new LinkedList<>();
-
-				if (results != null) {
-					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
-					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
-						jobs.add(jobExecutor.submit(() -> {
-							return exporter.computeOption(p.getFirst());
-						}));
+				for (final VesselCharter va : extraDataProvider.extraVesselCharters) {
+					if (va != null && va.eContainer() == null) {
+						sandboxResult.getExtraVesselCharters().add(va);
 					}
+				}
+				sandboxResult.getExtraSlots().addAll(extraDataProvider.extraLoads);
+				sandboxResult.getExtraSlots().addAll(extraDataProvider.extraDischarges);
+				sandboxResult.getExtraVesselEvents().addAll(extraDataProvider.extraVesselEvents);
 
-					jobs.forEach(f -> {
-						try {
-							sandboxResult.getOptions().add(f.get());
-						} catch (final Exception e) {
-							// Ignore exceptions;
+				// Check that all the spot slot references are properly contained. E.g. Schedule
+				// specification may have extra spot slot instances not used in the schedule
+				// models.
+				addExtraData(sandboxResult.getBaseOption(), sandboxResult);
+
+				final Consumer<SolutionOption> sandboxRefAction = opt -> {
+					addExtraData(opt, sandboxResult);
+
+					final ScheduleModel scheduleModel = opt.getScheduleModel();
+					final Schedule schedule = scheduleModel.getSchedule();
+
+					// Create a map of sandbox generated positions to the original object...
+					final Map<EObject, EObject> m = new HashMap<>();
+					for (final var sandbox : model.getBuys()) {
+						m.put(mapper.getOriginal(sandbox), sandbox);
+						if (mapper.isCreateBEOptions()) {
+							m.put(mapper.getBreakEven(sandbox), sandbox);
+							m.put(mapper.getChangable(sandbox), sandbox);
+						}
+					}
+					for (final var sandbox : model.getSells()) {
+						m.put(mapper.getOriginal(sandbox), sandbox);
+						if (mapper.isCreateBEOptions()) {
+							m.put(mapper.getBreakEven(sandbox), sandbox);
+							m.put(mapper.getChangable(sandbox), sandbox);
+						}
+					}
+					for (final var sandbox : model.getVesselEvents()) {
+						m.put(mapper.getOriginal(sandbox), sandbox);
+					}
+					// .... then add in a SandboxReference to the schedule object to allow lookup
+					// later (e.g. fore createSandboxFromSolution actions)
+					// We add to the SlotAllocation rather than the Slot to reduce the chances of
+					// dangling references. E.g. exporting the solution would need to clean up the
+					// slots
+					schedule.eAllContents().forEachRemaining(eObj -> {
+						if (eObj instanceof final SlotAllocation sa) {
+							final EObject eObject = m.get(sa.getSlot());
+							if (eObject != null) {
+								final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
+								ref.setReference(eObject);
+								sa.getExtensions().add(ref);
+							}
+						} else if (eObj instanceof final OpenSlotAllocation sa) {
+							final EObject eObject = m.get(sa.getSlot());
+							if (eObject != null) {
+								final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
+								ref.setReference(eObject);
+								sa.getExtensions().add(ref);
+							}
+						} else if (eObj instanceof final VesselEventVisit sa) {
+							final EObject eObject = m.get(sa.getVesselEvent());
+							if (eObject != null) {
+								final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
+								ref.setReference(eObject);
+								sa.getExtensions().add(ref);
+							}
 						}
 					});
+				};
+
+				sandboxRefAction.accept(sandboxResult.getBaseOption());
+				sandboxResult.getOptions().forEach(sandboxRefAction);
+
+				if (dualPNLMode) {
+					SolutionSetExporterUnit.convertToSimpleResult(sandboxResult, dualPNLMode);
 				}
-				exporter.applyPostTasks(sandboxResult);
+				return sandboxResult;
+			} finally {
+				subMonitor.done();
 			}
-
-			sandboxResult.setName("SandboxResult");
-			sandboxResult.setHasDualModeSolutions(dualPNLMode);
-			sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
-			sandboxResult.setPortfolioBreakEvenMode(model.isUseTargetPNL());
-
-			// Request this now one all other parts have run to get correct data.
-			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-
-			sandboxResult.getCharterInMarketOverrides().addAll(extraDataProvider.extraCharterInMarketOverrides);
-			sandboxResult.getExtraCharterInMarkets().addAll(extraDataProvider.extraCharterInMarkets);
-
-			for (final VesselCharter va : extraDataProvider.extraVesselCharters) {
-				if (va != null && va.eContainer() == null) {
-					sandboxResult.getExtraVesselCharters().add(va);
-				}
-			}
-			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraLoads);
-			sandboxResult.getExtraSlots().addAll(extraDataProvider.extraDischarges);
-			sandboxResult.getExtraVesselEvents().addAll(extraDataProvider.extraVesselEvents);
-
-			// Check that all the spot slot references are properly contained. E.g. Schedule
-			// specification may have extra spot slot instances not used in the schedule
-			// models.
-			addExtraData(sandboxResult.getBaseOption(), sandboxResult);
-
-			final Consumer<SolutionOption> sandboxRefAction = opt -> {
-				addExtraData(opt, sandboxResult);
-
-				final ScheduleModel scheduleModel = opt.getScheduleModel();
-				final Schedule schedule = scheduleModel.getSchedule();
-
-				// Create a map of sandbox generated positions to the original object...
-				final Map<EObject, EObject> m = new HashMap<>();
-				for (final var sandbox : model.getBuys()) {
-					m.put(mapper.getOriginal(sandbox), sandbox);
-					if (mapper.isCreateBEOptions()) {
-						m.put(mapper.getBreakEven(sandbox), sandbox);
-						m.put(mapper.getChangable(sandbox), sandbox);
-					}
-				}
-				for (final var sandbox : model.getSells()) {
-					m.put(mapper.getOriginal(sandbox), sandbox);
-					if (mapper.isCreateBEOptions()) {
-						m.put(mapper.getBreakEven(sandbox), sandbox);
-						m.put(mapper.getChangable(sandbox), sandbox);
-					}
-				}
-				for (final var sandbox : model.getVesselEvents()) {
-					m.put(mapper.getOriginal(sandbox), sandbox);
-				}
-				// .... then add in a SandboxReference to the schedule object to allow lookup
-				// later (e.g. fore createSandboxFromSolution actions)
-				// We add to the SlotAllocation rather than the Slot to reduce the chances of
-				// dangling references. E.g. exporting the solution would need to clean up the
-				// slots
-				schedule.eAllContents().forEachRemaining(eObj -> {
-					if (eObj instanceof final SlotAllocation sa) {
-						final EObject eObject = m.get(sa.getSlot());
-						if (eObject != null) {
-							final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
-							ref.setReference(eObject);
-							sa.getExtensions().add(ref);
-						}
-					} else if (eObj instanceof final OpenSlotAllocation sa) {
-						final EObject eObject = m.get(sa.getSlot());
-						if (eObject != null) {
-							final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
-							ref.setReference(eObject);
-							sa.getExtensions().add(ref);
-						}
-					} else if (eObj instanceof final VesselEventVisit sa) {
-						final EObject eObject = m.get(sa.getVesselEvent());
-						if (eObject != null) {
-							final SandboxReference ref = ScheduleFactory.eINSTANCE.createSandboxReference();
-							ref.setReference(eObject);
-							sa.getExtensions().add(ref);
-						}
-					}
-				});
-			};
-
-			sandboxRefAction.accept(sandboxResult.getBaseOption());
-			sandboxResult.getOptions().forEach(sandboxRefAction);
-
-			if (dualPNLMode) {
-				SolutionSetExporterUnit.convertToSimpleResult(sandboxResult, dualPNLMode);
-			}
-
-			return sandboxResult;
 		};
 	}
 
