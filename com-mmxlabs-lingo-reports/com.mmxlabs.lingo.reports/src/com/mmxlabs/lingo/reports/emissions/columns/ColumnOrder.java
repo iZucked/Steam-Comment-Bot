@@ -6,7 +6,8 @@ package com.mmxlabs.lingo.reports.emissions.columns;
  *
  */
 public enum ColumnOrder {
-	START(Integer.MIN_VALUE),
+	ID_LEVEL(Integer.MIN_VALUE),
+	START(Integer.MIN_VALUE + 100),
 	EARLY_LEVEL(0),
 	MIDDLE_LEVEL(100),
 	LATER_LEVEL(200),

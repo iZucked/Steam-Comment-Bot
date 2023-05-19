@@ -11,11 +11,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -30,6 +34,7 @@ import org.eclipse.swt.widgets.Widget;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderComparator;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortFunction;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
@@ -74,8 +79,10 @@ public class ColumnGenerator {
 		final Map<Integer, Field> mapOfFields = new HashMap<>();
 		final Map<Field, GridViewerColumn> mapOfFieldColumns = new HashMap<>();
 		int counter = -1;
+		
+		final Collection<Field> classFields = orderFields(cls);
 
-		for (final Field f : cls.getFields()) {
+		for (final Field f : classFields) {
 			if (f.getAnnotation(LingoIgnore.class) != null) {
 				continue;
 			}
@@ -237,5 +244,22 @@ public class ColumnGenerator {
 		}
 
 		return new ColumnInfo(mapOfFields, mapOfFieldColumns);
+	}
+
+	/**
+	 * Sorts the columns with respect to their ColumnOrder annotation
+	 * @param cls is the class to get fields
+	 * @return the collection of fields
+	 */
+	private static Collection<Field> orderFields(Class<?> cls) {
+		final PriorityQueue<Field> sortQueue = ColumnOrderComparator.priorityQueue();
+		for (final Field field : cls.getFields()) {
+			sortQueue.add(field);
+		}
+		List<Field> fields = new LinkedList<Field>();
+		while (!sortQueue.isEmpty()) {
+			fields.add(sortQueue.poll());
+		}
+		return fields;
 	}
 }
