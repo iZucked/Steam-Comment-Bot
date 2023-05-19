@@ -4,26 +4,12 @@
  */
 package com.mmxlabs.lingo.reports.emissions;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
-import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
-import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
-import com.mmxlabs.lingo.reports.modelbased.annotations.LingoEquivalents;
-import com.mmxlabs.lingo.reports.modelbased.annotations.LingoFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
-import com.mmxlabs.models.lng.schedule.Schedule;
 
 /**
  * Cargo emissions report data
@@ -48,4 +34,16 @@ public class TotalEmissionAccountingReportModelV1 extends AbstractEmissionAccoun
 	@ColumnName("Shipping")
 	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
 	public Long shippingEmission;
+	
+	@JsonIgnore
+	@LingoIgnore
+	public double upstreamEmissionRate;
+	
+	@JsonIgnore
+	@LingoIgnore
+	public double pipelineEmissionRate;
+	
+	@JsonIgnore
+	@LingoIgnore
+	public double liquefactionEmissionRate;
 }
