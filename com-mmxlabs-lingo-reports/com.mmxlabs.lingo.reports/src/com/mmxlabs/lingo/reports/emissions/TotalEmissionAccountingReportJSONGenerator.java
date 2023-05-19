@@ -130,7 +130,7 @@ public class TotalEmissionAccountingReportJSONGenerator {
 			slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
 				model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 			});
-			model.totalEmission += model.shippingEmission;
+			model.totalEmission += model.shippingEmission + 25 * model.methaneSlip;
 		}
 
 		// getting the start and the end of the event

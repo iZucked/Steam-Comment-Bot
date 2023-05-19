@@ -121,7 +121,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					if (model.eventID == null) {
 						continue; 
 					}
-					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
+					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission + 25 * model.methaneSlip;
 					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
 					if (denominatorForCIICalculation == 0) {
 						model.attainedCII = 0L;

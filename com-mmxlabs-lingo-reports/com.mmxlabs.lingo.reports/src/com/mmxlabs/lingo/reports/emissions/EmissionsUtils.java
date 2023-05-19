@@ -27,6 +27,8 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class EmissionsUtils {
 	
+	public static final int METHANE_CO2_EQUIVALENT = 25;
+	
 	public static double getBaseFuelEmissionRate(final @NonNull Vessel vessel) {
 		return vessel.getVesselOrDelegateBaseFuelEmissionRate();
 	}

@@ -65,7 +65,7 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventEnd;
 	
-	@ColumnName("Methane Slip")
+	@ColumnName("CH4")
 	@ColumnOrderLevel(ColumnOrder.END)
 	public Long methaneSlip;
 	

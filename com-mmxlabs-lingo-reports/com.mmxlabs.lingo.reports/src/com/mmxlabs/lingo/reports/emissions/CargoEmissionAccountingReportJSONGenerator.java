@@ -103,8 +103,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 		});
 		model.eventStart = eventStart;
-		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission;
-		
+		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission + 25 * model.methaneSlip;
 		return model;
 	}
 	

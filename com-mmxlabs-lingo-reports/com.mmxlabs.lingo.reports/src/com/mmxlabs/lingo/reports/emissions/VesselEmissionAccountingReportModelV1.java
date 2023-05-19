@@ -27,7 +27,7 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
 	public Long pilotLightEmission;
 	
-	@ColumnName("Attained CII")
+	@ColumnName("CII")
 	@ColumnOrderLevel(ColumnOrder.LATER_LEVEL)
 	public Long attainedCII;
 }

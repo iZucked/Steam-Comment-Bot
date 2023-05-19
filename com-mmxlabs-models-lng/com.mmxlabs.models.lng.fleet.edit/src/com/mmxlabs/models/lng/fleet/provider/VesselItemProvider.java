@@ -765,7 +765,7 @@ public class VesselItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Vessel_methaneSlipRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_methaneSlipRate_feature", "_UI_Vessel_type"),
+				 getString("_UI_Vessel_methaneSlipRate_description"),
 				 FleetPackage.Literals.VESSEL__METHANE_SLIP_RATE,
 				 true,
 				 false,
