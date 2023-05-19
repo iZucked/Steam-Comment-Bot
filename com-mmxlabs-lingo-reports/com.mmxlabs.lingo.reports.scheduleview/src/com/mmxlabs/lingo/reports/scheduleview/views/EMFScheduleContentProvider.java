@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +29,8 @@ import org.eclipse.swt.SWT;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.EnabledPositionsSequenceProviderTracker;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
@@ -71,7 +72,10 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	private final WeakHashMap<Slot<?>, SlotVisit> cachedElements = new WeakHashMap<>();
 	
-	protected Map<String, Optional<PositionsSequenceProviderException>> enabledPositionsSequenceProviders = new HashMap<>();
+	@Inject
+	protected Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
+	
+	protected EnabledPositionsSequenceProviderTracker enabledPSPTracker = new EnabledPositionsSequenceProviderTracker();
 	
 	protected boolean showNominalsByDefault = false;
 
@@ -335,7 +339,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		cachedElements.clear();
-		enabledPositionsSequenceProviders.values().removeIf(v -> v.isPresent());
+		enabledPSPTracker.clearErrors();
 	}
 
 	@Override
@@ -461,16 +465,37 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 		if (!showNominalsByDefault && resource instanceof final Sequence sequence) {
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
 		} else if (resource instanceof PositionsSequence ps) {
-			return isProviderEnabledWithNoError(ps.getProviderId()) || (enabledPositionsSequenceProviders.values().stream().noneMatch(Optional::isEmpty) && !ps.isPartition());
+			return enabledPSPTracker.isVisible(ps);
 		}
 		return true;
 	}
 	
-	public boolean isProviderEnabledWithNoError(String positionsSequenceProviderId) {
-		return enabledPositionsSequenceProviders.containsKey(positionsSequenceProviderId) && enabledPositionsSequenceProviders.get(positionsSequenceProviderId).isEmpty();
+	public void injectExtensionPoints() {
+		Activator.getDefault().getInjector().injectMembers(this);
 	}
 	
+	private final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
+		List<@NonNull PositionsSequence> result = new ArrayList<>();
+		
+		try {
+			result.addAll(new BuySellSplit().provide(schedule));
+		} catch (PositionsSequenceProviderException e) {
+			// BuySellSplit should never throw this
+		}
+
+		if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+			for (var ext: positionsSequenceProviderExtensions) {
+				ISchedulePositionsSequenceProvider provider = ext.createInstance();
+				try {
+					result.addAll(provider.provide(schedule));
+				} catch (PositionsSequenceProviderException e1) {
+					enabledPSPTracker.addError(provider.getId(), e1);
+				}
+			}
+		}
+		return result;
+	}
+			
 	public abstract IScenarioDataProvider getScenarioDataProviderFor(Object obj);
 	
-	public abstract List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule);
 }

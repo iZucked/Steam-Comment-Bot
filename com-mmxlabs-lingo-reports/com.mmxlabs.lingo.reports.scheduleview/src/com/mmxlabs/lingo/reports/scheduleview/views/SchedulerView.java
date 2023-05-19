@@ -175,9 +175,6 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemeExtensions;
 
-	@Inject
-	protected Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
-	
 	private HighlightAction highlightAction;
 
 	private int numberOfSchedules;
@@ -187,12 +184,13 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private ReentrantSelectionManager selectionManager;
 
 	boolean showNominalsByDefault = false;
-	
+
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	/**
-	 * Basic colour only items. Other are rendered directly once the ganttchart has been created
+	 * Basic colour only items. Other are rendered directly once the ganttchart has
+	 * been created
 	 */
 	private static final List<ILegendItem> basiclegendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
@@ -248,14 +246,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
 		memento.putString(SchedulerViewConstants.SortMode, viewerComparator.getMode().toString());
 		memento.putString(SchedulerViewConstants.SortCategory, viewerComparator.getCategory().toString());
-		
+
 		// Only save the settings for providers where there are no errors
 		IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
-		for (var entry: contentProvider.enabledPositionsSequenceProviders.entrySet()) {
-			if (entry.getValue().isEmpty()) {
-				partitionSettings.putBoolean(entry.getKey(), true);
-			}
-		}
+		contentProvider.enabledPSPTracker.saveToMemento(partitionSettings);
 
 		super.saveState(memento);
 	}
@@ -404,7 +398,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						}
 					}
 				}
-				// Canal events are always selected with journeys 
+				// Canal events are always selected with journeys
 				final List<Object> additionalElements = l.stream() //
 						.filter(Journey.class::isInstance) //
 						.map(Journey.class::cast) //
@@ -533,8 +527,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 								}
 							} else if (d instanceof PositionsSequence ps) {
 								var cp = (EMFScheduleContentProvider) getContentProvider();
-								visible = cp.isProviderEnabledWithNoError(ps.getProviderId())
-										|| cp.enabledPositionsSequenceProviders.values().stream().noneMatch(Optional::isEmpty) && !ps.isPartition();
+								visible = cp.enabledPSPTracker.isVisible(ps);
 							}
 
 							ganttSection.setVisible(visible);
@@ -554,9 +547,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									visible = true;
 								}
 							}
-						} else if (d instanceof final PositionsSequence ps) { 
+						} else if (d instanceof final PositionsSequence ps) {
 							var cp = (EMFScheduleContentProvider) getContentProvider();
-							visible = cp.isProviderEnabledWithNoError(ps.getProviderId()) || cp.enabledPositionsSequenceProviders.values().stream().noneMatch(Optional::isEmpty) && !ps.isPartition();
+							visible = cp.enabledPSPTracker.isVisible(ps);
 						}
 
 						ganttSection.setVisible(visible);
@@ -694,48 +687,26 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				}
 				return null;
 			}
-			
-			@Override
-			public final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
-				List<@NonNull PositionsSequence> result = new ArrayList<>();
-				
-				try {
-					result.addAll(new BuySellSplit().provide(schedule));
-				} catch (PositionsSequenceProviderException e) {
-					// BuySellSplit should never throw this
-				}
 
-				if (positionsSequenceProviderExtensions.iterator().hasNext()) {
-					for (var ext: positionsSequenceProviderExtensions) {
-						ISchedulePositionsSequenceProvider provider = ext.createInstance();
-						try {
-							result.addAll(provider.provide(schedule));
-						} catch (PositionsSequenceProviderException e1) {
-							enabledPositionsSequenceProviders.put(provider.getId(), Optional.of(e1));
-						}
-					}
-				}
-				return result;
-			}
-			
 		};
 
 		viewer.setContentProvider(contentProvider);
-		
+		contentProvider.injectExtensionPoints();
+
 		// Restore positions sequence (partition) settings
 		{
 			final IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
 			if (partitionSettings != null) {
-				for (final var ext : positionsSequenceProviderExtensions) {
+				for (final var ext : contentProvider.positionsSequenceProviderExtensions) {
 					ISchedulePositionsSequenceProvider provider = ext.createInstance();
 					if (partitionSettings.getBoolean(provider.getId()) == Boolean.TRUE) {
 						// Only restore if an error hasn't been found
-						contentProvider.enabledPositionsSequenceProviders.putIfAbsent(provider.getId(), Optional.empty());
+						contentProvider.enabledPSPTracker.enableIfNoError(provider.getId());
 					}
 				}
 			}
 		}
-		
+
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, scenarioComparisonService);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
@@ -1367,7 +1338,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
+	 * Helper method to expand cargo selections to include the whole set of events
+	 * representing the cargo
 	 * 
 	 * @param selectedObjects
 	 * @return
@@ -1402,7 +1374,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to
+	 * reset pin mode data
 	 * 
 	 */
 	private void clearPinModeData() {
