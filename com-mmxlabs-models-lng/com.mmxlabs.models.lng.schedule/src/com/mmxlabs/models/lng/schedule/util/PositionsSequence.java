@@ -56,7 +56,7 @@ public class PositionsSequence {
 	@Override
 	public @NonNull String toString() {
 		final String side = isBuy ? "Buy" : "Sell";
-		return (description == null || description.isBlank()) ? side : side + " - " + description;
+		return (description == null || description.isBlank()) ? side : side + " " + description;
 	}
 	
 	public String getDescription() {
@@ -95,6 +95,12 @@ public class PositionsSequence {
 		List<Predicate<SlotAllocation>> slotAllocationPredicates = portGroups.stream().map(SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
 		List<Predicate<OpenSlotAllocation>> openSlotAllocationPredicates = portGroups.stream().map(OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
 		List<String> descriptions = portGroups.stream().map(NamedObject::getName).collect(Collectors.toList());
+		return makeSequencesFromExtraPredicates(schedule, providerId, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap, addOtherGroup, otherGroupDescription);
+	}
+
+	public static List<@NonNull PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, String providerId, List<@NonNull PortGroup> portGroups, List<String> descriptions, boolean allowOverlap, boolean addOtherGroup, String otherGroupDescription) {
+		List<Predicate<SlotAllocation>> slotAllocationPredicates = portGroups.stream().map(SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
+		List<Predicate<OpenSlotAllocation>> openSlotAllocationPredicates = portGroups.stream().map(OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
 		return makeSequencesFromExtraPredicates(schedule, providerId, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap, addOtherGroup, otherGroupDescription);
 	}
 	
