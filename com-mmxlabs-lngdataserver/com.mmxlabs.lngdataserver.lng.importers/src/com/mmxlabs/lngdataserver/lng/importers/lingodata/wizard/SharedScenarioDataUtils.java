@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -57,6 +58,7 @@ import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVer
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSelectionPage.DataOptionGroup;
 import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsToScenarioImporter;
@@ -91,6 +93,7 @@ import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -129,6 +132,8 @@ import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
 
 public final class SharedScenarioDataUtils {
 	private static final Logger LOG = LoggerFactory.getLogger(SharedScenarioDataUtils.class);
+
+	private static final String EAST_OF_SUEZ_PORT_GROUP = "East of Suez";
 
 	private SharedScenarioDataUtils() {
 
@@ -407,7 +412,8 @@ public final class SharedScenarioDataUtils {
 
 						try {
 
-							// Rebates are user controlled data, so make sure we copy them across to the new object.
+							// Rebates are user controlled data, so make sure we copy them across to the new
+							// object.
 							List<SuezCanalRouteRebate> routeRebates = null;
 							{
 								final SuezCanalTariff oldTariff = costModel.getSuezCanalTariff();
@@ -436,6 +442,56 @@ public final class SharedScenarioDataUtils {
 					}
 				});
 			};
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createSuezPortGroupUpdater() {
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final PortModel portModel = ScenarioModelUtil.getPortModel(target);
+						final String suezPortId = InternalDataConstants.PORT_SUEZ;
+						final Optional<Port> optSuezPort = portModel.getPorts().stream() //
+								.filter(p -> suezPortId.equalsIgnoreCase(p.getLocation().getMmxId())) //
+								.findAny();
+						if (optSuezPort.isPresent()) {
+							final Port suezPort = optSuezPort.get();
+							final Location suezLocation = suezPort.getLocation();
+							if (suezLocation != null) {
+								final double suezLongitude = suezLocation.getLon();
+								final List<Port> eastOfSuezPorts = portModel.getPorts().stream() //
+										.filter(p -> p.getLocation() != null && p.getLocation().getLon() >= suezLongitude) //
+										.toList();
+								final Optional<PortGroup> optEastOfSuezPortGroup = portModel.getPortGroups().stream() //
+										.filter(pg -> pg.getName() != null && pg.getName().equalsIgnoreCase(EAST_OF_SUEZ_PORT_GROUP)) //
+										.findAny();
+								if (optEastOfSuezPortGroup.isPresent()) {
+									final PortGroup eastOfSuezPortGroup = optEastOfSuezPortGroup.get();
+									if (!eastOfSuezPortGroup.getContents().isEmpty()) {
+										final List<APortSet<Port>> portsToRemove = new ArrayList<>(eastOfSuezPortGroup.getContents());
+										appendAndExecute(RemoveCommand.create(target.getEditingDomain(), eastOfSuezPortGroup, PortPackage.eINSTANCE.getPortGroup_Contents(), portsToRemove));
+									}
+									if (!eastOfSuezPorts.isEmpty()) {
+										appendAndExecute(AddCommand.create(target.getEditingDomain(), eastOfSuezPortGroup, PortPackage.eINSTANCE.getPortGroup_Contents(), eastOfSuezPorts));
+									}
+								} else {
+									final PortGroup eastOfSuezPortGroup = PortFactory.eINSTANCE.createPortGroup();
+									eastOfSuezPortGroup.setName(EAST_OF_SUEZ_PORT_GROUP);
+									eastOfSuezPortGroup.getContents().addAll(eastOfSuezPorts);
+									appendAndExecute(AddCommand.create(target.getEditingDomain(), portModel, PortPackage.eINSTANCE.getPortModel_PortGroups(), eastOfSuezPortGroup));
+								}
+							}
+						}
+					}
+				});
+			};
+
 		}
 
 		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createSuezTariffRebateUpdater(final String portGroupsJSON, final String rebatesJSON) {
@@ -770,8 +826,10 @@ public final class SharedScenarioDataUtils {
 			mapper.registerModule(new EMFJacksonModule());
 			final String charterInJSON = mapper.writeValueAsString(spotMarketsModel.getCharterInMarkets());
 			final String charterOutJSON = mapper.writeValueAsString(spotMarketsModel.getCharterOutMarkets());
-			// final String otherJSON1 = mapper.writeValueAsString(spotMarketsModel.getCharterOutMarketParameters());
-			// final String otherJSON2 = mapper.writeValueAsString(spotMarketsModel.getCharterOutStartDate());
+			// final String otherJSON1 =
+			// mapper.writeValueAsString(spotMarketsModel.getCharterOutMarketParameters());
+			// final String otherJSON2 =
+			// mapper.writeValueAsString(spotMarketsModel.getCharterOutStartDate());
 
 			return (cmd, target) -> {
 				cmd.append(new CompoundCommand() {
@@ -1239,7 +1297,8 @@ public final class SharedScenarioDataUtils {
 						// Copy slots
 						// Copy cargoes
 						// Check back references.
-						// appendAndExecute(SetCommand.create(editingDomain, target.getScenario(), LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), newCargoModel));
+						// appendAndExecute(SetCommand.create(editingDomain, target.getScenario(),
+						// LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AdpModel(), newCargoModel));
 					} catch (final Exception e1) {
 						e1.printStackTrace();
 						appendAndExecute(UnexecutableCommand.INSTANCE);
@@ -1250,7 +1309,8 @@ public final class SharedScenarioDataUtils {
 	}
 
 	public static boolean checkPricingDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
-		final boolean settledOK = true;// checkMatch(LNGScenarioSharedModelTypes.SETTLED_PRICES.getID(), provider, targetVersions);
+		final boolean settledOK = true;// checkMatch(LNGScenarioSharedModelTypes.SETTLED_PRICES.getID(), provider,
+										// targetVersions);
 		final boolean marketOk = checkMatch(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), provider, targetVersions);
 
 		return marketOk && settledOK;
@@ -1294,7 +1354,8 @@ public final class SharedScenarioDataUtils {
 		if (LicenseFeatures.isPermitted("features:hub-sync-vessels")) {
 			groups.add(new DataOptionGroup("Vessels", !checkFleetDataMatch(p, scenarioDataVersions), true, false, DataOptions.FleetDatabase));
 		}
-		// groups.add(new DataOptionGroup("Commercial", true, true, false, DataOptions.CommercialData));
+		// groups.add(new DataOptionGroup("Commercial", true, true, false,
+		// DataOptions.CommercialData));
 		// // groups.add(new DataOptionGroup("Misc", true, false, false));
 		// }
 		return groups;
@@ -1346,7 +1407,8 @@ public final class SharedScenarioDataUtils {
 				// Ignore schedule models.
 				return //
 				feature == SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE //
-				// || feature == AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL //
+				// || feature ==
+				// AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL //
 				;
 			}
 		};
@@ -1441,7 +1503,8 @@ public final class SharedScenarioDataUtils {
 				// Ignore schedule models.
 				return //
 				(!includeScheduleModel && feature == SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE) // Optionally ignore
-				// || feature == AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL //
+				// || feature ==
+				// AnalyticsPackage.Literals.SOLUTION_OPTION_MICRO_CASE__SCHEDULE_MODEL //
 				;
 			}
 		};
