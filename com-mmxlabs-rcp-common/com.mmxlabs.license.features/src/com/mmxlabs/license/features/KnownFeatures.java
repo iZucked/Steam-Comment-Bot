@@ -143,8 +143,6 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_MARKETABLE_WINDOWS = "features:marketability";
 	
-	public static final String FEATURE_FORMULAE = "features:formulae";
-	
 	public static final String FEATURE_PREFERRED_FORMULAE = "features:preferred-formulae";
 	
 	public static final String FEATURE_BUSINESS_UNITS = "features:business-units";

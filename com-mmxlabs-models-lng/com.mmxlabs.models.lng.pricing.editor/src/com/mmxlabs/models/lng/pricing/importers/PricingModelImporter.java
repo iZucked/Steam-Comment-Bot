@@ -103,9 +103,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
 		inputs.put(BASEFUEL_PRICING_KEY, "Base Fuel Curves");
 		inputs.put(CURRENCY_CURVE_KEY, "Currency Curves");
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_FORMULAE)) {
-			inputs.put(FORMULA_KEY, "Formulae");
-		}
+		inputs.put(FORMULA_KEY, "Formulae");
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
 			inputs.put(SETTLED_PRICES_KEY, "Settled Prices");
 			inputs.put(HOLIDAY_CALENDAR_KEY, "Holiday Calendars");

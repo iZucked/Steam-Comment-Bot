@@ -37,7 +37,6 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.ToolTip;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -67,8 +66,6 @@ import org.osgi.service.event.EventHandler;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
@@ -115,9 +112,6 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  * 
  */
 public class IndexPane extends ScenarioTableViewerPane {
-
-	//private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
-	private final boolean isFormulaeEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_FORMULAE);
 	
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
@@ -180,9 +174,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		items.add(new Pair<>(PricingPackage.Literals.BUNKER_FUEL_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CHARTER_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CURRENCY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES)));
-		if (isFormulaeEnabled) {
-			items.add(new Pair<>(PricingPackage.Literals.COMMODITY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES, "Formula")));
-		}
+		items.add(new Pair<>(PricingPackage.Literals.COMMODITY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES, "Formula")));
 		return AddModelAction.create(items, actions);
 	}
 
@@ -191,13 +183,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// Add in Check for Tree
 		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getScenarioEditingLocation());
 		result.getGrid().setTreeLinesVisible(true);
-		result.addFilter(new ViewerFilter() {
-
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				return !(element instanceof final CommodityCurve cc && cc.eContainer() == PricingPackage.eINSTANCE.getPricingModel_FormulaeCurves() && !isFormulaeEnabled);
-			}
-		});
 
 		return result;
 	}
