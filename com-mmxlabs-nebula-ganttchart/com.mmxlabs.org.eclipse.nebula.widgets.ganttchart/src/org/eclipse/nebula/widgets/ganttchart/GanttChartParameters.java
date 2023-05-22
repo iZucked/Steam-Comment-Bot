@@ -1,5 +1,6 @@
 package org.eclipse.nebula.widgets.ganttchart;
 
+import org.eclipse.nebula.widgets.ganttchart.label.EventLabelFontSize;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -17,14 +18,24 @@ public class GanttChartParameters {
 
 	public static void updateFontSize(EventLabelFontSize size) {
 		fontSize = size;
+		recalculateMarginsPaddingsWithRespectToFatStrings();
 	}
 	
-	private static final String FAT_STRING = "B[j";
+	private static final String THIN_STRING = "amcn";
+	private static final String TOP_FAT_STRING = "BMNliCD";
+	private static final String BOTTOM_FAT_STRING = "jgy[]";
 
-	private static int currentTallestTextHeight = initTallestTextHeight();
+	private static final EventLabelFontSize INITIAL_FONT_SIZE = // TODO read from preferences
+			EventLabelFontSize.MEDIUM;
+	private static EventLabelFontSize fontSize = INITIAL_FONT_SIZE;
 	
-	private static final EventLabelFontSize initialFontSize = EventLabelFontSize.MEDIUM;
-	private static EventLabelFontSize fontSize = initialFontSize;
+	private static int currentShortestTextHeight;
+	private static int currentTextRespectfulTopPadding;
+	private static int currentTextRespectfulBottomPadding;	
+	
+	static {
+		recalculateMarginsPaddingsWithRespectToFatStrings();
+	}
 
 	private static final int STANDART_FIXED_ROW_V_PADDING = 8;
 
@@ -43,25 +54,27 @@ public class GanttChartParameters {
 	}
 	
 	/**
-	 * Just initialization of the static global variable
+	 * Updating parameters responsible for text looking nicely aligned for all letters.
+	 * Letters like "j", "[", "H", and etc. Now top and bottom margins are separate.
+	 * Idea is that the margin of the EventLabelFontSize will not be the extra thing, 
+	 * but the minimum buffer zone for the top and bottom "limbs" of letters like
+	 * "l", "j", "[", "Y". If the limbs are taller than the EventLabelFontSize margin,
+	 * then the actual margin will be extended. Independent for top and bottom.
 	 */
-	private static int initTallestTextHeight() {
+	private static void recalculateMarginsPaddingsWithRespectToFatStrings() {
 		final int dummyImageSize = 2;
 		final Image temporaryImage = new Image(Display.getDefault(), dummyImageSize, dummyImageSize);
 		final GC temporaryGC = new GC(temporaryImage);
-		final int result = temporaryGC.stringExtent(FAT_STRING).y;
+		
+		// Recalculation
+		currentShortestTextHeight = temporaryGC.stringExtent(THIN_STRING).y;
+		final int topDiff = temporaryGC.stringExtent(TOP_FAT_STRING).y - currentShortestTextHeight;
+		final int botDiff = temporaryGC.stringExtent(BOTTOM_FAT_STRING).y - currentShortestTextHeight;
+		currentTextRespectfulTopPadding = Math.max(topDiff, fontSize.getMargin());
+		currentTextRespectfulBottomPadding = Math.max(botDiff, fontSize.getMargin());
+		
 		temporaryImage.dispose();
 		temporaryGC.dispose();
-		assert result > dummyImageSize;
-		return result;
-	}
-
-	public static int getStandartRowVerticalPadding() {
-		return STANDART_FIXED_ROW_V_PADDING;
-	}
-	
-	public static int getTallestTextHeight() {
-		return currentTallestTextHeight;
 	}
 
 	/**
@@ -71,12 +84,8 @@ public class GanttChartParameters {
 		return 3 * fontSize.getFontHeightInPixels() / 4;
 	}
 
-	public static int getStandartEventVerticalPadding() {
-		return fontSize.getMargin();
-	}
-
 	private static int getStandartEventHeight() {
-		return currentTallestTextHeight + 2 * getStandartEventVerticalPadding();
+		return currentShortestTextHeight + getEventLabelTopPadding() + getEventLabelBottomPadding();
 	}
 
 	public static int getRowHeight() {
@@ -85,6 +94,10 @@ public class GanttChartParameters {
 
 	public static int getEventSpacerSize() {
 		return STANDART_EVENT_SPACER_SIZE;
+	}
+	
+	public static int getRowPadding() {
+		return STANDART_FIXED_ROW_V_PADDING;
 	}
 
 	public static ISettings getSettings() {
@@ -226,5 +239,13 @@ public class GanttChartParameters {
 		public int getEventHeight() {
 			return getStandartEventHeight();
 		}
+	}
+
+	public static int getEventLabelTopPadding() {
+		return currentTextRespectfulTopPadding;
+	}
+
+	public static int getEventLabelBottomPadding() {
+		return currentTextRespectfulBottomPadding;
 	}
 }

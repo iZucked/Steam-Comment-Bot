@@ -1,4 +1,4 @@
-package org.eclipse.nebula.widgets.ganttchart;
+package org.eclipse.nebula.widgets.ganttchart.label;
 
 public enum EventLabelFontSize {
 	SMALL(12, 1),
