@@ -35,10 +35,12 @@ public class IndexTreeTransformer {
 	 * 
 	 */
 	public enum DataType {
-		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, true, PriceIndexType.COMMODITY), BaseFuel("Base Fuel", false,
-				PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES, false, PriceIndexType.BUNKERS), Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES, false,
-						PriceIndexType.CHARTER), Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES, false, PriceIndexType.CURRENCY),
-		PricingBasis("Pricing Bases", false, PricingPackage.Literals.PRICING_MODEL__PRICING_BASES, true, PriceIndexType.PRICING_BASIS);
+		Commodity("Commodity", false, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, true, PriceIndexType.COMMODITY), 
+		BaseFuel("Base Fuel", false, PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES, false, PriceIndexType.BUNKERS), 
+		Charter("Chartering", true, PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES, false, PriceIndexType.CHARTER), 
+		Currency("Currency", false, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES, false, PriceIndexType.CURRENCY),
+		//PricingBasis("Pricing Bases", false, PricingPackage.Literals.PRICING_MODEL__PRICING_BASES, true, PriceIndexType.PRICING_BASIS),
+		Formulae("Formulae", false, PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES, true, PriceIndexType.COMMODITY);
 
 		private final String name;
 		private final EReference containerFeature;
@@ -70,7 +72,8 @@ public class IndexTreeTransformer {
 		}
 	}
 	
-	private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
+	//private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
+	private final boolean isFormulaeEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_FORMULAE);
 
 	private final EPackage modelPackage;
 	private final EClass nodeClass;
@@ -117,7 +120,10 @@ public class IndexTreeTransformer {
 
 			final List<EObject> nodes = new LinkedList<EObject>();
 			for (final DataType dt : DataType.values()) {
-				if (dt == DataType.PricingBasis && !isPricingBasesEnabled) {
+//				if (dt == DataType.PricingBasis && !isPricingBasesEnabled) {
+//					continue;
+//				}
+				if (dt == DataType.Formulae && !isFormulaeEnabled) {
 					continue;
 				}
 				final EObject n = modelPackage.getEFactoryInstance().create(nodeClass);

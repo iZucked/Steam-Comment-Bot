@@ -29,7 +29,6 @@ public final class SchedulerConstants {
 	public static final String Parser_BaseFuel = "BaseFuel";
 	public static final String Parser_Charter = "Charter";
 	public static final String Parser_Currency = "Currency";
-	public static final String Parser_PricingBasis = "PricingBasis";
 
 	public static final String MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE = "MidnightAlignedIntegerCurve";
 
@@ -94,8 +93,6 @@ public final class SchedulerConstants {
 	public static final String GENERATED_PAPERS_IN_PNL = "generated-papers-in-pnl";
 	public static final String IGNORE_HEDGE_PNL_AT_OPTI = "generated-papers-ignore-at-optimisation";
 	public static final String INDIVIDUAL_EXPOSURES = "individual-exposures";
-	
-	public static final String PRICING_BASES = "pricing-bases";
 	
 	public static final String PROCESS_TRANSFER_MODEL = "process-transfer-model";
 	

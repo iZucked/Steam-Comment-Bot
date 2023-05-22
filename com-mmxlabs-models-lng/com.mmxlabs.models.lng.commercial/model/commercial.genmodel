@@ -111,8 +111,7 @@
     <genClasses image="false" ecoreClass="commercial.ecore#//LNGPriceCalculatorParameters"/>
     <genClasses ecoreClass="commercial.ecore#//ExpressionPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/priceExpression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/pricingBasis"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ExpressionPriceParameters/preferredPBs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//ExpressionPriceParameters/preferredFormulae"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//VolumeTierPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//VolumeTierPriceParameters/lowExpression"/>
@@ -225,6 +224,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BusinessUnit/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BusinessUnit/default"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//PreferredPricingBasesWrapper"/>
+    <genClasses ecoreClass="commercial.ecore#//PreferredFormulaeWrapper"/>
   </genPackages>
 </genmodel:GenModel>

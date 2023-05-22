@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
+package com.mmxlabs.models.lng.transfers.editor.displaycomposites;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,8 +41,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
+import com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -62,13 +62,13 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
-public class PreferredPricingBasisTableCreator {
+public class PreferredFormulaeTableCreator {
 
-	public static EObjectTableViewer createPrefferedPBsTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
+	public static EObjectTableViewer createPrefferedFormulaeTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final EObject input, final EReference reference, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
-		final Label label = toolkit.createLabel(parent, "Preferred pricing bases");
+		final Label label = toolkit.createLabel(parent, "Preferred formulae");
 		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
@@ -99,7 +99,7 @@ public class PreferredPricingBasisTableCreator {
 					@Override
 					protected Control createControl(Composite parent) {
 						Control control = super.createControl(parent);
-						this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, ExpressionAnnotationConstants.TYPE_PRICING_BASIS);
+						this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, ExpressionAnnotationConstants.TYPE_COMMODITY);
 						EditingDomain editingDomain = commandHandler.getEditingDomain();
 						for (Resource r : editingDomain.getResourceSet().getResources()) {
 							for (EObject o : r.getContents()) {
@@ -199,11 +199,11 @@ public class PreferredPricingBasisTableCreator {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 
-				final PreferredPricingBasesWrapper newPPBW = CommercialFactory.eINSTANCE.createPreferredPricingBasesWrapper();
+				final PreferredFormulaeWrapper newPFW = CommercialFactory.eINSTANCE.createPreferredFormulaeWrapper();
 				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), input,  //
-						reference, newPPBW)//
+						reference, newPFW)//
 						, input,  reference);
-				eViewer.setSelection(new StructuredSelection(newPPBW));
+				eViewer.setSelection(new StructuredSelection(newPFW));
 				eViewer.refresh();
 				RunnerHelper.asyncExec(sizeChangedAction);
 			}
@@ -243,7 +243,7 @@ public class PreferredPricingBasisTableCreator {
 		if (mmxo instanceof LNGScenarioModel scenarioModel // 
 				&& scenarioModel.getReferenceModel() != null //
 				&& scenarioModel.getReferenceModel().getPricingModel() != null) {
-			final List<PricingBasis> pb = scenarioModel.getReferenceModel().getPricingModel().getPricingBases();
+			final List<CommodityCurve> pb = scenarioModel.getReferenceModel().getPricingModel().getFormulaeCurves();
 			if (pb != null) {
 				return pb.stream().map(NamedObject::getName).toList();
 			}
