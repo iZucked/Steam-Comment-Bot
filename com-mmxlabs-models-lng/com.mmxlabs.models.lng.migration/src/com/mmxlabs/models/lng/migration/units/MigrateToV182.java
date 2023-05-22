@@ -19,12 +19,12 @@ public class MigrateToV182 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 180;
+		return 181;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 181;
+		return 182;
 	}
 
 	@Override
