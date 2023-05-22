@@ -3,6 +3,8 @@ package org.eclipse.nebula.widgets.ganttchart;
 import org.eclipse.nebula.widgets.ganttchart.label.EventLabelFontSize;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
@@ -30,8 +32,7 @@ public class GanttChartParameters {
 	private static EventLabelFontSize fontSize = INITIAL_FONT_SIZE;
 	
 	private static int currentShortestTextHeight;
-	private static int currentTextRespectfulTopPadding;
-	private static int currentTextRespectfulBottomPadding;	
+	private static int currentTextRespectfulPadding;
 	
 	static {
 		recalculateMarginsPaddingsWithRespectToFatStrings();
@@ -62,25 +63,40 @@ public class GanttChartParameters {
 	 * then the actual margin will be extended. Independent for top and bottom.
 	 */
 	private static void recalculateMarginsPaddingsWithRespectToFatStrings() {
+		// Preparation
 		final int dummyImageSize = 2;
 		final Image temporaryImage = new Image(Display.getDefault(), dummyImageSize, dummyImageSize);
 		final GC temporaryGC = new GC(temporaryImage);
+		final Font temporaryFont = GanttChartParameters.getStandardFont();
+		temporaryGC.setFont(temporaryFont);
 		
 		// Recalculation
 		currentShortestTextHeight = temporaryGC.stringExtent(THIN_STRING).y;
 		final int topDiff = temporaryGC.stringExtent(TOP_FAT_STRING).y - currentShortestTextHeight;
 		final int botDiff = temporaryGC.stringExtent(BOTTOM_FAT_STRING).y - currentShortestTextHeight;
-		currentTextRespectfulTopPadding = Math.max(topDiff, fontSize.getMargin());
-		currentTextRespectfulBottomPadding = Math.max(botDiff, fontSize.getMargin());
+		currentTextRespectfulPadding = Math.max(topDiff, botDiff) + fontSize.getMargin();
 		
+		// Resources disposal
 		temporaryImage.dispose();
+		temporaryFont.dispose();
 		temporaryGC.dispose();
+	}
+	
+	/**
+	 * Get default font object with standard event label font height
+	 * @return
+	 */
+	public static Font getStandardFont() {
+		final String fontDataName = Display.getDefault().getSystemFont().getFontData()[0].getName();
+		final int fontHeight = GanttChartParameters.getStandardEventLabelFontHeight();
+		final FontData fontData = new FontData(fontDataName, fontHeight, SWT.NORMAL);
+		return new Font(Display.getDefault(), fontData);
 	}
 
 	/**
-	 * Size of the event label height in points
+	 * Size of the event label font height in points
 	 */
-	public static int getStandartEventLabelFontHeight() {
+	private static int getStandardEventLabelFontHeight() {
 		return 3 * fontSize.getFontHeightInPixels() / 4;
 	}
 
@@ -242,10 +258,10 @@ public class GanttChartParameters {
 	}
 
 	public static int getEventLabelTopPadding() {
-		return currentTextRespectfulTopPadding;
+		return currentTextRespectfulPadding;
 	}
 
 	public static int getEventLabelBottomPadding() {
-		return currentTextRespectfulBottomPadding;
+		return currentTextRespectfulPadding;
 	}
 }
