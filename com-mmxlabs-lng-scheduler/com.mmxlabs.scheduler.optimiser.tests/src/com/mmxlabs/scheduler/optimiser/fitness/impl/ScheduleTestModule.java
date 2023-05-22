@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -18,16 +17,12 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.EvaluatedStateConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
@@ -70,8 +65,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
@@ -86,9 +79,12 @@ public class ScheduleTestModule extends AbstractModule {
 
 	private IPhaseOptimisationData pData;
 
-	public ScheduleTestModule(final @NonNull IOptimisationData data, IPhaseOptimisationData pData) {
+	private ISequences initialSequences;
+
+	public ScheduleTestModule(final @NonNull IOptimisationData data, IPhaseOptimisationData pData, ISequences sequences) {
 		this.data = data;
 		this.pData = pData;
+		this.initialSequences = sequences;
 	}
 
 	@Override
@@ -271,29 +267,28 @@ public class ScheduleTestModule extends AbstractModule {
 		final List<String> result = new ArrayList<>(registry.getConstraintCheckerNames());
 		return result;
 	}
-
-	@Provides
-	@Singleton
-	private IInitialSequenceBuilder provideIInitialSequenceBuilder(final Injector injector, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
-		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(pairwiseCheckers);
-		injector.injectMembers(builder);
-		return builder;
-	}
-
+//
+//	@Provides
+//	@Singleton
+//	private IInitialSequenceBuilder provideIInitialSequenceBuilder(final Injector injector, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
+//		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(pairwiseCheckers);
+//		injector.injectMembers(builder);
+//		return builder;
+//	}
+//
 	@Provides
 	@Singleton
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
-	private ISequences provideInitialSequences(final IInitialSequenceBuilder sequenceBuilder) {
+	private ISequences provideInitialSequences() {
 
-		final ISequences sequences = sequenceBuilder.createInitialSequences(pData, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
 
-		return sequences;
+		return initialSequences;
 	}
-
+//
 	@Provides
 	@Singleton
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT)
-	private ISequences provideInputSequences(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences) {
+	private ISequences provideInputSequences( ) {
 
 		return initialSequences;
 	}

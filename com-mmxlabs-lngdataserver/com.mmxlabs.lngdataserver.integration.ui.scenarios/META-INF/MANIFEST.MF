@@ -60,7 +60,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.license.ssl,
  org.eclipse.core.net,
  com.mmxlabs.models.lng.scenario.ui,
- org.bouncycastle.bcprov
+ org.bouncycastle.bcprov,
+ wrapped.com.auth0.java-jwt
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: javax.inject;version="1.0.0",
  javax.servlet;version="4.0.0",
@@ -73,6 +74,7 @@ Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Ac
 Export-Package: com.mmxlabs.lngdataserver.integration.ui.scenarios,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.api,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud,
+ com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.auth,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.commands,

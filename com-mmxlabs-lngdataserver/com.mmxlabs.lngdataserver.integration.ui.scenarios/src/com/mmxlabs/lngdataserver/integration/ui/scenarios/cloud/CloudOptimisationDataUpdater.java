@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -33,6 +34,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.swt.internal.ole.win32.FUNCDESC;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +51,7 @@ import com.mmxlabs.models.lng.transformer.ui.jobmanagers.Task;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.TaskStatus;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
@@ -330,40 +337,56 @@ class CloudOptimisationDataUpdater {
 			}
 
 		};
-
 		if (tasksFile.exists() && tasksFile.canRead()) {
-			try {
-				final String json = Files.readString(tasksFile.toPath());
-				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
-				if (tasks != null && !tasks.isEmpty()) {
-					// Update downloaded state
-					for (final var r : tasks) {
-						if (r.job == null) {
-							continue;
-						}
-						if (r.isComplete()) {
-							continue;
-						}
-						ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
-							// Really want to make sure this is the "My Scenarios" services, but local is a
-							// good proxy for now.
-							if (ss.getServiceModel().isLocal()) {
-								// Does the UUID exist in the service?
-								ScenarioInstance si = ss.getScenarioInstance(r.job.getScenarioUUID());
-								if (si != null) {
-									CloudJobManager.INSTANCE.resumeTask(si, r);
-								}
-							}
-							return false;
-						});
-					}
-				}
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
-		}
 
-		updateThread.start();
+			// Defer running resume until we know the scenario service has loaded, otherwise we can execute this before the scenario are loaded and we loose the job
+			var bundleContext = FrameworkUtil.getBundle(getClass()).getBundleContext();
+			ServiceTracker<IScenarioService, IScenarioService> tracker = new ServiceTracker<>(bundleContext, IScenarioService.class, null) {
+				@Override
+				public IScenarioService addingService(ServiceReference<@NonNull IScenarioService> reference) {
+
+					final IScenarioService ss = super.addingService(reference);
+
+					// Really want to make sure this is the "My Scenarios" services, but local is a
+					// good proxy for now.
+					if (ss.getServiceModel().isLocal()) {
+						try {
+							final String json = Files.readString(tasksFile.toPath());
+							final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+							if (tasks != null && !tasks.isEmpty()) {
+								// Update downloaded state
+								for (final var r : tasks) {
+									if (r.job == null) {
+										continue;
+									}
+									if (r.isComplete()) {
+										continue;
+									}
+
+									// Does the UUID exist in the service?
+									ScenarioInstance si = ss.getScenarioInstance(r.job.getScenarioUUID());
+									if (si != null) {
+										CloudJobManager.INSTANCE.resumeTask(si, r);
+									}
+								}
+								// Clean up self
+								this.close();
+
+							}
+						} catch (final IOException e) {
+							e.printStackTrace();
+						} finally {
+							updateThread.start();
+						}
+					}
+
+					return ss;
+				}
+			};
+			tracker.open(true);
+		} else {
+			updateThread.start();
+		}
 	}
 
 	public void createUserIdFile() {
@@ -514,10 +537,10 @@ class CloudOptimisationDataUpdater {
 	}
 
 	/**
-	 * Returns records from the master list of records. Returns null if no record
-	 * found.
+	 * Returns records from the master list of records. Returns null if no record found.
 	 *
-	 * @param jobId  - jobId if next arg is false
+	 * @param jobId
+	 *            - jobId if next arg is false
 	 * @param isUUID
 	 * @return
 	 */
