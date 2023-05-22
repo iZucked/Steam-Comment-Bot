@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -43,6 +44,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -68,6 +70,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -95,6 +98,10 @@ import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderCompar
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -125,6 +132,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.MultiEvent;
+import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
@@ -181,7 +189,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	/**
-	 * Basic colour only items. Other are rendered directly once the ganttchart has been created
+	 * Basic colour only items. Other are rendered directly once the ganttchart has
+	 * been created
 	 */
 	private static final List<ILegendItem> basiclegendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
@@ -217,6 +226,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			if (memento.getChild(SchedulerViewConstants.Highlight_) == null) {
 				memento.createChild(SchedulerViewConstants.Highlight_);
 			}
+			if (memento.getChild(SchedulerViewConstants.Partition_) == null) {
+				memento.createChild(SchedulerViewConstants.Partition_);
+			}
 
 			this.showNominalsByDefault = memento.getBoolean(SchedulerViewConstants.Show_Nominals);
 		}
@@ -234,6 +246,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
 		memento.putString(SchedulerViewConstants.SortMode, viewerComparator.getMode().toString());
 		memento.putString(SchedulerViewConstants.SortCategory, viewerComparator.getCategory().toString());
+
+		// Only save the settings for providers where there are no errors
+		IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
+		contentProvider.enabledPSPTracker.saveToMemento(partitionSettings);
 
 		super.saveState(memento);
 	}
@@ -382,7 +398,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						}
 					}
 				}
-				// Canal events are always selected with journeys 
+				// Canal events are always selected with journeys
 				final List<Object> additionalElements = l.stream() //
 						.filter(Journey.class::isInstance) //
 						.map(Journey.class::cast) //
@@ -509,6 +525,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 										visible = true;
 									}
 								}
+							} else if (d instanceof PositionsSequence ps) {
+								var cp = (EMFScheduleContentProvider) getContentProvider();
+								visible = cp.enabledPSPTracker.isVisible(ps);
 							}
 
 							ganttSection.setVisible(visible);
@@ -528,7 +547,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									visible = true;
 								}
 							}
+						} else if (d instanceof final PositionsSequence ps) {
+							var cp = (EMFScheduleContentProvider) getContentProvider();
+							visible = cp.enabledPSPTracker.isVisible(ps);
 						}
+
 						ganttSection.setVisible(visible);
 					}
 				}
@@ -664,8 +687,26 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				}
 				return null;
 			}
+
 		};
+
 		viewer.setContentProvider(contentProvider);
+		contentProvider.injectExtensionPoints();
+
+		// Restore positions sequence (partition) settings
+		{
+			final IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
+			if (partitionSettings != null) {
+				for (final var ext : contentProvider.positionsSequenceProviderExtensions) {
+					ISchedulePositionsSequenceProvider provider = ext.createInstance();
+					if (partitionSettings.getBoolean(provider.getId()) == Boolean.TRUE) {
+						// Only restore if an error hasn't been found
+						contentProvider.enabledPSPTracker.enableIfNoError(provider.getId());
+					}
+				}
+			}
+		}
+
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, scenarioComparisonService);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
@@ -1297,7 +1338,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
+	 * Helper method to expand cargo selections to include the whole set of events
+	 * representing the cargo
 	 * 
 	 * @param selectedObjects
 	 * @return
@@ -1332,7 +1374,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to
+	 * reset pin mode data
 	 * 
 	 */
 	private void clearPinModeData() {
