@@ -97,7 +97,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.START_HEEL_OPTIONS: return createStartHeelOptions();
 			case CommercialPackage.REGAS_PRICING_PARAMS: return createRegasPricingParams();
 			case CommercialPackage.BUSINESS_UNIT: return createBusinessUnit();
-			case CommercialPackage.PREFERRED_PRICING_BASES_WRAPPER: return createPreferredPricingBasesWrapper();
+			case CommercialPackage.PREFERRED_FORMULAE_WRAPPER: return createPreferredFormulaeWrapper();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -448,9 +448,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public PreferredPricingBasesWrapper createPreferredPricingBasesWrapper() {
-		PreferredPricingBasesWrapperImpl preferredPricingBasesWrapper = new PreferredPricingBasesWrapperImpl();
-		return preferredPricingBasesWrapper;
+	public PreferredFormulaeWrapper createPreferredFormulaeWrapper() {
+		PreferredFormulaeWrapperImpl preferredFormulaeWrapper = new PreferredFormulaeWrapperImpl();
+		return preferredFormulaeWrapper;
 	}
 
 	/**

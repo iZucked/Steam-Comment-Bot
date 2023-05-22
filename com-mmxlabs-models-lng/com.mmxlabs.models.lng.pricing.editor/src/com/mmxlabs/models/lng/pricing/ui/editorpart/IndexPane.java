@@ -18,7 +18,6 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
@@ -75,7 +74,6 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -90,7 +88,6 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.ui.EMFViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.DefaultToolTipProvider;
@@ -119,8 +116,9 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public class IndexPane extends ScenarioTableViewerPane {
 
-	private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
-
+	//private final boolean isPricingBasesEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES);
+	private final boolean isFormulaeEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_FORMULAE);
+	
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
 
@@ -182,10 +180,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 		items.add(new Pair<>(PricingPackage.Literals.BUNKER_FUEL_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CHARTER_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CHARTER_CURVES)));
 		items.add(new Pair<>(PricingPackage.Literals.CURRENCY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES)));
-		if (isPricingBasesEnabled) {
-			items.add(new Pair<>(PricingPackage.Literals.PRICING_BASIS, getAddContext(PricingPackage.Literals.PRICING_MODEL__PRICING_BASES)));
+		if (isFormulaeEnabled) {
+			items.add(new Pair<>(PricingPackage.Literals.COMMODITY_CURVE, getAddContext(PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES, "Formula")));
 		}
-
 		return AddModelAction.create(items, actions);
 	}
 
@@ -198,8 +195,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				// if pricing bases feature is not enabled - do not show the pricing basis!
-				return !(element instanceof PricingBasis && !isPricingBasesEnabled);
+				return !(element instanceof final CommodityCurve cc && cc.eContainer() == PricingPackage.eINSTANCE.getPricingModel_FormulaeCurves() && !isFormulaeEnabled);
 			}
 		});
 
@@ -221,8 +217,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				if (element instanceof AbstractYearMonthCurve) {
-					final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
+				if (element instanceof final AbstractYearMonthCurve curve) {
 					if (curve.isSetExpression()) {
 						return curve.getExpression();
 					}
@@ -249,8 +244,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 			@Override
 			public String render(final Object object) {
 
-				if (object instanceof AbstractYearMonthCurve) {
-					final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) object;
+				if (object instanceof final AbstractYearMonthCurve curve) {
 
 					if (!isEmpty(curve.getCurrencyUnit()) && !isEmpty(curve.getVolumeUnit())) {
 						return String.format("%s/%s", curve.getCurrencyUnit(), curve.getVolumeUnit());
@@ -267,8 +261,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 			@Override
 			public String render(final Object object) {
 
-				if (object instanceof AbstractYearMonthCurve) {
-					final AbstractYearMonthCurve curve = (AbstractYearMonthCurve) object;
+				if (object instanceof final AbstractYearMonthCurve curve) {
 					if (curve.isSetExpression()) {
 						return "Expression";
 					} else {
@@ -580,7 +573,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 				public void setValue(final Object element, final Object value) {
 					final DataType dt = getDataTypeForElement(element);
 					if (dt != null) {
-						if (element instanceof @NonNull final AbstractYearMonthCurve curve) {
+						if (element instanceof @NonNull final AbstractYearMonthCurve curve //
+								&& curve.eContainingFeature() != PricingPackage.eINSTANCE.getPricingModel_FormulaeCurves()) {
 							final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 							setIndexPoint((Double) value, curve, colDate);
 						}
@@ -766,7 +760,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 	// }
 
 	private @Nullable DataType getDataTypeForElement(@Nullable final Object element) {
-		if (element instanceof CommodityCurve) {
+		if (element instanceof final CommodityCurve curve) {
+			if (curve.eContainer() == PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES) {
+				return DataType.Formulae;
+			}
 			return DataType.Commodity;
 		} else if (element instanceof BunkerFuelCurve) {
 			return DataType.BaseFuel;
@@ -774,9 +771,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 			return DataType.Charter;
 		} else if (element instanceof CurrencyCurve) {
 			return DataType.Currency;
-		} else if (element instanceof PricingBasis) {
-			return DataType.PricingBasis;
-		}
+		} 
+//		else if (element instanceof PricingBasis) {
+//			return DataType.PricingBasis;
+//		}
 		return null;
 
 	}
@@ -788,15 +786,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 		}
 
 		String name = null;
-		if (element instanceof NamedObject) {
-			final NamedObject namedObject = (NamedObject) element;
+		if (element instanceof final NamedObject namedObject) {
 			name = namedObject.getName();
 		}
 
 		DataType dt = getDataTypeForElement(element);
 
-		if (element instanceof AbstractYearMonthCurve) {
-			AbstractYearMonthCurve curve = (AbstractYearMonthCurve) element;
+		if (element instanceof AbstractYearMonthCurve curve) {
 			if (curve.isSetExpression()) {
 				final SeriesParser seriesParser = seriesParsers.get(dt);
 				if (seriesParser != null) {

@@ -212,11 +212,6 @@ public class CommodityCurveOverlayItemProvider extends UUIDObjectItemProvider {
 			(createChildParameter
 				(AnalyticsPackage.Literals.COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES,
 				 PricingFactory.eINSTANCE.createCurrencyCurve()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES,
-				 PricingFactory.eINSTANCE.createPricingBasis()));
 	}
 
 }

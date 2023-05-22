@@ -18,8 +18,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -77,15 +75,12 @@ public class TransferAgreementTopDetailComposite extends DefaultTopLevelComposit
 	}
 	
 	protected void doDisplay(final EObject object) {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES) && //
-				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_PRICING_BASES)) {
-			if (!this.dialogContext.isMultiEdit() && object instanceof final TransferAgreement ta) {
-				PreferredPricingBasisTableCreator.createPrefferedPBsTable(owner, toolkit, dialogContext, commandHandler, ta, //
-						TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_PBS, //
-						statusProvider, resizeAction);
-			}
-			resizeAction.run();
+		if (!this.dialogContext.isMultiEdit() && object instanceof final TransferAgreement ta) {
+			PreferredFormulaeTableCreator.createPrefferedFormulaeTable(owner, toolkit, dialogContext, commandHandler, ta, //
+					TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_FORMULAE, //
+					statusProvider, resizeAction);
 		}
+		resizeAction.run();
 	}
 	
 	@Override

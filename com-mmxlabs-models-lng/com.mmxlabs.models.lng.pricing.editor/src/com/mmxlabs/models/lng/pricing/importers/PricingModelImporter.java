@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -52,13 +51,12 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String PRICING_CALENDAR_KEY = "PRICING_CALENDAR_KEY";
 	public static final String SETTLE_STRATEGY_KEY = "SETTLE_STRATEGY_KEY";
 	public static final String MARKET_INDEX_KEY = "MARKET_INDEX_KEY";
-	public static final String PRICING_BASIS_KEY = "PRICING_BASES";
+	public static final String FORMULA_KEY = "FORMULA";
 
 	@Inject
 	private IImporterRegistry importerRegistry;
 
 	private IClassImporter commodityIndexImporter;
-	private IClassImporter pricingBasisImporter;
 	private IClassImporter charterIndexImporter;
 	private IClassImporter baseFuelIndexImporter;
 	private IClassImporter currencyIndexImporter;
@@ -66,6 +64,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private IClassImporter settledPricesImporter;
 	private IClassImporter marketIndexImporter;
 	private IClassImporter settleStrategyImporter;
+	private FormulaImporter formulaImporter;
 	private HolidayCalendarImporter holidayCalendarImporter;
 	private PricingCalendarImporter pricingCalendarImporter;
 
@@ -84,7 +83,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private void registryInit() {
 		if (importerRegistry != null) {
 			commodityIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCommodityCurve());
-			pricingBasisImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPricingBasis());
+			formulaImporter = new FormulaImporter();
 			charterIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCharterCurve());
 			baseFuelIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getBunkerFuelCurve());
 			currencyIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCurrencyCurve());
@@ -104,8 +103,8 @@ public class PricingModelImporter implements ISubmodelImporter {
 		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
 		inputs.put(BASEFUEL_PRICING_KEY, "Base Fuel Curves");
 		inputs.put(CURRENCY_CURVE_KEY, "Currency Curves");
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES)) {
-			inputs.put(PRICING_BASIS_KEY, "Pricing Bases");
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_FORMULAE)) {
+			inputs.put(FORMULA_KEY, "Formulae");
 		}
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
 			inputs.put(SETTLED_PRICES_KEY, "Settled Prices");
@@ -124,6 +123,9 @@ public class PricingModelImporter implements ISubmodelImporter {
 		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
 		if (inputs.containsKey(PRICE_CURVE_KEY)) {
 			importCommodityCurves(pricingModel, inputs.get(PRICE_CURVE_KEY), context);
+		}
+		if (inputs.containsKey(FORMULA_KEY)) {
+			importFormulae(pricingModel, inputs.get(FORMULA_KEY), context);
 		}
 		if (inputs.containsKey(CHARTER_CURVE_KEY)) {
 			importCharterCurves(pricingModel, inputs.get(CHARTER_CURVE_KEY), context);
@@ -152,9 +154,6 @@ public class PricingModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(SETTLE_STRATEGY_KEY)) {
 			importSettleStrategies(pricingModel, inputs.get(SETTLE_STRATEGY_KEY), context);
 		}
-		if (inputs.containsKey(PRICING_BASIS_KEY)) {
-			importPricingBases(pricingModel, inputs.get(PRICING_BASIS_KEY), context);
-		}
 		if (pricingModel.getConversionFactors().isEmpty()) {
 			// Create default conversion factors
 			makeConversionFactor("therm", "mmBtu", 10, pricingModel);
@@ -180,8 +179,8 @@ public class PricingModelImporter implements ISubmodelImporter {
 		pricing.getCommodityCurves().addAll((Collection<? extends CommodityCurve>) commodityIndexImporter.importObjects(PricingPackage.eINSTANCE.getCommodityCurve(), csvReader, context));
 	}
 	
-	private void importPricingBases(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
-		pricing.getPricingBases().addAll((Collection<? extends PricingBasis>) pricingBasisImporter.importObjects(PricingPackage.eINSTANCE.getPricingBasis(), csvReader, context));
+	private void importFormulae(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
+		pricing.getFormulaeCurves().addAll((Collection<? extends CommodityCurve>) formulaImporter.importObjects(PricingPackage.eINSTANCE.getCommodityCurve(), csvReader, context));
 	}
 
 	private void importSettledPrices(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
@@ -216,6 +215,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		final PricingModel pricing = (PricingModel) model;
 		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityCurves(), context));
+		output.put(FORMULA_KEY, formulaImporter.exportObjects(pricing.getFormulaeCurves(), context));
 		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterCurves(), context));
 		output.put(BASEFUEL_PRICING_KEY, baseFuelIndexImporter.exportObjects(pricing.getBunkerFuelCurves(), context));
 		output.put(CURRENCY_CURVE_KEY, currencyIndexImporter.exportObjects(pricing.getCurrencyCurves(), context));
@@ -225,7 +225,6 @@ public class PricingModelImporter implements ISubmodelImporter {
 		output.put(PRICING_CALENDAR_KEY, pricingCalendarImporter.exportObjects(pricing.getPricingCalendars(), context));
 		output.put(MARKET_INDEX_KEY, marketIndexImporter.exportObjects(pricing.getMarketIndices(), context));
 		output.put(SETTLE_STRATEGY_KEY, settleStrategyImporter.exportObjects(pricing.getSettleStrategies(), context));
-		output.put(PRICING_BASIS_KEY, pricingBasisImporter.exportObjects(pricing.getPricingBases(), context));
 	}
 
 	@Override

@@ -236,6 +236,9 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
 	protected IAddContext getAddContext(final EReference containment) {
 		return new IAddContext() {
+			
+			private String label = null;
+			
 			@Override
 			public MMXRootObject getRootObject() {
 				return scenarioEditingLocation.getRootObject();
@@ -265,7 +268,23 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 			public @Nullable Collection<@NonNull EObject> getCurrentSelection() {
 				return SelectionHelper.convertToList(viewer.getSelection(), EObject.class);
 			}
+
+			@Override
+			public String getMenuEntryLabel() {
+				return label;
+			}
+			
+			@Override
+			public void setMenuEntryLabel(final String label) {
+				this.label = label;
+			}
 		};
+	}
+	
+	protected IAddContext getAddContext(final EReference containment, final String label) {
+		final IAddContext result = getAddContext(containment);
+		result.setMenuEntryLabel(label);
+		return result;
 	}
 
 	/**
