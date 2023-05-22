@@ -19,16 +19,16 @@ public class MigrateToV181 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 180;
-	}
-
-	@Override
-	public int getScenarioDestinationVersion() {
 		return 181;
 	}
 
 	@Override
+	public int getScenarioDestinationVersion() {
+		return 182;
+	}
+
+	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// Adding Business Units to the Contracts
+		// Adding notes to vessel events
 	}
 }

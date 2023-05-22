@@ -45,14 +45,12 @@ import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSpecification;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
@@ -258,27 +256,10 @@ public class SandboxDefineRunner {
 				}
 				skipRun = true;
 			}
-			// tasks.add(0, model.getBaseCase());
-			// ScheduleSpecification baseSpecification;
-			if (model.getBaseCase().isKeepExistingScenario()) {
-				final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(originalScenarioDataProvider, mapper);
-				// baseSpecification = builder.generate(model.getBaseCase());
-
-				specifications = tasks.stream() //
-						.map(baseCase -> {
-							return new Pair<>(baseCase, builder.generate(baseCase, false));
-						}) //
-						.toList();
-
-			} else {
-
-				final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class), mapper);
-				// baseSpecification = builder.generate(model.getBaseCase());
-
-				specifications = tasks.stream() //
-						.map(baseCase -> new Pair<>(baseCase, builder.generate(baseCase, false))) //
-						.toList();
-			}
+			final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(originalScenarioDataProvider, mapper);
+			specifications = tasks.stream() //
+					.map(baseCase -> new Pair<>(baseCase, builder.generate(baseCase, model.getBaseCase().isKeepExistingScenario(), false))) //
+					.toList();
 		}
 		helper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());

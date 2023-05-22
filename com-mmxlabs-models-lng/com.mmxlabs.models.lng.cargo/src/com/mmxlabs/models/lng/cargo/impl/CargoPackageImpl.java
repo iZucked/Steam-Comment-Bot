@@ -2032,6 +2032,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getVesselEvent_Notes() {
+		return (EAttribute)vesselEventEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getVesselEvent__GetStartByAsDateTime() {
 		return vesselEventEClass.getEOperations().get(0);
 	}
@@ -3473,6 +3483,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(vesselEventEClass, VESSEL_EVENT__PORT);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__START_AFTER);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__START_BY);
+		createEAttribute(vesselEventEClass, VESSEL_EVENT__NOTES);
 		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME);
 
@@ -3985,6 +3996,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getVesselEvent_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselEvent_StartAfter(), theDateTimePackage.getLocalDateTime(), "startAfter", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselEvent_StartBy(), theDateTimePackage.getLocalDateTime(), "startBy", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselEvent_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselEvent__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -4525,6 +4537,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		String source = "http://www.mmxlabs.com/models/validation";
 		addAnnotation
 		  (getSlot_Notes(),
+		   source,
+		   new String[] {
+			   "ignore", "true"
+		   });
+		addAnnotation
+		  (getVesselEvent_Notes(),
 		   source,
 		   new String[] {
 			   "ignore", "true"
