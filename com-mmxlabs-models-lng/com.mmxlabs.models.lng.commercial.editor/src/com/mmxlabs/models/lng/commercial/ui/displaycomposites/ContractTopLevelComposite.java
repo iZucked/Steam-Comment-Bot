@@ -147,28 +147,16 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		topLevel.display(dialogContext, root, object, range, dbc);
 		
 		restrictionsLevel.display(dialogContext, root, object, range, dbc);
-
-		//
-		// // Overrides default layout factory so we get a single column rather than multiple columns and one row
-//		this.setLayout(new GridLayout(3, false));
 	}
 	
 	protected void doDisplay(final Composite parent, final EObject object) {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES) && //
-				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_PRICING_BASES)) {
-			if (!this.dialogContext.isMultiEdit() && object instanceof final Contract contract && contract.getPriceInfo() instanceof final ExpressionPriceParameters epp) {
-				PreferredPricingBasisTableCreator.createPrefferedPBsTable(parent, toolkit, dialogContext, commandHandler, epp, //
-						CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS, //
-						statusProvider, resizeAction);
-			}
+		if (!this.dialogContext.isMultiEdit() && object instanceof final Contract contract && contract.getPriceInfo() instanceof final ExpressionPriceParameters epp) {
+			PreferredFormulaeTableCreator.createPrefferedFormulaeTable(parent, toolkit, dialogContext, commandHandler, epp, //
+					CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE, //
+					statusProvider, resizeAction);
 			resizeAction.run();
 		}
 	}
-
-	// @Override
-	// protected boolean shouldDisplay(final EReference ref) {
-	// return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
-	// }
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {

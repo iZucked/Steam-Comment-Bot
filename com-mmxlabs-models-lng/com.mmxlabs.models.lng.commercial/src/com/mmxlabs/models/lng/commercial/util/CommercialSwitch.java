@@ -365,11 +365,11 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.PREFERRED_PRICING_BASES_WRAPPER: {
-				PreferredPricingBasesWrapper preferredPricingBasesWrapper = (PreferredPricingBasesWrapper)theEObject;
-				T result = casePreferredPricingBasesWrapper(preferredPricingBasesWrapper);
-				if (result == null) result = caseNamedObject(preferredPricingBasesWrapper);
-				if (result == null) result = caseMMXObject(preferredPricingBasesWrapper);
+			case CommercialPackage.PREFERRED_FORMULAE_WRAPPER: {
+				PreferredFormulaeWrapper preferredFormulaeWrapper = (PreferredFormulaeWrapper)theEObject;
+				T result = casePreferredFormulaeWrapper(preferredFormulaeWrapper);
+				if (result == null) result = caseNamedObject(preferredFormulaeWrapper);
+				if (result == null) result = caseMMXObject(preferredFormulaeWrapper);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -918,17 +918,17 @@ public class CommercialSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Preferred Formulae Wrapper</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Preferred Formulae Wrapper</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePreferredPricingBasesWrapper(PreferredPricingBasesWrapper object) {
+	public T casePreferredFormulaeWrapper(PreferredFormulaeWrapper object) {
 		return null;
 	}
 

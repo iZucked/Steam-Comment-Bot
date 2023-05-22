@@ -37,16 +37,14 @@
           ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/incoterm"/>
       <genFeatures createChild="false" propertyDescription="Type of the agreement"
           ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/companyStatus"/>
-      <genFeatures createChild="false" propertyDescription="Price" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/pricingBasis"/>
       <genFeatures createChild="false" propertyDescription="Pricing event buffer days"
           ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/bufferDays"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Source Business Unit"
           propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/fromBU"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Receiving Business Unit"
           propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/toBU"/>
-      <genFeatures property="None" children="true" createChild="true" propertyDescription="List of preferred pricing bases"
-          ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/preferredPBs"/>
       <genFeatures createChild="false" propertyDescription="Contract code" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferAgreement/code"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferAgreement/preferredFormulae"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferAgreement/getAgreementOrDelegateFromBU"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferAgreement/getAgreementOrDelegateToBU"/>
     </genClasses>
@@ -65,7 +63,6 @@
       <genFeatures createChild="false" propertyDescription="Status" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/status"/>
       <genFeatures createChild="false" propertyDescription="Notes" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/notes"/>
       <genFeatures createChild="false" propertyDescription="Stale" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/stale"/>
-      <genFeatures createChild="false" propertyDescription="Price" ecoreFeature="ecore:EAttribute transfers.ecore#//TransferRecord/pricingBasis"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Source Business Unit"
           propertySortChoices="true" ecoreFeature="ecore:EReference transfers.ecore#//TransferRecord/fromBU"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Receiving Business Unit"
@@ -76,7 +73,6 @@
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getCompanyStatus"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePriceExpression"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateIncoterm"/>
-      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePricingBasis"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateFromBU"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateToBU"/>
     </genClasses>

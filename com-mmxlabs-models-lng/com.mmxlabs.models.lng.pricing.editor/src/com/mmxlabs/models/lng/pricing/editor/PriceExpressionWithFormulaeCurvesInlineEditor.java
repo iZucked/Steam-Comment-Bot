@@ -21,7 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -29,7 +29,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 
-public class PricingBasisInlineEditor extends UnsettableInlineEditor {
+public class PriceExpressionWithFormulaeCurvesInlineEditor extends UnsettableInlineEditor {
 
 	protected ComboViewer combo;
 	private Control ccombo;
@@ -37,7 +37,7 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 	
 	protected final List<EObject> valueList = new ArrayList<>();
 	
-	public PricingBasisInlineEditor(final ETypedElement typedElement) {
+	public PriceExpressionWithFormulaeCurvesInlineEditor(final ETypedElement typedElement) {
 		super(typedElement);
 	}
 	
@@ -72,8 +72,8 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 		combo.addSelectionChangedListener(event -> {
 			final IStructuredSelection sel = combo.getStructuredSelection();
 			if (sel != null) {
-				if (sel.getFirstElement() instanceof PreferredPricingBasesWrapper ppbw) {
-					doSetValue(ppbw.getName(), true);
+				if (sel.getFirstElement() instanceof NamedObject pfw) {
+					doSetValue(pfw.getName(), true);
 				} else {
 					doSetValue(sel.getFirstElement(), true);
 				}
@@ -88,7 +88,7 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 			
 		});
 
-		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(ccombo, ExpressionAnnotationConstants.TYPE_PRICING_BASIS);
+		this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(ccombo, ExpressionAnnotationConstants.TYPE_COMMODITY);
 		EditingDomain editingDomain = commandHandler.getEditingDomain();
 		for (Resource r : editingDomain.getResourceSet().getResources()) {
 			for (EObject o : r.getContents()) {
@@ -152,6 +152,7 @@ public class PricingBasisInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		return TransfersPackage.Literals.TRANSFER_RECORD__TRANSFER_AGREEMENT.equals(changedFeature) ||
+				CargoPackage.Literals.SLOT__CONTRACT.equals(changedFeature) ||
 				super.updateOnChangeToFeature(changedFeature);
 	}
 

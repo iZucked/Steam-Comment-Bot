@@ -65,10 +65,7 @@ public class TransferAgreementsViewerPane extends ScenarioTableViewerPane {
 			@Override
 			public String render(final Object object) {
 				if (object instanceof TransferAgreement ta) {
-					if (ta.getPriceExpression() == null && ta.getPricingBasis() != null) {
-						return ta.getPricingBasis();
-					}
-					if (ta.getPricingBasis() == null && ta.getPriceExpression() != null) {
+					if (ta.getPriceExpression() != null) {
 						return ta.getPriceExpression();
 					}
 				}

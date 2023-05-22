@@ -12,7 +12,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.widgets.Label;
 
-import com.mmxlabs.models.lng.pricing.editor.PricingBasisInlineEditor;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.editor.PriceExpressionWithFormulaeCurvesInlineEditor;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferRecord;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
@@ -25,27 +28,28 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
  * A Class to wrap the slot price expression to see if it should be shown with
  * particular contracts
  * 
- * @author FM
+ * @author Simon Goodall
  * 
  */
-public class PricingBasisWrapper extends IInlineEditorEnablementWrapper {
+public class TransferAgreementExpressionWrapper extends IInlineEditorEnablementWrapper {
 	private boolean enabled = false;
 	private IDialogEditingContext dialogContext = null;
 	private MMXRootObject scenario;
 	private Collection<EObject> range = null;
 
-	public PricingBasisWrapper(@NonNull final IInlineEditor wrapped) {
+	public TransferAgreementExpressionWrapper(@NonNull final IInlineEditor wrapped) {
 		super(wrapped);
 	}
 
 	@Override
 	protected boolean respondToNotification(final Notification notification) {
-		
+
 		final EObject object = (EObject) notification.getNotifier();
-		if (notification.getFeature() == TransfersPackage.eINSTANCE.getTransferRecord_TransferAgreement()) {
-			if (notification.getNotifier() instanceof TransferRecord record) {
+		if (notification.getFeature() == TransfersPackage.eINSTANCE.getTransferAgreement_PriceExpression()) {
+			if (notification.getNotifier() instanceof TransferRecord) {
 				enabled = true;
 				if (notification.getNewValue() != null) {
+
 					final TransferAgreement agreement = (TransferAgreement) notification.getNewValue();
 
 					EAnnotation eAnnotation = agreement.eClass().getEAnnotation("http://minimaxlabs.com/models/commercial/slot/expression");
@@ -59,10 +63,9 @@ public class PricingBasisWrapper extends IInlineEditorEnablementWrapper {
 						}
 					}
 
-
 					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 					dialogContext.getDialogController().updateEditorVisibility();
-					display(dialogContext, scenario, input, range);
+					super.display(dialogContext, scenario, input, range);
 					Label label = getLabel();
 					if (label != null) {
 						label.pack();
@@ -90,28 +93,27 @@ public class PricingBasisWrapper extends IInlineEditorEnablementWrapper {
 		this.range = range;
 
 		enabled = true;
-		if (object instanceof TransferRecord record) {
-			final TransferAgreement agreement = record.getTransferAgreement();
-			if (agreement != null) {
+		if (object instanceof final TransferAgreement agreement) {
 
-				if (wrapped instanceof final PricingBasisInlineEditor pbie) {
-					pbie.addValues(agreement.getPreferredPBs(), true);
-				}
-
-				EAnnotation eAnnotation = agreement.eClass().getEAnnotation("http://minimaxlabs.com/models/commercial/slot/expression");
-				if (eAnnotation != null) {
-					String value = eAnnotation.getDetails().get("allowExpressionOverride");
-					if ("false".equalsIgnoreCase(value)) {
-						enabled = false;
-						dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
-						dialogContext.getDialogController().updateEditorVisibility();
-						dialogContext.getDialogController().relayout();
-						super.display(dialogContext, scenario, object, range);
-
-						return;
-					}
+			if (wrapped instanceof PriceExpressionWithFormulaeCurvesInlineEditor pbie && //
+					scenario instanceof final LNGScenarioModel lngScenarioModel) {
+				final PricingModel pm = ScenarioModelUtil.getPricingModel(lngScenarioModel);
+				if (!pm.getFormulaeCurves().isEmpty()) {
+					pbie.addValues(pm.getFormulaeCurves(), true);
 				}
 			}
+
+			EAnnotation eAnnotation = agreement.eClass().getEAnnotation("http://minimaxlabs.com/models/commercial/slot/expression");
+			if (eAnnotation != null) {
+				String value = eAnnotation.getDetails().get("allowExpressionOverride");
+				if ("false".equalsIgnoreCase(value)) {
+					enabled = false;
+					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
+					dialogContext.getDialogController().updateEditorVisibility();
+					return;
+				}
+			}
+
 
 		}
 		super.display(dialogContext, scenario, object, range);
