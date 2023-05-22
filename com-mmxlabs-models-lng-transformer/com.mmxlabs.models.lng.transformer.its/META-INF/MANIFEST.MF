@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Lingo Transformer Tests
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.its
-Bundle-Version: 6.5.3.qualifier
+Bundle-Version: 6.5.3.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.mmxlabs.optimiser.optimiser-common;bundle-version="[6.5.3,7.0.0)",
