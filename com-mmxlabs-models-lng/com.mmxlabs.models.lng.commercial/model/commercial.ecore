@@ -175,13 +175,8 @@
         <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
-        <details key="type" value="pricingBasis"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPBs" upperBound="-1"
-        eType="#//PreferredPricingBasesWrapper" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredFormulae" upperBound="-1"
+        eType="#//PreferredFormulaeWrapper" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VolumeTierPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
     <eAnnotations source="http://minimaxlabs.com/models/commercial/slot/parameters"
@@ -452,9 +447,9 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="numPricingDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BusinessUnit" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="BusinessUnit" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PreferredPricingBasesWrapper" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PreferredFormulaeWrapper" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
 </ecore:EPackage>

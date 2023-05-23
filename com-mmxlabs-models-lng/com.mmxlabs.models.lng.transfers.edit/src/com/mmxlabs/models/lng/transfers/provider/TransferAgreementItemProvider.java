@@ -58,7 +58,6 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 			addPriceExpressionPropertyDescriptor(object);
 			addIncotermPropertyDescriptor(object);
 			addCompanyStatusPropertyDescriptor(object);
-			addPricingBasisPropertyDescriptor(object);
 			addBufferDaysPropertyDescriptor(object);
 			addFromBUPropertyDescriptor(object);
 			addToBUPropertyDescriptor(object);
@@ -178,28 +177,6 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Pricing Basis feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPricingBasisPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_TransferAgreement_pricingBasis_feature"),
-				 getString("_UI_TransferAgreement_pricingBasis_description"),
-				 TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Buffer Days feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -299,7 +276,7 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_PBS);
+			childrenFeatures.add(TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_FORMULAE);
 		}
 		return childrenFeatures;
 	}
@@ -358,12 +335,11 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 			case TransfersPackage.TRANSFER_AGREEMENT__PRICE_EXPRESSION:
 			case TransfersPackage.TRANSFER_AGREEMENT__INCOTERM:
 			case TransfersPackage.TRANSFER_AGREEMENT__COMPANY_STATUS:
-			case TransfersPackage.TRANSFER_AGREEMENT__PRICING_BASIS:
 			case TransfersPackage.TRANSFER_AGREEMENT__BUFFER_DAYS:
 			case TransfersPackage.TRANSFER_AGREEMENT__CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_PBS:
+			case TransfersPackage.TRANSFER_AGREEMENT__PREFERRED_FORMULAE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -383,8 +359,8 @@ public class TransferAgreementItemProvider extends NamedObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_PBS,
-				 CommercialFactory.eINSTANCE.createPreferredPricingBasesWrapper()));
+				(TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_FORMULAE,
+				 CommercialFactory.eINSTANCE.createPreferredFormulaeWrapper()));
 	}
 
 }

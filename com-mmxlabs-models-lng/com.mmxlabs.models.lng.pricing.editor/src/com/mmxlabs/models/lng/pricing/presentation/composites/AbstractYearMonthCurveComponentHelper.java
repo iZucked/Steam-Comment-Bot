@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceExpressionProposalFactory;
@@ -65,8 +64,6 @@ public class AbstractYearMonthCurveComponentHelper extends DefaultComponentHelpe
 							delegate = new PriceExpressionProposalFactory().create(ExpressionAnnotationConstants.TYPE_BASE_FUEL);
 						} else if (eObject instanceof CharterCurve) {
 							delegate = new PriceExpressionProposalFactory().create(ExpressionAnnotationConstants.TYPE_CHARTER);
-						} else if (eObject instanceof PricingBasis) {
-							delegate = new PriceExpressionProposalFactory().create(ExpressionAnnotationConstants.TYPE_PRICING_BASIS);
 						}
 						if (delegate != null) {
 							delegate.setInputOject(eObject);

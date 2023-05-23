@@ -21,21 +21,16 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="incoterm" eType="#//TransferIncoterm"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="companyStatus" eType="#//CompanyStatus"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
-        <details key="type" value="pricingBasis"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="bufferDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="toBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPBs" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PreferredPricingBasesWrapper"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredFormulae" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PreferredFormulaeWrapper"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TransferRecord" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eOperations name="getFromEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
@@ -43,7 +38,6 @@
     <eOperations name="getCompanyStatus" eType="#//CompanyStatus"/>
     <eOperations name="getRecordOrDelegatePriceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getRecordOrDelegateIncoterm" eType="#//TransferIncoterm"/>
-    <eOperations name="getRecordOrDelegatePricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getRecordOrDelegateFromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
     <eOperations name="getRecordOrDelegateToBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transferAgreement" eType="#//TransferAgreement"/>
@@ -69,12 +63,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//TransferStatus"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="stale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        unsettable="true">
-      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
-        <details key="type" value="pricingBasis"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="toBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"

@@ -267,13 +267,13 @@ public interface CommercialFactory extends EFactory {
 	BusinessUnit createBusinessUnit();
 
 	/**
-	 * Returns a new object of class '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * Returns a new object of class '<em>Preferred Formulae Wrapper</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Preferred Pricing Bases Wrapper</em>'.
+	 * @return a new object of class '<em>Preferred Formulae Wrapper</em>'.
 	 * @generated
 	 */
-	PreferredPricingBasesWrapper createPreferredPricingBasesWrapper();
+	PreferredFormulaeWrapper createPreferredFormulaeWrapper();
 
 	/**
 	 * Returns the package supported by this factory.

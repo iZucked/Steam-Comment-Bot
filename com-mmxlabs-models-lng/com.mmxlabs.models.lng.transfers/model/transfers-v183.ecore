@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="transfers" nsURI="http://www.mmxlabs.com/models/lng/transfers/1/"
+    nsPrefix="lng.transfers">
+  <eClassifiers xsi:type="ecore:EClass" name="TransferModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferAgreements" upperBound="-1"
+        eType="#//TransferAgreement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferRecords" upperBound="-1"
+        eType="#//TransferRecord" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransferAgreement" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eOperations name="getAgreementOrDelegateFromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
+    <eOperations name="getAgreementOrDelegateToBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+        <details key="parameters" value="salesprice"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="incoterm" eType="#//TransferIncoterm"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="companyStatus" eType="#//CompanyStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="pricingBasis"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bufferDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPBs" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PreferredPricingBasesWrapper"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredFormulae" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PreferredFormulaeWrapper"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransferRecord" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+    <eOperations name="getFromEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eOperations name="getToEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eOperations name="getCompanyStatus" eType="#//CompanyStatus"/>
+    <eOperations name="getRecordOrDelegatePriceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getRecordOrDelegateIncoterm" eType="#//TransferIncoterm"/>
+    <eOperations name="getRecordOrDelegatePricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getRecordOrDelegateFromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
+    <eOperations name="getRecordOrDelegateToBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferAgreement" eType="#//TransferAgreement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhs" unsettable="true">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//TransferRecord"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoReleaseDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+        <details key="parameters" value="salesprice"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="incoterm" eType="#//TransferIncoterm"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//TransferStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingBasis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="pricingBasis"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toBU" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BusinessUnit"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransferIncoterm">
+    <eLiterals name="Both"/>
+    <eLiterals name="FOB" value="1"/>
+    <eLiterals name="DES" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransferStatus">
+    <eLiterals name="Confirmed"/>
+    <eLiterals name="Draft" value="1"/>
+    <eLiterals name="Cancelled" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CompanyStatus">
+    <eLiterals name="Intra" literal="Intra"/>
+    <eLiterals name="Inter" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

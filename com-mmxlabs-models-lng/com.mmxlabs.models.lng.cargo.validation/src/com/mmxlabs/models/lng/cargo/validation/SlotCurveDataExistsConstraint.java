@@ -183,56 +183,58 @@ public class SlotCurveDataExistsConstraint extends AbstractModelMultiConstraint 
 					}
 				}
 			}
-			LocalDate windowStart = slot.getSchedulingTimeWindow().getStart().toLocalDate();
-
-			if (slot instanceof final LoadSlot loadSlot && !loadSlot.isDESPurchase()) {
-				final CostModel costModel = ScenarioModelUtil.getCostModel(extraContext.getScenarioDataProvider());
-				final List<CooldownPrice> cooldownCosts = costModel.getCooldownCosts();
-				CooldownPrice portCP = null;
-				for (final CooldownPrice cp : cooldownCosts) {
-					if (cp.getPorts().contains(loadSlot.getPort())) {
-						portCP = cp;
-						break;
-					}
-				}
-				if (portCP == null) {
+			ZonedDateTime start = slot.getSchedulingTimeWindow().getStart();
+			if (start != null) {
+				LocalDate windowStart = start.toLocalDate();
+				if (slot instanceof final LoadSlot loadSlot && !loadSlot.isDESPurchase()) {
+					final CostModel costModel = ScenarioModelUtil.getCostModel(extraContext.getScenarioDataProvider());
+					final List<CooldownPrice> cooldownCosts = costModel.getCooldownCosts();
+					CooldownPrice portCP = null;
 					for (final CooldownPrice cp : cooldownCosts) {
-						if (SetUtils.getObjects(cp.getPorts()).contains(loadSlot.getPort())) {
+						if (cp.getPorts().contains(loadSlot.getPort())) {
 							portCP = cp;
 							break;
 						}
 					}
-				}
-				if (portCP != null) {
-					final String lumpsumExpression = portCP.getLumpsumExpression();
-					if (lumpsumExpression != null && !lumpsumExpression.trim().isEmpty()) {
-						validateExpression(lumpsumExpression, PriceIndexType.COMMODITY, windowStart, slot, CargoPackage.Literals.SLOT__PORT, "cooldown", KEY_COOLDOWN_FAILURE, marketCurveProvider, ctx,
-								baseFactory, failures);
+					if (portCP == null) {
+						for (final CooldownPrice cp : cooldownCosts) {
+							if (SetUtils.getObjects(cp.getPorts()).contains(loadSlot.getPort())) {
+								portCP = cp;
+								break;
+							}
+						}
 					}
-					final String volumeExpression = portCP.getVolumeExpression();
-					if (volumeExpression != null && !volumeExpression.trim().isEmpty()) {
-						validateExpression(volumeExpression, PriceIndexType.COMMODITY, windowStart, slot, CargoPackage.Literals.SLOT__PORT, "cooldown", KEY_COOLDOWN_FAILURE, marketCurveProvider, ctx,
-								baseFactory, failures);
+					if (portCP != null) {
+						final String lumpsumExpression = portCP.getLumpsumExpression();
+						if (lumpsumExpression != null && !lumpsumExpression.trim().isEmpty()) {
+							validateExpression(lumpsumExpression, PriceIndexType.COMMODITY, windowStart, slot, CargoPackage.Literals.SLOT__PORT, "cooldown", KEY_COOLDOWN_FAILURE, marketCurveProvider,
+									ctx, baseFactory, failures);
+						}
+						final String volumeExpression = portCP.getVolumeExpression();
+						if (volumeExpression != null && !volumeExpression.trim().isEmpty()) {
+							validateExpression(volumeExpression, PriceIndexType.COMMODITY, windowStart, slot, CargoPackage.Literals.SLOT__PORT, "cooldown", KEY_COOLDOWN_FAILURE, marketCurveProvider,
+									ctx, baseFactory, failures);
+						}
 					}
 				}
-			}
 
-			BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
-			if (entity != null) {
-				// check entity tax rates
-				if (entity != null && !curveCovers(windowStart, taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
-					final String format = "No tax data for %s %02d/%04d'";
-					final String failureMessage = String.format(format, entity.getName(), windowStart.getMonthValue(), windowStart.getYear());
-					baseFactory.copyName() //
-							.withMessage(failureMessage) //
-							.withConstraintKey(KEY_TAX_FAILURE) //
+				BaseLegalEntity entity = slot.getSlotOrDelegateEntity();
+				if (entity != null) {
+					// check entity tax rates
+					if (entity != null && !curveCovers(windowStart, taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
+						final String format = "No tax data for %s %02d/%04d'";
+						final String failureMessage = String.format(format, entity.getName(), windowStart.getMonthValue(), windowStart.getYear());
+						baseFactory.copyName() //
+								.withMessage(failureMessage) //
+								.withConstraintKey(KEY_TAX_FAILURE) //
 
-							.withObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START) //
-							.withObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT) //
-							.withObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) //
-							.withObjectAndFeature(entity.getTradingBook(), CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES) //
-							//
-							.make(ctx, failures);
+								.withObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START) //
+								.withObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT) //
+								.withObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) //
+								.withObjectAndFeature(entity.getTradingBook(), CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES) //
+								//
+								.make(ctx, failures);
+					}
 				}
 			}
 		}

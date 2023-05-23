@@ -5,11 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
-
-import com.mmxlabs.lingo.reports.components.GroupAlternatingRowCellRenderer;
 
 public class DeltaHelper {
 	private GridTableViewer viewer;
@@ -23,10 +19,6 @@ public class DeltaHelper {
 		this.defaultViewerComparator = viewer.getComparator();
 		this.viewer.addFilter(createFilter());
 	}
-	
-//	public void setDeltaMode(final boolean deltaMode) {
-//		this.deltaMode = deltaMode;
-//	}
 	
 	public void setProcessDeltas(final boolean processDeltas) {
 		this.processDeltas = processDeltas;

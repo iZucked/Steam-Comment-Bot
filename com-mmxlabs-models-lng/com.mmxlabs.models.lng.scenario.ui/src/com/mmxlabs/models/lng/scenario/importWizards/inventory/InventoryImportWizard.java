@@ -29,7 +29,6 @@ import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomai
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
@@ -192,10 +191,6 @@ public class InventoryImportWizard extends Wizard implements IImportWizard {
 				allProblems.add(description);
 			}
 		}
-	}
-
-	private FieldChoice[] getUnifiedChoices() {
-		return new FieldChoice[] { FieldChoice.CHOICE_COMMODITY_INDICES, FieldChoice.CHOICE_CHARTER_INDICES, FieldChoice.CHOICE_BASE_FUEL_CURVES, FieldChoice.CHOICE_CURRENCY_CURVES };
 	}
 
 	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final ModelReference modelReference, final Shell shell, final String importFilePath,

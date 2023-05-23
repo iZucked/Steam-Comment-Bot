@@ -111,13 +111,11 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 				curves.addAll(pricingModel.getCharterCurves());
 				break;
 			case COMMODITY:
+				curves.addAll(pricingModel.getFormulaeCurves());
 				curves.addAll(pricingModel.getCommodityCurves());
 				break;
 			case CURRENCY:
 				curves.addAll(pricingModel.getCurrencyCurves());
-				break;
-			case PRICING_BASIS:
-				curves.addAll(pricingModel.getPricingBases());
 				break;
 			default:
 				return new IContentProposal[0];

@@ -50,7 +50,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getMarketCurvesVersionRecord <em>Market Curves Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getSettledPricesVersionRecord <em>Settled Prices Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPricingCalendars <em>Pricing Calendars</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPricingBases <em>Pricing Bases</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getFormulaeCurves <em>Formulae Curves</em>}</li>
  * </ul>
  *
  * @generated
@@ -177,14 +177,14 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	protected EList<PricingCalendar> pricingCalendars;
 
 	/**
-	 * The cached value of the '{@link #getPricingBases() <em>Pricing Bases</em>}' containment reference list.
+	 * The cached value of the '{@link #getFormulaeCurves() <em>Formulae Curves</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPricingBases()
+	 * @see #getFormulaeCurves()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<PricingBasis> pricingBases;
+	protected EList<CommodityCurve> formulaeCurves;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -431,11 +431,11 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @generated
 	 */
 	@Override
-	public EList<PricingBasis> getPricingBases() {
-		if (pricingBases == null) {
-			pricingBases = new EObjectContainmentEList<PricingBasis>(PricingBasis.class, this, PricingPackage.PRICING_MODEL__PRICING_BASES);
+	public EList<CommodityCurve> getFormulaeCurves() {
+		if (formulaeCurves == null) {
+			formulaeCurves = new EObjectContainmentEList<CommodityCurve>(CommodityCurve.class, this, PricingPackage.PRICING_MODEL__FORMULAE_CURVES);
 		}
-		return pricingBases;
+		return formulaeCurves;
 	}
 
 	/**
@@ -470,8 +470,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return basicSetSettledPricesVersionRecord(null, msgs);
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				return ((InternalEList<?>)getPricingCalendars()).basicRemove(otherEnd, msgs);
-			case PricingPackage.PRICING_MODEL__PRICING_BASES:
-				return ((InternalEList<?>)getPricingBases()).basicRemove(otherEnd, msgs);
+			case PricingPackage.PRICING_MODEL__FORMULAE_CURVES:
+				return ((InternalEList<?>)getFormulaeCurves()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -508,8 +508,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getSettledPricesVersionRecord();
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				return getPricingCalendars();
-			case PricingPackage.PRICING_MODEL__PRICING_BASES:
-				return getPricingBases();
+			case PricingPackage.PRICING_MODEL__FORMULAE_CURVES:
+				return getFormulaeCurves();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -569,9 +569,9 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				getPricingCalendars().clear();
 				getPricingCalendars().addAll((Collection<? extends PricingCalendar>)newValue);
 				return;
-			case PricingPackage.PRICING_MODEL__PRICING_BASES:
-				getPricingBases().clear();
-				getPricingBases().addAll((Collection<? extends PricingBasis>)newValue);
+			case PricingPackage.PRICING_MODEL__FORMULAE_CURVES:
+				getFormulaeCurves().clear();
+				getFormulaeCurves().addAll((Collection<? extends CommodityCurve>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -621,8 +621,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				getPricingCalendars().clear();
 				return;
-			case PricingPackage.PRICING_MODEL__PRICING_BASES:
-				getPricingBases().clear();
+			case PricingPackage.PRICING_MODEL__FORMULAE_CURVES:
+				getFormulaeCurves().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -660,8 +660,8 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return settledPricesVersionRecord != null;
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
 				return pricingCalendars != null && !pricingCalendars.isEmpty();
-			case PricingPackage.PRICING_MODEL__PRICING_BASES:
-				return pricingBases != null && !pricingBases.isEmpty();
+			case PricingPackage.PRICING_MODEL__FORMULAE_CURVES:
+				return formulaeCurves != null && !formulaeCurves.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
