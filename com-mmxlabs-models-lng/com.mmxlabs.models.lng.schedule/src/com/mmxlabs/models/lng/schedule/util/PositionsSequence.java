@@ -216,12 +216,12 @@ public class PositionsSequence {
 
 		@Override
 		public Predicate<OpenSlotAllocation> buy() {
-			return LoadSlot.class::isInstance;
+			return sa -> sa.getSlot() instanceof LoadSlot;
 		}
 
 		@Override
 		public Predicate<OpenSlotAllocation> sell() {
-			return DischargeSlot.class::isInstance;
+			return sa -> sa.getSlot() instanceof DischargeSlot;
 		}
 
 		@Override
