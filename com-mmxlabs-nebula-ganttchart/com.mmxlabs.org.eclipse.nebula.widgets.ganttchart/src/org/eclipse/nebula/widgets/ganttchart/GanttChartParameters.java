@@ -20,22 +20,25 @@ public class GanttChartParameters {
 
 	public static void updateFontSize(EventLabelFontSize size) {
 		fontSize = size;
-		recalculateMarginsPaddingsWithRespectToFatStrings();
+		recalculateTextVerticalExtent();
 	}
 	
-	private static final String THIN_STRING = "amcn";
-	private static final String TOP_FAT_STRING = "BMNliCD";
-	private static final String BOTTOM_FAT_STRING = "jgy[]";
+	private static final String SAMPLE_STRING = "BliCDjgy[";
+	
+	/*
+	 * Comes from the ratio of string extent to the size of letter "j" inside it
+	 */
+	private static final int LETTER_SCALE_FACTOR_NUMERATOR = 832;
+	private static final int LETTER_SCALE_FACTOR_DENOMENATOR = 888;
 
 	private static final EventLabelFontSize INITIAL_FONT_SIZE = // TODO read from preferences
 			EventLabelFontSize.MEDIUM;
 	private static EventLabelFontSize fontSize = INITIAL_FONT_SIZE;
 	
-	private static int currentShortestTextHeight;
-	private static int currentTextRespectfulPadding;
+	private static int currentTextVerticalExtent;
 	
 	static {
-		recalculateMarginsPaddingsWithRespectToFatStrings();
+		recalculateTextVerticalExtent();
 	}
 
 	private static final int STANDART_FIXED_ROW_V_PADDING = 8;
@@ -55,14 +58,9 @@ public class GanttChartParameters {
 	}
 	
 	/**
-	 * Updating parameters responsible for text looking nicely aligned for all letters.
-	 * Letters like "j", "[", "H", and etc. Now top and bottom margins are separate.
-	 * Idea is that the margin of the EventLabelFontSize will not be the extra thing, 
-	 * but the minimum buffer zone for the top and bottom "limbs" of letters like
-	 * "l", "j", "[", "Y". If the limbs are taller than the EventLabelFontSize margin,
-	 * then the actual margin will be extended. Independent for top and bottom.
+	 * Getting actual string height
 	 */
-	private static void recalculateMarginsPaddingsWithRespectToFatStrings() {
+	private static void recalculateTextVerticalExtent() {
 		// Preparation
 		final int dummyImageSize = 2;
 		final Image temporaryImage = new Image(Display.getDefault(), dummyImageSize, dummyImageSize);
@@ -71,10 +69,7 @@ public class GanttChartParameters {
 		temporaryGC.setFont(temporaryFont);
 		
 		// Recalculation
-		currentShortestTextHeight = temporaryGC.stringExtent(THIN_STRING).y;
-		final int topDiff = temporaryGC.stringExtent(TOP_FAT_STRING).y - currentShortestTextHeight;
-		final int botDiff = temporaryGC.stringExtent(BOTTOM_FAT_STRING).y - currentShortestTextHeight;
-		currentTextRespectfulPadding = Math.max(topDiff, botDiff) + fontSize.getMargin();
+		currentTextVerticalExtent = temporaryGC.stringExtent(SAMPLE_STRING).y;
 		
 		// Resources disposal
 		temporaryImage.dispose();
@@ -101,7 +96,11 @@ public class GanttChartParameters {
 	}
 
 	private static int getStandartEventHeight() {
-		return currentShortestTextHeight + getEventLabelTopPadding() + getEventLabelBottomPadding();
+		return getActualTextExtent() + 2 * getEventLabelPadding();
+	}
+	
+	private static int getActualTextExtent() {
+		return currentTextVerticalExtent * LETTER_SCALE_FACTOR_NUMERATOR / LETTER_SCALE_FACTOR_DENOMENATOR;
 	}
 
 	public static int getRowHeight() {
@@ -114,6 +113,10 @@ public class GanttChartParameters {
 	
 	public static int getRowPadding() {
 		return STANDART_FIXED_ROW_V_PADDING;
+	}
+	
+	public static int getTextVerticalAlignDisplacement() {
+		return getActualTextExtent() - currentTextVerticalExtent - fontSize.getMargin();
 	}
 
 	public static ISettings getSettings() {
@@ -257,11 +260,7 @@ public class GanttChartParameters {
 		}
 	}
 
-	public static int getEventLabelTopPadding() {
-		return currentTextRespectfulPadding;
-	}
-
-	public static int getEventLabelBottomPadding() {
-		return currentTextRespectfulPadding;
+	public static int getEventLabelPadding() {
+		return fontSize.getMargin();
 	}
 }
