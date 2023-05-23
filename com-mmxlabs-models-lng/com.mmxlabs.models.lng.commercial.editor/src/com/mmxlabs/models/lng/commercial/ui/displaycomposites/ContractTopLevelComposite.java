@@ -150,11 +150,13 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	}
 	
 	protected void doDisplay(final Composite parent, final EObject object) {
-		if (!this.dialogContext.isMultiEdit() && object instanceof final Contract contract && contract.getPriceInfo() instanceof final ExpressionPriceParameters epp) {
-			PreferredFormulaeTableCreator.createPrefferedFormulaeTable(parent, toolkit, dialogContext, commandHandler, epp, //
-					CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE, //
-					statusProvider, resizeAction);
-			resizeAction.run();
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_FORMULAE)) {
+			if (!this.dialogContext.isMultiEdit() && object instanceof final Contract contract && contract.getPriceInfo() instanceof final ExpressionPriceParameters epp) {
+				PreferredFormulaeTableCreator.createPrefferedFormulaeTable(parent, toolkit, dialogContext, commandHandler, epp, //
+						CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE, //
+						statusProvider, resizeAction);
+				resizeAction.run();
+			}
 		}
 	}
 
