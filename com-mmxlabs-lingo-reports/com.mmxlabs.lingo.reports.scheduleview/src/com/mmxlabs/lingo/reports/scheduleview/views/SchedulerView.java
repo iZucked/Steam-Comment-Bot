@@ -382,7 +382,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						}
 					}
 				}
-				// Canal events are always selected with journeys 
+				// Canal events are always selected with journeys
 				final List<Object> additionalElements = l.stream() //
 						.filter(Journey.class::isInstance) //
 						.map(Journey.class::cast) //
@@ -396,6 +396,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				// - Fade out objects which are not selected.
 				// - Fade out pinned scenario objects more.
 
+				final Set<GanttEvent> seenEvents = new HashSet<>();
 				final ArrayList<GanttEvent> selectedEvents;
 				final Set<GanttSection> selectedSections = new HashSet<>();
 				if (l != null) {
@@ -406,7 +407,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						for (final GanttEvent ganttEvent : ganttChart.getGanttComposite().getEvents()) {
 							// Render CanalJourneyEvent without change to alpha
 							if (!(ganttEvent.getData() instanceof CanalJourneyEvent)) {
-								ganttEvent.setStatusAlpha(130);
+								if (isNonShippedOrOpen(ganttEvent)) {
+									ganttEvent.setStatusAlpha(60);
+								} else {
+									ganttEvent.setStatusAlpha(130);
+								}
 							} else {
 								ganttEvent.setStatusAlpha(255);
 							}
@@ -1524,6 +1529,43 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				return new Color[0];
 			}
 		};
+	}
+
+	private static boolean isNonShippedOrOpen(final GanttEvent event) {
+		final Object data = event.getData();
+		if (data instanceof OpenSlotAllocation) {
+			return true;
+		} else if (data instanceof SlotVisit visit) {
+			final Slot<?> slot = visit.getSlotAllocation().getSlot();
+			if (slot instanceof LoadSlot ls) {
+				if (ls.isDESPurchase()) {
+					return true;
+				} else {
+					final Cargo cargo = ls.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(1) instanceof DischargeSlot ds && ds.isFOBSale()) {
+							return true;
+						}
+					}
+				}
+			} else if (slot instanceof DischargeSlot ds) {
+				if (ds.isFOBSale()) {
+					return true;
+				} else {
+					final Cargo cargo = ds.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(0) instanceof LoadSlot ls && ls.isDESPurchase()) {
+							return true;
+						}
+					}
+				}
+			}
+		} else if (data instanceof MultiEvent) {
+			return true;
+		}
+		return false;
 	}
 
 }

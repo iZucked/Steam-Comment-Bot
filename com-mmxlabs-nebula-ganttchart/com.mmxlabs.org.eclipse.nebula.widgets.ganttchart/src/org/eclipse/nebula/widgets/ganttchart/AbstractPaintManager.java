@@ -101,7 +101,11 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				int height = event.getBounds().height + 2;// + event.getStatusBorderWidth() - 1;
 
 				int x = xLoc - 1;
-
+				int oldAlpha = gc.getAlpha();
+				if (alpha) {
+					int cEventAlpha = event.getStatusAlpha();
+					gc.setAlpha(cEventAlpha);
+				}
 				// First draw the fill.
 				gc.setBackground(cEventBorder);
 				gc.fillRectangle(x, y, width, height);
@@ -111,9 +115,13 @@ public abstract class AbstractPaintManager implements IPaintManager {
 					// +1 on height as drawRectangle seems to draw bigger
 					gc.fillRectangle(x, y, width, height);
 				} else {
+					gc.setAlpha(oldAlpha);
 					gc.setBackground(event.getStatusColor());
 					gc.fillRectangle(x, y, width, height);
-
+					if (alpha) {
+						int cEventAlpha = event.getStatusAlpha();
+						gc.setAlpha(cEventAlpha);
+					}
 					gc.setBackground(cEventBorder);
 					if (sdm == SpecialDrawModes.THREE_DOTS_NO_BORDER || sdm == SpecialDrawModes.ONE_DOT_WITH_BORDER || sdm == SpecialDrawModes.THREE_DOTS_WITH_BORDER
 
@@ -144,6 +152,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 							gc.drawRectangle(x, y, width - 1, height - 1);
 						}
 					}
+				}
+				if (alpha) {
+					gc.setAlpha(oldAlpha);
 				}
 			} else {
 				final int borderWidth = event.getStatusBorderWidth();
@@ -586,8 +597,8 @@ public abstract class AbstractPaintManager implements IPaintManager {
 	}
 
 	@Override
-	public void drawEventLabel(final GanttComposite composite, final ISettings settings, final GanttEvent event, final GC gc, final Collection<Collection<IEventTextPropertiesGenerator>> generatorsCollection,
-			final int x, final int y, final int eventWidth) {
+	public void drawEventLabel(final GanttComposite composite, final ISettings settings, final GanttEvent event, final GC gc,
+			final Collection<Collection<IEventTextPropertiesGenerator>> generatorsCollection, final int x, final int y, final int eventWidth) {
 		if (generatorsCollection == null || generatorsCollection.isEmpty()) {
 			return;
 		}
