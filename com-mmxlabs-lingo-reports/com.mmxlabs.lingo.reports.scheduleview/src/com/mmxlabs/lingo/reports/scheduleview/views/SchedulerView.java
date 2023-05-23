@@ -1366,6 +1366,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							newSelection.addAll(cargoAllocation.getEvents());
 						}
 					}
+				} else if (object instanceof final OpenSlotAllocation openSlotAllocation) {
+					newSelection.add(openSlotAllocation);
+				} else if (object instanceof final MultiEvent multiEvent) {
+					newSelection.add(multiEvent);
+					newSelection.addAll(multiEvent.getElements());
 				}
 			} else {
 				if (equivalents.containsKey(o)) {
