@@ -36,7 +36,7 @@ public class AddDistanceForNewPorts {
 
 	public static void main(String[] args) throws Exception {
 
-		Util.PERFORM_UPSTREAM_QUERIES = true;
+		Util.PERFORM_UPSTREAM_QUERIES = false;
 
 		String sourceData = "2023c";
 		String destData = "2023d";

@@ -25,11 +25,11 @@ public class AddNewPort {
 	public static void main(final String[] args) {
 
 		// Input data
-		final List<String> newPorts = Lists.newArrayList("IN0173");
-		final String sourceData = "2023d";
+		final List<String> newPorts = Lists.newArrayList("portname");
+		final String sourceData = "2023e";
 
 		// Output
-		final String destData = "2023d";
+		final String destData = "2023e";
 
 		Util.withService(service -> {
 			final ObjectMapper mapper = new ObjectMapper();

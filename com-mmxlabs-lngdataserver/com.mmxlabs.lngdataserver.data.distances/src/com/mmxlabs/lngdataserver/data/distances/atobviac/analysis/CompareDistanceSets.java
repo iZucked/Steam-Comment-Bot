@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataserver.data.distances.atobviac.impl.AtoBviaCLookupReco
 public class CompareDistanceSets {
 
 	public static void main(String[] args) throws Exception {
-		compare("2023b", "2023c");
+		compare("2020a", "2021a");
 	}
 
 	private static TypeReference<List<AtoBviaCLookupRecord>> DISTANCE_TYPE = new TypeReference<List<AtoBviaCLookupRecord>>() {

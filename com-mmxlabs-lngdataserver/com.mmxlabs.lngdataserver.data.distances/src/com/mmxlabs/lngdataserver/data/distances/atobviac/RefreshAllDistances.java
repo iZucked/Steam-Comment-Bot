@@ -43,7 +43,7 @@ public class RefreshAllDistances {
 		Util.PERFORM_UPSTREAM_QUERIES = false;
 
 		String sourceData = "2023b"; //Source data for comparison
-		String destData = "2023c"; // Dest folder - expects ports.json to be present
+		String destData = "2023d"; // Dest folder - expects ports.json to be present
 
 		gatherNew(destData);
 
