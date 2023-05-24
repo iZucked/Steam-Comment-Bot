@@ -88,7 +88,7 @@ public class PreferredFormulaeTableCreator {
 		// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
 				ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
 
-		eViewer.addTypicalColumn("    Name    ",
+		eViewer.addTypicalColumn("       Name       ",
 				new StringAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, commandHandler) {
 			@Override
 			protected CellEditor createCellEditor(final Composite c, final Object object) {
