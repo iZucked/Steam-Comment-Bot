@@ -1,5 +1,8 @@
 package org.eclipse.nebula.widgets.ganttchart;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import org.eclipse.nebula.widgets.ganttchart.label.EventLabelFontSize;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -10,6 +13,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 /**
+ * Singleton which is responsible for calculating the parameters of Gantt Chart
+ * with respect to the font size.
  * All numbers related to the sizes and spacings of ui elements of the Gantt
  * chart
  * 
@@ -18,9 +23,11 @@ import org.eclipse.swt.widgets.Display;
  */
 public class GanttChartParameters {
 
-	public static void updateFontSize(EventLabelFontSize size) {
+	public static void updateFontSize(final EventLabelFontSize size) {
 		fontSize = size;
-		recalculateTextVerticalExtent();
+		if (instance != null) {
+			instance.updateTextExtent();
+		}
 	}
 	
 	private static final String SAMPLE_STRING = "BliCDjgy[";
@@ -31,16 +38,16 @@ public class GanttChartParameters {
 	private static final int LETTER_SCALE_FACTOR_NUMERATOR = 832;
 	private static final int LETTER_SCALE_FACTOR_DENOMENATOR = 888;
 
-	private static final EventLabelFontSize INITIAL_FONT_SIZE = // TODO read from preferences
-			EventLabelFontSize.MEDIUM;
+	private static final EventLabelFontSize INITIAL_FONT_SIZE = EventLabelFontSize.MEDIUM;
 	private static EventLabelFontSize fontSize = INITIAL_FONT_SIZE;
 	
-	private static int currentTextVerticalExtent;
+	/*
+	 * Caching the string extents in order to avoid creating temporary GC every time
+	 */
+	@SuppressWarnings("null")
+	private static final Map<EventLabelFontSize, Integer> stringExtents = 
+			new EnumMap<>(EventLabelFontSize.class);
 	
-	static {
-		recalculateTextVerticalExtent();
-	}
-
 	private static final int STANDART_FIXED_ROW_V_PADDING = 8;
 
 	private static final int STANDART_EVENT_SPACER_SIZE = 0;
@@ -53,8 +60,24 @@ public class GanttChartParameters {
 	private static final int HEADER_MONTH_HEIGHT = 22;
 	private static final int HEADER_DAY_HEIGHT = 22;
 
-	private GanttChartParameters() {
+	private static GanttChartParameters instance = null;
+	
+	public static GanttChartParameters getInstance() {
+		if (instance == null) {		
+			return new GanttChartParameters();
+		}
+		return instance;
+	}
+	
+	private int textVerticalExtent;
 
+	private GanttChartParameters() {
+		recalculateTextVerticalExtent();
+		updateTextExtent();
+	}
+	
+	private void updateTextExtent() {		
+		this.textVerticalExtent = stringExtents.get(fontSize);
 	}
 	
 	/**
@@ -65,15 +88,18 @@ public class GanttChartParameters {
 		final int dummyImageSize = 2;
 		final Image temporaryImage = new Image(Display.getDefault(), dummyImageSize, dummyImageSize);
 		final GC temporaryGC = new GC(temporaryImage);
-		final Font temporaryFont = GanttChartParameters.getStandardFont();
-		temporaryGC.setFont(temporaryFont);
 		
 		// Recalculation
-		currentTextVerticalExtent = temporaryGC.stringExtent(SAMPLE_STRING).y;
+		for (final EventLabelFontSize currentFontSize : EventLabelFontSize.values()) {			
+			final Font temporaryFont = GanttChartParameters.getStandardFont();
+			temporaryGC.setFont(temporaryFont);
+			final int currentTextVerticalExtent = temporaryGC.stringExtent(SAMPLE_STRING).y;
+			stringExtents.put(currentFontSize, currentTextVerticalExtent);
+			temporaryFont.dispose();
+		}
 		
 		// Resources disposal
 		temporaryImage.dispose();
-		temporaryFont.dispose();
 		temporaryGC.dispose();
 	}
 	
@@ -95,16 +121,16 @@ public class GanttChartParameters {
 		return 3 * fontSize.getFontHeightInPixels() / 4;
 	}
 
-	private static int getStandartEventHeight() {
-		return getActualTextExtent() + 2 * getEventLabelPadding();
+	private static int getStandardEventHeight() {
+		return getInstance().getActualTextExtent() + 2 * getEventLabelPadding();
 	}
 	
-	private static int getActualTextExtent() {
-		return currentTextVerticalExtent * LETTER_SCALE_FACTOR_NUMERATOR / LETTER_SCALE_FACTOR_DENOMENATOR;
+	private int getActualTextExtent() {
+		return textVerticalExtent * LETTER_SCALE_FACTOR_NUMERATOR / LETTER_SCALE_FACTOR_DENOMENATOR;
 	}
 
 	public static int getRowHeight() {
-		return getStandartEventHeight() + 2 * STANDART_FIXED_ROW_V_PADDING;
+		return getStandardEventHeight() + 2 * STANDART_FIXED_ROW_V_PADDING;
 	}
 
 	public static int getEventSpacerSize() {
@@ -115,8 +141,12 @@ public class GanttChartParameters {
 		return STANDART_FIXED_ROW_V_PADDING;
 	}
 	
+	private int getInternalTextVerticalAlignDisplacement() {
+		return getActualTextExtent() - textVerticalExtent - fontSize.getMargin();
+	}
+	
 	public static int getTextVerticalAlignDisplacement() {
-		return getActualTextExtent() - currentTextVerticalExtent - fontSize.getMargin();
+		return getInstance().getInternalTextVerticalAlignDisplacement();
 	}
 
 	public static ISettings getSettings() {
@@ -256,11 +286,11 @@ public class GanttChartParameters {
 
 		@Override
 		public int getEventHeight() {
-			return getStandartEventHeight();
+			return getStandardEventHeight();
 		}
 	}
 
-	public static int getEventLabelPadding() {
+	private static int getEventLabelPadding() {
 		return fontSize.getMargin();
 	}
 }
