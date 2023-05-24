@@ -1,8 +1,8 @@
 package org.eclipse.nebula.widgets.ganttchart.label;
 
 public enum EventLabelFontSize {
-	SMALL(12, 0, 2),
-	MEDIUM(16, 0, 4),
+	SMALL(12, 0, 4),
+	MEDIUM(16, 0, 6),
 	LARGE(20, 0, 8);
 
 	/*
