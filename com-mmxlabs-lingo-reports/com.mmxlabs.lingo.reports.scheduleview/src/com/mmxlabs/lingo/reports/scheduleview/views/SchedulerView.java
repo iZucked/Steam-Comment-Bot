@@ -20,7 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -44,7 +43,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -70,7 +68,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -98,10 +95,7 @@ import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderCompar
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -412,6 +406,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				// - Fade out objects which are not selected.
 				// - Fade out pinned scenario objects more.
 
+				final Set<GanttEvent> seenEvents = new HashSet<>();
 				final ArrayList<GanttEvent> selectedEvents;
 				final Set<GanttSection> selectedSections = new HashSet<>();
 				if (l != null) {
@@ -422,7 +417,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						for (final GanttEvent ganttEvent : ganttChart.getGanttComposite().getEvents()) {
 							// Render CanalJourneyEvent without change to alpha
 							if (!(ganttEvent.getData() instanceof CanalJourneyEvent)) {
-								ganttEvent.setStatusAlpha(130);
+								if (isNonShippedOrOpen(ganttEvent)) {
+									ganttEvent.setStatusAlpha(60);
+								} else {
+									ganttEvent.setStatusAlpha(130);
+								}
 							} else {
 								ganttEvent.setStatusAlpha(255);
 							}
@@ -1361,6 +1360,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							newSelection.addAll(cargoAllocation.getEvents());
 						}
 					}
+				} else if (object instanceof final OpenSlotAllocation openSlotAllocation) {
+					newSelection.add(openSlotAllocation);
+				} else if (object instanceof final MultiEvent multiEvent) {
+					newSelection.add(multiEvent);
+					newSelection.addAll(multiEvent.getElements());
 				}
 			} else {
 				if (equivalents.containsKey(o)) {
@@ -1567,6 +1571,43 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				return new Color[0];
 			}
 		};
+	}
+
+	private static boolean isNonShippedOrOpen(final GanttEvent event) {
+		final Object data = event.getData();
+		if (data instanceof OpenSlotAllocation) {
+			return true;
+		} else if (data instanceof SlotVisit visit) {
+			final Slot<?> slot = visit.getSlotAllocation().getSlot();
+			if (slot instanceof LoadSlot ls) {
+				if (ls.isDESPurchase()) {
+					return true;
+				} else {
+					final Cargo cargo = ls.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(1) instanceof DischargeSlot ds && ds.isFOBSale()) {
+							return true;
+						}
+					}
+				}
+			} else if (slot instanceof DischargeSlot ds) {
+				if (ds.isFOBSale()) {
+					return true;
+				} else {
+					final Cargo cargo = ds.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(0) instanceof LoadSlot ls && ls.isDESPurchase()) {
+							return true;
+						}
+					}
+				}
+			}
+		} else if (data instanceof MultiEvent) {
+			return true;
+		}
+		return false;
 	}
 
 }
