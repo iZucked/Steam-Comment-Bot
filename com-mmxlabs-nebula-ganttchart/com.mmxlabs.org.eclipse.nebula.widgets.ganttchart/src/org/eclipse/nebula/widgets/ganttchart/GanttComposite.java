@@ -3459,7 +3459,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		// draw the text if any, o
 		if (ge.getParsedString() != null) {
 			_paintManager.drawEventLabel(this, _settings, ge, gc, this.textGeneratorCollection, xStart, yDrawPos, xEventWidth);
-			// _paintManager.drawEventString(this, _settings, _colorManager, ge, gc, ge.getParsedString(), _threeDee, xStart, yDrawPos, xEventWidth, bounds);
 		}
 
 		// reset font
