@@ -710,7 +710,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		default:
 			break;
 		}
-		int yTextPos = y - GanttChartParameters.getEventLabelBottomPadding();
+		int yTextPos = y + GanttChartParameters.getTextVerticalAlignDisplacement();
 		return new Point(textXStart, yTextPos);
 	}
 

@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.lingo.reports.internal;
 
-import javax.swing.event.DocumentEvent.EventType;
-
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -199,6 +197,7 @@ public final class Activator extends EMFPlugin {
 				}
 			}
 			updateNumDaysFormat(getPreferenceStore().getString(PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT));
+			updateEventLabelFontSize(getPreferenceStore().getString(PreferenceConstants.P_SCHEDULE_CHART_EVENT_LABEL_FONT_SIZE));
 		}
 
 		private void updateNumDaysFormat(final String value) {
