@@ -48,8 +48,6 @@ public class GanttChartParameters {
 	private static final Map<EventLabelFontSize, Integer> stringExtents = 
 			new EnumMap<>(EventLabelFontSize.class);
 	
-	private static final int STANDART_FIXED_ROW_V_PADDING = 8;
-
 	private static final int STANDART_EVENT_SPACER_SIZE = 0;
 	private static final int MINIMUM_SECTION_HEIGHT = 5;
 	private static final int SECTION_TEXT_SPACER_SIZE = 0;
@@ -130,7 +128,7 @@ public class GanttChartParameters {
 	}
 	
 	public static int getRowHeight() {
-		return getStandardEventHeight() + 2 * STANDART_FIXED_ROW_V_PADDING;
+		return getStandardEventHeight() + 2 * getRowPadding();
 	}
 
 	public static int getEventSpacerSize() {
@@ -138,7 +136,7 @@ public class GanttChartParameters {
 	}
 	
 	public static int getRowPadding() {
-		return STANDART_FIXED_ROW_V_PADDING;
+		return fontSize.getOuterMargin();
 	}
 	
 	public static int getTextVerticalAlignDisplacement() {
