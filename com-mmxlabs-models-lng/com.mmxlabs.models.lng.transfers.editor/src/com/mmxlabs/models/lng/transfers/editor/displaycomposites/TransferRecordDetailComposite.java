@@ -50,10 +50,16 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				TransfersPackage.Literals.TRANSFER_RECORD__TO_BU,//
 				
 				TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION,//
-				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS,//
+				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE,//
+				
+				TransfersPackage.Literals.TRANSFER_RECORD__LHS, //
+				TransfersPackage.Literals.TRANSFER_RECORD__RHS, //
 				
 				TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE,//
-				TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE				
+				TransfersPackage.Literals.TRANSFER_RECORD__INCOTERM, //
+				
+				TransfersPackage.Literals.TRANSFER_RECORD__STATUS, //
+				TransfersPackage.Literals.TRANSFER_RECORD__STALE //
 		);
 
 		// Reverse the list so that we can move the editors to the head of the list
@@ -99,25 +105,22 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE) //
 				.makeRow() //
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__LHS) //
-				.makeRow() //
-				//
-				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__RHS) //
 				.makeRow() //
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__INCOTERM) //
 				.makeRow() //
 				//
 				.withRow() //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__INCOTERM) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__STATUS) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__STALE) //
 				.makeRow() //
 				.make() //
 		;

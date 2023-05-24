@@ -23,7 +23,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settledPricesVersionRecord"/>
       <genFeatures property="None" children="true" createChild="true" propertyDescription="Pricing calendars"
           ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/pricingCalendars"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/pricingBases"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="Formulae based curves"
+          ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/formulaeCurves"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -221,6 +222,5 @@
       <genFeatures createChild="false" propertyDescription="Start settling months prior"
           ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settleStartMonthsPrior"/>
     </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//PricingBasis"/>
   </genPackages>
 </genmodel:GenModel>

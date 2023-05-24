@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
@@ -47,7 +46,7 @@ public class PriceIndexUtils {
 	public static final @NonNull LocalDateTime dateTimeZero = LocalDateTime.of(dateZero.getYear(), dateZero.getMonthValue(), 1, 0, 0);
 
 	public enum PriceIndexType {
-		COMMODITY, CHARTER, BUNKERS, CURRENCY, PRICING_BASIS;
+		COMMODITY, CHARTER, BUNKERS, CURRENCY;
 	}
 
 	/**
@@ -116,25 +115,22 @@ public class PriceIndexUtils {
 					seriesType = SeriesType.BUNKERS;
 				} else if (curve instanceof CurrencyCurve) {
 					seriesType = SeriesType.CURRENCY;
-				} else if (curve instanceof PricingBasis) {
-					seriesType = SeriesType.PRICING_BASIS;
 				} else {
 					throw new IllegalStateException();
 				}
 				addCurveData(curve, seriesType, indices);
 			}
 		}
+		if (reference == PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES) {
+			for (final AbstractYearMonthCurve curve : pricingModel.getFormulaeCurves()) {
+				addCurveData(curve, SeriesType.COMMODITY, indices);
+			} 
+		}
 		// Add in currency curves
 		if (reference != PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES) {
 			final List<CurrencyCurve> curves = pricingModel.getCurrencyCurves();
 			for (final AbstractYearMonthCurve curve : curves) {
 				addCurveData(curve, SeriesType.CURRENCY, indices);
-			}
-		}
-		if (reference == PricingPackage.Literals.PRICING_MODEL__PRICING_BASES) {
-			final List<CommodityCurve> curves = pricingModel.getCommodityCurves();
-			for (final AbstractYearMonthCurve curve : curves) {
-				addCurveData(curve, SeriesType.PRICING_BASIS, indices);
 			}
 		}
 
@@ -188,8 +184,6 @@ public class PriceIndexUtils {
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
 		case CURRENCY:
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
-		case PRICING_BASIS:
-			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__PRICING_BASES);
 		default:
 			throw new IllegalArgumentException();
 		}

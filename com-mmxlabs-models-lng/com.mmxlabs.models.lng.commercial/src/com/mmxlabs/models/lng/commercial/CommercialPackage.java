@@ -1375,22 +1375,13 @@ public interface CommercialPackage extends EPackage {
 	int EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
+	 * The feature id for the '<em><b>Preferred Formulae</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Preferred PBs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+	int EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Expression Price Parameters</em>' class.
@@ -1399,7 +1390,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
+	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.
@@ -2860,14 +2851,14 @@ public interface CommercialPackage extends EPackage {
 	int BUSINESS_UNIT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl <em>Preferred Pricing Bases Wrapper</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PreferredFormulaeWrapperImpl <em>Preferred Formulae Wrapper</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPreferredPricingBasesWrapper()
+	 * @see com.mmxlabs.models.lng.commercial.impl.PreferredFormulaeWrapperImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPreferredFormulaeWrapper()
 	 * @generated
 	 */
-	int PREFERRED_PRICING_BASES_WRAPPER = 36;
+	int PREFERRED_FORMULAE_WRAPPER = 36;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2876,7 +2867,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PREFERRED_PRICING_BASES_WRAPPER__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+	int PREFERRED_FORMULAE_WRAPPER__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2885,16 +2876,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PREFERRED_PRICING_BASES_WRAPPER__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+	int PREFERRED_FORMULAE_WRAPPER__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The number of structural features of the '<em>Preferred Pricing Bases Wrapper</em>' class.
+	 * The number of structural features of the '<em>Preferred Formulae Wrapper</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PREFERRED_PRICING_BASES_WRAPPER_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+	int PREFERRED_FORMULAE_WRAPPER_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
@@ -3555,26 +3546,15 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getExpressionPriceParameters_PriceExpression();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPricingBasis <em>Pricing Basis</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPreferredFormulae <em>Preferred Formulae</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPricingBasis()
+	 * @return the meta object for the containment reference list '<em>Preferred Formulae</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPreferredFormulae()
 	 * @see #getExpressionPriceParameters()
 	 * @generated
 	 */
-	EAttribute getExpressionPriceParameters_PricingBasis();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPreferredPBs <em>Preferred PBs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Preferred PBs</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPreferredPBs()
-	 * @see #getExpressionPriceParameters()
-	 * @generated
-	 */
-	EReference getExpressionPriceParameters_PreferredPBs();
+	EReference getExpressionPriceParameters_PreferredFormulae();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.VolumeTierPriceParameters <em>Volume Tier Price Parameters</em>}'.
@@ -4452,14 +4432,14 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getBusinessUnit_Default();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper <em>Preferred Pricing Bases Wrapper</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper <em>Preferred Formulae Wrapper</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Preferred Pricing Bases Wrapper</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper
+	 * @return the meta object for class '<em>Preferred Formulae Wrapper</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper
 	 * @generated
 	 */
-	EClass getPreferredPricingBasesWrapper();
+	EClass getPreferredFormulaeWrapper();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
@@ -4998,20 +4978,12 @@ public interface CommercialPackage extends EPackage {
 		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getExpressionPriceParameters_PriceExpression();
 
 		/**
-		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Preferred Formulae</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS = eINSTANCE.getExpressionPriceParameters_PricingBasis();
-
-		/**
-		 * The meta object literal for the '<em><b>Preferred PBs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS = eINSTANCE.getExpressionPriceParameters_PreferredPBs();
+		EReference EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE = eINSTANCE.getExpressionPriceParameters_PreferredFormulae();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeTierPriceParametersImpl <em>Volume Tier Price Parameters</em>}' class.
@@ -5724,14 +5696,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute BUSINESS_UNIT__DEFAULT = eINSTANCE.getBusinessUnit_Default();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl <em>Preferred Pricing Bases Wrapper</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PreferredFormulaeWrapperImpl <em>Preferred Formulae Wrapper</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.PreferredPricingBasesWrapperImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPreferredPricingBasesWrapper()
+		 * @see com.mmxlabs.models.lng.commercial.impl.PreferredFormulaeWrapperImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPreferredFormulaeWrapper()
 		 * @generated
 		 */
-		EClass PREFERRED_PRICING_BASES_WRAPPER = eINSTANCE.getPreferredPricingBasesWrapper();
+		EClass PREFERRED_FORMULAE_WRAPPER = eINSTANCE.getPreferredFormulaeWrapper();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

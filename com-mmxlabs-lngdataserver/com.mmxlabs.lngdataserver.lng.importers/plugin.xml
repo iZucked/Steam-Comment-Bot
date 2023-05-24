@@ -183,6 +183,10 @@
             class="com.mmxlabs.lngdataserver.lng.importers.canalcosts.SuezRebateUpdateCommandHandler"
             commandId="com.mmxlabs.datahub.update.suezRebate">
       </handler>
+      <handler
+            class="com.mmxlabs.lngdataserver.lng.importers.portgroups.EastOfSuezPortGroupUpdateCommandHandler"
+            commandId="com.mmxlabs.datahub.update.eastOfSuezPortGroup">
+      </handler>
 </extension>          
 <extension
       point="org.eclipse.ui.menus">
@@ -370,6 +374,19 @@
             commandId="com.mmxlabs.datahub.update.suezRebate"
             label="Reset Suez Rebates"
             style="push">
+      </command>
+      <command
+            commandId="com.mmxlabs.datahub.update.eastOfSuezPortGroup"
+            label="Reset East of Suez Port Group"
+            style="push">
+            <visibleWhen
+             checkEnabled="false">
+             <test
+                 args="features:mmx-east-of-suez-port-group"
+                 forcePluginActivation="true"
+                 property="com.mmxlabs.license.features.enablement">
+             </test>
+            </visibleWhen>
       </command>
    </menuContribution>
 </extension>

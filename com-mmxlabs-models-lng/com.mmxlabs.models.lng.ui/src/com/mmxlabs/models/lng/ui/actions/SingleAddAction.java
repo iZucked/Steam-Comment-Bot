@@ -41,6 +41,9 @@ public class SingleAddAction extends LockableAction {
 	 */
 	public SingleAddAction(final IModelFactory factory, final IAddContext context, @Nullable Viewer viewer) {
 		super(factory.getLabel());
+		if (context.getMenuEntryLabel() != null) {
+			setText(context.getMenuEntryLabel());
+		}
 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 		setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Disabled));
 		setToolTipText("Create new " + factory.getLabel());
