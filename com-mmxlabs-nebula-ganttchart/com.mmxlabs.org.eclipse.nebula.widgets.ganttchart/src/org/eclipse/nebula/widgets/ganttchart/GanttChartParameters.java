@@ -26,7 +26,7 @@ public class GanttChartParameters {
 	public static void updateFontSize(final EventLabelFontSize size) {
 		fontSize = size;
 		if (instance != null) {
-			instance.updateTextExtent();
+			instance.updateParameters();
 		}
 	}
 	
@@ -69,15 +69,19 @@ public class GanttChartParameters {
 		return instance;
 	}
 	
-	private int textVerticalExtent;
+	private int textVerticalTextAlignDisplacement;
+	private int eventHeight;
 
 	private GanttChartParameters() {
 		recalculateTextVerticalExtent();
-		updateTextExtent();
+		updateParameters();
 	}
 	
-	private void updateTextExtent() {		
-		this.textVerticalExtent = stringExtents.get(fontSize);
+	private void updateParameters() {		
+		final int textVerticalExtent = stringExtents.get(fontSize);
+		final int actualTextVerticalExtent = textVerticalExtent * LETTER_SCALE_FACTOR_NUMERATOR / LETTER_SCALE_FACTOR_DENOMENATOR;
+		this.textVerticalTextAlignDisplacement = actualTextVerticalExtent - textVerticalExtent - fontSize.getMargin();
+		this.eventHeight = actualTextVerticalExtent + 2 * getEventLabelPadding();
 	}
 	
 	/**
@@ -122,13 +126,9 @@ public class GanttChartParameters {
 	}
 
 	private static int getStandardEventHeight() {
-		return getInstance().getActualTextExtent() + 2 * getEventLabelPadding();
+		return getInstance().eventHeight;
 	}
 	
-	private int getActualTextExtent() {
-		return textVerticalExtent * LETTER_SCALE_FACTOR_NUMERATOR / LETTER_SCALE_FACTOR_DENOMENATOR;
-	}
-
 	public static int getRowHeight() {
 		return getStandardEventHeight() + 2 * STANDART_FIXED_ROW_V_PADDING;
 	}
@@ -141,12 +141,8 @@ public class GanttChartParameters {
 		return STANDART_FIXED_ROW_V_PADDING;
 	}
 	
-	private int getInternalTextVerticalAlignDisplacement() {
-		return getActualTextExtent() - textVerticalExtent - fontSize.getMargin();
-	}
-	
 	public static int getTextVerticalAlignDisplacement() {
-		return getInstance().getInternalTextVerticalAlignDisplacement();
+		return getInstance().textVerticalTextAlignDisplacement;
 	}
 
 	public static ISettings getSettings() {
