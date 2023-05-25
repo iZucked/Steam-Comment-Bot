@@ -527,7 +527,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 								}
 							} else if (d instanceof PositionsSequence ps) {
 								var cp = (EMFScheduleContentProvider) getContentProvider();
-								visible = cp.enabledPSPTracker.isVisible(ps);
+								visible = cp.enabledPSPTracker.isVisible(ps) || true;
 							}
 
 							ganttSection.setVisible(visible);
@@ -549,7 +549,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							}
 						} else if (d instanceof final PositionsSequence ps) {
 							var cp = (EMFScheduleContentProvider) getContentProvider();
-							visible = cp.enabledPSPTracker.isVisible(ps);
+							visible = cp.enabledPSPTracker.isVisible(ps) || true;
 						}
 
 						ganttSection.setVisible(visible);
@@ -686,6 +686,42 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 				}
 				return null;
+			}
+
+			@Override
+			protected final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
+				List<@NonNull PositionsSequence> result = new ArrayList<>();
+				
+				if (enabledPSPTracker.hasInputChanged()) {
+					enabledPSPTracker.clearErrors();
+					enabledPSPTracker.collectErrors(positionsSequenceProviderExtensions, schedule);
+					enabledPSPTracker.setInputChanged(false);
+				}
+				
+				if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+					for (var ext: positionsSequenceProviderExtensions) {
+						ISchedulePositionsSequenceProvider provider = ext.createInstance();
+						try {
+							if (enabledPSPTracker.isEnabledWithNoError(provider.getId())) {
+								result.addAll(provider.provide(schedule));
+							}
+						} catch (PositionsSequenceProviderException e) {
+							enabledPSPTracker.addError(provider.getId(), e);							MessageDialog dialog = new MessageDialog(viewer.getControl().getShell(), e.getTitle(), null, e.getDescription(), 0, 0, "OK");
+							dialog.create();
+							dialog.open();
+						}
+					}
+				}
+
+				if (result.isEmpty()) {
+					try {
+						return new BuySellSplit().provide(schedule);
+					} catch (PositionsSequenceProviderException e) {
+						// BuySellSplit should never throw this exception
+					}
+				}
+				
+				return result;
 			}
 
 		};

@@ -137,7 +137,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 							return;
 						}
 						setChecked(enabledTracker.isEnabledWithNoError(provider.getId()));
-						schedulerView.refresh();
+						schedulerView.redraw();
 					}
 				};
 				toggleShowPartition.setToolTipText("Partitions unshipped cargoes based on the selected split");

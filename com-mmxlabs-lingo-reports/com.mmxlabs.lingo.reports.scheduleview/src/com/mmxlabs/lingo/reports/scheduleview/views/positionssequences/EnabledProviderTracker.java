@@ -16,6 +16,11 @@ public class EnabledProviderTracker<E extends Exception> {
 	 */
 	private final Map<String, Optional<E>> enabledExtensionProviders = new HashMap<>();
 	
+	/**
+	 * A boolean flag that is set to be true when the associated content provider's input changes.
+	 */
+	private boolean inputChanged = true;
+	
 	public void enable(String providerId) {
 		enabledExtensionProviders.put(providerId, Optional.empty());
 	}
@@ -68,5 +73,13 @@ public class EnabledProviderTracker<E extends Exception> {
 				memento.putBoolean(entry.getKey(), true);
 			}
 		}
+	}
+	
+	public boolean hasInputChanged() {
+		return inputChanged;
+	}
+	
+	public void setInputChanged(boolean b) {
+		inputChanged = b;
 	}
 }
