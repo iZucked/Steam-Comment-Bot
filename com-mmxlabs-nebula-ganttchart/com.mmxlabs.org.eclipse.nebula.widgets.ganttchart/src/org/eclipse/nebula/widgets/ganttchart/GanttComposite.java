@@ -3378,13 +3378,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			alreadyDrawn.add(ge);
 
 			// draw it
-			drawOneEvent(gc, ge, bounds);
+			drawOneEvent(gc, ge, bounds, gs.isBuySell());
 		}
 	}
 
 	// draws one event onto the chart (or rather, delegates to the correct drawing
 	// method)
-	private void drawOneEvent(final GC gc, final GanttEvent ge, final Rectangle boundsToUse) {
+	private void drawOneEvent(final GC gc, final GanttEvent ge, final Rectangle boundsToUse, final boolean isBuySell) {
 		final int xStart = ge.getX();
 		final int xEventWidth = ge.getWidth();
 
@@ -3401,7 +3401,12 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			gradient = _settings.getDefaultGradientEventColor();
 		}
 
-		final int yDrawPos = ge.getY() + GanttChartParameters.getRowPadding();
+		final int yDrawPos;
+		if (isBuySell) {
+			yDrawPos = ge.getY();
+		} else {			
+			yDrawPos = ge.getY() + GanttChartParameters.getRowPadding();
+		}
 
 		final int dw = getDayWidth();
 
@@ -3483,8 +3488,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			return;
 		}
 		
-		final boolean isBuySellSection = gs.getName().startsWith("Buy") || gs.getName().startsWith("Sell");
-		final int actualFixedRowHeight = isBuySellSection ? GanttChartParameters.buySellFixedRowHeight() : _fixedRowHeight;
+		final int actualFixedRowHeight = gs.isBuySell() ? GanttChartParameters.buySellFixedRowHeight() : _fixedRowHeight;
 
 		int yStart = bounds.y + _settings.getEventsTopSpacer();// - mVerticalScrollPosition;
 		// System.err.println(yStart);
