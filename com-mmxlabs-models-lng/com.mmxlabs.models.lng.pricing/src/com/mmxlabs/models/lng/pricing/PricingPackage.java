@@ -196,13 +196,13 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__PRICING_CALENDARS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Bases</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Formulae Curves</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__PRICING_BASES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int PRICING_MODEL__FORMULAE_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -2248,88 +2248,6 @@ public interface PricingPackage extends EPackage {
 	int SETTLE_STRATEGY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl <em>Basis</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingBasis()
-	 * @generated
-	 */
-	int PRICING_BASIS = 37;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__EXTENSIONS = ABSTRACT_YEAR_MONTH_CURVE__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__UUID = ABSTRACT_YEAR_MONTH_CURVE__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__NAME = ABSTRACT_YEAR_MONTH_CURVE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__POINTS = ABSTRACT_YEAR_MONTH_CURVE__POINTS;
-
-	/**
-	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__CURRENCY_UNIT = ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__VOLUME_UNIT = ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__EXPRESSION = ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION;
-
-	/**
-	 * The number of structural features of the '<em>Basis</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2472,15 +2390,15 @@ public interface PricingPackage extends EPackage {
 	EReference getPricingModel_PricingCalendars();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getPricingBases <em>Pricing Bases</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getFormulaeCurves <em>Formulae Curves</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Pricing Bases</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getPricingBases()
+	 * @return the meta object for the containment reference list '<em>Formulae Curves</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getFormulaeCurves()
 	 * @see #getPricingModel()
 	 * @generated
 	 */
-	EReference getPricingModel_PricingBases();
+	EReference getPricingModel_FormulaeCurves();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -3855,16 +3773,6 @@ public interface PricingPackage extends EPackage {
 	EAttribute getSettleStrategy_SettleStartMonthsPrior();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingBasis <em>Basis</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Basis</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingBasis
-	 * @generated
-	 */
-	EClass getPricingBasis();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3993,12 +3901,12 @@ public interface PricingPackage extends EPackage {
 		EReference PRICING_MODEL__PRICING_CALENDARS = eINSTANCE.getPricingModel_PricingCalendars();
 
 		/**
-		 * The meta object literal for the '<em><b>Pricing Bases</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Formulae Curves</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PRICING_MODEL__PRICING_BASES = eINSTANCE.getPricingModel_PricingBases();
+		EReference PRICING_MODEL__FORMULAE_CURVES = eINSTANCE.getPricingModel_FormulaeCurves();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -5095,16 +5003,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR = eINSTANCE.getSettleStrategy_SettleStartMonthsPrior();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl <em>Basis</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingBasis()
-		 * @generated
-		 */
-		EClass PRICING_BASIS = eINSTANCE.getPricingBasis();
 
 
 	}

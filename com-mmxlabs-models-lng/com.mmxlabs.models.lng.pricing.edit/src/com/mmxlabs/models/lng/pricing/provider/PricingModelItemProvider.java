@@ -77,7 +77,7 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PRICING_CALENDARS);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PRICING_BASES);
+			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES);
 		}
 		return childrenFeatures;
 	}
@@ -144,7 +144,7 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD:
 			case PricingPackage.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD:
 			case PricingPackage.PRICING_MODEL__PRICING_CALENDARS:
-			case PricingPackage.PRICING_MODEL__PRICING_BASES:
+			case PricingPackage.PRICING_MODEL__FORMULAE_CURVES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -224,8 +224,8 @@ public class PricingModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__PRICING_BASES,
-				 PricingFactory.eINSTANCE.createPricingBasis()));
+				(PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES,
+				 PricingFactory.eINSTANCE.createCommodityCurve()));
 	}
 
 	/**
@@ -240,6 +240,8 @@ public class PricingModelItemProvider
 		Object childObject = child;
 
 		boolean qualify =
+			childFeature == PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES ||
+			childFeature == PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES ||
 			childFeature == PricingPackage.Literals.PRICING_MODEL__MARKET_CURVES_VERSION_RECORD ||
 			childFeature == PricingPackage.Literals.PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD;
 

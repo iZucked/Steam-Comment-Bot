@@ -20,7 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -70,7 +69,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -100,7 +98,6 @@ import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mod
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -412,6 +409,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				// - Fade out objects which are not selected.
 				// - Fade out pinned scenario objects more.
 
+				final Set<GanttEvent> seenEvents = new HashSet<>();
 				final ArrayList<GanttEvent> selectedEvents;
 				final Set<GanttSection> selectedSections = new HashSet<>();
 				if (l != null) {
@@ -422,7 +420,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						for (final GanttEvent ganttEvent : ganttChart.getGanttComposite().getEvents()) {
 							// Render CanalJourneyEvent without change to alpha
 							if (!(ganttEvent.getData() instanceof CanalJourneyEvent)) {
-								ganttEvent.setStatusAlpha(130);
+								if (isNonShippedOrOpen(ganttEvent)) {
+									ganttEvent.setStatusAlpha(60);
+								} else {
+									ganttEvent.setStatusAlpha(130);
+								}
 							} else {
 								ganttEvent.setStatusAlpha(255);
 							}
@@ -691,22 +693,23 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			@Override
 			protected final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
 				List<@NonNull PositionsSequence> result = new ArrayList<>();
-				
+
 				if (enabledPSPTracker.hasInputChanged()) {
 					enabledPSPTracker.clearErrors();
 					enabledPSPTracker.collectErrors(positionsSequenceProviderExtensions, schedule);
 					enabledPSPTracker.setInputChanged(false);
 				}
-				
+
 				if (positionsSequenceProviderExtensions.iterator().hasNext()) {
-					for (var ext: positionsSequenceProviderExtensions) {
+					for (var ext : positionsSequenceProviderExtensions) {
 						ISchedulePositionsSequenceProvider provider = ext.createInstance();
 						try {
 							if (enabledPSPTracker.isEnabledWithNoError(provider.getId())) {
 								result.addAll(provider.provide(schedule));
 							}
 						} catch (PositionsSequenceProviderException e) {
-							enabledPSPTracker.addError(provider.getId(), e);							MessageDialog dialog = new MessageDialog(viewer.getControl().getShell(), e.getTitle(), null, e.getDescription(), 0, 0, "OK");
+							enabledPSPTracker.addError(provider.getId(), e);
+							MessageDialog dialog = new MessageDialog(viewer.getControl().getShell(), e.getTitle(), null, e.getDescription(), 0, 0, "OK");
 							dialog.create();
 							dialog.open();
 						}
@@ -720,10 +723,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						// BuySellSplit should never throw this exception
 					}
 				}
-				
+
 				return result;
 			}
-
 		};
 
 		viewer.setContentProvider(contentProvider);
@@ -1397,6 +1399,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							newSelection.addAll(cargoAllocation.getEvents());
 						}
 					}
+				} else if (object instanceof final OpenSlotAllocation openSlotAllocation) {
+					newSelection.add(openSlotAllocation);
+				} else if (object instanceof final MultiEvent multiEvent) {
+					newSelection.add(multiEvent);
+					newSelection.addAll(multiEvent.getElements());
 				}
 			} else {
 				if (equivalents.containsKey(o)) {
@@ -1603,6 +1610,43 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				return new Color[0];
 			}
 		};
+	}
+
+	private static boolean isNonShippedOrOpen(final GanttEvent event) {
+		final Object data = event.getData();
+		if (data instanceof OpenSlotAllocation) {
+			return true;
+		} else if (data instanceof SlotVisit visit) {
+			final Slot<?> slot = visit.getSlotAllocation().getSlot();
+			if (slot instanceof LoadSlot ls) {
+				if (ls.isDESPurchase()) {
+					return true;
+				} else {
+					final Cargo cargo = ls.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(1) instanceof DischargeSlot ds && ds.isFOBSale()) {
+							return true;
+						}
+					}
+				}
+			} else if (slot instanceof DischargeSlot ds) {
+				if (ds.isFOBSale()) {
+					return true;
+				} else {
+					final Cargo cargo = ds.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(0) instanceof LoadSlot ls && ls.isDESPurchase()) {
+							return true;
+						}
+					}
+				}
+			}
+		} else if (data instanceof MultiEvent) {
+			return true;
+		}
+		return false;
 	}
 
 }

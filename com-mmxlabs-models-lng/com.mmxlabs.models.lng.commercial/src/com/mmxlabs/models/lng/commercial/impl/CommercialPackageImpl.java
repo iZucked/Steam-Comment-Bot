@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.commercial.NextPortType;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyTerm;
 import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
+import com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper;
 import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -326,7 +327,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass preferredPricingBasesWrapperEClass = null;
+	private EClass preferredFormulaeWrapperEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1000,18 +1001,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getExpressionPriceParameters_PricingBasis() {
-		return (EAttribute)expressionPriceParametersEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getExpressionPriceParameters_PreferredPBs() {
-		return (EReference)expressionPriceParametersEClass.getEStructuralFeatures().get(2);
+	public EReference getExpressionPriceParameters_PreferredFormulae() {
+		return (EReference)expressionPriceParametersEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1840,8 +1831,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EClass getPreferredPricingBasesWrapper() {
-		return preferredPricingBasesWrapperEClass;
+	public EClass getPreferredFormulaeWrapper() {
+		return preferredFormulaeWrapperEClass;
 	}
 
 	/**
@@ -1978,8 +1969,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		expressionPriceParametersEClass = createEClass(EXPRESSION_PRICE_PARAMETERS);
 		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
-		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS);
-		createEReference(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS);
+		createEReference(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE);
 
 		volumeTierPriceParametersEClass = createEClass(VOLUME_TIER_PRICE_PARAMETERS);
 		createEAttribute(volumeTierPriceParametersEClass, VOLUME_TIER_PRICE_PARAMETERS__LOW_EXPRESSION);
@@ -2090,7 +2080,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(businessUnitEClass, BUSINESS_UNIT__DESCRIPTION);
 		createEAttribute(businessUnitEClass, BUSINESS_UNIT__DEFAULT);
 
-		preferredPricingBasesWrapperEClass = createEClass(PREFERRED_PRICING_BASES_WRAPPER);
+		preferredFormulaeWrapperEClass = createEClass(PREFERRED_FORMULAE_WRAPPER);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -2166,7 +2156,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
 		regasPricingParamsEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 		businessUnitEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		preferredPricingBasesWrapperEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		preferredFormulaeWrapperEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2249,8 +2239,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(expressionPriceParametersEClass, ExpressionPriceParameters.class, "ExpressionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getExpressionPriceParameters_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getExpressionPriceParameters_PreferredPBs(), this.getPreferredPricingBasesWrapper(), null, "preferredPBs", null, 0, -1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getExpressionPriceParameters_PreferredFormulae(), this.getPreferredFormulaeWrapper(), null, "preferredFormulae", null, 0, -1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(volumeTierPriceParametersEClass, VolumeTierPriceParameters.class, "VolumeTierPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVolumeTierPriceParameters_LowExpression(), ecorePackage.getEString(), "lowExpression", "", 1, 1, VolumeTierPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2373,7 +2362,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getBusinessUnit_Description(), ecorePackage.getEString(), "description", null, 0, 1, BusinessUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBusinessUnit_Default(), ecorePackage.getEBoolean(), "default", null, 0, 1, BusinessUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(preferredPricingBasesWrapperEClass, PreferredPricingBasesWrapper.class, "PreferredPricingBasesWrapper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(preferredFormulaeWrapperEClass, PreferredFormulaeWrapper.class, "PreferredFormulaeWrapper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
@@ -2591,12 +2580,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source,
 		   new String[] {
 			   "type", "commodity"
-		   });
-		addAnnotation
-		  (getExpressionPriceParameters_PricingBasis(),
-		   source,
-		   new String[] {
-			   "type", "pricingBasis"
 		   });
 		addAnnotation
 		  (getVolumeTierPriceParameters_LowExpression(),

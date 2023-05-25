@@ -893,29 +893,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PricingBasis} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PricingBasisItemProvider pricingBasisItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PricingBasis}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPricingBasisAdapter() {
-		if (pricingBasisItemProvider == null) {
-			pricingBasisItemProvider = new PricingBasisItemProvider(this);
-		}
-
-		return pricingBasisItemProvider;
-	}
-
-	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1082,7 +1059,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (holidayCalendarEntryItemProvider != null) holidayCalendarEntryItemProvider.dispose();
 		if (holidayCalendarItemProvider != null) holidayCalendarItemProvider.dispose();
 		if (settleStrategyItemProvider != null) settleStrategyItemProvider.dispose();
-		if (pricingBasisItemProvider != null) pricingBasisItemProvider.dispose();
 	}
 
 }

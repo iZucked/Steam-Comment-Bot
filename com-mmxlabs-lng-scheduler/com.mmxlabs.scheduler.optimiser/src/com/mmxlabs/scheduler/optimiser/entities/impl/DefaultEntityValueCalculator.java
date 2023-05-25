@@ -569,7 +569,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	protected int getTransferPrice(final BasicTransferRecord record, int internalSalesPrice) {
-		return transferModelDataProvider.getTransferPrice(record.getPriceExpression(), record.getPricingDate(), internalSalesPrice, record.isBasis());
+		return transferModelDataProvider.getTransferPrice(record.getPriceExpression(), record.getPricingDate(), internalSalesPrice);
 	}
 
 	private void addAnnotationToTheBooks(final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap,
