@@ -57,6 +57,7 @@ public class GanttChartParameters {
 	private static final int SELECTION_LINE_WIDTH = 3;
 	private static final int HEADER_MONTH_HEIGHT = 22;
 	private static final int HEADER_DAY_HEIGHT = 22;
+	private static final int BUY_SELL_ROW_FIXED_HEIGHT = 21;
 
 	private static GanttChartParameters instance = null;
 	
@@ -289,6 +290,6 @@ public class GanttChartParameters {
 	}
 
 	public static int buySellFixedRowHeight() {
-		return getRowHeight() - 2 * getRowPadding();
+		return BUY_SELL_ROW_FIXED_HEIGHT;
 	}
 }
