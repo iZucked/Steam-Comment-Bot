@@ -91,7 +91,7 @@ public class GanttChartParameters {
 		final Image temporaryImage = new Image(Display.getDefault(), dummyImageSize, dummyImageSize);
 		final GC temporaryGC = new GC(temporaryImage);
 		
-		// Recalculation
+		// Calculation
 		for (final EventLabelFontSize currentFontSize : EventLabelFontSize.values()) {			
 			final Font temporaryFont = GanttChartParameters.getStandardFont();
 			temporaryGC.setFont(temporaryFont);
@@ -286,5 +286,9 @@ public class GanttChartParameters {
 
 	private static int getEventLabelPadding() {
 		return fontSize.getMargin();
+	}
+
+	public static int buySellFixedRowHeight() {
+		return getRowHeight() - 2 * getRowPadding();
 	}
 }

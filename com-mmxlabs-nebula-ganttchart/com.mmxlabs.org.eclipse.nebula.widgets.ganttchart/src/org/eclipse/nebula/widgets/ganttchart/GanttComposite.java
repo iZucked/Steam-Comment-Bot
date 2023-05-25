@@ -3482,6 +3482,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (_ganttEvents.isEmpty()) {
 			return;
 		}
+		
+		final boolean isBuySellSection = gs.getName().startsWith("Buy") || gs.getName().startsWith("Sell");
+		final int actualFixedRowHeight = isBuySellSection ? GanttChartParameters.buySellFixedRowHeight() : _fixedRowHeight;
 
 		int yStart = bounds.y + _settings.getEventsTopSpacer();// - mVerticalScrollPosition;
 		// System.err.println(yStart);
@@ -3516,9 +3519,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			// if the override is set, set it on events etc so it's used
 			if (_fixedRowHeight != 0) {
-				ge.setFixedRowHeight(_fixedRowHeight);
+				ge.setFixedRowHeight(actualFixedRowHeight);
 				if (ge.getGanttGroup() != null) {
-					ge.getGanttGroup().setFixedRowHeight(_fixedRowHeight);
+					ge.getGanttGroup().setFixedRowHeight(actualFixedRowHeight);
 				}
 			}
 
