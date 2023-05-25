@@ -14,6 +14,7 @@ import org.eclipse.ui.IWorkbench;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.DistanceDataVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
+import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.PortReplacement;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class UpdateDistancesWizard extends Wizard implements IImportWizard {
@@ -24,14 +25,17 @@ public class UpdateDistancesWizard extends Wizard implements IImportWizard {
 	private LocationsVersion locationsEntry;
 	private List<AtoBviaCLookupRecord> distancesEntry;
 	private List<AtoBviaCLookupRecord> manualRecords;
+	private List<PortReplacement> portReplacements;
 
-	public UpdateDistancesWizard(ModelReference modelReference,  DistanceDataVersion dataVersion, LocationsVersion locationsVersion, List<AtoBviaCLookupRecord> distanceRecords, List<AtoBviaCLookupRecord> manualRecords) {
+	public UpdateDistancesWizard(ModelReference modelReference, DistanceDataVersion dataVersion, LocationsVersion locationsVersion, List<AtoBviaCLookupRecord> distanceRecords,
+			List<AtoBviaCLookupRecord> manualRecords, List<PortReplacement> portReplacements) {
 		super();
 		this.modelReference = modelReference;
 		this.dataVersion = dataVersion;
 		this.locationsEntry = locationsVersion;
 		this.distancesEntry = distanceRecords;
 		this.manualRecords = manualRecords;
+		this.portReplacements = portReplacements;
 		this.setNeedsProgressMonitor(true);
 	}
 
@@ -49,7 +53,7 @@ public class UpdateDistancesWizard extends Wizard implements IImportWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		setWindowTitle("Distances update wizard"); // NON-NLS-1
 		setNeedsProgressMonitor(true);
-		portPage = new UpdatePortsPage("Review of port and distance changes", modelReference, dataVersion, locationsEntry, distancesEntry, manualRecords);
+		portPage = new UpdatePortsPage("Review of port and distance changes", modelReference, dataVersion, locationsEntry, distancesEntry, manualRecords, portReplacements);
 	}
 
 	@Override
