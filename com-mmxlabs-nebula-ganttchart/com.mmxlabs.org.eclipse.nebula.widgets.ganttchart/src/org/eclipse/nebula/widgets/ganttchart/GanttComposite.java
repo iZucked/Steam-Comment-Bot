@@ -3591,6 +3591,38 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			ge.setHorizontalLineTopY(yStart);
 
+			if (fixedHeight && gs.isBuySell()) {
+				int extra = 0;
+
+				int halfExtra = ((fixedRowHeight / 2) - (_eventHeight / 2));
+
+				switch (verticalAlignment) {
+				case SWT.BOTTOM:
+					extra = halfExtra;
+					// Reduce size to avoid clipping
+					eventHeight += halfExtra - 1;
+
+					break;
+				case SWT.CENTER:
+					extra = halfExtra;// ((fixedRowHeight / 2) - (_eventHeight / 2));
+					break;
+				case SWT.NONE:
+				case SWT.TOP:
+					// extra = 0;//fixedRowHeight;//_eventSpacer - fixedRowHeight ;
+					eventHeight += halfExtra;
+					break;
+				default:
+					break;
+				}
+
+				if (extra < 0) {
+					extra = 0;
+				}
+				// eventHeight+= extra;
+				yDrawPos += extra;
+
+			}
+
 			// sub-events in a grouped event type where the group has a fixed row height, we
 			// just set the yStart to the last yStart, which actually
 			// got through the above switch statement and had its start position calculated
