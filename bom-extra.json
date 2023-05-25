@@ -11,6 +11,12 @@
       "version" : "17.0.3",
       "cpe" : "cpe:2.3:a:oracle:java_se:17.0.3:*:*:*:*:*:*:*",
       "type" : "library"
+    },
+    {
+      "name" : "Oracle OpenJDK",
+      "version" : "17.0.3",
+      "cpe" : "cpe:2.3:a:oracle:jre:17.0.3:*:*:*:*:*:*:*",
+      "type" : "library"
     }
     ]
 }
