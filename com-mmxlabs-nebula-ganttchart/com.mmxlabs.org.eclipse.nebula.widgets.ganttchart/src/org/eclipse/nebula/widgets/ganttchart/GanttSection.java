@@ -6,6 +6,7 @@ package org.eclipse.nebula.widgets.ganttchart;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes.Name;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -479,4 +480,7 @@ public class GanttSection implements IFillBackgroundColors {
 		return this.data;
 	}
 
+	public boolean isBuySell() {
+		return _name.startsWith("Buy") || _name.startsWith("Sell");
+	}
 }
