@@ -38,7 +38,7 @@ public class GanttChartParameters {
 	private static final int LETTER_SCALE_FACTOR_NUMERATOR = 832;
 	private static final int LETTER_SCALE_FACTOR_DENOMENATOR = 888;
 
-	private static final EventLabelFontSize INITIAL_FONT_SIZE = EventLabelFontSize.MEDIUM;
+	private static final EventLabelFontSize INITIAL_FONT_SIZE = EventLabelFontSize.SMALL;
 	private static EventLabelFontSize fontSize = INITIAL_FONT_SIZE;
 	
 	/*
