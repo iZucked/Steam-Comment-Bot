@@ -25,8 +25,8 @@ public class AddNewPort {
 	public static void main(final String[] args) {
 
 		// Input data
-		final List<String> newPorts = Lists.newArrayList("NL0017");
-		final String sourceData = "2023b";
+		final List<String> newPorts = Lists.newArrayList("IN0173");
+		final String sourceData = "2023d";
 
 		// Output
 		final String destData = "2023d";
