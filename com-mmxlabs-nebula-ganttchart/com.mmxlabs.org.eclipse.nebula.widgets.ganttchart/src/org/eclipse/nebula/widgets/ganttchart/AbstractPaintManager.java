@@ -90,7 +90,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				// }
 				// Skip above, the bounds.width is incorrect leading to short drawing on RHS for
 				// events at end of the view
-				gc.drawRectangle(xLoc, y, eventWidth, event.getBounds().height);
+				gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
 
 				gc.setLineStyle(SWT.LINE_SOLID);
 				gc.setLineWidth(1);
