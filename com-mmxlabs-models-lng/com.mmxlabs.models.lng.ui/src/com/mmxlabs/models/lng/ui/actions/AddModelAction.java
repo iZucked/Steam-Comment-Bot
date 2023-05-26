@@ -49,6 +49,13 @@ public final class AddModelAction {
 
 		@Nullable
 		Collection<@NonNull EObject> getCurrentSelection();
+		
+		default String getMenuEntryLabel() {
+			return null;
+		}
+		
+		default void setMenuEntryLabel(final String label) {
+		}
 	}
 
 	public static final Action create(final EClass eClass, final IAddContext context) {

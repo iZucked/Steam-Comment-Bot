@@ -21,17 +21,31 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.LingoEquivalents;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
+import com.mmxlabs.models.lng.schedule.Schedule;
 
 /**
  * Emissions report data
  */
 @SchemaVersion(1)
-public class VesselEmissionAccountingReportModelV1 implements IVesselEmission{
+public class VesselEmissionAccountingReportModelV1 implements IVesselEmission, IEmissionReportIDData {
 
 	@JsonIgnore
 	@LingoEquivalents
 	@LingoIgnore
 	public Set<Object> equivalents = new HashSet<>();
+	
+	@JsonIgnore
+	@LingoIgnore
+	public boolean isPinned = false;
+	@JsonIgnore
+	@LingoIgnore
+	public Schedule schedule;
+	@JsonIgnore
+	@LingoIgnore
+	public String otherID;
+	
+	@ColumnName("Scenario")
+	public String scenarioName;
 	
 	@ColumnName("Vessel")
 	public String vesselName;
@@ -58,8 +72,6 @@ public class VesselEmissionAccountingReportModelV1 implements IVesselEmission{
 	public LocalDateTime eventEnd;
 	
 	@ColumnName("Base Fuel")
-//	@LingoFormat("#.###")
-//	@HubFormat("{\"thousandSeparated\": true, \"pattern\": \"0.00\", \"mantissa\": 2}")
 	public Long baseFuelEmission;
 	
 	@ColumnName("BOG")
@@ -99,10 +111,58 @@ public class VesselEmissionAccountingReportModelV1 implements IVesselEmission{
 		return pilotLightEmissionRate;
 	}
 
+	@JsonIgnore
+	@Override
+	public boolean isPinned() {
+		return this.isPinned;
+	}
+
+	@JsonIgnore
+	@Override
+	public Schedule getSchedule() {
+		return this.schedule;
+	}
+	
+	@JsonIgnore
+	@Override
+	public String getScenarioName() {
+		return scenarioName;
+	}
+
+	@Override
+	public String getVesselName() {
+		return vesselName;
+	}
+
+	@Override
+	public String getEventID() {
+		return eventID;
+	}
+
+	@JsonIgnore
+	@Override
+	public String getOtherID() {
+		return otherID;
+	}
+
 	public static void main(String args[]) throws Exception {
 
 		SchemaGenerator gen = new SchemaGenerator();
 		String json = gen.generateHubSchema(VesselEmissionAccountingReportModelV1.class, Mode.FULL);
 		System.out.println(json);
+	}
+	
+	@JsonIgnore
+	@LingoIgnore
+	public int group = Integer.MAX_VALUE;
+	
+	@JsonIgnore
+	@Override
+	public int getGroup() {
+		return group;
+	}
+	
+	public void setGroup(int group) {
+		this.group = group;
 	}
 }

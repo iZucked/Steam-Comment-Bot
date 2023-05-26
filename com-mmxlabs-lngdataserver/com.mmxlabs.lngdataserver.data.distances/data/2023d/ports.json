@@ -1,6 +1,6 @@
 {
   "identifier" : "303cb9a4-f81d-4aa5-a345-469af4d07fc8",
-  "createdAt" : "2023-02-24T14:07:02.924",
+  "createdAt" : "2023-05-25T13:35:16.311",
   "locations" : [ {
     "mmxId" : "L_DZ_Bethi",
     "name" : "Bethioua",
@@ -610,19 +610,6 @@
     "locode" : "CN  HKO",
     "upstreamID" : "CN0036"
   }, {
-    "mmxId" : "L_SP_Haina",
-    "name" : "Hainan",
-    "aliases" : [ "Hainan Strait" ],
-    "geographicPoint" : {
-      "lat" : 20.1772167,
-      "lon" : 110.3691,
-      "country" : "China",
-      "timeZone" : "Asia/Chongqing"
-    },
-    "locode" : "CN  YPG",
-    "upstreamID" : "SP5012",
-    "notes" : "SG thinks this should be replaced by Yangpu"
-  }, {
     "mmxId" : "L_CN_Heibe",
     "name" : "Heibei",
     "geographicPoint" : {
@@ -759,8 +746,9 @@
     "locode" : "CN  TSN",
     "upstreamID" : "CN0594"
   }, {
-    "mmxId" : "L_CN_Yangp",
-    "name" : "Yangpu",
+    "mmxId" : "L_SP_Haina",
+    "name" : "Hainan",
+    "aliases" : [ "Yangpu" ],
     "geographicPoint" : {
       "lat" : 19.72016716003418,
       "lon" : 109.18199920654297,
@@ -2110,8 +2098,8 @@
     },
     "locode" : "PK  BQM",
     "upstreamID" : "PK0021",
-    "fallbackUpstreamId" : "PK0004",
-    "notes" : "Fallback to Karachi as there are a lot of missing distances"
+    "notes" : "Fallback to Karachi as there are a lot of missing distances",
+    "fallbackUpstreamId" : "PK0004"
   }, {
     "mmxId" : "L_CP_Colon",
     "name" : "Colon",
@@ -3009,8 +2997,8 @@
       "timeZone" : "Australia/Darwin"
     },
     "upstreamID" : "AU0438",
-    "fallbackUpstreamID" : "AU0329",
-    "notes" : "Fallback to Darwin as there are a lot of missing distances. Why did we add this separately to Ichthys?"
+    "notes" : "Fallback to Darwin as there are a lot of missing distances. Why did we add this separately to Ichthys?",
+    "fallbackUpstreamId" : "AU0329"
   }, {
     "mmxId" : "L_ID_Senor",
     "name" : "Senoro",
@@ -3191,6 +3179,17 @@
     },
     "upstreamID" : "BD0003",
     "notes" : "Using Chittagong as an alias"
+  }, {
+    "mmxId" : "L_IN_Dhamr",
+    "name" : "Dhamra",
+    "geographicPoint" : {
+      "lat" : 20.81861686706543,
+      "lon" : 86.9704360961914,
+      "country" : "India",
+      "timeZone" : "Asia/Kolkata"
+    },
+    "locode" : "IN  DMA",
+    "upstreamID" : "IN0173"
   } ],
   "routingPoints" : [ {
     "identifier" : "SUZ",

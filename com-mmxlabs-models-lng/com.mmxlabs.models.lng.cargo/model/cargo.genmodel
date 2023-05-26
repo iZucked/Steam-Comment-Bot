@@ -148,7 +148,6 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancelled"/>
       <genFeatures createChild="false" propertyDescription="This is the counter party's time window."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowCounterParty"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingBasis"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/businessUnit"/>
       <genFeatures notify="false" createChild="false" propertyDescription="A list of ports to restrict the port this position can be at. Overrides the contract list. Note: This is different to the restricted ports which defines where this position can be sent to."
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedPorts"/>
@@ -263,6 +262,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselEvent/port"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startAfter"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startBy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/notes"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartByAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartAfterAsDateTime"/>
     </genClasses>

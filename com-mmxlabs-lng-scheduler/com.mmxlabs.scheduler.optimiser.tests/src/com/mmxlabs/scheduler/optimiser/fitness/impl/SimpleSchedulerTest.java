@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
@@ -27,8 +28,6 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
-import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
-import com.mmxlabs.common.curves.ParameterisedIntegerCurve;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
@@ -37,9 +36,12 @@ import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.scenario.PhaseOptimisationData;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -49,6 +51,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
@@ -59,6 +62,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
+import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -88,6 +92,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
@@ -106,7 +112,7 @@ public class SimpleSchedulerTest {
 
 	private static final boolean DEFAULT_VOLUME_LIMIT_IS_M3 = true;
 
-	IOptimisationData createProblem(final Injector injector) {
+	IOptimisationData createProblem(final Injector injector, List<ICargo> cargoes) {
 
 		final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
@@ -216,13 +222,13 @@ public class SimpleSchedulerTest {
 		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
 				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3, false);
 
-		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load1, discharge1), false);
-		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load2, discharge2), false);
-		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load3, discharge3), false);
-		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load4, discharge4), false);
-		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load5, discharge5), false);
-		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load6, discharge6), false);
-		builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load7, discharge7), false);
+		cargoes.add(builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load1, discharge1), false));
+		cargoes.add(builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load2, discharge2), false));
+		cargoes.add(builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load3, discharge3), false));
+		cargoes.add(builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load4, discharge4), false));
+		cargoes.add(builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load5, discharge5), false));
+		cargoes.add(builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load6, discharge6), false));
+		cargoes.add(builder.createCargo(Lists.<@NonNull IPortSlot> newArrayList(load7, discharge7), false));
 
 		DefaultEntity entity = new DefaultEntity("Entity", false);
 		injector.injectMembers(entity);
@@ -289,14 +295,36 @@ public class SimpleSchedulerTest {
 		final long seed = 1;
 		final Injector parentInjector = createInjector();
 
-		final IOptimisationData data = createProblem(parentInjector);
-		final IPhaseOptimisationData pData = createPhaseOptimisationData(parentInjector, data);
 		// Build opt data
-		final ScheduleTestModule m = new ScheduleTestModule(data, pData);
+		List<ICargo> cargoes = new LinkedList<>();
+		final IOptimisationData data = createProblem(parentInjector, cargoes);
+		final IPhaseOptimisationData pData = createPhaseOptimisationData(parentInjector, data);
+		IModifiableSequences sequences = new ModifiableSequences(data.getResources());
+		{
+			final IStartEndRequirementProvider startEndRequirementProvider = parentInjector.getInstance(IStartEndRequirementProvider.class);
+			final IPortSlotProvider portSlotProvider = parentInjector.getInstance(IPortSlotProvider.class);
+
+			for (final @NonNull IResource o_resource : data.getResources()) {
+				final @NonNull IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
+				modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
+			}
+			Random r = new Random(0);
+			for (var cargo : cargoes) {
+				IResource o_resource = data.getResources().get(r.nextInt(data.getResources().size()));
+				for (var ps : cargo.getPortSlots()) {
+					sequences.getModifiableSequence(o_resource).add(portSlotProvider.getElement(ps));
+				}
+			}
+			for (final @NonNull IResource o_resource : data.getResources()) {
+				final @NonNull IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
+				modifiableSequence.add(startEndRequirementProvider.getEndElement(o_resource));
+			}
+		}
+
+		final ScheduleTestModule m = new ScheduleTestModule(data, pData, sequences);
 		final Injector injector = parentInjector.createChildInjector(m);
 		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
-
 			// Generate initial state
 			// final IInitialSequenceBuilder sequenceBuilder = injector.getInstance(IInitialSequenceBuilder.class);
 

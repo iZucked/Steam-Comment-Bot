@@ -47,7 +47,6 @@ import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.common.curves.IParameterisedCurve;
-import com.mmxlabs.common.curves.PreGeneratedIntegerCurve;
 import com.mmxlabs.common.curves.PreGeneratedLongCurve;
 import com.mmxlabs.common.curves.WrappedParameterisedCurve;
 import com.mmxlabs.common.parser.series.EmptySeries;
@@ -114,7 +113,6 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PanamaTariffV2;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
@@ -306,10 +304,6 @@ public class LNGScenarioTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Currency)
 	private SeriesParser currencyIndices;
-
-	@Inject
-	@Named(SchedulerConstants.Parser_PricingBasis)
-	private SeriesParser pricingBases;
 
 	@Inject(optional = true)
 	@Nullable
@@ -593,16 +587,17 @@ public class LNGScenarioTransformer {
 			final String name = commodityIndex.getName();
 			assert name != null;
 			registerCommodityIndex(name, commodityIndex, commodityIndices);
-			registerCommodityIndex(name, commodityIndex, pricingBases);
+		}
+		for (final CommodityCurve commodityIndex : pricingModel.getFormulaeCurves()) {
+			final String name = commodityIndex.getName();
+			assert name != null;
+			registerCommodityIndex(name, commodityIndex, commodityIndices);
 		}
 		for (final BunkerFuelCurve baseFuelIndex : pricingModel.getBunkerFuelCurves()) {
 			registerIndex(baseFuelIndex.getName(), SeriesType.BUNKERS, baseFuelIndex, baseFuelIndices);
 		}
 		for (final CharterCurve charterIndex : pricingModel.getCharterCurves()) {
 			registerIndex(charterIndex.getName(), SeriesType.CHARTER, charterIndex, charterIndices);
-		}
-		for (final PricingBasis pricingBasis : pricingModel.getPricingBases()) {
-			registerIndex(pricingBasis.getName(), SeriesType.PRICING_BASIS, pricingBasis, pricingBases);
 		}
 
 		// Currency is added to all the options
@@ -613,12 +608,11 @@ public class LNGScenarioTransformer {
 				registerIndex(name, SeriesType.CURRENCY, currencyIndex, baseFuelIndices);
 				registerIndex(name, SeriesType.CURRENCY, currencyIndex, charterIndices);
 				registerIndex(name, SeriesType.CURRENCY, currencyIndex, currencyIndices);
-				registerIndex(name, SeriesType.CURRENCY, currencyIndex, pricingBases);
 			}
 		}
 
 		for (final UnitConversion factor : pricingModel.getConversionFactors()) {
-			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices, pricingBases);
+			registerConversionFactor(factor, commodityIndices, baseFuelIndices, charterIndices, currencyIndices);
 		}
 
 		// Now pre-compute our various curve data objects...
@@ -1592,7 +1586,7 @@ public class LNGScenarioTransformer {
 		final ISalesPriceCalculator dischargePriceCalculator;
 
 		final boolean isSpot = (dischargeSlot instanceof SpotSlot);
-		if ((dischargeSlot.isSetPriceExpression() || dischargeSlot.isSetPricingBasis())&& SlotContractParamsHelper.isSlotExpressionUsed(dischargeSlot)) {
+		if (dischargeSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(dischargeSlot)) {
 
 			if (dischargeSlot.isSetPriceExpression()) {
 				final String priceExpression = dischargeSlot.getPriceExpression();
@@ -1606,10 +1600,8 @@ public class LNGScenarioTransformer {
 						dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
 					}
 				} else {
-					dischargePriceCalculator = getSalesPriceCalculatorForExpression(priceExpression, false);
+					dischargePriceCalculator = getSalesPriceCalculatorForExpression(priceExpression);
 				}
-			} else if (dischargeSlot.isSetPricingBasis()) {
-				dischargePriceCalculator = getSalesPriceCalculatorForExpression(dischargeSlot.getPricingBasis(), true);
 			} else {
 				dischargePriceCalculator = null;
 			}
@@ -1770,13 +1762,9 @@ public class LNGScenarioTransformer {
 		return discharge;
 	}
 	
-	private ISalesPriceCalculator getSalesPriceCalculatorForExpression(final String priceExpression, final boolean isBasis) {
+	private ISalesPriceCalculator getSalesPriceCalculatorForExpression(final String priceExpression) {
 		final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-		if (isBasis) {
-			dynamicContract.setPricingBasis(priceExpression);
-		} else {
-			dynamicContract.setPriceExpression(priceExpression);
-		}
+		dynamicContract.setPriceExpression(priceExpression);
 
 		final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
 		if (transformer == null) {
@@ -1802,7 +1790,7 @@ public class LNGScenarioTransformer {
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
-		if ((loadSlot.isSetPriceExpression() || loadSlot.isSetPricingBasis())  && SlotContractParamsHelper.isSlotExpressionUsed(loadSlot)) {
+		if (loadSlot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(loadSlot)) {
 
 			if (loadSlot.isSetPriceExpression()) {
 				final String priceExpression = loadSlot.getPriceExpression();
@@ -1815,11 +1803,8 @@ public class LNGScenarioTransformer {
 						loadPriceCalculator = new BreakEvenLoadPriceCalculator();
 					}
 				} else {
-
-					loadPriceCalculator = getPurchasePriceCalculatorForExpression(priceExpression, false);
+					loadPriceCalculator = getPurchasePriceCalculatorForExpression(priceExpression);
 				}
-			} else if (loadSlot.isSetPricingBasis()) {
-				loadPriceCalculator = getPurchasePriceCalculatorForExpression(loadSlot.getPricingBasis(), true);
 			} else {
 				loadPriceCalculator = null;
 			}
@@ -1980,13 +1965,9 @@ public class LNGScenarioTransformer {
 		return load;
 	}
 
-	private ILoadPriceCalculator getPurchasePriceCalculatorForExpression(final String priceExpression, final boolean isBasis) {
+	private ILoadPriceCalculator getPurchasePriceCalculatorForExpression(final String priceExpression) {
 		final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
-		if (isBasis) {
-			dynamicContract.setPricingBasis(priceExpression);
-		} else {
-			dynamicContract.setPriceExpression(priceExpression);
-		}
+		dynamicContract.setPriceExpression(priceExpression);
 
 		final IContractTransformer transformer = contractTransformersByEClass.get(dynamicContract.eClass());
 		if (transformer == null) {

@@ -788,14 +788,16 @@ public class AnalyticsBuilder {
 		return veRef;
 	}
 
-	public static ShippingOption applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row, final Cargo cargo,
+	public static @Nullable ShippingOption applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row, final Cargo cargo,
 			final LoadSlot load, final DischargeSlot dischargeSlot, final boolean portfolioMode, final CompoundCommand cmd) {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, portfolioMode, optionAnalysisModel);
-		if (opt.eContainer() == null) {
-			cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+		if (opt != null) {
+			if (opt.eContainer() == null) {
+				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt));
+			}
+			cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, Collections.singletonList(opt)));
 		}
-		cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, Collections.singletonList(opt)));
 		return opt;
 	}
 
@@ -1219,7 +1221,7 @@ public class AnalyticsBuilder {
 		menuHelper.open();
 	}
 
-	public static Port getPort(final SellOption option) {
+	public static @Nullable Port getPort(final SellOption option) {
 		if (option instanceof final SellOpportunity sellOpportunity) {
 			return sellOpportunity.getPort();
 		} else if (option instanceof final SellReference sellReference) {
@@ -1235,13 +1237,18 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static LocalDate getDate(final SellOption option) {
+	public static @Nullable LocalDate getDate(final SellOption option) {
 		if (option instanceof final SellOpportunity sellOpportunity) {
 			return sellOpportunity.getDate();
 		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {
 				return slot.getWindowStart();
+			}
+		} else if (option instanceof final SellMarket mkt) {
+			YearMonth ym = mkt.getMonth();
+			if (ym != null) {
+				return ym.atDay(1);
 			}
 		}
 		return null;
@@ -1259,7 +1266,7 @@ public class AnalyticsBuilder {
 		return true;
 	}
 
-	public static Port getPort(final BuyOption option) {
+	public static @Nullable Port getPort(final BuyOption option) {
 		if (option instanceof final BuyOpportunity buyOpportunity) {
 			return buyOpportunity.getPort();
 		} else if (option instanceof final BuyReference buyReference) {
@@ -1275,7 +1282,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static LocalDate getDate(final BuyOption option) {
+	public static @Nullable LocalDate getDate(final BuyOption option) {
 		if (option instanceof final BuyOpportunity buyOpportunity) {
 			return buyOpportunity.getDate();
 		} else if (option instanceof final BuyReference buyReference) {
@@ -1283,11 +1290,16 @@ public class AnalyticsBuilder {
 			if (slot != null) {
 				return slot.getWindowStart();
 			}
+		} else if (option instanceof final BuyMarket mkt) {
+			YearMonth ym = mkt.getMonth();
+			if (ym != null) {
+				return ym.atDay(1);
+			}
 		}
 		return null;
 	}
 
-	public static ZonedDateTime getWindowStartDate(final BuyOption option) {
+	public static @Nullable ZonedDateTime getWindowStartDate(final BuyOption option) {
 		if (option instanceof final BuyOpportunity buyOpportunity) {
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
@@ -1316,11 +1328,12 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static ZonedDateTime getWindowStartDate(final SellOption option) {
+	public static @Nullable ZonedDateTime getWindowStartDate(final SellOption option) {
 		if (option instanceof final SellOpportunity sellOpportunity) {
 			final Port port = sellOpportunity.getPort();
-			if (port != null) {
-				return sellOpportunity.getDate().atStartOfDay(port.getZoneId()).plusHours(port.getDefaultStartTime());
+			LocalDate date = sellOpportunity.getDate();
+			if (port != null && date != null) {
+				return date.atStartOfDay(port.getZoneId()).plusHours(port.getDefaultStartTime());
 			}
 		} else if (option instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
@@ -1342,7 +1355,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static ZonedDateTime getWindowEndDate(final BuyOption option) {
+	public static @Nullable ZonedDateTime getWindowEndDate(final BuyOption option) {
 		if (option instanceof final BuyOpportunity buyOpportunity) {
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
@@ -1390,7 +1403,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static ZonedDateTime getWindowEndDate(final SellOption option) {
+	public static @Nullable ZonedDateTime getWindowEndDate(final SellOption option) {
 		if (option instanceof final SellOpportunity sellOpportunity) {
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
@@ -1633,6 +1646,11 @@ public class AnalyticsBuilder {
 		if (cargoCV == 0) {
 			return null;
 		}
+		return getSellVolumeInMMBTU(cargoCV, sell);
+	}
+
+	public static int @Nullable [] getSellVolumeInMMBTU(double cargoCV, final SellOption sell) {
+
 		if (sell instanceof final SellReference sellReference) {
 			final DischargeSlot slot = sellReference.getSlot();
 			if (slot != null) {

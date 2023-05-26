@@ -14,8 +14,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -25,6 +28,12 @@ import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.swt.SWT;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
+import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.EnabledPositionsSequenceProviderTracker;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -62,7 +71,12 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public abstract class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	private final WeakHashMap<Slot<?>, SlotVisit> cachedElements = new WeakHashMap<>();
-
+	
+	@Inject
+	protected Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
+	
+	protected EnabledPositionsSequenceProviderTracker enabledPSPTracker = new EnabledPositionsSequenceProviderTracker();
+	
 	protected boolean showNominalsByDefault = false;
 
 	@Override
@@ -119,17 +133,14 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 							result.add(cs);
 						}
 					}
+
 					// for (InventoryEvents inventory : schedule.getInventoryLevels()) {
 					// result.add(inventory);
 					// }
-					PositionsSequence buys = PositionsSequence.makeBuySequence(schedule);
-					PositionsSequence sells = PositionsSequence.makeSellSequence(schedule);
-					if (!buys.getElements().isEmpty()) {
-						result.add(buys);
-					}
-					if (!sells.getElements().isEmpty()) {
-						result.add(sells);
-					}
+					
+					result.addAll(getPositionsSequences(schedule));
+					
+					
 				}
 //				result.addAll(Schedule)
 			}
@@ -328,6 +339,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		cachedElements.clear();
+		enabledPSPTracker.clearErrors();
 	}
 
 	@Override
@@ -452,9 +464,38 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	public boolean isVisibleByDefault(final Object resource) {
 		if (!showNominalsByDefault && resource instanceof final Sequence sequence) {
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
+		} else if (resource instanceof PositionsSequence ps) {
+			return enabledPSPTracker.isVisible(ps);
 		}
 		return true;
 	}
+	
+	public void injectExtensionPoints() {
+		Activator.getDefault().getInjector().injectMembers(this);
+	}
+	
+	private final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
+		List<@NonNull PositionsSequence> result = new ArrayList<>();
+		
+		try {
+			result.addAll(new BuySellSplit().provide(schedule));
+		} catch (PositionsSequenceProviderException e) {
+			// BuySellSplit should never throw this
+		}
 
+		if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+			for (var ext: positionsSequenceProviderExtensions) {
+				ISchedulePositionsSequenceProvider provider = ext.createInstance();
+				try {
+					result.addAll(provider.provide(schedule));
+				} catch (PositionsSequenceProviderException e1) {
+					enabledPSPTracker.addError(provider.getId(), e1);
+				}
+			}
+		}
+		return result;
+	}
+			
 	public abstract IScenarioDataProvider getScenarioDataProviderFor(Object obj);
+	
 }

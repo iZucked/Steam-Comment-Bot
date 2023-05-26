@@ -29,25 +29,13 @@ public class ExpressionPriceParametersConstraint extends AbstractPriceParameters
 	protected void doParamsValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,//
 			final ExpressionPriceParameters pricingParams,//
 			final EObject eContainer, final DetailConstraintStatusFactory factory) {
-
-		if (pricingParams.eIsSet(CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION) 
-				&& pricingParams.eIsSet(CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS)) {
-			factory.copyName()//
-			.withMessage("only one of the two, price expression or pricing basis, should be set") //
-			.withObjectAndFeature(pricingParams, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION) //
-			.withObjectAndFeature(pricingParams, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS) //
-			.make(ctx, failures);
-		}
 		
 		if (pricingParams.eIsSet(CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION)) {
 			validatePrice(ctx, failures, pricingParams, pricingParams.getPriceExpression(), factory, PriceIndexType.COMMODITY, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
 		}
-		if (pricingParams.eIsSet(CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS)) {
-			validatePrice(ctx, failures, pricingParams, pricingParams.getPricingBasis(), factory, PriceIndexType.PRICING_BASIS, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICING_BASIS);
-		}
-		if (pricingParams.getPreferredPBs() != null && !pricingParams.getPreferredPBs().isEmpty()) {
-			pricingParams.getPreferredPBs().forEach( w -> {
-				validatePrice(ctx, failures, w, w.getName(), factory, PriceIndexType.PRICING_BASIS, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_PBS);
+		if (pricingParams.getPreferredFormulae() != null && !pricingParams.getPreferredFormulae().isEmpty()) {
+			pricingParams.getPreferredFormulae().forEach( w -> {
+				validatePrice(ctx, failures, w, w.getName(), factory, PriceIndexType.COMMODITY, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE);
 			});
 		}
 	}

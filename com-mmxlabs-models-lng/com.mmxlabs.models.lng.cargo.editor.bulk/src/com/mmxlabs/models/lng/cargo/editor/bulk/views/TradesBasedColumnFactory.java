@@ -1366,7 +1366,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 		}
 	}
 
-	private EmfBlockColumnFactory createWiringColumn(final String columnID, final String columnName, final IAdaptable report, final boolean isLoad, final String blockGroup, final String blockType,
+	private EmfBlockColumnFactory createWiringColumn(final String columnID, final String columnName, final IAdaptable report, final boolean isLoad, final String blockType, final String blockGroup,
 			final String orderKey) {
 		return new EmfBlockColumnFactory() {
 

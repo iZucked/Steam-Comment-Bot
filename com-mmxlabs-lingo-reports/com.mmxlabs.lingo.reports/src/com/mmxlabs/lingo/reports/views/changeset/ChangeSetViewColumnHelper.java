@@ -3349,4 +3349,12 @@ public class ChangeSetViewColumnHelper {
 		}
 		return sum;
 	}
+
+	public void resetExposures() {
+		indexNames.clear();
+		curveNames.clear();
+		exposuresAggregator.clear();
+		indicesMap.clear();
+		
+	}
 }

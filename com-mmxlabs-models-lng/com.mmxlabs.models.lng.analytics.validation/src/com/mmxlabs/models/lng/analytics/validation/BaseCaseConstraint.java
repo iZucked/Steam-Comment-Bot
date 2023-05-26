@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
-import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -70,11 +69,6 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 						statuses.add(deco);
 					}
 				});
-
-				if (!baseCase.isKeepExistingScenario()) {
-					processBaseCaseShipping(baseCase, ctx, statuses);
-				}
-
 			}
 
 			// Check there is at least one optioniser target
@@ -125,27 +119,6 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 
 			if (sell != null) {
 				visitDischargeSlot.accept(row, sell);
-			}
-		}
-	}
-
-	public void processBaseCaseShipping(final BaseCase baseCase, @NonNull final IValidationContext ctx, @NonNull final List<IStatus> statuses) {
-		final Set<ShippingOption> shippingOptions = new HashSet<>();
-		final Set<ShippingOption> duplicatedShippingOptions = new HashSet<>();
-		for (final BaseCaseRow row : baseCase.getBaseCase()) {
-			final ShippingOption shipping = row.getShipping();
-			if (shipping != null && !shippingOptions.add(shipping)) {
-				duplicatedShippingOptions.add(shipping);
-			}
-		}
-
-		for (final BaseCaseRow row : baseCase.getBaseCase()) {
-			final ShippingOption shipping = row.getShipping();
-			if (shipping != null && duplicatedShippingOptions.contains(shipping)) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - existing shipping option used multiple times."));
-				deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-				statuses.add(deco);
 			}
 		}
 	}

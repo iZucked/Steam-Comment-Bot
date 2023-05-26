@@ -98,7 +98,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getBusinessUnit <em>Business Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
@@ -1030,35 +1029,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean windowCounterParty = WINDOW_COUNTER_PARTY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPricingBasis()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String PRICING_BASIS_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPricingBasis()
-	 * @generated
-	 * @ordered
-	 */
-	protected String pricingBasis = PRICING_BASIS_EDEFAULT;
-
-	/**
-	 * This is true if the Pricing Basis attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean pricingBasisESet;
 
 	/**
 	 * The cached value of the '{@link #getBusinessUnit() <em>Business Unit</em>}' reference.
@@ -2753,56 +2723,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public String getPricingBasis() {
-		return pricingBasis;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPricingBasis(String newPricingBasis) {
-		String oldPricingBasis = pricingBasis;
-		pricingBasis = newPricingBasis;
-		boolean oldPricingBasisESet = pricingBasisESet;
-		pricingBasisESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, pricingBasis, !oldPricingBasisESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPricingBasis() {
-		String oldPricingBasis = pricingBasis;
-		boolean oldPricingBasisESet = pricingBasisESet;
-		pricingBasis = PRICING_BASIS_EDEFAULT;
-		pricingBasisESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, PRICING_BASIS_EDEFAULT, oldPricingBasisESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPricingBasis() {
-		return pricingBasisESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public BusinessUnit getBusinessUnit() {
 		if (businessUnit != null && businessUnit.eIsProxy()) {
 			InternalEObject oldBusinessUnit = (InternalEObject)businessUnit;
@@ -3350,8 +3270,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isCancelled();
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return isWindowCounterParty();
-			case CargoPackage.SLOT__PRICING_BASIS:
-				return getPricingBasis();
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				if (resolve) return getBusinessUnit();
 				return basicGetBusinessUnit();
@@ -3504,9 +3422,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty((Boolean)newValue);
-				return;
-			case CargoPackage.SLOT__PRICING_BASIS:
-				setPricingBasis((String)newValue);
 				return;
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				setBusinessUnit((BusinessUnit)newValue);
@@ -3661,9 +3576,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty(WINDOW_COUNTER_PARTY_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__PRICING_BASIS:
-				unsetPricingBasis();
-				return;
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				unsetBusinessUnit();
 				return;
@@ -3791,8 +3703,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return cancelled != CANCELLED_EDEFAULT;
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return windowCounterParty != WINDOW_COUNTER_PARTY_EDEFAULT;
-			case CargoPackage.SLOT__PRICING_BASIS:
-				return isSetPricingBasis();
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				return isSetBusinessUnit();
 			case CargoPackage.SLOT__ALLOWED_PORTS:
@@ -4005,8 +3915,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(cancelled);
 		result.append(", windowCounterParty: ");
 		result.append(windowCounterParty);
-		result.append(", pricingBasis: ");
-		if (pricingBasisESet) result.append(pricingBasis); else result.append("<unset>");
 		result.append(", allowedPortsOverride: ");
 		result.append(allowedPortsOverride);
 		result.append(", computeExposure: ");
@@ -4160,15 +4068,21 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				
 				@Override
 				public Object getValue(final EObject object) {
+					if (getContract() != null) {
+						final Contract o_contract = getContract();
+						if (o_contract != null && o_contract.eIsSet(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT)) {
+							return o_contract.eGet(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT);
+						}
+					}
 					if (getSlotOrDelegateEntity() != null) {
-						final BaseLegalEntity entity = getSlotOrDelegateEntity();
-						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
-							for (final var bu : entity.getBusinessUnits()) {
+						final BaseLegalEntity o_entity = getSlotOrDelegateEntity();
+						if (o_entity.getBusinessUnits() != null && !o_entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : o_entity.getBusinessUnits()) {
 								if (bu.isDefault()) {
 									return bu;
 								}
 							}
-							return entity.getBusinessUnits().get(0);
+							return o_entity.getBusinessUnits().get(0);
 						}
 					}
 					return null;

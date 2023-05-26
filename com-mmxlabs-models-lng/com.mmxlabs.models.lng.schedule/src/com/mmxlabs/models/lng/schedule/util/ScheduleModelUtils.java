@@ -400,7 +400,7 @@ public class ScheduleModelUtils {
 		return "";
 	}
 
-	private static String getPortFullNameFromSlot(final Slot<?> slot) {
+	public static String getPortFullNameFromSlot(final Slot<?> slot) {
 		if (slot != null) {
 			if (slot.getPort() != null) {
 				final Port port = slot.getPort();

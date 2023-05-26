@@ -227,22 +227,13 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_AGREEMENT__COMPANY_STATUS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSFER_AGREEMENT__PRICING_BASIS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
-
-	/**
 	 * The feature id for the '<em><b>Buffer Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT__BUFFER_DAYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+	int TRANSFER_AGREEMENT__BUFFER_DAYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>From BU</b></em>' reference.
@@ -251,7 +242,7 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT__FROM_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
+	int TRANSFER_AGREEMENT__FROM_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>To BU</b></em>' reference.
@@ -260,16 +251,7 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT__TO_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
-
-	/**
-	 * The feature id for the '<em><b>Preferred PBs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSFER_AGREEMENT__PREFERRED_PBS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int TRANSFER_AGREEMENT__TO_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Code</b></em>' attribute.
@@ -278,7 +260,16 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT__CODE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+	int TRANSFER_AGREEMENT__CODE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Formulae</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_AGREEMENT__PREFERRED_FORMULAE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Transfer Agreement</em>' class.
@@ -287,7 +278,7 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+	int TRANSFER_AGREEMENT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -471,22 +462,13 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_RECORD__STALE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSFER_RECORD__PRICING_BASIS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
-
-	/**
 	 * The feature id for the '<em><b>From BU</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD__FROM_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 12;
+	int TRANSFER_RECORD__FROM_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>To BU</b></em>' reference.
@@ -495,7 +477,16 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD__TO_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 13;
+	int TRANSFER_RECORD__TO_BU = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD__CODE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The number of structural features of the '<em>Transfer Record</em>' class.
@@ -579,22 +570,13 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 4;
 
 	/**
-	 * The operation id for the '<em>Get Record Or Delegate Pricing Basis</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_BASIS = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 5;
-
-	/**
 	 * The operation id for the '<em>Get Record Or Delegate From BU</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_FROM_BU = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 6;
+	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_FROM_BU = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Record Or Delegate To BU</em>' operation.
@@ -603,7 +585,7 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_TO_BU = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 7;
+	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_TO_BU = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Transfer Record</em>' class.
@@ -612,7 +594,7 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 8;
+	int TRANSFER_RECORD_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}' enum.
@@ -743,17 +725,6 @@ public interface TransfersPackage extends EPackage {
 	EAttribute getTransferAgreement_CompanyStatus();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
-	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis()
-	 * @see #getTransferAgreement()
-	 * @generated
-	 */
-	EAttribute getTransferAgreement_PricingBasis();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -787,17 +758,6 @@ public interface TransfersPackage extends EPackage {
 	EReference getTransferAgreement_ToBU();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredPBs <em>Preferred PBs</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Preferred PBs</em>'.
-	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredPBs()
-	 * @see #getTransferAgreement()
-	 * @generated
-	 */
-	EReference getTransferAgreement_PreferredPBs();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCode <em>Code</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -807,6 +767,17 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTransferAgreement_Code();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredFormulae <em>Preferred Formulae</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Preferred Formulae</em>'.
+	 * @see com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredFormulae()
+	 * @see #getTransferAgreement()
+	 * @generated
+	 */
+	EReference getTransferAgreement_PreferredFormulae();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getAgreementOrDelegateFromBU() <em>Get Agreement Or Delegate From BU</em>}' operation.
@@ -949,17 +920,6 @@ public interface TransfersPackage extends EPackage {
 	EAttribute getTransferRecord_Stale();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis <em>Pricing Basis</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
-	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getPricingBasis()
-	 * @see #getTransferRecord()
-	 * @generated
-	 */
-	EAttribute getTransferRecord_PricingBasis();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromBU <em>From BU</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -980,6 +940,17 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getTransferRecord_ToBU();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getCode <em>Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Code</em>'.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getCode()
+	 * @see #getTransferRecord()
+	 * @generated
+	 */
+	EAttribute getTransferRecord_Code();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getFromEntity() <em>Get From Entity</em>}' operation.
@@ -1030,16 +1001,6 @@ public interface TransfersPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getTransferRecord__GetRecordOrDelegateIncoterm();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePricingBasis() <em>Get Record Or Delegate Pricing Basis</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Record Or Delegate Pricing Basis</em>' operation.
-	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePricingBasis()
-	 * @generated
-	 */
-	EOperation getTransferRecord__GetRecordOrDelegatePricingBasis();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegateFromBU() <em>Get Record Or Delegate From BU</em>}' operation.
@@ -1181,13 +1142,6 @@ public interface TransfersPackage extends EPackage {
 		 */
 		EAttribute TRANSFER_AGREEMENT__COMPANY_STATUS = eINSTANCE.getTransferAgreement_CompanyStatus();
 		/**
-		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TRANSFER_AGREEMENT__PRICING_BASIS = eINSTANCE.getTransferAgreement_PricingBasis();
-		/**
 		 * The meta object literal for the '<em><b>Buffer Days</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1209,19 +1163,19 @@ public interface TransfersPackage extends EPackage {
 		 */
 		EReference TRANSFER_AGREEMENT__TO_BU = eINSTANCE.getTransferAgreement_ToBU();
 		/**
-		 * The meta object literal for the '<em><b>Preferred PBs</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TRANSFER_AGREEMENT__PREFERRED_PBS = eINSTANCE.getTransferAgreement_PreferredPBs();
-		/**
 		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute TRANSFER_AGREEMENT__CODE = eINSTANCE.getTransferAgreement_Code();
+		/**
+		 * The meta object literal for the '<em><b>Preferred Formulae</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TRANSFER_AGREEMENT__PREFERRED_FORMULAE = eINSTANCE.getTransferAgreement_PreferredFormulae();
 		/**
 		 * The meta object literal for the '<em><b>Get Agreement Or Delegate From BU</b></em>' operation.
 		 * <!-- begin-user-doc -->
@@ -1316,13 +1270,6 @@ public interface TransfersPackage extends EPackage {
 		 */
 		EAttribute TRANSFER_RECORD__STALE = eINSTANCE.getTransferRecord_Stale();
 		/**
-		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TRANSFER_RECORD__PRICING_BASIS = eINSTANCE.getTransferRecord_PricingBasis();
-		/**
 		 * The meta object literal for the '<em><b>From BU</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1336,6 +1283,13 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TRANSFER_RECORD__TO_BU = eINSTANCE.getTransferRecord_ToBU();
+		/**
+		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSFER_RECORD__CODE = eINSTANCE.getTransferRecord_Code();
 		/**
 		 * The meta object literal for the '<em><b>Get From Entity</b></em>' operation.
 		 * <!-- begin-user-doc -->
@@ -1371,13 +1325,6 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM = eINSTANCE.getTransferRecord__GetRecordOrDelegateIncoterm();
-		/**
-		 * The meta object literal for the '<em><b>Get Record Or Delegate Pricing Basis</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_BASIS = eINSTANCE.getTransferRecord__GetRecordOrDelegatePricingBasis();
 		/**
 		 * The meta object literal for the '<em><b>Get Record Or Delegate From BU</b></em>' operation.
 		 * <!-- begin-user-doc -->

@@ -45,10 +45,7 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 					return "n/a";
 				}
 				if (object instanceof final ExpressionPriceParameters priceInfo) {
-					if ((priceInfo.getPriceExpression() == null || priceInfo.getPriceExpression().isBlank()) && priceInfo.getPricingBasis() != null) {
-						return priceInfo.getPricingBasis();
-					}
-					if ((priceInfo.getPricingBasis() == null || priceInfo.getPricingBasis().isBlank()) && priceInfo.getPriceExpression() != null) {
+					if (priceInfo.getPriceExpression() != null) {
 						return priceInfo.getPriceExpression();
 					}
 				}

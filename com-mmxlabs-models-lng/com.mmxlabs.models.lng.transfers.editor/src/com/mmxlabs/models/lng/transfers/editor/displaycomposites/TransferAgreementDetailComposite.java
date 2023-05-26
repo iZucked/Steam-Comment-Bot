@@ -43,7 +43,6 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__FROM_BU,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__TO_BU,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION,//
-				TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS, //
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__BUFFER_DAYS, //
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE,//
 				TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM
@@ -69,7 +68,7 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //
 				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__COMPANY_STATUS) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE) //
 				.makeRow()
 				//
 				.withRow()
@@ -84,11 +83,11 @@ public class TransferAgreementDetailComposite extends DefaultDetailComposite imp
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICE_EXPRESSION) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__PRICING_BASIS) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__BUFFER_DAYS) //
 				.makeRow() //
 				.withRow() //
+				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__COMPANY_STATUS) //
 				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__INCOTERM) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_AGREEMENT__CODE) //
 				.makeRow() //
 				.make() //
 		;
