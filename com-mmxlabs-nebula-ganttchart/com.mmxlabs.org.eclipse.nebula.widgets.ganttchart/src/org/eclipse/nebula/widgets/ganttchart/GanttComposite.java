@@ -3573,7 +3573,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				yDrawPos = groupLocations.get(ge.getGanttGroup()).intValue();
 			}
 
-			int fixedRowHeight = _fixedRowHeight;
+			int fixedRowHeight = gs.isBuySell() ? GanttChartParameters.buySellFixedRowHeight() : _fixedRowHeight;
 			int verticalAlignment = ge.getVerticalEventAlignment();
 			int eventHeight = _eventHeight;
 			if (ge.getGanttGroup() == null) {
