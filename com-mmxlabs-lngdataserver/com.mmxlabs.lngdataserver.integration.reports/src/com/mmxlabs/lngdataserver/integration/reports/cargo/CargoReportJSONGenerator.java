@@ -5,11 +5,10 @@
 package com.mmxlabs.lngdataserver.integration.reports.cargo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,46 +50,53 @@ public class CargoReportJSONGenerator {
 		final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 		final List<CargoReportModel> models = new LinkedList<>();
 
+		int rowGroupCounter = 1;
 		for (final CargoAllocation cargoAllocation : scheduleModel.getSchedule().getCargoAllocations()) {
 
-			final CargoReportModel model = new CargoReportModel();
-			final EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
-
-			final Optional<SlotAllocation> loadOptional = slotAllocations //
-					.stream() //
-					.filter(s -> (s.getSlot() != null && (s.getSlot() instanceof LoadSlot))) //
-					.findFirst();
-
-			final Optional<SlotAllocation> dischargeOptional = slotAllocations.stream()//
-					.filter(s -> (s.getSlot() != null && s.getSlot() instanceof DischargeSlot)) //
-					.findFirst();
-
-			if (!loadOptional.isPresent()) {
-				continue;
+			int rowGroup = rowGroupCounter++;
+			// Build up list of slots assigned to cargo, sorting into loads and discharges
+			final List<SlotAllocation> loadSlots = new ArrayList<>();
+			final List<SlotAllocation> dischargeSlots = new ArrayList<>();
+			for (final SlotAllocation slot : cargoAllocation.getSlotAllocations()) {
+				if (slot.getSlot() instanceof LoadSlot) {
+					loadSlots.add(slot);
+				} else if (slot.getSlot() instanceof DischargeSlot) {
+					dischargeSlots.add(slot);
+				} else {
+					// Assume some kind of discharge?
+					// dischargeSlots.add((Slot) slot);
+				}
 			}
 
-			model.cargoType = cargoAllocation.getCargoType().toString();
+			// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
+			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
+				final CargoReportModel model = new CargoReportModel();
+				model.rowGroup = rowGroup;
+				model.cargoType = cargoAllocation.getCargoType().toString();
 
-			final String vesselName = vesselAssignmentFormatter.render(cargoAllocation);
-			if (!vesselName.equals("")) {
-				model.vesselName = vesselName;
+				if (i == 0) {
+					final String vesselName = vesselAssignmentFormatter.render(cargoAllocation);
+					if (vesselName != null && !vesselName.equals("")) {
+						model.vesselName = vesselName;
+					}
+				}
+
+				if (i < loadSlots.size()) {
+					updateLoadAttributes(model, loadSlots.get(i));
+				}
+				if (i < dischargeSlots.size()) {
+					updateDischargeAttributes(model, dischargeSlots.get(i));
+				}
+				models.add(model);
 			}
 
-			if (loadOptional.isPresent()) {
-				updateLoadAttributes(model, loadOptional.get());
-			}
-			if (dischargeOptional.isPresent()) {
-				updateDischargeAttributes(model, dischargeOptional.get());
-			}
-
-			models.add(model);
 		}
 
 		for (final OpenSlotAllocation openSlotAllocation : scheduleModel.getSchedule().getOpenSlotAllocations()) {
 
 			final CargoReportModel model = new CargoReportModel();
 
-			Slot slot = openSlotAllocation.getSlot();
+			Slot<?> slot = openSlotAllocation.getSlot();
 			if (slot == null) {
 				continue;
 			}
@@ -133,8 +139,8 @@ public class CargoReportJSONGenerator {
 			model.loadPortName = slotVisit.getPort().getName();
 		}
 		model.loadPrice = slotAllocation.getPrice();
-		model.loadVolumeM3 = slotAllocation.getVolumeTransferred();
-		model.loadVolumeMMBTU = slotAllocation.getEnergyTransferred();
+		model.loadVolumeM3 = (double) slotAllocation.getVolumeTransferred();
+		model.loadVolumeMMBTU = (double) slotAllocation.getEnergyTransferred();
 	}
 
 	private static void updateDischargeAttributes(final @NonNull CargoReportModel model, final @NonNull SlotAllocation slotAllocation) {
@@ -151,8 +157,8 @@ public class CargoReportJSONGenerator {
 			model.dischargePortName = slotVisit.getPort().getName();
 		}
 		model.dischargePrice = slotAllocation.getPrice();
-		model.dischargeVolumeM3 = slotAllocation.getVolumeTransferred();
-		model.dischargeVolumeMMBTU = slotAllocation.getEnergyTransferred();
+		model.dischargeVolumeM3 = (double) slotAllocation.getVolumeTransferred();
+		model.dischargeVolumeMMBTU = (double) slotAllocation.getEnergyTransferred();
 	}
 
 	private static void jsonOutput(final List<CargoReportModel> models) {

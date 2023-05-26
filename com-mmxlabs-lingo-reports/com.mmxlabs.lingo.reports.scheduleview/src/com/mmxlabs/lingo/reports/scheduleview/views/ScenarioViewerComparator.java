@@ -388,6 +388,27 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				return cat1 - cat2;
 			}
 		}
+		
+		// Sort positions sequences by partition description first and buy/sell later (pairs buys and sells)
+		if (e1 instanceof PositionsSequence ps1 && e2 instanceof PositionsSequence ps2) {
+			final String desc1 = ps1.getDescription();
+			final String desc2 = ps2.getDescription();
+
+			final int c = desc1.compareTo(desc2);
+			if (c != 0) {
+				// Other group comes last
+				if (desc1.equals(PositionsSequence.OTHER_GROUP_DESCRIPTION)) {
+					return 1;
+				} else if (desc2.equals(PositionsSequence.OTHER_GROUP_DESCRIPTION)) {
+					return -1;
+				}
+				return c;
+			} else {
+				// Buy comes before sell
+				return Boolean.compare(!ps1.isBuy(), !ps2.isBuy());
+			}
+		}
+		
 		// Otherwise fallback to default behaviour
 		return super.compare(viewer, e1, e2);
 	}

@@ -68,6 +68,7 @@ public class BulkImportPage extends WizardPage {
 		CHOICE_CHARTER_INDICES, //
 		CHOICE_BASE_FUEL_CURVES, //
 		CHOICE_CURRENCY_CURVES, //
+		CHOICE_FORMULAE, //
 		CHOICE_ALL_INDICIES
 	};
 

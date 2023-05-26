@@ -95,7 +95,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
@@ -151,12 +151,12 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
 
-		// Expecting options in same order as routes were specified. 
+		// Expecting options in same order as routes were specified.
 		// US -> UK, only expect DIRECT route
 		for (int i = 0; i < 1; ++i) {
 
@@ -168,7 +168,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 			Assertions.assertEquals(RouteOption.DIRECT, sca.getLadenLeg().getRouteOption());
 		}
 	}
-	
+
 	@Test
 	public void testCargoBallastRouteOptions() {
 		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
@@ -208,7 +208,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
@@ -263,7 +263,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(3, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
@@ -343,7 +343,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(3, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
@@ -490,7 +490,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
@@ -545,7 +545,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(4, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
@@ -560,7 +560,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 			Assertions.assertEquals(row.getOptions().getDischargeDates().get(i).getDateTime(), sca.getDischargeAllocation().getSlotVisit().getStart().toLocalDateTime());
 		}
 	}
-	
+
 	@Test
 	public void testCargoDischargeDatesDelayed() {
 		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
@@ -600,7 +600,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 		// Check expected extra data items
 		Assertions.assertEquals(2, result.getExtraSlots().size());
-		Assertions.assertEquals(2, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(1, result.getExtraCharterInMarkets().size());
 		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
 		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
 		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
@@ -619,7 +619,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 			Assertions.assertTrue(row.getOptions().getDischargeDates().get(i).getDateTime().isBefore(sca.getDischargeAllocation().getSlotVisit().getStart().toLocalDateTime()));
 		}
 	}
-	
+
 	@Test
 	public void testEventDates() {
 		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));

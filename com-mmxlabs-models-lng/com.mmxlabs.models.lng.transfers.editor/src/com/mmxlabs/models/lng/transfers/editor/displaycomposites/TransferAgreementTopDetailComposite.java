@@ -77,11 +77,10 @@ public class TransferAgreementTopDetailComposite extends DefaultTopLevelComposit
 	}
 	
 	protected void doDisplay(final EObject object) {
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PRICING_BASES) && //
-				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_PRICING_BASES)) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PREFERRED_FORMULAE)) {
 			if (!this.dialogContext.isMultiEdit() && object instanceof final TransferAgreement ta) {
-				PreferredPricingBasisTableCreator.createPrefferedPBsTable(owner, toolkit, dialogContext, commandHandler, ta, //
-						TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_PBS, //
+				PreferredFormulaeTableCreator.createPrefferedFormulaeTable(owner, toolkit, dialogContext, commandHandler, ta, //
+						TransfersPackage.Literals.TRANSFER_AGREEMENT__PREFERRED_FORMULAE, //
 						statusProvider, resizeAction);
 			}
 			resizeAction.run();

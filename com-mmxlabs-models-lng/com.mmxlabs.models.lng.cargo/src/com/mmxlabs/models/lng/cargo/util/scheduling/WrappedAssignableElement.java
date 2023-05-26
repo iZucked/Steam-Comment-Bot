@@ -76,16 +76,14 @@ public class WrappedAssignableElement {
 
 	private final List<Slot<?>> getSortedSlots(final AssignableElement cargo) {
 		if (cargo instanceof Cargo) {
-			return ((Cargo)cargo).getSortedSlots();
-		}
-		else if (cargo instanceof FakeCargo) {
-			return ((FakeCargo)cargo).getSlots();
-		}
-		else {
-			throw new IllegalArgumentException("Unsupport cargo type: "+cargo.getClass().getCanonicalName());
+			return ((Cargo) cargo).getSortedSlots();
+		} else if (cargo instanceof FakeCargo) {
+			return ((FakeCargo) cargo).getSlots();
+		} else {
+			throw new IllegalArgumentException("Unsupport cargo type: " + cargo.getClass().getCanonicalName());
 		}
 	}
-	
+
 	private final int countSpotSlots(final List<Slot<?>> sortedSlots) {
 		int i = 0;
 		for (final Slot<?> slot : sortedSlots) {
@@ -95,15 +93,15 @@ public class WrappedAssignableElement {
 		}
 		return i;
 	}
-	
-	private void initFromCargo(final AssignableElement cargo, final PortModel portModel, ModelDistanceProvider modelDistanceProvider,
-			final IAssignableElementDateProvider dateProvider) {
+
+	private void initFromCargo(final AssignableElement cargo, final PortModel portModel, ModelDistanceProvider modelDistanceProvider, final IAssignableElementDateProvider dateProvider) {
 		final List<Slot<?>> sortedSlots = getSortedSlots(cargo);
 		assert sortedSlots != null;
-		assert countSpotSlots(sortedSlots) <= 1;
+		assert countSpotSlots(sortedSlots) <= sortedSlots.size() - 1;
+
 		Slot<?> firstSlot = getFirstSlot(sortedSlots);
 		Slot<?> lastSlot = getLastSlot(sortedSlots);
-		
+
 		final ZonedDateTime minEndDate = getMinEndDate(cargo, portModel, modelDistanceProvider, dateProvider, sortedSlots);
 		final ZonedDateTime maxStartDate = getMaxStartDate(cargo, portModel, modelDistanceProvider, dateProvider, sortedSlots);
 
@@ -144,7 +142,7 @@ public class WrappedAssignableElement {
 			final ZonedDateTime slotTime = getWindowStart(slot, dateProvider);
 			if (lastSlot != null && lastSlot.getPort() != null && lastTime != null) {
 				final int minTravelTime = portModel == null ? 0 : getTravelTime(cargo, portModel, lastSlot, slot, modelDistanceProvider);
-				
+
 				if (minTravelTime == Integer.MAX_VALUE) {
 					lastTime = slotTime;
 				} else {
@@ -175,8 +173,7 @@ public class WrappedAssignableElement {
 		for (final Slot<?> slot : sortedSlots) {
 			if (slot instanceof SpotSlot) {
 				continue;
-			}
-			else {
+			} else {
 				return slot;
 			}
 		}
@@ -202,7 +199,7 @@ public class WrappedAssignableElement {
 		Collections.reverse(reverseOrder);
 		Slot<?> lastSlot = null;
 		ZonedDateTime lastTime = null;
-		
+
 		for (final Slot<?> slot : reverseOrder) {
 			final ZonedDateTime slotTime = getWindowEnd(slot, dateProvider);
 			if (lastSlot != null && lastSlot.getPort() != null && lastTime != null) {
@@ -234,7 +231,7 @@ public class WrappedAssignableElement {
 		maxStartDate = lastTime;
 		return maxStartDate;
 	}
-	
+
 	private @NonNull ZonedDateTime getWindowStart(@NonNull final Slot<?> slot, @Nullable final IAssignableElementDateProvider dateProvider) {
 		if (dateProvider != null) {
 			ZonedDateTime date = dateProvider.getSlotWindowStart(slot);
@@ -292,7 +289,7 @@ public class WrappedAssignableElement {
 
 	private int getTravelTime(final AssignableElement assignableElement, final PortModel portModel, final Slot<?> fromSlot, final Slot<?> toSlot, ModelDistanceProvider modelDistanceProvider) {
 		Vessel vessel = null;
-		
+
 		final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 		if (vesselAssignmentType instanceof VesselCharter) {
 			final VesselCharter vesselCharter = (VesselCharter) vesselAssignmentType;
@@ -327,7 +324,7 @@ public class WrappedAssignableElement {
 				}
 			}
 		}
-		
+
 		return travelTimeInHours;
 	}
 

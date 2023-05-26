@@ -110,6 +110,9 @@ public class PartialCaseComponent extends AbstractSandboxComponent<OptionModelle
 
 		partialCaseViewer.getGrid().setAutoHeight(true);
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
+		partialCaseViewer.getGrid().setFooterVisible(true); // To allow DND to create a new row when table is full
+		partialCaseViewer.getGrid().setEmptyColumnFooterRenderer(new SandboxFooterRenderer());
+		partialCaseViewer.getGrid().setBottomLeftRenderer(new SandboxBottomLeftRenderer());
 
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER | SWT.WRAP);
@@ -236,6 +239,10 @@ public class PartialCaseComponent extends AbstractSandboxComponent<OptionModelle
 				}
 			});
 
+		}
+
+		for (var g : partialCaseViewer.getGrid().getColumns()) {
+			g.setFooterRenderer(new SandboxFooterRenderer());
 		}
 
 		return partialCaseViewer.getGrid();

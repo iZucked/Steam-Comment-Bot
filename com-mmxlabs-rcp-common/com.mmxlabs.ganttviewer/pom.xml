@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 		<groupId>com.mmxlabs.rcp.common</groupId>
-		<version>6.5.2-SNAPSHOT</version>
+		<version>6.5.4-SNAPSHOT</version>
 	</parent>
 	<groupId>com.mmxlabs.ganttviewer</groupId>
 	<artifactId>com.mmxlabs.ganttviewer</artifactId>

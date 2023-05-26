@@ -280,9 +280,13 @@ public class CustomReportsRegistry {
 	}
 
 	public void removeDeletedViews(@NonNull final MApplication application, @NonNull final EModelService modelService) {
-		final List<CustomReportDefinition> reportDefinitions = readUserCustomReportDefinitions();
+		final List<CustomReportDefinition> userReportDefinitions = readUserCustomReportDefinitions();
+		final List<CustomReportDefinition> teamReportDefinitions = readTeamCustomReportDefinitions();
 		final Set<String> customReportIds = new HashSet<>();
-		for (final CustomReportDefinition rd : reportDefinitions) {
+		for (final CustomReportDefinition rd : userReportDefinitions) {
+			customReportIds.add(rd.getUuid());
+		}
+		for (final CustomReportDefinition rd : teamReportDefinitions) {
 			customReportIds.add(rd.getUuid());
 		}
 
@@ -295,7 +299,7 @@ public class CustomReportsRegistry {
 				reportIdsToRemove.add(id);
 			}
 		}
-
+		reportIdsToRemove.removeAll(customReportIds);
 		for (final String id : reportIdsToRemove) {
 			E4ModelHelper.removeViewPart(id, application, modelService);
 		}

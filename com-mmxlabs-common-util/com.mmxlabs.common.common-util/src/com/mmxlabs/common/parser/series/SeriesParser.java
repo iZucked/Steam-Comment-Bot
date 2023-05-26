@@ -24,7 +24,6 @@ import com.mmxlabs.common.parser.astnodes.CommoditySeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.ConversionASTNode;
 import com.mmxlabs.common.parser.astnodes.CurrencySeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.NamedSeriesASTNode;
-import com.mmxlabs.common.parser.astnodes.PricingBasisSeriesASTNode;
 import com.mmxlabs.common.parser.impl.Lexer;
 import com.mmxlabs.common.parser.impl.Parser;
 
@@ -191,7 +190,6 @@ public class SeriesParser {
 		case CHARTER -> new CharterSeriesASTNode(name);
 		case BUNKERS -> new BunkersSeriesASTNode(name);
 		case CONVERSION -> new ConversionASTNode(name);
-		case PRICING_BASIS -> new PricingBasisSeriesASTNode(name);
 		default -> throw new IllegalArgumentException();
 		};
 	}

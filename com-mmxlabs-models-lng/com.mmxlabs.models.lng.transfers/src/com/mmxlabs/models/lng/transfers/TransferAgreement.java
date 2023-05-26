@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.transfers;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
 import com.mmxlabs.models.lng.commercial.BusinessUnit;
+import com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper;
 import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import org.eclipse.emf.common.util.EList;
@@ -27,12 +28,11 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getIncoterm <em>Incoterm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCompanyStatus <em>Company Status</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getBufferDays <em>Buffer Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getFromBU <em>From BU</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getToBU <em>To BU</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredPBs <em>Preferred PBs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getCode <em>Code</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPreferredFormulae <em>Preferred Formulae</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement()
@@ -155,28 +155,6 @@ public interface TransferAgreement extends NamedObject {
 	 * @generated
 	 */
 	void setCompanyStatus(CompanyStatus value);
-
-	/**
-	 * Returns the value of the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Pricing Basis</em>' attribute.
-	 * @see #setPricingBasis(String)
-	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_PricingBasis()
-	 * @model annotation="http://www.mmxlabs.com/models/pricing/expressionType type='pricingBasis'"
-	 * @generated
-	 */
-	String getPricingBasis();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.transfers.TransferAgreement#getPricingBasis <em>Pricing Basis</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Pricing Basis</em>' attribute.
-	 * @see #getPricingBasis()
-	 * @generated
-	 */
-	void setPricingBasis(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Buffer Days</b></em>' attribute.
@@ -327,18 +305,6 @@ public interface TransferAgreement extends NamedObject {
 	boolean isSetToBU();
 
 	/**
-	 * Returns the value of the '<em><b>Preferred PBs</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Preferred PBs</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_PreferredPBs()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<PreferredPricingBasesWrapper> getPreferredPBs();
-
-	/**
 	 * Returns the value of the '<em><b>Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -359,6 +325,18 @@ public interface TransferAgreement extends NamedObject {
 	 * @generated
 	 */
 	void setCode(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Preferred Formulae</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Preferred Formulae</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.transfers.TransfersPackage#getTransferAgreement_PreferredFormulae()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<PreferredFormulaeWrapper> getPreferredFormulae();
 
 	/**
 	 * <!-- begin-user-doc -->
