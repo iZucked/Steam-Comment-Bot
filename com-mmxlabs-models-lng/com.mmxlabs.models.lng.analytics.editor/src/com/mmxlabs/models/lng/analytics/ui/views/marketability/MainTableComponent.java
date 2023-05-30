@@ -465,7 +465,7 @@ public class MainTableComponent {
 		if (date == null) {
 			return "";
 		}
-		return DateTimeFormatter.ofPattern("dd/MM/yy").format(date);
+		return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(date);
 	}
 
 	@SuppressWarnings("null")
