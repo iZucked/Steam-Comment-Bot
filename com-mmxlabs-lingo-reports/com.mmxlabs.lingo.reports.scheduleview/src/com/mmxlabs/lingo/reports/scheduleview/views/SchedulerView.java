@@ -43,6 +43,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -77,6 +78,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.collect.Lists;
@@ -162,6 +164,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private Action sortModeAction;
 
 	private RunnableAction toggleLegend;
+	private RunnableAction gotoPreferences;
+
 	protected EMFScheduleContentProvider contentProvider;
 	private ScenarioViewerComparator viewerComparator;
 
@@ -1041,6 +1045,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(toggleLegend);
+		manager.add(gotoPreferences);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -1082,6 +1087,12 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			viewer.getGanttChart().getGanttComposite().redraw();
 		});
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
+
+		gotoPreferences = new RunnableAction("Preferences", () -> {
+			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage",
+					new String[] { "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage" }, null);
+			dialog.open();
+		});
 
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
