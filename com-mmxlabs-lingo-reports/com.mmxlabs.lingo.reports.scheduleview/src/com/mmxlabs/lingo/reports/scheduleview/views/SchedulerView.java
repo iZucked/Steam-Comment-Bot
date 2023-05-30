@@ -531,9 +531,6 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 										visible = true;
 									}
 								}
-							} else if (d instanceof PositionsSequence ps) {
-								var cp = (EMFScheduleContentProvider) getContentProvider();
-								visible = cp.enabledPSPTracker.isVisible(ps) || true;
 							}
 
 							ganttSection.setVisible(visible);
@@ -553,9 +550,6 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									visible = true;
 								}
 							}
-						} else if (d instanceof final PositionsSequence ps) {
-							var cp = (EMFScheduleContentProvider) getContentProvider();
-							visible = cp.enabledPSPTracker.isVisible(ps) || true;
 						}
 
 						ganttSection.setVisible(visible);

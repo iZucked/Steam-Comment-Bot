@@ -464,8 +464,6 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	public boolean isVisibleByDefault(final Object resource) {
 		if (!showNominalsByDefault && resource instanceof final Sequence sequence) {
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
-		} else if (resource instanceof PositionsSequence ps) {
-			return enabledPSPTracker.isVisible(ps);
 		}
 		return true;
 	}
