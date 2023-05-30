@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
-		<version>6.5.4-SNAPSHOT</version>
+		<version>6.5.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.extensions</artifactId>
 	<packaging>eclipse-plugin</packaging>
