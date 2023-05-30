@@ -58,7 +58,7 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToExcelMSClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -212,7 +212,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
 
-		final Action copyTableAction = new CopyGridToClipboardAction(mainTableComponent.getViewer().getGrid());
+		final Action copyTableAction = new CopyGridToExcelMSClipboardAction(mainTableComponent.getViewer().getGrid(), true);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
 
