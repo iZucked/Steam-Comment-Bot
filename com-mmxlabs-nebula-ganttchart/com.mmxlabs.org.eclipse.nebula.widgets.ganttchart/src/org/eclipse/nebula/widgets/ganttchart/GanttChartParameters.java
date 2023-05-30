@@ -58,6 +58,7 @@ public class GanttChartParameters {
 	private static final int HEADER_MONTH_HEIGHT = 22;
 	private static final int HEADER_DAY_HEIGHT = 22;
 	private static final int BUY_SELL_ROW_FIXED_HEIGHT = 21;
+	private static final int BUY_SELL_ROW_EVENT_HEIGHT = 14;
 
 	private static GanttChartParameters instance = null;
 	
@@ -291,5 +292,9 @@ public class GanttChartParameters {
 
 	public static int buySellFixedRowHeight() {
 		return BUY_SELL_ROW_FIXED_HEIGHT;
+	}
+
+	public static int buySellEventHeight() {
+		return BUY_SELL_ROW_EVENT_HEIGHT;
 	}
 }

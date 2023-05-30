@@ -3487,8 +3487,16 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (_ganttEvents.isEmpty()) {
 			return;
 		}
-		
-		final int actualFixedRowHeight = gs.isBuySell() ? GanttChartParameters.buySellFixedRowHeight() : _fixedRowHeight;
+
+		final int actualFixedRowHeight;
+		final int actualEventHeight;
+		if (gs.isBuySell()) {
+			actualFixedRowHeight = GanttChartParameters.buySellFixedRowHeight();
+			actualEventHeight = GanttChartParameters.buySellEventHeight();
+		} else {
+			actualFixedRowHeight = _fixedRowHeight;
+			actualEventHeight = _eventHeight;
+		}
 
 		int yStart = bounds.y + _settings.getEventsTopSpacer();// - mVerticalScrollPosition;
 		// System.err.println(yStart);
@@ -3499,7 +3507,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		boolean lastLoopWasGroup = false;
-		// GanttGroup lastGroup = null;
 		final Map<GanttGroup, Integer> groupLocations = new HashMap<>();
 
 		List<? extends IGanttChartItem> events = _ganttEvents;
@@ -3554,7 +3561,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				if (!groupLocations.containsKey(ge.getGanttGroup())) {
 					newGroup = true;
 					if (i != 0 && lastLoopWasGroup) {
-						yStart += _eventHeight + _eventSpacer;
+						yStart += actualEventHeight + _eventSpacer;
 					}
 					groupLocations.put(ge.getGanttGroup(), Integer.valueOf(yStart));
 				}
@@ -3562,7 +3569,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			// event just after a group
 			if (lastLoopWasGroup && !groupedEvent) {
-				yStart += _eventHeight + _eventSpacer;
+				yStart += actualEventHeight + _eventSpacer;
 			}
 
 			// position event will be drawn at vertically
@@ -3573,15 +3580,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				yDrawPos = groupLocations.get(ge.getGanttGroup()).intValue();
 			}
 
-			int fixedRowHeight = gs.isBuySell() ? GanttChartParameters.buySellFixedRowHeight() : _fixedRowHeight;
+			int fixedRowHeight = actualFixedRowHeight;
 			int verticalAlignment = ge.getVerticalEventAlignment();
-			int eventHeight = _eventHeight;
+			int eventHeight = actualEventHeight;
 			if (ge.getGanttGroup() == null) {
 				if (!ge.isAutomaticRowHeight()) {
 					fixedRowHeight = ge.getFixedRowHeight();
 				}
 			} else {
-				// verticalAlignment = ge.getGanttGroup().getVerticalEventAlignment();
 				if (!ge.getGanttGroup().isAutomaticRowHeight()) {
 					fixedRowHeight = ge.getGanttGroup().getFixedRowHeight();
 				}
@@ -3594,7 +3600,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			if (fixedHeight && gs.isBuySell()) {
 				int extra = 0;
 
-				int halfExtra = ((fixedRowHeight / 2) - (_eventHeight / 2));
+				int halfExtra = ((fixedRowHeight / 2) - (actualEventHeight / 2));
 
 				switch (verticalAlignment) {
 				case SWT.BOTTOM:
@@ -3631,9 +3637,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			}
 
 			if (fixedHeight) {
-				ge.setHorizontalLineBottomY(yDrawPos - _eventHeight);
+				ge.setHorizontalLineBottomY(yDrawPos - actualEventHeight);
 			} else {
-				ge.setHorizontalLineBottomY(yDrawPos + _eventHeight);
+				ge.setHorizontalLineBottomY(yDrawPos + actualEventHeight);
 			}
 
 			// set event bounds
