@@ -207,9 +207,9 @@ public final class Activator extends EMFPlugin {
 
 		private void updateEventLabelFontSize(final String value) {
 			final EventLabelFontSize fontSize = switch (value) {
-				case "SMALL" -> EventLabelFontSize.SMALL;
+				case "MEDIUM" -> EventLabelFontSize.MEDIUM;
 				case "LARGE" ->	EventLabelFontSize.LARGE;
-				default -> EventLabelFontSize.MEDIUM;
+				default -> EventLabelFontSize.SMALL;
 			};
 			GanttChartParameters.updateFontSize(fontSize);
 		}
