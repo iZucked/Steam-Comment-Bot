@@ -43,7 +43,6 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__ALLOWED_PORTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_HEDGE);
-		ignoreFeatures.add(CargoPackage.Literals.SLOT__BUSINESS_UNIT);
 
 		addEditor(CargoPackage.Literals.SLOT__WINDOW_START, topClass -> {
 			if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
@@ -116,6 +115,8 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 					}
 				};
 			});
+		} else {
+			ignoreFeatures.add(CargoPackage.Literals.SLOT__BUSINESS_UNIT);
 		}
 	}
 }

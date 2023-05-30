@@ -25,8 +25,6 @@ public class ContractComponentHelper extends DefaultComponentHelper {
 
 	public ContractComponentHelper() {
 		super(CommercialPackage.Literals.CONTRACT);
-		
-		ignoreFeatures.add(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT);
 
 		addEditor(CommercialPackage.Literals.CONTRACT__NOTES, topClass -> new MultiTextInlineEditor(CommercialPackage.Literals.CONTRACT__NOTES));
 
@@ -69,6 +67,8 @@ public class ContractComponentHelper extends DefaultComponentHelper {
 					}
 				};
 			});
+		} else {
+			ignoreFeatures.add(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT);
 		}
 
 	}
