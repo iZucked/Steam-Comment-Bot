@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotExpressionWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
@@ -41,6 +43,7 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__ALLOWED_PORTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_HEDGE);
+		ignoreFeatures.add(CargoPackage.Literals.SLOT__BUSINESS_UNIT);
 
 		addEditor(CargoPackage.Literals.SLOT__WINDOW_START, topClass -> {
 			if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
@@ -96,20 +99,23 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			editor.addNotificationChangedListener(new PricingEventInlineEditorChangedListener());
 			return editor;
 		});
-		addEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT, topClass -> {
-			return new ReferenceInlineEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT) {
-				@Override
-				protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
-					if (currentlySettingValue) {
-						return;
+		
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BUSINESS_UNITS)) {
+			addEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT, topClass -> {
+				return new ReferenceInlineEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT) {
+					@Override
+					protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+						if (currentlySettingValue) {
+							return;
+						}
+						if (value == null && !valueList.isEmpty()) {
+							doSetValue(valueList.get(0), forceCommandExecution);
+						} else {
+							doSetValue(value, forceCommandExecution);
+						}
 					}
-					if (value == null && !valueList.isEmpty()) {
-						doSetValue(valueList.get(0), forceCommandExecution);
-					} else {
-						doSetValue(value, forceCommandExecution);
-					}
-				}
-			};
-		});
+				};
+			});
+		}
 	}
 }
