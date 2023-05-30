@@ -26,6 +26,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -208,10 +210,12 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 
 					return gd;
 				}
-				if (feature == CommercialPackage.Literals.CONTRACT__ENTITY || feature == CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT) {
-					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-					gd.horizontalSpan = 4;
-					return gd;
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BUSINESS_UNITS)) {
+					if (feature == CommercialPackage.Literals.CONTRACT__ENTITY || feature == CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT) {
+						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+						gd.horizontalSpan = 4;
+						return gd;
+					}
 				}
 				if (feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS || feature == CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
