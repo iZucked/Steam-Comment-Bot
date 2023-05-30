@@ -339,7 +339,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		cachedElements.clear();
-		enabledPSPTracker.clearErrors();
+		enabledPSPTracker.setInputChanged(true);
 	}
 
 	@Override
@@ -474,28 +474,9 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 		Activator.getDefault().getInjector().injectMembers(this);
 	}
 	
-	private final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
-		List<@NonNull PositionsSequence> result = new ArrayList<>();
-		
-		try {
-			result.addAll(new BuySellSplit().provide(schedule));
-		} catch (PositionsSequenceProviderException e) {
-			// BuySellSplit should never throw this
-		}
-
-		if (positionsSequenceProviderExtensions.iterator().hasNext()) {
-			for (var ext: positionsSequenceProviderExtensions) {
-				ISchedulePositionsSequenceProvider provider = ext.createInstance();
-				try {
-					result.addAll(provider.provide(schedule));
-				} catch (PositionsSequenceProviderException e1) {
-					enabledPSPTracker.addError(provider.getId(), e1);
-				}
-			}
-		}
-		return result;
-	}
 			
 	public abstract IScenarioDataProvider getScenarioDataProviderFor(Object obj);
+	
+	protected abstract List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule);
 	
 }

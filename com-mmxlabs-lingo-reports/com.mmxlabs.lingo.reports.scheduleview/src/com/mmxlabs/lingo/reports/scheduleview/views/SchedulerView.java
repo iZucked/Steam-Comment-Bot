@@ -43,6 +43,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -50,7 +51,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
 import org.eclipse.nebula.widgets.ganttchart.GanttChartParameters;
@@ -98,7 +98,9 @@ import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderCompar
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -531,7 +533,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 								}
 							} else if (d instanceof PositionsSequence ps) {
 								var cp = (EMFScheduleContentProvider) getContentProvider();
-								visible = cp.enabledPSPTracker.isVisible(ps);
+								visible = cp.enabledPSPTracker.isVisible(ps) || true;
 							}
 
 							ganttSection.setVisible(visible);
@@ -553,7 +555,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							}
 						} else if (d instanceof final PositionsSequence ps) {
 							var cp = (EMFScheduleContentProvider) getContentProvider();
-							visible = cp.enabledPSPTracker.isVisible(ps);
+							visible = cp.enabledPSPTracker.isVisible(ps) || true;
 						}
 
 						ganttSection.setVisible(visible);
@@ -692,6 +694,42 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				return null;
 			}
 
+			@Override
+			protected final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
+				List<@NonNull PositionsSequence> result = new ArrayList<>();
+
+				if (enabledPSPTracker.hasInputChanged()) {
+					enabledPSPTracker.clearErrors();
+					enabledPSPTracker.collectErrors(positionsSequenceProviderExtensions, schedule);
+					enabledPSPTracker.setInputChanged(false);
+				}
+
+				if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+					for (var ext : positionsSequenceProviderExtensions) {
+						ISchedulePositionsSequenceProvider provider = ext.createInstance();
+						try {
+							if (enabledPSPTracker.isEnabledWithNoError(provider.getId())) {
+								result.addAll(provider.provide(schedule));
+							}
+						} catch (PositionsSequenceProviderException e) {
+							enabledPSPTracker.addError(provider.getId(), e);
+							MessageDialog dialog = new MessageDialog(viewer.getControl().getShell(), e.getTitle(), null, e.getDescription(), 0, 0, "OK");
+							dialog.create();
+							dialog.open();
+						}
+					}
+				}
+
+				if (result.isEmpty()) {
+					try {
+						return new BuySellSplit().provide(schedule);
+					} catch (PositionsSequenceProviderException e) {
+						// BuySellSplit should never throw this exception
+					}
+				}
+
+				return result;
+			}
 		};
 
 		viewer.setContentProvider(contentProvider);
