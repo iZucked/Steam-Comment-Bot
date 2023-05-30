@@ -40,6 +40,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		final boolean alpha = colorManager.useAlphaDrawing();
 
 		int xLoc = xStart;
+		//
+		// Some calls to draw methods still use y, not yLoc! TODO
+		int yLoc = y;
 
 		// draw the border
 		Color cEventBorder = event.getStatusBorderColor();
@@ -87,7 +90,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				// }
 				// Skip above, the bounds.width is incorrect leading to short drawing on RHS for
 				// events at end of the view
-				gc.drawRectangle(xLoc, y, eventWidth, event.getBounds().height);
+				gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
 
 				gc.setLineStyle(SWT.LINE_SOLID);
 				gc.setLineWidth(1);
@@ -165,7 +168,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 						gc.setAlpha(cEventAlpha);
 					}
 					gc.setLineWidth(event.getStatusBorderWidth());
-					gc.drawRectangle(xLoc, y, eventWidth + event.getStatusBorderWidth() - 1, event.getBounds().height + event.getStatusBorderWidth() - 1);
+					/* It used to be `event.getBounds().height` instead of `settings.getEventHeight`,
+					 *  but it did not work on preference change, so maybe will lead to problems */
+					gc.drawRectangle(xLoc, yLoc, eventWidth + event.getStatusBorderWidth() - 1, settings.getEventHeight() + event.getStatusBorderWidth() - 1);
 					if (alpha) {
 						gc.setAlpha(oldAlpha);
 					}
@@ -197,10 +202,10 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		if (eventWidth > 1) {
 			if (settings.showGradientEventBars()) {
 				gc.setForeground(gradient);
-				gc.fillGradientRectangle(xLoc, y, eventWidth, settings.getEventHeight(), true);
+				gc.fillGradientRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight(), true);
 				gc.setForeground(colorManager.getEventBorderColor()); // re-set foreground color
 			} else {
-				gc.fillRectangle(xLoc, y, eventWidth, settings.getEventHeight());
+				gc.fillRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight());
 			}
 		}
 		// Reset alpha
@@ -526,14 +531,19 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			oldFont = gc.getFont();
 			final FontData[] old = oldFont.getFontData();
 			old[0].setStyle(SWT.BOLD);
+			
 			final Font f = new Font(Display.getDefault(), old);
 			gc.setFont(f);
 			f.dispose();
 		}
-
-		if (event.getTextFont() != null) {
-			gc.setFont(event.getTextFont());
-		}
+		
+		/*
+		 * Change font size to desired
+		 */
+		final Font f = GanttChartParameters.getStandardFont();
+		gc.setFont(f);
+		event.setTextFont(f);
+		
 
 		final int textSpacer = composite.isConnected(event) ? settings.getTextSpacerConnected() : settings.getTextSpacerNonConnected();
 
@@ -542,7 +552,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				break;
 			}
 		}
-
+		f.dispose();
 		gc.setFont(oldFont);
 	}
 
@@ -630,20 +640,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		default:
 			break;
 		}
-		int yTextPos = y + (event.getHeight() / 2);
-		switch (event.getVerticalTextLocation()) {
-		case SWT.TOP:
-			yTextPos = event.getY() - size.y;
-			break;
-		case SWT.CENTER:
-			yTextPos -= (size.y / 2) + 1;
-			break;
-		case SWT.BOTTOM:
-			yTextPos = event.getBottomY();
-			break;
-		default:
-			break;
-		}
+		int yTextPos = y + GanttChartParameters.getTextVerticalAlignDisplacement();
 		return new Point(textXStart, yTextPos);
 	}
 
