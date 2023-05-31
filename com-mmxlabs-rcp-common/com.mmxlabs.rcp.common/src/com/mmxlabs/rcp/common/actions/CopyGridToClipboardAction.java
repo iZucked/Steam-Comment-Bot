@@ -33,7 +33,7 @@ public class CopyGridToClipboardAction extends Action {
 
 	private final char separator;
 
-	private boolean rowHeadersIncluded = false;
+	protected boolean rowHeadersIncluded = false;
 
 	private Runnable preOperation;
 	private Runnable postOperation;
@@ -130,7 +130,7 @@ public class CopyGridToClipboardAction extends Action {
 		return sw;
 	}
 
-	private void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
+	protected void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
 		if (rowHeadersIncluded) {
 			cw.addValue(item.getHeaderText());
 		}
