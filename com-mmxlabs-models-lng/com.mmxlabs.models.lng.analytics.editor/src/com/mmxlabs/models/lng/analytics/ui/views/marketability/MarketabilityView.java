@@ -138,7 +138,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			if (modelRecord != null) {
 				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
 					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-					final Optional<Integer> vesselSpeed = mainTableComponent.getVesselSpeed();
+					final Optional<Double> vesselSpeed = mainTableComponent.getVesselSpeed();
 					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
 						try {
 							dialog.run(true, false, m -> {
