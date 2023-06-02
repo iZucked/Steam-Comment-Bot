@@ -91,11 +91,13 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Background, Vessel_Laden_Idle);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background, Vessel_Ballast_Journey);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background, Vessel_Ballast_Idle);
+		setItemColour(ColourPaletteItems.Voyage_Ballast_Non_Shipped_Idle, ColourElements.Background, Vessel_Charter_Length);
 
 		setItemColour(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Foreground, White);
 		setItemColour(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Foreground, Black);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Foreground, White);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_Ballast_Non_Shipped_Idle, ColourElements.Foreground, Black);
 
 		setItemColour(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background, Vessel_Generated_Charter_Out);
 		setItemColour(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background, Vessel_Charter_Length);
@@ -167,6 +169,7 @@ public final class ColourPalette {
 		Voyage_Load, Voyage_Discharge,
 		Voyage_Laden_Journey, Voyage_Laden_Idle,
 		Voyage_Ballast_Journey, Voyage_Ballast_Idle,
+		Voyage_Ballast_Non_Shipped_Idle,
 		Voyage_Cooldown, Voyage_Purge,
 		Voyage_GeneratedCharterOut,
 		Voyage_CharterLength,

@@ -9,13 +9,15 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.WeakHashMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -29,11 +31,8 @@ import org.eclipse.swt.SWT;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.EnabledPositionsSequenceProviderTracker;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -42,12 +41,15 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -71,13 +73,15 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public abstract class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	private final WeakHashMap<Slot<?>, SlotVisit> cachedElements = new WeakHashMap<>();
-	
+
 	@Inject
 	protected Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
-	
+
 	protected EnabledPositionsSequenceProviderTracker enabledPSPTracker = new EnabledPositionsSequenceProviderTracker();
-	
+
 	protected boolean showNominalsByDefault = false;
+
+	private Collection<Predicate<NonShippedSequence>> fobRotationsToShow = new LinkedList<>();
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
@@ -122,6 +126,29 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 						}
 						result.add(seq);
 					}
+					final Collection<Slot<?>> nonShippedSlots = new HashSet<>();
+					for (final NonShippedSequence seq : schedule.getNonShippedSequences()) {
+						if (fobRotationsToShow.stream().anyMatch(p -> p.test(seq))) {
+							result.add(seq);
+							for (final Event event : seq.getEvents()) {
+								if (event instanceof NonShippedSlotVisit slotVisit) {
+									nonShippedSlots.add(slotVisit.getSlot());
+								}
+							}
+						}
+					}
+					final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore;
+					if (!nonShippedSlots.isEmpty()) {
+						slotVisitsToIgnore = schedule.getCargoAllocations().stream() //
+								.map(CargoAllocation::getSlotAllocations) //
+								.flatMap(List::stream) //
+								.filter(sa -> nonShippedSlots.contains(sa.getSlot())) //
+								.map(SlotAllocation::getSlotVisit) //
+								.collect(Collectors.toSet());
+					} else {
+						slotVisitsToIgnore = Collections.emptySet();
+					}
+
 					for (final var entry : chartersMap.entrySet()) {
 						final Vessel vessel = entry.getKey();
 						final List<Sequence> combinedSequences = entry.getValue();
@@ -134,13 +161,8 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 						}
 					}
 
-					// for (InventoryEvents inventory : schedule.getInventoryLevels()) {
-					// result.add(inventory);
-					// }
-					
-					result.addAll(getPositionsSequences(schedule));
-					
-					
+					result.addAll(getPositionsSequences(schedule, slotVisitsToIgnore));
+
 				}
 //				result.addAll(Schedule)
 			}
@@ -160,6 +182,9 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				if (seq.getSequenceType() == SequenceType.FOB_SALE) {
 					continue;
 				}
+				seqs.add(seq);
+			}
+			for (final NonShippedSequence seq : schedule.getNonShippedSequences()) {
 				seqs.add(seq);
 			}
 			// for (InventoryEvents inventory : schedule.getInventoryLevels()) {
@@ -214,6 +239,8 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				}
 			}
 			return newEvents.toArray();
+		} else if (parent instanceof final NonShippedSequence nonShippedSequence) {
+			return nonShippedSequence.getEvents().toArray();
 		} else if (parent instanceof final CombinedSequence combinedSequence) {
 			final List<Event> newEvents = new LinkedList<>();
 			for (final Sequence sequence : combinedSequence.getSequences()) {
@@ -327,7 +354,7 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		return (element instanceof Sequence) || (element instanceof Schedule) || (element instanceof CombinedSequence) || (element instanceof InventoryEvents)
+		return (element instanceof Sequence) || (element instanceof NonShippedSequence) || (element instanceof Schedule) || (element instanceof CombinedSequence) || (element instanceof InventoryEvents)
 				|| (element instanceof PositionsSequence);
 	}
 
@@ -464,17 +491,27 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 	public boolean isVisibleByDefault(final Object resource) {
 		if (!showNominalsByDefault && resource instanceof final Sequence sequence) {
 			return sequence.getSequenceType() != SequenceType.ROUND_TRIP;
+		} else if (resource instanceof final NonShippedSequence sequence) {
+			return fobRotationsToShow.stream().anyMatch(pred -> pred.test(sequence));
 		}
 		return true;
 	}
-	
+
 	public void injectExtensionPoints() {
 		Activator.getDefault().getInjector().injectMembers(this);
 	}
-	
-			
+
+	public void clearFobRotations() {
+		fobRotationsToShow.clear();
+	}
+
+	public void replaceFobRotations(final @NonNull Collection<Predicate<NonShippedSequence>> predicates) {
+		fobRotationsToShow.clear();
+		fobRotationsToShow.addAll(predicates);
+	}
+
 	public abstract IScenarioDataProvider getScenarioDataProviderFor(Object obj);
-	
-	protected abstract List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule);
-	
+
+	protected abstract List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule, @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore);
+
 }

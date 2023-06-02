@@ -9,10 +9,14 @@ import java.util.Collections;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -26,17 +30,20 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelReferenceThread;
 
 public class EvaluateTask {
 
-	public static void submit(final ScenarioInstance scenarioInstance) {
+	private EvaluateTask() {
+	}
+
+	public static void submit(final @NonNull ScenarioInstance scenarioInstance) {
 		submit(scenarioInstance, true);
 	}
 
-	public static void submit(final ScenarioInstance scenarioInstance, boolean withUI) {
+	public static void submit(final @NonNull ScenarioInstance scenarioInstance, boolean withUI) {
 		final ScenarioModelRecord scenarioModelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 		submit(scenarioModelRecord, withUI);
 
 	}
 
-	public static void submit(final ScenarioModelRecord scenarioModelRecord, boolean withUI) {
+	public static void submit(final @NonNull ScenarioModelRecord scenarioModelRecord, boolean withUI) {
 
 		// We need a special unique thread for exclusive locking.
 		final ScenarioModelReferenceThread thread = new ScenarioModelReferenceThread("Evaluate", scenarioModelRecord, sdp -> {
@@ -71,6 +78,10 @@ public class EvaluateTask {
 
 				final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
 						.withUserSettings(userSettings);
+
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NON_SHIPPED_FOB_ROTATIONS)) {
+					runnerBuilder.withHints(LNGTransformerHelper.HINT_NONSHIPPED_ROTATIONS);
+				}
 
 				final LNGScenarioRunner runner = runnerBuilder //
 						.buildDefaultRunner() //

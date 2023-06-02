@@ -506,12 +506,12 @@ public class PortTimesRecordMaker {
 			final List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData) {
 
 		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
-
 		// Check resource type
 		assert vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
 				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
 				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
-				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP 
+				|| vesselCharter.getVesselInstanceType() == VesselInstanceType.NONSHIPPED_ROTATION;
 
 		final List<@NonNull IPortTimesRecord> portTimesRecords = new LinkedList<>();
 

@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
@@ -115,12 +116,16 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -185,6 +190,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private ReentrantSelectionManager selectionManager;
 
 	boolean showNominalsByDefault = false;
+
+	private final Set<Contract> fobRotationSelectedContracts = new HashSet<>();
+	private final Set<Predicate<NonShippedSequence>> fobRotationsToShow = new HashSet<>();
 
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
@@ -531,6 +539,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 										visible = true;
 									}
 								}
+							} else if (d instanceof NonShippedSequence sequence) {
+								visible = fobRotationsToShow.stream().anyMatch(pred -> pred.test(sequence));
 							}
 
 							ganttSection.setVisible(visible);
@@ -550,6 +560,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									visible = true;
 								}
 							}
+						} else if (d instanceof final NonShippedSequence sequence) {
+							visible = fobRotationsToShow.stream().anyMatch(pred -> pred.test(sequence));
 						}
 
 						ganttSection.setVisible(visible);
@@ -651,6 +663,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							if (ee.getSequence() != null && ee.getSequence().getVesselCharter() != null) {
 								return Collections.singletonList(ee.getSequence().getVesselCharter());
 							}
+						} else if (event instanceof final NonShippedSlotVisit slotVisit) {
+							return Collections.singletonList(slotVisit.getSlot());
 						}
 
 						return Collections.emptyList();
@@ -689,12 +703,12 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			}
 
 			@Override
-			protected final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule) {
+			protected final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore) {
 				List<@NonNull PositionsSequence> result = new ArrayList<>();
 
 				if (enabledPSPTracker.hasInputChanged()) {
 					enabledPSPTracker.clearErrors();
-					enabledPSPTracker.collectErrors(positionsSequenceProviderExtensions, schedule);
+					enabledPSPTracker.collectErrors(positionsSequenceProviderExtensions, schedule, slotVisitsToIgnore);
 					enabledPSPTracker.setInputChanged(false);
 				}
 
@@ -703,7 +717,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						ISchedulePositionsSequenceProvider provider = ext.createInstance();
 						try {
 							if (enabledPSPTracker.isEnabledWithNoError(provider.getId())) {
-								result.addAll(provider.provide(schedule));
+								result.addAll(provider.provide(schedule, slotVisitsToIgnore));
 							}
 						} catch (PositionsSequenceProviderException e) {
 							enabledPSPTracker.addError(provider.getId(), e);
@@ -716,7 +730,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 				if (result.isEmpty()) {
 					try {
-						return new BuySellSplit().provide(schedule);
+						return new BuySellSplit().provide(schedule, slotVisitsToIgnore);
 					} catch (PositionsSequenceProviderException e) {
 						// BuySellSplit should never throw this exception
 					}
@@ -1284,6 +1298,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				} else if (object instanceof final MultiEvent multiEvent) {
 					newSelection.add(multiEvent);
 					newSelection.addAll(multiEvent.getElements());
+				} else if (object instanceof final @NonNull NonShippedSlotVisit slotVisit) {
+					if (!newSelection.contains(slotVisit)) {
+						newSelection.addAll(getNonShippedExtraEvents(slotVisit));
+					}
 				}
 			} else {
 				if (equivalents.containsKey(o)) {
@@ -1293,7 +1311,39 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		}
 		newSelection.retainAll(contents);
 		return new ArrayList<>(newSelection);
+	}
 
+	private NonShippedSlotVisit getFirstCommonCargoNonShippedSlotVisit(final @NonNull NonShippedSlotVisit slotVisit) {
+		final Cargo commonCargo = slotVisit.getSlot().getCargo();
+		NonShippedSlotVisit currentFirst = slotVisit;
+		Event currentEvent = slotVisit.getPreviousEvent();
+		while (currentEvent != null) {
+			if (currentEvent instanceof NonShippedSlotVisit currentSlotVisit) {
+				if (currentSlotVisit.getSlot().getCargo() == commonCargo) {
+					currentFirst = currentSlotVisit;
+				} else {
+					break;
+				}
+			}
+			currentEvent = currentEvent.getPreviousEvent();
+		}
+		return currentFirst;
+	}
+
+	private List<Event> getNonShippedExtraEvents(final @NonNull NonShippedSlotVisit slotVisit) {
+		final List<Event> events = new LinkedList<>();
+		final Cargo commonCargo = slotVisit.getSlot().getCargo();
+		assert commonCargo != null;
+		final NonShippedSlotVisit firstLoadVisit = getFirstCommonCargoNonShippedSlotVisit(slotVisit);
+		Event currentEvent = firstLoadVisit;
+		while (currentEvent != null) {
+			if (currentEvent instanceof NonShippedSlotVisit currentSlotVisit && currentSlotVisit.getSlot().getCargo() != commonCargo) {
+				break;
+			}
+			events.add(currentEvent);
+			currentEvent = currentEvent.getNextEvent();
+		}
+		return events;
 	}
 
 	/**
@@ -1529,4 +1579,27 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		return false;
 	}
 
+	public boolean toggleSelectedContract(final Contract selectedContract) {
+		if (fobRotationSelectedContracts.contains(selectedContract)) {
+			fobRotationSelectedContracts.remove(selectedContract);
+			return false;
+		} else {
+			fobRotationSelectedContracts.add(selectedContract);
+			return true;
+		}
+	}
+
+	public Set<Contract> getSelectedContracts() {
+		return fobRotationSelectedContracts;
+	}
+
+	public void clearFobRotations() {
+		fobRotationsToShow.clear();
+		fobRotationSelectedContracts.clear();
+	}
+
+	public void replaceFobRotations(final @NonNull Collection<@NonNull Predicate<NonShippedSequence>> predicates) {
+		fobRotationsToShow.clear();
+		fobRotationsToShow.addAll(predicates);
+	}
 }

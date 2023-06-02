@@ -152,6 +152,10 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS: return createOriginPortRepositioningFeeTermDetails();
 			case SchedulePackage.TRANSFER_RECORD_PNL_DETAILS: return createTransferRecordPNLDetails();
 			case SchedulePackage.SANDBOX_REFERENCE: return createSandboxReference();
+			case SchedulePackage.NON_SHIPPED_SEQUENCE: return createNonShippedSequence();
+			case SchedulePackage.NON_SHIPPED_SLOT_VISIT: return createNonShippedSlotVisit();
+			case SchedulePackage.NON_SHIPPED_JOURNEY: return createNonShippedJourney();
+			case SchedulePackage.NON_SHIPPED_IDLE: return createNonShippedIdle();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -803,6 +807,50 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public SandboxReference createSandboxReference() {
 		SandboxReferenceImpl sandboxReference = new SandboxReferenceImpl();
 		return sandboxReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NonShippedSequence createNonShippedSequence() {
+		NonShippedSequenceImpl nonShippedSequence = new NonShippedSequenceImpl();
+		return nonShippedSequence;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NonShippedSlotVisit createNonShippedSlotVisit() {
+		NonShippedSlotVisitImpl nonShippedSlotVisit = new NonShippedSlotVisitImpl();
+		return nonShippedSlotVisit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NonShippedJourney createNonShippedJourney() {
+		NonShippedJourneyImpl nonShippedJourney = new NonShippedJourneyImpl();
+		return nonShippedJourney;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NonShippedIdle createNonShippedIdle() {
+		NonShippedIdleImpl nonShippedIdle = new NonShippedIdleImpl();
+		return nonShippedIdle;
 	}
 
 	/**

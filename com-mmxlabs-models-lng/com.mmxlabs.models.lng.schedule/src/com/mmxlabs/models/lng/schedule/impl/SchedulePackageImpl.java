@@ -58,6 +58,10 @@ import com.mmxlabs.models.lng.schedule.LumpSumDetails;
 import com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
+import com.mmxlabs.models.lng.schedule.NonShippedIdle;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyBallastBonusTermDetails;
 import com.mmxlabs.models.lng.schedule.NotionalJourneyDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -486,6 +490,34 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass nonShippedSequenceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass nonShippedSlotVisitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass nonShippedJourneyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass nonShippedIdleEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum fuelUnitEEnum = null;
 
 	/**
@@ -771,6 +803,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EReference getSchedule_GeneratedPaperDeals() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSchedule_NonShippedSequences() {
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -3280,6 +3322,106 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EClass getNonShippedSequence() {
+		return nonShippedSequenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getNonShippedSequence_Vessel() {
+		return (EReference)nonShippedSequenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getNonShippedSequence_Events() {
+		return (EReference)nonShippedSequenceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getNonShippedSlotVisit() {
+		return nonShippedSlotVisitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getNonShippedSlotVisit_Slot() {
+		return (EReference)nonShippedSlotVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getNonShippedJourney() {
+		return nonShippedJourneyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getNonShippedJourney_Laden() {
+		return (EAttribute)nonShippedJourneyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getNonShippedJourney_Destination() {
+		return (EReference)nonShippedJourneyEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getNonShippedIdle() {
+		return nonShippedIdleEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getNonShippedIdle_Laden() {
+		return (EAttribute)nonShippedIdleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -3419,6 +3561,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(scheduleEClass, SCHEDULE__PAPER_DEAL_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__OTHER_PNL);
 		createEReference(scheduleEClass, SCHEDULE__GENERATED_PAPER_DEALS);
+		createEReference(scheduleEClass, SCHEDULE__NON_SHIPPED_SEQUENCES);
 
 		fitnessEClass = createEClass(FITNESS);
 		createEAttribute(fitnessEClass, FITNESS__FITNESS_VALUE);
@@ -3723,6 +3866,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		sandboxReferenceEClass = createEClass(SANDBOX_REFERENCE);
 		createEReference(sandboxReferenceEClass, SANDBOX_REFERENCE__REFERENCE);
 
+		nonShippedSequenceEClass = createEClass(NON_SHIPPED_SEQUENCE);
+		createEReference(nonShippedSequenceEClass, NON_SHIPPED_SEQUENCE__VESSEL);
+		createEReference(nonShippedSequenceEClass, NON_SHIPPED_SEQUENCE__EVENTS);
+
+		nonShippedSlotVisitEClass = createEClass(NON_SHIPPED_SLOT_VISIT);
+		createEReference(nonShippedSlotVisitEClass, NON_SHIPPED_SLOT_VISIT__SLOT);
+
+		nonShippedJourneyEClass = createEClass(NON_SHIPPED_JOURNEY);
+		createEAttribute(nonShippedJourneyEClass, NON_SHIPPED_JOURNEY__LADEN);
+		createEReference(nonShippedJourneyEClass, NON_SHIPPED_JOURNEY__DESTINATION);
+
+		nonShippedIdleEClass = createEClass(NON_SHIPPED_IDLE);
+		createEAttribute(nonShippedIdleEClass, NON_SHIPPED_IDLE__LADEN);
+
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 		fuelEEnum = createEEnum(FUEL);
@@ -3851,6 +4008,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		notionalJourneyBallastBonusTermDetailsEClass.getESuperTypes().add(this.getNotionalJourneyDetails());
 		originPortRepositioningFeeTermDetailsEClass.getESuperTypes().add(this.getNotionalJourneyDetails());
 		transferRecordPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
+		nonShippedSequenceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		nonShippedSlotVisitEClass.getESuperTypes().add(this.getEvent());
+		nonShippedJourneyEClass.getESuperTypes().add(this.getEvent());
+		nonShippedIdleEClass.getESuperTypes().add(this.getEvent());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3869,6 +4030,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSchedule_PaperDealAllocations(), this.getPaperDealAllocation(), null, "paperDealAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_OtherPNL(), this.getOtherPNL(), null, "otherPNL", null, 0, 1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_GeneratedPaperDeals(), theCargoPackage.getPaperDeal(), null, "generatedPaperDeals", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSchedule_NonShippedSequences(), this.getNonShippedSequence(), null, "nonShippedSequences", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fitnessEClass, Fitness.class, "Fitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFitness_FitnessValue(), ecorePackage.getELong(), "fitnessValue", null, 1, 1, Fitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4184,6 +4346,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(sandboxReferenceEClass, SandboxReference.class, "SandboxReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSandboxReference_Reference(), ecorePackage.getEObject(), null, "reference", null, 0, 1, SandboxReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(nonShippedSequenceEClass, NonShippedSequence.class, "NonShippedSequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNonShippedSequence_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, NonShippedSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNonShippedSequence_Events(), this.getEvent(), null, "events", null, 0, -1, NonShippedSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(nonShippedSlotVisitEClass, NonShippedSlotVisit.class, "NonShippedSlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNonShippedSlotVisit_Slot(), theCargoPackage.getSlot(), null, "slot", null, 0, 1, NonShippedSlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(nonShippedJourneyEClass, NonShippedJourney.class, "NonShippedJourney", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNonShippedJourney_Laden(), ecorePackage.getEBoolean(), "laden", null, 0, 1, NonShippedJourney.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNonShippedJourney_Destination(), thePortPackage.getPort(), null, "destination", null, 0, 1, NonShippedJourney.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(nonShippedIdleEClass, NonShippedIdle.class, "NonShippedIdle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNonShippedIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 0, 1, NonShippedIdle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");

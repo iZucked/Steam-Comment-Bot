@@ -142,6 +142,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -782,7 +783,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					aSet.add(slotAllocation.getSlot());
 				} else if (a instanceof final SlotVisit slotVisit) {
 					aSet.add(slotVisit.getSlotAllocation().getSlot());
-
+				} else if (a instanceof final NonShippedSlotVisit slotVisit) {
+					aSet.add(slotVisit.getSlot());
 				} else if (a instanceof Event evt) {
 					while (evt != null) {
 						if (evt instanceof VesselEventVisit) {
@@ -790,6 +792,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						} else if (evt instanceof GeneratedCharterOut) {
 							return null;
 						} else if (evt instanceof SlotVisit) {
+							return getObjectSet(evt);
+						} else if (evt instanceof NonShippedSlotVisit) {
 							return getObjectSet(evt);
 						}
 						evt = evt.getPreviousEvent();

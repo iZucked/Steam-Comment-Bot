@@ -204,6 +204,52 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		return new ScheduledTimeWindows(travelTimeDataMap, trimmedWindows);
 	}
 
+	public ScheduledTimeWindows calculateNonShippedTrimmedWindows(final @NonNull ISequences sequences) {
+		final Map<IResource, MinTravelTimeData> travelTimeDataMap = new HashMap<>();
+		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = new HashMap<>();
+
+		// Construct new bookings data object
+		final CurrentBookingData data = new CurrentBookingData();
+
+		if (useCanalBasedWindowTrimming) {
+		}
+
+		for (final IResource resource : sequences.getResources()) {
+			List<IPortTimeWindowsRecord> list;
+			final @NonNull ISequence sequence = sequences.getSequence(resource);
+			final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = doNonShippedTrimming(resource, sequence, data, sequences.getProviders());
+			list = p.getFirst();
+			travelTimeDataMap.put(resource, p.getSecond());
+//			}
+			// Copy list incase externally modified
+			trimmedWindows.put(resource, new ArrayList<>(list));
+
+			// We copy the booking data as we don't know whether or not cache will hit or
+			// miss.
+			// Modify the original to remove used bookings
+			// The reason for the below code appears to be in case of a cache hit, the
+			// booking data passed in won't have been updated with used bookings
+			// and unassigned bookings utilised moves to assigned bookings etc. Sometimes it
+			// will already be updated, sometimes not.
+			if (list != null) {
+				for (final IPortTimeWindowsRecord rr : list) {
+					for (final IPortSlot slot : rr.getSlots()) {
+						final IRouteOptionBooking booking = rr.getRouteOptionBooking(slot);
+						if (booking != null) {
+							if (!data.isUsed(booking.getEntryPoint(), booking)) {
+								data.setUsed(booking.getEntryPoint(), booking);
+							}
+						}
+					}
+				}
+			}
+
+		}
+		// validateBookingsUsedOnce(trimmedWindows);
+
+		return new ScheduledTimeWindows(travelTimeDataMap, trimmedWindows);
+	}
+
 	private void validateBookingsUsedOnce(final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows) {
 		// Check used bookings.
 		final Set<IRouteOptionBooking> usedBookings = new HashSet<>();
@@ -264,6 +310,25 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		return portTimeRecords;
 	}
 
+	@Override
+	public @NonNull Map<@NonNull IResource, Pair<@NonNull MinTravelTimeData, @NonNull List<@NonNull IPortTimesRecord>>> scheduleNonShipped(final @NonNull ISequences fullSequences) {
+		final ScheduledTimeWindows scheduledTimeWindows = calculateNonShippedTrimmedWindows(fullSequences);
+		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = scheduledTimeWindows.getTrimmedTimeWindowsMap();
+		final Map<@NonNull IResource, Pair<@NonNull MinTravelTimeData, @NonNull List<@NonNull IPortTimesRecord>>> portTimeRecords = new HashMap<>();
+		//
+		for (int seqIndex = 0; seqIndex < fullSequences.getResources().size(); ++seqIndex) {
+			final IResource resource = fullSequences.getResources().get(seqIndex);
+			final ISequence sequence = fullSequences.getSequence(resource);
+			final MinTravelTimeData travelTimeData = scheduledTimeWindows.getTravelTimeData().get(resource);
+			if (travelTimeData == null) {
+				throw new IllegalStateException("Missing travel time");
+			}
+			portTimeRecords.put(resource, Pair.of(travelTimeData, portTimesRecordMaker.makeSimpleShippedPortTimesRecords(seqIndex, resource, sequence, trimmedWindows.get(resource), travelTimeData)));
+		}
+
+		return portTimeRecords;
+	}
+
 	public boolean isUsePriceBasedWindowTrimming() {
 		return usePriceBasedWindowTrimming;
 	}
@@ -311,6 +376,15 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 		return new Pair<>(list, minTimeData);
 
+	}
+
+	private Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> doNonShippedTrimming(final IResource resource, final ISequence sequence, final CurrentBookingData data,
+			ISequencesAttributesProvider sequencesAttributesProvider) {
+		final FeasibleTimeWindowTrimmer feasibleTimeWindowTrimmer = timeWindowTrimmerProvider.get();
+		feasibleTimeWindowTrimmer.setTrimByPanamaCanalBookings(useCanalBasedWindowTrimming);
+		final MinTravelTimeData minTimeData = new MinTravelTimeData(resource, sequence);
+		final List<IPortTimeWindowsRecord> list = feasibleTimeWindowTrimmer.generateNonShippedTrimmedWindows(resource, sequence, minTimeData, data, sequencesAttributesProvider);
+		return Pair.of(list, minTimeData);
 	}
 
 	@Subscribe

@@ -4,10 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.positionssequences;
 
+import java.util.Collection;
 import java.util.Optional;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class EnabledPositionsSequenceProviderTracker extends EnabledProviderTracker<PositionsSequenceProviderException> {
 	
@@ -20,11 +23,11 @@ public class EnabledPositionsSequenceProviderTracker extends EnabledProviderTrac
 		}
 	}
 	
-	public void collectErrors(Iterable<ISchedulePositionsSequenceProviderExtension> exts, Schedule schedule) {
+	public void collectErrors(Iterable<ISchedulePositionsSequenceProviderExtension> exts, Schedule schedule, @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore) {
 		for (var ext: exts) {
 			ISchedulePositionsSequenceProvider provider = ext.createInstance();
 			try {
-				provider.provide(schedule);
+				provider.provide(schedule, slotVisitsToIgnore);
 			} catch (PositionsSequenceProviderException e) {
 				addError(provider.getId(), e);
 			}

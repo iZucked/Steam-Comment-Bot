@@ -4,11 +4,18 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -17,11 +24,19 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.EnabledPositionsSequenceProviderTracker;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -145,6 +160,98 @@ class ColourSchemeAction extends SchedulerViewAction {
 				final ActionContributionItem actionContributionItem = new ActionContributionItem(toggleShowPartition);
 				actionContributionItem.fill(menu, -1);
 			}
+		}
+		final Object input = viewer.getInput();
+		if (input instanceof final Collection<?> collection) {
+			if (collection.size() == 1) {
+				if (collection.iterator().next() instanceof final @NonNull Schedule schedule) {
+					buildFobSaleRotationMenu(menu, schedule);
+				}
+			}
+		} else if (input instanceof final @NonNull Schedule schedule) {
+			buildFobSaleRotationMenu(menu, schedule);
+		}
+	}
+
+	private void buildFobSaleRotationMenu(final Menu menu, final @NonNull Schedule schedule) {
+		final List<NonShippedSequence> nonShippedSequences = schedule.getNonShippedSequences();
+		if (!nonShippedSequences.isEmpty()) {
+			final Action fobRotation = new DefaultMenuCreatorAction("FOB sale rotation") {
+
+				@Override
+				protected void populate(Menu menu) {
+					final Action off = new Action("off") {
+						@Override
+						public void run() {
+							schedulerView.clearFobRotations();
+							schedulerView.contentProvider.clearFobRotations();
+							schedulerView.redraw();
+							schedulerView.refresh();
+						}
+					};
+					final Action all = new Action("all") {
+						@Override
+						public void run() {
+							final Collection<Predicate<NonShippedSequence>> predicates = Collections.singleton(sequence -> true);
+							schedulerView.clearFobRotations();
+							schedulerView.replaceFobRotations(predicates);
+							schedulerView.contentProvider.replaceFobRotations(predicates);
+							schedulerView.redraw();
+							schedulerView.refresh();
+						}
+					};
+					addActionToMenu(off, menu);
+					addActionToMenu(all, menu);
+					final Map<SalesContract, Set<Vessel>> fobSalesContractVesselMap = new HashMap<>();
+					for (final NonShippedSequence sequence : nonShippedSequences) {
+						final Vessel vessel = sequence.getVessel();
+						if (vessel != null) {
+							sequence.getEvents().stream() //
+									.filter(NonShippedSlotVisit.class::isInstance) //
+									.map(NonShippedSlotVisit.class::cast) //
+									.map(NonShippedSlotVisit::getSlot) //
+									.map(Slot::getContract) //
+									.filter(Objects::nonNull) //
+									.filter(SalesContract.class::isInstance) //
+									.map(SalesContract.class::cast) //
+									.forEach(sc -> fobSalesContractVesselMap.computeIfAbsent(sc, k -> new HashSet<>()).add(vessel));
+						}
+					}
+					final List<Pair<SalesContract, Set<Vessel>>> sortedSalesContracts = fobSalesContractVesselMap.entrySet().stream() //
+							.sorted((e1, e2) -> e1.getKey().getName().compareTo(e2.getKey().getName())) //
+							.map(e -> Pair.of(e.getKey(), e.getValue())) //
+							.toList();
+					for (final Pair<SalesContract, Set<Vessel>> pair : sortedSalesContracts) {
+						final Action nextAction = new Action(pair.getFirst().getName()) {
+							@Override
+							public void run() {
+								schedulerView.toggleSelectedContract(pair.getFirst());
+								final Set<Contract> selectedContracts = schedulerView.getSelectedContracts();
+//								final Predicate<NonShippedSequence> predicate = seq -> pair.getSecond().contains(seq.getVessel());
+								final Predicate<NonShippedSequence> predicate = seq -> {
+									return selectedContracts.stream() //
+											.anyMatch(contract -> {
+												final Set<Vessel> vessels = fobSalesContractVesselMap.get(contract);
+												if (vessels != null) {
+													return vessels.contains(seq.getVessel());
+												}
+												return false;
+											});
+//									pair.getSecond().contains(seq.getVessel());
+								};
+								final Collection<@NonNull Predicate<NonShippedSequence>> predicates = Collections.singleton(predicate);
+								schedulerView.replaceFobRotations(predicates);
+								schedulerView.contentProvider.replaceFobRotations(predicates);
+								schedulerView.redraw();
+								schedulerView.refresh();
+							}
+						};
+						addActionToMenu(nextAction, menu);
+					}
+				}
+			};
+			final ActionContributionItem actionContributionItem = new ActionContributionItem(fobRotation);
+			actionContributionItem.fill(menu, -1);
 		}
 	}
 

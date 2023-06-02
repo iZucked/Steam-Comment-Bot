@@ -76,6 +76,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/paperDealAllocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/otherPNL"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/generatedPaperDeals"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/nonShippedSequences"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Fitness">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Fitness/fitnessValue"/>
@@ -380,6 +381,20 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//SandboxReference">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SandboxReference/reference"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//NonShippedSequence">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//NonShippedSequence/vessel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//NonShippedSequence/events"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//NonShippedSlotVisit">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//NonShippedSlotVisit/slot"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//NonShippedJourney">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NonShippedJourney/laden"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//NonShippedJourney/destination"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//NonShippedIdle">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NonShippedIdle/laden"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
