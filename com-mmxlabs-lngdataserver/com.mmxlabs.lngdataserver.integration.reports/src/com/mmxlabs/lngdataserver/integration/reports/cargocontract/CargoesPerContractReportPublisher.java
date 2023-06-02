@@ -23,7 +23,7 @@ public class CargoesPerContractReportPublisher implements IReportPublisherExtens
 		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
 		if (versions.isEmpty() || versions.contains("1")) {
-			final List<CargoesPerContractReportModel> models = CargoesPerContractJSONGenerator.createLongShortData(scheduleModel);
+			final List<CargoesPerContractReportModel> models = CargoesPerContractJSONGenerator.createReportData(scheduleModel);
 			final ObjectMapper objectMapper = new ObjectMapper();
 			final String content = objectMapper.writeValueAsString(models);
 			return new DefaultReportContent(getReportType(), "1", content);

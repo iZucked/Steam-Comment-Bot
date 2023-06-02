@@ -9,6 +9,6 @@ public enum SeriesType {
 	CURRENCY,
 	CHARTER,
 	BUNKERS,
-	CONVERSION, PRICING_BASIS
+	CONVERSION
 	
 }

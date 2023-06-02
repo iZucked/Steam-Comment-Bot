@@ -29,6 +29,8 @@ public final class SchedulerViewConstants {
 	public static final String Highlight_ = "Hi.";
 //	public static final String HighlightScheme = "SchedulerView.HighlightScheme";
 	public static final String Highlight_Riskies = "Hi.RiskyJourneys";
+	
+	public static final String Partition_ = "Partition.";
 
 	public static final String SCHEDULER_VIEW_COLOUR_SCHEME = "SCHEDULER_VIEW_COLOUR_SCHEME";
 }

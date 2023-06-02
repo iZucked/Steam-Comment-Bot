@@ -828,11 +828,17 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group" -> columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.load-notes" -> columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-				new SingleColumnFactoryBuilder(columnID, "Purchase Notes").withTooltip("The notes for the load slot")
-						.withCellRenderer(Formatters.objectFormatter)
-						.withElementPath(loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Notes())
-						.build());
+				new SingleColumnFactoryBuilder(columnID, "Purchase Notes") //
+				.withTooltip("The notes for the load slot or vessel event") //
+				.withCellRenderer(withFormatter(object -> applyToBuyOrEvent(object, //
+						(unused, slot) -> slot.getNotes(), //
+						(unused, slot) -> slot.getNotes(), //
+						(unused, event) -> event.getNotes(), //
+						unused -> null //
+				), Formatters.objectFormatter::render, ""))
+				.build());
 
+		
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.discharge-notes" -> columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 				new SingleColumnFactoryBuilder(columnID, "Sale Notes").withTooltip("The notes for the discharge slot")
 						.withCellRenderer(Formatters.objectFormatter)

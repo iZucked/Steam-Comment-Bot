@@ -29,6 +29,6 @@ public class MigrateToV181 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// Adding Business Units to the Contracts
+		// Adding notes to vessel events
 	}
 }

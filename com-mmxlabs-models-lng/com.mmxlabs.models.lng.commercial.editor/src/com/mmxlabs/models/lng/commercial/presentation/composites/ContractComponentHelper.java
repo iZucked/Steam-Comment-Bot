@@ -50,21 +50,26 @@ public class ContractComponentHelper extends DefaultComponentHelper {
 			editor.addNotificationChangedListener(new DivertibleContractInlineEditorChangedListener());
 			return editor;
 		});
-		addEditor(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT, topClass -> {
-			return new ReferenceInlineEditor(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT) {
-				@Override
-				protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
-					if (currentlySettingValue) {
-						return;
+		
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BUSINESS_UNITS)) {
+			addEditor(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT, topClass -> {
+				return new ReferenceInlineEditor(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT) {
+					@Override
+					protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+						if (currentlySettingValue) {
+							return;
+						}
+						if (value == null && !valueList.isEmpty()) {
+							doSetValue(valueList.get(0), forceCommandExecution);
+						} else {
+							doSetValue(value, forceCommandExecution);
+						}
 					}
-					if (value == null && !valueList.isEmpty()) {
-						doSetValue(valueList.get(0), forceCommandExecution);
-					} else {
-						doSetValue(value, forceCommandExecution);
-					}
-				}
-			};
-		});
+				};
+			});
+		} else {
+			ignoreFeatures.add(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT);
+		}
 
 	}
 }

@@ -64,7 +64,6 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			addStatusPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addStalePropertyDescriptor(object);
-			addPricingBasisPropertyDescriptor(object);
 			addFromBUPropertyDescriptor(object);
 			addToBUPropertyDescriptor(object);
 			addCodePropertyDescriptor(object);
@@ -315,28 +314,6 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Pricing Basis feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPricingBasisPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_TransferRecord_pricingBasis_feature"),
-				 getString("_UI_TransferRecord_pricingBasis_description"),
-				 TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the From BU feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -448,7 +425,6 @@ public class TransferRecordItemProvider extends NamedObjectItemProvider {
 			case TransfersPackage.TRANSFER_RECORD__STATUS:
 			case TransfersPackage.TRANSFER_RECORD__NOTES:
 			case TransfersPackage.TRANSFER_RECORD__STALE:
-			case TransfersPackage.TRANSFER_RECORD__PRICING_BASIS:
 			case TransfersPackage.TRANSFER_RECORD__CODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

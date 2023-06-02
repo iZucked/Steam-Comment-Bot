@@ -40,6 +40,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		final boolean alpha = colorManager.useAlphaDrawing();
 
 		int xLoc = xStart;
+		//
+		// Some calls to draw methods still use y, not yLoc! TODO
+		int yLoc = y;
 
 		// draw the border
 		Color cEventBorder = event.getStatusBorderColor();
@@ -87,7 +90,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				// }
 				// Skip above, the bounds.width is incorrect leading to short drawing on RHS for
 				// events at end of the view
-				gc.drawRectangle(xLoc, y, eventWidth, event.getBounds().height);
+				gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
 
 				gc.setLineStyle(SWT.LINE_SOLID);
 				gc.setLineWidth(1);
@@ -101,7 +104,11 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				int height = event.getBounds().height + 2;// + event.getStatusBorderWidth() - 1;
 
 				int x = xLoc - 1;
-
+				int oldAlpha = gc.getAlpha();
+				if (alpha) {
+					int cEventAlpha = event.getStatusAlpha();
+					gc.setAlpha(cEventAlpha);
+				}
 				// First draw the fill.
 				gc.setBackground(cEventBorder);
 				gc.fillRectangle(x, y, width, height);
@@ -111,9 +118,13 @@ public abstract class AbstractPaintManager implements IPaintManager {
 					// +1 on height as drawRectangle seems to draw bigger
 					gc.fillRectangle(x, y, width, height);
 				} else {
+					gc.setAlpha(oldAlpha);
 					gc.setBackground(event.getStatusColor());
 					gc.fillRectangle(x, y, width, height);
-
+					if (alpha) {
+						int cEventAlpha = event.getStatusAlpha();
+						gc.setAlpha(cEventAlpha);
+					}
 					gc.setBackground(cEventBorder);
 					if (sdm == SpecialDrawModes.THREE_DOTS_NO_BORDER || sdm == SpecialDrawModes.ONE_DOT_WITH_BORDER || sdm == SpecialDrawModes.THREE_DOTS_WITH_BORDER
 
@@ -145,6 +156,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 						}
 					}
 				}
+				if (alpha) {
+					gc.setAlpha(oldAlpha);
+				}
 			} else {
 				final int borderWidth = event.getStatusBorderWidth();
 				if (borderWidth > 0) {
@@ -154,7 +168,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 						gc.setAlpha(cEventAlpha);
 					}
 					gc.setLineWidth(event.getStatusBorderWidth());
-					gc.drawRectangle(xLoc, y, eventWidth + event.getStatusBorderWidth() - 1, event.getBounds().height + event.getStatusBorderWidth() - 1);
+					/* It used to be `event.getBounds().height` instead of `settings.getEventHeight`,
+					 *  but it did not work on preference change, so maybe will lead to problems */
+					gc.drawRectangle(xLoc, yLoc, eventWidth + event.getStatusBorderWidth() - 1, settings.getEventHeight() + event.getStatusBorderWidth() - 1);
 					if (alpha) {
 						gc.setAlpha(oldAlpha);
 					}
@@ -186,97 +202,16 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		if (eventWidth > 1) {
 			if (settings.showGradientEventBars()) {
 				gc.setForeground(gradient);
-				gc.fillGradientRectangle(xLoc, y, eventWidth, settings.getEventHeight(), true);
+				gc.fillGradientRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight(), true);
 				gc.setForeground(colorManager.getEventBorderColor()); // re-set foreground color
 			} else {
-				gc.fillRectangle(xLoc, y, eventWidth, settings.getEventHeight());
+				gc.fillRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight());
 			}
 		}
 		// Reset alpha
 		if (alpha) {
 			gc.setAlpha(oldAlpha);
 		}
-
-		// // if 3D effect, draw drop-shadow
-		// if (threeDee) {
-		// final boolean subAlpha = colorManager.useAlphaDrawingOn3DEventDropShadows();
-		// if (subAlpha) {
-		// gc.setAlpha(200);
-		// }
-		// gc.setForeground(colorManager.getFadeOffColor1());
-		// // horizontal line.. ends a few pixles right of bottom right corner
-		// gc.drawLine(xLoc, y + settings.getEventHeight() + 1, xLoc + eventWidth + 1, y
-		// + settings.getEventHeight() + 1);
-		// // vertical line at end, starts slightly below top right corner
-		// gc.drawLine(xLoc + eventWidth + 1, y + 2, xLoc + eventWidth + 1, y +
-		// settings.getEventHeight());
-		//
-		// if (subAlpha) {
-		// gc.setAlpha(100);
-		// }
-		// gc.setForeground(colorManager.getFadeOffColor2());
-		// gc.drawLine(xLoc, y + settings.getEventHeight() + 2, xLoc + eventWidth + 1, y
-		// + settings.getEventHeight() + 2); // h
-		//
-		// if (subAlpha) {
-		// gc.setAlpha(50);
-		// }
-		// gc.setForeground(colorManager.getFadeOffColor1());
-		// gc.drawLine(xLoc, y + settings.getEventHeight() + 3, xLoc + eventWidth + 1, y
-		// + settings.getEventHeight() + 3); // h
-		// // next vertical starts 1 pixel further down and 1 pixel further right and
-		// dips 1 pixel below bottom
-		// gc.drawLine(xLoc + eventWidth + 2, y + 3, xLoc + eventWidth + 2, y +
-		// settings.getEventHeight() + 1); // v
-		// if (subAlpha) {
-		// gc.setAlpha(255);
-		// gc.setAdvanced(false);
-		// }
-		// }
-		//
-		// // whacky % completes don't get to play
-		// if (event.getPercentComplete() > 0 && event.getPercentComplete() <= 100) {
-		// final int yStart = y + (settings.getEventHeight() / 2) - 1;
-		//
-		// // xEnd is how long the event box is
-		// // how much of that in % are we showing?
-		// final float perc = event.getPercentComplete() / 100f;
-		// // and how many pixels is that?
-		// float toDraw = eventWidth * perc;
-		// // remainder
-		// final int remainder = eventWidth - (int) toDraw;
-		//
-		// if (alpha) {
-		// gc.setAlpha(settings.getPercentageBarAlpha());
-		// }
-		//
-		// xLoc += 1;
-		// toDraw -= 1;
-		//
-		// // draw the inner bar
-		// gc.setForeground(colorManager.getPercentageBarColorTop());
-		// gc.setBackground(colorManager.getPercentageBarColorBottom());
-		// gc.fillGradientRectangle(xLoc, yStart -
-		// settings.getEventPercentageBarHeight() / 2 + 1, (int) toDraw,
-		// settings.getEventPercentageBarHeight(), true);
-		//
-		// if (settings.drawFullPercentageBar()) {
-		// if (alpha) {
-		// gc.setAlpha(settings.getRemainderPercentageBarAlpha());
-		// }
-		//
-		// gc.setForeground(colorManager.getPercentageBarRemainderColorTop());
-		// gc.setBackground(colorManager.getPercentageBarRemainderColorBottom());
-		// gc.fillGradientRectangle(xLoc + (int) toDraw, yStart -
-		// settings.getEventPercentageBarHeight() / 2 + 1, remainder,
-		// settings.getEventPercentageBarHeight(), true);
-		// }
-		//
-		// if (alpha) {
-		// gc.setAlpha(255);
-		// gc.setAdvanced(false);
-		// }
-		// }
 	}
 
 	public void drawCheckpoint(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean threeDee,
@@ -586,8 +521,8 @@ public abstract class AbstractPaintManager implements IPaintManager {
 	}
 
 	@Override
-	public void drawEventLabel(final GanttComposite composite, final ISettings settings, final GanttEvent event, final GC gc, final Collection<Collection<IEventTextPropertiesGenerator>> generatorsCollection,
-			final int x, final int y, final int eventWidth) {
+	public void drawEventLabel(final GanttComposite composite, final ISettings settings, final GanttEvent event, final GC gc,
+			final Collection<Collection<IEventTextPropertiesGenerator>> generatorsCollection, final int x, final int y, final int eventWidth) {
 		if (generatorsCollection == null || generatorsCollection.isEmpty()) {
 			return;
 		}
@@ -596,14 +531,19 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			oldFont = gc.getFont();
 			final FontData[] old = oldFont.getFontData();
 			old[0].setStyle(SWT.BOLD);
+			
 			final Font f = new Font(Display.getDefault(), old);
 			gc.setFont(f);
 			f.dispose();
 		}
-
-		if (event.getTextFont() != null) {
-			gc.setFont(event.getTextFont());
-		}
+		
+		/*
+		 * Change font size to desired
+		 */
+		final Font f = GanttChartParameters.getStandardFont();
+		gc.setFont(f);
+		event.setTextFont(f);
+		
 
 		final int textSpacer = composite.isConnected(event) ? settings.getTextSpacerConnected() : settings.getTextSpacerNonConnected();
 
@@ -612,7 +552,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				break;
 			}
 		}
-
+		f.dispose();
 		gc.setFont(oldFont);
 	}
 
@@ -700,20 +640,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		default:
 			break;
 		}
-		int yTextPos = y + (event.getHeight() / 2);
-		switch (event.getVerticalTextLocation()) {
-		case SWT.TOP:
-			yTextPos = event.getY() - size.y;
-			break;
-		case SWT.CENTER:
-			yTextPos -= (size.y / 2) + 1;
-			break;
-		case SWT.BOTTOM:
-			yTextPos = event.getBottomY();
-			break;
-		default:
-			break;
-		}
+		int yTextPos = y + GanttChartParameters.getTextVerticalAlignDisplacement();
 		return new Point(textXStart, yTextPos);
 	}
 

@@ -17,6 +17,8 @@ import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubSummary;
+import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
+import com.mmxlabs.lingo.reports.modelbased.annotations.RowGroup;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 
 @SchemaVersion(1)
@@ -26,7 +28,7 @@ public class CargoReportModel {
 	public String cargoType;
 
 	@ColumnName("Vessel")
-	@HubSummary(name="Vessel", index=4)
+	@HubSummary(name = "Vessel", index = 4)
 	public String vesselName;
 
 	@ColumnName("ID")
@@ -36,27 +38,27 @@ public class CargoReportModel {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@HubFormat("DD/MM/YYYY hh:mm")
 	@ColumnName("Date")
-	@HubSummary(name="Date", index=2)
+	@HubSummary(name = "Date", index = 2)
 	public LocalDateTime loadScheduledDate;
 
 	@ColumnName("Port")
-	@HubSummary(name="Port", index=1)
+	@HubSummary(name = "Port", index = 1)
 	public String loadPortName;
 
-	public double loadVolumeM3;
+	public Double loadVolumeM3;
 	@ColumnName("Volume")
 	@HubFormat("{ \"thousandSeparated\": true }")
-	public double loadVolumeMMBTU;
+	public Double loadVolumeMMBTU;
 
 	@ColumnName("Buy at")
-	@HubSummary(name="Buy at", index=3)
+	@HubSummary(name = "Buy at", index = 3)
 	public String purchaseContract;
 	@ColumnName("C/P")
 	public String purchaseCounterparty;
 
 	@ColumnName("Buy Price")
 	@HubFormat("{\"thousandSeparated\": true, \"decimals\": 2}")
-	public double loadPrice;
+	public Double loadPrice;
 
 	@ColumnName("ID")
 	public String dischargeName;
@@ -65,21 +67,21 @@ public class CargoReportModel {
 	@HubFormat("DD/MM/YYYY hh:mm")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@ColumnName("Date")
-	@HubSummary(name="Date", index=6)
+	@HubSummary(name = "Date", index = 6)
 	public LocalDateTime dischargeScheduledDate;
 
 	@ColumnName("Port")
-	@HubSummary(name="Port", index=5)
+	@HubSummary(name = "Port", index = 5)
 	public String dischargePortName;
 
-	public double dischargeVolumeM3; // M3
-	
+	public Double dischargeVolumeM3; // M3
+
 	@ColumnName("Volume")
 	@HubFormat("{ \"thousandSeparated\": true }")
-	public double dischargeVolumeMMBTU; // MMMBtu
+	public Double dischargeVolumeMMBTU; // MMMBtu
 
 	@ColumnName("Sell at")
-	@HubSummary(name="Sell at", index=7)
+	@HubSummary(name = "Sell at", index = 7)
 	public String saleContract;
 
 	@ColumnName("C/P")
@@ -87,7 +89,7 @@ public class CargoReportModel {
 
 	@ColumnName("Sell Price")
 	@HubFormat("{\"thousandSeparated\": true, \"decimals\": 2}")
-	public double dischargePrice;
+	public Double dischargePrice;
 
 	@ColumnName("Buy Notes")
 	public String loadComment;
@@ -95,7 +97,11 @@ public class CargoReportModel {
 	@ColumnName("Sell Notes")
 	public String dischargeComment;
 
-	public long profitAndLoss;
+	public Long profitAndLoss;
+
+	@LingoIgnore
+	@RowGroup
+	public int rowGroup;
 
 	public LocalDateTime getLoadScheduledDate() {
 		return loadScheduledDate;
@@ -113,27 +119,27 @@ public class CargoReportModel {
 		this.loadName = loadName;
 	}
 
-	public double getLoadVolumeM3() {
+	public Double getLoadVolumeM3() {
 		return loadVolumeM3;
 	}
 
-	public void setLoadVolumeM3(double loadVolumeM3) {
+	public void setLoadVolumeM3(Double loadVolumeM3) {
 		this.loadVolumeM3 = loadVolumeM3;
 	}
 
-	public double getLoadVolumeMMBTU() {
+	public Double getLoadVolumeMMBTU() {
 		return loadVolumeMMBTU;
 	}
 
-	public void setLoadVolumeMMBTU(double loadVolumeMMBTU) {
+	public void setLoadVolumeMMBTU(Double loadVolumeMMBTU) {
 		this.loadVolumeMMBTU = loadVolumeMMBTU;
 	}
 
-	public double getLoadPrice() {
+	public Double getLoadPrice() {
 		return loadPrice;
 	}
 
-	public void setLoadPrice(double loadPrice) {
+	public void setLoadPrice(Double loadPrice) {
 		this.loadPrice = loadPrice;
 	}
 
@@ -177,27 +183,27 @@ public class CargoReportModel {
 		this.dischargeName = dischargeName;
 	}
 
-	public double getDischargeVolumeM3() {
+	public Double getDischargeVolumeM3() {
 		return dischargeVolumeM3;
 	}
 
-	public void setDischargeVolumeM3(double dischargeVolumeM3) {
+	public void setDischargeVolumeM3(Double dischargeVolumeM3) {
 		this.dischargeVolumeM3 = dischargeVolumeM3;
 	}
 
-	public double getDischargeVolumeMMBTU() {
+	public Double getDischargeVolumeMMBTU() {
 		return dischargeVolumeMMBTU;
 	}
 
-	public void setDischargeVolumeMMBTU(double dischargeVolumeMMBTU) {
+	public void setDischargeVolumeMMBTU(Double dischargeVolumeMMBTU) {
 		this.dischargeVolumeMMBTU = dischargeVolumeMMBTU;
 	}
 
-	public double getDischargePrice() {
+	public Double getDischargePrice() {
 		return dischargePrice;
 	}
 
-	public void setDischargePrice(double dischargePrice) {
+	public void setDischargePrice(Double dischargePrice) {
 		this.dischargePrice = dischargePrice;
 	}
 
@@ -257,15 +263,14 @@ public class CargoReportModel {
 		this.cargoType = cargoType;
 	}
 
-	public long getProfitAndLoss() {
+	public Long getProfitAndLoss() {
 		return profitAndLoss;
 	}
 
-	public void setProfitAndLoss(long profitAndLoss) {
+	public void setProfitAndLoss(Long profitAndLoss) {
 		this.profitAndLoss = profitAndLoss;
 	}
-	
-	
+
 	public static void main(String[] args) throws Exception {
 		String schema = new SchemaGenerator().generateHubSchema(CargoReportModel.class, Mode.SUMMARY);
 		System.out.println(schema);

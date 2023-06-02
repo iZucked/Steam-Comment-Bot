@@ -32,6 +32,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartAfter <em>Start After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartBy <em>Start By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getNotes <em>Notes</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEvent()
@@ -159,6 +160,28 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * @generated
 	 */
 	void setStartBy(LocalDateTime value);
+
+	/**
+	 * Returns the value of the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Notes</em>' attribute.
+	 * @see #setNotes(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEvent_Notes()
+	 * @model annotation="http://www.mmxlabs.com/models/validation ignore='true'"
+	 * @generated
+	 */
+	String getNotes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getNotes <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Notes</em>' attribute.
+	 * @see #getNotes()
+	 * @generated
+	 */
+	void setNotes(String value);
 
 	/**
 	 * <!-- begin-user-doc -->

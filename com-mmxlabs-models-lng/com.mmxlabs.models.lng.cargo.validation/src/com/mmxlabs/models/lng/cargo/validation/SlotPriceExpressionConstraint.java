@@ -67,7 +67,7 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 				}
 			};
 
-			if ((slot.isSetPriceExpression() || slot.isSetPricingBasis()) && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
+			if (slot.isSetPriceExpression() && SlotContractParamsHelper.isSlotExpressionUsed(slot)) {
 				final String priceExpression = slot.getPriceExpression();
 				boolean checkExpression = true;
 				if ("??".equals(priceExpression)) {
@@ -83,17 +83,6 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 
 				if (checkExpression) {
 					final String name = slot.getName();
-					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS) &&
-							slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
-						final String failureMessage = String.format("[%s]: only one of the two, price expression or pricing basis, should be set", name);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
-						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
-						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
-						failures.add(dsd);
-					}
-					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS)) {
-						validatePrice(ctx, failures, slot.getPricingBasis(), PriceIndexType.PRICING_BASIS, name, slot, CargoPackage.Literals.SLOT__PRICING_BASIS);
-					}
 					if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICE_EXPRESSION)) {
 						validatePrice(ctx, failures, slot.getPriceExpression(), PriceIndexType.COMMODITY, name, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
 					}

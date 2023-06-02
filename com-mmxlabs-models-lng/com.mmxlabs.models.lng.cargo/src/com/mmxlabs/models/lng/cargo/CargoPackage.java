@@ -952,22 +952,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__PRICING_BASIS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
-
-	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT__BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
@@ -976,7 +967,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+	int SLOT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
@@ -985,7 +976,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
+	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
@@ -994,7 +985,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
+	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
 
 	/**
 	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
@@ -1003,7 +994,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
+	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -1012,7 +1003,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1661,15 +1652,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
-
-	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
 
 	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
@@ -2471,15 +2453,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
-
-	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
 
 	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
@@ -3346,15 +3319,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__WINDOW_COUNTER_PARTY = LOAD_SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__PRICING_BASIS = LOAD_SLOT__PRICING_BASIS;
-
-	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4163,15 +4127,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = DISCHARGE_SLOT__WINDOW_COUNTER_PARTY;
-
-	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__PRICING_BASIS = DISCHARGE_SLOT__PRICING_BASIS;
 
 	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
@@ -5083,13 +5038,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5261,6 +5225,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAINTENANCE_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__NOTES = VESSEL_EVENT__NOTES;
 
 	/**
 	 * The number of structural features of the '<em>Maintenance Event</em>' class.
@@ -5443,6 +5416,15 @@ public interface CargoPackage extends EPackage {
 	int DRY_DOCK_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__NOTES = VESSEL_EVENT__NOTES;
+
+	/**
 	 * The number of structural features of the '<em>Dry Dock Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5621,6 +5603,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__NOTES = VESSEL_EVENT__NOTES;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -8402,17 +8393,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_WindowCounterParty();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getPricingBasis()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_PricingBasis();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9560,6 +9540,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselEvent_StartBy();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getNotes()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_Notes();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
@@ -11307,14 +11298,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__WINDOW_COUNTER_PARTY = eINSTANCE.getSlot_WindowCounterParty();
 
 		/**
-		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__PRICING_BASIS = eINSTANCE.getSlot_PricingBasis();
-
-		/**
 		 * The meta object literal for the '<em><b>Business Unit</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12203,6 +12186,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_EVENT__START_BY = eINSTANCE.getVesselEvent_StartBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__NOTES = eINSTANCE.getVesselEvent_Notes();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.

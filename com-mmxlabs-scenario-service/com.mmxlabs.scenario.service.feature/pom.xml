@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
 		<groupId>com.mmxlabs.scenario.service</groupId>
-		<version>6.5.3-SNAPSHOT</version>
+		<version>6.5.6-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<groupId>com.mmxlabs.scenario.service.feature</groupId>

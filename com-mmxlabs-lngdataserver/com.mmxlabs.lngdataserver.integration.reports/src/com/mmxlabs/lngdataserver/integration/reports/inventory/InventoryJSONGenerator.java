@@ -24,29 +24,29 @@ public class InventoryJSONGenerator {
 	public static InventoryExportModel createInventoryData(CargoModel cargoModel, ScheduleModel scheduleModel, Port port) {
 		// check schedule not null, check
 		final List<InventoryLevel> invLevels = InventoryUtils.createInventoryLevels(scheduleModel, port);
-		
+
 		InventoryExportModel newExportModel = new InventoryExportModel();
-		List<InventoryInput> newInputs = new LinkedList<InventoryInput>();
-		List<InventoryOutput> newOutputs = new LinkedList<InventoryOutput>();
-		List<InventoryLevelPerDay> newLevels = new LinkedList<InventoryLevelPerDay>();
-		for(final InventoryLevel level : invLevels) {
+		List<InventoryInput> newInputs = new LinkedList<>();
+		List<InventoryOutput> newOutputs = new LinkedList<>();
+		List<InventoryLevelPerDay> newLevels = new LinkedList<>();
+		for (final InventoryLevel level : invLevels) {
 			InventoryInput input = new InventoryInput();
 			InventoryOutput output = new InventoryOutput();
 			InventoryLevelPerDay lvl = new InventoryLevelPerDay();
-					
+
 			input.setDate(level.date);
-					
+
 			input.setReliability(100.0);
 			input.setVolume(level.feedIn - level.feedOut);
 			newInputs.add(input);
-					
+
 			if (level.dischargeId != "") {
 				output.setDate(level.date);
 				output.setVolume(Math.abs(level.cargoOut));
 				output.setEventName(level.dischargeId);
 				newOutputs.add(output);
 			}
-			
+
 			lvl.setDate(level.date);
 			lvl.setChange(Math.abs(level.changeInM3));
 			lvl.setVolume(level.runningTotal);
@@ -55,11 +55,11 @@ public class InventoryJSONGenerator {
 		newExportModel.setLevels(newLevels);
 		newExportModel.setInput(newInputs);
 		newExportModel.setOutput(newOutputs);
-		
+
 		setMinMaxVolume(newExportModel, scheduleModel);
 		return newExportModel;
 	}
-	
+
 	public static void setMinMaxVolume(final InventoryExportModel exportModel, final ScheduleModel scheduleModel) {
 		if (scheduleModel != null) {
 			if (scheduleModel.getSchedule() != null) {
@@ -75,7 +75,7 @@ public class InventoryJSONGenerator {
 			}
 		}
 	}
-	
+
 	private static void jsonOutput(Object inventoryLevel) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
