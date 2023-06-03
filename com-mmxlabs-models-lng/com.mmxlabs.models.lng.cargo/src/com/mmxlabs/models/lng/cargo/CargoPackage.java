@@ -997,13 +997,31 @@ public interface CargoPackage extends EPackage {
 	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
 
 	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SCHEDULED_VOLUME_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SCHEDULED_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 49;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1697,6 +1715,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__COMPUTE_HEDGE = SLOT__COMPUTE_HEDGE;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SCHEDULED_VOLUME_UNIT = SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SCHEDULED_VOLUME = SLOT__SCHEDULED_VOLUME;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -2498,6 +2534,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__COMPUTE_HEDGE = SLOT__COMPUTE_HEDGE;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SCHEDULED_VOLUME_UNIT = SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SCHEDULED_VOLUME = SLOT__SCHEDULED_VOLUME;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -3364,6 +3418,24 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__COMPUTE_HEDGE = LOAD_SLOT__COMPUTE_HEDGE;
 
 	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SCHEDULED_VOLUME_UNIT = LOAD_SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SCHEDULED_VOLUME = LOAD_SLOT__SCHEDULED_VOLUME;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4172,6 +4244,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__COMPUTE_HEDGE = DISCHARGE_SLOT__COMPUTE_HEDGE;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SCHEDULED_VOLUME_UNIT = DISCHARGE_SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SCHEDULED_VOLUME = DISCHARGE_SLOT__SCHEDULED_VOLUME;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -8448,6 +8538,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_ComputeHedge();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolumeUnit <em>Scheduled Volume Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scheduled Volume Unit</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getScheduledVolumeUnit()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_ScheduledVolumeUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolume <em>Scheduled Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scheduled Volume</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getScheduledVolume()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_ScheduledVolume();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateMinQuantity() <em>Get Slot Or Delegate Min Quantity</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11336,6 +11448,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__COMPUTE_HEDGE = eINSTANCE.getSlot_ComputeHedge();
+
+		/**
+		 * The meta object literal for the '<em><b>Scheduled Volume Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__SCHEDULED_VOLUME_UNIT = eINSTANCE.getSlot_ScheduledVolumeUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Scheduled Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__SCHEDULED_VOLUME = eINSTANCE.getSlot_ScheduledVolume();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Quantity</b></em>' operation.
