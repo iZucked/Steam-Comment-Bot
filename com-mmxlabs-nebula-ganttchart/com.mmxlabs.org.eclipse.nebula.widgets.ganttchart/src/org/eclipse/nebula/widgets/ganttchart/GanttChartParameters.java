@@ -67,8 +67,8 @@ public class GanttChartParameters {
 	private static GanttChartParameters instance = null;
 	
 	public static GanttChartParameters getInstance() {
-		if (instance == null) {		
-			return new GanttChartParameters();
+		if (instance == null) {
+			instance = new GanttChartParameters();
 		}
 		return instance;
 	}
