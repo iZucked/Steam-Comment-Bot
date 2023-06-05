@@ -36,65 +36,40 @@ public class LightWeightVesselUsageConstraintChecker implements IFullLightWeight
 	@Inject
 	IVesselUsageConstraintDataProvider vesselUsageConstraintDataProvider;
 
-
 	@Override
 	public boolean checkSequences(List<List<Integer>> sequences) {
 		final List<IVesselCharter> vesselCharters = lightWeightOptimisationData.getVessels();
 		final Set<VesselUsageConstraintInfo<?, ?, IDischargeOption>> allDischargeVesselUsesConstraintInfos = vesselUsageConstraintDataProvider.getAllDischargeVesselUses();
 		final Set<VesselUsageConstraintInfo<?, ?, ILoadOption>> allLoadVesselConstraintInfos = vesselUsageConstraintDataProvider.getAllLoadVesselUses();
 
+		final Map<Object, Integer> counts = new HashMap<>();
 		for (int i = 0; i < sequences.size(); i++) {
 			final IVesselCharter vc = vesselCharters.get(i);
 			final List<Integer> cargoIndices = sequences.get(i);
 
-			final Map<Object, Integer> counts = new HashMap<>();
-			final Map<Object, Integer> nominalSlotsCount = new HashMap<>();
 			final IVessel vessel = vc.getVessel();
 			for (final int cargoIndex : cargoIndices) {
 				List<IPortSlot> cargo = lightWeightOptimisationData.getShippedCargoes().get(cargoIndex);
 				for (IPortSlot slot : cargo) {
-					if (vc.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && //
-							slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
-						Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream()) //
-								.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel)) //
-								.map(x -> x.getContractProfile()) //
-								.forEach(x -> nominalSlotsCount.compute(x, (k, v) -> v == null ? 1 : v + 1));
-					} else {
-						Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream())//
-								.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel))//
-								.map(x -> x.getProfileConstraint())//
-								.forEach(x -> counts.compute(x, (k, v) -> v == null ? 1 : v + 1));
-					}
+					Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream())//
+							.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel))//
+							.map(x -> x.getProfileConstraintDistribution())//
+							.forEach(x -> counts.compute(x, (k, v) -> v == null ? 1 : v + 1));
 				}
 			}
+		}
+		for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraintInfo : allLoadVesselConstraintInfos) {
+			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraintDistribution()), 0);
 
-			for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraintInfo : allLoadVesselConstraintInfos) {
-				final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraint()), 0);
-
-				if (vesselUses > constraintInfo.getBound()) {
-					return false;
-				} else if (vesselUses < constraintInfo.getBound()) {
-					int remainingNominalsCount = nominalSlotsCount.getOrDefault(constraintInfo.getContractProfile(), 0);
-					final int flex = constraintInfo.getBound() - vesselUses - remainingNominalsCount;
-					if (flex < 0) {
-						return false;
-					}
-					nominalSlotsCount.compute(constraintInfo.getContractProfile(), (k, v) -> v == null ? 0 : v - flex);
-				}
+			if (vesselUses > constraintInfo.getBound()) {
+				return false;
 			}
-			for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraintInfo : allDischargeVesselUsesConstraintInfos) {
-				final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraint()), 0);
+		}
+		for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraintInfo : allDischargeVesselUsesConstraintInfos) {
+			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraintDistribution()), 0);
 
-				if (vesselUses > constraintInfo.getBound()) {
-					return false;
-				} else if (vesselUses < constraintInfo.getBound()) {
-					int remainingNominalsCount = nominalSlotsCount.getOrDefault(constraintInfo.getContractProfile(), 0);
-					final int flex = constraintInfo.getBound() - -vesselUses - remainingNominalsCount;
-					if (flex < 0) {
-						return false;
-					}
-					nominalSlotsCount.compute(constraintInfo.getContractProfile(), (k, v) -> v == null ? 0 : v - flex);
-				}
+			if (vesselUses > constraintInfo.getBound()) {
+				return false;
 			}
 		}
 		return true;

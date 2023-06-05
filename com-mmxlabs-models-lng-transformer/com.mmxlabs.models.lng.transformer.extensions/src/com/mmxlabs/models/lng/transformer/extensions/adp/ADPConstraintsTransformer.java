@@ -207,7 +207,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 								.flatMap(x -> x.collect(new BasicEList<>()).stream()).map(v -> modelEntityMap.getOptimiserObjectNullChecked(v, IVessel.class))//
 								.collect(Collectors.toSet());
 						final Set<ILoadOption> oVesselSlots = oSlots.stream().map(Pair::getFirst).collect(Collectors.toSet());
-						vesselConstraintDataProviderEditor.addLoadSlotVesselUses(contractProfile, profileConstraint, oVesselSlots, vessels, vesselDistribution.getCargoes());
+						vesselConstraintDataProviderEditor.addLoadSlotVesselUses(contractProfile, vesselDistribution, oVesselSlots, vessels, vesselDistribution.getCargoes());
 					}
 				} else {
 					// Not handled here.
@@ -310,7 +310,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 								.flatMap(x -> x.collect(new BasicEList<>()).stream()).map(v -> modelEntityMap.getOptimiserObjectNullChecked(v, IVessel.class))//
 								.collect(Collectors.toSet());
 						final Set<IDischargeOption> oVesselSlots = oSlots.stream().map(Pair::getFirst).collect(Collectors.toSet());
-						vesselConstraintDataProviderEditor.addDischargeSlotVesselUses(contractProfile, profileConstraint, oVesselSlots, vessels, vesselDistribution.getCargoes());
+						vesselConstraintDataProviderEditor.addDischargeSlotVesselUses(contractProfile, vesselDistribution, oVesselSlots, vessels, vesselDistribution.getCargoes());
 					}
 				} else {
 					// Not handled here.

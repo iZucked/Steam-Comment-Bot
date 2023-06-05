@@ -13,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 public class VesselUsageConstraintInfo<P, C, T extends IPortSlot> {
 	P contractProfile;
-	C profileConstraint;
+	C profileConstraintDistribution;
 	Set<@NonNull T> slots;
 	Set<@NonNull ? extends IVessel> vessels;
 	int bound;
@@ -26,7 +26,7 @@ public class VesselUsageConstraintInfo<P, C, T extends IPortSlot> {
 	
 	public VesselUsageConstraintInfo(final P contractProfile, final C profileConstraint, final Set<T> slots, final Set<? extends IVessel> vessels, int bound) {
 		this.contractProfile = contractProfile;
-		this.profileConstraint = profileConstraint;
+		this.profileConstraintDistribution = profileConstraint;
 		this.slots = slots;
 		this.vessels = vessels;
 		this.bound = bound;
@@ -59,8 +59,8 @@ public class VesselUsageConstraintInfo<P, C, T extends IPortSlot> {
 		return contractProfile;
 	}
 	
-	public C getProfileConstraint() {
-		return profileConstraint;
+	public C getProfileConstraintDistribution() {
+		return profileConstraintDistribution;
 	}
 }
 
