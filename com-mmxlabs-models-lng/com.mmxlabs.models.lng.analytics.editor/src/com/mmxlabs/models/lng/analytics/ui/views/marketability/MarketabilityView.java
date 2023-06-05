@@ -81,9 +81,9 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	private MarketabilityModel currentModel;
 	// listens which object is selected
 	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
-	
+
 	private IScenarioServiceSelectionProvider selectedScenariosService;
-	
+
 	private IScenarioServiceSelectionChangedListener scenarioChangedListener;
 
 	// selection service from upper class
@@ -111,25 +111,24 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 		mainTableComponent = new MainTableComponent();
 
-		
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
 		selectedScenariosService = getSite().getService(IScenarioServiceSelectionProvider.class);
-		scenarioChangedListener = (pinned, others) ->  {
+		scenarioChangedListener = (pinned, others) -> {
 			ScenarioResult scenarioResult = null;
-			if(pinned != null) {
+			if (pinned != null) {
 				scenarioResult = pinned;
-			} else if(others.iterator().hasNext()) {
+			} else if (others.iterator().hasNext()) {
 				scenarioResult = others.iterator().next();
 			}
-			if(scenarioResult != null) {
+			if (scenarioResult != null) {
 				final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
-				final AnalyticsModel analyticsModel =  ScenarioModelUtil.getAnalyticsModel(sdp);
+				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 				setInput(scenarioResult.getRootObject(), analyticsModel.getMarketabilityModel());
 			} else {
 				setInput(null, null);
 			}
-			
+
 		};
 		selectedScenariosService.addSelectionChangedListener(scenarioChangedListener);
 
@@ -230,17 +229,17 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 						LocalDate ld = LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yy"));
 						text = ld.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 					} catch (final Exception e) {
-						
+
 					}
 					try {
 						LocalDateTime ldt = LocalDateTime.parse(text, DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
 						text = ldt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 					} catch (final Exception e) {
-						
+
 					}
-					
+
 					cw.addValue(text);
-					
+
 					// end row
 					if ((i + 1) == numColumns) {
 						cw.endRow();
@@ -303,8 +302,10 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 				if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel()
 						|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getMarketabilityModel_Rows()) {
-					doDisplay = true;
-					break;
+					if (notification.getNewValue() != null) {
+						doDisplay = true;
+						break;
+					}
 				}
 			}
 			if (doDisplay) {
@@ -355,11 +356,11 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			service.removePostSelectionListener(selectionListener);
 			selectionListener = null;
 		}
-		if(selectedScenariosService != null) {
+		if (selectedScenariosService != null) {
 			selectedScenariosService.removeSelectionChangedListener(scenarioChangedListener);
 			selectedScenariosService = null;
 		}
-		
+
 		mainTableComponent.dispose();
 		super.dispose();
 	}
