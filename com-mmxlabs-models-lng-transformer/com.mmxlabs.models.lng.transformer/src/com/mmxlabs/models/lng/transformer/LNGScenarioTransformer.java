@@ -2269,18 +2269,18 @@ public class LNGScenarioTransformer {
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 				// Should this market month be included?
-				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfPromptPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
-				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
 
 				final List<IPortSlot> marketGroupSlots = new ArrayList<>();
 
-				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
+				LOOP_MARKET: for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
 					assert market instanceof FOBSalesMarket;
 					if (market instanceof final FOBSalesMarket fobSaleMarket && fobSaleMarket.isEnabled()) {
 
@@ -2325,11 +2325,39 @@ public class LNGScenarioTransformer {
 								final int end = dateHelper.convertTime(tzEndTime);
 								assert end > trimmedStart;
 
+								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
+								fobSlot.setFOBSale(true);
+								fobSlot.setWindowStart(startTime);
+								fobSlot.setWindowStartTime(0);
+								fobSlot.setOptional(true);
+								fobSlot.setWindowSize(1);
+								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+								// Key piece of information
+								fobSlot.setMarket(fobSaleMarket);
+
+								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+								for (final IPort port : marketPorts) {
+
+									// Re-use the real date objects to map back to integer timezones to avoid
+									// mismatching windows caused by half hour timezone shifts
+									final ZonedDateTime portWindowStart = fobSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
+									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(fobSlot.getSchedulingTimeWindow().getSizeInHours());
+									// Re-check against opt start date.
+									final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+											Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
+									final int trimmedPortWindowEnd = dateHelper.convertTime(portWindowEnd);
+									if (trimmedPortWindowStart <= trimmedPortWindowEnd) {
+										final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(trimmedPortWindowStart, trimmedPortWindowEnd, 0, false);
+										marketPortsMap.put(port, tw);
+									}
+								}
+								if (marketPortsMap.isEmpty()) {
+									continue LOOP_MARKET;
+								}
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and
 								// elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being
 								// permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(trimmedStart, end);
 
 								final String typePrefix = "FS-";
@@ -2354,38 +2382,13 @@ public class LNGScenarioTransformer {
 										priceCalculator, 0, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
 
 								// Create a fake model object to add in here
-								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
-								fobSlot.setFOBSale(true);
 								fobSlot.setName(externalID);
-								fobSlot.setWindowStart(startTime);
-								fobSlot.setWindowStartTime(0);
-								fobSlot.setOptional(true);
-								fobSlot.setWindowSize(1);
-								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-								// Key piece of information
-								fobSlot.setMarket(fobSaleMarket);
 								modelEntityMap.addModelObject(fobSlot, fobSaleSlot);
 
 								fobSaleSlot.setKey(String.format("FS-%s-%s", market.getName(), yearMonthString));
 
 								for (final ISlotTransformer slotTransformer : slotTransformers) {
 									slotTransformer.slotTransformed(fobSlot, fobSaleSlot);
-								}
-
-								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
-								for (final IPort port : marketPorts) {
-
-									// Re-use the real date objects to map back to integer timezones to avoid
-									// mismatching windows caused by half hour timezone shifts
-									final ZonedDateTime portWindowStart = fobSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
-									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(fobSlot.getSchedulingTimeWindow().getSizeInHours());
-									// Re-check against opt start date.
-									final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
-											Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
-
-									final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(trimmedPortWindowStart, dateHelper.convertTime(portWindowEnd), 0, false);
-
-									marketPortsMap.put(port, tw);
 								}
 
 								builder.bindLoadSlotsToFOBSale(fobSaleSlot, marketPortsMap);
