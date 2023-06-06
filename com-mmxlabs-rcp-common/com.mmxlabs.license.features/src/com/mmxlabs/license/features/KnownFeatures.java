@@ -183,5 +183,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_COMPLEX_CARGO = "features:complex-cargo";
 
 	public static final String FEATURE_MONTHLY_BALLAST_BONUS = "features:monthly-ballast-bonus";
+	
+	public static final String FEATURE_SCHEDULED_VOLUME = "features:scheduled-volume";
 
 }

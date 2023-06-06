@@ -1,4 +1,5 @@
 /**
+
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
@@ -81,7 +82,6 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 				return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT);
 			}
 			return null;
-
 		});
 		addEditor(CargoPackage.Literals.SLOT__PORT, topClass -> new TextualPortReferenceInlineEditor(CargoPackage.Literals.SLOT__PORT));
 		addEditor(CargoPackage.Literals.SLOT__CN, topClass -> new TextInlineEditor(CargoPackage.Literals.SLOT__CN));
@@ -117,6 +117,23 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			});
 		} else {
 			ignoreFeatures.add(CargoPackage.Literals.SLOT__BUSINESS_UNIT);
+		}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SCHEDULED_VOLUME)) {
+			addEditor(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME, topClass -> {
+				if (!CargoPackage.Literals.SPOT_SLOT.isSuperTypeOf(topClass)) {
+					return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__SCHEDULED_VOLUME);
+				}
+				return null;
+			});
+			addEditor(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT, topClass -> {
+				if (!CargoPackage.Literals.SPOT_SLOT.isSuperTypeOf(topClass)) {
+					return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT);
+				}
+				return null;
+			});
+		} else {
+			ignoreFeatures.add(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME);
+			ignoreFeatures.add(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT);
 		}
 	}
 }
