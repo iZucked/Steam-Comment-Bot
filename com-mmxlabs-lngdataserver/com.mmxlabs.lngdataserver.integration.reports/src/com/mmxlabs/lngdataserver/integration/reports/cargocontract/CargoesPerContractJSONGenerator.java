@@ -117,11 +117,13 @@ public class CargoesPerContractJSONGenerator {
 			cargoesPerContractReportModel.contracts = new LinkedList<>();
 			
 			final Map<String, Integer> sums = purchaseContractPerMonths.get(month);
-			for (final var e : sums.entrySet()) {
-				final ContractReportModel c = new ContractReportModel();
-				c.setName(e.getKey());
-				c.setNb(e.getValue());
-				cargoesPerContractReportModel.contracts.add(c);
+			if (sums != null) {
+				for (final var e : sums.entrySet()) {
+					final ContractReportModel c = new ContractReportModel();
+					c.setName(e.getKey());
+					c.setNb(e.getValue());
+					cargoesPerContractReportModel.contracts.add(c);
+				}
 			}
 			// Only reporting purchase contracts?
 			// cargoesPerContractReportModel.sellContracts = getSumContracts(sellContractPerMonths.get(month));
