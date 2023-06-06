@@ -115,7 +115,7 @@ public class CargoesPerContractJSONGenerator {
 			cargoesPerContractReportModel.month = month.getMonthValue();
 			cargoesPerContractReportModel.year = month.getYear();
 			cargoesPerContractReportModel.contracts = new LinkedList<>();
-
+			
 			final Map<String, Integer> sums = purchaseContractPerMonths.get(month);
 			for (final var e : sums.entrySet()) {
 				final ContractReportModel c = new ContractReportModel();

@@ -30,7 +30,7 @@ public class SingleMissingPriceConstraint extends AbstractModelMultiConstraint {
 			int missingPriceCount = 0;
 			for (final Slot<?> slot : cargo.getSlots()) {
 
-				if (slot.isSetPriceExpression() && slot.getPriceExpression().equals(IBreakEvenEvaluator.MARKER)) {
+				if (slot.isSetPriceExpression() && IBreakEvenEvaluator.MARKER.equals(slot.getPriceExpression())) {
 					if (++missingPriceCount > 1) {
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A cargo can have at most one missing price"));
 						dcsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
