@@ -251,7 +251,6 @@ public class LNGScenarioTransformer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
-
 	private final @NonNull LNGScenarioModel rootObject;
 
 	@Inject
@@ -1761,7 +1760,7 @@ public class LNGScenarioTransformer {
 		}
 		return discharge;
 	}
-	
+
 	private ISalesPriceCalculator getSalesPriceCalculatorForExpression(final String priceExpression) {
 		final ExpressionPriceParameters dynamicContract = CommercialFactory.eINSTANCE.createExpressionPriceParameters();
 		dynamicContract.setPriceExpression(priceExpression);
@@ -1833,7 +1832,8 @@ public class LNGScenarioTransformer {
 //				loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 //				injector.injectMembers(loadPriceCalculator);
 
-			
+			// loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
+			// injector.injectMembers(loadPriceCalculator);
 
 		} else if (loadSlot instanceof final SpotSlot spotSlot) {
 			final SpotMarket market = spotSlot.getMarket();
@@ -2093,18 +2093,18 @@ public class LNGScenarioTransformer {
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 				// Should this market month be included?
-				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfPromptPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
-				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
 
 				final List<IPortSlot> marketGroupSlots = new ArrayList<>();
 
-				for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
+				LOOP_MARKET: for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
 					assert market instanceof DESPurchaseMarket;
 					if (market instanceof final DESPurchaseMarket desPurchaseMarket && desPurchaseMarket.isEnabled()) {
 						final LNGPriceCalculatorParameters priceInfo = desPurchaseMarket.getPriceInfo();
@@ -2149,11 +2149,44 @@ public class LNGScenarioTransformer {
 								final int end = dateHelper.convertTime(tzEndTime);
 								assert end > trimmedStart;
 
+								// Create a fake model object to add in here
+								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
+								desSlot.setDESPurchase(true);
+
+								desSlot.setArriveCold(false);
+								desSlot.setWindowStart(LocalDate.of(startTime.getYear(), startTime.getMonthValue(), startTime.getDayOfMonth()));
+								desSlot.setWindowStartTime(0);
+								desSlot.setOptional(true);
+								desSlot.setWindowSize(1);
+								desSlot.setWindowSizeUnits(TimePeriod.MONTHS);
+								// Key piece of information
+								desSlot.setMarket(desPurchaseMarket);
+
+								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+								for (final IPort port : marketPorts) {
+									// Re-use the real date objects to map back to integer timezones to avoid
+									// mismatching windows caused by half hour timezone shifts
+									final ZonedDateTime portWindowStart = desSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
+									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(desSlot.getSchedulingTimeWindow().getSizeInHours());
+									// Re-check against opt start date.
+									final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
+											Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
+									final int trimmedPortWindowEnd = dateHelper.convertTime(portWindowEnd);
+
+									if (trimmedPortWindowStart <= trimmedPortWindowEnd) {
+										final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(trimmedPortWindowStart, trimmedPortWindowEnd, 0, false);
+										marketPortsMap.put(port, tw);
+									}
+
+								}
+								if (marketPortsMap.isEmpty()) {
+									continue LOOP_MARKET;
+								}
+
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and
 								// elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being
 								// permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(trimmedStart, end);
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
@@ -2176,18 +2209,8 @@ public class LNGScenarioTransformer {
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()),
 										priceCalculator, cargoCVValue, 0, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
 
-								// Create a fake model object to add in here
-								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
-								desSlot.setDESPurchase(true);
+								;
 								desSlot.setName(externalID);
-								desSlot.setArriveCold(false);
-								desSlot.setWindowStart(LocalDate.of(startTime.getYear(), startTime.getMonthValue(), startTime.getDayOfMonth()));
-								desSlot.setWindowStartTime(0);
-								desSlot.setOptional(true);
-								desSlot.setWindowSize(1);
-								desSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-								// Key piece of information
-								desSlot.setMarket(desPurchaseMarket);
 								modelEntityMap.addModelObject(desSlot, desPurchaseSlot);
 
 								desPurchaseSlot.setKey(String.format("DP-%s-%s", market.getName(), yearMonthString));
@@ -2196,20 +2219,6 @@ public class LNGScenarioTransformer {
 									slotTransformer.slotTransformed(desSlot, desPurchaseSlot);
 								}
 
-								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
-								for (final IPort port : marketPorts) {
-									// Re-use the real date objects to map back to integer timezones to avoid
-									// mismatching windows caused by half hour timezone shifts
-									final ZonedDateTime portWindowStart = desSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
-									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(desSlot.getSchedulingTimeWindow().getSizeInHours());
-									// Re-check against opt start date.
-									final int trimmedPortWindowStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
-											Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(portWindowStart)));
-
-									final ITimeWindow tw = TimeWindowMaker.createInclusiveInclusive(trimmedPortWindowStart, dateHelper.convertTime(portWindowEnd), 0, false);
-
-									marketPortsMap.put(port, tw);
-								}
 								builder.bindDischargeSlotsToDESPurchase(desPurchaseSlot, marketPortsMap);
 
 								marketSlots.add(desPurchaseSlot);
