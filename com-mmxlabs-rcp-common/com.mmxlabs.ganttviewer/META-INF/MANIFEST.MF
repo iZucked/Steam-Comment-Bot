@@ -3,14 +3,14 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Ganttviewer
 Bundle-SymbolicName: com.mmxlabs.ganttviewer
 Automatic-Module-Name: com.mmxlabs.ganttviewer
-Bundle-Version: 6.5.6.qualifier
+Bundle-Version: 6.6.1.RELEASE
 Bundle-Activator: com.mmxlabs.ganttviewer.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.org.eclipse.nebula.widgets.ganttchart;bundle-version="[6.5.6,7.0.0)",
- com.mmxlabs.rcp.common;bundle-version="[6.5.6,7.0.0)"
+ com.mmxlabs.org.eclipse.nebula.widgets.ganttchart;bundle-version="[6.6.1,7.0.0)",
+ com.mmxlabs.rcp.common;bundle-version="[6.6.1,7.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.ganttviewer,
