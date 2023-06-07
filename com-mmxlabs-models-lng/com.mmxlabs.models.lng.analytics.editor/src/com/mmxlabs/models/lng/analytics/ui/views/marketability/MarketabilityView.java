@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.marketability;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -33,6 +37,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -44,6 +49,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.csv.CSVWriter;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -58,7 +64,7 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToExcelMSClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -75,9 +81,9 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 	private MarketabilityModel currentModel;
 	// listens which object is selected
 	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
-	
+
 	private IScenarioServiceSelectionProvider selectedScenariosService;
-	
+
 	private IScenarioServiceSelectionChangedListener scenarioChangedListener;
 
 	// selection service from upper class
@@ -105,25 +111,24 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 		mainTableComponent = new MainTableComponent();
 
-		
 		mainTableComponent.createControls(this.parent, MarketabilityView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
 		selectedScenariosService = getSite().getService(IScenarioServiceSelectionProvider.class);
-		scenarioChangedListener = (pinned, others) ->  {
+		scenarioChangedListener = (pinned, others) -> {
 			ScenarioResult scenarioResult = null;
-			if(pinned != null) {
+			if (pinned != null) {
 				scenarioResult = pinned;
-			} else if(others.iterator().hasNext()) {
+			} else if (others.iterator().hasNext()) {
 				scenarioResult = others.iterator().next();
 			}
-			if(scenarioResult != null) {
+			if (scenarioResult != null) {
 				final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
-				final AnalyticsModel analyticsModel =  ScenarioModelUtil.getAnalyticsModel(sdp);
+				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
 				setInput(scenarioResult.getRootObject(), analyticsModel.getMarketabilityModel());
 			} else {
 				setInput(null, null);
 			}
-			
+
 		};
 		selectedScenariosService.addSelectionChangedListener(scenarioChangedListener);
 
@@ -132,7 +137,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			if (modelRecord != null) {
 				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
 					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
-					final Optional<Integer> vesselSpeed = mainTableComponent.getVesselSpeed();
+					final Optional<Double> vesselSpeed = mainTableComponent.getVesselSpeed();
 					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
 						try {
 							dialog.run(true, false, m -> {
@@ -212,7 +217,36 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
 
-		final Action copyTableAction = new CopyGridToExcelMSClipboardAction(mainTableComponent.getViewer().getGrid(), true);
+		final Action copyTableAction = new CopyGridToClipboardAction(mainTableComponent.getViewer().getGrid()) {
+			@Override
+			protected void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
+				if (rowHeadersIncluded) {
+					cw.addValue(item.getHeaderText());
+				}
+				for (int i = 0; i < numColumns; ++i) {
+					String text = item.getText(i);
+					try {
+						LocalDate ld = LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yy"));
+						text = ld.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+					} catch (final Exception e) {
+
+					}
+					try {
+						LocalDateTime ldt = LocalDateTime.parse(text, DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
+						text = ldt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+					} catch (final Exception e) {
+
+					}
+
+					cw.addValue(text);
+
+					// end row
+					if ((i + 1) == numColumns) {
+						cw.endRow();
+					}
+				}
+			}
+		};
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
 
@@ -268,8 +302,10 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 
 				if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_MarketabilityModel()
 						|| notification.getFeature() == AnalyticsPackage.eINSTANCE.getMarketabilityModel_Rows()) {
-					doDisplay = true;
-					break;
+					if (notification.getNewValue() != null) {
+						doDisplay = true;
+						break;
+					}
 				}
 			}
 			if (doDisplay) {
@@ -320,11 +356,11 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 			service.removePostSelectionListener(selectionListener);
 			selectionListener = null;
 		}
-		if(selectedScenariosService != null) {
+		if (selectedScenariosService != null) {
 			selectedScenariosService.removeSelectionChangedListener(scenarioChangedListener);
 			selectedScenariosService = null;
 		}
-		
+
 		mainTableComponent.dispose();
 		super.dispose();
 	}

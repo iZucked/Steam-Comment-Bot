@@ -103,6 +103,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isComputeExposure <em>Compute Exposure</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isComputeHedge <em>Compute Hedge</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getScheduledVolumeUnit <em>Scheduled Volume Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getScheduledVolume <em>Scheduled Volume</em>}</li>
  * </ul>
  *
  * @generated
@@ -1118,6 +1120,46 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean computeHedge = COMPUTE_HEDGE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getScheduledVolumeUnit() <em>Scheduled Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits SCHEDULED_VOLUME_UNIT_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getScheduledVolumeUnit() <em>Scheduled Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits scheduledVolumeUnit = SCHEDULED_VOLUME_UNIT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getScheduledVolume() <em>Scheduled Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SCHEDULED_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getScheduledVolume() <em>Scheduled Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int scheduledVolume = SCHEDULED_VOLUME_EDEFAULT;
 
 	/**
 	 * Clump of methods for computing the schedule time window start and end times etc.
@@ -2889,6 +2931,52 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VolumeUnits getScheduledVolumeUnit() {
+		return scheduledVolumeUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setScheduledVolumeUnit(VolumeUnits newScheduledVolumeUnit) {
+		VolumeUnits oldScheduledVolumeUnit = scheduledVolumeUnit;
+		scheduledVolumeUnit = newScheduledVolumeUnit == null ? SCHEDULED_VOLUME_UNIT_EDEFAULT : newScheduledVolumeUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT, oldScheduledVolumeUnit, scheduledVolumeUnit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getScheduledVolume() {
+		return scheduledVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setScheduledVolume(int newScheduledVolume) {
+		int oldScheduledVolume = scheduledVolume;
+		scheduledVolume = newScheduledVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SCHEDULED_VOLUME, oldScheduledVolume, scheduledVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
@@ -3281,6 +3369,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isComputeExposure();
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				return isComputeHedge();
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				return getScheduledVolumeUnit();
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				return getScheduledVolume();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3439,6 +3531,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				setComputeHedge((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				setScheduledVolumeUnit((VolumeUnits)newValue);
+				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				setScheduledVolume((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -3591,6 +3689,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				setComputeHedge(COMPUTE_HEDGE_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				setScheduledVolumeUnit(SCHEDULED_VOLUME_UNIT_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				setScheduledVolume(SCHEDULED_VOLUME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -3713,6 +3817,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return computeExposure != COMPUTE_EXPOSURE_EDEFAULT;
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				return computeHedge != COMPUTE_HEDGE_EDEFAULT;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				return scheduledVolumeUnit != SCHEDULED_VOLUME_UNIT_EDEFAULT;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				return scheduledVolume != SCHEDULED_VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3921,6 +4029,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(computeExposure);
 		result.append(", computeHedge: ");
 		result.append(computeHedge);
+		result.append(", scheduledVolumeUnit: ");
+		result.append(scheduledVolumeUnit);
+		result.append(", scheduledVolume: ");
+		result.append(scheduledVolume);
 		result.append(')');
 		return result.toString();
 	}

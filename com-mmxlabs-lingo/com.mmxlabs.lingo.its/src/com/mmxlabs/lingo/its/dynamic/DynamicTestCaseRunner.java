@@ -92,6 +92,12 @@ public abstract class DynamicTestCaseRunner {
 
 	@TestFactory
 	@Tag(TestCategories.REPORT_TEST)
+	public List<DynamicNode> runHubReportTests() throws IOException {
+		return ReportTestRunner.runHubReportTests(getBaseDirectory());
+	}
+
+	@TestFactory
+	@Tag(TestCategories.REPORT_TEST)
 	public List<DynamicNode> runReportWithElementTests() throws IOException {
 		return ReportTestRunner.runReportWithElementTests(getBaseDirectory());
 	}

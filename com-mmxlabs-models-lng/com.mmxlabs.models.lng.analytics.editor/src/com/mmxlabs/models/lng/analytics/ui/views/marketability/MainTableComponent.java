@@ -93,10 +93,10 @@ public class MainTableComponent {
 		return inputWants;
 	}
 
-	public @NonNull Optional<Integer> getVesselSpeed() {
+	public @NonNull Optional<Double> getVesselSpeed() {
 		String speed = vesselSpeedText.getText();
 		try {
-			return Optional.of(Integer.parseInt(speed));
+			return Optional.of(Double.parseDouble(speed));
 		} catch (NumberFormatException e) {
 			return Optional.empty();
 		}
@@ -124,13 +124,17 @@ public class MainTableComponent {
 		vesselSpeedComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
 		vesselSpeedComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.END).minSize(1000, -1).create());
 		final Label lbl = new Label(vesselSpeedComposite, SWT.NONE);
-		lbl.setText("Vessel speed:");
+		lbl.setText("Max speed:");
 		lbl.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).minSize(1000, -1).create());
 		vesselSpeedText = new Text(vesselSpeedComposite, SWT.SINGLE | SWT.BORDER);
 		vesselSpeedText.setEditable(true);
-		vesselSpeedText.setTextLimit(2);
+		vesselSpeedText.setTextLimit(4);
 		vesselSpeedText.setMessage("max");
-		vesselSpeedText.addVerifyListener(x -> x.doit = x.text.matches("\\d*"));
+		vesselSpeedText.addVerifyListener(x -> {
+			String oldText = ((Text)x.widget).getText();
+			String newText = oldText.substring(0, x.start) + x.text + oldText.substring(x.end);
+			x.doit = newText.matches("\\d*(\\.\\d{0,2})?");
+		});
 		final Label knotsLabel = new Label(vesselSpeedComposite, SWT.NONE);
 		knotsLabel.setText("kts");
 	}
@@ -235,7 +239,7 @@ public class MainTableComponent {
 
 	private void updateVesselSpeedText(final @Nullable MarketabilityModel model) {
 		if (model != null && model.isSetVesselSpeed()) {
-			vesselSpeedText.setText(Integer.toString((int)model.getVesselSpeed()));
+			vesselSpeedText.setText(Double.toString(model.getVesselSpeed()));
 		} else {
 			vesselSpeedText.setText("");
 		}
@@ -465,7 +469,7 @@ public class MainTableComponent {
 		if (date == null) {
 			return "";
 		}
-		return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(date);
+		return DateTimeFormatter.ofPattern("dd/MM/yy").format(date);
 	}
 
 	@SuppressWarnings("null")
