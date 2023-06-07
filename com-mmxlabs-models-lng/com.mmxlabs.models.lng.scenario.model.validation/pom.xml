@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>6.6.1.RELEASE</version>
+		<version>6.6.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.scenario.model.validation</artifactId>
