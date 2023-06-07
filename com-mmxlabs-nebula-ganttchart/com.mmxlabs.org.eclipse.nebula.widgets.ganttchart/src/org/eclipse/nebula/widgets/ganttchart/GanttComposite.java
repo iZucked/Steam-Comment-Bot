@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -24,8 +25,15 @@ import java.util.function.Supplier;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
+import org.eclipse.nebula.widgets.ganttchart.label.DefaultEventsLabelCalculator;
+import org.eclipse.nebula.widgets.ganttchart.label.EEventLabelAlignment;
+import org.eclipse.nebula.widgets.ganttchart.label.EventLabelFontSize;
 import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
-import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventsLabelCalculator;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventsLabelManager;
+import org.eclipse.nebula.widgets.ganttchart.label.NullEventsLabelManager;
+import org.eclipse.nebula.widgets.ganttchart.label.PreComputedEventsLabelManager;
+import org.eclipse.nebula.widgets.ganttchart.label.internal.GeneratedEventText;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.IUndoRedoCommand;
@@ -324,9 +332,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	private ILegendProvider legendProvider = null;
 
-	private IPlaqueContentProvider[] plaqueContentProviders;
-
-	private Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection = null;
+	@NonNull
+	private IEventsLabelManager eventsLabelManager = new NullEventsLabelManager();
 
 	private Comparator<GanttEvent> eventRenderOrderComparator;
 
@@ -3404,7 +3411,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		final int yDrawPos;
 		if (isBuySell) {
 			yDrawPos = ge.getY();
-		} else {			
+		} else {
 			yDrawPos = ge.getY() + GanttChartParameters.getRowPadding();
 		}
 
@@ -3445,9 +3452,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		// draw a little plaque saying how many days that this event is long
-		if (_showNumDays && plaqueContentProviders != null) {
-			_paintManager.drawPlaqueOnEvent(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, plaqueContentProviders, bounds);
-		}
+		// if (_showNumDays && plaqueContentProviders != null) {
+		// _paintManager.drawPlaqueOnEvent(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, plaqueContentProviders, bounds);
+		// }
 
 		// fetch current font
 		final Font oldFont = gc.getFont();
@@ -3461,8 +3468,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		// draw the text if any, o
-		if (ge.getParsedString() != null) {
-			_paintManager.drawEventLabel(this, _settings, ge, gc, this.textGeneratorCollection, xStart, yDrawPos, xEventWidth);
+		if (ge.getParsedString() != null && ge.getSpecialDrawMode() == SpecialDrawModes.NONE) {
+			final List<@NonNull GeneratedEventText> eventTexts = eventsLabelManager.getEventTexts(ge, xEventWidth);
+			if (eventTexts != null && !eventTexts.isEmpty()) {
+				_paintManager.drawEventLabel(this, _settings, ge, gc, eventTexts, xStart, yDrawPos, xEventWidth);
+			}
 		}
 
 		// reset font
@@ -5315,6 +5325,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		_forceSBUpdate = true;
 		_vScrollBar.setSelection(0);
 		flagForceFullUpdate();
+		eventsLabelManager.reset();
 		redraw();
 	}
 
@@ -9091,6 +9102,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		return !_specDateRanges.isEmpty();
 	}
 
+	@Override
+	public void dispose() {
+		eventsLabelManager.dispose();
+		// Annoying hack for @NonNull annotations
+		eventsLabelManager = new NullEventsLabelManager();
+	}
+
 	boolean isDDayCalendar() {
 		return _currentView == ISettings.VIEW_D_DAY;
 	}
@@ -9135,19 +9153,54 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		this.menuAction = menuAction;
 	}
 
-	public void replacePlaqueContentProviders(final Collection<@NonNull IPlaqueContentProvider> plaqueContentProviders) {
-		this.plaqueContentProviders = plaqueContentProviders.toArray(new IPlaqueContentProvider[plaqueContentProviders.size()]);
-	}
-
 	public void setRenderOrderComparator(final @Nullable Comparator<GanttEvent> comparator) {
 		this.eventRenderOrderComparator = comparator;
 	}
 
-	public void replaceTextGenerationCollection(final Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection) {
-		this.textGeneratorCollection = textGeneratorCollection;
+	public void replaceTextGenerationCollection(final @NonNull Collection<@NonNull Collection<@NonNull IEventTextPropertiesGenerator>> textGeneratorCollection) {
+		final List<@NonNull List<@NonNull IEventTextPropertiesGenerator>> sortedGeneratorsList = new ArrayList<>(textGeneratorCollection.size());
+		final boolean[] seenAlignment = new boolean[EEventLabelAlignment.values().length];
+		for (final Collection<@NonNull IEventTextPropertiesGenerator> generators : textGeneratorCollection) {
+			// Reset seen alignments
+			for (int i = 0; i < seenAlignment.length; ++i) {
+				seenAlignment[i] = false;
+			}
+			final List<@NonNull IEventTextPropertiesGenerator> generatorsToKeep = new LinkedList<>();
+			// Each alignment should only be used once
+			for (final IEventTextPropertiesGenerator generator : generators) {
+				final int alignmentIndex = generator.getAlignment().ordinal();
+				if (!seenAlignment[alignmentIndex]) {
+					generatorsToKeep.add(generator);
+					seenAlignment[alignmentIndex] = true;
+				}
+			}
+			final List<@NonNull IEventTextPropertiesGenerator> sortedGenerators = new ArrayList<>(generatorsToKeep);
+			sortedGenerators.sort((g1, g2) -> Integer.compare(g1.getAlignment().ordinal(), g2.getAlignment().ordinal()));
+			sortedGeneratorsList.add(sortedGenerators);
+		}
+		final IEventsLabelCalculator calculator = new DefaultEventsLabelCalculator(evt -> this.isConnected(evt) ? _settings.getTextSpacerConnected() : _settings.getTextSpacerNonConnected(), 5);
+		final IEventsLabelManager newLabelManager = new PreComputedEventsLabelManager(sortedGeneratorsList, calculator);
+		eventsLabelManager.dispose();
+		eventsLabelManager = newLabelManager;
 	}
 
 	public void clearTextGenerationCollection() {
-		this.textGeneratorCollection = null;
+		eventsLabelManager.dispose();
+		eventsLabelManager = new NullEventsLabelManager();
+	}
+
+	public void resetEventLabels() {
+		if (!(eventsLabelManager instanceof NullEventsLabelManager)) {
+			eventsLabelManager.reset();
+			refresh();
+		}
+	}
+
+	public void setEventFont(final @NonNull EventLabelFontSize newFontSize) {
+		final EventLabelFontSize oldFontSize = GanttChartParameters.getFontSize();
+		if (newFontSize != oldFontSize) {
+			eventsLabelManager.reset();
+			GanttChartParameters.updateFontSize(newFontSize);
+		}
 	}
 }

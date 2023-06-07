@@ -81,7 +81,7 @@ public class GanttChartParameters {
 		updateParameters();
 	}
 	
-	private void updateParameters() {		
+	private void updateParameters() {
 		final int textVerticalExtent = stringExtents.get(fontSize);
 		final int actualTextVerticalExtent = textVerticalExtent * LETTER_SCALE_FACTOR_NUMERATOR / LETTER_SCALE_FACTOR_DENOMENATOR;
 		this.textVerticalTextAlignDisplacement = actualTextVerticalExtent - textVerticalExtent - fontSize.getMargin();
@@ -98,8 +98,8 @@ public class GanttChartParameters {
 		final GC temporaryGC = new GC(temporaryImage);
 		
 		// Calculation
-		for (final EventLabelFontSize currentFontSize : EventLabelFontSize.values()) {			
-			final Font temporaryFont = GanttChartParameters.getStandardFont();
+		for (final EventLabelFontSize currentFontSize : EventLabelFontSize.values()) {
+			final Font temporaryFont = buildFont(currentFontSize);
 			temporaryGC.setFont(temporaryFont);
 			final int currentTextVerticalExtent = temporaryGC.stringExtent(SAMPLE_STRING).y;
 			stringExtents.put(currentFontSize, currentTextVerticalExtent);
@@ -116,8 +116,12 @@ public class GanttChartParameters {
 	 * @return
 	 */
 	public static Font getStandardFont() {
+		return buildFont(fontSize);
+	}
+
+	private static Font buildFont(final EventLabelFontSize localFontSize) {
 		final String fontDataName = Display.getDefault().getSystemFont().getFontData()[0].getName();
-		final int fontHeight = GanttChartParameters.getStandardEventLabelFontHeight();
+		final int fontHeight = getEventLabelFontHeight(localFontSize);
 		final FontData fontData = new FontData(fontDataName, fontHeight, SWT.NORMAL);
 		return new Font(Display.getDefault(), fontData);
 	}
@@ -125,8 +129,8 @@ public class GanttChartParameters {
 	/**
 	 * Size of the event label font height in points
 	 */
-	private static int getStandardEventLabelFontHeight() {
-		return 3 * fontSize.getFontHeightInPixels() / 4;
+	private static int getEventLabelFontHeight(final EventLabelFontSize localFontSize) {
+		return 3 * localFontSize.getFontHeightInPixels() / 4;
 	}
 
 	private static int getStandardEventHeight() {
@@ -300,5 +304,9 @@ public class GanttChartParameters {
 
 	public static int buySellEventHeight() {
 		return BUY_SELL_ROW_EVENT_HEIGHT;
+	}
+
+	public static EventLabelFontSize getFontSize() {
+		return fontSize;
 	}
 }

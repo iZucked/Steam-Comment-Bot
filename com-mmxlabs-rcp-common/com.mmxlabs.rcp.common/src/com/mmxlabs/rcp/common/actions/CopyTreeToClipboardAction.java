@@ -7,7 +7,6 @@ package com.mmxlabs.rcp.common.actions;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
@@ -17,7 +16,7 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
 import com.mmxlabs.common.csv.CSVWriter;
-import com.mmxlabs.rcp.common.internal.Activator;
+import com.mmxlabs.rcp.common.actions.copyutils.CopyAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
@@ -28,7 +27,7 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
  * @author Simon Goodall
  * 
  */
-public class CopyTreeToClipboardAction extends Action {
+public class CopyTreeToClipboardAction extends CopyAction {
 
 	private final Tree tree;
 
@@ -130,7 +129,7 @@ public class CopyTreeToClipboardAction extends Action {
 
 		for (int i = 0; i < numColumns; ++i) {
 
-			cw.addValue(item.getText(i));
+			cw.addValue(reformatText(item.getText(i)));
 			// Add EOL or separator char as appropriate
 			if ((i + 1) == numColumns) {
 				cw.endRow();
