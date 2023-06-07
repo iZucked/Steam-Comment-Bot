@@ -21,6 +21,8 @@ import org.eclipse.swt.graphics.FontData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.actions.copyutils.CopyAction;
+
 /**
  * Copies "rendered" table contents to the clipboard. This will maintain the column order, sort order and label provider output.
  * 
@@ -39,6 +41,7 @@ public class CopyGridToHtmlStringUtil {
 	private boolean showForegroundColours = false;
 	private boolean includeAllColumns = false;
 	protected IAdditionalAttributeProvider additionalAttributeProvider = null;
+	private CopyAction copyAction = null;
 	protected static final String EOL = System.getProperty("line.separator");
 
 	public CopyGridToHtmlStringUtil(final Grid table, final boolean includeRowHeaders, final boolean includeAllColumns) {
@@ -46,6 +49,11 @@ public class CopyGridToHtmlStringUtil {
 		this.table = table;
 		this.rowHeadersIncluded = includeRowHeaders;
 		this.includeAllColumns = includeAllColumns;
+	}
+	
+	public CopyGridToHtmlStringUtil(final Grid table, final boolean includeRowHeaders, final boolean includeAllColumns, final CopyAction copyAction) {
+		this(table, includeRowHeaders, includeAllColumns);
+		this.copyAction = copyAction;
 	}
 
 	public String convert() {
@@ -339,6 +347,9 @@ public class CopyGridToHtmlStringUtil {
 				sw.write(" " + attribute);
 			}
 			sw.write(">");
+		}
+		if (copyAction != null) {
+			text = copyAction.reformatText(text);
 		}
 		text = htmlEscape(text);
 
