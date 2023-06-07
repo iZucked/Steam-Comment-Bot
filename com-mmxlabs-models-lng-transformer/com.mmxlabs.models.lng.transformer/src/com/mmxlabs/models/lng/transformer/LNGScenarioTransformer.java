@@ -2093,11 +2093,11 @@ public class LNGScenarioTransformer {
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 				// Should this market month be included?
-				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
-				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
@@ -2269,11 +2269,11 @@ public class LNGScenarioTransformer {
 				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 				// Should this market month be included?
-				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfPromptPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfPromptPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
-				if (dateHelper.convertTime(tzEndTime) < promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
+				if (dateHelper.convertTime(tzEndTime) <= promptPeriodProviderEditor.getStartOfOptimisationPeriod()) {
 					tzStartTime = tzStartTime.plusMonths(1);
 					continue;
 				}
