@@ -13,7 +13,6 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
@@ -205,7 +204,6 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, null, null);
 
-
 		setCopyForegroundColours(true);
 		setCopyBackgroundColours(true);
 
@@ -216,7 +214,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 
 		getViewSite().getActionBars().updateActionBars();
 	}
-	
+
 	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
