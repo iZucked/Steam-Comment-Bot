@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.emissions;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
+import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 
 /**
@@ -27,6 +28,7 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
 	public Long pilotLightEmission;
 	
+	@LingoIgnore
 	@ColumnName("CII")
 	@ColumnOrderLevel(ColumnOrder.LATER_LEVEL)
 	public Long attainedCII;

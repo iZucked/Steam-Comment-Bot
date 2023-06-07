@@ -50,14 +50,14 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@ColumnName("Start")
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
-	@ColumnOrderLevel(ColumnOrder.START)
+	@ColumnOrderLevel(ColumnOrder.EARLY_START_DATE)
 	@ColumnSortOrder(value = 1)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventStart;
 	
 	@ColumnName("End")
-	@ColumnOrderLevel(ColumnOrder.START)
+	@ColumnOrderLevel(ColumnOrder.EARLY_END_DATE)
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
 	@ColumnSortOrder(value = 1)
