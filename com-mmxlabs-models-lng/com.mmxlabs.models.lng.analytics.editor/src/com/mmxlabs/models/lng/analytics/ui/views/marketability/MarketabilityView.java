@@ -217,36 +217,7 @@ public class MarketabilityView extends ScenarioInstanceView implements CommandSt
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
 
-		final Action copyTableAction = new CopyGridToClipboardAction(mainTableComponent.getViewer().getGrid()) {
-			@Override
-			protected void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
-				if (rowHeadersIncluded) {
-					cw.addValue(item.getHeaderText());
-				}
-				for (int i = 0; i < numColumns; ++i) {
-					String text = item.getText(i);
-					try {
-						LocalDate ld = LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yy"));
-						text = ld.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-					} catch (final Exception e) {
-
-					}
-					try {
-						LocalDateTime ldt = LocalDateTime.parse(text, DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
-						text = ldt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
-					} catch (final Exception e) {
-
-					}
-
-					cw.addValue(text);
-
-					// end row
-					if ((i + 1) == numColumns) {
-						cw.endRow();
-					}
-				}
-			}
-		};
+		final Action copyTableAction = new CopyGridToClipboardAction(mainTableComponent.getViewer().getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
 
