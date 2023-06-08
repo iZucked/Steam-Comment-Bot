@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -150,6 +151,9 @@ public class ScenarioServicePublishAction {
 				case FAILED_TO_UPLOAD_BASECASE_CSV:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Base case uploaded but failed to upload backup archive.");
 					break;
+				case FAILED_TO_EVALUATE_VALIDATION_ERROR:
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Base case validation failed.");
+					break;
 				default:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUBLISHING, "Unknown error occurred. Unable to publish as base case.");
 					break;
@@ -209,9 +213,11 @@ public class ScenarioServicePublishAction {
 			LNGScenarioModel scenarioModel = null;
 
 			try (final IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
-				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-
 				
+				if (!OptimisationHelper.validateScenario(o_scenarioDataProvider, null, false, true, true, Collections.emptySet())) {
+					throw new PublishBasecaseException("Error evaluating scenario. Please fix validation errors.", Type.FAILED_TO_EVALUATE_VALIDATION_ERROR);
+				}
+				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 				
 				processPrePublishCommands(progressMonitor, o_scenarioDataProvider);
 				
@@ -243,6 +249,8 @@ public class ScenarioServicePublishAction {
 				} catch (final Exception e) {
 					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_EVALUATE);
 				}
+			} catch (final PublishBasecaseException e) {
+				throw e;
 			} catch (final RuntimeException e) {
 				if (e.getCause() instanceof ScenarioMigrationException ee ) {
 					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_MIGRATE, ee);

@@ -25,6 +25,7 @@ public class PublishBasecaseException extends RuntimeException {
 		FAILED_TO_GENERATE_REPORT, //
 		FAILED_TO_MAKE_CURRENT,//
 		FAILED_TO_EXECUTE_PRE_PUBLISH_COMMAND,//
+		FAILED_TO_EVALUATE_VALIDATION_ERROR,
 	};
 
 	private final Type type;

@@ -154,6 +154,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/allowedPortsOverride"/>
       <genFeatures createChild="false" propertyDescription="Compute exposure" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/computeExposure"/>
       <genFeatures createChild="false" propertyDescription="Compute hedge" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/computeHedge"/>
+      <genFeatures createChild="false" propertyDescription="The volume units used for the scheduled volume"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/scheduledVolumeUnit"/>
+      <genFeatures createChild="false" propertyDescription="Scheduled volume" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/scheduledVolume"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateOperationalTolerance"/>

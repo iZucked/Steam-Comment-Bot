@@ -20,6 +20,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubColumnStyle;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.TodayProvider;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -100,7 +101,7 @@ public class Nominations {
 		this.nomination = ""; // Not used currently.
 
 		if (this.nominateBy != null) {
-			final LocalDate today = LocalDate.now();
+			final LocalDate today = TodayProvider.getInstance().getToday().toLocalDate();
 			if (!today.isBefore(this.nominateBy)) {
 				this.warn = true;
 			} else {

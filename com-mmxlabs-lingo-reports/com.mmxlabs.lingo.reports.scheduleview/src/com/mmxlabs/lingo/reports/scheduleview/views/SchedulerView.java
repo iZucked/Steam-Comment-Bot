@@ -63,6 +63,7 @@ import org.eclipse.nebula.widgets.ganttchart.IGanttChartItem;
 import org.eclipse.nebula.widgets.ganttchart.ILegendItem;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
+import org.eclipse.nebula.widgets.ganttchart.label.EventLabelFontSize;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
@@ -93,6 +94,7 @@ import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderComparator;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
@@ -147,6 +149,12 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class SchedulerView extends ViewPart implements IPreferenceChangeListener {
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
+
+	private static final Set<String> IGNORED_PREFERENCES = new HashSet<>();
+
+	static {
+		IGNORED_PREFERENCES.add(PreferenceConstants.P_REPORT_DURATION_FORMAT);
+	}
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -1332,7 +1340,29 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 	@Override
 	public void preferenceChange(final PreferenceChangeEvent event) {
-		viewer.setInput(viewer.getInput());
+		final String preferenceKey = event.getKey();
+		if (preferenceKey != null) {
+			if (preferenceKey.equals(PreferenceConstants.P_SCHEDULE_CHART_EVENT_LABEL_FONT_SIZE)) {
+				final Object newValueObj = event.getNewValue();
+				if (newValueObj == null) {
+					// default case - small
+					viewer.getGanttChart().getGanttComposite().setEventFont(EventLabelFontSize.SMALL);
+					viewer.setInput(viewer.getInput());
+				} else if (newValueObj instanceof String newValue) {
+					final EventLabelFontSize fontSize = switch (newValue) {
+					case "MEDIUM" -> EventLabelFontSize.MEDIUM;
+					case "LARGE" -> EventLabelFontSize.LARGE;
+					default -> EventLabelFontSize.SMALL;
+					};
+					viewer.getGanttChart().getGanttComposite().setEventFont(fontSize);
+					viewer.setInput(viewer.getInput());
+				}
+			} else if (preferenceKey.equals(PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT)) {
+				viewer.getGanttChart().getGanttComposite().resetEventLabels();
+			} else if (!IGNORED_PREFERENCES.contains(preferenceKey)){
+				viewer.setInput(viewer.getInput());
+			}
+		}
 	}
 
 	@NonNull

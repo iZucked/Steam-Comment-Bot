@@ -38,6 +38,12 @@ public class ExpressionPriceParametersConstraint extends AbstractPriceParameters
 				validatePrice(ctx, failures, w, w.getName(), factory, PriceIndexType.COMMODITY, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PREFERRED_FORMULAE);
 			});
 		}
+		if (pricingParams.getPriceExpression() == null || pricingParams.getPriceExpression().isBlank()) {
+			factory.copyName()//
+			.withMessage("Price is missing") //
+			.withObjectAndFeature(pricingParams, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION) //
+			.make(ctx, failures);
+		}
 	}
 	
 	private void validatePrice(final IValidationContext ctx, final List<IStatus> failures, final EObject target,//

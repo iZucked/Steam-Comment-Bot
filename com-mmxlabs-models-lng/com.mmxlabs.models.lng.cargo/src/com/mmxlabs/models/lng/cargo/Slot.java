@@ -79,6 +79,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isComputeExposure <em>Compute Exposure</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isComputeHedge <em>Compute Hedge</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolumeUnit <em>Scheduled Volume Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolume <em>Scheduled Volume</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
@@ -1937,6 +1939,54 @@ public interface Slot<T extends Contract> extends UUIDObject, NamedObject, ITime
 	 * @generated
 	 */
 	void setComputeHedge(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.VolumeUnits}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scheduled Volume Unit</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see #setScheduledVolumeUnit(VolumeUnits)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ScheduledVolumeUnit()
+	 * @model required="true"
+	 * @generated
+	 */
+	VolumeUnits getScheduledVolumeUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolumeUnit <em>Scheduled Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scheduled Volume Unit</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see #getScheduledVolumeUnit()
+	 * @generated
+	 */
+	void setScheduledVolumeUnit(VolumeUnits value);
+
+	/**
+	 * Returns the value of the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scheduled Volume</em>' attribute.
+	 * @see #setScheduledVolume(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ScheduledVolume()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
+	 * @generated
+	 */
+	int getScheduledVolume();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolume <em>Scheduled Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scheduled Volume</em>' attribute.
+	 * @see #getScheduledVolume()
+	 * @generated
+	 */
+	void setScheduledVolume(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

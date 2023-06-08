@@ -5,9 +5,7 @@
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -18,7 +16,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
-import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.EnabledPositionsSequenceProviderTracker;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
@@ -62,8 +59,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 				public void run() {
 					lp.toggleShowCanals();
 					setChecked(lp.showCanals());
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
+					viewer.getGanttChart().getGanttComposite().refresh();
 				}
 			};
 			canalAction.setChecked(lp.showCanals());
@@ -77,8 +73,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 				public void run() {
 					lp.toggleShowDestinationLabels();
 					setChecked(lp.showDestinationLabels());
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
+					viewer.getGanttChart().getGanttComposite().refresh();
 				}
 			};
 			destinationLabelsAction.setChecked(lp.showDestinationLabels());
@@ -92,8 +87,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 				public void run() {
 					lp.toggleShowDays();
 					setChecked(lp.showDays());
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
+					viewer.getGanttChart().getGanttComposite().refresh();
 				}
 			};
 			showDaysOnEventsAction.setChecked(lp.showDays());

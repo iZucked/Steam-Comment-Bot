@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFormats;
@@ -17,9 +19,13 @@ public interface IReportPublisherExtension {
 	final String DEFAULT_REPORT_FILE_EXTENSION = ".json";
 
 	IReportContent publishReport(SupportedReportFormats supportedFormats, IScenarioDataProvider scenarioDataProvider, ScheduleModel scheduleModel) throws Exception;
+	
+	IReportContent publishReport(String version, IScenarioDataProvider scenarioDataProvider, ScheduleModel scheduleModel) throws Exception;
 
 	String getReportType();
 
+	List<String> getVersions();
+	
 	default String getEndpointURL() {
 		return DEFAULT_REPORT_UPLOAD_URL;
 	}
