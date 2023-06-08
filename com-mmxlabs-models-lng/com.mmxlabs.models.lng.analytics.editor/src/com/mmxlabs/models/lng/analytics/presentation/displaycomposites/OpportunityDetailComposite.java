@@ -142,6 +142,25 @@ public class OpportunityDetailComposite extends DefaultDetailComposite implement
 					}
 
 					return gd;
+				} else if (feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__DES_PURCHASE || feature == AnalyticsPackage.Literals.BUY_OPPORTUNITY__OPTIONAL) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+
+					if (!(control instanceof Label)) {
+						gd.horizontalSpan = 2;
+					} else {
+						gd.horizontalSpan = 1;
+					}
+					return gd;
+
+				} else if (feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__FOB_SALE || feature == AnalyticsPackage.Literals.SELL_OPPORTUNITY__OPTIONAL) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					if (!(control instanceof Label)) {
+						gd.horizontalSpan = 2;
+					} else {
+						gd.horizontalSpan = 1;
+					}
+					return gd;
+
 				}
 
 				// Anything else needs to fill the space.

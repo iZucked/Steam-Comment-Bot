@@ -99,4 +99,9 @@ public class SellOpportunityMaker {
 		opportunity.setDate(date);
 		return this;
 	}
+
+	public SellOpportunityMaker withOptional(boolean optional) {
+		opportunity.setOptional(optional);
+		return this;
+	}
 }
