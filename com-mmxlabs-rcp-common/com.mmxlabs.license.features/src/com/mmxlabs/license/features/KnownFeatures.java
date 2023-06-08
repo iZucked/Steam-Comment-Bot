@@ -157,6 +157,7 @@ public final class KnownFeatures {
 	 */
 	public static final String FEATURE_TRANSFER_MODEL = "features:transfer-model";
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_AGREEMENT_GROUPING = "features:transfer-model-transfer-agreement-grouping";
+	public static final String FEATURE_TRANSFER_MODEL_ALLOW_TRANSFER_WITING_ENTITY = "features:transfer-model-allow-transfer-within-entity";
 	// reserved NOT used
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_RECORD_EXPOSURE = "features:transfer-model-transfer-record-exposure";
 	/**
