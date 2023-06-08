@@ -25,12 +25,12 @@ public class DateTimeFormatsProvider {
 	private String timeStringDisplay = "HH:mm";
 
 	// Defaults are changed in constructor. Needed here to avoid Null analysis error
-	private String yearMonthStringEdit = "";
-	private String yearMonthStringDisplay = "";
-	private String dateStringEdit = "";
-	private String dateStringDisplay = "";
-	private String dateTimeStringEdit = "";
-	private String dateTimeStringDisplay = "";
+	private String dateStringEdit = "dd/MM/yyyy";
+	private String dateStringDisplay = "dd/MM/yy";
+	private String dateTimeStringEdit = "dd/MM/yyyy HH:00";
+	private String dateTimeStringDisplay = "dd/MM/yy HH:mm";
+	private String yearMonthStringEdit = MONTH_YEAR_FORMAT;
+	private String yearMonthStringDisplay = MONTH_YEAR_FORMAT;
 
 	private DateTimeFormatsProvider() {
 		switch (DMYUtil.getDayMonthYearOrder()) {
