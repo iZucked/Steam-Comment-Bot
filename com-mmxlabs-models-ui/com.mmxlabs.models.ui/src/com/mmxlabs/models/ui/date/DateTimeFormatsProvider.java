@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.ui.date;
 
-import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,32 +12,54 @@ import java.util.Locale;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import com.mmxlabs.common.time.DMYUtil;
+
 @NonNullByDefault
 public class DateTimeFormatsProvider {
 
 	public static final DateTimeFormatsProvider INSTANCE = new DateTimeFormatsProvider();
+	
+	private static final String MONTH_YEAR_FORMAT = "MM/yyyy";
 
-	private String yearMonthStringEdit = "MM/yyyy";
-	private String yearMonthStringDisplay = "MM/yyyy";
 	private String timeStringEdit = "HH:00";
 	private String timeStringDisplay = "HH:mm";
 
 	// Defaults are changed in constructor. Needed here to avoid Null analysis error
-	private String dateStringEdit = "dd/MM/yyyy";
-	private String dateStringDisplay = "dd/MM/yy";
-	private String dateTimeStringEdit = "dd/MM/yyyy HH:00";
-	private String dateTimeStringDisplay = "dd/MM/yy HH:mm";
+	private String yearMonthStringEdit = "";
+	private String yearMonthStringDisplay = "";
+	private String dateStringEdit = "";
+	private String dateStringDisplay = "";
+	private String dateTimeStringEdit = "";
+	private String dateTimeStringDisplay = "";
 
 	private DateTimeFormatsProvider() {
-		// Get the system date format and determine if system is2 month/day or day/month
-		final SimpleDateFormat sdf = new SimpleDateFormat();
-		final String pattern = sdf.toPattern();
-		final int monthIdx = pattern.indexOf('M');
-		final int dayIdx = pattern.indexOf('d');
-		if (dayIdx < monthIdx) {
-			setDefaultDayMonthFormats();
-		} else {
-			setDefaultMonthDayFormats();
+		switch (DMYUtil.getDayMonthYearOrder()) {
+		case DAY_MONTH_YEAR:
+			dateStringEdit = "dd/MM/yyyy";
+			dateStringDisplay = "dd/MM/yy";
+			dateTimeStringEdit = "dd/MM/yyyy HH:00";
+			dateTimeStringDisplay = "dd/MM/yy HH:mm";
+			yearMonthStringEdit = MONTH_YEAR_FORMAT;
+			yearMonthStringDisplay = MONTH_YEAR_FORMAT;
+			break;
+		case MONTH_DAY_YEAR:
+			dateStringEdit = "MM/dd/yyyy";
+			dateStringDisplay = "MM/dd/yy";
+			dateTimeStringEdit = "MM/dd/yyyy HH:00";
+			dateTimeStringDisplay = "MM/dd/yy HH:mm";
+			yearMonthStringEdit = MONTH_YEAR_FORMAT;
+			yearMonthStringDisplay = MONTH_YEAR_FORMAT;
+			break;
+		case YEAR_MONTH_DAY:
+			dateStringEdit = "yyyy/MM/dd";
+			dateStringDisplay = "yy/MM/dd";
+			dateTimeStringEdit = "yyyy/MM/dd HH:00";
+			dateTimeStringDisplay = "yy/MM/dd HH:mm";
+			yearMonthStringEdit = "yyyy/MM";
+			yearMonthStringDisplay = "yyyy/MM";
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -127,14 +148,15 @@ public class DateTimeFormatsProvider {
 	public void setTimeStringDisplay(final String timeStringDisplay) {
 		this.timeStringDisplay = timeStringDisplay;
 	}
-	
+
 	public DateTimeFormatter createDateStringDisplayFormatter() {
 		return DateTimeFormatter.ofPattern(dateStringDisplay);
 	}
-	
+
 	public DateTimeFormatter createDateTimeStringDisplayFormatter() {
 		return DateTimeFormatter.ofPattern(dateTimeStringDisplay);
 	}
+
 	public DateTimeFormatter createTimeStringDisplayFormatter() {
 		return DateTimeFormatter.ofPattern(timeStringDisplay);
 	}
