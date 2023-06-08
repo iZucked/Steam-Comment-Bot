@@ -157,108 +157,7 @@ public class EObjectTableViewerSortingSupport {
 	 * @return
 	 */
 	public ViewerComparator createViewerComparer() {
-		return new ViewerComparator() {
-
-			@Override
-			public void sort(Viewer viewer, Object[] elements) {
-				if (!sortOnlyOnSelect || doSort) {
-					super.sort(viewer, elements);
-				}
-			}
-
-			@Override
-			// BE for completeness -- this one's not actually used, see compare() below
-			public int category(Object object) {
-				return getCategory(object);
-			}
-
-			@Override
-			public int compare(final Viewer viewer, final Object leftObject, final Object rightObject) {
-				// BE take the categories (ie bins) into account while
-				if (categoryFunction != null) {
-					int cat1 = getCategory(leftObject);
-					int cat2 = getCategory(rightObject);
-
-					if (cat1 != cat2) {
-						return cat1 - cat2;
-					}
-				}
-				// BE
-
-				// If there is a fixed sort order use that.
-				if (fixedSortOrder != null) {
-					final int idx1 = fixedSortOrder.indexOf(leftObject);
-					final int idx2 = fixedSortOrder.indexOf(rightObject);
-					return idx1 - idx2;
-				}
-
-				final Iterator<GridColumn> iterator = getColumnSortOrder().iterator();
-				int comparison = 0;
-				while (iterator.hasNext() && (comparison == 0)) {
-					final GridColumn column = iterator.next();
-
-					// additional text rendering information and comparison information
-					final IComparableProvider renderer = (IComparableProvider) column.getData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER);
-
-					final IEMFPath sortPath = (IEMFPath) column.getData(EObjectTableViewer.COLUMN_SORT_PATH);
-					Object leftOwner = null;
-					Object rightOwner = null;
-
-					if (sortPath != null) {
-						leftOwner = sortPath.get((EObject) leftObject);
-						rightOwner = sortPath.get((EObject) rightObject);
-					} else {
-						Object data = column.getData(EObjectTableViewer.COLUMN_PATH);
-						if (data instanceof EMFPath) {
-							final EMFPath path = (EMFPath) data;
-							leftOwner = path.get((EObject) leftObject);
-							rightOwner = path.get((EObject) rightObject);
-						} else if (data instanceof EMFPath[]) {
-
-							leftOwner = null;
-							rightOwner = null;
-
-							EMFPath[] paths = (EMFPath[]) data;
-							for (final EMFPath p : paths) {
-								final Object x = p.get((EObject) leftObject);
-								if (x != null) {
-									leftOwner = x;
-									break;
-								}
-							}
-
-							for (final EMFPath p : paths) {
-								final Object x = p.get((EObject) rightObject);
-								if (x != null) {
-									rightOwner = x;
-									break;
-								}
-							}
-						} else {
-							leftOwner = leftObject;
-							rightOwner = rightObject;
-
-						}
-
-					}
-					final Comparable<Object> left = renderer.getComparable(leftOwner);
-					final Comparable<Object> right = renderer.getComparable(rightOwner);
-
-					if (left == right) {
-						continue;
-					}
-
-					if (left == null) {
-						return -1;
-					} else if (right == null) {
-						return 1;
-					} else {
-						comparison = left.compareTo(right);
-					}
-				}
-				return isSortDescending() ? -comparison : comparison;
-			}
-		};
+		return new EObjectTableViewerComparator();
 	}
 
 	public boolean isSortDescending() {
@@ -271,5 +170,108 @@ public class EObjectTableViewerSortingSupport {
 
 	public void setSortDescending(boolean sortDescending) {
 		this.sortDescending = sortDescending;
+	}
+	
+	public class EObjectTableViewerComparator extends ViewerComparator {
+		@Override
+		public void sort(Viewer viewer, Object[] elements) {
+			if (!sortOnlyOnSelect || doSort) {
+				super.sort(viewer, elements);
+			}
+		}
+
+		@Override
+		// BE for completeness -- this one's not actually used, see compare() below
+		public int category(Object object) {
+			return getCategory(object);
+		}
+
+		@Override
+		public int compare(final Viewer viewer, final Object leftObject, final Object rightObject) {
+			// BE take the categories (ie bins) into account while
+			if (categoryFunction != null) {
+				int cat1 = getCategory(leftObject);
+				int cat2 = getCategory(rightObject);
+
+				if (cat1 != cat2) {
+					return cat1 - cat2;
+				}
+			}
+			// BE
+
+			// If there is a fixed sort order use that.
+			if (fixedSortOrder != null) {
+				final int idx1 = fixedSortOrder.indexOf(leftObject);
+				final int idx2 = fixedSortOrder.indexOf(rightObject);
+				return idx1 - idx2;
+			}
+
+			final Iterator<GridColumn> iterator = getColumnSortOrder().iterator();
+			int comparison = 0;
+			while (iterator.hasNext() && (comparison == 0)) {
+				final GridColumn column = iterator.next();
+
+				// additional text rendering information and comparison information
+				final IComparableProvider renderer = (IComparableProvider) column.getData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER);
+
+				final IEMFPath sortPath = (IEMFPath) column.getData(EObjectTableViewer.COLUMN_SORT_PATH);
+				Object leftOwner = null;
+				Object rightOwner = null;
+
+				if (sortPath != null) {
+					leftOwner = sortPath.get((EObject) leftObject);
+					rightOwner = sortPath.get((EObject) rightObject);
+				} else {
+					Object data = column.getData(EObjectTableViewer.COLUMN_PATH);
+					if (data instanceof EMFPath) {
+						final EMFPath path = (EMFPath) data;
+						leftOwner = path.get((EObject) leftObject);
+						rightOwner = path.get((EObject) rightObject);
+					} else if (data instanceof EMFPath[]) {
+
+						leftOwner = null;
+						rightOwner = null;
+
+						EMFPath[] paths = (EMFPath[]) data;
+						for (final EMFPath p : paths) {
+							final Object x = p.get((EObject) leftObject);
+							if (x != null) {
+								leftOwner = x;
+								break;
+							}
+						}
+
+						for (final EMFPath p : paths) {
+							final Object x = p.get((EObject) rightObject);
+							if (x != null) {
+								rightOwner = x;
+								break;
+							}
+						}
+					} else {
+						leftOwner = leftObject;
+						rightOwner = rightObject;
+
+					}
+
+				}
+				final Comparable<Object> left = renderer.getComparable(leftOwner);
+				final Comparable<Object> right = renderer.getComparable(rightOwner);
+
+				if (left == right) {
+					continue;
+				}
+
+				if (left == null) {
+					return -1;
+				} else if (right == null) {
+					return 1;
+				} else {
+					comparison = left.compareTo(right);
+				}
+			}
+			return isSortDescending() ? -comparison : comparison;
+		}
+		
 	}
 }
