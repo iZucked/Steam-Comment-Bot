@@ -18,7 +18,7 @@ public class TransferRecordComponentHelper extends DefaultComponentHelper {
 	public TransferRecordComponentHelper() {
 		super(TransfersPackage.Literals.TRANSFER_RECORD);
 		this.includeEOperations = true;
-		//TODO: check layout for the feature:
+
 		addEditor(TransfersPackage.Literals.TRANSFER_RECORD___GET_FROM_ENTITY, topClass -> {
 			return new SimpleOperationInlineEditor("From", TransfersPackage.Literals.TRANSFER_RECORD___GET_FROM_ENTITY) {
 				@Override
