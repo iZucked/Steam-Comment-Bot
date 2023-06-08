@@ -7,10 +7,12 @@ package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +97,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -492,6 +495,58 @@ public final class SharedScenarioDataUtils {
 				});
 			};
 
+		}
+
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPositionListPortGroupsUpdater(final String feMeiPortGroupName, final String europePortGroupName) {
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						final PortModel portModel = ScenarioModelUtil.getPortModel(target);
+						
+						final String[] europeCountries = { "albania", "andorra", "austria", "belarus", "belgium", "bosnia and herzegovina", "bulgaria", "canary is.", "croatia", "cyprus", "czech republic",
+								"denmark", "estonia", "finland", "france", "germany", "georgia", "gibraltar", "greece", "hungary", "iceland", "ireland", "italy", "kosovo", "latvia", "liechtenstein",
+								"lithuania", "luxembourg", "malta", "moldova", "monaco", "montenegro", "netherlands", "republic of macedonia", "norway", "poland", "portugal", "romania", "san marino",
+								"serbia", "slovakia", "slovenia", "spain", "sweden", "switzerland", "turkey", "ukraine", "united kingdom", "vatican city", };
+						final Set<String> europeCountriesSet = new HashSet<>(Arrays.asList(europeCountries));
+
+						final String[] feMeiCountries = { "bangladesh", "brunei darussalam", "china", "india", "indonesia", "iran", "iraq", "japan", "jordan", "kuwait", "lebanon", "malaysia", "oman",
+								"pakistan", "papua new guinea", "philippines", "qatar", "singapore", "south korea", "taiwan", "thailand", "united arab emirates", "vietnam", "yemen", };
+						final Set<String> feMeiCountriesSet = new HashSet<>(Arrays.asList(feMeiCountries));
+
+						final List<PortCountryGroup> feMeiPortCountries = portModel.getPortCountryGroups().stream().filter(pcg -> feMeiCountriesSet.contains(pcg.getName().toLowerCase())).toList();
+						final List<PortCountryGroup> europePortCountries = portModel.getPortCountryGroups().stream().filter(pcg -> europeCountriesSet.contains(pcg.getName().toLowerCase())).toList();
+
+						final BiConsumer<String, List<PortCountryGroup>> updateWithPortGroupNameAndCountryGroups = (name, ports) -> {
+							Optional<PortGroup> optExistingPortGroup = portModel.getPortGroups().stream().filter(pg -> name.equalsIgnoreCase(pg.getName())).findAny();
+							if (optExistingPortGroup.isPresent()) {
+								final PortGroup existingPortGroup = optExistingPortGroup.get();
+								if (!existingPortGroup.getContents().isEmpty()) {
+									final List<APortSet<Port>> portsToRemove = new ArrayList(existingPortGroup.getContents());
+									appendAndExecute(RemoveCommand.create(target.getEditingDomain(), existingPortGroup, PortPackage.eINSTANCE.getPortGroup_Contents(), portsToRemove));
+								}
+								if (!ports.isEmpty()) {
+									appendAndExecute(AddCommand.create(target.getEditingDomain(), existingPortGroup, PortPackage.eINSTANCE.getPortGroup_Contents(), ports));
+								}
+							} else {
+								final PortGroup newPortGroup = PortFactory.eINSTANCE.createPortGroup();
+								newPortGroup.setName(name);
+								newPortGroup.getContents().addAll(ports);
+								appendAndExecute(AddCommand.create(target.getEditingDomain(), portModel, PortPackage.eINSTANCE.getPortModel_PortGroups(), newPortGroup));
+							}
+						};
+						
+						updateWithPortGroupNameAndCountryGroups.accept(feMeiPortGroupName, feMeiPortCountries);
+						updateWithPortGroupNameAndCountryGroups.accept(europePortGroupName, europePortCountries);
+					}
+				});
+			};
 		}
 
 		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createSuezTariffRebateUpdater(final String portGroupsJSON, final String rebatesJSON) {

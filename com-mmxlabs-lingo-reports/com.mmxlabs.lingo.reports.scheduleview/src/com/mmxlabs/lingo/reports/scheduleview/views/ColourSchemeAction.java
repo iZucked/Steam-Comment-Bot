@@ -42,7 +42,7 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 class ColourSchemeAction extends SchedulerViewAction {
-	
+
 	public ColourSchemeAction(final SchedulerView schedulerView, final EMFScheduleLabelProvider lp, final GanttChartViewer viewer) {
 		super("Label", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Label, IconMode.Enabled));
@@ -77,8 +77,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 				public void run() {
 					lp.toggleShowCanals();
 					setChecked(lp.showCanals());
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
+					viewer.getGanttChart().getGanttComposite().refresh();
 				}
 			};
 			canalAction.setChecked(lp.showCanals());
@@ -92,8 +91,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 				public void run() {
 					lp.toggleShowDestinationLabels();
 					setChecked(lp.showDestinationLabels());
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
+					viewer.getGanttChart().getGanttComposite().refresh();
 				}
 			};
 			destinationLabelsAction.setChecked(lp.showDestinationLabels());
@@ -107,8 +105,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 				public void run() {
 					lp.toggleShowDays();
 					setChecked(lp.showDays());
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
+					viewer.getGanttChart().getGanttComposite().refresh();
 				}
 			};
 			showDaysOnEventsAction.setChecked(lp.showDays());
@@ -135,9 +132,9 @@ class ColourSchemeAction extends SchedulerViewAction {
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(toggleShowNominalsByDefaultAction);
 			actionContributionItem.fill(menu, -1);
 		}
-		
+
 		final var enabledTracker = schedulerView.contentProvider.enabledPSPTracker;
-		for (ISchedulePositionsSequenceProviderExtension ext: schedulerView.contentProvider.positionsSequenceProviderExtensions) {
+		for (ISchedulePositionsSequenceProviderExtension ext : schedulerView.contentProvider.positionsSequenceProviderExtensions) {
 			if (ext.showMenuItem().equals("true")) {
 				ISchedulePositionsSequenceProvider provider = ext.createInstance();
 				final Action toggleShowPartition = new Action(ext.getName(), SWT.CHECK) {
@@ -227,18 +224,11 @@ class ColourSchemeAction extends SchedulerViewAction {
 							public void run() {
 								schedulerView.toggleSelectedContract(pair.getFirst());
 								final Set<Contract> selectedContracts = schedulerView.getSelectedContracts();
-//								final Predicate<NonShippedSequence> predicate = seq -> pair.getSecond().contains(seq.getVessel());
-								final Predicate<NonShippedSequence> predicate = seq -> {
-									return selectedContracts.stream() //
-											.anyMatch(contract -> {
-												final Set<Vessel> vessels = fobSalesContractVesselMap.get(contract);
-												if (vessels != null) {
-													return vessels.contains(seq.getVessel());
-												}
-												return false;
-											});
-//									pair.getSecond().contains(seq.getVessel());
-								};
+								final Predicate<NonShippedSequence> predicate = seq -> selectedContracts.stream() //
+										.anyMatch(contract -> {
+											final Set<Vessel> vessels = fobSalesContractVesselMap.get(contract);
+											return vessels != null && vessels.contains(seq.getVessel());
+										});
 								final Collection<@NonNull Predicate<NonShippedSequence>> predicates = Collections.singleton(predicate);
 								schedulerView.replaceFobRotations(predicates);
 								schedulerView.contentProvider.replaceFobRotations(predicates);

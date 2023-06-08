@@ -76,6 +76,8 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 	private EObjectTableViewerFilterSupport filterSupport;
 	protected FilterField filterField;
 
+	protected EObjectTableViewerSortingSupport sortingSupport;
+
 	protected ColumnInfo columnInfo;
 	
 	protected EventHandler todayHandler;
@@ -231,8 +233,6 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		}
 
 	};
-
-	private EObjectTableViewerSortingSupport sortingSupport;
 
 	@Override
 	public void setFocus() {
