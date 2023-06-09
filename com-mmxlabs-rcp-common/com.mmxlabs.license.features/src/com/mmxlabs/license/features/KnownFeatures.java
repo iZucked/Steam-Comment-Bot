@@ -146,6 +146,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_PREFERRED_FORMULAE = "features:preferred-formulae";
 	
 	public static final String FEATURE_BUSINESS_UNITS = "features:business-units";
+	
+	public static final String FEATURE_THIRD_PARTY_ENTITIES = "features:third-party-entities";
 
 	/**
 	 * Scenario repair features
