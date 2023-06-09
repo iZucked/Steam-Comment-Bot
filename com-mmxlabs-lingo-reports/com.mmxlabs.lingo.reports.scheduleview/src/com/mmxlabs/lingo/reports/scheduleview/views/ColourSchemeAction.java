@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -177,24 +178,32 @@ class ColourSchemeAction extends SchedulerViewAction {
 
 				@Override
 				protected void populate(Menu menu) {
-					final Action off = new Action("off") {
+					final Action off = new Action("off", IAction.AS_CHECK_BOX) {
 						@Override
 						public void run() {
-							schedulerView.clearFobRotations();
-							schedulerView.contentProvider.clearFobRotations();
-							schedulerView.redraw();
-							schedulerView.refresh();
+							if (schedulerView.getFobRotationOptionSelection() != ENonShippedRotationSelection.OFF) {
+								schedulerView.clearFobRotations();
+								schedulerView.contentProvider.clearFobRotations();
+								schedulerView.redraw();
+								schedulerView.refresh();
+								schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.OFF);
+							}
 						}
 					};
-					final Action all = new Action("all") {
+					final Action all = new Action("all", IAction.AS_CHECK_BOX) {
 						@Override
 						public void run() {
-							final Collection<Predicate<NonShippedSequence>> predicates = Collections.singleton(sequence -> true);
-							schedulerView.clearFobRotations();
-							schedulerView.replaceFobRotations(predicates);
-							schedulerView.contentProvider.replaceFobRotations(predicates);
-							schedulerView.redraw();
-							schedulerView.refresh();
+							if (isChecked()) {
+								final Collection<Predicate<NonShippedSequence>> predicates = Collections.singleton(sequence -> true);
+								schedulerView.clearFobRotations();
+								schedulerView.replaceFobRotations(predicates);
+								schedulerView.contentProvider.replaceFobRotations(predicates);
+								schedulerView.redraw();
+								schedulerView.refresh();
+								schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.ALL);
+							} else {
+								off.run();
+							}
 						}
 					};
 					addActionToMenu(off, menu);
@@ -218,11 +227,16 @@ class ColourSchemeAction extends SchedulerViewAction {
 							.sorted((e1, e2) -> e1.getKey().getName().compareTo(e2.getKey().getName())) //
 							.map(e -> Pair.of(e.getKey(), e.getValue())) //
 							.toList();
+					final List<Action> selectedContractActions = new LinkedList<>();
+					final Set<Contract> selectedContracts = schedulerView.getSelectedContracts();
 					for (final Pair<SalesContract, Set<Vessel>> pair : sortedSalesContracts) {
-						final Action nextAction = new Action(pair.getFirst().getName()) {
+						final Action nextAction = new Action(pair.getFirst().getName(), IAction.AS_CHECK_BOX) {
 							@Override
 							public void run() {
-								schedulerView.toggleSelectedContract(pair.getFirst());
+								boolean newlyChecked = schedulerView.toggleSelectedContract(pair.getFirst());
+								if (newlyChecked) {
+									schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.POSSIBLY_CONTRACT);
+								}
 								final Set<Contract> selectedContracts = schedulerView.getSelectedContracts();
 								final Predicate<NonShippedSequence> predicate = seq -> selectedContracts.stream() //
 										.anyMatch(contract -> {
@@ -236,7 +250,22 @@ class ColourSchemeAction extends SchedulerViewAction {
 								schedulerView.refresh();
 							}
 						};
+						if (selectedContracts.contains(pair.getFirst())) {
+							selectedContractActions.add(nextAction);
+						}
 						addActionToMenu(nextAction, menu);
+					}
+					if (schedulerView.getFobRotationOptionSelection() == ENonShippedRotationSelection.OFF) {
+						off.setChecked(true);
+					} else if (schedulerView.getFobRotationOptionSelection() == ENonShippedRotationSelection.ALL) {
+						all.setChecked(true);
+					} else if (schedulerView.getFobRotationOptionSelection() == ENonShippedRotationSelection.POSSIBLY_CONTRACT) {
+						if (selectedContractActions.isEmpty()) {
+							schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.OFF);
+							off.setChecked(true);
+						} else {
+							selectedContractActions.forEach(a -> a.setChecked(true));
+						}
 					}
 				}
 			};

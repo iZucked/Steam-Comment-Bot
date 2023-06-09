@@ -199,8 +199,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 	boolean showNominalsByDefault = false;
 
-	private final Set<Contract> fobRotationSelectedContracts = new HashSet<>();
-	private final Set<Predicate<NonShippedSequence>> fobRotationsToShow = new HashSet<>();
+	private @NonNull ENonShippedRotationSelection rotationSelection = ENonShippedRotationSelection.OFF;
+	private final @NonNull Set<Contract> fobRotationSelectedContracts = new HashSet<>();
+	private final @NonNull Set<Predicate<NonShippedSequence>> fobRotationsToShow = new HashSet<>();
 
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
@@ -1182,6 +1183,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 				final boolean needFit = viewer.getInput() == null;
 
+				SchedulerView.this.clearFobRotations();
+				if (viewer.getContentProvider() instanceof EMFScheduleContentProvider emfScheduleContentProvider) {
+					emfScheduleContentProvider.clearFobRotations();
+				}
 				viewer.setInput(input);
 
 				if ((input != null) && needFit) {
@@ -1421,6 +1426,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		public void selectedDataProviderChanged(final ISelectedDataProvider selectedDataProvider, final boolean block) {
 			ViewerHelper.runIfViewerValid(viewer, block, () -> {
 				SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
+				SchedulerView.this.clearFobRotations();
 
 				final ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 
@@ -1623,7 +1629,16 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		return fobRotationSelectedContracts;
 	}
 
+	public ENonShippedRotationSelection getFobRotationOptionSelection() {
+		return rotationSelection;
+	}
+
+	public void setFobRotationOptionSelection(final @NonNull ENonShippedRotationSelection rotationSelection) {
+		this.rotationSelection = rotationSelection;
+	}
+
 	public void clearFobRotations() {
+		setFobRotationOptionSelection(ENonShippedRotationSelection.OFF);
 		fobRotationsToShow.clear();
 		fobRotationSelectedContracts.clear();
 	}
