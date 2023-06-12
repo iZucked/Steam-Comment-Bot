@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.adp.ext.impl;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
@@ -18,7 +20,7 @@ public class VesselUsageDistributionProfileConstraintFactory implements IProfile
 
 	@Override
 	public boolean validFor(ContractProfile<?, ?> profile) {
-		return profile instanceof SalesContractProfile;
+		return LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_VESSEL_USAGE_CONSTRAINT) && profile instanceof SalesContractProfile;
 	}
 
 	@Override

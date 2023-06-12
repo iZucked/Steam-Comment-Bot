@@ -115,8 +115,6 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_NOMINATIONS = "features:nominations";
 
-	
-
 	public static final String FEATURE_PURGE = "features:purge";
 
 	public static final String FEATURE_DATAHUB_BASECASE_ARCHIVE = "features:datahub-basecase-archive";
@@ -132,6 +130,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY = "features:adp-profile-constraints-summary";
 
 	public static final String FEATURE_ADP_SPACING_RATEABILITY = "features:adp-spacing-rateability";
+
+	public static final String FEATURE_ADP_VESSEL_USAGE_CONSTRAINT = "features:adp-vessel-usage-constraint";
 
 	public static final String FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS = "features:grouped-optional-slots-constraints";
 
