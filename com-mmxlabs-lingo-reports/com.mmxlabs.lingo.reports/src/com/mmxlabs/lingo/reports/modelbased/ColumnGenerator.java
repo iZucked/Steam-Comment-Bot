@@ -35,6 +35,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortFunction;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
@@ -105,7 +106,7 @@ public class ColumnGenerator {
 				if (format != null) {
 					dtf = DateTimeFormatter.ofPattern(format.value());
 				} else {
-					dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					dtf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
 				}
 
 				formatter = o -> {
