@@ -7,7 +7,6 @@
  */
 package com.mmxlabs.models.lng.adp.presentation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -50,14 +49,11 @@ import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.VesselUsageDistribution;
 import com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselGroup;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.fleet.ui.editorpart.MultipleVesselReferenceManipulator;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.ColumnLabelProviderFactory;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -67,7 +63,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerEditingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.models.ui.tabular.manipulators.MultiAttributeInlineEditor;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -75,8 +70,7 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 /**
- * Detail composite for vessel state attributes; adds an additional bit to the
- * bottom of the composite which contains a fuel curve table.
+ * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
  * 
  * @author hinton
  * 
@@ -177,21 +171,13 @@ public class VesselUsageProfileConstraintDetailComposite extends Composite imple
 		slotsColumn.getColumn().setText("Slots");
 
 		{
-			rangeColumn.setEditingSupport(
-					new GridViewerEditingSupport(tableViewer, table, () -> new MultiAttributeInlineEditor(ADPPackage.Literals.VESSEL_USAGE_DISTRIBUTION__VESSELS, commandHandler, a -> {
-						return String.format(a instanceof VesselGroup ? "[G] %s" : "[V] %s", ((NamedObject) a).getName());
-					}, () -> {
-						final FleetModel fleetModel = ScenarioModelUtil.getFleetModel((LNGScenarioModel) scenarioModel);
-						final List<Object> vesselsToAdd = new ArrayList<>();
-						vesselsToAdd.addAll(fleetModel.getVessels());
-						vesselsToAdd.addAll(fleetModel.getVesselGroups());
-						return vesselsToAdd;
-					})));
+			rangeColumn.setEditingSupport(new GridViewerEditingSupport(tableViewer, table, () -> new MultipleVesselReferenceManipulator(ADPPackage.eINSTANCE.getVesselUsageDistribution_Vessels(),
+					commandHandler.getReferenceValueProviderProvider(), commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name())));
 		}
 		// Use hyphen for consecutive months, comma otherwise
 		rangeColumn.setLabelProvider(ColumnLabelProviderFactory.make(VesselUsageDistribution.class, "", vesselDistribution -> {
 			List<AVesselSet<Vessel>> vessels = vesselDistribution.getVessels();
-			if(vesselDistribution.getVessels().isEmpty()) {
+			if (vesselDistribution.getVessels().isEmpty()) {
 				return "";
 			}
 			StringBuilder builder = new StringBuilder();
@@ -337,6 +323,7 @@ public class VesselUsageProfileConstraintDetailComposite extends Composite imple
 	public void displayValidationStatus(final IStatus status) {
 		statusProvider.fireStatusChanged(status);
 	}
+
 	@Override
 	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
 	}
