@@ -36,6 +36,8 @@
       <genFeatures createChild="false" propertyDescription="Optional name for the opportunity to override the name generated from select attributes"
           ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/desPurchase"/>
+      <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/optional"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/port"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/date"/>
@@ -58,6 +60,8 @@
       <genFeatures createChild="false" propertyDescription="Optional name for the opportunity to override the name generated from select attributes"
           ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/fobSale"/>
+      <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/optional"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/port"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/date"/>

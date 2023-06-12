@@ -105,6 +105,7 @@ public class SellOptionsContextMenuManager implements MenuDetectListener {
 					mgr.add(new RunnableAction("Copy", CommonImages.getImageDescriptor(IconPaths.Copy, IconMode.Enabled), () -> {
 						final SellOpportunity newSell = AnalyticsFactory.eINSTANCE.createSellOpportunity();
 						newSell.setFobSale(slot.isFOBSale());
+						newSell.setOptional(slot.isOptional());
 						newSell.setPort(slot.getPort());
 						newSell.setDate(slot.getWindowStart());
 						newSell.setSpecifyWindow(true);

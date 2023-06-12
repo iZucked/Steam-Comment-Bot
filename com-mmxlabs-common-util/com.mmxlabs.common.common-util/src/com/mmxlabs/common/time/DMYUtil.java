@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.common.time;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
@@ -36,7 +37,7 @@ public class DMYUtil {
 	}
 
 	public static DayMonthOrder getDayMonthOrder() {
-		return getDayMonthOrder(Locale.getDefault());
+		return getDayMonthOrder(Locale.getDefault(Locale.Category.FORMAT));
 	}
 
 	public static DayMonthOrder getDayMonthOrder(final Locale locale) {
@@ -51,7 +52,7 @@ public class DMYUtil {
 	}
 
 	public static DayMonthYearOrder getDayMonthYearOrder() {
-		return getDayMonthYearOrder(Locale.getDefault());
+		return getDayMonthYearOrder(Locale.getDefault(Locale.Category.FORMAT));
 	}
 
 	public static DayMonthYearOrder getDayMonthYearOrder(final Locale locale) {

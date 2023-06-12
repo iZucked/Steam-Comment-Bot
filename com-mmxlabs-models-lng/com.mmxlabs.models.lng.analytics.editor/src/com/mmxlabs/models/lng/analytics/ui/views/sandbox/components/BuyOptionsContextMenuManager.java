@@ -99,6 +99,7 @@ public class BuyOptionsContextMenuManager implements MenuDetectListener {
 					mgr.add(new RunnableAction("Copy", CommonImages.getImageDescriptor(IconPaths.Copy, IconMode.Enabled), () -> {
 						final BuyOpportunity newBuy = AnalyticsFactory.eINSTANCE.createBuyOpportunity();
 						newBuy.setDesPurchase(slot.isDESPurchase());
+						newBuy.setOptional(slot.isOptional());
 						newBuy.setPort(slot.getPort());
 						newBuy.setDate(slot.getWindowStart());
 						newBuy.setSpecifyWindow(true);
