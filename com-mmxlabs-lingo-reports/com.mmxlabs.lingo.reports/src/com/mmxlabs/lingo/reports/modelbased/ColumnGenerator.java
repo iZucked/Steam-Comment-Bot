@@ -106,7 +106,7 @@ public class ColumnGenerator {
 				if (format != null) {
 					dtf = DateTimeFormatter.ofPattern(format.value());
 				} else {
-					dtf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
+					dtf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringEdit());
 				}
 
 				formatter = o -> {
