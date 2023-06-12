@@ -330,13 +330,22 @@ s	 * <!-- end-user-doc -->
 	int BUY_OPPORTUNITY__DES_PURCHASE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int BUY_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -345,7 +354,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -354,7 +363,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int BUY_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -363,7 +372,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -372,7 +381,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -381,7 +390,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CV = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int BUY_OPPORTUNITY__CV = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -390,7 +399,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -399,7 +408,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
@@ -408,7 +417,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
@@ -417,7 +426,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -426,7 +435,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
@@ -435,7 +444,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
@@ -444,7 +453,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int BUY_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -453,7 +462,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int BUY_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
@@ -462,7 +471,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
@@ -471,7 +480,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -510,13 +519,22 @@ s	 * <!-- end-user-doc -->
 	int SELL_OPPORTUNITY__FOB_SALE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SELL_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -525,7 +543,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -534,7 +552,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SELL_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -543,7 +561,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -552,7 +570,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -561,7 +579,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -570,7 +588,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
@@ -579,7 +597,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
@@ -588,7 +606,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -597,7 +615,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
@@ -606,7 +624,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
@@ -615,7 +633,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int SELL_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -624,7 +642,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int SELL_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
@@ -633,7 +651,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The number of structural features of the '<em>Sell Opportunity</em>' class.
@@ -642,7 +660,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
@@ -6223,6 +6241,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBuyOpportunity_DesPurchase();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#isOptional <em>Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optional</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#isOptional()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_Optional();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6418,6 +6447,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getSellOpportunity_FobSale();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isOptional <em>Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optional</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#isOptional()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_Optional();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPort <em>Port</em>}'.
@@ -10159,6 +10199,14 @@ s	 * <!-- end-user-doc -->
 		EAttribute BUY_OPPORTUNITY__DES_PURCHASE = eINSTANCE.getBuyOpportunity_DesPurchase();
 
 		/**
+		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__OPTIONAL = eINSTANCE.getBuyOpportunity_Optional();
+
+		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10303,6 +10351,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SELL_OPPORTUNITY__FOB_SALE = eINSTANCE.getSellOpportunity_FobSale();
+
+		/**
+		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__OPTIONAL = eINSTANCE.getSellOpportunity_Optional();
 
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.

@@ -104,4 +104,9 @@ public class BuyOpportunityMaker {
 		opportunity.setDate(date);
 		return this;
 	}
+	
+	public BuyOpportunityMaker withOptional(boolean optional) {
+		opportunity.setOptional(optional);
+		return this;
+	}
 }

@@ -18,11 +18,17 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -33,7 +39,79 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof BaseCase baseCase) {
+		if (target instanceof final BaseCase baseCase) {
+			// Break-even check in optimise mode
+			if (extraContext.getContainer(baseCase) instanceof final OptionAnalysisModel model && model.getMode() == SandboxModeConstants.MODE_OPTIMISE) {
+				final Set<Object> seenSlots = new HashSet<>();
+				for (final BaseCaseRow row : baseCase.getBaseCase()) {
+					if (row.getBuyOption() instanceof final BuyOpportunity buy) {
+						final String e = buy.getPriceExpression();
+						if (e != null && e.contains("?")) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - Cannot optimise with a break-even position"));
+							deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+							statuses.add(deco);
+						}
+					}
+					if (row.getBuyOption() instanceof final BuyReference buy) {
+						final String e = buy.getSlot() == null ? null : buy.getSlot().getPriceExpression();
+						if (e != null && e.contains("?")) {
+							seenSlots.add(buy.getSlot());
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - Cannot optimise with a break-even position"));
+							deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+							statuses.add(deco);
+						}
+					}
+					if (row.getSellOption() instanceof final SellOpportunity sell) {
+						final String e = sell.getPriceExpression();
+						if (e != null && e.contains("?")) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - Cannot optimise with a break-even position"));
+							deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+							statuses.add(deco);
+						}
+					}
+					if (row.getSellOption() instanceof final SellReference sell) {
+						final String e = sell.getSlot() == null ? null : sell.getSlot().getPriceExpression();
+						if (e != null && e.contains("?")) {
+							seenSlots.add(sell.getSlot());
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - Cannot optimise with a break-even position"));
+							deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+							statuses.add(deco);
+						}
+					}
+				}
+				// Also check the base case
+				if (model.getBaseCase().isKeepExistingScenario()) {
+					final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(extraContext.getScenarioDataProvider());
+					for (final var s : cargoModel.getLoadSlots()) {
+						if (seenSlots.contains(s)) {
+							continue;
+						}
+						final String e = s.getPriceExpression();
+						if (e != null && e.contains("?")) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - Cannot optimise with a break-even position (" + s.getName() + ") from base case"));
+							deco.addEObjectAndFeature(baseCase, AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO);
+							statuses.add(deco);
+						}
+					}
+					for (final var s : cargoModel.getDischargeSlots()) {
+						if (seenSlots.contains(s)) {
+							continue;
+						}
+						final String e = s.getPriceExpression();
+						if (e != null && e.contains("?")) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - Cannot optimise with a break-even position (" + s.getName() + ")  from base case"));
+							deco.addEObjectAndFeature(baseCase, AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO);
+							statuses.add(deco);
+						}
+					}
+				}
+			}
 
 			// Check for duplicated existing slots.
 			{
@@ -73,12 +151,12 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 
 			// Check there is at least one optioniser target
 			boolean optioniserMode = false;
-			if (extraContext.getContainer(baseCase) instanceof OptionAnalysisModel model) {				
+			if (extraContext.getContainer(baseCase) instanceof final OptionAnalysisModel model) {
 				optioniserMode = model.getMode() == SandboxModeConstants.MODE_OPTIONISE;
 			}
 			if (optioniserMode) {
 				int optioniseTargetsFound = 0;
-				for (BaseCaseRow bcr : baseCase.getBaseCase()) {
+				for (final BaseCaseRow bcr : baseCase.getBaseCase()) {
 					if (bcr.isOptionise()) {
 						if (bcr.getBuyOption() != null && !AnalyticsBuilder.isSpot(bcr.getBuyOption())) {
 							optioniseTargetsFound++;
@@ -94,7 +172,7 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 				if (optioniseTargetsFound == 0) {
 					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - optionise mode needs a target"));
 					deco.addEObjectAndFeature(baseCase, AnalyticsPackage.Literals.BASE_CASE__BASE_CASE);
-					for (BaseCaseRow row : baseCase.getBaseCase()) {
+					for (final BaseCaseRow row : baseCase.getBaseCase()) {
 						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONISE);
 					}
 					statuses.add(deco);

@@ -147,6 +147,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_PREFERRED_FORMULAE = "features:preferred-formulae";
 
 	public static final String FEATURE_BUSINESS_UNITS = "features:business-units";
+	
+	public static final String FEATURE_THIRD_PARTY_ENTITIES = "features:third-party-entities";
 
 	public static final String FEATURE_NON_SHIPPED_FOB_ROTATIONS = "features:non-shipped-fob-rotations";
 
@@ -160,6 +162,7 @@ public final class KnownFeatures {
 	 */
 	public static final String FEATURE_TRANSFER_MODEL = "features:transfer-model";
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_AGREEMENT_GROUPING = "features:transfer-model-transfer-agreement-grouping";
+	public static final String FEATURE_TRANSFER_MODEL_ALLOW_TRANSFER_WITING_ENTITY = "features:transfer-model-allow-transfer-within-entity";
 	// reserved NOT used
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_RECORD_EXPOSURE = "features:transfer-model-transfer-record-exposure";
 	/**

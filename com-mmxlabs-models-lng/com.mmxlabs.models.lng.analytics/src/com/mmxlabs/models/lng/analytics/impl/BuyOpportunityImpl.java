@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#isDesPurchase <em>Des Purchase</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl#getDate <em>Date</em>}</li>
@@ -107,6 +108,26 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 	 * @ordered
 	 */
 	protected boolean desPurchase = DES_PURCHASE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OPTIONAL_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean optional = OPTIONAL_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -427,6 +448,29 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 		desPurchase = newDesPurchase;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE, oldDesPurchase, desPurchase));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isOptional() {
+		return optional;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOptional(boolean newOptional) {
+		boolean oldOptional = optional;
+		optional = newOptional;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__OPTIONAL, oldOptional, optional));
 	}
 
 	/**
@@ -914,6 +958,8 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 				return getName();
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				return isDesPurchase();
+			case AnalyticsPackage.BUY_OPPORTUNITY__OPTIONAL:
+				return isOptional();
 			case AnalyticsPackage.BUY_OPPORTUNITY__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -965,6 +1011,9 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				setDesPurchase((Boolean)newValue);
+				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__OPTIONAL:
+				setOptional((Boolean)newValue);
 				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__PORT:
 				setPort((Port)newValue);
@@ -1029,6 +1078,9 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				setDesPurchase(DES_PURCHASE_EDEFAULT);
 				return;
+			case AnalyticsPackage.BUY_OPPORTUNITY__OPTIONAL:
+				setOptional(OPTIONAL_EDEFAULT);
+				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__PORT:
 				setPort((Port)null);
 				return;
@@ -1090,6 +1142,8 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 				return isSetName();
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
 				return desPurchase != DES_PURCHASE_EDEFAULT;
+			case AnalyticsPackage.BUY_OPPORTUNITY__OPTIONAL:
+				return optional != OPTIONAL_EDEFAULT;
 			case AnalyticsPackage.BUY_OPPORTUNITY__PORT:
 				return port != null;
 			case AnalyticsPackage.BUY_OPPORTUNITY__CONTRACT:
@@ -1138,6 +1192,8 @@ public class BuyOpportunityImpl extends UUIDObjectImpl implements BuyOpportunity
 		if (nameESet) result.append(name); else result.append("<unset>");
 		result.append(", desPurchase: ");
 		result.append(desPurchase);
+		result.append(", optional: ");
+		result.append(optional);
 		result.append(", date: ");
 		result.append(date);
 		result.append(", priceExpression: ");

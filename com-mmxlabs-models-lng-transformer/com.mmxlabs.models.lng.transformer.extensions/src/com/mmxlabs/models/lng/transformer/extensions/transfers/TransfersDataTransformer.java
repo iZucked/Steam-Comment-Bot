@@ -107,20 +107,18 @@ public class TransfersDataTransformer implements ISlotTransformer {
 			final @NonNull ModelEntityMap modelEntityMap) {
 		final List<BasicTransferAgreement> agreements = new ArrayList<>(transfersModel.getTransferAgreements().size());
 		for (final TransferAgreement ta : transfersModel.getTransferAgreements()) {
-			if (ta.getFromEntity() != ta.getToEntity()) {
-				final String priceExpression;
-				if (ta.getPriceExpression() != null && !ta.getPriceExpression().isBlank()) {
-					priceExpression = ta.getPriceExpression();
-				} else {
-					throw new IllegalStateException(String.format("Transfer agreement %s is missing the price data", ta.getName()));
-				}
-				final IEntity fromEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getFromEntity(), IEntity.class);
-				final IEntity toEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getToEntity(), IEntity.class);
-				final BasicTransferAgreement basicTA = new BasicTransferAgreement(ta.getName(), fromEntity, //
-						toEntity, priceExpression);
-				agreements.add(basicTA);
-				modelEntityMap.addModelObject(ta, basicTA);
+			final String priceExpression;
+			if (ta.getPriceExpression() != null && !ta.getPriceExpression().isBlank()) {
+				priceExpression = ta.getPriceExpression();
+			} else {
+				throw new IllegalStateException(String.format("Transfer agreement %s is missing the price data", ta.getName()));
 			}
+			final IEntity fromEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getFromEntity(), IEntity.class);
+			final IEntity toEntity = modelEntityMap.getOptimiserObjectNullChecked(ta.getToEntity(), IEntity.class);
+			final BasicTransferAgreement basicTA = new BasicTransferAgreement(ta.getName(), fromEntity, //
+					toEntity, priceExpression);
+			agreements.add(basicTA);
+			modelEntityMap.addModelObject(ta, basicTA);
 		}
 		return agreements;
 	}

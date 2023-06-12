@@ -248,8 +248,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Test case to check whether we can schedule a cargo OR a vessel event (but not
-	 * both).
+	 * Test case to check whether we can schedule a cargo OR a vessel event (but not both).
 	 */
 	@Test
 	public void testEventOrCargoCase() {
@@ -278,7 +277,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		sandboxBuilder.makePartialCaseRow() //
 				.withShippingOptions(shipping1) //
 				.withVesselEventOptions(event1) // Vessel event...
-				.withBuyOptions(buy1).withSellOptions(sell1) // ... or a cargo
+				.withBuyOptions(buy1)
+				.withSellOptions(sell1) // ... or a cargo
 				.build();
 
 		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
@@ -330,8 +330,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Regression test: Sandbox optioniser fails as sandbox DES purchase is
-	 * transformed twice.
+	 * Regression test: Sandbox optioniser fails as sandbox DES purchase is transformed twice.
 	 */
 	@Test
 	public void testDESPurchaseOptioniserInPeriod() {
@@ -636,8 +635,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Based on fogbugz 5137 where a bug was introduced in the
-	 * {@link ScheduleSpecificationTransformer} and the sandbox failed to evaluate.
+	 * Based on fogbugz 5137 where a bug was introduced in the {@link ScheduleSpecificationTransformer} and the sandbox failed to evaluate.
 	 */
 	@Test
 	public void testPortfolioWithUnusedOptions() {
@@ -743,7 +741,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 				.withCV(22.5) //
 				.build();
 
-		DESSalesMarket market1 = spotMarketsModelBuilder.makeDESSaleMarket("Market1", port2, entity, "7").withVolumeLimits(0, 4_000_000, VolumeUnits.MMBTU) //
+		DESSalesMarket market1 = spotMarketsModelBuilder.makeDESSaleMarket("Market1", port2, entity, "7")
+				.withVolumeLimits(0, 4_000_000, VolumeUnits.MMBTU) //
 				.build();
 
 		final SellOption sell1 = sandboxBuilder.createSellMarketOption(market1);
@@ -753,9 +752,11 @@ public class SandboxTests extends AbstractSandboxTestCase {
 				.with(option -> {
 					option.setStart(LocalDate.of(2021, 1, 1));
 					option.setEnd(LocalDate.of(2021, 6, 1));
-				}).build();
+				})
+				.build();
 
-		sandboxBuilder.makePartialCaseRow().withBuyOptions(buy1) //
+		sandboxBuilder.makePartialCaseRow()
+				.withBuyOptions(buy1) //
 				.withSellOptions(sell1) //
 				.withShippingOptions(ship1) //
 				.build();
@@ -829,7 +830,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 				.with(option -> {
 					option.setStart(LocalDate.of(2021, 1, 1));
 					option.setEnd(LocalDate.of(2021, 6, 1));
-				}).build();
+				})
+				.build();
 
 		sandboxBuilder.makePartialCaseRow() //
 				.withBuyOptions(buy1, buy2) //
@@ -902,4 +904,169 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		}
 		return charterOuts;
 	}
+
+	/**
+	 * Expect optimiser to pick buy2 as non-optional even though it costs more
+	 */
+	@Test
+	public void testOptionalDESPurchaseSwap() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(true);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setOptimiseSandboxMode();
+
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "5").withDate(LocalDate.of(2019, 7, 1)).withCV(22.5).withOptional(true).build();
+		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(true, port, entity, "5.1").withDate(LocalDate.of(2019, 7, 1)).withCV(22.5).withOptional(false).build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port, entity, "6").withDate(LocalDate.of(2019, 7, 1)).withOptional(true).build();
+
+		sandboxBuilder.createBaseCaseRow(buy1, sell1, null);
+		sandboxBuilder.createBaseCaseRow(buy2, null, null);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Base state (use price expression as pairing indicator)
+			final SolutionOption option = result.getBaseOption();
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals("5.1", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+	}
+
+	/**
+	 * Expect optimiser to pick sell2 as non-optional even though it sells for less
+	 */
+	@Test
+	public void testOptionalFOBSaleSwap() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(true);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setOptimiseSandboxMode();
+
+		final Port port = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port, entity, "5").withDate(LocalDate.of(2019, 7, 1)).withCV(22.5).withOptional(true).build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(true, port, entity, "6.1").withDate(LocalDate.of(2019, 7, 1)).withOptional(true).build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(true, port, entity, "6").withDate(LocalDate.of(2019, 7, 1)).withOptional(false).build();
+
+		sandboxBuilder.createBaseCaseRow(buy1, sell1, null);
+		sandboxBuilder.createBaseCaseRow(null, sell2, null);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(0, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Base state (use price expression as pairing indicator)
+			final SolutionOption option = result.getBaseOption();
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("6.1", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+	}
+
+	/**
+	 */
+	@Test
+	public void testOptionalDESSaleSwap() {
+
+		final Vessel referenceVessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final Vessel vessel1 = fleetModelBuilder.createVessel("Vessel1", referenceVessel);
+
+		VesselCharter charter1 = cargoModelBuilder.makeVesselCharter(vessel1, entity).build();
+
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(true);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setOptimiseSandboxMode();
+
+		// Create options
+
+		// Buy options
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, portFinder.findPortById(InternalDataConstants.PORT_CAMERON), entity, "5")
+				.withDate(LocalDate.of(2021, 5, 4))
+				.withOptional(false)
+				.build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), entity, "5.1")
+				.withDate(LocalDate.of(2021, 5, 26))
+				.withOptional(true)
+				.build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(false, portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), entity, "5")
+				.withDate(LocalDate.of(2021, 5, 26))
+				.withOptional(false)
+				.build();
+
+		// Shipping options
+		final ShippingOption shipping1 = sandboxBuilder.createExistingCharter(charter1);
+
+		// Create starting point
+		sandboxBuilder.createBaseCaseRow(buy1, sell1, shipping1);
+		sandboxBuilder.createBaseCaseRow(null, sell2, null);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		{ // Base state (use price expression as pairing indicator)
+			final SolutionOption option = result.getBaseOption();
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			// Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("5.1", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			// Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+	}
+
 }
