@@ -12,13 +12,14 @@ import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.VesselUsageDistribution;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class VesselUsageDistributionConstraint extends AbstractModelMultiConstraint {
-	
+
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
@@ -29,15 +30,15 @@ public class VesselUsageDistributionConstraint extends AbstractModelMultiConstra
 					.withTag(ValidationConstants.TAG_ADP);
 			if (distribution.getCargoes() <= 0) {
 				factory.copyName() //
-				.withObjectAndFeature(target, ADPPackage.eINSTANCE.getVesselUsageDistribution_Cargoes()) //
-				.withMessage("Number of cargoes must be greater than zero") //
-				.make(ctx, statuses);
+						.withObjectAndFeature(target, ADPPackage.eINSTANCE.getVesselUsageDistribution_Cargoes()) //
+						.withMessage("Number of cargoes must be greater than zero") //
+						.make(ctx, statuses);
 			}
-			if (distribution.getVessels().isEmpty()) {
+			if (SetUtils.getObjects(distribution.getVessels()).isEmpty()) {
 				factory.copyName() //
-				.withObjectAndFeature(target, ADPPackage.eINSTANCE.getVesselUsageDistribution_Vessels()) //
-				.withMessage("No vessels selected") //
-				.make(ctx, statuses);
+						.withObjectAndFeature(target, ADPPackage.eINSTANCE.getVesselUsageDistribution_Vessels()) //
+						.withMessage("No vessels selected") //
+						.make(ctx, statuses);
 			}
 		}
 	}
