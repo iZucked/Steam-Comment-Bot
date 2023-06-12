@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -27,7 +25,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselUsageConstraintDataProvider;
@@ -63,11 +60,13 @@ public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstrain
 
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, final Collection<@NonNull IResource> changedResources, final List<String> messages) {
-		final Set<VesselUsageConstraintInfo<?, ?, IDischargeOption>> allDischargeVesselUsesConstraintInfos = vesselUsageConstraintDataProvider.getAllDischargeVesselUses();
-		final Set<VesselUsageConstraintInfo<?, ?, ILoadOption>> allLoadVesselConstraintInfos = vesselUsageConstraintDataProvider.getAllLoadVesselUses();
+		final List<VesselUsageConstraintInfo<?, ?, IDischargeOption>> allDischargeVesselUsesConstraintInfos = new ArrayList<>(vesselUsageConstraintDataProvider.getAllDischargeVesselUses());
+		final List<VesselUsageConstraintInfo<?, ?, ILoadOption>> allLoadVesselConstraintInfos = new ArrayList<>(vesselUsageConstraintDataProvider.getAllLoadVesselUses());
+		if (allLoadVesselConstraintInfos.isEmpty() && allDischargeVesselUsesConstraintInfos.isEmpty()) {
+			return true;
+		}
 
 		final Map<Object, Integer> counts = new HashMap<>();
-		final Map<Object, Integer> nominalSlotsCount = new HashMap<>();
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence sequence = sequences.getSequence(resource);
 			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
@@ -75,56 +74,32 @@ public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstrain
 			for (final ISequenceElement element : sequence) {
 				final IPortSlot slot = portSlotProvider.getPortSlot(element);
 				if (slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
-					if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-						Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream()) //
-								.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel)) //
-								.map(x -> x.getContractProfile()) //
-								.forEach(x -> nominalSlotsCount.compute(x, (k, v) -> v == null ? 1 : v + 1));
-					} else {
-						Stream.concat(allLoadVesselConstraintInfos.stream(), allDischargeVesselUsesConstraintInfos.stream())//
-								.filter(x -> x.getSlots().contains(slot) && x.getVessels().contains(vessel))//
-								.map(x -> x.getProfileConstraintDistribution())//
-								.forEach(x -> counts.compute(x, (k, v) -> v == null ? 1 : v + 1));
+					for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraint : allLoadVesselConstraintInfos) {
+						if (constraint.getSlots().contains(slot) && constraint.getVessels().contains(vessel)) {
+							final int newCount = counts.compute(constraint.getProfileConstraintDistribution(), (k, v) -> v == null ? 1 : v + 1);
+							if (newCount > constraint.getBound()) {
+								if (messages != null) {
+									messages.add(String.format("%s: Load Slot Vessel Usage not equal to constraint", this.name));
+								}
+								return false;
+							}
+						}
+					}
+					
+					for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraint : allDischargeVesselUsesConstraintInfos) {
+						if (constraint.getSlots().contains(slot) && constraint.getVessels().contains(vessel)) {
+							final int newCount = counts.compute(constraint.getProfileConstraintDistribution(), (k, v) -> v == null ? 1 : v + 1);
+							if (newCount > constraint.getBound()) {
+								if (messages != null) {
+									messages.add(String.format("%s: Discharge Slot Vessel Usage not equal to constraint", this.name));
+								}
+								return false;
+							}
+						}
 					}
 				}
 			}
-
 		}
-		for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraintInfo : allLoadVesselConstraintInfos) {
-			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraintDistribution()), 0);
-
-			if (vesselUses > constraintInfo.getBound()) {
-				if (messages != null) {
-					messages.add(String.format("%s: Load Slot Vessel Usage not equal to constraint", this.name));
-				}
-				return false;
-			} else if (vesselUses < constraintInfo.getBound()) {
-				int remainingNominalsCount = nominalSlotsCount.getOrDefault(constraintInfo.getContractProfile(), 0);
-				final int additionalCargoesNeeded = constraintInfo.getBound() - vesselUses;
-				if (remainingNominalsCount < additionalCargoesNeeded) {
-					return false;
-				}
-				nominalSlotsCount.compute(constraintInfo.getContractProfile(), (k, v) -> v == null ? 0 : v - additionalCargoesNeeded);
-			}
-		}
-		for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraintInfo : allDischargeVesselUsesConstraintInfos) {
-			final int vesselUses = Objects.requireNonNullElse(counts.get(constraintInfo.getProfileConstraintDistribution()), 0);
-
-			if (vesselUses > constraintInfo.getBound()) {
-				if (messages != null) {
-					messages.add(String.format("%s: Discharge Slot Vessel Usage not equal to constraint", this.name));
-				}
-				return false;
-			} else if (vesselUses < constraintInfo.getBound()) {
-				int remainingNominalsCount = nominalSlotsCount.getOrDefault(constraintInfo.getContractProfile(), 0);
-				final int additionalCargoesNeeded = constraintInfo.getBound() - vesselUses;
-				if (remainingNominalsCount < additionalCargoesNeeded) {
-					return false;
-				}
-				nominalSlotsCount.compute(constraintInfo.getContractProfile(), (k, v) -> v == null ? 0 : v - additionalCargoesNeeded);
-			}
-		}
-
 		return true;
 
 	}

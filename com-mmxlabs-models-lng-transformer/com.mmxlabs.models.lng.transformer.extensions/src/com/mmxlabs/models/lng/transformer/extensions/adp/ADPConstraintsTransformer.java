@@ -6,20 +6,19 @@ package com.mmxlabs.models.lng.transformer.extensions.adp;
 
 import java.time.YearMonth;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetConstraint;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
@@ -40,6 +39,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -133,18 +133,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			// calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
 
 			final List<Pair<ILoadOption, Integer>> oSlots = slots.stream() //
-					.<Pair<ILoadOption, Integer>>map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class),
+					.<Pair<ILoadOption, Integer>> map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class),
 							calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())))) //
 					.collect(Collectors.toList());
-
-			// Forcibly add in the default vessel to the allowed vessels list.
-			// Note: This is *vessel* not market!
-			for (final Pair<ILoadOption, Integer> slot : oSlots) {
-				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
-				if (permittedVessels != null) {
-					permittedVessels.add(iDefaultVessel);
-				}
-			}
 
 			// Only soft required slots are the constrained ones. The optionality of these
 			// slots during optimisation is handled by NonOptionalFitnessCore by ignoring
@@ -214,6 +205,37 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				}
 
 			}
+			boolean foundVesselUsageConstraint = false;
+			final Set<@NonNull IVessel> vesselUsageRestrictions = new HashSet<>();
+			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
+				if (profileConstraint instanceof VesselUsageDistributionProfileConstraint vesselUsageDistributionProfileConstraint) {
+					for (final VesselUsageDistribution distribution : vesselUsageDistributionProfileConstraint.getDistributions()) {
+						foundVesselUsageConstraint = true;
+						vesselUsageRestrictions.addAll(SetUtils.getObjects(distribution.getVessels()).stream().map(v -> modelEntityMap.getOptimiserObjectNullChecked(v, IVessel.class)).toList());
+					}
+				}
+			}
+			if (foundVesselUsageConstraint) {
+				for (final Pair<ILoadOption, Integer> slot : oSlots) {
+					final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
+					if (permittedVessels != null) {
+						// intersect existing restrictions with vessel usage restrictions
+						final Set<@NonNull IVessel> originalSet = new HashSet<>(permittedVessels);
+						final Set<@NonNull IVessel> vesselIntersections = vesselUsageRestrictions.stream().filter(originalSet::contains).collect(Collectors.toCollection(HashSet::new));
+						allowedVesselProviderEditor.setPermittedVesselAndClasses(slot.getFirst(), vesselIntersections);
+					} else {
+						allowedVesselProviderEditor.setPermittedVesselAndClasses(slot.getFirst(), vesselUsageRestrictions);
+					}
+				}
+			}
+			// Forcibly add in the default vessel to the allowed vessels list.
+			// Note: This is *vessel* not market!
+			for (final Pair<ILoadOption, Integer> slot : oSlots) {
+				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
+				if (permittedVessels != null) {
+					permittedVessels.add(iDefaultVessel);
+				}
+			}
 
 		}
 		for (final SalesContractProfile contractProfile : adpModel.getSalesContractProfiles()) {
@@ -235,18 +257,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 			// Convert from LNG model slots to optimiser DischargeOptions.
 			final List<Pair<IDischargeOption, Integer>> oSlots = slots.stream() //
-					.<Pair<IDischargeOption, Integer>>map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class),
+					.<Pair<IDischargeOption, Integer>> map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class),
 							calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())))) //
 					.collect(Collectors.toList());
-
-			// Forcibly add in the default vessel to the allowed vessels list.
-			// Note: This is *vessel* not market!
-			for (final Pair<IDischargeOption, Integer> slot : oSlots) {
-				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
-				if (permittedVessels != null) {
-					permittedVessels.add(iDefaultVessel);
-				}
-			}
 
 			// Only soft required slots are the constrained ones. The optionality of these
 			// slots during optimisation is handled by NonOptionalFitnessCore by ignoring
@@ -316,6 +329,37 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 					// Not handled here.
 				}
 
+			}
+			boolean foundVesselUsageConstraint = false;
+			final Set<@NonNull IVessel> vesselUsageRestrictions = new HashSet<>();
+			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
+				if (profileConstraint instanceof VesselUsageDistributionProfileConstraint vesselUsageDistributionProfileConstraint) {
+					for (final VesselUsageDistribution distribution : vesselUsageDistributionProfileConstraint.getDistributions()) {
+						foundVesselUsageConstraint = true;
+						vesselUsageRestrictions.addAll(SetUtils.getObjects(distribution.getVessels()).stream().map(v -> modelEntityMap.getOptimiserObjectNullChecked(v, IVessel.class)).toList());
+					}
+				}
+			}
+			if (foundVesselUsageConstraint) {
+				for (final Pair<IDischargeOption, Integer> slot : oSlots) {
+					final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
+					if (permittedVessels != null) {
+						// intersect existing restrictions with vessel usage restrictions
+						final Set<@NonNull IVessel> originalSet = new HashSet<>(permittedVessels);
+						final Set<@NonNull IVessel> vesselIntersections = vesselUsageRestrictions.stream().filter(originalSet::contains).collect(Collectors.toCollection(HashSet::new));
+						allowedVesselProviderEditor.setPermittedVesselAndClasses(slot.getFirst(), vesselIntersections);
+					} else {
+						allowedVesselProviderEditor.setPermittedVesselAndClasses(slot.getFirst(), vesselUsageRestrictions);
+					}
+				}
+			}
+			// Forcibly add in the default vessel to the allowed vessels list.
+			// Note: This is *vessel* not market!
+			for (final Pair<IDischargeOption, Integer> slot : oSlots) {
+				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
+				if (permittedVessels != null) {
+					permittedVessels.add(iDefaultVessel);
+				}
 			}
 		}
 		handleVesselConstraints(adpModel);
