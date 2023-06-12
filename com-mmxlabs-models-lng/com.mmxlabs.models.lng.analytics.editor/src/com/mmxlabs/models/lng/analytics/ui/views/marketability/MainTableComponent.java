@@ -68,6 +68,7 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -185,8 +186,7 @@ public class MainTableComponent {
 						if (cell.getElement() instanceof MarketabilityRow row) {
 							for (var result : row.getResult().getRhsResults()) {
 								if (result.getTarget() == sm && result.getEarliestETA() != null) {
-									String text = formatDate(result.getEarliestETA().toLocalDate());
-									text += " " + formatTime(result.getEarliestETA().toLocalTime());
+									String text = formatDateTime(result.getEarliestETA().toLocalDateTime());
 									cell.setText(text);
 								}
 							}
@@ -210,8 +210,7 @@ public class MainTableComponent {
 						if (cell.getElement() instanceof MarketabilityRow row) {
 							for (var result : row.getResult().getRhsResults()) {
 								if (result.getTarget() == sm && result.getLatestETA() != null) {
-									String text = formatDate(result.getLatestETA().toLocalDate());
-									text += " " + formatTime(result.getLatestETA().toLocalTime());
+									String text = formatDateTime(result.getLatestETA().toLocalDateTime());
 									cell.setText(text);
 								}
 							}
@@ -469,15 +468,15 @@ public class MainTableComponent {
 		if (date == null) {
 			return "";
 		}
-		return DateTimeFormatter.ofPattern("dd/MM/yy").format(date);
+		return DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter().format(date);
 	}
 
 	@SuppressWarnings("null")
-	private @NonNull String formatTime(final LocalTime time) {
-		if (time == null) {
+	private @NonNull String formatDateTime(final LocalDateTime dateTime) {
+		if (dateTime == null) {
 			return "";
 		}
-		return DateTimeFormatter.ofPattern("HH:mm").format(time);
+		return DateTimeFormatsProvider.INSTANCE.createDateTimeStringDisplayFormatter().format(dateTime);
 	}
 
 	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {

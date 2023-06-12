@@ -79,6 +79,6 @@ public abstract class CopyAction extends Action {
 	 * Same as {@link CopyUtils.reformatText} but wrapper
 	 */
 	public final String reformatText(String itemText) {
-		return CopyUtils.reformatText(itemText, this);
+		return itemText;
 	}
 }

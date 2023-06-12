@@ -25,8 +25,14 @@ public class EntityBusinessUnitsConstraint extends AbstractModelMultiConstraint 
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof final BaseLegalEntity entity) {
-			if (entity.isThirdParty() || entity.getBusinessUnits() == null || entity.getBusinessUnits().isEmpty()) {
+			if (entity.getBusinessUnits() == null || entity.getBusinessUnits().isEmpty()) {
 				return;
+			}
+			if (entity.isThirdParty() && !entity.getBusinessUnits().isEmpty()) {
+				String failureMessage = String.format("Third party entity %s can not have a defined list of business units.", entity.getName());
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__BUSINESS_UNITS);
+				failures.add(dsd);
 			}
 			final int[] defaultCounter = {0};
 			entity.getBusinessUnits().forEach( bu -> {
