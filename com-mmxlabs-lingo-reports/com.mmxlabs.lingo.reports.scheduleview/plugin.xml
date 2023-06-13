@@ -34,11 +34,5 @@
             isHighlighter="true"
             name="Shipping Risk">
       </ColourScheme>
-      <ColourScheme
-            class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.SourceContractHighlighter"
-            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.SourceContractHighlighter"
-            isHighlighter="true"
-            name="Source contract">
-      </ColourScheme>
    </extension>
 </plugin>
