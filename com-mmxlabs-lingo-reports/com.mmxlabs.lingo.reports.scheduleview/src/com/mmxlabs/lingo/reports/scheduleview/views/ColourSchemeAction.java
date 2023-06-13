@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
@@ -159,15 +161,15 @@ class ColourSchemeAction extends SchedulerViewAction {
 				actionContributionItem.fill(menu, -1);
 			}
 		}
-		final Object input = viewer.getInput();
-		if (input instanceof final Collection<?> collection) {
-			if (collection.size() == 1) {
-				if (collection.iterator().next() instanceof final @NonNull Schedule schedule) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NON_SHIPPED_FOB_ROTATIONS)) {
+			final Object input = viewer.getInput();
+			if (input instanceof final Collection<?> collection) {
+				if (collection.size() == 1 && collection.iterator().next() instanceof final @NonNull Schedule schedule) {
 					buildFobSaleRotationMenu(menu, schedule);
 				}
+			} else if (input instanceof final @NonNull Schedule schedule) {
+				buildFobSaleRotationMenu(menu, schedule);
 			}
-		} else if (input instanceof final @NonNull Schedule schedule) {
-			buildFobSaleRotationMenu(menu, schedule);
 		}
 	}
 
