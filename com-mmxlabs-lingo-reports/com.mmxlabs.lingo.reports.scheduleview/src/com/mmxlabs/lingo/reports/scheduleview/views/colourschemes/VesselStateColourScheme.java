@@ -209,7 +209,7 @@ public class VesselStateColourScheme extends ColourScheme {
 			if (event instanceof SlotVisit || event instanceof NonShippedSlotVisit) {
 				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
 			}
-		} else if (element instanceof final NonShippedSlotVisit) {
+		} else if (element instanceof NonShippedSlotVisit) {
 				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
 		}
 
