@@ -194,24 +194,48 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 			case AnalyticsPackage.BASE_CASE_ROW: {
 				BaseCaseRow baseCaseRow = (BaseCaseRow)theEObject;
 				T result = caseBaseCaseRow(baseCaseRow);
+				if (result == null) result = caseUUIDObject(baseCaseRow);
+				if (result == null) result = caseMMXObject(baseCaseRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.BASE_CASE_ROW_GROUP: {
+				BaseCaseRowGroup baseCaseRowGroup = (BaseCaseRowGroup)theEObject;
+				T result = caseBaseCaseRowGroup(baseCaseRowGroup);
+				if (result == null) result = caseUUIDObject(baseCaseRowGroup);
+				if (result == null) result = caseMMXObject(baseCaseRowGroup);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.BASE_CASE_ROW_OPTIONS: {
 				BaseCaseRowOptions baseCaseRowOptions = (BaseCaseRowOptions)theEObject;
 				T result = caseBaseCaseRowOptions(baseCaseRowOptions);
+				if (result == null) result = caseUUIDObject(baseCaseRowOptions);
+				if (result == null) result = caseMMXObject(baseCaseRowOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.PARTIAL_CASE_ROW: {
 				PartialCaseRow partialCaseRow = (PartialCaseRow)theEObject;
 				T result = casePartialCaseRow(partialCaseRow);
+				if (result == null) result = caseUUIDObject(partialCaseRow);
+				if (result == null) result = caseMMXObject(partialCaseRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.PARTIAL_CASE_ROW_GROUP: {
+				PartialCaseRowGroup partialCaseRowGroup = (PartialCaseRowGroup)theEObject;
+				T result = casePartialCaseRowGroup(partialCaseRowGroup);
+				if (result == null) result = caseUUIDObject(partialCaseRowGroup);
+				if (result == null) result = caseMMXObject(partialCaseRowGroup);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case AnalyticsPackage.PARTIAL_CASE_ROW_OPTIONS: {
 				PartialCaseRowOptions partialCaseRowOptions = (PartialCaseRowOptions)theEObject;
 				T result = casePartialCaseRowOptions(partialCaseRowOptions);
+				if (result == null) result = caseUUIDObject(partialCaseRowOptions);
+				if (result == null) result = caseMMXObject(partialCaseRowOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -962,6 +986,21 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Base Case Row Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Base Case Row Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBaseCaseRowGroup(BaseCaseRowGroup object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Base Case Row Options</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -988,6 +1027,21 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePartialCaseRow(PartialCaseRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Partial Case Row Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Partial Case Row Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePartialCaseRowGroup(PartialCaseRowGroup object) {
 		return null;
 	}
 

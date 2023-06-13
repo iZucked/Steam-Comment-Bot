@@ -7,8 +7,10 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -29,12 +31,16 @@ import org.eclipse.swt.widgets.Menu;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
+import com.mmxlabs.models.lng.analytics.ui.commands.CleanUpBaseCaseRowGroupsCommand;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
@@ -72,9 +78,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 		}
 		mgr.removeAll();
 		{
-			IContributionItem[] items = mgr.getItems();
+			final IContributionItem[] items = mgr.getItems();
 			mgr.removeAll();
-			for (IContributionItem mItem : items) {
+			for (final IContributionItem mItem : items) {
 				mItem.dispose();
 			}
 		}
@@ -86,7 +92,7 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 		final GridColumn column = grid.getColumn(mousePoint);
 
-		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		final IStructuredSelection selection = viewer.getStructuredSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
 
@@ -94,40 +100,61 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
-				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
-
-			}));
-
-			mgr.add(new RunnableAction("Copy to options", () -> {
-				final Collection<EObject> c = new LinkedList<>();
-				selection.iterator().forEachRemaining(ee -> {
-					if (ee instanceof BaseCaseRow) {
-						final BaseCaseRow baseCaseRow = (BaseCaseRow) ee;
-						final PartialCaseRow partialCaseRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
-						if (baseCaseRow.getVesselEventOption() != null) {
-							partialCaseRow.getVesselEventOptions().add(baseCaseRow.getVesselEventOption());
-						}
-						if (baseCaseRow.getBuyOption() != null) {
-							partialCaseRow.getBuyOptions().add(baseCaseRow.getBuyOption());
-						}
-						if (baseCaseRow.getSellOption() != null) {
-							partialCaseRow.getSellOptions().add(baseCaseRow.getSellOption());
-						}
-						if (baseCaseRow.getShipping() != null) {
-							partialCaseRow.getShipping().add(baseCaseRow.getShipping());
-						}
-						if (!(partialCaseRow.getBuyOptions().isEmpty() && partialCaseRow.getSellOptions().isEmpty() && partialCaseRow.getShipping() == null)) {
-							c.add(partialCaseRow);
-						}
-					}
-				});
-
 				if (!c.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, c),
-							optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
+					final CompoundCommand cmd = new CompoundCommand();
+					cmd.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
+					cmd.append(new CleanUpBaseCaseRowGroupsCommand(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getBaseCase()));
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
 				}
 			}));
+
+			if (optionAnalysisModel.getMode() == SandboxModeConstants.MODE_DEFINE) {
+				mgr.add(new RunnableAction("Copy to options", () -> {
+					final Collection<BaseCaseRowGroup> bcrgs = new LinkedHashSet<>();
+					selection.iterator().forEachRemaining(ee -> {
+						if (ee instanceof final BaseCaseRow baseCaseRow) {
+							bcrgs.add(baseCaseRow.getGroup());
+						}
+					});
+
+					final Collection<PartialCaseRow> rows = new LinkedList<>();
+					final Collection<PartialCaseRowGroup> groups = new LinkedList<>();
+					for (final BaseCaseRowGroup grp : bcrgs) {
+						final PartialCaseRowGroup partialCaseRowGroup = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+						for (final BaseCaseRow baseCaseRow : grp.getRows()) {
+							final PartialCaseRow partialCaseRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+							if (baseCaseRow.getVesselEventOption() != null) {
+								partialCaseRow.getVesselEventOptions().add(baseCaseRow.getVesselEventOption());
+							}
+							if (baseCaseRow.getBuyOption() != null) {
+								partialCaseRow.getBuyOptions().add(baseCaseRow.getBuyOption());
+							}
+							if (baseCaseRow.getSellOption() != null) {
+								partialCaseRow.getSellOptions().add(baseCaseRow.getSellOption());
+							}
+							if (baseCaseRow.getShipping() != null) {
+								partialCaseRow.getShipping().add(baseCaseRow.getShipping());
+							}
+							if (!(partialCaseRow.getBuyOptions().isEmpty() && partialCaseRow.getSellOptions().isEmpty() && partialCaseRow.getShipping() == null)) {
+								rows.add(partialCaseRow);
+								partialCaseRow.setGroup(partialCaseRowGroup);
+							}
+						}
+						if (!partialCaseRowGroup.getRows().isEmpty()) {
+							groups.add(partialCaseRowGroup);
+						}
+					}
+
+					if (!groups.isEmpty()) {
+						final CompoundCommand c = new CompoundCommand();
+
+						c.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, rows));
+						c.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__GROUPS, groups));
+
+						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(c, optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
+					}
+				}));
+			}
 		}
 		if (items.length == 1) {
 			if (column != null) {
@@ -136,9 +163,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 					final BaseCaseRow row = (BaseCaseRow) ed;
 					if (row.getBuyOption() != null) {
 						mgr.add(new RunnableAction("Remove buy", () -> {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION, SetCommand.UNSET_VALUE), row,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION, SetCommand.UNSET_VALUE), row,
+											AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
 
 						}));
 
@@ -147,9 +174,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 							if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
 								mgr.add(new RunnableAction("Match dates", () -> {
-									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity,
-											AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, AnalyticsBuilder.getDate(row.getSellOption())), opportunity,
-											AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
+									scenarioEditingLocation.getDefaultCommandHandler()
+											.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
+													AnalyticsBuilder.getDate(row.getSellOption())), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 
 								}));
 							} else {
@@ -159,8 +186,8 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								final Port toPort = AnalyticsBuilder.getPort(row.getSellOption());
 								final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 								final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-								final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
-										ModelDistanceProvider.class);
+								final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider()
+										.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 								final ZonedDateTime sellDate = AnalyticsBuilder.getWindowStartDate(row.getSellOption());
 
 								if (vessel != null && fromPort != null && toPort != null && sellDate != null) {
@@ -172,9 +199,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
 
-										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-												SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate), opportunity,
-												AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
+										scenarioEditingLocation.getDefaultCommandHandler()
+												.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate),
+														opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 
 									}));
 									if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
@@ -186,9 +213,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = sellDate.minusDays(travelDays).toLocalDate();
 
-											scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-													SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate), opportunity,
-													AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
+											scenarioEditingLocation.getDefaultCommandHandler()
+													.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE, newDate),
+															opportunity, AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE);
 
 										}));
 									}
@@ -204,9 +231,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 					final BaseCaseRow row = (BaseCaseRow) ed;
 					if (row.getSellOption() != null) {
 						mgr.add(new RunnableAction("Remove sell", () -> {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, SetCommand.UNSET_VALUE), row,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION, SetCommand.UNSET_VALUE),
+											row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 
 						}));
 
@@ -215,9 +242,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 
 							if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
 								mgr.add(new RunnableAction("Match dates", () -> {
-									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity,
-											AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, AnalyticsBuilder.getDate(row.getBuyOption())), opportunity,
-											AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
+									scenarioEditingLocation.getDefaultCommandHandler()
+											.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE,
+													AnalyticsBuilder.getDate(row.getBuyOption())), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 								}));
 							} else {
 
@@ -226,8 +253,8 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 								final Port toPort = AnalyticsBuilder.getPort(row.getSellOption());
 								final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 								final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-								final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
-										ModelDistanceProvider.class);
+								final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider()
+										.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 								final ZonedDateTime buyDate = AnalyticsBuilder.getWindowStartDate(row.getBuyOption());
 
 								if (vessel != null && fromPort != null && toPort != null && buyDate != null) {
@@ -239,9 +266,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 										final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 										final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
 
-										scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-												SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate), opportunity,
-												AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
+										scenarioEditingLocation.getDefaultCommandHandler()
+												.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate),
+														opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 
 									}));
 									if (vessel.getLadenAttributes().getVesselOrDelegateServiceSpeed() > 0.0) {
@@ -253,9 +280,10 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 											final int travelDays = (int) Math.ceil((double) travelHours / 24.0);
 											final LocalDate newDate = buyDate.plusDays(travelDays).toLocalDate();
 
-											scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-													SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate), opportunity,
-													AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
+											scenarioEditingLocation.getDefaultCommandHandler()
+													.handleCommand(
+															SetCommand.create(scenarioEditingLocation.getEditingDomain(), opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE, newDate),
+															opportunity, AnalyticsPackage.Literals.SELL_OPPORTUNITY__DATE);
 
 										}));
 									}
@@ -272,9 +300,9 @@ public class BaseCaseContextMenuManager implements MenuDetectListener {
 					final BaseCaseRow row = (BaseCaseRow) ed;
 					if (row.getShipping() != null) {
 						mgr.add(new RunnableAction("Remove shipping", () -> {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE), row,
-									AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE), row,
+											AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
 						}));
 

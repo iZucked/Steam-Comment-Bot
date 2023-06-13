@@ -164,20 +164,22 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 		return createPriceSensitivityFunction(sdp, null, userSettings, lngScenarioModel.getSensitivityModel().getSensitivityModel()).apply(subMonitor);
 	}
 
-	public Function<IProgressMonitor, AbstractSolutionSet> createPriceSensitivityFunction(final IScenarioDataProvider sdp, @Nullable final ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model) {
+	public Function<IProgressMonitor, AbstractSolutionSet> createPriceSensitivityFunction(final IScenarioDataProvider sdp, @Nullable final ScenarioInstance scenarioInstance,
+			final UserSettings userSettings, final OptionAnalysisModel model) {
 		final SensitivitySolutionSet sensitivityResult = AnalyticsFactory.eINSTANCE.createSensitivitySolutionSet();
 		sensitivityResult.setUseScenarioBase(true);
 		return createPriceSetFunction(sdp, scenarioInstance, userSettings, model, sensitivityResult, (mapper, baseScheduleSpecification) -> {
-			model.getCommodityCurves().stream() //
+			model.getCommodityCurves()
+					.stream() //
 					.filter(CommodityCurveOverlay.class::isInstance) //
 					.map(CommodityCurveOverlay.class::cast) //
 					.forEach(mapper::addMapping);
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-			final LNGSchedulerPriceCurveSetRunner priceSensitivityRunner = new LNGSchedulerPriceCurveSetRunner(scenarioInstance, model, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider, (mem, data, injector) -> {
-				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-				return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
-			}, new LinkedList<>());
+			final LNGSchedulerPriceCurveSetRunner priceSensitivityRunner = new LNGSchedulerPriceCurveSetRunner(scenarioInstance, model, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider,
+					(mem, data, injector) -> {
+						final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
+						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
+					}, new LinkedList<>());
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {

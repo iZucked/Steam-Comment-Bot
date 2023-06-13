@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.ScrollBar;
 
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -174,7 +175,56 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		// Fill whole area - not for use in a table
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		// draw paths
+		for (BaseCaseRowGroup grp : root.getGroups()) {
+			if (grp.getRows().size() < 2) {
+				continue;
+			}
+			float firstRow = -1;
+			for (BaseCaseRow grpRow : grp.getRows()) {
 
+				// Clear clip rect for dragged wire
+				graphics.setClipping((Rectangle) null);
+
+				// Re-apply clip rect
+				graphics.setClipping(ca);
+
+				// // draw terminal blobs
+				graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+				graphics.setLineWidth(2);
+				rawI = 0;
+				for (final float midpoint : terminalPositions) {
+
+					// Map back between current row (sorted) and data (unsorted)
+					final int i = rawI++;
+					// -1 indicates filtered row
+					if (i == -1) {
+						continue;
+					}
+
+					final BaseCaseRow row = indexToRow.get(i);
+					if (row != grpRow) {
+						continue;
+					}
+
+					if (firstRow < 0) {
+						firstRow = midpoint;
+					}
+
+					final float startMid = firstRow;
+					final float endMid = midpoint;
+
+					int x1 = Math.round(ca.x + 1.5f * terminalSize);
+					int x2 = Math.round(ca.x + ca.width - 2 * terminalSize);
+					int x1a = x1 + ((x2 - x1) * 3 / 4);
+					if (startMid != endMid) {
+						graphics.drawLine(x1a, Math.round(startMid), x2, Math.round(startMid));
+						graphics.drawLine(x1a, Math.round(startMid), x1a, Math.round(endMid));
+					}
+					graphics.drawLine(x1a, Math.round(endMid), x2, Math.round(endMid));
+				}
+			}
+		}
 		// draw paths
 		for (final BaseCaseRow baseCaseRow : root.getBaseCase()) {
 
@@ -225,6 +275,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 				}
 			}
 		}
+
 	}
 
 	private void drawTerminal(final boolean isLeft, final boolean hollow, Color terminalColour, final boolean isOptional, final boolean isSpot, final Rectangle ca, final GC graphics,

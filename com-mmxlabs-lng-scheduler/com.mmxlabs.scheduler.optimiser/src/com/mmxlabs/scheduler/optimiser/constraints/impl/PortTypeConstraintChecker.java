@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -25,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IPreSequencedSegmentProvider;
 
 /**
  * {@link IConstraintChecker} implementation to enforce correct ordering of port types. Specifically:
@@ -75,9 +77,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
-			@NonNull
-			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
-			if (!checkSequence(sequence, messages, vesselCharter.getVesselInstanceType(), vesselCharter.isOptional())) {
+			final @NonNull IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+			if (!checkSequence(sequence, messages, vesselCharter.getVesselInstanceType(), sequences.getProviders())) {
 				return false;
 			}
 		}
@@ -86,7 +87,10 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	}
 
- 
+	public final boolean checkSequence(@NonNull final ISequence sequence, final List<String> messages, @NonNull final VesselInstanceType instanceType) {
+		return checkSequence(sequence, messages, instanceType, null);
+	}
+
 	/**
 	 * Check ISequence for {@link PortType} ordering violations.
 	 * 
@@ -97,7 +101,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	 * @return
 	 */
 	public final boolean checkSequence(@NonNull final ISequence sequence, final List<String> messages, @NonNull final VesselInstanceType instanceType,
-			final boolean isOptionalVesselCharter) {
+			final @Nullable ISequencesAttributesProvider providers) {
+
+		IPreSequencedSegmentProvider preSequenced = providers == null ? null : providers.getProvider(IPreSequencedSegmentProvider.class);
 
 		if (instanceType == VesselInstanceType.FOB_SALE || instanceType == VesselInstanceType.DES_PURCHASE) {
 			final int size = sequence.size();
@@ -120,13 +126,12 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				return ptStart == PortType.Start && ptEnd == PortType.End && pt1 == PortType.Load && pt2 == PortType.Discharge;
 			}
 			if (messages != null)
-				messages.add(String.format("%s: Sequence starting with sequence element %s has a wrong size!", this.name, 
-					sequence.first() != null ? sequence.first().getName() : "(unknown element)"));
+				messages.add(String.format("%s: Sequence starting with sequence element %s has a wrong size!", this.name, sequence.first() != null ? sequence.first().getName() : "(unknown element)"));
 			return false;
 		}
 
 		boolean seenLoad = false;
-		boolean seenDischarge = false;
+		int seenDischarges = 0;
 		ISequenceElement previous = null;
 		PortType previousType = null;
 		for (final ISequenceElement t : sequence) {
@@ -138,7 +143,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 					// or must start with a load or an End and be a round trip.
 
 					if (messages != null)
-						messages.add(this.name + ": Sequence must begin with PortType. Start or, if roundtrip, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
+						messages.add(
+								this.name + ": Sequence must begin with PortType. Start or, if roundtrip, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
 					return false;
 				}
 			} else {
@@ -151,24 +157,37 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			}
 
 			// don't enforce any constraints here if the ordered sequence provider specifies a previous element
-			final boolean checkConstraint = (orderedSequenceProvider.getPreviousElement(t) == null && (previous == null || orderedSequenceProvider.getNextElement(previous) == null));
+			boolean checkConstraint = (orderedSequenceProvider.getPreviousElement(t) == null && (previous == null || orderedSequenceProvider.getNextElement(previous) == null));
 
 			switch (type) {
 			case Discharge:
-				if (seenDischarge && checkConstraint) {
-					// Cannot have two discharges in a row
-					if (messages != null)
-						messages.add(this.name + ": Cannot have two PortType.Discharge in a row");
+				if (seenDischarges == 1 && checkConstraint) {
+					// Allow pre-sequenced LDD cargo 
+					boolean validDD = previous!= null && preSequenced != null && preSequenced.isPreSequenced(previous) && preSequenced.validSequence(previous, t);
+					if (!validDD) {
+						// Cannot have two discharges in a row
+						if (messages != null) {
+							messages.add(this.name + ": Cannot have two unfixed PortType.Discharge in a row");
+						}
+						return false;
+					}
+				}
+				if (seenDischarges > 1 && checkConstraint) {
+					// Cannot have three discharges in a row
+					if (messages != null) {
+						messages.add(this.name + ": Cannot have three PortType.Discharge in a row");
+					}
 					return false;
 				}
-				if (!seenLoad && checkConstraint) {
+				if (seenDischarges == 0 && !seenLoad && checkConstraint) {
 					// Cannot discharge without loading
-					if (messages != null)
+					if (messages != null) {
 						messages.add(this.name + ": Cannot have PortType.Discharge without a PortType.Load");
+					}
 					return false;
 				}
 				seenLoad = false;
-				seenDischarge = true;
+				seenDischarges++;
 				break;
 			case Load:
 				if (seenLoad && checkConstraint) {
@@ -178,7 +197,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 					return false;
 				}
 				seenLoad = true;
-				seenDischarge = false;
+				seenDischarges = 0;
 				break;
 			case Start:
 				if (previous != null && checkConstraint) {

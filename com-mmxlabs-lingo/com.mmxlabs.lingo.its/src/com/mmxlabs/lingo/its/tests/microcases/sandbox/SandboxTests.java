@@ -55,6 +55,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -330,6 +331,330 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
+	 * Test case to check whether we can schedule a cargo OR a vessel event (but not both).
+	 */
+	@Test
+	public void testEventOrCargoPlusCargoCase() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+		final ShippingOption shipping2 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5").withCV(22.5).withDate(LocalDate.of(2019, 7, 1)).build();
+		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "6").withCV(22.5).withDate(LocalDate.of(2019, 7, 1)).build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "7") //
+				.withDate(LocalDate.of(2019, 8, 1)) //
+				.build();
+		final SellOption sell2 = sandboxBuilder.createOpenSell();
+
+		final VesselEventOption event1 = sandboxBuilder.makeCharterOutOpportunity(port1, LocalDate.of(2019, 7, 1), 30).withHireCost(50_000).build();
+
+		sandboxBuilder.makePartialCaseRow() //
+				.withShippingOptions(shipping1) //
+				.withVesselEventOptions(event1) // Vessel event...
+				.withBuyOptions(buy1)
+				.withSellOptions(sell1) // ... or a cargo
+				.build();
+
+		sandboxBuilder.makePartialCaseRow() //
+				.withShippingOptions(shipping2) //
+				.withBuyOptions(buy2)
+				.withSellOptions(sell1, sell2) //
+				.build();
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(3, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(2, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(1, result.getExtraVesselEvents().size());
+
+		boolean foundCargo1Solution = false;
+		boolean foundEventWithCargo2Solution = false;
+		boolean foundEventSolution = false;
+		LOOP_SOLUTIONS: for (final SolutionOption option : result.getOptions()) {
+			if (option.getScheduleModel().getSchedule().getCargoAllocations().isEmpty()) {
+				for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+					for (final Event evt : seq.getEvents()) {
+						if (evt instanceof VesselEventVisit vesselEventVisit) {
+							if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
+								foundEventSolution = true;
+								continue LOOP_SOLUTIONS;
+							}
+						}
+					}
+				}
+			} else {
+				final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+				if (cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression().equals("5")) {
+					Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+					foundCargo1Solution = true;
+					for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+						for (final Event evt : seq.getEvents()) {
+							if (evt instanceof VesselEventVisit) {
+								Assertions.fail("Vessel event not expected in cargo solution");
+							}
+						}
+					}
+				} else if (cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression().equals("6")) {
+					foundCargo1Solution = true;
+					for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+						for (final Event evt : seq.getEvents()) {
+							if (evt instanceof VesselEventVisit) {
+								foundEventWithCargo2Solution = true;
+							}
+						}
+					}
+				} else {
+					Assertions.fail();
+				}
+				//
+			}
+		}
+		Assertions.assertTrue(foundEventSolution);
+		Assertions.assertTrue(foundCargo1Solution);
+		Assertions.assertTrue(foundEventWithCargo2Solution);
+	}
+
+	/**
+	 * Test case to check whether we can schedule a cargo OR a vessel event (but not both).
+	 */
+	@Test
+	public void testEventOrLDDCargoCase() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port port3 = portFinder.findPortById(InternalDataConstants.PORT_TOKYO_BAY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5") //
+				.withCV(22.5) //
+				.withDate(LocalDate.of(2019, 6, 1)) //
+				.build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "6") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(false, port3, entity, "7") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+
+		final VesselEventOption event1 = sandboxBuilder.makeCharterOutOpportunity(port1, LocalDate.of(2019, 7, 1), 30).withHireCost(50_000).build();
+
+		var group = sandboxBuilder.createPartialCaseLDDGroup(buy1, sell1, sell2, shipping1);
+		group.getRows().get(0).getVesselEventOptions().add(event1);
+		//
+		// sandboxBuilder.makePartialCaseRow() //
+		// .withShippingOptions(shipping1) //
+		// .withVesselEventOptions(event1) // Vessel event...
+		// .withBuyOptions(buy1)
+		// .withSellOptions(sell1) // ... or a cargo
+		// .build();
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(2, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(1, result.getExtraVesselEvents().size());
+
+		boolean foundCargoSolution = false;
+		boolean foundEventSolution = false;
+		LOOP_SOLUTIONS: for (final SolutionOption option : result.getOptions()) {
+			if (option.getScheduleModel().getSchedule().getCargoAllocations().isEmpty()) {
+				for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+					for (final Event evt : seq.getEvents()) {
+						if (evt instanceof VesselEventVisit vesselEventVisit) {
+							if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
+								foundEventSolution = true;
+								continue LOOP_SOLUTIONS;
+							}
+						}
+					}
+				}
+			} else {
+				final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+				Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+				Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+				Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+				foundCargoSolution = true;
+				for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+					for (final Event evt : seq.getEvents()) {
+						if (evt instanceof VesselEventVisit) {
+							Assertions.fail("Vessel event not expected in cargo solution");
+						}
+					}
+				}
+			}
+		}
+		Assertions.assertTrue(foundEventSolution);
+		Assertions.assertTrue(foundCargoSolution);
+	}
+
+	/**
+	 * Test case to check whether we can schedule a cargo OR a vessel event (but not both).
+	 */
+	@Test
+	public void testEventOrLDOrLDDCargoCase() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port port3 = portFinder.findPortById(InternalDataConstants.PORT_TOKYO_BAY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5") //
+				.withCV(22.5) //
+				.withDate(LocalDate.of(2019, 6, 1)) //
+				.build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "6") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(false, port3, entity, "7") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+		final SellOption openSell = sandboxBuilder.createOpenSell();
+
+		final VesselEventOption event1 = sandboxBuilder.makeCharterOutOpportunity(port1, LocalDate.of(2019, 7, 1), 30).withHireCost(50_000).build();
+
+		var group = sandboxBuilder.createPartialCaseLDDGroup(buy1, sell1, sell2, shipping1);
+		group.getRows().get(0).getVesselEventOptions().add(event1);
+		group.getRows().get(1).getSellOptions().add(openSell);
+		//
+		// sandboxBuilder.makePartialCaseRow() //
+		// .withShippingOptions(shipping1) //
+		// .withVesselEventOptions(event1) // Vessel event...
+		// .withBuyOptions(buy1)
+		// .withSellOptions(sell1) // ... or a cargo
+		// .build();
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		// Assertions.assertEquals(3, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(1, result.getExtraVesselEvents().size());
+
+		boolean foundLDCargoSolution = false;
+		boolean foundLDDCargoSolution = false;
+		boolean foundEventSolution = false;
+		LOOP_SOLUTIONS: for (final SolutionOption option : result.getOptions()) {
+			if (option.getScheduleModel().getSchedule().getCargoAllocations().isEmpty()) {
+				for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+					for (final Event evt : seq.getEvents()) {
+						if (evt instanceof VesselEventVisit vesselEventVisit) {
+							if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
+								// Assertions.assertFalse(foundEventSolution);
+								foundEventSolution = true;
+								continue LOOP_SOLUTIONS;
+							}
+						}
+					}
+				}
+			} else {
+				final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+				if (cargoAllocation.getSlotAllocations().size() == 2) {
+					Assertions.assertFalse(foundLDCargoSolution);
+					Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+					Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+					foundLDCargoSolution = true;
+					for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+						for (final Event evt : seq.getEvents()) {
+							if (evt instanceof VesselEventVisit) {
+								Assertions.fail("Vessel event not expected in cargo solution");
+							}
+						}
+					}
+				}
+				if (cargoAllocation.getSlotAllocations().size() == 3) {
+					Assertions.assertFalse(foundLDDCargoSolution);
+
+					Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+					Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+					Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+					foundLDDCargoSolution = true;
+					for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
+						for (final Event evt : seq.getEvents()) {
+							if (evt instanceof VesselEventVisit) {
+								Assertions.fail("Vessel event not expected in cargo solution");
+							}
+						}
+					}
+				}
+			}
+		}
+		Assertions.assertTrue(foundEventSolution);
+		Assertions.assertTrue(foundLDCargoSolution);
+		Assertions.assertTrue(foundLDDCargoSolution);
+	}
+
+	/**
 	 * Regression test: Sandbox optioniser fails as sandbox DES purchase is transformed twice.
 	 */
 	@Test
@@ -387,9 +712,9 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	@Test
-	public void testDerive_DESDES() {
+	public void testDefine_DESDES() {
 
-		Port futtsu = portFinder.findPortById("L_JP_Futts");
+		Port futtsu = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
 		Port osaka = portFinder.findPortById("L_JP_Osaka");
 
 		LoadSlot dp1 = cargoModelBuilder.createDESPurchase("DP1", DESPurchaseDealType.DEST_ONLY, LocalDate.of(2010, 1, 1), futtsu, null, entity, "5", 22.6, null);
@@ -448,7 +773,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	@Test
-	public void testDerive_FOBFOB() {
+	public void testDefine_FOBFOB() {
 
 		Port onslow = portFinder.findPortById("L_AU_Onslo");
 		Port pluto = portFinder.findPortById("L_AU_Pluto");
@@ -509,7 +834,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	@Test
-	public void testDerive_DESDESDivertFromSource() {
+	public void testDefine_DESDESDivertFromSource() {
 
 		Port onslow = portFinder.findPortById("L_AU_Onslo");
 		Port futtsu = portFinder.findPortById("L_JP_Futts");
@@ -1069,4 +1394,366 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		}
 	}
 
+
+	/**
+	 * LDD - but swap order of sales
+	 */
+	@Test
+	public void testLDD_SaleSwap() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port port3 = portFinder.findPortById(InternalDataConstants.PORT_TOKYO_BAY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5") //
+				.withCV(22.5) //
+				.withDate(LocalDate.of(2019, 6, 1)) //
+				.build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "6") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(false, port3, entity, "7") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+
+		sandboxBuilder.createBaseCaseLDDGroup(buy1, sell1, sell2, shipping1);
+
+		sandboxBuilder.createPartialCaseLDDGroup(buy1, sell2, sell1, shipping1);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Base state (use price expression as pairing indicator)
+			final SolutionOption option = result.getBaseOption();
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(2).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+			Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+		}
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(2).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+		}
+	}
+
+	/**
+	 * LD cargo to LDD
+	 */
+	@Test
+	public void testLDToLDD1() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port port3 = portFinder.findPortById(InternalDataConstants.PORT_TOKYO_BAY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5") //
+				.withCV(22.5) //
+				.withDate(LocalDate.of(2019, 6, 1)) //
+				.build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "6") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(false, port3, entity, "7") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+
+		sandboxBuilder.createBaseCaseRow(buy1, sell1, shipping1);
+
+		sandboxBuilder.createPartialCaseLDDGroup(buy1, sell2, sell1, shipping1);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Base state (use price expression as pairing indicator)
+			final SolutionOption option = result.getBaseOption();
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(2, cargoAllocation.getSlotAllocations().size());
+			Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(2).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+		}
+	}
+
+	/**
+	 * LD cargo to LDD
+	 */
+	@Test
+	public void testLDToLDD2() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port port3 = portFinder.findPortById(InternalDataConstants.PORT_TOKYO_BAY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5") //
+				.withCV(22.5) //
+				.withDate(LocalDate.of(2019, 6, 1)) //
+				.build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "6") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(false, port3, entity, "7") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+
+		sandboxBuilder.createBaseCaseRow(buy1, sell2, shipping1);
+
+		sandboxBuilder.createPartialCaseLDDGroup(buy1, sell2, sell1, shipping1);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(1, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Base state (use price expression as pairing indicator)
+			final SolutionOption option = result.getBaseOption();
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(2, cargoAllocation.getSlotAllocations().size());
+			Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+		}
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+			Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(2).getSlot().getWindowStart());
+			Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+			Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+		}
+	}
+
+	/**
+	 * LDD optimise. Without the PreSequencedElementsConstraintChecker, we would get rid of the LDD and use the buy for the LD cargo.
+	 */
+	@Test
+	public void testLDD_Optimiser() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final ShippingOption shipping1 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		final ShippingOption shipping2 = sandboxBuilder.makeSimpleCharter(vessel, entity) //
+				.withHireCosts("50000") //
+				.build();
+
+		sandboxBuilder.setPortfolioMode(true);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setOptimiseSandboxMode();
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+		final Port port3 = portFinder.findPortById(InternalDataConstants.PORT_TOKYO_BAY);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "1") //
+				.withCV(22.5) //
+				.withDate(LocalDate.of(2019, 6, 1)) //
+				.build();
+		final SellOption sell1 = sandboxBuilder.makeSellOpportunity(false, port2, entity, "6") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.build();
+		final SellOption sell2 = sandboxBuilder.makeSellOpportunity(false, port3, entity, "7") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.withVolumeFixed(1_500_000, VolumeUnits.MMBTU) //
+				.build();
+
+		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "10") //
+				.withCV(22.5) //
+				.withDate(LocalDate.of(2019, 6, 1)) //
+				.build();
+		// We can't use this as LDD can't re-wire
+		final SellOption sell3 = sandboxBuilder.makeSellOpportunity(false, port3, entity, "9") //
+				.withDate(LocalDate.of(2019, 7, 1)) //
+				.withWindow(1, TimePeriod.MONTHS) //
+				.build();
+
+		sandboxBuilder.createBaseCaseLDDGroup(buy1, sell1, sell2, shipping1);
+		sandboxBuilder.createBaseCaseRow(buy2, sell3, shipping2);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(5, result.getExtraSlots().size());
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(2, result.getExtraVesselCharters().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Base state (use price expression as pairing indicator)
+			final SolutionOption option = result.getBaseOption();
+			boolean foundLDD = false;
+			boolean foundLD = false;
+			for (final CargoAllocation cargoAllocation : option.getScheduleModel().getSchedule().getCargoAllocations()) {
+				if (cargoAllocation.getSlotAllocations().size() == 2) {
+					Assertions.assertFalse(foundLD);
+					foundLD = true;
+				} else if (cargoAllocation.getSlotAllocations().size() == 3) {
+					Assertions.assertFalse(foundLDD);
+					foundLDD = true;
+					Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+					Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+					Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(2).getSlot().getWindowStart());
+					Assertions.assertEquals("1", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+					Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+					Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+				} else {
+					Assertions.fail();
+
+				}
+			}
+			Assertions.assertTrue(foundLD);
+			Assertions.assertTrue(foundLDD);
+
+		}
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			boolean foundLDD = false;
+			boolean foundLD = false;
+			for (final CargoAllocation cargoAllocation : option.getScheduleModel().getSchedule().getCargoAllocations()) {
+				if (cargoAllocation.getSlotAllocations().size() == 2) {
+					Assertions.assertFalse(foundLD);
+					foundLD = true;
+				} else if (cargoAllocation.getSlotAllocations().size() == 3) {
+					Assertions.assertFalse(foundLDD);
+					foundLDD = true;
+					Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+					Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+					Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(2).getSlot().getWindowStart());
+					Assertions.assertEquals("1", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+					Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+					Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+				} else {
+					Assertions.fail();
+
+				}
+			}
+			Assertions.assertFalse(foundLD);
+			Assertions.assertTrue(foundLDD);
+
+			// final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+			// Assertions.assertEquals(LocalDate.of(2019, 6, 1), cargoAllocation.getSlotAllocations().get(0).getSlot().getWindowStart());
+			// Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(1).getSlot().getWindowStart());
+			// Assertions.assertEquals(LocalDate.of(2019, 7, 1), cargoAllocation.getSlotAllocations().get(2).getSlot().getWindowStart());
+			// Assertions.assertEquals("5", cargoAllocation.getSlotAllocations().get(0).getSlot().getPriceExpression());
+			// Assertions.assertEquals("6", cargoAllocation.getSlotAllocations().get(1).getSlot().getPriceExpression());
+			// Assertions.assertEquals("7", cargoAllocation.getSlotAllocations().get(2).getSlot().getPriceExpression());
+		}
+	}
 }

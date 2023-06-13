@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.function.Function;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,8 +30,10 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -38,6 +42,7 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SellMarket;
@@ -62,6 +67,7 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSONTransformer;
 import com.mmxlabs.models.lng.transformer.ui.headless.common.ScenarioMetaUtils;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -69,6 +75,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -109,136 +116,139 @@ public class SandboxDefineRunner {
 			templateBaseCase.setKeepExistingScenario(model.getPartialCase().isKeepExistingScenario());
 
 			final List<List<Runnable>> combinations = new LinkedList<>();
-			for (final PartialCaseRow r : model.getPartialCase().getPartialCase()) {
-				final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-				bcr.setOptions(AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions());
+			for (final PartialCaseRowGroup group : model.getPartialCase().getGroups()) {
+				final BaseCaseRowGroup bcrg = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+				for (final PartialCaseRow r : group.getRows()) {
+					final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+					bcr.setGroup(bcrg);
+					bcr.setOptions(AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions());
 
-				// If we mix vessel events AND cargoes in the same row, we ensure we always have
-				// a null vessel event combination. Later on this will be handled in the
-				// recursive tasks step
+					// If we mix vessel events AND cargoes in the same row, we ensure we always have
+					// a null vessel event combination. Later on this will be handled in the
+					// recursive tasks step
 
-				boolean hasVE = false;
-				if (!r.getVesselEventOptions().isEmpty()) {
-					hasVE = true;
+					boolean hasVE = false;
+					if (!r.getVesselEventOptions().isEmpty()) {
+						hasVE = true;
+					}
+
+					if (r.getVesselEventOptions().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final VesselEventOption o : r.getVesselEventOptions()) {
+							options.add(() -> bcr.setVesselEventOption(o));
+						}
+						// Add Empty case if needed
+						if (!r.getBuyOptions().isEmpty() || !r.getSellOptions().isEmpty()) {
+							options.add(() -> bcr.setVesselEventOption(null));
+						}
+						combinations.add(options);
+					} else if (r.getVesselEventOptions().size() == 1) {
+						// Add Empty case if needed
+						if (!r.getBuyOptions().isEmpty() || !r.getSellOptions().isEmpty()) {
+							final List<Runnable> options = new LinkedList<>();
+							options.add(() -> bcr.setVesselEventOption(r.getVesselEventOptions().get(0)));
+							options.add(() -> bcr.setVesselEventOption(null));
+							combinations.add(options);
+						} else {
+							bcr.setVesselEventOption(r.getVesselEventOptions().get(0));
+						}
+					}
+
+					if (hasVE || r.getBuyOptions().size() > 1) {
+						if (!r.getBuyOptions().isEmpty()) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final BuyOption o : r.getBuyOptions()) {
+								options.add(() -> bcr.setBuyOption(o));
+							}
+							combinations.add(options);
+						}
+					} else if (r.getBuyOptions().size() == 1) {
+						bcr.setBuyOption(r.getBuyOptions().get(0));
+					}
+
+					if (hasVE || r.getSellOptions().size() > 1) {
+						if (!r.getSellOptions().isEmpty()) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final SellOption o : r.getSellOptions()) {
+								options.add(() -> bcr.setSellOption(o));
+							}
+							combinations.add(options);
+						}
+					} else if (r.getSellOptions().size() == 1) {
+						bcr.setSellOption(r.getSellOptions().get(0));
+					}
+					if (r.getShipping().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final ShippingOption o : r.getShipping()) {
+							options.add(() -> bcr.setShipping(o));
+						}
+						combinations.add(options);
+					} else if (r.getShipping().size() == 1) {
+						bcr.setShipping(r.getShipping().get(0));
+					}
+					final PartialCaseRowOptions rowOptions = r.getOptions();
+					if (rowOptions != null) {
+						if (rowOptions.getLadenRoutes().size() > 1) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final RouteOption ro : rowOptions.getLadenRoutes()) {
+								options.add(() -> bcr.getOptions().setLadenRoute(ro));
+							}
+							combinations.add(options);
+						} else if (rowOptions.getLadenRoutes().size() == 1) {
+							bcr.getOptions().setLadenRoute(rowOptions.getLadenRoutes().get(0));
+						}
+						if (rowOptions.getBallastRoutes().size() > 1) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final RouteOption ro : rowOptions.getBallastRoutes()) {
+								options.add(() -> bcr.getOptions().setBallastRoute(ro));
+							}
+							combinations.add(options);
+						} else if (rowOptions.getBallastRoutes().size() == 1) {
+							bcr.getOptions().setBallastRoute(rowOptions.getBallastRoutes().get(0));
+						}
+
+						if (rowOptions.getLadenFuelChoices().size() > 1) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final FuelChoice ro : rowOptions.getLadenFuelChoices()) {
+								options.add(() -> bcr.getOptions().setLadenFuelChoice(ro));
+							}
+							combinations.add(options);
+						} else if (rowOptions.getLadenFuelChoices().size() == 1) {
+							bcr.getOptions().setLadenFuelChoice(rowOptions.getLadenFuelChoices().get(0));
+						}
+
+						if (rowOptions.getBallastFuelChoices().size() > 1) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final FuelChoice ro : rowOptions.getBallastFuelChoices()) {
+								options.add(() -> bcr.getOptions().setBallastFuelChoice(ro));
+							}
+							combinations.add(options);
+						} else if (rowOptions.getBallastFuelChoices().size() == 1) {
+							bcr.getOptions().setBallastFuelChoice(rowOptions.getBallastFuelChoices().get(0));
+						}
+
+						if (rowOptions.getLoadDates().size() > 1) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final LocalDateTimeHolder ro : rowOptions.getLoadDates()) {
+								options.add(() -> bcr.getOptions().setLoadDate(ro.getDateTime()));
+							}
+							combinations.add(options);
+						} else if (rowOptions.getLoadDates().size() == 1) {
+							bcr.getOptions().setLoadDate(rowOptions.getLoadDates().get(0).getDateTime());
+						}
+						if (rowOptions.getDischargeDates().size() > 1) {
+							final List<Runnable> options = new LinkedList<>();
+							for (final LocalDateTimeHolder ro : rowOptions.getDischargeDates()) {
+								options.add(() -> bcr.getOptions().setDischargeDate(ro.getDateTime()));
+							}
+							combinations.add(options);
+						} else if (rowOptions.getDischargeDates().size() == 1) {
+							bcr.getOptions().setDischargeDate(rowOptions.getDischargeDates().get(0).getDateTime());
+						}
+					}
+					templateBaseCase.getBaseCase().add(bcr);
 				}
-
-				if (r.getVesselEventOptions().size() > 1) {
-					final List<Runnable> options = new LinkedList<>();
-					for (final VesselEventOption o : r.getVesselEventOptions()) {
-						options.add(() -> bcr.setVesselEventOption(o));
-					}
-					// Add Empty case if needed
-					if (!r.getBuyOptions().isEmpty() || !r.getSellOptions().isEmpty()) {
-						options.add(() -> bcr.setVesselEventOption(null));
-					}
-					combinations.add(options);
-				} else if (r.getVesselEventOptions().size() == 1) {
-					// Add Empty case if needed
-					if (!r.getBuyOptions().isEmpty() || !r.getSellOptions().isEmpty()) {
-						final List<Runnable> options = new LinkedList<>();
-						options.add(() -> bcr.setVesselEventOption(r.getVesselEventOptions().get(0)));
-						options.add(() -> bcr.setVesselEventOption(null));
-						combinations.add(options);
-					} else {
-						bcr.setVesselEventOption(r.getVesselEventOptions().get(0));
-					}
-				}
-
-				if (hasVE || r.getBuyOptions().size() > 1) {
-					if (!r.getBuyOptions().isEmpty()) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final BuyOption o : r.getBuyOptions()) {
-							options.add(() -> bcr.setBuyOption(o));
-						}
-						combinations.add(options);
-					}
-				} else if (r.getBuyOptions().size() == 1) {
-					bcr.setBuyOption(r.getBuyOptions().get(0));
-				}
-
-				if (hasVE || r.getSellOptions().size() > 1) {
-					if (!r.getSellOptions().isEmpty()) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final SellOption o : r.getSellOptions()) {
-							options.add(() -> bcr.setSellOption(o));
-						}
-						combinations.add(options);
-					}
-				} else if (r.getSellOptions().size() == 1) {
-					bcr.setSellOption(r.getSellOptions().get(0));
-				}
-				if (r.getShipping().size() > 1) {
-					final List<Runnable> options = new LinkedList<>();
-					for (final ShippingOption o : r.getShipping()) {
-						options.add(() -> bcr.setShipping(o));
-					}
-					combinations.add(options);
-				} else if (r.getShipping().size() == 1) {
-					bcr.setShipping(r.getShipping().get(0));
-				}
-				final PartialCaseRowOptions rowOptions = r.getOptions();
-				if (rowOptions != null) {
-					if (rowOptions.getLadenRoutes().size() > 1) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final RouteOption ro : rowOptions.getLadenRoutes()) {
-							options.add(() -> bcr.getOptions().setLadenRoute(ro));
-						}
-						combinations.add(options);
-					} else if (rowOptions.getLadenRoutes().size() == 1) {
-						bcr.getOptions().setLadenRoute(rowOptions.getLadenRoutes().get(0));
-					}
-					if (rowOptions.getBallastRoutes().size() > 1) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final RouteOption ro : rowOptions.getBallastRoutes()) {
-							options.add(() -> bcr.getOptions().setBallastRoute(ro));
-						}
-						combinations.add(options);
-					} else if (rowOptions.getBallastRoutes().size() == 1) {
-						bcr.getOptions().setBallastRoute(rowOptions.getBallastRoutes().get(0));
-					}
-
-					if (rowOptions.getLadenFuelChoices().size() > 1) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final FuelChoice ro : rowOptions.getLadenFuelChoices()) {
-							options.add(() -> bcr.getOptions().setLadenFuelChoice(ro));
-						}
-						combinations.add(options);
-					} else if (rowOptions.getLadenFuelChoices().size() == 1) {
-						bcr.getOptions().setLadenFuelChoice(rowOptions.getLadenFuelChoices().get(0));
-					}
-
-					if (rowOptions.getBallastFuelChoices().size() > 1) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final FuelChoice ro : rowOptions.getBallastFuelChoices()) {
-							options.add(() -> bcr.getOptions().setBallastFuelChoice(ro));
-						}
-						combinations.add(options);
-					} else if (rowOptions.getBallastFuelChoices().size() == 1) {
-						bcr.getOptions().setBallastFuelChoice(rowOptions.getBallastFuelChoices().get(0));
-					}
-
-					if (rowOptions.getLoadDates().size() > 1) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final LocalDateTimeHolder ro : rowOptions.getLoadDates()) {
-							options.add(() -> bcr.getOptions().setLoadDate(ro.getDateTime()));
-						}
-						combinations.add(options);
-					} else if (rowOptions.getLoadDates().size() == 1) {
-						bcr.getOptions().setLoadDate(rowOptions.getLoadDates().get(0).getDateTime());
-					}
-					if (rowOptions.getDischargeDates().size() > 1) {
-						final List<Runnable> options = new LinkedList<>();
-						for (final LocalDateTimeHolder ro : rowOptions.getDischargeDates()) {
-							options.add(() -> bcr.getOptions().setDischargeDate(ro.getDateTime()));
-						}
-						combinations.add(options);
-					} else if (rowOptions.getDischargeDates().size() == 1) {
-						bcr.getOptions().setDischargeDate(rowOptions.getDischargeDates().get(0).getDateTime());
-					}
-
-				}
-
-				templateBaseCase.getBaseCase().add(bcr);
+				templateBaseCase.getGroups().add(bcrg);
 			}
 
 			final List<BaseCase> tasks = new LinkedList<>();
@@ -256,6 +266,7 @@ public class SandboxDefineRunner {
 				}
 				skipRun = true;
 			}
+
 			final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(originalScenarioDataProvider, mapper);
 			specifications = tasks.stream() //
 					.map(baseCase -> new Pair<>(baseCase, builder.generate(baseCase, model.getBaseCase().isKeepExistingScenario(), false))) //
@@ -266,7 +277,8 @@ public class SandboxDefineRunner {
 	}
 
 	private boolean checkSequenceSatifiesConstraints(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
-		final ModifiableSequences emptySequences = new ModifiableSequences(new LinkedList<>());
+		// Currently (at least) there is no need to use the rawSequence provider data
+		final ModifiableSequences emptySequences = new ModifiableSequences(new LinkedList<>(), new SequencesAttributesProviderImpl());
 
 		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, emptySequences, emptySequences, dataTransformer.getHints());
 
@@ -363,6 +375,31 @@ public class SandboxDefineRunner {
 
 	private static void filterTasks(final List<BaseCase> tasks) {
 		removeAllSpotBuySpotSellCargoes(tasks);
+
+		{
+			Iterator<BaseCase> itr = tasks.iterator();
+			TASK_LOOP: while (itr.hasNext()) {
+				BaseCase baseCase = itr.next();
+				for (var group : baseCase.getGroups()) {
+					int numDischargesWithVolRange = 0;
+					for (BaseCaseRow r : group.getRows()) {
+						if (r.getSellOption() != null) {
+							// We don't care what the CV is here.
+							int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(1.0, r.getSellOption());
+							if (sellVolumeInMMBTU == null || sellVolumeInMMBTU[0] != sellVolumeInMMBTU[1]) {
+								numDischargesWithVolRange++;
+							}
+						}
+					}
+					if (numDischargesWithVolRange > 1) {
+						itr.remove();
+						continue TASK_LOOP;
+					}
+				}
+
+			}
+		}
+
 		final Set<BaseCase> duplicates = new HashSet<>();
 		for (final BaseCase baseCase1 : tasks) {
 			DUPLICATE_TEST: for (final BaseCase baseCase2 : tasks) {
@@ -407,29 +444,37 @@ public class SandboxDefineRunner {
 	}
 
 	private static void removeAllSpotBuySpotSellCargoes(final List<BaseCase> tasks) {
+		List<BaseCase> tasksToRemove = new LinkedList<>();
 		for (final BaseCase bc : tasks) {
-			for (int i = 0; i < bc.getBaseCase().size(); i++) {
-				final BaseCaseRow bcRow = bc.getBaseCase().get(i);
-				if (bcRow.getBuyOption() instanceof BuyMarket && bcRow.getSellOption() instanceof SellMarket) {
-					tasks.remove(bc);
-					break;
-				}
+			for (BaseCaseRowGroup grp : bc.getGroups()) {
+				boolean hasBuyMarket = false;
 
-				if (bcRow.getBuyOption() != null && bcRow.getSellOption() == null) {
-					if (AnalyticsBuilder.getDate(bcRow.getBuyOption()) == null || bcRow.getBuyOption() instanceof BuyMarket) {
-						tasks.remove(bc);
+				for (final BaseCaseRow bcRow : grp.getRows()) {
+					if (bcRow.getBuyOption() instanceof BuyMarket) {
+						hasBuyMarket = true;
+					}
+					if (hasBuyMarket && bcRow.getSellOption() instanceof SellMarket) {
+						tasksToRemove.add(bc);
 						break;
 					}
-				}
+					// Filter open spot positions
+					if (grp.getRows().size() == 1 && bcRow.getBuyOption() != null && bcRow.getSellOption() == null) {
+						if (AnalyticsBuilder.getDate(bcRow.getBuyOption()) == null || bcRow.getBuyOption() instanceof BuyMarket) {
+							tasksToRemove.add(bc);
+							break;
+						}
+					}
 
-				if (bcRow.getSellOption() != null && bcRow.getBuyOption() == null) {
-					if (AnalyticsBuilder.getDate(bcRow.getSellOption()) == null || bcRow.getSellOption() instanceof SellMarket) {
-						tasks.remove(bc);
-						break;
+					if (grp.getRows().size() == 1 && bcRow.getSellOption() != null && bcRow.getBuyOption() == null) {
+						if (AnalyticsBuilder.getDate(bcRow.getSellOption()) == null || bcRow.getSellOption() instanceof SellMarket) {
+							tasksToRemove.add(bc);
+							break;
+						}
 					}
 				}
 			}
 		}
+		tasks.removeAll(tasksToRemove);
 	}
 
 	private static void recursiveTaskCreator(final int listIdx, final List<List<Runnable>> combinations, final BaseCase templateBaseCase, final List<BaseCase> tasks) {
@@ -437,50 +482,85 @@ public class SandboxDefineRunner {
 			final BaseCase copy = EMFCopier.copy(templateBaseCase);
 
 			final Set<Object> seenItems = new HashSet<>();
-			final List<BaseCaseRow> data = new LinkedList<>(copy.getBaseCase());
-			while (!data.isEmpty()) {
-				final BaseCaseRow row = data.remove(0);
-				if (row.getVesselEventOption() != null && !seenItems.add(row.getVesselEventOption())) {
-					return;
-				}
-				if (row.getVesselEventOption() != null) {
-					if (row.getBuyOption() != null && AnalyticsBuilder.getDate(row.getBuyOption()) != null) {
-						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						final BuyOption buyOption = row.getBuyOption();
-						if (!(buyOption instanceof BuyMarket)) {
-							extra.setBuyOption(buyOption);
-							copy.getBaseCase().add(extra);
-							data.add(extra);
-						}
-					}
-					if (row.getSellOption() != null && AnalyticsBuilder.getDate(row.getSellOption()) != null) {
-						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						final SellOption sellOption = row.getSellOption();
-						if (!(sellOption instanceof SellMarket)) {
-							extra.setSellOption(sellOption);
-							copy.getBaseCase().add(extra);
-							data.add(extra);
-						}
-					}
-					row.setBuyOption(null);
-					row.setSellOption(null);
-				}
-				if (row.getBuyOption() != null && !seenItems.add(row.getBuyOption())) {
-					return;
-				}
-				if (row.getSellOption() != null && !seenItems.add(row.getSellOption())) {
-					return;
-				}
-				if ((row.getBuyOption() instanceof OpenBuy && row.getSellOption() instanceof OpenSell) || (row.getBuyOption() instanceof BuyMarket && row.getSellOption() instanceof SellMarket)) {
-					return;
-				}
-				// Replace open options with null reference for eval code.
-				if (row.getBuyOption() instanceof OpenBuy) {
-					row.setBuyOption(null);
-				}
+			// May need to loop over groups?
+			final List<BaseCaseRowGroup> data = new LinkedList<>(copy.getGroups());
 
-				if (row.getSellOption() instanceof OpenSell) {
-					row.setSellOption(null);
+			final List<BuyOption> openBuys = new LinkedList<>();
+			final List<SellOption> openSells = new LinkedList<>();
+			while (!data.isEmpty()) {
+				final BaseCaseRowGroup grp = data.remove(0);
+				boolean forceRowToOpen = false;
+				// Copy of list as we can modify it
+				for (BaseCaseRow row : new LinkedList<>(grp.getRows())) {
+					if (row.getVesselEventOption() != null && !seenItems.add(row.getVesselEventOption())) {
+						return;
+					}
+					// LDD second row may not be covered here?
+					if (forceRowToOpen || row.getVesselEventOption() != null) {
+						forceRowToOpen = true;
+						// Vessel with buy/sell options. This need to be treated as open, so split out some extra rows for the open options (unless they are spot market options).
+						if (row.getBuyOption() != null && AnalyticsBuilder.getDate(row.getBuyOption()) != null) {
+							final BuyOption buyOption = row.getBuyOption();
+							if (!(buyOption instanceof BuyMarket)) {
+								openBuys.add(buyOption);
+							}
+						}
+						if (row.getSellOption() != null && AnalyticsBuilder.getDate(row.getSellOption()) != null) {
+							final SellOption sellOption = row.getSellOption();
+							if (!(sellOption instanceof SellMarket)) {
+								openSells.add(sellOption);
+							}
+						}
+						// Second LDD rows should be removed
+						if (row.getVesselEventOption() == null) {
+							row.setGroup(null);
+							copy.getBaseCase().remove(row);
+						}
+						row.setBuyOption(null);
+						row.setSellOption(null);
+					}
+					if (row.getBuyOption() != null && !seenItems.add(row.getBuyOption())) {
+						return;
+					}
+					if (row.getSellOption() != null && !seenItems.add(row.getSellOption())) {
+						return;
+					}
+					if ((row.getBuyOption() instanceof OpenBuy && row.getSellOption() instanceof OpenSell) || (row.getBuyOption() instanceof BuyMarket && row.getSellOption() instanceof SellMarket)) {
+						return;
+					}
+
+					// Replace open options with null reference for eval code.
+					if (row.getBuyOption() instanceof OpenBuy) {
+						row.setBuyOption(null);
+					}
+
+					if (row.getSellOption() instanceof OpenSell) {
+						row.setSellOption(null);
+					}
+				}
+			}
+
+			// Check options removed from event rows and see whether they have been used, or need to be marked as open
+			for (var buyOption : openBuys) {
+				if (!seenItems.contains(buyOption)) {
+					final BaseCaseRow extraOpenRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+					final BaseCaseRowGroup extraGroup = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+					extraOpenRow.setBuyOption(buyOption);
+					copy.getBaseCase().add(extraOpenRow);
+					copy.getGroups().add(extraGroup);
+					extraOpenRow.setGroup(extraGroup);
+					data.add(extraGroup); // Add to list to avoid using the buy again
+				}
+			}
+			for (var sellOption : openSells) {
+				if (!seenItems.contains(sellOption)) {
+					final BaseCaseRow extraOpenRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+					final BaseCaseRowGroup extraGroup = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+					extraOpenRow.setSellOption(sellOption);
+					copy.getBaseCase().add(extraOpenRow);
+					copy.getGroups().add(extraGroup);
+					extraOpenRow.setGroup(extraGroup);
+					data.add(extraGroup); // Add to list to avoid using the sell again
 				}
 			}
 			filterShipping(copy);

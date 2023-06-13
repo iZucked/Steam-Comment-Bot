@@ -199,8 +199,8 @@ public class AbstractSequencesOptimiserTest {
 		final Map<IResource, IModifiableSequence> seqMap1 = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Map<IResource, IModifiableSequence> seqMap2 = CollectionsUtil.makeHashMap(r1, seq3, r2, seq4);
 
-		final ModifiableSequences source = new ModifiableSequences(resList, seqMap1);
-		final ModifiableSequences destination = new ModifiableSequences(resList, seqMap2);
+		final ModifiableSequences source = new ModifiableSequences(resList, seqMap1, new SequencesAttributesProviderImpl());
+		final ModifiableSequences destination = new ModifiableSequences(resList, seqMap2, new SequencesAttributesProviderImpl());
 
 		final List<IResource> affectedResources = CollectionsUtil.makeArrayList(r2);
 
@@ -238,8 +238,8 @@ public class AbstractSequencesOptimiserTest {
 		final Map<IResource, ISequence> seqMap1 = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Map<IResource, IModifiableSequence> seqMap2 = CollectionsUtil.makeHashMap(r1, seq3, r2, seq4);
 
-		final Sequences source = new Sequences(resList, seqMap1, Collections.emptyList(),  new SequencesAttributesProviderImpl());
-		final ModifiableSequences destination = new ModifiableSequences(resList, seqMap2);
+		final Sequences source = new Sequences(resList, seqMap1, Collections.emptyList(), new SequencesAttributesProviderImpl());
+		final ModifiableSequences destination = new ModifiableSequences(resList, seqMap2, new SequencesAttributesProviderImpl());
 
 		final List<IResource> affectedResources = CollectionsUtil.makeArrayList(r2);
 

@@ -52,12 +52,14 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstrain
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PreSequencedElementsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselUsageSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
@@ -366,6 +368,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(TravelTimeConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(VirtualVesselConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(TimeSortConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(PreSequencedElementsConstraintCheckerFactory.NAME, true));
 
 			// BugzId: 1597 - Disable as this causes problems with optimisation performance.
 			// constraints.add(createConstraint(parametersFactory,
@@ -409,6 +412,7 @@ public class ScenarioUtils {
 
 	public static void updateObjectivesForDefaultADPOptimisation(final OptimisationPlan plan) {
 		ScenarioUtils.createOrUpdateAllConstraints(plan, MinMaxSlotGroupConstraintCheckerFactory.NAME, true);
+		ScenarioUtils.createOrUpdateAllConstraints(plan, VesselUsageSlotGroupConstraintCheckerFactory.NAME, true);
 		ScenarioUtils.createOrUpdateAllConstraints(plan, LadenIdleTimeConstraintCheckerFactory.NAME, true);
 		ScenarioUtils.createOrUpdateAllObjectives(plan, VesselUtilisationFitnessCoreFactory.NAME, true, 1);
 		ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);

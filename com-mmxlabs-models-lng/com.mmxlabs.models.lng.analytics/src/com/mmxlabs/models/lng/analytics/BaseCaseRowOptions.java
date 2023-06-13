@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.port.RouteOption;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import java.time.LocalDateTime;
 import org.eclipse.emf.ecore.EObject;
 
@@ -33,7 +34,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface BaseCaseRowOptions extends EObject {
+public interface BaseCaseRowOptions extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Laden Route</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.port.RouteOption}.

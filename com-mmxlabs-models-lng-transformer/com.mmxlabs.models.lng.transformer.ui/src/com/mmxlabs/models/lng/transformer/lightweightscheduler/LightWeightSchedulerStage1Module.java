@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.lightweightscheduler;
 
+import static com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module.FULL_LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES;
 import static com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module.LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES;
 import static com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module.LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT;
 import static com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module.LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT;
@@ -24,11 +25,13 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ICargoVesselRestrictionsMatrixProducer;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.CargoVesselRestrictionsMatrixProducer;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.FullLightWeightConstraintCheckerRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightConstraintCheckerRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightFitnessFunctionRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.SimpleCargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightVesselUsageConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.DefaultPNLLightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.VesselCargoCountLightWeightFitnessFunctionFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.pairing.GoogleORToolsPairingMatrixOptimiser;
@@ -98,6 +101,13 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 		registry.registerConstraintCheckerFactory(new LightWeightShippingRestrictionsConstraintCheckerFactory());
 		return registry;
 	}
+	@Provides
+	@Singleton
+	FullLightWeightConstraintCheckerRegistry getFullLightweightConstraintCheckerRegistry() {
+		FullLightWeightConstraintCheckerRegistry registry = new FullLightWeightConstraintCheckerRegistry();
+		registry.registerConstraintCheckerFactory(new LightWeightVesselUsageConstraintCheckerFactory());
+		return registry;
+	}
 
 	@Provides
 	@Singleton
@@ -118,5 +128,11 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 	@Named(LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES)
 	List<String> getConstraintCheckerNames() {
 		return CollectionsUtil.makeLinkedList("LightWeightShippingRestrictionsConstraintChecker");
+	}
+	
+	@Provides
+	@Named(FULL_LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES)
+	List<String> getFullConstraintCheckerNames() {
+		return CollectionsUtil.makeLinkedList("LightWeightVesselUsageConstraintChecker");
 	}
 }

@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.analytics;
 import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.port.RouteOption;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import java.time.LocalDateTime;
 import org.eclipse.emf.common.util.EList;
 
@@ -35,7 +36,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface PartialCaseRowOptions extends EObject {
+public interface PartialCaseRowOptions extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Laden Routes</b></em>' attribute list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.port.RouteOption}.

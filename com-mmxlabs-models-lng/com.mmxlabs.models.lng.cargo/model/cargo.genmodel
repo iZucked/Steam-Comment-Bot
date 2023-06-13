@@ -342,6 +342,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/nonShippedCargoSpecifications"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/openEvents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/preSequences"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//PreSequenceGroup">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PreSequenceGroup/sequence"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//NonShippedCargoSpecification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//NonShippedCargoSpecification/slotSpecifications"/>

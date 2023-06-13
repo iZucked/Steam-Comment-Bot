@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
@@ -187,7 +189,37 @@ public class SandboxModelBuilder {
 		row.setOptions(options);
 
 		this.optionAnalysisModel.getBaseCase().getBaseCase().add(row);
+		final BaseCaseRowGroup group = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+		row.setGroup(group);
+		this.optionAnalysisModel.getBaseCase().getGroups().add(group);
 		return row;
+
+	}
+
+	public BaseCaseRowGroup createBaseCaseLDDGroup(final BuyOption buy, final SellOption sell1, final SellOption sell2, final ShippingOption shipping) {
+		final BaseCaseRowGroup group = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+		this.optionAnalysisModel.getBaseCase().getGroups().add(group);
+		{
+			final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+			final BaseCaseRowOptions options = AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions();
+			row.setBuyOption(buy);
+			row.setSellOption(sell1);
+			row.setShipping(shipping);
+
+			row.setOptions(options);
+
+			this.optionAnalysisModel.getBaseCase().getBaseCase().add(row);
+			row.setGroup(group);
+		}
+		{
+			final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+			final BaseCaseRowOptions options = AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions();
+			row.setSellOption(sell2);
+			row.setOptions(options);
+			this.optionAnalysisModel.getBaseCase().getBaseCase().add(row);
+			row.setGroup(group);
+		}
+		return group;
 
 	}
 
@@ -200,6 +232,9 @@ public class SandboxModelBuilder {
 		row.setOptions(options);
 
 		this.optionAnalysisModel.getBaseCase().getBaseCase().add(row);
+		final BaseCaseRowGroup group = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+		row.setGroup(group);
+		this.optionAnalysisModel.getBaseCase().getGroups().add(group);
 		return row;
 
 	}
@@ -219,11 +254,55 @@ public class SandboxModelBuilder {
 		row.setOptions(options);
 
 		this.optionAnalysisModel.getPartialCase().getPartialCase().add(row);
+
+		final PartialCaseRowGroup group = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+		row.setGroup(group);
+		this.optionAnalysisModel.getPartialCase().getGroups().add(group);
 		return row;
 
 	}
 
+	public PartialCaseRowGroup createPartialCaseLDDGroup(final BuyOption buy, final SellOption sell1, final SellOption sell2, final ShippingOption shipping) {
+		final PartialCaseRowGroup group = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+		this.optionAnalysisModel.getPartialCase().getGroups().add(group);
+		{
+
+			final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+			final PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
+			if (buy != null) {
+				row.getBuyOptions().add(buy);
+			}
+			if (sell1 != null) {
+				row.getSellOptions().add(sell1);
+			}
+			if (shipping != null) {
+				row.getShipping().add(shipping);
+			}
+			row.setOptions(options);
+
+			this.optionAnalysisModel.getPartialCase().getPartialCase().add(row);
+
+			row.setGroup(group);
+		}
+		{
+
+			final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+			final PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
+			row.getSellOptions().add(sell2);
+			row.setOptions(options);
+
+			this.optionAnalysisModel.getPartialCase().getPartialCase().add(row);
+
+			row.setGroup(group);
+		}
+		return group;
+
+	}
+
 	public PartialCaseRow createPartialCaseRow(final VesselEventOption event, final ShippingOption shipping) {
+		final PartialCaseRowGroup group = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+		this.optionAnalysisModel.getPartialCase().getGroups().add(group);
+
 		final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
 		final PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
 
@@ -236,10 +315,14 @@ public class SandboxModelBuilder {
 		row.setOptions(options);
 
 		this.optionAnalysisModel.getPartialCase().getPartialCase().add(row);
+
+		row.setGroup(group);
 		return row;
 	}
 
 	public PartialCaseRowMaker makePartialCaseRow() {
-		return new PartialCaseRowMaker(this);
+		final PartialCaseRowGroup group = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+		this.optionAnalysisModel.getPartialCase().getGroups().add(group);
+		return new PartialCaseRowMaker(this, group);
 	}
 }

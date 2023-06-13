@@ -75,8 +75,10 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.VESSEL_EVENT_REFERENCE: return createVesselEventReference();
 			case AnalyticsPackage.CHARTER_OUT_OPPORTUNITY: return createCharterOutOpportunity();
 			case AnalyticsPackage.BASE_CASE_ROW: return createBaseCaseRow();
+			case AnalyticsPackage.BASE_CASE_ROW_GROUP: return createBaseCaseRowGroup();
 			case AnalyticsPackage.BASE_CASE_ROW_OPTIONS: return createBaseCaseRowOptions();
 			case AnalyticsPackage.PARTIAL_CASE_ROW: return createPartialCaseRow();
+			case AnalyticsPackage.PARTIAL_CASE_ROW_GROUP: return createPartialCaseRowGroup();
 			case AnalyticsPackage.PARTIAL_CASE_ROW_OPTIONS: return createPartialCaseRowOptions();
 			case AnalyticsPackage.SHIPPING_OPTION: return createShippingOption();
 			case AnalyticsPackage.SIMPLE_VESSEL_CHARTER_OPTION: return createSimpleVesselCharterOption();
@@ -329,6 +331,17 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * @generated
 	 */
 	@Override
+	public BaseCaseRowGroup createBaseCaseRowGroup() {
+		BaseCaseRowGroupImpl baseCaseRowGroup = new BaseCaseRowGroupImpl();
+		return baseCaseRowGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BaseCaseRowOptions createBaseCaseRowOptions() {
 		BaseCaseRowOptionsImpl baseCaseRowOptions = new BaseCaseRowOptionsImpl();
 		return baseCaseRowOptions;
@@ -343,6 +356,17 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public PartialCaseRow createPartialCaseRow() {
 		PartialCaseRowImpl partialCaseRow = new PartialCaseRowImpl();
 		return partialCaseRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PartialCaseRowGroup createPartialCaseRowGroup() {
+		PartialCaseRowGroupImpl partialCaseRowGroup = new PartialCaseRowGroupImpl();
+		return partialCaseRowGroup;
 	}
 
 	/**

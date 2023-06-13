@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCh
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PreSequencedElementsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
@@ -33,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintChec
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselUsageSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 
 /**
@@ -103,20 +105,24 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 				.toProvider(Peaberry.service(new LadenLegLimitConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(LadenIdleTimeConstraintCheckerFactory.class.getCanonicalName()))
-		.toProvider(Peaberry.service(new LadenIdleTimeConstraintCheckerFactory()).export());
+				.toProvider(Peaberry.service(new LadenIdleTimeConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(MinMaxVolumeConstraintCheckerFactory.class.getCanonicalName()))
-		.toProvider(Peaberry.service(new MinMaxVolumeConstraintCheckerFactory()).export());
-		
+				.toProvider(Peaberry.service(new MinMaxVolumeConstraintCheckerFactory()).export());
+
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(MinMaxSlotGroupConstraintCheckerFactory.class.getCanonicalName()))
-		.toProvider(Peaberry.service(new MinMaxSlotGroupConstraintCheckerFactory()).export());
-		
+				.toProvider(Peaberry.service(new MinMaxSlotGroupConstraintCheckerFactory()).export());
+
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(CounterPartyVolumeConstraintCheckerFactory.class.getCanonicalName()))
-		.toProvider(Peaberry.service(new CounterPartyVolumeConstraintCheckerFactory()).export());
+				.toProvider(Peaberry.service(new CounterPartyVolumeConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(CounterPartyWindowConstraintCheckerFactory.class.getCanonicalName()))
-		.toProvider(Peaberry.service(new CounterPartyWindowConstraintCheckerFactory()).export());
+				.toProvider(Peaberry.service(new CounterPartyWindowConstraintCheckerFactory()).export());
 
-
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PreSequencedElementsConstraintCheckerFactory.class.getCanonicalName()))
+				.toProvider(Peaberry.service(new PreSequencedElementsConstraintCheckerFactory()).export());
+		
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(VesselUsageSlotGroupConstraintCheckerFactory.class.getCanonicalName()))
+		.toProvider(Peaberry.service(new VesselUsageSlotGroupConstraintCheckerFactory()).export());
 	}
 }

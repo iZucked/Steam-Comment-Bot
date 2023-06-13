@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.jdt.annotation.NonNull;
@@ -38,13 +37,10 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
-import com.mmxlabs.models.lng.analytics.ui.views.formatters.FreezeDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.OptioniseDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
@@ -65,7 +61,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 	private GridTreeViewer baseCaseViewer;
 	private BaseCaseWiringDiagram baseCaseDiagram;
 	private GridViewerColumn optioniseCol;
-//	private GridViewerColumn freezeCol;
+	// private GridViewerColumn freezeCol;
 	private GridViewerColumn optionsCol;
 	private OptionModellerView optionModellerView;
 
@@ -82,7 +78,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(scenarioEditingLocation, baseCaseViewer);
 			inputWants.add(listener::setOptionAnalysisModel);
-			final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE | DND.DROP_LINK);
+			final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
 			dropTarget.setTransfer(types);
 			dropTarget.addDropListener(listener);
 		}, false);
@@ -91,7 +87,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 		final BaseCaseDropTargetListener listener = new BaseCaseDropTargetListener(scenarioEditingLocation, baseCaseViewer);
 		inputWants.add(listener::setOptionAnalysisModel);
-		baseCaseViewer.addDropSupport(DND.DROP_MOVE | DND.DROP_LINK, types, listener);
+		baseCaseViewer.addDropSupport(DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK, types, listener);
 		expandable.setExpanded(expanded);
 
 		expandable.addExpansionListener(expansionListener);
@@ -107,7 +103,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		baseCaseViewer.getGrid().setFooterVisible(true); // To allow DND to create a new row when table is full
 
 		baseCaseViewer.getGrid().setEmptyColumnFooterRenderer(new SandboxFooterRenderer());
-		
+
 		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
 		optioniseCol.getColumn().setAlignment(SWT.CENTER);
 		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
@@ -141,7 +137,12 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 							dv.setColumnSpan(item, i, 1);
 							cell.setText(new VesselEventOptionDescriptionFormatter().render(baseCaseRow.getVesselEventOption()));
 						} else {
-							cell.setText(new BuyOptionDescriptionFormatter().render(baseCaseRow.getBuyOption()));
+							if (baseCaseRow.getBuyOption() == null && baseCaseRow.getGroup().getRows().get(0) != baseCaseRow) {
+								// For LDD, leave cell blank
+								cell.setText("");
+							} else {
+								cell.setText(new BuyOptionDescriptionFormatter().render(baseCaseRow.getBuyOption()));
+							}
 						}
 					} else {
 						cell.setText("");
@@ -160,7 +161,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		}
 
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
-		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false);
 
 		// Mode specific columns
 		optionsCol = createColumn(baseCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS);

@@ -18,6 +18,6 @@ import com.mmxlabs.common.concurrent.JobExecutor;
  *
  */
 public interface ILightWeightSequenceOptimiser {
-	List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions,
+	List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers, List<IFullLightWeightConstraintChecker> fullConstraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions,
 			@NonNull JobExecutor jobExecutor, IProgressMonitor monitor);
 }

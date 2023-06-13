@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -36,6 +37,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl#getPartialCase <em>Partial Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl#isKeepExistingScenario <em>Keep Existing Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl#getGroups <em>Groups</em>}</li>
  * </ul>
  *
  * @generated
@@ -69,6 +71,16 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 	 * @ordered
 	 */
 	protected boolean keepExistingScenario = KEEP_EXISTING_SCENARIO_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getGroups() <em>Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PartialCaseRowGroup> groups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -131,10 +143,25 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 	 * @generated
 	 */
 	@Override
+	public EList<PartialCaseRowGroup> getGroups() {
+		if (groups == null) {
+			groups = new EObjectContainmentEList<PartialCaseRowGroup>(PartialCaseRowGroup.class, this, AnalyticsPackage.PARTIAL_CASE__GROUPS);
+		}
+		return groups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.PARTIAL_CASE__PARTIAL_CASE:
 				return ((InternalEList<?>)getPartialCase()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.PARTIAL_CASE__GROUPS:
+				return ((InternalEList<?>)getGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -151,6 +178,8 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 				return getPartialCase();
 			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
 				return isKeepExistingScenario();
+			case AnalyticsPackage.PARTIAL_CASE__GROUPS:
+				return getGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -171,6 +200,10 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
 				setKeepExistingScenario((Boolean)newValue);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE__GROUPS:
+				getGroups().clear();
+				getGroups().addAll((Collection<? extends PartialCaseRowGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -189,6 +222,9 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
 				setKeepExistingScenario(KEEP_EXISTING_SCENARIO_EDEFAULT);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE__GROUPS:
+				getGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -205,6 +241,8 @@ public class PartialCaseImpl extends EObjectImpl implements PartialCase {
 				return partialCase != null && !partialCase.isEmpty();
 			case AnalyticsPackage.PARTIAL_CASE__KEEP_EXISTING_SCENARIO:
 				return keepExistingScenario != KEEP_EXISTING_SCENARIO_EDEFAULT;
+			case AnalyticsPackage.PARTIAL_CASE__GROUPS:
+				return groups != null && !groups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

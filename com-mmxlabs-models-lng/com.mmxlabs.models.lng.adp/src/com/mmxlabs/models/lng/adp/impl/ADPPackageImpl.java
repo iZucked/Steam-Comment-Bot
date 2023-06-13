@@ -65,6 +65,8 @@ import com.mmxlabs.models.lng.adp.SupplyFromFlow;
 import com.mmxlabs.models.lng.adp.SupplyFromProfileFlow;
 import com.mmxlabs.models.lng.adp.SupplyFromSpotFlow;
 import com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint;
+import com.mmxlabs.models.lng.adp.VesselUsageDistribution;
+import com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -123,6 +125,20 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	private EClass periodDistributionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselUsageDistributionProfileConstraintEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselUsageDistributionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -785,6 +801,56 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	@Override
 	public EAttribute getPeriodDistribution_MaxCargoes() {
 		return (EAttribute)periodDistributionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getVesselUsageDistributionProfileConstraint() {
+		return vesselUsageDistributionProfileConstraintEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getVesselUsageDistributionProfileConstraint_Distributions() {
+		return (EReference)vesselUsageDistributionProfileConstraintEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getVesselUsageDistribution() {
+		return vesselUsageDistributionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVesselUsageDistribution_Cargoes() {
+		return (EAttribute)vesselUsageDistributionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getVesselUsageDistribution_Vessels() {
+		return (EReference)vesselUsageDistributionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2065,6 +2131,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(periodDistributionEClass, PERIOD_DISTRIBUTION__MIN_CARGOES);
 		createEAttribute(periodDistributionEClass, PERIOD_DISTRIBUTION__MAX_CARGOES);
 
+		vesselUsageDistributionProfileConstraintEClass = createEClass(VESSEL_USAGE_DISTRIBUTION_PROFILE_CONSTRAINT);
+		createEReference(vesselUsageDistributionProfileConstraintEClass, VESSEL_USAGE_DISTRIBUTION_PROFILE_CONSTRAINT__DISTRIBUTIONS);
+
+		vesselUsageDistributionEClass = createEClass(VESSEL_USAGE_DISTRIBUTION);
+		createEAttribute(vesselUsageDistributionEClass, VESSEL_USAGE_DISTRIBUTION__CARGOES);
+		createEReference(vesselUsageDistributionEClass, VESSEL_USAGE_DISTRIBUTION__VESSELS);
+
 		fleetConstraintEClass = createEClass(FLEET_CONSTRAINT);
 
 		targetCargoesOnVesselConstraintEClass = createEClass(TARGET_CARGOES_ON_VESSEL_CONSTRAINT);
@@ -2222,6 +2295,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		minCargoConstraintEClass.getESuperTypes().add(this.getProfileConstraint());
 		maxCargoConstraintEClass.getESuperTypes().add(this.getProfileConstraint());
 		periodDistributionProfileConstraintEClass.getESuperTypes().add(this.getProfileConstraint());
+		vesselUsageDistributionProfileConstraintEClass.getESuperTypes().add(this.getProfileConstraint());
 		targetCargoesOnVesselConstraintEClass.getESuperTypes().add(this.getFleetConstraint());
 		desSalesMarketAllocationRowEClass.getESuperTypes().add(this.getMullAllocationRow());
 		salesContractAllocationRowEClass.getESuperTypes().add(this.getMullAllocationRow());
@@ -2365,6 +2439,16 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getPeriodDistribution_Range(), theDateTimePackage.getYearMonth(), "range", null, 0, -1, PeriodDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPeriodDistribution_MinCargoes(), ecorePackage.getEInt(), "minCargoes", null, 0, 1, PeriodDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPeriodDistribution_MaxCargoes(), ecorePackage.getEInt(), "maxCargoes", null, 0, 1, PeriodDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselUsageDistributionProfileConstraintEClass, VesselUsageDistributionProfileConstraint.class, "VesselUsageDistributionProfileConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVesselUsageDistributionProfileConstraint_Distributions(), this.getVesselUsageDistribution(), null, "distributions", null, 0, -1, VesselUsageDistributionProfileConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vesselUsageDistributionEClass, VesselUsageDistribution.class, "VesselUsageDistribution", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVesselUsageDistribution_Cargoes(), ecorePackage.getEInt(), "cargoes", null, 0, 1, VesselUsageDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAVesselSet());
+		g2 = createEGenericType(theFleetPackage.getVessel());
+		g1.getETypeArguments().add(g2);
+		initEReference(getVesselUsageDistribution_Vessels(), g1, null, "vessels", null, 0, -1, VesselUsageDistribution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fleetConstraintEClass, FleetConstraint.class, "FleetConstraint", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

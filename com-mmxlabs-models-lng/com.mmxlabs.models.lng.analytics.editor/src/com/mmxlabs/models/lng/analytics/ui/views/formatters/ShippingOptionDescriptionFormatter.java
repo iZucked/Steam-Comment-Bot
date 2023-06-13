@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.formatters;
 
 import java.util.Collection;
 
+import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisRow;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
@@ -28,30 +29,31 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 	@Override
 	public String render(final Object object) {
 
-		if (object instanceof MTMRow) {
-			final MTMRow row = (MTMRow) object;
+		if (object instanceof MTMRow row) {
 			final MTMResult result = row.getRhsResults().get(0);
 			final ShippingOption shipping = result.getShipping();
 			return render(shipping);
-		} else if (object instanceof ViabilityRow) {
-			final ViabilityRow row = (ViabilityRow) object;
+		} else if (object instanceof ViabilityRow row) {
 			final ShippingOption shipping = row.getShipping();
 			return render(shipping);
 		} else if (object instanceof MarketabilityRow row) {
 			final ShippingOption shipping = row.getShipping();
 			return render(shipping);
-		} else if (object instanceof BreakEvenAnalysisRow) {
-			final BreakEvenAnalysisRow partialCaseRow = (BreakEvenAnalysisRow) object;
-			final ShippingOption shipping = partialCaseRow.getShipping();
+		} else if (object instanceof BreakEvenAnalysisRow row) {
+			final ShippingOption shipping = row.getShipping();
 			return render(shipping);
-		} else if (object instanceof PartialCaseRow) {
-			final PartialCaseRow partialCaseRow = (PartialCaseRow) object;
-			final Collection<?> shipping = partialCaseRow.getShipping();
-
+		} else if (object instanceof BaseCaseRow row) {
+			if (row.getGroup().getRows().get(0) != row) {
+				return "";
+			}
+			return render(row.getShipping());
+		} else if (object instanceof PartialCaseRow row) {
+			if (row.getGroup().getRows().get(0) != row) {
+				return "";
+			}
+			final Collection<?> shipping = row.getShipping();
 			return render(shipping);
-
-		} else if (object instanceof Collection<?>) {
-			final Collection<?> collection = (Collection<?>) object;
+		} else if (object instanceof Collection<?> collection) {
 
 			if (collection.isEmpty()) {
 				return "<unset>";
@@ -67,9 +69,7 @@ public class ShippingOptionDescriptionFormatter extends BaseFormatter {
 				first = false;
 			}
 			return sb.toString();
-		} else if (object instanceof Object[]) {
-			final Object[] objects = (Object[]) object;
-
+		} else if (object instanceof Object[] objects) {
 			if (objects.length == 0) {
 				return "<open>";
 			}

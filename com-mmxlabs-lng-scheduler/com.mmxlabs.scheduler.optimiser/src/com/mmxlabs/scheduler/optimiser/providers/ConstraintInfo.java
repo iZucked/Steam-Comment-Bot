@@ -18,7 +18,7 @@ public class ConstraintInfo<P, C, T extends IPortSlot> {
 	int bound;
 	public enum ViolationType {
 		Min, Max
-	};
+	}
 	ViolationType violationType;
 	
 	int violatedAmount = 0;
