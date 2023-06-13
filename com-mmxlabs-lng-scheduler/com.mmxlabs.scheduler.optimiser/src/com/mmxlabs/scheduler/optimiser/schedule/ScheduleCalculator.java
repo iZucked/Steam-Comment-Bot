@@ -58,6 +58,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IHeelCarrySlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
+import com.mmxlabs.scheduler.optimiser.scheduling.MinTravelTimeData;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -103,6 +104,10 @@ public class ScheduleCalculator {
 	public ProfitAndLossSequences schedule(final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 		final Map<IResource, List<@NonNull IPortTimesRecord>> allPortTimeRecords = arrivalTimeScheduler.schedule(sequences);
 		return schedule(sequences, allPortTimeRecords, solution);
+	}
+
+	public Map<@NonNull IResource, @Nullable Pair<@NonNull MinTravelTimeData, @NonNull List<@NonNull IPortTimesRecord>>> getNonShippedEstimatedFeasibility(final ISequences sequences) {
+		return arrivalTimeScheduler.scheduleNonShipped(sequences);
 	}
 
 	@Nullable

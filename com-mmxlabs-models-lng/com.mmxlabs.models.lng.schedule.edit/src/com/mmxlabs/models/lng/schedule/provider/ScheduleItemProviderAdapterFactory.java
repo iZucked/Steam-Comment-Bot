@@ -1307,6 +1307,98 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NonShippedSequence} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NonShippedSequenceItemProvider nonShippedSequenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NonShippedSequence}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNonShippedSequenceAdapter() {
+		if (nonShippedSequenceItemProvider == null) {
+			nonShippedSequenceItemProvider = new NonShippedSequenceItemProvider(this);
+		}
+
+		return nonShippedSequenceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NonShippedSlotVisitItemProvider nonShippedSlotVisitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNonShippedSlotVisitAdapter() {
+		if (nonShippedSlotVisitItemProvider == null) {
+			nonShippedSlotVisitItemProvider = new NonShippedSlotVisitItemProvider(this);
+		}
+
+		return nonShippedSlotVisitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NonShippedJourney} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NonShippedJourneyItemProvider nonShippedJourneyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NonShippedJourney}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNonShippedJourneyAdapter() {
+		if (nonShippedJourneyItemProvider == null) {
+			nonShippedJourneyItemProvider = new NonShippedJourneyItemProvider(this);
+		}
+
+		return nonShippedJourneyItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NonShippedIdle} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NonShippedIdleItemProvider nonShippedIdleItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NonShippedIdle}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNonShippedIdleAdapter() {
+		if (nonShippedIdleItemProvider == null) {
+			nonShippedIdleItemProvider = new NonShippedIdleItemProvider(this);
+		}
+
+		return nonShippedIdleItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1491,6 +1583,10 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (originPortRepositioningFeeTermDetailsItemProvider != null) originPortRepositioningFeeTermDetailsItemProvider.dispose();
 		if (transferRecordPNLDetailsItemProvider != null) transferRecordPNLDetailsItemProvider.dispose();
 		if (sandboxReferenceItemProvider != null) sandboxReferenceItemProvider.dispose();
+		if (nonShippedSequenceItemProvider != null) nonShippedSequenceItemProvider.dispose();
+		if (nonShippedSlotVisitItemProvider != null) nonShippedSlotVisitItemProvider.dispose();
+		if (nonShippedJourneyItemProvider != null) nonShippedJourneyItemProvider.dispose();
+		if (nonShippedIdleItemProvider != null) nonShippedIdleItemProvider.dispose();
 	}
 
 }

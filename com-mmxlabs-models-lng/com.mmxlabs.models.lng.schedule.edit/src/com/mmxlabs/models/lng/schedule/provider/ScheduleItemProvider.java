@@ -122,6 +122,7 @@ public class ScheduleItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__PAPER_DEAL_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__OTHER_PNL);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__GENERATED_PAPER_DEALS);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__NON_SHIPPED_SEQUENCES);
 		}
 		return childrenFeatures;
 	}
@@ -182,6 +183,7 @@ public class ScheduleItemProvider
 			case SchedulePackage.SCHEDULE__PAPER_DEAL_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__OTHER_PNL:
 			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
+			case SchedulePackage.SCHEDULE__NON_SHIPPED_SEQUENCES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -248,6 +250,11 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__GENERATED_PAPER_DEALS,
 				 CargoFactory.eINSTANCE.createSellPaperDeal()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__NON_SHIPPED_SEQUENCES,
+				 ScheduleFactory.eINSTANCE.createNonShippedSequence()));
 	}
 
 }

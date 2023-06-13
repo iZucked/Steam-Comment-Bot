@@ -4,9 +4,19 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -15,16 +25,27 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 class ColourSchemeAction extends SchedulerViewAction {
-	
+
 	public ColourSchemeAction(final SchedulerView schedulerView, final EMFScheduleLabelProvider lp, final GanttChartViewer viewer) {
 		super("Label", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Label, IconMode.Enabled));
@@ -114,9 +135,9 @@ class ColourSchemeAction extends SchedulerViewAction {
 			final ActionContributionItem actionContributionItem = new ActionContributionItem(toggleShowNominalsByDefaultAction);
 			actionContributionItem.fill(menu, -1);
 		}
-		
+
 		final var enabledTracker = schedulerView.contentProvider.enabledPSPTracker;
-		for (ISchedulePositionsSequenceProviderExtension ext: schedulerView.contentProvider.positionsSequenceProviderExtensions) {
+		for (ISchedulePositionsSequenceProviderExtension ext : schedulerView.contentProvider.positionsSequenceProviderExtensions) {
 			if (ext.showMenuItem().equals("true")) {
 				ISchedulePositionsSequenceProvider provider = ext.createInstance();
 				final Action toggleShowPartition = new Action(ext.getName(), SWT.CHECK) {
@@ -139,6 +160,119 @@ class ColourSchemeAction extends SchedulerViewAction {
 				final ActionContributionItem actionContributionItem = new ActionContributionItem(toggleShowPartition);
 				actionContributionItem.fill(menu, -1);
 			}
+		}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NON_SHIPPED_FOB_ROTATIONS)) {
+			final Object input = viewer.getInput();
+			if (input instanceof final Collection<?> collection) {
+				if (collection.size() == 1 && collection.iterator().next() instanceof final @NonNull Schedule schedule) {
+					buildFobSaleRotationMenu(menu, schedule);
+				}
+			} else if (input instanceof final @NonNull Schedule schedule) {
+				buildFobSaleRotationMenu(menu, schedule);
+			}
+		}
+	}
+
+	private void buildFobSaleRotationMenu(final Menu menu, final @NonNull Schedule schedule) {
+		final List<NonShippedSequence> nonShippedSequences = schedule.getNonShippedSequences();
+		if (!nonShippedSequences.isEmpty()) {
+			final Action fobRotation = new DefaultMenuCreatorAction("FOB sale rotation") {
+
+				@Override
+				protected void populate(Menu menu) {
+					final Action off = new Action("off", IAction.AS_CHECK_BOX) {
+						@Override
+						public void run() {
+							if (schedulerView.getFobRotationOptionSelection() != ENonShippedRotationSelection.OFF) {
+								schedulerView.clearFobRotations();
+								schedulerView.contentProvider.clearFobRotations();
+								schedulerView.redraw();
+								schedulerView.refresh();
+								schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.OFF);
+							}
+						}
+					};
+					final Action all = new Action("all", IAction.AS_CHECK_BOX) {
+						@Override
+						public void run() {
+							if (isChecked()) {
+								final Collection<Predicate<NonShippedSequence>> predicates = Collections.singleton(sequence -> true);
+								schedulerView.clearFobRotations();
+								schedulerView.replaceFobRotations(predicates);
+								schedulerView.contentProvider.replaceFobRotations(predicates);
+								schedulerView.redraw();
+								schedulerView.refresh();
+								schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.ALL);
+							} else {
+								off.run();
+							}
+						}
+					};
+					addActionToMenu(off, menu);
+					addActionToMenu(all, menu);
+					final Map<SalesContract, Set<Vessel>> fobSalesContractVesselMap = new HashMap<>();
+					for (final NonShippedSequence sequence : nonShippedSequences) {
+						final Vessel vessel = sequence.getVessel();
+						if (vessel != null) {
+							sequence.getEvents().stream() //
+									.filter(NonShippedSlotVisit.class::isInstance) //
+									.map(NonShippedSlotVisit.class::cast) //
+									.map(NonShippedSlotVisit::getSlot) //
+									.map(Slot::getContract) //
+									.filter(Objects::nonNull) //
+									.filter(SalesContract.class::isInstance) //
+									.map(SalesContract.class::cast) //
+									.forEach(sc -> fobSalesContractVesselMap.computeIfAbsent(sc, k -> new HashSet<>()).add(vessel));
+						}
+					}
+					final List<Pair<SalesContract, Set<Vessel>>> sortedSalesContracts = fobSalesContractVesselMap.entrySet().stream() //
+							.sorted((e1, e2) -> e1.getKey().getName().compareTo(e2.getKey().getName())) //
+							.map(e -> Pair.of(e.getKey(), e.getValue())) //
+							.toList();
+					final List<Action> selectedContractActions = new LinkedList<>();
+					final Set<Contract> selectedContracts = schedulerView.getSelectedContracts();
+					for (final Pair<SalesContract, Set<Vessel>> pair : sortedSalesContracts) {
+						final Action nextAction = new Action(pair.getFirst().getName(), IAction.AS_CHECK_BOX) {
+							@Override
+							public void run() {
+								boolean newlyChecked = schedulerView.toggleSelectedContract(pair.getFirst());
+								if (newlyChecked) {
+									schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.POSSIBLY_CONTRACT);
+								}
+								final Set<Contract> selectedContracts = schedulerView.getSelectedContracts();
+								final Predicate<NonShippedSequence> predicate = seq -> selectedContracts.stream() //
+										.anyMatch(contract -> {
+											final Set<Vessel> vessels = fobSalesContractVesselMap.get(contract);
+											return vessels != null && vessels.contains(seq.getVessel());
+										});
+								final Collection<@NonNull Predicate<NonShippedSequence>> predicates = Collections.singleton(predicate);
+								schedulerView.replaceFobRotations(predicates);
+								schedulerView.contentProvider.replaceFobRotations(predicates);
+								schedulerView.redraw();
+								schedulerView.refresh();
+							}
+						};
+						if (selectedContracts.contains(pair.getFirst())) {
+							selectedContractActions.add(nextAction);
+						}
+						addActionToMenu(nextAction, menu);
+					}
+					if (schedulerView.getFobRotationOptionSelection() == ENonShippedRotationSelection.OFF) {
+						off.setChecked(true);
+					} else if (schedulerView.getFobRotationOptionSelection() == ENonShippedRotationSelection.ALL) {
+						all.setChecked(true);
+					} else if (schedulerView.getFobRotationOptionSelection() == ENonShippedRotationSelection.POSSIBLY_CONTRACT) {
+						if (selectedContractActions.isEmpty()) {
+							schedulerView.setFobRotationOptionSelection(ENonShippedRotationSelection.OFF);
+							off.setChecked(true);
+						} else {
+							selectedContractActions.forEach(a -> a.setChecked(true));
+						}
+					}
+				}
+			};
+			final ActionContributionItem actionContributionItem = new ActionContributionItem(fobRotation);
+			actionContributionItem.fill(menu, -1);
 		}
 	}
 

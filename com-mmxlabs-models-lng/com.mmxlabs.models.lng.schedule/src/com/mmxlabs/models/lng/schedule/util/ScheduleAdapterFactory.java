@@ -329,6 +329,22 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createSandboxReferenceAdapter();
 			}
 			@Override
+			public Adapter caseNonShippedSequence(NonShippedSequence object) {
+				return createNonShippedSequenceAdapter();
+			}
+			@Override
+			public Adapter caseNonShippedSlotVisit(NonShippedSlotVisit object) {
+				return createNonShippedSlotVisitAdapter();
+			}
+			@Override
+			public Adapter caseNonShippedJourney(NonShippedJourney object) {
+				return createNonShippedJourneyAdapter();
+			}
+			@Override
+			public Adapter caseNonShippedIdle(NonShippedIdle object) {
+				return createNonShippedIdleAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -1135,6 +1151,62 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSandboxReferenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.NonShippedSequence <em>Non Shipped Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSequence
+	 * @generated
+	 */
+	public Adapter createNonShippedSequenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit <em>Non Shipped Slot Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSlotVisit
+	 * @generated
+	 */
+	public Adapter createNonShippedSlotVisitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.NonShippedJourney <em>Non Shipped Journey</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedJourney
+	 * @generated
+	 */
+	public Adapter createNonShippedJourneyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.NonShippedIdle <em>Non Shipped Idle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedIdle
+	 * @generated
+	 */
+	public Adapter createNonShippedIdleAdapter() {
 		return null;
 	}
 

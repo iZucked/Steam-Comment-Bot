@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -31,6 +32,9 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedIdle;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
@@ -63,12 +67,18 @@ public class VesselStateColourScheme extends ColourScheme {
 			} else {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, colourElement);
 			}
+		} else if (element instanceof final NonShippedJourney journey) {
+			final ColourPaletteItems item = journey.isLaden() ? ColourPaletteItems.Voyage_Laden_Journey : ColourPaletteItems.Voyage_Ballast_Journey;
+			return ColourPalette.getInstance().getColourFor(item, colourElement);
 		} else if (element instanceof final Idle idle) {
 			if (idle.isLaden()) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, colourElement);
 			} else {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, colourElement);
 			}
+		} else if (element instanceof final NonShippedIdle idle) {
+			final ColourPaletteItems item = idle.isLaden() ? ColourPaletteItems.Voyage_Laden_Idle : ColourPaletteItems.Voyage_Ballast_Non_Shipped_Idle;
+			return ColourPalette.getInstance().getColourFor(item, colourElement);
 		} else if (element instanceof final VesselEventVisit vev) {
 			if (isOutsideTimeWindow(vev)) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, colourElement);
@@ -116,6 +126,13 @@ public class VesselStateColourScheme extends ColourScheme {
 				} else if (visit.getSlotAllocation().getSlot() instanceof DischargeSlot) {
 					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, colourElement);
 				}
+			}
+		} else if (element instanceof final NonShippedSlotVisit visit) {
+			final Slot<?> slot = visit.getSlot();
+			if (slot instanceof LoadSlot) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Load, colourElement);
+			} else if (slot instanceof DischargeSlot) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, colourElement);
 			}
 		}
 		return null;
@@ -189,7 +206,7 @@ public class VesselStateColourScheme extends ColourScheme {
 					return ColourPalette.getInstance().getColour(ColourPalette.Black);
 				}
 			}
-			if (event instanceof SlotVisit) {
+			if (event instanceof SlotVisit || event instanceof NonShippedSlotVisit) {
 				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
 			}
 		}

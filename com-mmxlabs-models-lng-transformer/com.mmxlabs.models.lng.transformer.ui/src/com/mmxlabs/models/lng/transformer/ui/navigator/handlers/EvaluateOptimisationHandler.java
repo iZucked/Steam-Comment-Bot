@@ -9,6 +9,7 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -40,7 +41,7 @@ public class EvaluateOptimisationHandler extends AbstractHandler {
 				final Iterator<?> itr = strucSelection.iterator();
 				while (itr.hasNext()) {
 					final Object obj = itr.next();
-					if (obj instanceof ScenarioInstance instance) {
+					if (obj instanceof final @NonNull ScenarioInstance instance) {
 
 						ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 						if (modelRecord == null) {

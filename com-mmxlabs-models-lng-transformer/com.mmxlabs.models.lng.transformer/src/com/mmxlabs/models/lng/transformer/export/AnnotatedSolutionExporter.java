@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -21,10 +22,12 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
@@ -36,6 +39,10 @@ import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedIdle;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -63,7 +70,9 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventEndPortSlot;
@@ -72,6 +81,7 @@ import com.mmxlabs.scheduler.optimiser.evaluation.HeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.NonShippedScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
@@ -79,7 +89,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.scheduling.MinTravelTimeData;
 import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
@@ -403,6 +415,8 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
+//		exportNonShippedSchedules(modelEntityMap, annotatedSolution, output);
+
 		for (final IExporterExtension extension : extensions) {
 			extension.finishExporting();
 		}
@@ -419,6 +433,130 @@ public class AnnotatedSolutionExporter {
 		}
 
 		return output;
+	}
+
+	protected void exportNonShippedSchedules(final @NonNull ModelEntityMap modelEntityMap, final @NonNull IAnnotatedSolution annotatedSolution, final @NonNull Schedule output) {
+		final NonShippedScheduledSequences nonShippedSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.NONSHIPPED_SCHEDULED_SEQUENCES, NonShippedScheduledSequences.class);
+		if (nonShippedSequences != null) {
+			final Map<IResource, Pair<MinTravelTimeData, List<IPortTimesRecord>>> map = nonShippedSequences.getSchedule();
+			for (final Entry<IResource, Pair<MinTravelTimeData, List<IPortTimesRecord>>> entry : map.entrySet()) {
+				final IResource resource = entry.getKey();
+				final MinTravelTimeData travelTimeData = entry.getValue().getFirst();
+				final List<IPortTimesRecord> oSequence = entry.getValue().getSecond();
+				int i = 0;
+				if (!oSequence.isEmpty()) {
+					final NonShippedSequence eSequence = ScheduleFactory.eINSTANCE.createNonShippedSequence();
+					final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+					final IVessel oVessel = vesselCharter.getVessel();
+					eSequence.setVessel(modelEntityMap.getModelObjectNullChecked(oVessel, Vessel.class));
+					Event previousEvent = null;
+					for (final IPortTimesRecord portTimesRecord : oSequence) {
+						final List<IPortSlot> oSlots = portTimesRecord.getSlots();
+						if (oSlots.size() == 1) {
+							++i;
+							continue;
+						}
+						final NonShippedSlotVisit eLoadVisit = ScheduleFactory.eINSTANCE.createNonShippedSlotVisit();
+						final int startTime = portTimesRecord.getSlotTime(oSlots.get(0));
+						eLoadVisit.setStart(modelEntityMap.getDateFromHours(startTime, oSlots.get(0).getPort()));
+						final int loadDuration = portTimesRecord.getSlotDuration(oSlots.get(0));
+						final int endTime = startTime + loadDuration;
+						eLoadVisit.setEnd(modelEntityMap.getDateFromHours(endTime, oSlots.get(0).getPort()));
+						eLoadVisit.setPort(modelEntityMap.getModelObjectNullChecked(oSlots.get(0).getPort(), Port.class));
+						eLoadVisit.setSlot(modelEntityMap.getModelObjectNullChecked(oSlots.get(0), Slot.class));
+						eSequence.getEvents().add(eLoadVisit);
+
+						if (previousEvent != null) {
+							eLoadVisit.setPreviousEvent(previousEvent);
+							previousEvent.setNextEvent(eLoadVisit);
+						}
+						previousEvent = eLoadVisit;
+
+						final int dischargeStart = portTimesRecord.getSlotTime(oSlots.get(1));
+						final int dischargeDuration = portTimesRecord.getSlotDuration(oSlots.get(1));
+						final int dischargeEnd = dischargeStart + dischargeDuration;
+						final int minLadentTravelTime = travelTimeData.getMinTravelTime(i++) - loadDuration;
+						final int earliestLadenEnd = endTime + minLadentTravelTime;
+						final NonShippedJourney ladenJourney = ScheduleFactory.eINSTANCE.createNonShippedJourney();
+						ladenJourney.setLaden(true);
+						ladenJourney.setStart(modelEntityMap.getDateFromHours(endTime, oSlots.get(0).getPort()));
+						IPort destPort = oSlots.get(1).getPort();
+						if (destPort.getName().equalsIgnoreCase("ANYWHERE")) {
+							destPort = oSlots.get(0).getPort();
+						}
+						ladenJourney.setPort(modelEntityMap.getModelObjectNullChecked(oSlots.get(0).getPort(), Port.class));
+						ladenJourney.setDestination(modelEntityMap.getModelObjectNullChecked(destPort, Port.class));
+						ladenJourney.setEnd(modelEntityMap.getDateFromHours(earliestLadenEnd, destPort));
+						eSequence.getEvents().add(ladenJourney);
+						if (previousEvent != null) {
+							ladenJourney.setPreviousEvent(previousEvent);
+							previousEvent.setNextEvent(ladenJourney);
+						}
+						previousEvent = ladenJourney;
+
+						if (dischargeStart != earliestLadenEnd) {
+							final NonShippedIdle ladenIdle = ScheduleFactory.eINSTANCE.createNonShippedIdle();
+							ladenIdle.setLaden(true);
+							ladenIdle.setStart(modelEntityMap.getDateFromHours(earliestLadenEnd, destPort));
+							ladenIdle.setEnd(modelEntityMap.getDateFromHours(dischargeStart, destPort));
+							ladenIdle.setPort(modelEntityMap.getModelObjectNullChecked(destPort, Port.class));
+							eSequence.getEvents().add(ladenIdle);
+							if (previousEvent != null) {
+								ladenIdle.setPreviousEvent(previousEvent);
+								previousEvent.setNextEvent(ladenIdle);
+							}
+							previousEvent = ladenIdle;
+						}
+
+						final NonShippedSlotVisit eDischargeVisit = ScheduleFactory.eINSTANCE.createNonShippedSlotVisit();
+						eDischargeVisit.setStart(modelEntityMap.getDateFromHours(dischargeStart, destPort));
+						eDischargeVisit.setEnd(modelEntityMap.getDateFromHours(dischargeEnd, destPort));
+						eDischargeVisit.setPort(modelEntityMap.getModelObject(destPort, Port.class));
+						eDischargeVisit.setSlot(modelEntityMap.getModelObject(oSlots.get(1), Slot.class));
+						eSequence.getEvents().add(eDischargeVisit);
+
+						if (previousEvent != null) {
+							eDischargeVisit.setPreviousEvent(previousEvent);
+							previousEvent.setNextEvent(eDischargeVisit);
+						}
+						previousEvent = eDischargeVisit;
+
+						final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
+						if (returnSlot != null) {
+							final int nextLoadStart = portTimesRecord.getSlotTime(returnSlot);
+							final int minBallastTravelTime = travelTimeData.getMinTravelTime(i++) - dischargeDuration;
+							final int earliestBallastEnd = dischargeEnd + minBallastTravelTime;
+							final NonShippedJourney ballastJourney = ScheduleFactory.eINSTANCE.createNonShippedJourney();
+							ballastJourney.setLaden(false);
+							ballastJourney.setStart(modelEntityMap.getDateFromHours(dischargeEnd, destPort));
+							ballastJourney.setEnd(modelEntityMap.getDateFromHours(earliestBallastEnd, returnSlot.getPort()));
+							ballastJourney.setPort(modelEntityMap.getModelObjectNullChecked(destPort, Port.class));
+							ballastJourney.setDestination(modelEntityMap.getModelObjectNullChecked(returnSlot.getPort(), Port.class));
+							eSequence.getEvents().add(ballastJourney);
+							if (previousEvent != null) {
+								ballastJourney.setPreviousEvent(previousEvent);
+								previousEvent.setNextEvent(ballastJourney);
+							}
+							previousEvent = ballastJourney;
+							if (nextLoadStart != earliestBallastEnd) {
+								final NonShippedIdle ballastIdle = ScheduleFactory.eINSTANCE.createNonShippedIdle();
+								ballastIdle.setLaden(false);
+								ballastIdle.setPort(modelEntityMap.getModelObjectNullChecked(returnSlot.getPort(), Port.class));
+								ballastIdle.setStart(modelEntityMap.getDateFromHours(earliestBallastEnd, returnSlot.getPort()));
+								ballastIdle.setEnd(modelEntityMap.getDateFromHours(nextLoadStart, returnSlot.getPort()));
+								eSequence.getEvents().add(ballastIdle);
+								if (previousEvent != null) {
+									ballastIdle.setPreviousEvent(previousEvent);
+									previousEvent.setNextEvent(ballastIdle);
+								}
+								previousEvent = ballastIdle;
+							}
+						}
+					}
+					output.getNonShippedSequences().add(eSequence);
+				}
+			}
+		}
 	}
 
 	protected void fixUpEventTimezones(final @NonNull Schedule output) {

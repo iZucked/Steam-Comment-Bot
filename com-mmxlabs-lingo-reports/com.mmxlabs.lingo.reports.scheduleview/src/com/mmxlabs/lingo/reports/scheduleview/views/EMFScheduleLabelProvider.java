@@ -72,6 +72,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -253,6 +254,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 			}
 			text = seqText;
+		} else if (element instanceof NonShippedSequence sequence) {
+			text = sequence.getVessel().getName();
 		} else if (element instanceof Journey j) {
 			final RouteOption routeOption = j.getRouteOption();
 			if (memento.getBoolean(Show_Canals)) {

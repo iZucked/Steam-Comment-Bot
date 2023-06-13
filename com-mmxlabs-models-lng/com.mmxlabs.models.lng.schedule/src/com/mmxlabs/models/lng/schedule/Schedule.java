@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getOtherPNL <em>Other PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getGeneratedPaperDeals <em>Generated Paper Deals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getNonShippedSequences <em>Non Shipped Sequences</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule()
@@ -221,6 +222,18 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<PaperDeal> getGeneratedPaperDeals();
+
+	/**
+	 * Returns the value of the '<em><b>Non Shipped Sequences</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.NonShippedSequence}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Non Shipped Sequences</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_NonShippedSequences()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<NonShippedSequence> getNonShippedSequences();
 
 } // end of  Schedule
 

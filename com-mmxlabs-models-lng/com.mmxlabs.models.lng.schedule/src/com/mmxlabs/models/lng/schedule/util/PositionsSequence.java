@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.util;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -83,60 +84,60 @@ public class PositionsSequence {
 		return isBuy;
 	}
 
-	public static List<@NonNull PositionsSequence> makeBuySellSequences(final Schedule schedule, String providerId) {
-		return List.of(makeSequence(schedule, providerId, true), makeSequence(schedule, providerId, false));
+	public static List<@NonNull PositionsSequence> makeBuySellSequences(final Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore, String providerId) {
+		return List.of(makeSequence(schedule, slotVisitsToIgnore, providerId, true), makeSequence(schedule, slotVisitsToIgnore, providerId, false));
 	}
 	
-	public static List<@NonNull PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, String providerID, List<@NonNull PortGroup> portGroups, boolean allowOverlap, boolean addOtherGroup) {
-		return makeBuySellSequencesFromPortGroups(schedule, providerID, portGroups, allowOverlap, addOtherGroup, null);
+	public static List<@NonNull PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore, String providerID, List<@NonNull PortGroup> portGroups, boolean allowOverlap, boolean addOtherGroup) {
+		return makeBuySellSequencesFromPortGroups(schedule, slotVisitsToIgnore, providerID, portGroups, allowOverlap, addOtherGroup, null);
 	}
 
-	public static List<@NonNull PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, String providerId, List<@NonNull PortGroup> portGroups, boolean allowOverlap, boolean addOtherGroup, String otherGroupDescription) {
+	public static List<@NonNull PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore, String providerId, List<@NonNull PortGroup> portGroups, boolean allowOverlap, boolean addOtherGroup, String otherGroupDescription) {
 		List<Predicate<SlotAllocation>> slotAllocationPredicates = portGroups.stream().map(SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
 		List<Predicate<OpenSlotAllocation>> openSlotAllocationPredicates = portGroups.stream().map(OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
 		List<String> descriptions = portGroups.stream().map(NamedObject::getName).collect(Collectors.toList());
-		return makeSequencesFromExtraPredicates(schedule, providerId, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap, addOtherGroup, otherGroupDescription);
+		return makeSequencesFromExtraPredicates(schedule, slotVisitsToIgnore, providerId, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap, addOtherGroup, otherGroupDescription);
 	}
 
-	public static List<@NonNull PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, String providerId, List<@NonNull PortGroup> portGroups, List<String> descriptions, boolean allowOverlap, boolean addOtherGroup, String otherGroupDescription) {
+	public static List<@NonNull PositionsSequence> makeBuySellSequencesFromPortGroups(final Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore, String providerId, List<@NonNull PortGroup> portGroups, List<String> descriptions, boolean allowOverlap, boolean addOtherGroup, String otherGroupDescription) {
 		List<Predicate<SlotAllocation>> slotAllocationPredicates = portGroups.stream().map(SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
 		List<Predicate<OpenSlotAllocation>> openSlotAllocationPredicates = portGroups.stream().map(OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER::isInPortGroup).collect(Collectors.toList());
-		return makeSequencesFromExtraPredicates(schedule, providerId, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap, addOtherGroup, otherGroupDescription);
+		return makeSequencesFromExtraPredicates(schedule, slotVisitsToIgnore, providerId, slotAllocationPredicates, openSlotAllocationPredicates, descriptions, allowOverlap, addOtherGroup, otherGroupDescription);
 	}
 	
-	private static List<@NonNull PositionsSequence> makeSequencesFromExtraPredicates(final Schedule schedule, String providerId, List<Predicate<SlotAllocation>> extraSlotAllocationPredicates, List<Predicate<OpenSlotAllocation>> extraOpenSlotAllocationPredicates, List<String> descriptions,
+	private static List<@NonNull PositionsSequence> makeSequencesFromExtraPredicates(final Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore, String providerId, List<Predicate<SlotAllocation>> extraSlotAllocationPredicates, List<Predicate<OpenSlotAllocation>> extraOpenSlotAllocationPredicates, List<String> descriptions,
 			boolean allowOverlap, boolean addOtherGroup, String otherGroupDescription) {
 		assert extraSlotAllocationPredicates.size() == descriptions.size() && extraOpenSlotAllocationPredicates.size() == descriptions.size();
 		List<@NonNull PositionsSequence> positionsSequences = new ArrayList<>();
 
 		Set<Object> seen = allowOverlap ? new HashSet<>() : null;
 		for (int i = 0; i < descriptions.size(); i++) {
-			positionsSequences.add(makeSequence(schedule, providerId, descriptions.get(i), true, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen, true));
-			positionsSequences.add(makeSequence(schedule, providerId, descriptions.get(i), false, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen, true));
+			positionsSequences.add(makeSequence(schedule, slotVisitsToIgnore, providerId, descriptions.get(i), true, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen, true));
+			positionsSequences.add(makeSequence(schedule, slotVisitsToIgnore, providerId, descriptions.get(i), false, extraSlotAllocationPredicates.get(i), extraOpenSlotAllocationPredicates.get(i), seen, true));
 		}
 		
 		if (addOtherGroup) {
 			Predicate<SlotAllocation> otherSlotAllocationPredicate = sa -> extraSlotAllocationPredicates.stream().noneMatch(p -> p.test(sa));
 			Predicate<OpenSlotAllocation> otherOpenSlotAllocationPredicate = sa -> extraOpenSlotAllocationPredicates.stream().noneMatch(p -> p.test(sa));
 
-			positionsSequences.add(makeSequence(schedule, providerId, otherGroupDescription, true, otherSlotAllocationPredicate, otherOpenSlotAllocationPredicate, seen, true));
-			positionsSequences.add(makeSequence(schedule, providerId, otherGroupDescription, false, otherSlotAllocationPredicate, otherOpenSlotAllocationPredicate, seen, true));
+			positionsSequences.add(makeSequence(schedule, slotVisitsToIgnore, providerId, otherGroupDescription, true, otherSlotAllocationPredicate, otherOpenSlotAllocationPredicate, seen, true));
+			positionsSequences.add(makeSequence(schedule, slotVisitsToIgnore, providerId, otherGroupDescription, false, otherSlotAllocationPredicate, otherOpenSlotAllocationPredicate, seen, true));
 		}
 
 		return positionsSequences;
 	}
 	
-	private static @NonNull PositionsSequence makeSequence(final Schedule schedule, String providerId, boolean isBuy) {
-		return makeSequence(schedule, providerId, "", isBuy, x -> true, x -> true, null, false);
+	private static @NonNull PositionsSequence makeSequence(final Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore, String providerId, boolean isBuy) {
+		return makeSequence(schedule, slotVisitsToIgnore, providerId, "", isBuy, x -> true, x -> true, null, false);
 	}
 
-	private static @NonNull PositionsSequence makeSequence(final Schedule schedule, String providerId, String description, boolean isBuy, Predicate<SlotAllocation> extraFilterSlotAllocation, Predicate<OpenSlotAllocation> extraFilterOpenSlotAllocation, Set<Object> seen, boolean isPartition) {
+	private static @NonNull PositionsSequence makeSequence(final Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore, String providerId, String description, boolean isBuy, Predicate<SlotAllocation> extraFilterSlotAllocation, Predicate<OpenSlotAllocation> extraFilterOpenSlotAllocation, Set<Object> seen, boolean isPartition) {
 		final Map<LocalDate, List<Object>> collectedDates = new TreeMap<>();
 
 		final var filterSlotAllocation = isBuy ? SLOT_ALLOCATION_PREDICATE_PROVIDER.buy() : SLOT_ALLOCATION_PREDICATE_PROVIDER.sell();
 		final var filterOpenSlotAllocation = isBuy ? OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER.buy() : OPEN_SLOT_ALLOCATION_PREDICATE_PROVIDER.sell();
 		collectDatesForOpenSlotAllocations(collectedDates, schedule, filterOpenSlotAllocation.and(extraFilterOpenSlotAllocation), seen);
-		collectDatesForCargoAllocations(collectedDates, schedule, filterSlotAllocation.and(extraFilterSlotAllocation), seen);
+		collectDatesForCargoAllocations(collectedDates, schedule, filterSlotAllocation.and(extraFilterSlotAllocation).and(sa -> !slotVisitsToIgnore.contains(sa.getSlotVisit())), seen);
 
 		final List<Object> elements = createElementList(collectedDates);
 		return new PositionsSequence(providerId, description, isBuy, schedule, elements, isPartition);

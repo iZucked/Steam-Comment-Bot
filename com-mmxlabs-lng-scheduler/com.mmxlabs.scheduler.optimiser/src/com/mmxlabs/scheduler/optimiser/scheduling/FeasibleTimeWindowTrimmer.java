@@ -166,7 +166,7 @@ public class FeasibleTimeWindowTrimmer {
 
 	@Inject
 	private PanamaBookingHelper panamaBookingsHelper;
-	
+
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean checkPanamaCanalBookings = false;
@@ -213,6 +213,22 @@ public class FeasibleTimeWindowTrimmer {
 
 	}
 
+	public final List<IPortTimeWindowsRecord> generateNonShippedTrimmedWindows(final @NonNull IResource resource, final @NonNull ISequence sequence, final @NonNull MinTravelTimeData travelTimeData,
+			final @NonNull CurrentBookingData currentBookingData, final ISequencesAttributesProvider sequencesAttributesProvider) {
+		final LinkedList<IPortTimeWindowsRecord> portTimeWindowRecords = new LinkedList<>();
+		trimNonShippedBasedOnMaxSpeed(resource, sequence, portTimeWindowRecords, travelTimeData, sequencesAttributesProvider);
+		if (checkPanamaCanalBookings) {
+			trimNonShippedBasedOnPanamaCanal(resource, sequence, travelTimeData, currentBookingData);
+		}
+		for (int idx = 0; idx < portTimeWindowRecords.size(); ++idx) {
+			final IPortTimeWindowsRecord portTimeWindowsRecord = portTimeWindowRecords.get(idx);
+			assert portTimeWindowsRecord != null;
+			final boolean isLastRecord = idx == portTimeWindowRecords.size() - 1;
+			setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, travelTimeData, isLastRecord);
+		}
+		return portTimeWindowRecords;
+	}
+
 	/**
 	 * Returns an array of boolean values indicating whether, for each index of the
 	 * vessel location sequence, a sequence break occurs at that location
@@ -226,6 +242,26 @@ public class FeasibleTimeWindowTrimmer {
 		int idx = 0;
 		for (final ISequenceElement element : sequence) {
 			final PortType portType = portTypeProvider.getPortType(element);
+			switch (portType) {
+			case Load -> records[idx].breakSequence = !isRoundTripSequence && (idx > 0); // don't break on first load port
+			case CharterOut, DryDock, Other, End, Round_Trip_Cargo_End -> records[idx].breakSequence = true;
+			default -> records[idx].breakSequence = false;
+			}
+			idx++;
+		}
+	}
+
+	private void findSequenceBreaksNonShipped(final ISequence sequence, final boolean isRoundTripSequence, final ElementRecord[] records) {
+		int idx = 0;
+		for (final ISequenceElement element : sequence) {
+			final PortType portType;
+			if (idx == 0) {
+				portType = PortType.Start;
+			} else if (idx == sequence.size() - 1) {
+				portType = PortType.End;
+			} else {
+				portType = portTypeProvider.getPortType(element);
+			}
 			switch (portType) {
 			case Load -> records[idx].breakSequence = !isRoundTripSequence && (idx > 0); // don't break on first load port
 			case CharterOut, DryDock, Other, End, Round_Trip_Cargo_End -> records[idx].breakSequence = true;
@@ -579,6 +615,353 @@ public class FeasibleTimeWindowTrimmer {
 		}
 	}
 
+	protected final void trimNonShippedBasedOnMaxSpeed(final @NonNull IResource resource, final @NonNull ISequence sequence, final List<IPortTimeWindowsRecord> portTimeWindowRecords,
+			final MinTravelTimeData travelTimeData, final ISequencesAttributesProvider sequencesAttributesProvider) {
+
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			throw new IllegalStateException("Should not have nonshipped sequence");
+		}
+
+		final int size = sequence.size();
+		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
+		if (size < 2) {
+			return;
+		}
+
+		resizeAll(size);
+
+		final boolean isRoundTripSequence = false;
+//		final boolean isRoundTripSequence = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+
+		findSequenceBreaksNonShipped(sequence, isRoundTripSequence, records);
+
+		final int vesselMaxSpeed = vesselCharter.getVessel().getMaxSpeed();
+		final int vesselPurgeTime = vesselCharter.getVessel().getPurgeTime();
+
+		int index = 0;
+		ISequenceElement prevElement = null;
+		IPortSlot prevPortSlot = null;
+		// Used for end of sequence checks
+		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+
+		// first pass, collecting start time windows
+		for (final ISequenceElement element : sequence) {
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+
+			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+			records[index].portSlot = thisPortSlot;
+			records[index].visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationProvider.getElementDuration(element, resource);
+
+			final ITimeWindow window;
+
+			final IVoyageSpecificationProvider voyageSpecProvider = sequencesAttributesProvider.getProvider(IVoyageSpecificationProvider.class);
+			// If there is an override, then we set the other travel times to MAX_VALUE
+			Integer timeOverride = null;
+			if (voyageSpecProvider != null) {
+				timeOverride = voyageSpecProvider.getArrivalTime(thisPortSlot);
+			}
+			if (timeOverride != null) {
+				window = new TimeWindow(timeOverride, timeOverride + 1);
+			} else if (portTypeProvider.getPortType(element) == PortType.Start) {
+				// Take element start window into account
+				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
+
+				// "windows" defaults to the default start window
+				ITimeWindow timeWindow = defaultStartWindow;
+
+				// but can be overridden by a specified start requirement
+				if (startRequirement != null && startRequirement.hasTimeRequirement()) {
+					timeWindow = startRequirement.getTimeWindow();
+				}
+
+				window = timeWindow;
+			} else if (portTypeProvider.getPortType(element) == PortType.End) {
+				final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+				window = endRequirement.getTimeWindow();
+				assert window != null;// End requirements should always have a window.
+			} else if (thisPortSlot instanceof RoundTripCargoEnd) {
+				records[index].isRoundTripEnd = true;
+				// If this is null, the we will force discharge arrival as early as possible,
+				// regardless of cost (or booking availability)
+				window = null;// new TimeWindow(0, Integer.MAX_VALUE);
+			} else {
+
+				final IPortSlot prevSlot = prevElement == null ? null : portSlotProvider.getPortSlot(prevElement);
+				if (prevSlot != null && actualsDataProvider.hasReturnActuals(prevSlot)) {
+					window = actualsDataProvider.getReturnTimeAsTimeWindow(prevSlot);
+					if (actualsDataProvider.hasActuals(portSlot)) {
+						final int a = actualsDataProvider.getArrivalTime(portSlot);
+						final int b = actualsDataProvider.getReturnTime(prevSlot);
+						assert a == b;
+
+					}
+					records[index].actualisedTimeWindow = true;
+				} else if (actualsDataProvider.hasActuals(portSlot)) {
+					window = actualsDataProvider.getArrivalTimeWindow(portSlot);
+					records[index].actualisedTimeWindow = true;
+				} else {
+					window = portSlot.getTimeWindow();
+				}
+			}
+
+			if (prevElement != null) {
+				assert prevPortSlot != null;
+
+				records[index - 1].extraIdleTimes[ExplicitIdleTime.CONTINGENCY.ordinal()] = actualsDataProvider.hasActuals(thisPortSlot) ? 0
+						: extraIdleTimeProvider.getContingencyIdleTimeInHours(prevPortSlot, thisPortSlot);
+				records[index - 1].extraIdleTimes[ExplicitIdleTime.MARKET_BUFFER.ordinal()] = actualsDataProvider.hasActuals(thisPortSlot) ? 0
+						: extraIdleTimeProvider.getBufferIdleTimeInHours(thisPortSlot);
+				if (purgeSchedulingEnabled) {
+					if (portTypeProvider.getPortType(prevElement) == PortType.DryDock) {
+						records[index - 1].extraIdleTimes[ExplicitIdleTime.PURGE.ordinal()] = vesselPurgeTime;
+					} else if (portTypeProvider.getPortType(element) == PortType.Load) {
+						if (scheduledPurgeProvider.isPurgeScheduled(thisPortSlot)) {
+							records[index - 1].extraIdleTimes[ExplicitIdleTime.PURGE.ordinal()] = vesselPurgeTime;
+						}
+					}
+				}
+				for (final var type : ExplicitIdleTime.values()) {
+					portTimeWindowsRecord.setSlotExtraIdleTime(prevPortSlot, type, records[index - 1].extraIdleTimes[type.ordinal()]);
+				}
+			}
+
+			records[index].isRoundTripEnd = false;
+			if (records[index].breakSequence) {
+				assert prevPortSlot != null;
+
+				// last slot in plan, set return
+
+				portTimeWindowsRecord.setReturnSlot(thisPortSlot, null, records[index].visitDuration, index);
+				// finalise record
+				portTimeWindowRecords.add(portTimeWindowsRecord);
+				// create new record
+				if (!(thisPortSlot instanceof RoundTripCargoEnd)) {
+					portTimeWindowsRecord = new PortTimeWindowsRecord();
+					portTimeWindowsRecord.setSlot(thisPortSlot, null, records[index].visitDuration, index);
+				} else {
+					records[index].isRoundTripEnd = true;
+				}
+			} else {
+				if (!(prevPortSlot instanceof RoundTripCargoEnd)) {
+					portTimeWindowsRecord.setSlot(thisPortSlot, null, records[index].visitDuration, index);
+				} else {
+					portTimeWindowsRecord = new PortTimeWindowsRecord();
+					portTimeWindowsRecord.setSlot(thisPortSlot, null, records[index].visitDuration, index);
+
+					records[index].isRoundTripEnd = true;
+				}
+			}
+
+			records[index].ptr = portTimeWindowsRecord;
+
+			records[index].isVirtual = portTypeProvider.getPortType(element) == PortType.Virtual;
+			records[index].useTimeWindow = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Round_Trip_Cargo_End;
+
+			// Calculate minimum inter-element durations
+			travelTimeData.setMinTravelTime(index, records[index].visitDuration);
+			int directTravelTime;
+			int suezTravelTime;
+			int panamaTravelTime;
+			if (prevElement != null) {
+				assert prevPortSlot != null;
+
+				final IPort prevPort = portProvider.getPortForElement(prevElement);
+				final IPort port = portProvider.getPortForElement(element);
+
+				final int prevVisitDuration = records[index - 1].visitDuration;
+
+				directTravelTime = distanceProvider.getTravelTime(ERouteOption.DIRECT, vesselCharter.getVessel(), prevPort, port, vesselMaxSpeed);
+				suezTravelTime = distanceProvider.getTravelTime(ERouteOption.SUEZ, vesselCharter.getVessel(), prevPort, port, vesselMaxSpeed);
+				panamaTravelTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselCharter.getVessel(), prevPort, port, vesselMaxSpeed);
+
+				// Can we build this into the distance provider api?
+				// If there is an override, then we set the other travel times to MAX_VALUE
+				if (voyageSpecProvider != null) {
+					ERouteOption routeOverride = voyageSpecProvider.getVoyageRouteOption(prevPortSlot, thisPortSlot);
+					if (routeOverride != null) {
+						// There is a case were there is no distance between elements. I.e. same port or
+						// one of them is the ANYWHERE port. In this case, we always need to use the
+						// DIRECT distance otherwise canal transit times etc will be applied. We use
+						// travel time as a proxy for distance here.
+						if (directTravelTime == 0 && routeOverride != ERouteOption.DIRECT) {
+							routeOverride = ERouteOption.DIRECT;
+						}
+						switch (routeOverride) {
+						case DIRECT:
+							suezTravelTime = Integer.MAX_VALUE;
+							panamaTravelTime = Integer.MAX_VALUE;
+							break;
+						case PANAMA:
+							suezTravelTime = Integer.MAX_VALUE;
+							directTravelTime = Integer.MAX_VALUE;
+							break;
+						case SUEZ:
+							directTravelTime = Integer.MAX_VALUE;
+							panamaTravelTime = Integer.MAX_VALUE;
+							break;
+						default:
+							break;
+						}
+					}
+				}
+
+				int extraIdleTime = 0;
+				for (final var type : ExplicitIdleTime.values()) {
+					extraIdleTime += records[index - 1].extraIdleTimes[type.ordinal()];
+				}
+
+				if (directTravelTime != Integer.MAX_VALUE) {
+					directTravelTime += prevVisitDuration + extraIdleTime;
+				}
+				if (suezTravelTime != Integer.MAX_VALUE) {
+					suezTravelTime += prevVisitDuration + extraIdleTime;
+				}
+				if (panamaTravelTime != Integer.MAX_VALUE) {
+					panamaTravelTime += prevVisitDuration + extraIdleTime;
+				}
+
+				final int minTravelTime = Math.min(directTravelTime, Math.min(panamaTravelTime, suezTravelTime));
+				if (minTravelTime == Integer.MAX_VALUE) {
+					throw new InfeasibleSolutionException("No valid distance");
+				}
+
+				travelTimeData.setMinTravelTime(index - 1, minTravelTime);
+				travelTimeData.setTravelTime(ERouteOption.DIRECT, index - 1, directTravelTime);
+				travelTimeData.setTravelTime(ERouteOption.SUEZ, index - 1, suezTravelTime);
+				travelTimeData.setTravelTime(ERouteOption.PANAMA, index - 1, panamaTravelTime);
+			}
+
+			// Handle time windows
+			if (window == null) { // empty time windows are made to be the
+									// biggest reasonable gap
+				if (index > 0) {
+					// clip start of time window
+					records[index].windowStartTime = records[index - 1].windowStartTime + travelTimeData.getMinTravelTime(index - 1);
+					assert records[index].windowEndTime > records[index].windowStartTime;
+					// backwards pass will fix this.
+					if (records[index].isRoundTripEnd) {
+						// FIXME: This forces the previous discharge to be as early as possible. Pick a
+						// suitable window size! (records[index-1].windowEndTime + minTravelTime should
+						// work as
+						// PTRMaker
+						// selects
+						// quickest travel time)
+						// records[index].windowEndTime = records[index].windowStartTime + 1 +
+						// EMPTY_WINDOW_SIZE;
+						// The fix! Note price schedule needs updating otherwise we slow down too much,
+						records[index].windowEndTime = Math.max(records[index].windowStartTime, records[index - 1].windowStartTime + 2 * travelTimeData.getMinTravelTime(index - 1));
+						assert records[index].windowEndTime > records[index].windowStartTime;
+					} else {
+						// We may get here for e.g. relocatable charter out events.
+						records[index].windowEndTime = records[index].windowStartTime + 1 + EMPTY_WINDOW_SIZE;
+						assert records[index].windowEndTime > records[index].windowStartTime;
+					}
+				} else {
+					records[index].windowStartTime = 0;
+					records[index].windowEndTime = 1 + sequence.size() == 1 ? 0 : EMPTY_WINDOW_SIZE;
+					assert records[index].windowEndTime > records[index].windowStartTime;
+				}
+			} else {
+				if (index == 0) {// first time window is special
+					// It is possible the first window is a spot market slot with a negative start
+					// window due to timezones
+					records[index].windowStartTime = Math.max(0, window.getInclusiveStart());
+					records[index].windowEndTime = Math.max(1, window.getExclusiveEnd());
+					assert records[index].windowEndTime > records[index].windowStartTime;
+				} else {
+
+					// subsequent time windows have their start time clipped, so
+					// they don't start any earlier
+					// than you could get to them without being late.
+					records[index].windowEndTime = window.getExclusiveEnd();
+					assert records[index].windowEndTime > records[index].windowStartTime;
+					if (records[index].useTimeWindow || records[index].actualisedTimeWindow) {
+						// Cargo shorts - pretend this is a start element
+						// Actuals - use window directly
+						records[index].windowStartTime = window.getInclusiveStart();
+						assert records[index].windowEndTime > records[index].windowStartTime;
+					} else {
+						assert prevElement != null;
+						records[index].windowStartTime = Math.max(window.getInclusiveStart(), records[index - 1].windowStartTime + travelTimeData.getMinTravelTime(index - 1));
+						records[index].windowEndTime = Math.max(records[index].windowEndTime, records[index].windowStartTime + 1);
+						assert records[index].windowEndTime > records[index].windowStartTime;
+
+					}
+
+				}
+			}
+
+			assert records[index].windowEndTime > records[index].windowStartTime;
+
+			index++;
+			prevElement = element;
+			prevPortSlot = thisPortSlot;
+		}
+
+		// Do this bit twice, first time to correctly align the start/end boundaries of
+		// the time windows, then to run again after max duration trimming
+		for (int pass = 0; pass < 2; ++pass) {
+
+			// add the last time window
+			// portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
+			// now perform reverse-pass to trim any overly late end times
+			// (that is end times which would make us late at the next element)
+			for (index = size - 2; index >= 0; index--) {
+				// trim the end of this time window so that the next element is
+				// reachable without lateness
+				// (but never so that the end time is before the start time)
+
+				if (records[index].actualisedTimeWindow && records[index + 1].actualisedTimeWindow) {
+					// Skip, windows should already match.
+				} else if (records[index + 1].actualisedTimeWindow && !records[index].actualisedTimeWindow) {
+					// Current window if flexible, next window is fixed, bring end window back
+					records[index].windowEndTime = records[index + 1].windowEndTime - travelTimeData.getMinTravelTime(index);
+					assert records[index].windowEndTime > records[index].windowStartTime;
+				} else if (!records[index + 1].useTimeWindow) {
+					records[index].windowEndTime = Math.max(records[index].windowStartTime + 1,
+							Math.min(records[index].windowEndTime, records[index + 1].windowEndTime - travelTimeData.getMinTravelTime(index)));
+					assert records[index].windowEndTime > records[index].windowStartTime;
+				}
+
+				// Make sure end if >= start - this may shift the end forward again violating
+				// min travel time.
+				records[index].windowEndTime = Math.max(records[index].windowStartTime + 1, records[index].windowEndTime);
+				assert records[index].windowEndTime > records[index].windowStartTime;
+			}
+			if (pass == 0) {
+				if (sequence.size() > 0) {
+					// Apply max duration cutoff to the last element of the sequence
+
+					// NO MAX DURATION
+					trimBasedOnMaxDuration(resource);
+					// Try to trim down the start event upper bound given the minimal duration if it
+					// is set
+					// NO MIN DURATION
+					trimBasedOnMinDuration(resource);
+				}
+			}
+
+		}
+
+		for (index = 1; index < size; ++index) {
+			assert records[index].windowStartTime < records[index].windowEndTime;
+			if (!records[index - 1].isRoundTripEnd) {
+				assert records[index - 1].windowStartTime <= records[index].windowStartTime;
+				assert records[index - 1].windowEndTime <= records[index].windowEndTime;
+			}
+		}
+
+		// For charter outs where event, virtual, other, copy the event window forward
+		for (index = 1; index < size; ++index) {
+			if (records[index].isVirtual || records[index - 1].isVirtual) {
+				records[index].windowStartTime = records[index - 1].windowStartTime;
+				records[index].windowEndTime = records[index - 1].windowEndTime;
+				assert records[index].windowEndTime > records[index].windowStartTime;
+			}
+		}
+	}
+
 	protected final void trimBasedOnPanamaCanal(final @NonNull IResource resource, final @NonNull ISequence sequence, final MinTravelTimeData travelTimeData,
 			final CurrentBookingData currentBookings) {
 
@@ -595,6 +978,47 @@ public class FeasibleTimeWindowTrimmer {
 		}
 
 		final boolean isRoundTripSequence = vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
+
+		// Make sure we can schedule stuff on Panama
+		final IVessel vessel = vesselCharter.getVessel();
+		if (!distanceProvider.isRouteAvailable(ERouteOption.PANAMA, vessel)) {
+			return;
+		}
+
+		boolean changed = false;
+		// Two phases
+		// - Phase 0 allocate required Panama voyages. Allocated boooking and voyages
+		// where Panama (with booking or idle time) is faster.
+		// - Phase 1 force direct/suez where possible
+		for (int phase = 0; phase < 2; ++phase) {
+			if (changed) {
+				// Keep in the current phase until we stop changing stuff.
+				--phase;
+				changed = false;
+			}
+
+			changed |= trimPanamaForwardsPass(sequence, travelTimeData, currentBookings, isRoundTripSequence, vessel, phase);
+			changed |= trimPanamaBackwardsPass(resource, sequence, travelTimeData, currentBookings, size, isRoundTripSequence, vessel);
+		}
+
+	}
+
+	protected final void trimNonShippedBasedOnPanamaCanal(final @NonNull IResource resource, final @NonNull ISequence sequence, final MinTravelTimeData travelTimeData,
+			final CurrentBookingData currentBookings) {
+
+		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			// No shipping
+			return;
+		}
+
+		final int size = sequence.size();
+		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
+		if (size < 2) {
+			return;
+		}
+
+		final boolean isRoundTripSequence = false;
 
 		// Make sure we can schedule stuff on Panama
 		final IVessel vessel = vesselCharter.getVessel();

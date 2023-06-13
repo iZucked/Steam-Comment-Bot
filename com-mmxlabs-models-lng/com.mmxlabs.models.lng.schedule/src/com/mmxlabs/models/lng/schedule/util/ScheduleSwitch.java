@@ -576,6 +576,40 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.NON_SHIPPED_SEQUENCE: {
+				NonShippedSequence nonShippedSequence = (NonShippedSequence)theEObject;
+				T result = caseNonShippedSequence(nonShippedSequence);
+				if (result == null) result = caseMMXObject(nonShippedSequence);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.NON_SHIPPED_SLOT_VISIT: {
+				NonShippedSlotVisit nonShippedSlotVisit = (NonShippedSlotVisit)theEObject;
+				T result = caseNonShippedSlotVisit(nonShippedSlotVisit);
+				if (result == null) result = caseEvent(nonShippedSlotVisit);
+				if (result == null) result = caseMMXObject(nonShippedSlotVisit);
+				if (result == null) result = caseITimezoneProvider(nonShippedSlotVisit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.NON_SHIPPED_JOURNEY: {
+				NonShippedJourney nonShippedJourney = (NonShippedJourney)theEObject;
+				T result = caseNonShippedJourney(nonShippedJourney);
+				if (result == null) result = caseEvent(nonShippedJourney);
+				if (result == null) result = caseMMXObject(nonShippedJourney);
+				if (result == null) result = caseITimezoneProvider(nonShippedJourney);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.NON_SHIPPED_IDLE: {
+				NonShippedIdle nonShippedIdle = (NonShippedIdle)theEObject;
+				T result = caseNonShippedIdle(nonShippedIdle);
+				if (result == null) result = caseEvent(nonShippedIdle);
+				if (result == null) result = caseMMXObject(nonShippedIdle);
+				if (result == null) result = caseITimezoneProvider(nonShippedIdle);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1402,6 +1436,66 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSandboxReference(SandboxReference object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Non Shipped Sequence</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Non Shipped Sequence</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNonShippedSequence(NonShippedSequence object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Non Shipped Slot Visit</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Non Shipped Slot Visit</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNonShippedSlotVisit(NonShippedSlotVisit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Non Shipped Journey</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Non Shipped Journey</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNonShippedJourney(NonShippedJourney object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Non Shipped Idle</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Non Shipped Idle</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNonShippedIdle(NonShippedIdle object) {
 		return null;
 	}
 
