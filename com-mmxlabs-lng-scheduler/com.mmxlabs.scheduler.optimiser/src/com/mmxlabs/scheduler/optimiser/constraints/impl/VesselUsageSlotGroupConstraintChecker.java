@@ -28,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselUsageConstraintDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.VesselUsageConstraintInfo;
 
 /**
@@ -68,14 +67,14 @@ public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstrain
 
 		final Map<Object, Integer> counts = new HashMap<>();
 		for (final IResource resource : sequences.getResources()) {
-			final ISequence sequence = sequences.getSequence(resource);
 			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 			final IVessel vessel = vesselCharter.getVessel();
-			for (final ISequenceElement element : sequence) {
-				final IPortSlot slot = portSlotProvider.getPortSlot(element);
-				if (slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
-					for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraint : allLoadVesselConstraintInfos) {
-						if (constraint.getSlots().contains(slot) && constraint.getVessels().contains(vessel)) {
+			for (final VesselUsageConstraintInfo<?, ?, ILoadOption> constraint : allLoadVesselConstraintInfos) {
+				if (constraint.getVessels().contains(vessel)) {
+					final ISequence sequence = sequences.getSequence(resource);
+					for (final ISequenceElement element : sequence) {
+						final IPortSlot slot = portSlotProvider.getPortSlot(element);
+						if (constraint.getSlots().contains(slot)) {
 							final int newCount = counts.compute(constraint.getProfileConstraintDistribution(), (k, v) -> v == null ? 1 : v + 1);
 							if (newCount > constraint.getBound()) {
 								if (messages != null) {
@@ -84,10 +83,16 @@ public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstrain
 								return false;
 							}
 						}
+
 					}
-					
-					for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraint : allDischargeVesselUsesConstraintInfos) {
-						if (constraint.getSlots().contains(slot) && constraint.getVessels().contains(vessel)) {
+				}
+			}
+			for (final VesselUsageConstraintInfo<?, ?, IDischargeOption> constraint : allDischargeVesselUsesConstraintInfos) {
+				if (constraint.getVessels().contains(vessel)) {
+					final ISequence sequence = sequences.getSequence(resource);
+					for (final ISequenceElement element : sequence) {
+						final IPortSlot slot = portSlotProvider.getPortSlot(element);
+						if (constraint.getSlots().contains(slot)) {
 							final int newCount = counts.compute(constraint.getProfileConstraintDistribution(), (k, v) -> v == null ? 1 : v + 1);
 							if (newCount > constraint.getBound()) {
 								if (messages != null) {
