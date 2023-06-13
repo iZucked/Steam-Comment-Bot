@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -188,7 +189,7 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 			resources.add(resource);
 			sequenceMap.put(resource, new ListModifiableSequence(elems));
 		}
-		return new ModifiableSequences(resources, sequenceMap);
+		return new ModifiableSequences(resources, sequenceMap, new SequencesAttributesProviderImpl());
 	}
 
 	public void setEvaluationElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
