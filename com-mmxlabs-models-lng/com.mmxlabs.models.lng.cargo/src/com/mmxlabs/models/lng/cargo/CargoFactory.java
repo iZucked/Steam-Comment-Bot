@@ -187,6 +187,15 @@ public interface CargoFactory extends EFactory {
 	ScheduleSpecification createScheduleSpecification();
 
 	/**
+	 * Returns a new object of class '<em>Pre Sequence Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Pre Sequence Group</em>'.
+	 * @generated
+	 */
+	PreSequenceGroup createPreSequenceGroup();
+
+	/**
 	 * Returns a new object of class '<em>Non Shipped Cargo Specification</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#isFobSale <em>Fob Sale</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getDate <em>Date</em>}</li>
@@ -97,6 +98,26 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 	 * @ordered
 	 */
 	protected boolean fobSale = FOB_SALE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OPTIONAL_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean optional = OPTIONAL_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -388,6 +409,29 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 		fobSale = newFobSale;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE, oldFobSale, fobSale));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isOptional() {
+		return optional;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOptional(boolean newOptional) {
+		boolean oldOptional = optional;
+		optional = newOptional;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SELL_OPPORTUNITY__OPTIONAL, oldOptional, optional));
 	}
 
 	/**
@@ -825,6 +869,8 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 				return getName();
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				return isFobSale();
+			case AnalyticsPackage.SELL_OPPORTUNITY__OPTIONAL:
+				return isOptional();
 			case AnalyticsPackage.SELL_OPPORTUNITY__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -874,6 +920,9 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				setFobSale((Boolean)newValue);
+				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__OPTIONAL:
+				setOptional((Boolean)newValue);
 				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__PORT:
 				setPort((Port)newValue);
@@ -935,6 +984,9 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				setFobSale(FOB_SALE_EDEFAULT);
 				return;
+			case AnalyticsPackage.SELL_OPPORTUNITY__OPTIONAL:
+				setOptional(OPTIONAL_EDEFAULT);
+				return;
 			case AnalyticsPackage.SELL_OPPORTUNITY__PORT:
 				setPort((Port)null);
 				return;
@@ -993,6 +1045,8 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 				return isSetName();
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
 				return fobSale != FOB_SALE_EDEFAULT;
+			case AnalyticsPackage.SELL_OPPORTUNITY__OPTIONAL:
+				return optional != OPTIONAL_EDEFAULT;
 			case AnalyticsPackage.SELL_OPPORTUNITY__PORT:
 				return port != null;
 			case AnalyticsPackage.SELL_OPPORTUNITY__CONTRACT:
@@ -1039,6 +1093,8 @@ public class SellOpportunityImpl extends UUIDObjectImpl implements SellOpportuni
 		if (nameESet) result.append(name); else result.append("<unset>");
 		result.append(", fobSale: ");
 		result.append(fobSale);
+		result.append(", optional: ");
+		result.append(optional);
 		result.append(", date: ");
 		result.append(date);
 		result.append(", priceExpression: ");

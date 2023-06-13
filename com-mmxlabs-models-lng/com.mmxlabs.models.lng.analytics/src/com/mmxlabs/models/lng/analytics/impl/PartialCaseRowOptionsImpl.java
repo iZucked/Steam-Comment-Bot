@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.port.RouteOption;
 
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -46,7 +47,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class PartialCaseRowOptionsImpl extends EObjectImpl implements PartialCaseRowOptions {
+public class PartialCaseRowOptionsImpl extends UUIDObjectImpl implements PartialCaseRowOptions {
 	/**
 	 * The cached value of the '{@link #getLadenRoutes() <em>Laden Routes</em>}' attribute list.
 	 * <!-- begin-user-doc -->

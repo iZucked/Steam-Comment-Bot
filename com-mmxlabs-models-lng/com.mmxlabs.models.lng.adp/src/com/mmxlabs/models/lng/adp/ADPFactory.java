@@ -118,6 +118,24 @@ public interface ADPFactory extends EFactory {
 	PeriodDistribution createPeriodDistribution();
 
 	/**
+	 * Returns a new object of class '<em>Vessel Usage Distribution Profile Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Usage Distribution Profile Constraint</em>'.
+	 * @generated
+	 */
+	VesselUsageDistributionProfileConstraint createVesselUsageDistributionProfileConstraint();
+
+	/**
+	 * Returns a new object of class '<em>Vessel Usage Distribution</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Usage Distribution</em>'.
+	 * @generated
+	 */
+	VesselUsageDistribution createVesselUsageDistribution();
+
+	/**
 	 * Returns a new object of class '<em>Cargo By Quarter Distribution Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

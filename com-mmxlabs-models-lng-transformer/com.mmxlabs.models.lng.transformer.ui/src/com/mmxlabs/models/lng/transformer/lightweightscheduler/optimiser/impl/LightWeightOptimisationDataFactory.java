@@ -59,6 +59,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -236,7 +237,7 @@ public class LightWeightOptimisationDataFactory {
 			}
 		}
 
-		final IModifiableSequences sequences = new ModifiableSequences(new ArrayList<>(resources));
+		final IModifiableSequences sequences = new ModifiableSequences(new ArrayList<>(resources), new SequencesAttributesProviderImpl());
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
 		@NonNull

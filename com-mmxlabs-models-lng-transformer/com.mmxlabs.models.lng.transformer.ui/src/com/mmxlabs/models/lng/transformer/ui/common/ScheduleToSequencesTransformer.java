@@ -36,6 +36,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
@@ -109,7 +110,7 @@ public class ScheduleToSequencesTransformer {
 		}
 		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
 
-		final IModifiableSequences initialSequences = new ModifiableSequences(resources, resourceMap);
+		final IModifiableSequences initialSequences = new ModifiableSequences(resources, resourceMap, new SequencesAttributesProviderImpl());
 
 		// Add in open positions
 		schedule.getOpenSlotAllocations().stream() //

@@ -10,12 +10,14 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -41,11 +43,12 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getShipping <em>Shipping</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getCommodityCurveOptions <em>Commodity Curve Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getGroup <em>Group</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
+public class PartialCaseRowImpl extends UUIDObjectImpl implements PartialCaseRow {
 	/**
 	 * The cached value of the '{@link #getBuyOptions() <em>Buy Options</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -105,6 +108,16 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * @ordered
 	 */
 	protected EList<CommodityCurveOption> commodityCurveOptions;
+
+	/**
+	 * The cached value of the '{@link #getGroup() <em>Group</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGroup()
+	 * @generated
+	 * @ordered
+	 */
+	protected PartialCaseRowGroup group;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -241,10 +254,90 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * @generated
 	 */
 	@Override
+	public PartialCaseRowGroup getGroup() {
+		if (group != null && group.eIsProxy()) {
+			InternalEObject oldGroup = (InternalEObject)group;
+			group = (PartialCaseRowGroup)eResolveProxy(oldGroup);
+			if (group != oldGroup) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.PARTIAL_CASE_ROW__GROUP, oldGroup, group));
+			}
+		}
+		return group;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PartialCaseRowGroup basicGetGroup() {
+		return group;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetGroup(PartialCaseRowGroup newGroup, NotificationChain msgs) {
+		PartialCaseRowGroup oldGroup = group;
+		group = newGroup;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PARTIAL_CASE_ROW__GROUP, oldGroup, newGroup);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setGroup(PartialCaseRowGroup newGroup) {
+		if (newGroup != group) {
+			NotificationChain msgs = null;
+			if (group != null)
+				msgs = ((InternalEObject)group).eInverseRemove(this, AnalyticsPackage.PARTIAL_CASE_ROW_GROUP__ROWS, PartialCaseRowGroup.class, msgs);
+			if (newGroup != null)
+				msgs = ((InternalEObject)newGroup).eInverseAdd(this, AnalyticsPackage.PARTIAL_CASE_ROW_GROUP__ROWS, PartialCaseRowGroup.class, msgs);
+			msgs = basicSetGroup(newGroup, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PARTIAL_CASE_ROW__GROUP, newGroup, newGroup));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalyticsPackage.PARTIAL_CASE_ROW__GROUP:
+				if (group != null)
+					msgs = ((InternalEObject)group).eInverseRemove(this, AnalyticsPackage.PARTIAL_CASE_ROW_GROUP__ROWS, PartialCaseRowGroup.class, msgs);
+				return basicSetGroup((PartialCaseRowGroup)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
 				return basicSetOptions(null, msgs);
+			case AnalyticsPackage.PARTIAL_CASE_ROW__GROUP:
+				return basicSetGroup(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -269,6 +362,9 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return getOptions();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS:
 				return getCommodityCurveOptions();
+			case AnalyticsPackage.PARTIAL_CASE_ROW__GROUP:
+				if (resolve) return getGroup();
+				return basicGetGroup();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -305,6 +401,9 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				getCommodityCurveOptions().clear();
 				getCommodityCurveOptions().addAll((Collection<? extends CommodityCurveOption>)newValue);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__GROUP:
+				setGroup((PartialCaseRowGroup)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -335,6 +434,9 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS:
 				getCommodityCurveOptions().clear();
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__GROUP:
+				setGroup((PartialCaseRowGroup)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -359,6 +461,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return options != null;
 			case AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS:
 				return commodityCurveOptions != null && !commodityCurveOptions.isEmpty();
+			case AnalyticsPackage.PARTIAL_CASE_ROW__GROUP:
+				return group != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -85,6 +85,7 @@ public class ScheduleSpecificationItemProvider
 			childrenFeatures.add(CargoPackage.Literals.SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS);
 			childrenFeatures.add(CargoPackage.Literals.SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS);
 			childrenFeatures.add(CargoPackage.Literals.SCHEDULE_SPECIFICATION__OPEN_EVENTS);
+			childrenFeatures.add(CargoPackage.Literals.SCHEDULE_SPECIFICATION__PRE_SEQUENCES);
 		}
 		return childrenFeatures;
 	}
@@ -140,6 +141,7 @@ public class ScheduleSpecificationItemProvider
 			case CargoPackage.SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS:
 			case CargoPackage.SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS:
 			case CargoPackage.SCHEDULE_SPECIFICATION__OPEN_EVENTS:
+			case CargoPackage.SCHEDULE_SPECIFICATION__PRE_SEQUENCES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -186,6 +188,11 @@ public class ScheduleSpecificationItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.SCHEDULE_SPECIFICATION__OPEN_EVENTS,
 				 CargoFactory.eINSTANCE.createSlotSpecification()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.SCHEDULE_SPECIFICATION__PRE_SEQUENCES,
+				 CargoFactory.eINSTANCE.createPreSequenceGroup()));
 	}
 
 	/**

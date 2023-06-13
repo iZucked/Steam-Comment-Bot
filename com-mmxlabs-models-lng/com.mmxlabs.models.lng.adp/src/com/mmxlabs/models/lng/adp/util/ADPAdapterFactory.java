@@ -194,6 +194,14 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createPeriodDistributionAdapter();
 			}
 			@Override
+			public Adapter caseVesselUsageDistributionProfileConstraint(VesselUsageDistributionProfileConstraint object) {
+				return createVesselUsageDistributionProfileConstraintAdapter();
+			}
+			@Override
+			public Adapter caseVesselUsageDistribution(VesselUsageDistribution object) {
+				return createVesselUsageDistributionAdapter();
+			}
+			@Override
 			public Adapter caseFleetConstraint(FleetConstraint object) {
 				return createFleetConstraintAdapter();
 			}
@@ -362,6 +370,34 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPeriodDistributionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint <em>Vessel Usage Distribution Profile Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint
+	 * @generated
+	 */
+	public Adapter createVesselUsageDistributionProfileConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.VesselUsageDistribution <em>Vessel Usage Distribution</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.VesselUsageDistribution
+	 * @generated
+	 */
+	public Adapter createVesselUsageDistributionAdapter() {
 		return null;
 	}
 

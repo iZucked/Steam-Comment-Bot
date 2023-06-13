@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 
@@ -100,7 +101,7 @@ public class SortingFitnessCoreTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(r1, OptimiserTestUtil.makeSequence(1, 3, 2, 4), r2, OptimiserTestUtil.makeSequence(5, 8, 7, 6));
 
-		final IModifiableSequences sequences = new ModifiableSequences(CollectionsUtil.makeArrayList(r1, r2), map);
+		final IModifiableSequences sequences = new ModifiableSequences(CollectionsUtil.makeArrayList(r1, r2), map, new SequencesAttributesProviderImpl());
 
 		core.evaluate(sequences, evaluationState);
 

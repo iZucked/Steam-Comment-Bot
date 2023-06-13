@@ -387,6 +387,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BaseCaseRowGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BaseCaseRowGroupItemProvider baseCaseRowGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BaseCaseRowGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBaseCaseRowGroupAdapter() {
+		if (baseCaseRowGroupItemProvider == null) {
+			baseCaseRowGroupItemProvider = new BaseCaseRowGroupItemProvider(this);
+		}
+
+		return baseCaseRowGroupItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -430,6 +453,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		}
 
 		return partialCaseRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.PartialCaseRowGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PartialCaseRowGroupItemProvider partialCaseRowGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.PartialCaseRowGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPartialCaseRowGroupAdapter() {
+		if (partialCaseRowGroupItemProvider == null) {
+			partialCaseRowGroupItemProvider = new PartialCaseRowGroupItemProvider(this);
+		}
+
+		return partialCaseRowGroupItemProvider;
 	}
 
 	/**
@@ -2051,8 +2097,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (vesselEventReferenceItemProvider != null) vesselEventReferenceItemProvider.dispose();
 		if (charterOutOpportunityItemProvider != null) charterOutOpportunityItemProvider.dispose();
 		if (baseCaseRowItemProvider != null) baseCaseRowItemProvider.dispose();
+		if (baseCaseRowGroupItemProvider != null) baseCaseRowGroupItemProvider.dispose();
 		if (baseCaseRowOptionsItemProvider != null) baseCaseRowOptionsItemProvider.dispose();
 		if (partialCaseRowItemProvider != null) partialCaseRowItemProvider.dispose();
+		if (partialCaseRowGroupItemProvider != null) partialCaseRowGroupItemProvider.dispose();
 		if (partialCaseRowOptionsItemProvider != null) partialCaseRowOptionsItemProvider.dispose();
 		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
 		if (simpleVesselCharterOptionItemProvider != null) simpleVesselCharterOptionItemProvider.dispose();

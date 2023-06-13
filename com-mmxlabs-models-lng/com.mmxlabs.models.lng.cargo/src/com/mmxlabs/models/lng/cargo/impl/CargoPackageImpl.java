@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
+import com.mmxlabs.models.lng.cargo.PreSequenceGroup;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
@@ -230,6 +231,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass scheduleSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass preSequenceGroupEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2622,6 +2630,36 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getScheduleSpecification_PreSequences() {
+		return (EReference)scheduleSpecificationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPreSequenceGroup() {
+		return preSequenceGroupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPreSequenceGroup_Sequence() {
+		return (EReference)preSequenceGroupEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNonShippedCargoSpecification() {
 		return nonShippedCargoSpecificationEClass;
 	}
@@ -3563,6 +3601,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS);
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS);
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__OPEN_EVENTS);
+		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__PRE_SEQUENCES);
+
+		preSequenceGroupEClass = createEClass(PRE_SEQUENCE_GROUP);
+		createEReference(preSequenceGroupEClass, PRE_SEQUENCE_GROUP__SEQUENCE);
 
 		nonShippedCargoSpecificationEClass = createEClass(NON_SHIPPED_CARGO_SPECIFICATION);
 		createEReference(nonShippedCargoSpecificationEClass, NON_SHIPPED_CARGO_SPECIFICATION__SLOT_SPECIFICATIONS);
@@ -4084,6 +4126,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getScheduleSpecification_VesselScheduleSpecifications(), this.getVesselScheduleSpecification(), null, "vesselScheduleSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScheduleSpecification_NonShippedCargoSpecifications(), this.getNonShippedCargoSpecification(), null, "nonShippedCargoSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScheduleSpecification_OpenEvents(), this.getScheduleSpecificationEvent(), null, "openEvents", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScheduleSpecification_PreSequences(), this.getPreSequenceGroup(), null, "preSequences", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(preSequenceGroupEClass, PreSequenceGroup.class, "PreSequenceGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPreSequenceGroup_Sequence(), this.getScheduleSpecificationEvent(), null, "sequence", null, 0, -1, PreSequenceGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nonShippedCargoSpecificationEClass, NonShippedCargoSpecification.class, "NonShippedCargoSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNonShippedCargoSpecification_SlotSpecifications(), this.getSlotSpecification(), null, "slotSpecifications", null, 0, -1, NonShippedCargoSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

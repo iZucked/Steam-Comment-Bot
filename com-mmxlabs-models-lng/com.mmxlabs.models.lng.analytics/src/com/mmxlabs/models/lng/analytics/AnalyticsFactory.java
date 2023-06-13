@@ -142,6 +142,15 @@ public interface AnalyticsFactory extends EFactory {
 	BaseCaseRow createBaseCaseRow();
 
 	/**
+	 * Returns a new object of class '<em>Base Case Row Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base Case Row Group</em>'.
+	 * @generated
+	 */
+	BaseCaseRowGroup createBaseCaseRowGroup();
+
+	/**
 	 * Returns a new object of class '<em>Base Case Row Options</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -158,6 +167,15 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	PartialCaseRow createPartialCaseRow();
+
+	/**
+	 * Returns a new object of class '<em>Partial Case Row Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Partial Case Row Group</em>'.
+	 * @generated
+	 */
+	PartialCaseRowGroup createPartialCaseRowGroup();
 
 	/**
 	 * Returns a new object of class '<em>Partial Case Row Options</em>'.

@@ -6548,13 +6548,22 @@ public interface CargoPackage extends EPackage {
 	int SCHEDULE_SPECIFICATION__OPEN_EVENTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Pre Sequences</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION__PRE_SEQUENCES = 3;
+
+	/**
 	 * The number of structural features of the '<em>Schedule Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_SPECIFICATION_FEATURE_COUNT = 3;
+	int SCHEDULE_SPECIFICATION_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Schedule Specification</em>' class.
@@ -6566,6 +6575,43 @@ public interface CargoPackage extends EPackage {
 	int SCHEDULE_SPECIFICATION_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl <em>Pre Sequence Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPreSequenceGroup()
+	 * @generated
+	 */
+	int PRE_SEQUENCE_GROUP = 22;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_SEQUENCE_GROUP__SEQUENCE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Pre Sequence Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_SEQUENCE_GROUP_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Pre Sequence Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_SEQUENCE_GROUP_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl <em>Non Shipped Cargo Specification</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6573,7 +6619,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getNonShippedCargoSpecification()
 	 * @generated
 	 */
-	int NON_SHIPPED_CARGO_SPECIFICATION = 22;
+	int NON_SHIPPED_CARGO_SPECIFICATION = 23;
 
 	/**
 	 * The feature id for the '<em><b>Slot Specifications</b></em>' containment reference list.
@@ -6610,7 +6656,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselScheduleSpecification()
 	 * @generated
 	 */
-	int VESSEL_SCHEDULE_SPECIFICATION = 23;
+	int VESSEL_SCHEDULE_SPECIFICATION = 24;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Allocation</b></em>' reference.
@@ -6665,7 +6711,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecificationEvent()
 	 * @generated
 	 */
-	int SCHEDULE_SPECIFICATION_EVENT = 24;
+	int SCHEDULE_SPECIFICATION_EVENT = 25;
 
 	/**
 	 * The number of structural features of the '<em>Schedule Specification Event</em>' class.
@@ -6693,7 +6739,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEventSpecification()
 	 * @generated
 	 */
-	int VESSEL_EVENT_SPECIFICATION = 25;
+	int VESSEL_EVENT_SPECIFICATION = 26;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -6739,7 +6785,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVoyageSpecification()
 	 * @generated
 	 */
-	int VOYAGE_SPECIFICATION = 26;
+	int VOYAGE_SPECIFICATION = 27;
 
 	/**
 	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
@@ -6785,7 +6831,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlotSpecification()
 	 * @generated
 	 */
-	int SLOT_SPECIFICATION = 27;
+	int SLOT_SPECIFICATION = 28;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -6831,7 +6877,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterInMarketOverride()
 	 * @generated
 	 */
-	int CHARTER_IN_MARKET_OVERRIDE = 28;
+	int CHARTER_IN_MARKET_OVERRIDE = 29;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7021,7 +7067,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperDeal()
 	 * @generated
 	 */
-	int PAPER_DEAL = 29;
+	int PAPER_DEAL = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7193,7 +7239,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getBuyPaperDeal()
 	 * @generated
 	 */
-	int BUY_PAPER_DEAL = 30;
+	int BUY_PAPER_DEAL = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7365,7 +7411,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSellPaperDeal()
 	 * @generated
 	 */
-	int SELL_PAPER_DEAL = 31;
+	int SELL_PAPER_DEAL = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7537,7 +7583,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDealSet()
 	 * @generated
 	 */
-	int DEAL_SET = 32;
+	int DEAL_SET = 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7628,7 +7674,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselGroupCanalParameters()
 	 * @generated
 	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS = 33;
+	int VESSEL_GROUP_CANAL_PARAMETERS = 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7710,7 +7756,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPanamaSeasonalityRecord()
 	 * @generated
 	 */
-	int PANAMA_SEASONALITY_RECORD = 34;
+	int PANAMA_SEASONALITY_RECORD = 35;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Group Canal Parameter</b></em>' reference.
@@ -7792,7 +7838,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedSlotsConstraint()
 	 * @generated
 	 */
-	int GROUPED_SLOTS_CONSTRAINT = 35;
+	int GROUPED_SLOTS_CONSTRAINT = 36;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -7838,7 +7884,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedDischargeSlotsConstraint()
 	 * @generated
 	 */
-	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT = 36;
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT = 37;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -7884,7 +7930,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 37;
+	int CARGO_TYPE = 38;
 
 
 	/**
@@ -7895,7 +7941,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 38;
+	int VESSEL_TYPE = 39;
 
 
 	/**
@@ -7906,7 +7952,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 39;
+	int INVENTORY_FACILITY_TYPE = 40;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -7916,7 +7962,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 40;
+	int INVENTORY_FREQUENCY = 41;
 
 
 	/**
@@ -7927,7 +7973,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 41;
+	int PAPER_PRICING_TYPE = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
@@ -7937,7 +7983,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
 	 * @generated
 	 */
-	int FUEL_CHOICE = 42;
+	int FUEL_CHOICE = 43;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -7947,7 +7993,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 43;
+	int SCHEDULING_TIME_WINDOW = 44;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -10275,6 +10321,38 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getScheduleSpecification_OpenEvents();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getPreSequences <em>Pre Sequences</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Pre Sequences</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecification#getPreSequences()
+	 * @see #getScheduleSpecification()
+	 * @generated
+	 */
+	EReference getScheduleSpecification_PreSequences();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.PreSequenceGroup <em>Pre Sequence Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Pre Sequence Group</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PreSequenceGroup
+	 * @generated
+	 */
+	EClass getPreSequenceGroup();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.PreSequenceGroup#getSequence <em>Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Sequence</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PreSequenceGroup#getSequence()
+	 * @see #getPreSequenceGroup()
+	 * @generated
+	 */
+	EReference getPreSequenceGroup_Sequence();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification <em>Non Shipped Cargo Specification</em>}'.
@@ -12800,6 +12878,32 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE_SPECIFICATION__OPEN_EVENTS = eINSTANCE.getScheduleSpecification_OpenEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Pre Sequences</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE_SPECIFICATION__PRE_SEQUENCES = eINSTANCE.getScheduleSpecification_PreSequences();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl <em>Pre Sequence Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPreSequenceGroup()
+		 * @generated
+		 */
+		EClass PRE_SEQUENCE_GROUP = eINSTANCE.getPreSequenceGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Sequence</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRE_SEQUENCE_GROUP__SEQUENCE = eINSTANCE.getPreSequenceGroup_Sequence();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl <em>Non Shipped Cargo Specification</em>}' class.

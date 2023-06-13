@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.lso.moves.impl.MoveSnake;
 
 public class MoveSnakeTest {
@@ -38,7 +39,7 @@ public class MoveSnakeTest {
 
 		final Map<@NonNull IResource, @NonNull IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		final MoveSnake move = new MoveSnake();
 
@@ -76,7 +77,7 @@ public class MoveSnakeTest {
 
 		final Map<@NonNull IResource, @NonNull IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2, resource3, sequence3);
 
-		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap, new SequencesAttributesProviderImpl());
 
 		final MoveSnake move = new MoveSnake();
 
@@ -133,7 +134,7 @@ public class MoveSnakeTest {
 
 		final Map<@NonNull IResource, @NonNull IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2, resource3, sequence3);
 
-		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap, new SequencesAttributesProviderImpl());
 
 		final MoveSnake move = new MoveSnake();
 

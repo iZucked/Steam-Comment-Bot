@@ -63,7 +63,7 @@ public class MainTableContextMenuManager implements MenuDetectListener {
 		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 		final GridColumn column = grid.getColumn(mousePoint);
 
-		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		final IStructuredSelection selection = viewer.getStructuredSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
 			mgr.add(new RunnableAction("Delete row(s)", () -> {

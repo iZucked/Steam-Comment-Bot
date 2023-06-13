@@ -20,11 +20,13 @@ import org.eclipse.jface.action.Action;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -37,6 +39,7 @@ import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -131,7 +134,6 @@ public class CreateSandboxFromResultAction extends Action {
 				return op;
 			} else {
 				if (s instanceof SpotSlot spotSlot) {
-					// return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
 					final SpotMarket mkt = spotSlot.getMarket();
 					final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
 					m.setMarket(mkt);
@@ -139,7 +141,6 @@ public class CreateSandboxFromResultAction extends Action {
 					newModel.getBuys().add(m);
 
 					return m;
-					// });
 				} else {
 					final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
 					ref.setSlot(s);
@@ -155,7 +156,6 @@ public class CreateSandboxFromResultAction extends Action {
 				return op;
 			} else {
 				if (s instanceof SpotSlot spotSlot) {
-					// return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
 					final SpotMarket mkt = spotSlot.getMarket();
 					final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
 					m.setMarket(mkt);
@@ -163,7 +163,6 @@ public class CreateSandboxFromResultAction extends Action {
 					newModel.getSells().add(m);
 
 					return m;
-					// });
 				} else {
 					final SellReference ref = AnalyticsFactory.eINSTANCE.createSellReference();
 					ref.setSlot(s);
@@ -228,65 +227,67 @@ public class CreateSandboxFromResultAction extends Action {
 		baseCase.setProfitAndLoss(ScheduleModelKPIUtils.getScheduleProfitAndLoss(ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule()));
 
 		// Stage 1, generate the before case (i.e. the pin)
-		for (final ChangeSetTableRow row : selectedRows) {
-			final BaseCaseRow bRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-			if (row.isWiringChange() || row.isVesselChange()) {
-				// Date only changes not required for sandbox as they are derived values
-				{
-					final ChangeSetRowData lhsData = row.getLhsAfter();
-					if (lhsData != null) {
-						final SlotAllocation loadAllocation = lhsData.getLoadAllocation();
-						if (loadAllocation != null) {
-							final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
+		Map<ChangeSetRowDataGroup, BaseCaseRowGroup> mBase = new HashMap<>();
+		for (ChangeSetTableRow row : selectedRows) {
 
-							boolean foundSandbox = false;
-							for (var ext : loadAllocation.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
-									bRow.setBuyOption(sandboxBuyGetter.apply(opt));
-									foundSandbox = true;
-									break;
-								}
+			final BaseCaseRow bRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+			{
+				final ChangeSetRowData lhsData = row.getLhsBefore();
+				if (lhsData != null) {
+					final SlotAllocation loadAllocation = lhsData.getLoadAllocation();
+					if (loadAllocation != null) {
+						final LoadSlot slot = (LoadSlot) loadAllocation.getSlot();
+
+						boolean foundSandbox = false;
+						for (var ext : loadAllocation.getExtensions()) {
+							if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
+								bRow.setBuyOption(sandboxBuyGetter.apply(opt));
+								foundSandbox = true;
+								break;
 							}
-							if (!foundSandbox) {
+						}
+						if (!foundSandbox) {
+							bRow.setBuyOption(buyGetter.apply(slot));
+						}
+					}
+
+					var osa = lhsData.getOpenLoadAllocation();
+					if (osa != null) {
+						boolean foundSandbox = false;
+						for (var ext : osa.getExtensions()) {
+							if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
+								bRow.setBuyOption(sandboxBuyGetter.apply(opt));
+								foundSandbox = true;
+								break;
+							}
+						}
+						if (!foundSandbox) {
+							final LoadSlot slot = (LoadSlot) osa.getSlot();
+							// TODO: Not sure why we have a null check here, it may be a bug
+							// as this will avoid creating an OpenBuy
+							if (slot != null) {
 								bRow.setBuyOption(buyGetter.apply(slot));
 							}
 						}
+					}
 
-						var osa = lhsData.getOpenLoadAllocation();
-						if (osa != null) {
-							boolean foundSandbox = false;
-							for (var ext : osa.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof BuyOpportunity opt) {
-									bRow.setBuyOption(sandboxBuyGetter.apply(opt));
-									foundSandbox = true;
-									break;
-								}
-							}
-							if (!foundSandbox) {
-								final LoadSlot slot = (LoadSlot) osa.getSlot();
-								// TODO: Not sure why we have a null check here, it may be a bug
-								// as this will avoid creating an OpenBuy
-								if (slot != null) {
-									bRow.setBuyOption(buyGetter.apply(slot));
-								}
+					final Event evt = lhsData.getLhsEvent();
+					if (evt instanceof VesselEventVisit vesselEventVisit) {
+						boolean foundSandbox = false;
+						for (var ext : vesselEventVisit.getExtensions()) {
+							if (ext instanceof SandboxReference ref && ref.getReference() instanceof CharterOutOpportunity opt) {
+								bRow.setVesselEventOption(sandboxEventGetter.apply(opt));
+								foundSandbox = true;
+								break;
 							}
 						}
-
-						final Event evt = lhsData.getLhsEvent();
-						if (evt instanceof VesselEventVisit vesselEventVisit) {
-							boolean foundSandbox = false;
-							for (var ext : vesselEventVisit.getExtensions()) {
-								if (ext instanceof SandboxReference ref && ref.getReference() instanceof CharterOutOpportunity opt) {
-									bRow.setVesselEventOption(sandboxEventGetter.apply(opt));
-									foundSandbox = true;
-									break;
-								}
-							}
-							if (!foundSandbox) {
-								bRow.setVesselEventOption(eventGetter.apply(vesselEventVisit.getVesselEvent()));
-							}
+						if (!foundSandbox) {
+							bRow.setVesselEventOption(eventGetter.apply(vesselEventVisit.getVesselEvent()));
 						}
 					}
+				}
+
+				{
 					final ChangeSetRowData rhsData = row.getLhsBefore();
 					if (rhsData != null) {
 						final SlotAllocation originalLoadAllocation = rhsData.getLoadAllocation();
@@ -296,7 +297,7 @@ public class CreateSandboxFromResultAction extends Action {
 						}
 					}
 				}
-				final ChangeSetRowData rhsData = row.getLhsBefore();
+				final ChangeSetRowData rhsData = row.getPreviousRhsBefore();
 				if (rhsData != null) {
 					final SlotAllocation dischargeAllocation = rhsData.getDischargeAllocation();
 					if (dischargeAllocation != null) {
@@ -336,6 +337,13 @@ public class CreateSandboxFromResultAction extends Action {
 				} else if (bRow.getBuyOption() == null && bRow.getSellOption() instanceof SellMarket) {
 					// Do not add
 				} else if (bRow.getBuyOption() != null || bRow.getSellOption() != null || bRow.getVesselEventOption() != null) {
+
+					var rdGroup = rhsData.getRowDataGroup();
+					mBase.computeIfAbsent(rdGroup, k -> {
+						final BaseCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+						baseCase.getGroups().add(grp);
+						return grp;
+					}).getRows().add(bRow);
 					baseCase.getBaseCase().add(bRow);
 				}
 			}
@@ -347,9 +355,15 @@ public class CreateSandboxFromResultAction extends Action {
 
 		// Stage 2, generate the after case (i.e. the diff/other)
 		// This code is pretty similar to stage 1.
+		Map<ChangeSetRowDataGroup, PartialCaseRowGroup> mOptions = new HashMap<>();
+
 		for (final ChangeSetTableRow row : selectedRows) {
+
 			final PartialCaseRow pRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
-			if (row.isWiringChange() || row.isVesselChange()) {
+			// final PartialCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+			// pRow.setGroup(grp);
+			// if (row.isWiringChange() || row.isVesselChange())
+			{
 				{
 					final ChangeSetRowData lhsData = row.getLhsAfter();
 					if (lhsData != null) {
@@ -463,6 +477,17 @@ public class CreateSandboxFromResultAction extends Action {
 				}
 
 				if (!pRow.getBuyOptions().isEmpty() || !pRow.getSellOptions().isEmpty() || !pRow.getVesselEventOptions().isEmpty()) {
+					// partialCase.getPartialCase().add(pRow);
+					ChangeSetRowData lhsData = row.getLhsAfter();
+					if (lhsData == null) {
+						lhsData = row.getCurrentRhsAfter();
+					}
+					var rdGroup = lhsData.getRowDataGroup();
+					mOptions.computeIfAbsent(rdGroup, k -> {
+						final PartialCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+						 partialCase.getGroups().add(grp);
+						return grp;
+					}).getRows().add(pRow);
 					partialCase.getPartialCase().add(pRow);
 				}
 			}

@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.lso.moves.impl.Move2over2;
 
 public class Move2over2Test {
@@ -36,7 +37,7 @@ public class Move2over2Test {
 
 		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap, new SequencesAttributesProviderImpl());
 
 		final Move2over2 move = new Move2over2();
 
@@ -72,7 +73,7 @@ public class Move2over2Test {
 
 		final Map<IResource, IModifiableSequence> sequenceMap = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap, new SequencesAttributesProviderImpl());
 
 		final Move2over2 move = new Move2over2();
 

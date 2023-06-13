@@ -325,6 +325,52 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselUsageDistributionProfileConstraintItemProvider vesselUsageDistributionProfileConstraintItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselUsageDistributionProfileConstraintAdapter() {
+		if (vesselUsageDistributionProfileConstraintItemProvider == null) {
+			vesselUsageDistributionProfileConstraintItemProvider = new VesselUsageDistributionProfileConstraintItemProvider(this);
+		}
+
+		return vesselUsageDistributionProfileConstraintItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.VesselUsageDistribution} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselUsageDistributionItemProvider vesselUsageDistributionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.VesselUsageDistribution}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselUsageDistributionAdapter() {
+		if (vesselUsageDistributionItemProvider == null) {
+			vesselUsageDistributionItemProvider = new VesselUsageDistributionItemProvider(this);
+		}
+
+		return vesselUsageDistributionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1125,6 +1171,8 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (maxCargoConstraintItemProvider != null) maxCargoConstraintItemProvider.dispose();
 		if (periodDistributionProfileConstraintItemProvider != null) periodDistributionProfileConstraintItemProvider.dispose();
 		if (periodDistributionItemProvider != null) periodDistributionItemProvider.dispose();
+		if (vesselUsageDistributionProfileConstraintItemProvider != null) vesselUsageDistributionProfileConstraintItemProvider.dispose();
+		if (vesselUsageDistributionItemProvider != null) vesselUsageDistributionItemProvider.dispose();
 		if (targetCargoesOnVesselConstraintItemProvider != null) targetCargoesOnVesselConstraintItemProvider.dispose();
 		if (mullEntityRowItemProvider != null) mullEntityRowItemProvider.dispose();
 		if (desSalesMarketAllocationRowItemProvider != null) desSalesMarketAllocationRowItemProvider.dispose();

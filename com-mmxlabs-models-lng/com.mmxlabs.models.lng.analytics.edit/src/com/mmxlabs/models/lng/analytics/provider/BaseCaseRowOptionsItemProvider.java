@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 
 import com.mmxlabs.models.lng.port.RouteOption;
 
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,13 +40,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class BaseCaseRowOptionsItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -228,8 +223,7 @@ public class BaseCaseRowOptionsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		RouteOption labelValue = ((BaseCaseRowOptions)object).getLadenRoute();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((BaseCaseRowOptions)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_BaseCaseRowOptions_type") :
 			getString("_UI_BaseCaseRowOptions_type") + " " + label;
@@ -270,17 +264,6 @@ public class BaseCaseRowOptionsItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

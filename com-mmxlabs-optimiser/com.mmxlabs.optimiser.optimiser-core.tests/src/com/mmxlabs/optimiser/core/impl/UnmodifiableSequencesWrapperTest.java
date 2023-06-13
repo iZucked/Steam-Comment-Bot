@@ -31,7 +31,7 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
@@ -53,7 +53,7 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
@@ -83,7 +83,7 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
@@ -109,7 +109,7 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 
@@ -141,9 +141,9 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final Map<IResource, IModifiableSequence> map2 = CollectionsUtil.makeHashMap(resource2, sequence2);
 
-		final ModifiableSequences sequences1 = new ModifiableSequences(resources1, map1);
+		final ModifiableSequences sequences1 = new ModifiableSequences(resources1, map1, new SequencesAttributesProviderImpl());
 
-		final ModifiableSequences sequences2 = new ModifiableSequences(resources2, map2);
+		final ModifiableSequences sequences2 = new ModifiableSequences(resources2, map2, new SequencesAttributesProviderImpl());
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences1);
 
@@ -172,7 +172,7 @@ public class UnmodifiableSequencesWrapperTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
+		final ModifiableSequences sequences = new ModifiableSequences(resources, map, new SequencesAttributesProviderImpl());
 
 		final UnmodifiableSequencesWrapper wrapper = new UnmodifiableSequencesWrapper(sequences);
 		Assertions.assertEquals(2, wrapper.size());

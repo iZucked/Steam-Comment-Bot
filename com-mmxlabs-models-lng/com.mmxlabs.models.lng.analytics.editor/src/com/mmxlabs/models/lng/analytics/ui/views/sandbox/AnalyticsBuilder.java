@@ -142,7 +142,7 @@ public class AnalyticsBuilder {
 			if (slotMode != SlotMode.ORIGINAL_SLOT) {
 				// TODO: Copy other params!
 				final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
-				slot.setOptional(true);
+				slot.setOptional(originalLoadSlot.isOptional());
 				slot.setName(id);
 				slot.setPort(originalLoadSlot.getPort());
 
@@ -182,7 +182,7 @@ public class AnalyticsBuilder {
 			return originalLoadSlot;
 		} else if (buy instanceof final BuyOpportunity buyOpportunity) {
 			final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
-			slot.setOptional(true);
+			slot.setOptional(buyOpportunity.isOptional());
 			slot.setName(id);
 			slot.setPort(buyOpportunity.getPort());
 			if (buyOpportunity.isDesPurchase()) {
@@ -338,7 +338,7 @@ public class AnalyticsBuilder {
 			if (slotMode != SlotMode.ORIGINAL_SLOT) {
 
 				final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
-				slot.setOptional(true);
+				slot.setOptional(originalDischargeSlot.isOptional());
 				slot.setName(id);
 				slot.setPort(originalDischargeSlot.getPort());
 
@@ -375,7 +375,7 @@ public class AnalyticsBuilder {
 			return originalDischargeSlot;
 		} else if (sell instanceof final SellOpportunity sellOpportunity) {
 			final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
-			slot.setOptional(true);
+			slot.setOptional(sellOpportunity.isOptional());
 			slot.setName(id);
 			slot.setPort(sellOpportunity.getPort());
 			if (sellOpportunity.isFobSale()) {
@@ -788,8 +788,8 @@ public class AnalyticsBuilder {
 		return veRef;
 	}
 
-	public static @Nullable ShippingOption applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row, final Cargo cargo,
-			final LoadSlot load, final DischargeSlot dischargeSlot, final boolean portfolioMode, final CompoundCommand cmd) {
+	public static @Nullable ShippingOption applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row,
+			final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, final boolean portfolioMode, final CompoundCommand cmd) {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, portfolioMode, optionAnalysisModel);
 		if (opt != null) {
@@ -1970,5 +1970,33 @@ public class AnalyticsBuilder {
 
 		newMarket.setName(vessel.getName() + " @" + hireCost);
 		return newMarket;
+	}
+
+	public static boolean isOptional(final BuyOption option) {
+		if (option instanceof final BuyOpportunity buyOpportunity) {
+			return buyOpportunity.isOptional();
+		} else if (option instanceof final BuyReference buyReference) {
+			final LoadSlot slot = buyReference.getSlot();
+			if (slot != null) {
+				return slot.isOptional();
+			}
+		} else if (option instanceof final BuyMarket sellMarket) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isOptional(final SellOption option) {
+		if (option instanceof final SellOpportunity sellOpportunity) {
+			return sellOpportunity.isOptional();
+		} else if (option instanceof final SellReference sellReference) {
+			final DischargeSlot slot = sellReference.getSlot();
+			if (slot != null) {
+				return slot.isOptional();
+			}
+		} else if (option instanceof final SellMarket sellMarket) {
+			return true;
+		}
+		return false;
 	}
 }

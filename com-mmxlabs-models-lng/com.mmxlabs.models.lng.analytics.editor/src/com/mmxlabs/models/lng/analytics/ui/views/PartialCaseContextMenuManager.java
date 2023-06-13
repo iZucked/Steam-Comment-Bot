@@ -36,9 +36,12 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ui.commands.CleanUpBaseCaseRowGroupsCommand;
+import com.mmxlabs.models.lng.analytics.ui.commands.CleanUpPartialCaseRowGroupsCommand;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -79,9 +82,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 		}
 		mgr.removeAll();
 		{
-			IContributionItem[] items = mgr.getItems();
+			final IContributionItem[] items = mgr.getItems();
 			mgr.removeAll();
-			for (IContributionItem mItem : items) {
+			for (final IContributionItem mItem : items) {
 				mItem.dispose();
 			}
 		}
@@ -91,15 +94,19 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 		final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 		final GridColumn column = grid.getColumn(mousePoint);
 
-		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+		final IStructuredSelection selection = viewer.getStructuredSelection();
 		final GridItem[] items = grid.getSelection();
 		if (items.length > 0) {
 			mgr.add(new RunnableAction("Delete row(s)", () -> {
 				final Collection<EObject> c = new LinkedList<>();
 				selection.iterator().forEachRemaining(ee -> c.add((EObject) ee));
 
-				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c), null, null);
-
+				if (!c.isEmpty()) {
+					final CompoundCommand cmd = new CompoundCommand();
+					cmd.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), c));
+					cmd.append(new CleanUpPartialCaseRowGroupsCommand(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase()));
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				}
 			}));
 		}
 		if (items.length == 1) {
@@ -108,13 +115,30 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 			{
 				if (!row.getBuyOptions().isEmpty() && !row.getSellOptions().isEmpty()) {
 					mgr.add(new RunnableAction("Split row", () -> {
-
-						final PartialCaseRow newRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
 						final CompoundCommand cmd = new CompoundCommand();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, newRow));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), newRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, row.getSellOptions()));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, SetCommand.UNSET_VALUE));
-
+						{
+							final PartialCaseRow newRow = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+							final PartialCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+							newRow.setGroup(grp);
+							cmd.append(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE, newRow));
+							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__GROUPS, grp));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), newRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, row.getSellOptions()));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, SetCommand.UNSET_VALUE));
+						}
+						if (row.getGroup().getRows().size() > 1) {
+							for (var r : row.getGroup().getRows()) {
+								if (r == row) {
+									continue;
+								}
+								if (!r.getSellOptions().isEmpty()) {
+									final PartialCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup();
+									cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), r, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__GROUP, grp));
+									cmd.append(
+											AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__GROUPS, grp));
+								}
+							}
+						}
 						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
 
 					}));
@@ -127,8 +151,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 					mgr.add(new RunnableAction("Edit options", () -> {
 
 						if (row.getOptions() == null) {
-							PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
-							Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS, options);
+							final PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
+							final Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS, options);
 							DetailCompositeDialogUtil.editNewObjectWithUndoOnCancel(scenarioEditingLocation, options, c);
 						} else {
 							DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row.getOptions());
@@ -140,9 +164,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 
 					if (!row.getBuyOptions().isEmpty()) {
 						mgr.add(new RunnableAction("Remove buy(s)", () -> {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS, SetCommand.UNSET_VALUE), row,
-									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS, SetCommand.UNSET_VALUE),
+											row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
 
 						}));
 						if (row.getSellOptions().size() == 1) {
@@ -151,8 +175,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 							final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-							ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
-									ModelDistanceProvider.class);
+							final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider()
+									.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 							final Vessel vessel = row.getShipping().isEmpty() ? null : AnalyticsBuilder.getVessel(row.getShipping().get(0));
 							final Port toPort = AnalyticsBuilder.getPort(sellOption);
 							final ZonedDateTime sellDate = AnalyticsBuilder.getWindowStartDate(sellOption);
@@ -216,9 +240,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 				if (column.getText().equals("Sell")) {
 					if (!row.getSellOptions().isEmpty()) {
 						mgr.add(new RunnableAction("Remove sell(s)", () -> {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, SetCommand.UNSET_VALUE), row,
-									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS, SetCommand.UNSET_VALUE),
+											row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
 
 						}));
 						if (row.getBuyOptions().size() == 1) {
@@ -227,8 +251,8 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 
 							final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 							final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
-							ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider().getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
-									ModelDistanceProvider.class);
+							final ModelDistanceProvider modelDistanceProvider = scenarioEditingLocation.getScenarioDataProvider()
+									.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 							final Vessel vessel = row.getShipping().isEmpty() ? null : AnalyticsBuilder.getVessel(row.getShipping().get(0));
 							final Port fromPort = AnalyticsBuilder.getPort(buyOption);
 							final ZonedDateTime buyDate = AnalyticsBuilder.getWindowStartDate(buyOption);
@@ -294,9 +318,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 				if (column.getText().equals("Shipping")) {
 					if (row.getShipping() != null) {
 						mgr.add(new RunnableAction("Remove shipping", () -> {
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE), row,
-									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, SetCommand.UNSET_VALUE),
+											row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 
 						}));
 						// mgr.add(new RunnableAction("Copy shipping to templates", () -> {
@@ -312,9 +336,9 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 					if (AnalyticsBuilder.isNonShipped(row) == ShippingType.NonShipped) {
 						mgr.add(new RunnableAction("Create Nominated", () -> {
 							final NominatedShippingOption o = AnalyticsFactory.eINSTANCE.createNominatedShippingOption();
-							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-									SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
-									AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+							scenarioEditingLocation.getDefaultCommandHandler()
+									.handleCommand(SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
+											AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
 						}));
 					} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {

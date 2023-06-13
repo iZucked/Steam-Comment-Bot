@@ -131,6 +131,7 @@ public class BaseCaseItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.BASE_CASE__BASE_CASE);
+			childrenFeatures.add(AnalyticsPackage.Literals.BASE_CASE__GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -189,6 +190,7 @@ public class BaseCaseItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.BASE_CASE__BASE_CASE:
+			case AnalyticsPackage.BASE_CASE__GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -210,6 +212,11 @@ public class BaseCaseItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.BASE_CASE__BASE_CASE,
 				 AnalyticsFactory.eINSTANCE.createBaseCaseRow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.BASE_CASE__GROUPS,
+				 AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup()));
 	}
 
 	/**

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.validation;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -36,22 +38,27 @@ public class SandboxConstraintUtils {
 
 	}
 
-	public static boolean vesselPortRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
+	public static boolean vesselPortRestrictionsValid(final BuyOption buy, final SellOption sell1, final @Nullable SellOption sell2, final ShippingOption shippingOption) {
 		final Collection<APortSet<Port>> portRestrictions = AnalyticsBuilder.getPortRestrictions(shippingOption);
-		final Port buyPort = AnalyticsBuilder.getPort(buy);
-		final Port sellPort = AnalyticsBuilder.getPort(sell);
 		if (!portRestrictions.isEmpty()) {
-			for (final APortSet<Port> portFromSet : portRestrictions) {
-				final Optional<Port> value = SetUtils.getObjects(portFromSet).stream().filter(p -> p.equals(buyPort) || p.equals(sellPort)).findFirst();
-				if (value.isPresent() && value.get() != null) {
-					return false;
+			final Set<Port> optionPorts = new HashSet<>();
+			optionPorts.add(AnalyticsBuilder.getPort(buy));
+			optionPorts.add(AnalyticsBuilder.getPort(sell1));
+			optionPorts.add(AnalyticsBuilder.getPort(sell2));
+			optionPorts.remove(null);
+
+			if (!optionPorts.isEmpty()) {
+				for (final APortSet<Port> portFromSet : portRestrictions) {
+					if (SetUtils.getObjects(portFromSet).stream().anyMatch(optionPorts::contains)) {
+						return false;
+					}
 				}
 			}
 		}
 		return true;
 	}
 
-	public static boolean vesselRestrictionsValid(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
+	public static boolean vesselRestrictionsValid(final BuyOption buy, final SellOption sell1, final @Nullable SellOption sell2, final ShippingOption shippingOption) {
 		final Vessel vessel = AnalyticsBuilder.getVessel(shippingOption);
 		if (vessel != null) {
 			if (buy instanceof BuyReference) {
@@ -65,8 +72,18 @@ public class SandboxConstraintUtils {
 					return false;
 				}
 			}
-			if (sell instanceof SellReference) {
-				final Pair<Boolean, Set<AVesselSet<Vessel>>> restrictedVessels = AnalyticsBuilder.getSellVesselRestrictions(sell);
+			if (sell1 instanceof SellReference) {
+				final Pair<Boolean, Set<AVesselSet<Vessel>>> restrictedVessels = AnalyticsBuilder.getSellVesselRestrictions(sell1);
+				final boolean permissive = restrictedVessels.getFirst();
+				final Set<AVesselSet<Vessel>> allowedVessels = restrictedVessels.getSecond();
+				if (!permissive && allowedVessels.isEmpty()) {
+					// No restrictions
+				} else if (SetUtils.getObjects(allowedVessels).contains(vessel) != permissive) {
+					return false;
+				}
+			}
+			if (sell2 instanceof SellReference) {
+				final Pair<Boolean, Set<AVesselSet<Vessel>>> restrictedVessels = AnalyticsBuilder.getSellVesselRestrictions(sell2);
 				final boolean permissive = restrictedVessels.getFirst();
 				final Set<AVesselSet<Vessel>> allowedVessels = restrictedVessels.getSecond();
 				if (!permissive && allowedVessels.isEmpty()) {
@@ -79,23 +96,48 @@ public class SandboxConstraintUtils {
 		return true;
 	}
 
-	public static boolean portRestrictionsValid(final BuyOption buy, final SellOption sell) {
+	public static boolean portRestrictionsValid(final BuyOption buy, final SellOption sell1, final @Nullable SellOption sell2) {
 
 		if (buy instanceof BuyReference) {
-			final Port port = AnalyticsBuilder.getPort(sell);
-			final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getBuyPortRestrictions(buy);
+			{
+				final Port port = AnalyticsBuilder.getPort(sell1);
+				final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getBuyPortRestrictions(buy);
+				final boolean permissive = restrictedPorts.getFirst();
+				final Set<APortSet<Port>> allowedPorts = restrictedPorts.getSecond();
+
+				if (!permissive && allowedPorts.isEmpty()) {
+					// No restrictions
+				} else if (SetUtils.getObjects(allowedPorts).contains(port) != permissive) {
+					return false;
+				}
+			}
+			if (sell2 != null) {
+				final Port port = AnalyticsBuilder.getPort(sell2);
+				final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getBuyPortRestrictions(buy);
+				final boolean permissive = restrictedPorts.getFirst();
+				final Set<APortSet<Port>> allowedPorts = restrictedPorts.getSecond();
+
+				if (!permissive && allowedPorts.isEmpty()) {
+					// No restrictions
+				} else if (SetUtils.getObjects(allowedPorts).contains(port) != permissive) {
+					return false;
+				}
+			}
+		}
+		if (sell1 instanceof SellReference) {
+			final Port port = AnalyticsBuilder.getPort(buy);
+			final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getSellPortRestrictions(sell1);
 			final boolean permissive = restrictedPorts.getFirst();
 			final Set<APortSet<Port>> allowedPorts = restrictedPorts.getSecond();
-
 			if (!permissive && allowedPorts.isEmpty()) {
 				// No restrictions
 			} else if (SetUtils.getObjects(allowedPorts).contains(port) != permissive) {
 				return false;
 			}
 		}
-		if (sell instanceof SellReference) {
+		if (sell2 instanceof SellReference) {
 			final Port port = AnalyticsBuilder.getPort(buy);
-			final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getSellPortRestrictions(sell);
+			final Pair<Boolean, Set<APortSet<Port>>> restrictedPorts = AnalyticsBuilder.getSellPortRestrictions(sell2);
 			final boolean permissive = restrictedPorts.getFirst();
 			final Set<APortSet<Port>> allowedPorts = restrictedPorts.getSecond();
 			if (!permissive && allowedPorts.isEmpty()) {
@@ -107,23 +149,24 @@ public class SandboxConstraintUtils {
 		return true;
 	}
 
-	public static boolean checkVolumeAgainstBuyAndSell(final BuyOption buy, final SellOption sell) {
-		if (buy == null || sell == null) {
+	public static boolean checkVolumeAgainstBuyAndSell(final BuyOption buy, final SellOption sell1, final @Nullable SellOption sell2) {
+		if (buy == null || sell1 == null) {
 			return true;
 		}
 		final int[] buyVolumeInMMBTU = AnalyticsBuilder.getBuyVolumeInMMBTU(buy);
-		final int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell);
-		if (buyVolumeInMMBTU == null || sellVolumeInMMBTU == null) {
+		final int[] sell1VolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell1);
+		final int[] sell2VolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell2);
+		if (buyVolumeInMMBTU == null || sell1VolumeInMMBTU == null) {
 			return true;
 		}
-		if (buyVolumeInMMBTU[0] > sellVolumeInMMBTU[1]) {
+		if (buyVolumeInMMBTU[0] > (sell1VolumeInMMBTU[1] + (sell2VolumeInMMBTU == null ? 0 : sell2VolumeInMMBTU[1]))) {
 			return false;
 		}
 		return true;
 	}
 
-	public static boolean checkVolumeAgainstVessel(final BuyOption buy, final SellOption sell, final ShippingOption shippingOption) {
-		if (buy == null || sell == null || shippingOption == null) {
+	public static boolean checkVolumeAgainstVessel(final BuyOption buy, final SellOption sell1, final @Nullable SellOption sell2, final ShippingOption shippingOption) {
+		if (buy == null || sell1 == null || shippingOption == null) {
 			return true;
 		}
 		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
@@ -131,36 +174,59 @@ public class SandboxConstraintUtils {
 			return false;
 		}
 		final int[] buyVolumeInMMBTU = AnalyticsBuilder.getBuyVolumeInMMBTU(buy);
-		final int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell);
-		if (buyVolumeInMMBTU == null || sellVolumeInMMBTU == null) {
+		final int[] sell1VolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell1);
+		final int[] sell2VolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(buy, sell2);
+
+		if (buyVolumeInMMBTU == null || sell1VolumeInMMBTU == null) {
 			return true;
 		}
 		final int capacityInMMBTU = (int) ((double) AnalyticsBuilder.getVesselCapacityInM3(shippingOption) * cargoCV);
 		if (buyVolumeInMMBTU[0] > capacityInMMBTU) {
 			return false;
 		}
-		if (sellVolumeInMMBTU[0] > capacityInMMBTU) {
+		if (sell1VolumeInMMBTU[0] > capacityInMMBTU) {
+			return false;
+		}
+		if (sell2VolumeInMMBTU != null && sell2VolumeInMMBTU[0] > capacityInMMBTU) {
 			return false;
 		}
 		return true;
 	}
 
-	public static boolean checkCVAgainstBuyAndSell(final BuyOption buy, final SellOption sell) {
-		if (buy == null || sell == null) {
-			return true;
-		}
-		double[] cvRange = AnalyticsBuilder.getCargoCVRange(sell);
-		if (cvRange == null) {
+	public static boolean checkCVAgainstBuyAndSell(final BuyOption buy, final SellOption sell1, final @Nullable SellOption sell2) {
+		if (buy == null || sell1 == null) {
 			return true;
 		}
 		final double cargoCV = AnalyticsBuilder.getCargoCV(buy);
-		if (cargoCV < cvRange[0]) {
-			return false;
+		{
+			final double[] cvRange = AnalyticsBuilder.getCargoCVRange(sell1);
+			if (cvRange == null) {
+				return true;
+			}
+			if (cargoCV < cvRange[0]) {
+				return false;
+			}
+			if (cvRange[1] > 0.0 && cargoCV > cvRange[1]) {
+				return false;
+			}
 		}
-		if (cvRange[1] > 0.0 && cargoCV > cvRange[1]) {
-			return false;
+		if (sell2 != null) {
+			final double[] cvRange = AnalyticsBuilder.getCargoCVRange(sell2);
+			if (cvRange == null) {
+				return true;
+			}
+			if (cargoCV < cvRange[0]) {
+				return false;
+			}
+			if (cvRange[1] > 0.0 && cargoCV > cvRange[1]) {
+				return false;
+			}
 		}
 		return true;
+	}
+
+	public static boolean shouldValidate(@NonNull final PartialCaseRowGroup partialCaseRowGroup) {
+		return isRunningUnderSandboxModes(partialCaseRowGroup, Collections.singleton(SandboxModeConstants.MODE_DEFINE));
 	}
 
 	public static boolean shouldValidate(@NonNull final PartialCaseRow partialCaseRow) {
@@ -171,11 +237,11 @@ public class SandboxConstraintUtils {
 		return isRunningUnderSandboxModes(partialCase, Collections.singleton(SandboxModeConstants.MODE_DEFINE));
 	}
 
-	private static boolean isRunningUnderSandboxModes(@Nullable final EObject eObject, @NonNull Collection<Integer> modes) {
+	private static boolean isRunningUnderSandboxModes(@Nullable final EObject eObject, @NonNull final Collection<Integer> modes) {
 		if (eObject == null) {
 			return false;
 		}
-		if (eObject instanceof @NonNull OptionAnalysisModel optionAnalysisModel && modes.contains(optionAnalysisModel.getMode())) {
+		if (eObject instanceof @NonNull final OptionAnalysisModel optionAnalysisModel && modes.contains(optionAnalysisModel.getMode())) {
 			return true;
 		}
 		return isRunningUnderSandboxModes(eObject.eContainer(), modes);

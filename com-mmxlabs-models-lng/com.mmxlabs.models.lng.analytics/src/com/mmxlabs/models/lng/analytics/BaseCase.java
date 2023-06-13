@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCase#getBaseCase <em>Base Case</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCase#getProfitAndLoss <em>Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCase#isKeepExistingScenario <em>Keep Existing Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCase#getGroups <em>Groups</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCase()
@@ -96,5 +97,17 @@ public interface BaseCase extends EObject {
 	 * @generated
 	 */
 	void setKeepExistingScenario(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.BaseCaseRowGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Groups</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCase_Groups()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<BaseCaseRowGroup> getGroups();
 
 } // BaseCase

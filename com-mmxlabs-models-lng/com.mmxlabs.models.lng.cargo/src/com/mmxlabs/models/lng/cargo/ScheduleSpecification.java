@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getVesselScheduleSpecifications <em>Vessel Schedule Specifications</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getNonShippedCargoSpecifications <em>Non Shipped Cargo Specifications</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getOpenEvents <em>Open Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getPreSequences <em>Pre Sequences</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getScheduleSpecification()
@@ -76,5 +77,17 @@ public interface ScheduleSpecification extends EObject {
 	 * @generated
 	 */
 	EList<ScheduleSpecificationEvent> getOpenEvents();
+
+	/**
+	 * Returns the value of the '<em><b>Pre Sequences</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.PreSequenceGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pre Sequences</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getScheduleSpecification_PreSequences()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<PreSequenceGroup> getPreSequences();
 
 } // ScheduleSpecification

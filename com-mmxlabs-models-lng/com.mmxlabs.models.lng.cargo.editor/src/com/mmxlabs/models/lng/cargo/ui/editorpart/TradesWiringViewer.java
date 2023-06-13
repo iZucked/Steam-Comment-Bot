@@ -46,6 +46,7 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -74,6 +75,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -86,6 +89,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -268,6 +272,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private IPropertyChangeListener propertyChangeListener;
 	private final Set<String> filtersOpenContracts = new HashSet<>();
 	private IExtraFiltersProvider extraFiltersProvider;
+
+	private final boolean allowLDD = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_COMPLEX_CARGO);
 
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
@@ -1415,9 +1421,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram.setSortOrder(rootData, sortedIndices, reverseSortedIndices);
 
 		// Hook in a listener to notify mouse events
-		final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
+		final WiringDiagramMouseListener listener = new WiringDiagramMouseListener(getScenarioViewer().getGrid());
 		getScenarioViewer().getGrid().addMouseMoveListener(listener);
 		getScenarioViewer().getGrid().addMouseListener(listener);
+		getScenarioViewer().getGrid().addKeyListener(listener);
 
 		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE | DND.DROP_LINK);
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -1724,7 +1731,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		final boolean swapDischarges = ctrlPressed;
 		// Complex cargoes no longer supported in wiring DND
-		final boolean createComplexCargo = !swapDischarges && shiftPressed && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_COMPLEX_CARGO);
+		final boolean createComplexCargo = !swapDischarges && shiftPressed && allowLDD;
 
 		final List<Command> setCommands = new LinkedList<>();
 
@@ -2641,14 +2648,64 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * A combined {@link MouseListener} and {@link MouseMoveListener} to scroll the table during wiring operations.
 	 * 
 	 */
-	private class WiringDiagramMouseListener implements MouseListener, MouseMoveListener {
+	private class WiringDiagramMouseListener implements MouseListener, MouseMoveListener, KeyListener {
 
 		private boolean dragging = false;
 
+		private int x = 0; // Last drag x pos
+		private int y = 0; // Last drag y pos
+		private final Label lbl; // Tooltip label while dragging
+
+		protected WiringDiagramMouseListener(final Grid grid) {
+			lbl = new Label(grid.getParent(), SWT.BORDER);
+			lbl.setText("");
+			lbl.setBackground(lbl.getShell().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+			lbl.setLayoutData(GridDataFactory.swtDefaults().exclude(true).create());
+			// Make sure we are on top of the table viewer
+			lbl.moveAbove(grid);
+			// Hide until we are ready to show
+			lbl.setVisible(false);
+		}
+
+		protected final void setDragMessage(final String message) {
+			if (message == null || message.isBlank()) {
+				if (this.lbl.isVisible()) {
+					this.lbl.setVisible(false);
+				}
+				return;
+			}
+
+			if (!Objects.equals(this.lbl.getText(), message)) {
+				this.lbl.setText(message);
+				this.lbl.pack();
+
+			}
+			if (!this.lbl.isVisible()) {
+				this.lbl.setVisible(true);
+			}
+		}
+
 		@Override
 		public void mouseMove(final MouseEvent e) {
+
+			// Update tool tip location
+			if (e.x != x || e.y != y) {
+				x = e.x;
+				y = e.y;
+				this.lbl.setLocation(e.x + 0, e.y + 50);
+			}
+			// If drag off the table and release the mouse, the mouse up/down event will not trigger here.
+			// Re-check the mouse state and see if we have let go of the mouse button.
+
+			if (dragging && ((e.stateMask & SWT.BUTTON1) == 0)) {
+				dragging = false;
+				setDragMessage(null);
+			}
 			if (dragging) {
 				final Grid grid = getScenarioViewer().getGrid();
+
+				// Update tooltip message
+				updateTooltip(e.stateMask);
 
 				// Get table area
 				Rectangle bounds = getScenarioViewer().getGrid().getClientArea();
@@ -2710,6 +2767,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						getScenarioViewer().refresh();
 					}
 				}
+			} else {
+				setDragMessage(null);
 			}
 		}
 
@@ -2720,14 +2779,53 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		@Override
 		public void mouseDown(final MouseEvent e) {
-			dragging = true;
+			if (e.button == 1) {
+				dragging = true;
+			}
 
 		}
 
 		@Override
 		public void mouseUp(final MouseEvent e) {
 			dragging = false;
+			// Hide the tooltip
+			setDragMessage(null);
 		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.keyCode == SWT.CTRL || e.keyCode == SWT.SHIFT) {
+				updateTooltip(e.keyCode);
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if (e.keyCode == SWT.CTRL || e.keyCode == SWT.SHIFT) {
+				updateTooltip(e.stateMask & ~e.keyCode);
+			}
+		}
+
+		private void updateTooltip(int stateMask) {
+			if (dragging) {
+				final boolean ctrlPressed = (stateMask & SWT.CTRL) != 0;
+				final boolean shiftPressed = (stateMask & SWT.SHIFT) != 0;
+				// final boolean altPressed = (stateMask & SWT.ALT) != 0;
+				if (ctrlPressed) {
+					setDragMessage("Drag over another terminal to swap sells");
+				} else if (shiftPressed && allowLDD) {
+					setDragMessage("Drag over another terminal to create a LDD cargo");
+				} else {
+					if (allowLDD) {
+						setDragMessage(
+								"Drag over another terminal to create a new cargo.\nHold CTRL to swap sells\nHold SHIFT to make a LDD cargo\nDrag over white space to unpair the existing cargo");
+					} else {
+						setDragMessage("Drag over another terminal to create a new cargo.\nHold CTRL to swap sells\nDrag over white space to unpair the existing cargo");
+					}
+				}
+			}
+		}
+
 	}
 
 	private class CreateStripMenuAction extends LockableAction implements IMenuCreator {
@@ -2878,12 +2976,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	protected Action createDuplicateAction() {
 		return null;
 	}
-	
+
 	@Override
 	protected void lookAtMySelection(final ISelection selection) {
 		// nothing
 		if (selection != null && !selection.isEmpty()) {
-			
+
 		}
 	}
+
 }

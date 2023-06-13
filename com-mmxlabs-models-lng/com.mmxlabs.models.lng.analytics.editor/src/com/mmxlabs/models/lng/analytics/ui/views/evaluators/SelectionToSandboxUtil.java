@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -182,7 +183,10 @@ public class SelectionToSandboxUtil {
 
 						// Create a new row
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+						final BaseCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+						row.setGroup(grp);
 						baseCase.getBaseCase().add(row);
+						baseCase.getGroups().add(grp);
 						if (slot instanceof LoadSlot loadSlot) {
 							final BuyOption option = loadSlotToOption(loadSlot, buyMap);
 							row.setBuyOption(option);
@@ -202,7 +206,10 @@ public class SelectionToSandboxUtil {
 							}
 							// Create a new row
 							final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+							final BaseCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+							row.setGroup(grp);
 							baseCase.getBaseCase().add(row);
+							baseCase.getGroups().add(grp);
 							for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 								final Slot<?> slot = sa.getSlot();
 								if (slot instanceof LoadSlot loadSlot) {
@@ -259,7 +266,10 @@ public class SelectionToSandboxUtil {
 						}
 						// Create a new row
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+						final BaseCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+						row.setGroup(grp);
 						baseCase.getBaseCase().add(row);
+						baseCase.getGroups().add(grp);
 						for (final Slot<?> s : cargo.getSlots()) {
 							if (s instanceof LoadSlot loadSlot) {
 								final BuyOption option = loadSlotToOption(loadSlot, buyMap);
@@ -286,7 +296,10 @@ public class SelectionToSandboxUtil {
 
 						// Create a new row
 						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+						final BaseCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
+						row.setGroup(grp);
 						baseCase.getBaseCase().add(row);
+						baseCase.getGroups().add(grp);
 						if (slot instanceof LoadSlot loadSlot) {
 							final BuyOption option = loadSlotToOption(loadSlot, buyMap);
 							row.setBuyOption(option);

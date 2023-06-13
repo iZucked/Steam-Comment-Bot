@@ -287,6 +287,19 @@ public class ADPSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ADPPackage.VESSEL_USAGE_DISTRIBUTION_PROFILE_CONSTRAINT: {
+				VesselUsageDistributionProfileConstraint vesselUsageDistributionProfileConstraint = (VesselUsageDistributionProfileConstraint)theEObject;
+				T1 result = caseVesselUsageDistributionProfileConstraint(vesselUsageDistributionProfileConstraint);
+				if (result == null) result = caseProfileConstraint(vesselUsageDistributionProfileConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ADPPackage.VESSEL_USAGE_DISTRIBUTION: {
+				VesselUsageDistribution vesselUsageDistribution = (VesselUsageDistribution)theEObject;
+				T1 result = caseVesselUsageDistribution(vesselUsageDistribution);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ADPPackage.FLEET_CONSTRAINT: {
 				FleetConstraint fleetConstraint = (FleetConstraint)theEObject;
 				T1 result = caseFleetConstraint(fleetConstraint);
@@ -473,6 +486,36 @@ public class ADPSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 casePeriodDistribution(PeriodDistribution object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Usage Distribution Profile Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Usage Distribution Profile Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseVesselUsageDistributionProfileConstraint(VesselUsageDistributionProfileConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Usage Distribution</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Usage Distribution</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseVesselUsageDistribution(VesselUsageDistribution object) {
 		return null;
 	}
 

@@ -56,6 +56,20 @@ public class OptionAnalysisModelConstraint extends AbstractModelMultiConstraint 
 				statuses.add(deco);
 			}
 
+			if (model.getMode() == SandboxModeConstants.MODE_OPTIONISE) {
+				for (var group : model.getBaseCase().getGroups()) {
+					if (group.getRows().size() > 1) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Optionise does not support LDD cargoes"));
+						deco.addEObjectAndFeature(model, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE);
+						for (var row : group.getRows()) {
+							deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
+						}
+						statuses.add(deco);
+						break;
+					}
+				}
+			}
+
 			// Check for duplicated existing slots.
 			{
 				final Set<LoadSlot> loadSlots = new HashSet<>();

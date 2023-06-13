@@ -136,12 +136,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createBaseCaseRowAdapter();
 			}
 			@Override
+			public Adapter caseBaseCaseRowGroup(BaseCaseRowGroup object) {
+				return createBaseCaseRowGroupAdapter();
+			}
+			@Override
 			public Adapter caseBaseCaseRowOptions(BaseCaseRowOptions object) {
 				return createBaseCaseRowOptionsAdapter();
 			}
 			@Override
 			public Adapter casePartialCaseRow(PartialCaseRow object) {
 				return createPartialCaseRowAdapter();
+			}
+			@Override
+			public Adapter casePartialCaseRowGroup(PartialCaseRowGroup object) {
+				return createPartialCaseRowGroupAdapter();
 			}
 			@Override
 			public Adapter casePartialCaseRowOptions(PartialCaseRowOptions object) {
@@ -666,6 +674,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowGroup <em>Base Case Row Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowGroup
+	 * @generated
+	 */
+	public Adapter createBaseCaseRowGroupAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions <em>Base Case Row Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -690,6 +712,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowGroup <em>Partial Case Row Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowGroup
+	 * @generated
+	 */
+	public Adapter createPartialCaseRowGroupAdapter() {
 		return null;
 	}
 

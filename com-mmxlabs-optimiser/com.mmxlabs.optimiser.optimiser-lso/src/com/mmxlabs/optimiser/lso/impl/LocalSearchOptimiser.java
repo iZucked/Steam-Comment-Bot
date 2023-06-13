@@ -131,7 +131,7 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 
 		final ModifiableSequences lCurrentRawSequences = new ModifiableSequences(inputRawSequences);
 
-		final ModifiableSequences lPotentialRawSequences = new ModifiableSequences(lCurrentRawSequences.getResources());
+		final ModifiableSequences lPotentialRawSequences = new ModifiableSequences(lCurrentRawSequences.getResources(), lCurrentRawSequences.getProviders());
 		updateSequences(lCurrentRawSequences, lPotentialRawSequences, lCurrentRawSequences.getResources());
 
 		// Evaluate initial sequences

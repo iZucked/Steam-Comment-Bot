@@ -50,6 +50,7 @@ public class SellOpportunityItemProvider
 
 			addNamePropertyDescriptor(object);
 			addFobSalePropertyDescriptor(object);
+			addOptionalPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
 			addDatePropertyDescriptor(object);
@@ -82,6 +83,28 @@ public class SellOpportunityItemProvider
 				 getString("_UI_SellOpportunity_fobSale_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SellOpportunity_fobSale_feature", "_UI_SellOpportunity_type"),
 				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__FOB_SALE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Optional feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOptionalPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SellOpportunity_optional_feature"),
+				 getString("_UI_SellOpportunity_optional_description"),
+				 AnalyticsPackage.Literals.SELL_OPPORTUNITY__OPTIONAL,
 				 true,
 				 false,
 				 false,
@@ -459,6 +482,7 @@ public class SellOpportunityItemProvider
 		switch (notification.getFeatureID(SellOpportunity.class)) {
 			case AnalyticsPackage.SELL_OPPORTUNITY__NAME:
 			case AnalyticsPackage.SELL_OPPORTUNITY__FOB_SALE:
+			case AnalyticsPackage.SELL_OPPORTUNITY__OPTIONAL:
 			case AnalyticsPackage.SELL_OPPORTUNITY__DATE:
 			case AnalyticsPackage.SELL_OPPORTUNITY__PRICE_EXPRESSION:
 			case AnalyticsPackage.SELL_OPPORTUNITY__CANCELLATION_EXPRESSION:

@@ -88,6 +88,8 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.MAX_CARGO_CONSTRAINT: return createMaxCargoConstraint();
 			case ADPPackage.PERIOD_DISTRIBUTION_PROFILE_CONSTRAINT: return createPeriodDistributionProfileConstraint();
 			case ADPPackage.PERIOD_DISTRIBUTION: return createPeriodDistribution();
+			case ADPPackage.VESSEL_USAGE_DISTRIBUTION_PROFILE_CONSTRAINT: return createVesselUsageDistributionProfileConstraint();
+			case ADPPackage.VESSEL_USAGE_DISTRIBUTION: return createVesselUsageDistribution();
 			case ADPPackage.TARGET_CARGOES_ON_VESSEL_CONSTRAINT: return createTargetCargoesOnVesselConstraint();
 			case ADPPackage.MULL_ENTITY_ROW: return createMullEntityRow();
 			case ADPPackage.DES_SALES_MARKET_ALLOCATION_ROW: return createDESSalesMarketAllocationRow();
@@ -248,6 +250,28 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public PeriodDistribution createPeriodDistribution() {
 		PeriodDistributionImpl periodDistribution = new PeriodDistributionImpl();
 		return periodDistribution;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VesselUsageDistributionProfileConstraint createVesselUsageDistributionProfileConstraint() {
+		VesselUsageDistributionProfileConstraintImpl vesselUsageDistributionProfileConstraint = new VesselUsageDistributionProfileConstraintImpl();
+		return vesselUsageDistributionProfileConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VesselUsageDistribution createVesselUsageDistribution() {
+		VesselUsageDistributionImpl vesselUsageDistribution = new VesselUsageDistributionImpl();
+		return vesselUsageDistribution;
 	}
 
 	/**
