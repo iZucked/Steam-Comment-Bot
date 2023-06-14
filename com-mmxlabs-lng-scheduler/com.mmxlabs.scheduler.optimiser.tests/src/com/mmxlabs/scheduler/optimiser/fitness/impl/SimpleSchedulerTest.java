@@ -92,6 +92,7 @@ import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityBook;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IFobSaleRotationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -426,6 +427,9 @@ public class SimpleSchedulerTest {
 						Mockito.when(maintenanceEvaluator.processSchedule(ArgumentMatchers.any(long[].class), ArgumentMatchers.any(IVesselCharter.class), ArgumentMatchers.any(VoyagePlan.class),
 								ArgumentMatchers.any(IPortTimesRecord.class), ArgumentMatchers.nullable(IAnnotatedSolution.class))).thenReturn(null);
 						bind(IMaintenanceEvaluator.class).toInstance(maintenanceEvaluator);
+
+						final IFobSaleRotationProvider fobSaleRotationProvider = Mockito.mock(IFobSaleRotationProvider.class);
+						bind(IFobSaleRotationProvider.class).toInstance(fobSaleRotationProvider);
 					}
 				});
 	}

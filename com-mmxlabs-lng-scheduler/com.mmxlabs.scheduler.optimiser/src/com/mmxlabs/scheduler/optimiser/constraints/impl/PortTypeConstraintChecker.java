@@ -162,8 +162,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			switch (type) {
 			case Discharge:
 				if (seenDischarges == 1 && checkConstraint) {
-					// Allow pre-sequenced LDD cargo 
-					boolean validDD = previous!= null && preSequenced != null && preSequenced.isPreSequenced(previous) && preSequenced.validSequence(previous, t);
+					// Allow pre-sequenced LDD cargo
+					boolean validDD = previous != null && preSequenced != null && preSequenced.isPreSequenced(previous) && preSequenced.validSequence(previous, t);
 					if (!validDD) {
 						// Cannot have two discharges in a row
 						if (messages != null) {
@@ -242,12 +242,21 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			previousType = type;
 		}
 
-		if ((instanceType == VesselInstanceType.ROUND_TRIP && !(previousType == null || previousType == PortType.Round_Trip_Cargo_End))
-				|| (instanceType != VesselInstanceType.ROUND_TRIP && previousType != PortType.End)) {
-			// Must end with an End type.
-			if (messages != null)
-				messages.add(this.name + ": Sequence must end with PortType.End");
-			return false;
+		if (instanceType != VesselInstanceType.NONSHIPPED_ROTATION) {
+			if ((instanceType == VesselInstanceType.ROUND_TRIP && !(previousType == null || previousType == PortType.Round_Trip_Cargo_End))
+					|| (instanceType != VesselInstanceType.ROUND_TRIP && previousType != PortType.End)) {
+				// Must end with an End type.
+				if (messages != null)
+					messages.add(this.name + ": Sequence must end with PortType.End");
+				return false;
+			}
+		} else {
+			if (sequence.size() != 0) {
+				if (messages != null) {
+					messages.add(this.name + ": Non-shipped rotation must have an empty sequence");
+				}
+				return false;
+			}
 		}
 
 		return true;
@@ -315,6 +324,12 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 					messages.add(explain(first, second, resource));
 				return false;
 			}
+		} else if (instanceType == VesselInstanceType.NONSHIPPED_ROTATION) {
+			// Non-shipped rotations must be empty during optimisation
+			if (messages != null) {
+				messages.add(this.name + ": Non-shipped rotations must not be sequenced during optimisation");
+			}
+			return false;
 		}
 
 		return true;
