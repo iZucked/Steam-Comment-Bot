@@ -64,6 +64,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint.Row;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo.ViolationType;
@@ -330,6 +331,7 @@ public class LightWeightOptimisationDataFactory {
 	private List<@NonNull IVesselCharter> getAllVessels() {
 		final List<@NonNull IVesselCharter> vessels = initialSequences.getResources().stream() //
 				.map(v -> vesselProvider.getVesselCharter(v)) //
+				.filter(vc -> vc.getVesselInstanceType() != VesselInstanceType.NONSHIPPED_ROTATION) //
 				.collect(Collectors.toList());
 		return vessels;
 	}

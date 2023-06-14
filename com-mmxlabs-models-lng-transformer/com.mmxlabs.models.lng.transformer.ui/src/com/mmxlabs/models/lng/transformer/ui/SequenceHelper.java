@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -609,12 +610,16 @@ public class SequenceHelper {
 	}
 
 	public static @NonNull IModifiableSequences createEmptySequences(final @NonNull Injector injector, @NonNull final List<@NonNull IResource> resources) {
-		final ModifiableSequences sequences = new ModifiableSequences(resources, new SequencesAttributesProviderImpl());
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
+		final @NonNull List<@NonNull IResource> optimisableResources = resources.stream() //
+				.filter(resource -> vesselProvider.getVesselCharter(resource).getVesselInstanceType() != VesselInstanceType.NONSHIPPED_ROTATION) //
+				.toList();
+		final ModifiableSequences sequences = new ModifiableSequences(optimisableResources, new SequencesAttributesProviderImpl());
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
 		for (@NonNull
-		final IResource o_resource : resources) {
+		final IResource o_resource : optimisableResources) {
 			@NonNull
 			final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
 			modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));
