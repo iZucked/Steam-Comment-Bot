@@ -20,6 +20,7 @@ import com.mmxlabs.lngdataserver.integration.pricing.model.DataCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.ExpressionCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.mmxcore.VersionRecord;
@@ -32,6 +33,9 @@ public class PricingFromScenarioCopier {
 	private static Function<AbstractYearMonthCurve, ExpressionCurve> derivedTransformer = (idx) -> {
 		ExpressionCurve out = new ExpressionCurve();
 		out.setExpression(idx.getExpression());
+		if (idx instanceof final CommodityCurve cc && cc.getMarketIndex() != null) {
+			out.setMarketIndex(cc.getMarketIndex().getName());
+		}
 		return out;
 	};
 	private static Function<AbstractYearMonthCurve, DataCurve> dataTransformer = (idx) -> {
@@ -44,6 +48,9 @@ public class PricingFromScenarioCopier {
 			pts.add(newPt);
 		}
 		out.setCurve(pts);
+		if (idx instanceof final CommodityCurve cc && cc.getMarketIndex() != null) {
+			out.setMarketIndex(cc.getMarketIndex().getName());
+		}
 		return out;
 	};
 
@@ -66,6 +73,9 @@ public class PricingFromScenarioCopier {
 			curve.setCurrency("");
 		}
 		curve.setType(type);
+		if (idx instanceof final CommodityCurve cc && cc.getMarketIndex() != null) {
+			curve.setMarketIndex(cc.getMarketIndex().getName());
+		}
 
 		return curve;
 	};

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import com.mmxlabs.rcp.common.json.CreatedAtInstantDeserializer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({ "published", "current", "metaInformation" })
+@JsonIgnoreProperties({ "published", "current", "metaInformation", "version" })
 public class PricingVersion {
 
 	@JsonDeserialize(using = CreatedAtInstantDeserializer.class)

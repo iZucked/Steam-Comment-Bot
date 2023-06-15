@@ -17,17 +17,19 @@ public abstract class Curve {
 	private String description;
 	private String unit;
 	private String currency;
+	private String marketIndex;
 
 	protected Curve() {
 
 	}
 
-	protected Curve(String name, CurveType type, String description, String unit, String currency) {
+	protected Curve(String name, CurveType type, String description, String unit, String currency, String marketIndex) {
 		this.name = name;
 		this.type = type;
 		this.description = description;
 		this.unit = unit;
 		this.currency = currency;
+		this.marketIndex = marketIndex;
 	}
 
 	public String getName() {
@@ -68,6 +70,14 @@ public abstract class Curve {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	public String getMarketIndex() {
+		return marketIndex;
+	}
+
+	public void setMarketIndex(String marketIndex) {
+		this.marketIndex = marketIndex;
 	}
 
 	public static String encodedName(String name) {
