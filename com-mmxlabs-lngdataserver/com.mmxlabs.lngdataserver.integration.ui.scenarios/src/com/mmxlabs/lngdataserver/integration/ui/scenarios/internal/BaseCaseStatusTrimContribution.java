@@ -95,7 +95,6 @@ public class BaseCaseStatusTrimContribution {
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				dismissNotification(myLabel);
 			}
 			
 			@Override
@@ -121,7 +120,7 @@ public class BaseCaseStatusTrimContribution {
 		if (service != null && pListener != null) {
 			service.addChangedListener(pListener);
 		}
-		
+		setLabelTextAndToolTip(myLabel, false);
 		return control;
 	}
 	
@@ -231,7 +230,7 @@ public class BaseCaseStatusTrimContribution {
 	
 	private String dataHubStatusToolTipText(final boolean changed) {
 		if (changed && !myRecord.isDismissed) {
-			return String.format("New base case was published by %s %nRight click to dismiss", myRecord.publisher);
+			return String.format("New base case was published by %s %n Double click to dismiss", myRecord.publisher);
 		}
 		return "You have the latest base case \nor you have dismissed the notification";
 	}

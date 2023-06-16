@@ -1,4 +1,5 @@
 /**
+
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
@@ -126,7 +127,6 @@ public class DataHubStatusTrimContribution {
 		};
 		IDataHubStateChangeListener pListener = listener;
 		DataHubServiceProvider.getInstance().addDataHubStateListener(pListener);
-		
 		return control;
 	}
 
