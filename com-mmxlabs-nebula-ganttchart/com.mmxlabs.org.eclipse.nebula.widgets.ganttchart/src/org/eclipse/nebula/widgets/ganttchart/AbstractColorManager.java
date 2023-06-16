@@ -159,7 +159,7 @@ public abstract class AbstractColorManager implements IColorManager {
 	}
 
 	public Color getRevisedStartColor() {
-		return ColorCache.getColor(0, 180, 0);
+		return ColorCache.getColor(255, 0, 0);
 	}
 
 	public Color getZoomBackgroundColorTop() {

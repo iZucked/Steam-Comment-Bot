@@ -108,6 +108,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	// draw the revised dates as a very thin small black |------| on the chart
 	private boolean _showPlannedDates;
+	
+	// draw the lateness bars
+	private boolean _showLatenessBars;
 
 	// how many days offset to start drawing the calendar at.. useful for not
 	// having the first day be today
@@ -401,6 +404,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		_zoomLevel = _settings.getInitialZoomLevel();
 		_showNumDays = _settings.showNumberOfDaysOnBars();
 		_showPlannedDates = _settings.showPlannedDates();
+		_showLatenessBars = _settings.showLatenessBars();
 		_threeDee = _settings.showBarsIn3D();
 		_yearDayWidth = _settings.getYearMonthDayWidth();
 		_monthDayWidth = _settings.getMonthDayWidth();
@@ -3450,6 +3454,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (_showPlannedDates) {
 			_paintManager.drawPlannedDates(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, bounds);
 		}
+		
+		if (_showLatenessBars) {
+			_paintManager.drawLatenessBars(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, bounds);
+		}
 
 		// draw a little plaque saying how many days that this event is long
 		// if (_showNumDays && plaqueContentProviders != null) {
@@ -5786,6 +5794,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	 * @return x position or -1 if it for some reason should not be found
 	 */
 	public int getStartingXFor(final Calendar date) {
+		return getStartingXFor(date, false);
+	}
+
+	public int getStartingXFor(final Calendar date, final boolean forceDrawToHour) {
 		checkWidget();
 
 		if (_currentView == ISettings.VIEW_DAY) {
@@ -5801,19 +5813,18 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		if (_currentView == ISettings.VIEW_YEAR) {
 			temp.set(Calendar.DAY_OF_MONTH, 1);
 		}
-
+		
 		final long daysBetween = DateHelper.daysBetween(temp, date);
 		final int dw = getDayWidth();
 
-		int extra = 0;
-		if (_drawToMinute && _currentView != ISettings.VIEW_DAY) {
-			final float ppm = 60f / _dayWidth;
-
-			final int mins = date.get(Calendar.HOUR_OF_DAY);
-			extra = (int) (mins * ppm);
+		int extraHourPixels = 0;
+		if ((_drawToMinute || forceDrawToHour) && _currentView != ISettings.VIEW_DAY) {
+			final int remainingHoursBetween = DateHelper.hoursBetween(temp, date, true);
+			final float pph = _dayWidth / 24f;
+			extraHourPixels = (int) (remainingHoursBetween * pph);
 		}
 
-		return _mainBounds.x + ((int) daysBetween * dw) + extra;
+		return _mainBounds.x + ((int) daysBetween * dw) + extraHourPixels;
 	}
 
 	private int getXLengthForEventHours(final GanttEvent event) {
@@ -8902,6 +8913,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		if (fromMouseWheel && _settings.zoomToMousePointerDateOnWheelZooming() && mouseLoc != null) {
 			internalSetDateAtX(mouseLoc.x, preZoom, true, false, false);
+		} else if (_currentView != ISettings.VIEW_DAY) {
+			internalSetDate(_mainCalendar, SWT.LEFT, true, false);
 		}
 
 		_zoomLevelChanged = true;

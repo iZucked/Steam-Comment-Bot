@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.schedule.NonShippedIdle;
 import com.mmxlabs.models.lng.schedule.NonShippedJourney;
 import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -113,19 +114,10 @@ public class VesselStateColourScheme extends ColourScheme {
 
 		// else if (mode == Mode.Lateness) {
 		if (element instanceof final SlotVisit visit) {
-			if (isOutsideTimeWindow(visit)) {
-				if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Load, colourElement);
-				} else if (visit.getSlotAllocation().getSlot() instanceof DischargeSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Discharge, colourElement);
-				}
-				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Event, colourElement);
-			} else {
-				if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Load, colourElement);
-				} else if (visit.getSlotAllocation().getSlot() instanceof DischargeSlot) {
-					return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, colourElement);
-				}
+			if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Load, colourElement);
+			} else if (visit.getSlotAllocation().getSlot() instanceof DischargeSlot) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, colourElement);
 			}
 		} else if (element instanceof final NonShippedSlotVisit visit) {
 			final Slot<?> slot = visit.getSlot();
@@ -206,7 +198,11 @@ public class VesselStateColourScheme extends ColourScheme {
 					return ColourPalette.getInstance().getColour(ColourPalette.Black);
 				}
 			}
-			if (event instanceof SlotVisit || event instanceof NonShippedSlotVisit) {
+			if (event instanceof SlotVisit sv) { 
+				final PortVisitLateness pvl = sv.getLateness();
+				return Display.getDefault().getSystemColor(pvl != null && pvl.getLatenessInHours() > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GRAY);
+			} else if (event instanceof NonShippedSlotVisit) {
+
 				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
 			}
 		} else if (element instanceof NonShippedSlotVisit) {
@@ -218,7 +214,15 @@ public class VesselStateColourScheme extends ColourScheme {
 
 	@Override
 	public int getBorderWidth(final Object element) {
+		if (element instanceof SlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0) {
+			return 3;
+		}
 		return 1;
+	}
+	
+	@Override
+	public boolean getIsBorderInner(final Object element) {
+		return element instanceof SlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0;
 	}
 
 	private static record OpenOrNonShippedType(boolean multi, boolean fob, boolean des, boolean buy, boolean optional, boolean open) {

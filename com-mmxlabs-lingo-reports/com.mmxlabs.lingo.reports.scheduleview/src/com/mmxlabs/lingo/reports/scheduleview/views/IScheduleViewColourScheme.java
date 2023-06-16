@@ -79,4 +79,6 @@ public interface IScheduleViewColourScheme {
 	int getBorderWidth(Object element);
 
 	SpecialDrawModes getSpecialDrawMode(Object element);
+
+	boolean getIsBorderInner(Object element);
 }

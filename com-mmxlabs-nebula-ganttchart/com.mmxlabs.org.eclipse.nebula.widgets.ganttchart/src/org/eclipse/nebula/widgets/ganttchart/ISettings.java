@@ -261,6 +261,13 @@ public interface ISettings {
      * @return true if to draw lines for the revised dates. Default is false.
      */
     public boolean showPlannedDates();
+    
+    /**
+     * Whether to draw bars above the event bars that show how late an event is.
+     * 
+     * @return true if to show the bars. Default is true.
+     */
+    public boolean showLatenessBars();
 
     /**
      * Returns the height of the header section that displays the month names.

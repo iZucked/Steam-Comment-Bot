@@ -155,17 +155,26 @@ public abstract class AbstractPaintManager implements IPaintManager {
 					gc.setAlpha(oldAlpha);
 				}
 			} else {
-				final int borderWidth = event.getStatusBorderWidth();
+				// If its an inner border, use a border of width 1 and no fill and then just draw another rectangle inside
+				final int borderWidth = (event.isStatusBorderInner()) ? 1 : event.getStatusBorderWidth();
 				if (borderWidth > 0) {
 					int oldAlpha = gc.getAlpha();
 					int cEventAlpha = event.getStatusAlpha();
 					if (alpha) {
 						gc.setAlpha(cEventAlpha);
 					}
-					gc.setLineWidth(event.getStatusBorderWidth());
+					gc.setLineWidth(borderWidth);
 					/* It used to be `event.getBounds().height` instead of `settings.getEventHeight`,
 					 *  but it did not work on preference change, so maybe will lead to problems */
-					gc.drawRectangle(xLoc, yLoc, eventWidth + event.getStatusBorderWidth() - 1, settings.getEventHeight() + event.getStatusBorderWidth() - 1);
+					gc.drawRectangle(xLoc, yLoc, eventWidth + borderWidth - 1, settings.getEventHeight() + borderWidth - 1);
+					
+					if (event.isStatusBorderInner()) {
+						final int innerBorderWidth = event.getStatusBorderWidth() - 1;
+						final int innerBorderShift = event.getStatusBorderWidth() / 2;
+						gc.setLineWidth(innerBorderWidth);
+						gc.drawRectangle(xLoc + innerBorderShift, yLoc + innerBorderShift, eventWidth + borderWidth - 1 - 2 * innerBorderShift, settings.getEventHeight() + borderWidth - 1 - 2 * innerBorderShift);
+					}
+					
 					if (alpha) {
 						gc.setAlpha(oldAlpha);
 					}
@@ -175,7 +184,9 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			gc.setLineStyle(SWT.LINE_SOLID);
 		}
 
+		// if inner border, use the first rectangle as a border
 		Color cEvent = event.getStatusColor();
+
 		int cEventAlpha = event.getStatusAlpha();
 		Color gradient = event.getGradientStatusColor();
 
@@ -199,9 +210,13 @@ public abstract class AbstractPaintManager implements IPaintManager {
 				gc.setForeground(gradient);
 				gc.fillGradientRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight(), true);
 				gc.setForeground(colorManager.getEventBorderColor()); // re-set foreground color
+			} else if (event.isStatusBorderInner()) {
+				final int innerBorderShift = event.getStatusBorderWidth() / 2;
+				gc.fillRectangle(xLoc + innerBorderShift, yLoc + innerBorderShift, eventWidth - 2 * innerBorderShift, settings.getEventHeight() - 2 * innerBorderShift);
 			} else {
 				gc.fillRectangle(xLoc, yLoc, eventWidth, settings.getEventHeight());
 			}
+			
 		}
 		// Reset alpha
 		if (alpha) {
@@ -379,6 +394,43 @@ public abstract class AbstractPaintManager implements IPaintManager {
 			gc.drawLine(xe, ys - 3, xe, ys + 3);
 			gc.drawLine(x + eventWidth, ys - 3, x + eventWidth, ys + 3);
 			// }
+		}
+	}
+
+	public void drawLatenessBars(final GanttComposite ganttComposite, final ISettings settings, final IColorManager colorManager, final GanttEvent event, final GC gc, final boolean threeDee,
+			final int x, final int y, final int eventWidth, final Rectangle bounds) {
+
+		if (event.isScope() || eventWidth == 0 || event.getStartDate() == null) {
+			return;
+		}
+		
+		final int xs = ganttComposite.getStartingXFor(event.getStartDate(), true);
+		
+		if (xs >= x) {
+			return;
+		}
+
+		final int spacer = settings.getRevisedLineSpacer();
+		final int ys = y - spacer;
+		
+		boolean alpha = colorManager.useAlphaDrawing();
+		int oldAlpha = gc.getAlpha();
+		if (alpha) {
+			gc.setAlpha(event.getStatusAlpha());
+		}
+
+		gc.setForeground(colorManager.getRevisedStartColor());
+
+		int oldLineWidth = gc.getLineWidth();
+		gc.setLineWidth(3);
+		gc.drawLine(xs, ys, x, ys);
+		gc.setLineWidth(oldLineWidth);
+
+		gc.drawLine(xs, ys, xs, ys + 3);
+		gc.drawLine(x, ys, x, ys + 3);
+		
+		if (alpha) {
+			gc.setAlpha(oldAlpha);
 		}
 	}
 

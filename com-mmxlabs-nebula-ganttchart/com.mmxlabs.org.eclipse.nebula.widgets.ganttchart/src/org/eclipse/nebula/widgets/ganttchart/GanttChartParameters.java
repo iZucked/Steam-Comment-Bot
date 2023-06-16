@@ -179,11 +179,6 @@ public class GanttChartParameters {
 		}
 
 		@Override
-		public boolean showPlannedDates() {
-			return false;
-		}
-
-		@Override
 		public String getTextDisplayFormat() {
 			return "#name#";
 		}

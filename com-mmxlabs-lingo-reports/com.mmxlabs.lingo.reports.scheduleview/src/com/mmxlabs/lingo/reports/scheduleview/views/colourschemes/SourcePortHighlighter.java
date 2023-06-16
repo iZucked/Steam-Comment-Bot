@@ -97,4 +97,9 @@ public class SourcePortHighlighter extends ParameterisedColourScheme {
 		selectedObject = object instanceof Port port ? port : null;
 	}
 
+	@Override
+	public boolean getIsBorderInner(Object element) {
+		return false;
+	}
+
 }

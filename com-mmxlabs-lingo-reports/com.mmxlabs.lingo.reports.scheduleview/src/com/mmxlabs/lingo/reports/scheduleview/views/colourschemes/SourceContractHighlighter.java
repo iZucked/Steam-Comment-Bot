@@ -88,4 +88,9 @@ public class SourceContractHighlighter extends ParameterisedColourScheme {
 		selectedObject = object instanceof PurchaseContract pc ? pc : null;
 	}
 
+	@Override
+	public boolean getIsBorderInner(Object element) {
+		return false;
+	}
+
 }
