@@ -1,6 +1,6 @@
 {
   "identifier" : "303cb9a4-f81d-4aa5-a345-469af4d07fc8",
-  "createdAt" : "2023-06-19T12:26:37.268",
+  "createdAt" : "2023-06-19T13:20:27.314",
   "locations" : [ {
     "mmxId" : "L_DZ_Bethi",
     "name" : "Bethioua",
@@ -3394,6 +3394,16 @@
     },
     "upstreamID" : "SP1000",
     "notes" : "Using Ostrov Mednyy as proxy. lat/lon are for this routing point"
+  }, {
+    "mmxId" : "L_CN_Binha",
+    "name" : "Binhai LNG Terminal",
+    "geographicPoint" : {
+      "lat" : 34.30603333333333,
+      "lon" : 120.2734,
+      "country" : "China",
+      "timeZone" : "Asia/Shanghai"
+    },
+    "upstreamID" : "CN0678"
   } ],
   "routingPoints" : [ {
     "identifier" : "SUZ",
