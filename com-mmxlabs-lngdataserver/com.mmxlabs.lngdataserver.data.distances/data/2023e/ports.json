@@ -1,6 +1,6 @@
 {
   "identifier" : "303cb9a4-f81d-4aa5-a345-469af4d07fc8",
-  "createdAt" : "2023-05-24T10:41:28.047",
+  "createdAt" : "2023-06-19T12:26:37.268",
   "locations" : [ {
     "mmxId" : "L_DZ_Bethi",
     "name" : "Bethioua",
@@ -2027,7 +2027,7 @@
     },
     "locode" : "NL  RTM",
     "upstreamID" : "NL0099",
-    "fallbackUpstreamId": "NL0051"
+    "fallbackUpstreamId" : "NL0051"
   }, {
     "mmxId" : "L_NZ_NewPl",
     "name" : "New Plymouth",
@@ -2619,7 +2619,7 @@
     },
     "locode" : "US  PGL",
     "upstreamID" : "US1244",
-    "fallbackUpstreamId": "US0566"
+    "fallbackUpstreamId" : "US0566"
   }, {
     "mmxId" : "L_US_Plaqu",
     "name" : "Plaquemines",
@@ -3369,8 +3369,31 @@
       "timeZone" : "America/Sao_Paulo"
     },
     "locode" : "BR  ACU",
-    "notes" : "FSRU BW Magna at ACU terminal 2",
-    "upstreamID" : "BR0264"
+    "upstreamID" : "BR0264",
+    "notes" : "FSRU BW Magna at ACU terminal 2"
+  }, {
+    "mmxId" : "L_KR_Ulsan",
+    "name" : "Ulsan",
+    "aliases" : [ "Jangseungpo" ],
+    "geographicPoint" : {
+      "lat" : 35.483333587646484,
+      "lon" : 129.39666748046875,
+      "country" : "South Korea",
+      "timeZone" : "Asia/Seoul"
+    },
+    "locode" : "KR  USN",
+    "upstreamID" : "KR0036"
+  }, {
+    "mmxId" : "L_RU_Kamch",
+    "name" : "Kamchatka",
+    "geographicPoint" : {
+      "lat" : 54.189998626708984,
+      "lon" : 168.34666442871094,
+      "country" : "Russian Federation",
+      "timeZone" : "Pacific/Guadalcanal"
+    },
+    "upstreamID" : "SP1000",
+    "notes" : "Using Ostrov Mednyy as proxy. lat/lon are for this routing point"
   } ],
   "routingPoints" : [ {
     "identifier" : "SUZ",
