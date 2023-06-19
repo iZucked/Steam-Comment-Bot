@@ -48,7 +48,7 @@
     },
     "locode" : "CN  NBO",
     "upstreamID" : "CN0610",
-    "notes" : "Also CN0610 but lat/lon seems off"
+    "fallbackUpstreamId" : "CN0101"
   }, {
     "mmxId" : "L_CN_BeiHa",
     "name" : "Bei Hai",
@@ -595,7 +595,8 @@
       "timeZone" : "Asia/Chongqing"
     },
     "locode" : "CN  JYG",
-    "upstreamID" : "CN0662"
+    "upstreamID" : "CN0662",
+    "fallbackUpstreamId" : "CN0204"
   }, {
     "mmxId" : "L_CN_Haiko",
     "name" : "Haikou",
@@ -1086,7 +1087,8 @@
       "timeZone" : "Asia/Calcutta"
     },
     "locode" : "IN  HZA",
-    "upstreamID" : "IN0207"
+    "upstreamID" : "IN0207",
+    "fallbackUpstreamId" : "IN0048"
   }, {
     "mmxId" : "L_IN_Kakin",
     "name" : "Kakinada",
@@ -1614,7 +1616,8 @@
       "timeZone" : "Asia/Tokyo"
     },
     "locode" : "JP  OIT",
-    "upstreamID" : "JP0359"
+    "upstreamID" : "JP0359",
+    "fallbackUpstreamId" : "JP0219"
   }, {
     "mmxId" : "L_JP_Okina",
     "name" : "Okinawa",
@@ -1650,7 +1653,8 @@
       "timeZone" : "Asia/Tokyo"
     },
     "locode" : "JP  OTR",
-    "upstreamID" : "JP0448"
+    "upstreamID" : "JP0448",
+    "fallbackUpstreamId" : "JP0240"
   }, {
     "mmxId" : "L_JP_Sakai",
     "name" : "Sakai",
@@ -2022,7 +2026,8 @@
       "timeZone" : "Europe/Amsterdam"
     },
     "locode" : "NL  RTM",
-    "upstreamID" : "NL0099"
+    "upstreamID" : "NL0099",
+    "fallbackUpstreamId": "NL0051"
   }, {
     "mmxId" : "L_NZ_NewPl",
     "name" : "New Plymouth",
@@ -2363,7 +2368,8 @@
       "timeZone" : "Asia/Seoul"
     },
     "locode" : "KR  INC",
-    "upstreamID" : "KR0072"
+    "upstreamID" : "KR0072",
+    "fallbackUpstreamId" : "KR0012"
   }, {
     "mmxId" : "L_KR_TongY",
     "name" : "Tong Yong",
@@ -2464,7 +2470,8 @@
       "timeZone" : "Asia/Bangkok"
     },
     "locode" : "TH  MTP",
-    "upstreamID" : "TH0069"
+    "upstreamID" : "TH0069",
+    "fallbackUpstreamId" : "TH0017"
   }, {
     "mmxId" : "L_TT_Point2",
     "name" : "Point Fortin",
@@ -2611,7 +2618,8 @@
       "timeZone" : "America/Chicago"
     },
     "locode" : "US  PGL",
-    "upstreamID" : "US1244"
+    "upstreamID" : "US1244",
+    "fallbackUpstreamId": "US0566"
   }, {
     "mmxId" : "L_US_Plaqu",
     "name" : "Plaquemines",

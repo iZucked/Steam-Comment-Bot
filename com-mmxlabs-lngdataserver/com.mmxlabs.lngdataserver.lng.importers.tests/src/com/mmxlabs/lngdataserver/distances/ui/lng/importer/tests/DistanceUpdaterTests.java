@@ -48,6 +48,7 @@ public class DistanceUpdaterTests {
 				{ "2023b", CURRENT, 800 }, //
 				{ "2023c", CURRENT, 806 }, //
 				{ "2023d", CURRENT, 0 }, //
+				{ "2023d", "2023e", 0 }, //
 
 		});
 	}
