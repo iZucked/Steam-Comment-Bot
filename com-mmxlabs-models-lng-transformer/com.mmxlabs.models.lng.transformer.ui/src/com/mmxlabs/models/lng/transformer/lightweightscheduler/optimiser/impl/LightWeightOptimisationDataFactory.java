@@ -78,7 +78,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class LightWeightOptimisationDataFactory {
 
 	@Inject
-	private PairingOptimisationData<?,?> optimiserRecorder;
+	private PairingOptimisationData<?, ?> optimiserRecorder;
 	@Inject
 	private ILongTermSlotsProvider longTermSlotsProvider;
 	@Inject
@@ -101,13 +101,14 @@ public class LightWeightOptimisationDataFactory {
 	private @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) ISequences initialSequences;
 	@Inject
 	private ModelEntityMap modelEntityMap;
-	
+
 	@Inject
 	private Injector injector;
 
 	public ILightWeightOptimisationData createLightWeightOptimisationData(final IVesselCharter pnlVessel, final LoadDischargePairValueCalculatorStep calculator,
 			final JobExecutorFactory jobExecutorFactory, final IProgressMonitor monitor) {
-		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
+		// get the slot pairing matrix as a sparse binary matrix (sum of each row and
+		// column <= 1)
 		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, jobExecutorFactory, monitor);
 
 		if (pairingsMatrix == null) {
@@ -189,17 +190,15 @@ public class LightWeightOptimisationDataFactory {
 		final int[] cargoEndSlotDurations = cargoToCargoCostCalculator.getCargoEndSlotDurations(shippedCargoes);
 		final CargoWindowData[] cargoWindows = calculateCargoWindows(shippedCargoes, minCargoStartToEndSlotTravelTimesPerVessel, cargoIndexes);
 
-		final LightWeightOptimisationData lightWeightOptimisationData = new LightWeightOptimisationData(shippedCargoes, nonshippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability,
-				cargoVesselRestrictions, minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight,
-				cargoesVolumes, cargoDetails, cargoCharterCostPerAvailability, cargoIndexes, eventIndexes, vesselStartWindows, vesselEndWindows, cargoStartSlotDurations, cargoEndSlotDurations,
-				cargoWindows);
-
-		return lightWeightOptimisationData;
+		return new LightWeightOptimisationData(shippedCargoes, nonshippedCargoes, vessels, capacity, cargoPNL, cargoToCargoCostsOnAvailability, cargoVesselRestrictions,
+				minCargoToCargoTravelTimesPerVessel, minCargoStartToEndSlotTravelTimesPerVessel, pairingsMap, desiredVesselCargoCount, desiredVesselCargoWeight, cargoesVolumes, cargoDetails,
+				cargoCharterCostPerAvailability, cargoIndexes, eventIndexes, vesselStartWindows, vesselEndWindows, cargoStartSlotDurations, cargoEndSlotDurations, cargoWindows);
 	}
 
 	public ISequences createNominalADP(final IVesselCharter pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final JobExecutorFactory jobExecutorFactory,
 			final IProgressMonitor monitor) {
-		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
+		// get the slot pairing matrix as a sparse binary matrix (sum of each row and
+		// column <= 1)
 		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, jobExecutorFactory, monitor);
 
 		if (pairingsMatrix == null) {
@@ -298,12 +297,11 @@ public class LightWeightOptimisationDataFactory {
 	}
 
 	private long[] getVesselCapacities(final List<@NonNull IVesselCharter> vessels) {
-		final long[] capacity = vessels.stream().mapToLong(v -> v.getVessel().getCargoCapacity()).toArray();
-		return capacity;
+		return vessels.stream().mapToLong(v -> v.getVessel().getCargoCapacity()).toArray();
 	}
 
 	private long[] getCargoVolumes(final List<List<IPortSlot>> shippedCargoes) {
-		final long[] cargoesVolumes = shippedCargoes.stream().mapToLong(x -> {
+		return shippedCargoes.stream().mapToLong(x -> {
 			if (!(x.get(0) instanceof ILoadOption)) {
 				return 1;
 			}
@@ -311,42 +309,37 @@ public class LightWeightOptimisationDataFactory {
 			final long dischargeVolume = ((IDischargeOption) x.get(1)).getMaxDischargeVolume(23);
 			return Math.min(loadVolume, dischargeVolume);
 		}).toArray();
-		return cargoesVolumes;
 	}
 
 	private LightWeightCargoDetails[] getCargoDetails(final List<List<IPortSlot>> shippedCargoes, final List<@NonNull IVesselCharter> vessels) {
-		final LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> {
-			for(int i = 0; i < x.size(); i++) {
+		return shippedCargoes.stream().map(x -> {
+			for (int i = 0; i < x.size(); i++) {
 				final PortType slotType = x.get(i).getPortType();
-				if(slotType == PortType.CharterOut || 
-						slotType == PortType.DryDock ||
-						slotType == PortType.Maintenance) {
+				if (slotType == PortType.CharterOut || slotType == PortType.DryDock || slotType == PortType.Maintenance) {
 					return new LightWeightCargoDetails(x.get(i).getPortType());
 				}
 			}
 			return new LightWeightCargoDetails(x.get(0).getPortType());
 		}).toArray(LightWeightCargoDetails[]::new);
-		return cargoDetails;
 	}
 
 	private List<@NonNull IVesselCharter> getVessels() {
-		final List<@NonNull IVesselCharter> vessels = initialSequences.getResources().stream() //
+		return initialSequences.getResources().stream() //
 				.sorted((a, b) -> a.getName().compareTo(b.getName())) //
 				.map(v -> vesselProvider.getVesselCharter(v)) //
 				.filter(v -> PairingOptimiserHelper.isShippedVessel(v)).collect(Collectors.toList());
-		return vessels;
 	}
 
 	private List<@NonNull IVesselCharter> getAllVessels() {
-		final List<@NonNull IVesselCharter> vessels = initialSequences.getResources().stream() //
+		return initialSequences.getResources().stream() //
 				.map(v -> vesselProvider.getVesselCharter(v)) //
 				.filter(vc -> vc.getVesselInstanceType() != VesselInstanceType.NONSHIPPED_ROTATION) //
 				.collect(Collectors.toList());
-		return vessels;
 	}
 
 	/**
-	 * Get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1) ALEX_TODO: move this to LongTerm package
+	 * Get the slot pairing matrix as a sparse binary matrix (sum of each row and
+	 * column <= 1) ALEX_TODO: move this to LongTerm package
 	 * 
 	 * @param pnlVessel
 	 * @param calculator
@@ -374,39 +367,40 @@ public class LightWeightOptimisationDataFactory {
 				optimiserRecorder.getMaxLoadGroupCount(), optimiserRecorder.getMinLoadGroupCount());
 
 		if (pairingsMatrix == null) {
-			final List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> violatedConstraints = matrixOptimiser.findMinViolatedConstraints(optimiserRecorder, optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(),
-					optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(), optimiserRecorder.getMaxDischargeGroupCounts(), optimiserRecorder.getMinDischargeGroupCounts(),
-					optimiserRecorder.getMaxLoadGroupCounts(), optimiserRecorder.getMinLoadGroupCounts());
+			final List<ConstraintInfo<ContractProfile, ProfileConstraint, ?>> violatedConstraints = matrixOptimiser.findMinViolatedConstraints(optimiserRecorder,
+					optimiserRecorder.getProfitAsPrimitive(), optimiserRecorder.getOptionalLoads(), optimiserRecorder.getOptionalDischarges(), optimiserRecorder.getValid(),
+					optimiserRecorder.getMaxDischargeGroupCounts(), optimiserRecorder.getMinDischargeGroupCounts(), optimiserRecorder.getMaxLoadGroupCounts(),
+					optimiserRecorder.getMinLoadGroupCounts());
 
 			StringBuilder errorMessage = new StringBuilder();
-			
+
 			errorMessage.append("Some contract constraints cannot be satisfied:\n\n");
-			
+
 			addViolatedConstraintDetails(modelEntityMap, violatedConstraints, errorMessage);
-			
+
 			throw new InfeasibleSolutionException(errorMessage.toString());
 		}
-		
+
 		return pairingsMatrix;
 	}
 
-	public static void addViolatedConstraintDetails(ModelEntityMap mem, final List<ConstraintInfo<ContractProfile, ProfileConstraint,?>> violatedConstraints, StringBuilder errorMessage) {
+	public static void addViolatedConstraintDetails(ModelEntityMap mem, final List<ConstraintInfo<ContractProfile, ProfileConstraint, ?>> violatedConstraints, StringBuilder errorMessage) {
 		Map<Contract, Set<String>> contractsToConstraintErrMsgs = new HashMap<>();
-		
+
 		if (violatedConstraints == null) {
 			return;
 		}
-		
-		for (ConstraintInfo<ContractProfile, ProfileConstraint,?> violated : violatedConstraints) {
-			ContractProfile contract = (ContractProfile)violated.getContractProfile();
-			ProfileConstraint constraint = (ProfileConstraint)violated.getProfileConstraint();
+
+		for (ConstraintInfo<ContractProfile, ProfileConstraint, ?> violated : violatedConstraints) {
+			ContractProfile contract = (ContractProfile) violated.getContractProfile();
+			ProfileConstraint constraint = (ProfileConstraint) violated.getProfileConstraint();
 
 			Set<String> contractConstraints = contractsToConstraintErrMsgs.computeIfAbsent(contract.getContract(), key -> new HashSet<String>());
 
 			StringBuilder constraintDetails = new StringBuilder();
 
 			if (constraint instanceof PeriodDistributionProfileConstraint) {
-				PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint)constraint;
+				PeriodDistributionProfileConstraint pdc = (PeriodDistributionProfileConstraint) constraint;
 				for (PeriodDistribution pd : pdc.getDistributions()) {
 					if (violated.getMonths() == null) {
 						if (pd.getMinCargoes() == violated.getBound() || pd.getMaxCargoes() == violated.getBound()) {
@@ -419,19 +413,18 @@ public class LightWeightOptimisationDataFactory {
 							}
 							if (violated.getViolationType() == ViolationType.Min) {
 								constraintDetails.append(" (Min violated, slots used = ").append(violated.getViolatedAmount()).append(")");
-							}
-							else if (violated.getViolationType() == ViolationType.Max) {
+							} else if (violated.getViolationType() == ViolationType.Max) {
 								constraintDetails.append(" (Max violated, slots used = ").append(violated.getViolatedAmount()).append(")");
 							}
 							constraintDetails.append("\n");
 						}
 						contractConstraints.add(constraintDetails.toString());
 					}
-				}								
+				}
 			}
 
 			if (violated.getMonths() != null) {
-				Row row = (Row)violated.getMonths();
+				Row row = (Row) violated.getMonths();
 				List<YearMonth> yearMonths = row.getYearMonths();
 
 				String monthsStr = getMonthsString(row, yearMonths);
@@ -442,24 +435,24 @@ public class LightWeightOptimisationDataFactory {
 				if (violated.getViolationType() == ViolationType.Min) {
 					minMaxStr = "minimum";
 					bound = row.getMin();
-				}
-				else if (violated.getViolationType() == ViolationType.Max) {
+				} else if (violated.getViolationType() == ViolationType.Max) {
 					minMaxStr = "maximum";
 					bound = row.getMax();
 				}
 				String constraintStr = getViolationMsg(monthsStr, minMaxStr, bound, utilized);
 				constraintDetails.append(constraintStr).append("\n");
 				for (IPortSlot slot : violated.getSlots()) {
-					Slot emfSlot = mem.getModelObject(slot, Slot.class);
+					Slot<?> emfSlot = mem.getModelObject(slot, Slot.class);
+					assert emfSlot != null;
 					getSlotDetails(constraintDetails, emfSlot);
 				}
-				constraintDetails.append("\n");										
+				constraintDetails.append("\n");
 				contractConstraints.add(constraintDetails.toString());
 			}
 		}
-		
+
 		for (Contract contract : contractsToConstraintErrMsgs.keySet()) {
-			String sideContract = (contract instanceof PurchaseContract ? "(Buy)" : "(Sell)");	
+			String sideContract = (contract instanceof PurchaseContract ? "(Buy)" : "(Sell)");
 			Set<String> contractConstraints = contractsToConstraintErrMsgs.get(contract);
 			for (String constraintName : contractConstraints) {
 				errorMessage.append(contract.getName()).append(" ").append(sideContract).append(":\n");
@@ -468,14 +461,14 @@ public class LightWeightOptimisationDataFactory {
 		}
 	}
 
-	protected static void getSlotDetails(StringBuilder constraintDetails, Slot emfSlot) {
-		constraintDetails.append(" "+emfSlot.getName()+" \t"+getSlotStartDateString(emfSlot)+getTimeWindowString(emfSlot)+"\n");
+	protected static void getSlotDetails(StringBuilder constraintDetails, Slot<?> emfSlot) {
+		constraintDetails.append(" " + emfSlot.getName() + " \t" + getSlotStartDateString(emfSlot) + getTimeWindowString(emfSlot) + "\n");
 	}
 
-	protected static String getTimeWindowString(Slot emfSlot) {
+	protected static String getTimeWindowString(Slot<?> emfSlot) {
 		String timeWindowString = "";
 		if (emfSlot.getSchedulingTimeWindow().getSize() > 0) {
-			timeWindowString += " +"+emfSlot.getSchedulingTimeWindow().getSize();
+			timeWindowString += " +" + emfSlot.getSchedulingTimeWindow().getSize();
 			switch (emfSlot.getSchedulingTimeWindow().getSizeUnits()) {
 			case HOURS:
 				timeWindowString += "h";
@@ -490,8 +483,8 @@ public class LightWeightOptimisationDataFactory {
 		}
 		return timeWindowString;
 	}
-	
-	protected static @NonNull String getSlotStartDateString(Slot emfSlot) {
+
+	protected static @NonNull String getSlotStartDateString(Slot<?> emfSlot) {
 		return emfSlot.getSchedulingTimeWindow().getStart().toLocalDate().toString().replace("-", "/");
 	}
 
@@ -502,18 +495,17 @@ public class LightWeightOptimisationDataFactory {
 		}
 
 		if (yearMonths.size() > 2 && isContigous(row)) {
-			if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
+			if (constraintDetails.charAt(constraintDetails.length() - 1) != '[') {
 				constraintDetails.append(", ");
 			}
 			YearMonth ym0 = yearMonths.get(0);
-			YearMonth ym1 = yearMonths.get(yearMonths.size()-1);
-			String yearMonthStrFirst = getYearMonthString(ym0);						
-			String yearMonthStrLast = getYearMonthString(ym1);						
-			constraintDetails.append(yearMonthStrFirst+"-"+yearMonthStrLast);
-		}
-		else {
+			YearMonth ym1 = yearMonths.get(yearMonths.size() - 1);
+			String yearMonthStrFirst = getYearMonthString(ym0);
+			String yearMonthStrLast = getYearMonthString(ym1);
+			constraintDetails.append(yearMonthStrFirst + "-" + yearMonthStrLast);
+		} else {
 			for (YearMonth ym : yearMonths) {
-				if (constraintDetails.charAt(constraintDetails.length()-1) != '[') {
+				if (constraintDetails.charAt(constraintDetails.length() - 1) != '[') {
 					constraintDetails.append(", ");
 				}
 				String yearMonthStr = getYearMonthString(ym);
@@ -527,27 +519,27 @@ public class LightWeightOptimisationDataFactory {
 	}
 
 	private static String getViolationMsg(String monthsStr, String minMaxStr, int bound, int utilizable) {
-		//During [Jan-Mar], a min of 3 is required but 0 of the following are used
-		//"none" instead of zero and also "minimum of X slots is ..." instead of "min of X is..."
+		// During [Jan-Mar], a min of 3 is required but 0 of the following are used
+		// "none" instead of zero and also "minimum of X slots is ..." instead of "min
+		// of X is..."
 		String utilizableStr = "none";
 		if (utilizable > 0) {
 			utilizableStr = Integer.toString(utilizable);
 		}
-		return "During "+monthsStr+", a "+minMaxStr+" of "+bound+" slots is required but "+utilizableStr+" of the following are used";
+		return "During " + monthsStr + ", a " + minMaxStr + " of " + bound + " slots is required but " + utilizableStr + " of the following are used";
 	}
-	
+
 	protected static String getYearMonthString(YearMonth ym) {
-		String yearMonthStr = String.format("%s '%02d", //
+		return String.format("%s '%02d", //
 				ym.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
 				ym.getYear() % 100);
-		return yearMonthStr;
 	}
 
 	private static boolean isContigous(Row row) {
 		int maxGap = 1;
 		int lastMonth = row.getMonths().get(0);
 		for (int month : row.getMonths()) {
-			if (month > lastMonth+1) {
+			if (month > lastMonth + 1) {
 				maxGap = 2;
 			}
 			lastMonth = month;
@@ -562,14 +554,11 @@ public class LightWeightOptimisationDataFactory {
 	}
 
 	private List<IDischargeOption> getLongTermDischarges(final Collection<IPortSlot> longTermSlots) {
-		final List<IDischargeOption> longTermDischarges = longTermSlots.stream().filter(s -> (s instanceof IDischargeOption)).map(m -> (IDischargeOption) m)
-				.collect(Collectors.toCollection(ArrayList::new));
-		return longTermDischarges;
+		return longTermSlots.stream().filter(IDischargeOption.class::isInstance).map(IDischargeOption.class::cast).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	private List<ILoadOption> getLongTermLoads(final Collection<IPortSlot> longTermSlots) {
-		final List<ILoadOption> longtermLoads = longTermSlots.stream().filter(s -> (s instanceof ILoadOption)).map(m -> (ILoadOption) m).collect(Collectors.toCollection(ArrayList::new));
-		return longtermLoads;
+		return longTermSlots.stream().filter(ILoadOption.class::isInstance).map(ILoadOption.class::cast).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	private CargoWindowData[] calculateCargoWindows(final List<List<IPortSlot>> cargoes, final int[][] cargoMinTravelTimes, final Set<Integer> cargoIndexes) {
@@ -584,7 +573,8 @@ public class LightWeightOptimisationDataFactory {
 			} else {
 				final ITimeWindow tw = cargoes.get(i).get(0).getTimeWindow();
 
-				// vessel events are vessel independent for duration so get time from first vessel
+				// vessel events are vessel independent for duration so get time from first
+				// vessel
 				cargoWindows[i] = new CargoWindowData(tw.getInclusiveStart(), tw.getExclusiveEnd(), tw.getInclusiveStart() + cargoMinTravelTimes[i][0],
 						tw.getExclusiveEnd() + cargoMinTravelTimes[i][0]);
 			}
