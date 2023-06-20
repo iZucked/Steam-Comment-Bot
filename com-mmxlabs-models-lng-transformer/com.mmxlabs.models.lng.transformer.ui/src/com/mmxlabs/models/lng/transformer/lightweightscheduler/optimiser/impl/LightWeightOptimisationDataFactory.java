@@ -73,6 +73,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class LightWeightOptimisationDataFactory {
 
@@ -315,6 +316,14 @@ public class LightWeightOptimisationDataFactory {
 
 	private LightWeightCargoDetails[] getCargoDetails(final List<List<IPortSlot>> shippedCargoes, final List<@NonNull IVesselCharter> vessels) {
 		final LightWeightCargoDetails[] cargoDetails = shippedCargoes.stream().map(x -> {
+			for(int i = 0; i < x.size(); i++) {
+				final PortType slotType = x.get(i).getPortType();
+				if(slotType == PortType.CharterOut || 
+						slotType == PortType.DryDock ||
+						slotType == PortType.Maintenance) {
+					return new LightWeightCargoDetails(x.get(i).getPortType());
+				}
+			}
 			return new LightWeightCargoDetails(x.get(0).getPortType());
 		}).toArray(LightWeightCargoDetails[]::new);
 		return cargoDetails;
