@@ -42,6 +42,12 @@ public class CharterOutEventMaker {
 		event.setDurationInDays(durationInDays);
 		return this;
 	}
+	
+	@NonNull
+	public CharterOutEventMaker withExtensionInDays(int extensionInDays) {
+		event.setExtensionPeriod(extensionInDays);
+		return this;
+	}
 
 	@NonNull
 	public CharterOutEventMaker withVesselAssignment(@NonNull final VesselCharter vesselCharter, final int sequenceHint) {

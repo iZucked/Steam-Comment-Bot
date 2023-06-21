@@ -765,7 +765,7 @@ public class RollForwardEngine {
 			if (freezeDate != null && dt.toLocalDate().isBefore(freezeDate)) {
 				couldFreeze = true;
 			}
-			dt = dt.plusDays(e.getDurationInDays());
+			dt = dt.plusDays(e.getSchedulingDurationInDays());
 			if (removeDate != null && dt.toLocalDate().isBefore(removeDate)) {
 				couldRemove = true;
 			} else {

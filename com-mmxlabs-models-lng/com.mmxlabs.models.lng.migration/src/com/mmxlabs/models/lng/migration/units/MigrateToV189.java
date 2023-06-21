@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
 
-public class MigrateToV188 extends AbstractMigrationUnit {
+public class MigrateToV189 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -19,16 +19,16 @@ public class MigrateToV188 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 188;
+		return 187;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 189;
+		return 188;
 	}
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// Charter out extension period
+		// FOB Vessel Rotations
 	}
 }

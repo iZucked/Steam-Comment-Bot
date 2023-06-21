@@ -68,10 +68,10 @@ public class WrappedAssignableElement {
 		}
 
 		this.startWindow = new Pair<>(vesselEvent.getStartAfterAsDateTime(), vesselEvent.getStartByAsDateTime());
-		this.endWindow = new Pair<>(vesselEvent.getStartAfterAsDateTime().plusDays(vesselEvent.getDurationInDays()), vesselEvent.getStartByAsDateTime().plusDays(vesselEvent.getDurationInDays()));
+		this.endWindow = new Pair<>(vesselEvent.getStartAfterAsDateTime().plusDays(vesselEvent.getSchedulingDurationInDays()), vesselEvent.getStartByAsDateTime().plusDays(vesselEvent.getSchedulingDurationInDays()));
 
 		// TODO: Correct? What about day light savings!
-		this.minElementDuration = vesselEvent.getDurationInDays() * 24;
+		this.minElementDuration = vesselEvent.getSchedulingDurationInDays() * 24;
 	}
 
 	private final List<Slot<?>> getSortedSlots(final AssignableElement cargo) {

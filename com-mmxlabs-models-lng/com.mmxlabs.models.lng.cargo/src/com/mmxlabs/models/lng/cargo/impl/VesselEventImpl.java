@@ -575,6 +575,16 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
+	public int getSchedulingDurationInDays() {
+		return getDurationInDays();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
 	public String getTimeZone(EAttribute attribute) {
 		Port p = getPort();
 		if (p != null) {
@@ -849,6 +859,8 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 				return getStartByAsDateTime();
 			case CargoPackage.VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME:
 				return getStartAfterAsDateTime();
+			case CargoPackage.VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS:
+				return getSchedulingDurationInDays();
 			case CargoPackage.VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

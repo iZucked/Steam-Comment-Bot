@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.port.Port;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRequiredHeel <em>Required Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getAvailableHeel <em>Available Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getExtensionPeriod <em>Extension Period</em>}</li>
  * </ul>
  *
  * @generated
@@ -159,6 +160,26 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * @ordered
 	 */
 	protected StartHeelOptions availableHeel;
+
+	/**
+	 * The default value of the '{@link #getExtensionPeriod() <em>Extension Period</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtensionPeriod()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int EXTENSION_PERIOD_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getExtensionPeriod() <em>Extension Period</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtensionPeriod()
+	 * @generated
+	 * @ordered
+	 */
+	protected int extensionPeriod = EXTENSION_PERIOD_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -434,6 +455,29 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 	 * @generated
 	 */
 	@Override
+	public int getExtensionPeriod() {
+		return extensionPeriod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setExtensionPeriod(int newExtensionPeriod) {
+		int oldExtensionPeriod = extensionPeriod;
+		extensionPeriod = newExtensionPeriod;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CHARTER_OUT_EVENT__EXTENSION_PERIOD, oldExtensionPeriod, extensionPeriod));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getHireRate() {
 		return hireRate;
 	}
@@ -525,6 +569,8 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
 				if (resolve) return getAvailableHeel();
 				return basicGetAvailableHeel();
+			case CargoPackage.CHARTER_OUT_EVENT__EXTENSION_PERIOD:
+				return getExtensionPeriod();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -557,6 +603,9 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 				return;
 			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
 				setAvailableHeel((StartHeelOptions)newValue);
+				return;
+			case CargoPackage.CHARTER_OUT_EVENT__EXTENSION_PERIOD:
+				setExtensionPeriod((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -591,6 +640,9 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
 				setAvailableHeel((StartHeelOptions)null);
 				return;
+			case CargoPackage.CHARTER_OUT_EVENT__EXTENSION_PERIOD:
+				setExtensionPeriod(EXTENSION_PERIOD_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -617,6 +669,8 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 				return requiredHeel != null;
 			case CargoPackage.CHARTER_OUT_EVENT__AVAILABLE_HEEL:
 				return availableHeel != null;
+			case CargoPackage.CHARTER_OUT_EVENT__EXTENSION_PERIOD:
+				return extensionPeriod != EXTENSION_PERIOD_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -653,8 +707,22 @@ public class CharterOutEventImpl extends VesselEventImpl implements CharterOutEv
 		result.append(ballastBonus);
 		result.append(", repositioningFee: ");
 		result.append(repositioningFee);
+		result.append(", extensionPeriod: ");
+		result.append(extensionPeriod);
 		result.append(')');
 		return result.toString();
 	}
 
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getSchedulingDurationInDays() {
+		return getDurationInDays() + getExtensionPeriod();
+	}
+
+	
 } //CharterOutEventImpl

@@ -199,4 +199,12 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 */
 	ZonedDateTime getStartAfterAsDateTime();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSchedulingDurationInDays();
+
 } // VesselEvent

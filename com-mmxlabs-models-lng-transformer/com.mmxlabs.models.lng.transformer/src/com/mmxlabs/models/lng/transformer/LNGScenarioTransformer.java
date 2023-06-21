@@ -229,12 +229,8 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEva
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
- * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility
- * methods to convert it into an optimisation job. Typical usage is to construct
- * an LNGScenarioTransformer with a given Scenario, and then call the
- * {@link createOptimisationData} method. It is only expected that an instance
- * will be used once. I.e. a single call to
- * {@link #createOptimisationData(ModelEntityMap)}
+ * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
+ * Scenario, and then call the {@link createOptimisationData} method. It is only expected that an instance will be used once. I.e. a single call to {@link #createOptimisationData(ModelEntityMap)}
  * 
  * @author hinton, Simon Goodall
  * 
@@ -242,8 +238,7 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 public class LNGScenarioTransformer {
 
 	/**
-	 * Constant used to inject a limit for spot slot creation. Negative numbers do
-	 * not apply a cap.
+	 * Constant used to inject a limit for spot slot creation. Negative numbers do not apply a cap.
 	 */
 	public static final String LIMIT_SPOT_SLOT_CREATION = "limit-spot-slot-creation";
 
@@ -349,15 +344,13 @@ public class LNGScenarioTransformer {
 	private ILazyExpressionManagerEditor lazyExpressionManagerEditor;
 
 	/**
-	 * Contains the contract transformers for each known contract type, by the
-	 * EClass of the contract they transform.
+	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
 	@NonNull
 	private final Map<EClass, IContractTransformer> contractTransformersByEClass = new LinkedHashMap<>();
 
 	/**
-	 * A set of all contract transformers being used; these should be mapped to in
-	 * {@link #contractTransformersByEClass}
+	 * A set of all contract transformers being used; these should be mapped to in {@link #contractTransformersByEClass}
 	 */
 	@NonNull
 	private final Set<IContractTransformer> contractTransformers = new LinkedHashSet<>();
@@ -375,8 +368,7 @@ public class LNGScenarioTransformer {
 	private final Set<IVesselCharterTransformer> vesselCharterTransformers = new LinkedHashSet<>();
 
 	/**
-	 * A set of all transformer extensions being used (should contain
-	 * {@link #contractTransformers})
+	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
 	 */
 	@NonNull
 	private final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<>();
@@ -392,16 +384,13 @@ public class LNGScenarioTransformer {
 	private final Map<Vessel, IVessel> allVessels = new HashMap<>();
 
 	/**
-	 * The {@link Set} of ID strings already used. The UI should restrict user
-	 * entered data items from clashing, but generated ID's may well clash with user
-	 * ones.
+	 * The {@link Set} of ID strings already used. The UI should restrict user entered data items from clashing, but generated ID's may well clash with user ones.
 	 */
 	@NonNull
 	private final Set<String> usedIDStrings = new HashSet<>();
 
 	/**
-	 * A {@link Map} of existing spot market slots by ID. This map is used later
-	 * when building the spot market options.
+	 * A {@link Map} of existing spot market slots by ID. This map is used later when building the spot market options.
 	 */
 	@NonNull
 	private final Map<String, @NonNull Slot<?>> marketSlotsByID = new HashMap<>();
@@ -457,9 +446,7 @@ public class LNGScenarioTransformer {
 	private final Set<ISlotTransformer> slotTransformers = new LinkedHashSet<>();
 
 	/**
-	 * Create a transformer for the given scenario; the class holds a reference, so
-	 * changes made to the scenario after construction will be reflected in calls to
-	 * the various helper methods.
+	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
 	 * @param scenario
 	 */
@@ -471,8 +458,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from
-	 * the platform's registry.
+	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from the platform's registry.
 	 */
 	@Inject
 	public boolean addPlatformTransformerExtensions() {
@@ -537,8 +523,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the
-	 * contained scenario.
+	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the contained scenario.
 	 * 
 	 * @return
 	 * @throws IncompleteScenarioException
@@ -687,8 +672,7 @@ public class LNGScenarioTransformer {
 		}
 
 		/**
-		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the
-		 * builder.
+		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
 		final Association<Port, IPort> portAssociation = new Association<>();
 		/**
@@ -701,9 +685,7 @@ public class LNGScenarioTransformer {
 		final Map<IPort, Integer> portIndices = new HashMap<>();
 
 		/*
-		 * Construct ports for each port in the scenario port model, and keep them in a
-		 * two-way lookup table (the two-way lookup is needed to do things like setting
-		 * distances later).
+		 * Construct ports for each port in the scenario port model, and keep them in a two-way lookup table (the two-way lookup is needed to do things like setting distances later).
 		 */
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 
@@ -1140,11 +1122,14 @@ public class LNGScenarioTransformer {
 
 			final ITimeWindow window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(event.getStartAfterAsDateTime()), dateHelper.convertTime(event.getStartByAsDateTime()), false);
 			final IPort port = portAssociation.lookupNullChecked(event.getPort());
-			final int durationHours = event.getDurationInDays() * 24;
+			final int durationHours = event.getSchedulingDurationInDays() * 24;
 			final IVesselEventPortSlot builderSlot;
 			if (event instanceof final CharterOutEvent charterOut) {
+				final int extensionHours = charterOut.getExtensionPeriod() * 24;
+
 				final IPort endPort = portAssociation.lookupNullChecked(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
 
+				// Hire revenue is only on confirmed days, not on the extension period
 				final long totalHireRevenue = OptimiserUnitConvertor.convertToInternalDailyCost(charterOut.getHireRate()) * (long) charterOut.getDurationInDays();
 				final long repositioning = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getRepositioningFee());
 				final long ballastBonus = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getBallastBonus());
@@ -1154,8 +1139,8 @@ public class LNGScenarioTransformer {
 				// VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
 				final IHeelOptionSupplier heelSupplier = createHeelSupplier(charterOut.getAvailableHeel(), null);
 
-				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning, ballastBonus,
-						charterOut.isOptional());
+				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning,
+						ballastBonus, charterOut.isOptional());
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -1182,8 +1167,8 @@ public class LNGScenarioTransformer {
 	/**
 	 * Extract the cargoes from the scenario and add them to the given builder.
 	 * 
-	 * @param builder              current builder. should already have
-	 *                             ports/distances/vessels built
+	 * @param builder
+	 *            current builder. should already have ports/distances/vessels built
 	 * @param indexAssociation
 	 * @param contractTransformers
 	 * @param modelEntityMap
@@ -1257,7 +1242,8 @@ public class LNGScenarioTransformer {
 			});
 		}
 
-		cargoModel.getCargoes().stream() //
+		cargoModel.getCargoes()
+				.stream() //
 				.filter(c -> cargoFilterFunctions.stream().allMatch(fun -> fun.test(c))) //
 				.forEach(eCargo -> {
 					final List<@NonNull ILoadOption> loadOptions = new LinkedList<>();
@@ -1662,17 +1648,12 @@ public class LNGScenarioTransformer {
 			}
 
 			/*
-			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract =
-			 * (SalesContract) dischargeSlot.getContract();
+			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
 			 * 
-			 * if (salesContract.isSetMinCvValue()) { minCv =
-			 * OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.
-			 * getMinCvValue()); } else { minCv = 0; }
+			 * if (salesContract.isSetMinCvValue()) { minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract. getMinCvValue()); } else { minCv = 0; }
 			 * 
-			 * if (salesContract.isSetMaxCvValue()) { maxCv =
-			 * OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.
-			 * getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else { minCv = 0;
-			 * maxCv = Long.MAX_VALUE; }
+			 * if (salesContract.isSetMaxCvValue()) { maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract. getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else {
+			 * minCv = 0; maxCv = Long.MAX_VALUE; }
 			 */
 
 			final boolean slotLocked = dischargeSlot.isLocked() || shippingOnly && dischargeSlot.getCargo() == null;
@@ -1807,30 +1788,30 @@ public class LNGScenarioTransformer {
 			} else {
 				loadPriceCalculator = null;
 			}
-//				final ICurve curve;
-//				IIntegerIntervalCurve priceIntervals;
-//				final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
-//				if (expression.canEvaluate()) {
-//					final ISeries parsed = expression.evaluate();
-//					if (parsed.getChangePoints().length == 0) {
-//						priceIntervals = monthIntervalsInHoursCurve;
-//					} else {
-//						priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
-//					}
-//					curve = buildStepwiseIntegerCurve(parsed);
-//				} else {
-//					final LazyIntegerIntervalCurve lazyIntervalCurve = new LazyIntegerIntervalCurve(priceIntervals,
-//							parsed -> parsed.getChangePoints() == 0 ? monthIntervalsInHoursCurve : integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints()));
-//					priceIntervals = lazyIntervalCurve;
-//					final Consumer<ISeries> parsedSeriesConsumer = lazyIntervalCurve::initialise;
-//					lazyExpressionManagerEditor.addLazyIntervalCurve(lazyIntervalCurve);
-//					final ILazyCurve lazyCurve = new LazyStepwiseIntegerCurve(expression, LNGScenarioTransformer::buildStepwiseIntegerCurve, parsedSeriesConsumer);
-//					curve = lazyCurve;
-//					lazyExpressionManagerEditor.addLazyCurve(lazyCurve);
-//				}
+			// final ICurve curve;
+			// IIntegerIntervalCurve priceIntervals;
+			// final IExpression<ISeries> expression = commodityIndices.parse(priceExpression);
+			// if (expression.canEvaluate()) {
+			// final ISeries parsed = expression.evaluate();
+			// if (parsed.getChangePoints().length == 0) {
+			// priceIntervals = monthIntervalsInHoursCurve;
+			// } else {
+			// priceIntervals = integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints());
+			// }
+			// curve = buildStepwiseIntegerCurve(parsed);
+			// } else {
+			// final LazyIntegerIntervalCurve lazyIntervalCurve = new LazyIntegerIntervalCurve(priceIntervals,
+			// parsed -> parsed.getChangePoints() == 0 ? monthIntervalsInHoursCurve : integerIntervalCurveHelper.getSplitMonthDatesForChangePoint(parsed.getChangePoints()));
+			// priceIntervals = lazyIntervalCurve;
+			// final Consumer<ISeries> parsedSeriesConsumer = lazyIntervalCurve::initialise;
+			// lazyExpressionManagerEditor.addLazyIntervalCurve(lazyIntervalCurve);
+			// final ILazyCurve lazyCurve = new LazyStepwiseIntegerCurve(expression, LNGScenarioTransformer::buildStepwiseIntegerCurve, parsedSeriesConsumer);
+			// curve = lazyCurve;
+			// lazyExpressionManagerEditor.addLazyCurve(lazyCurve);
+			// }
 
-//				loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
-//				injector.injectMembers(loadPriceCalculator);
+			// loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
+			// injector.injectMembers(loadPriceCalculator);
 
 			// loadPriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 			// injector.injectMembers(loadPriceCalculator);
@@ -2419,8 +2400,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Given a UTC based time window, extend it's range to cover the whole range of
-	 * possible UTC offsets from UTC-12 to UTC+14
+	 * Given a UTC based time window, extend it's range to cover the whole range of possible UTC offsets from UTC-12 to UTC+14
 	 * 
 	 * @param builder
 	 * @param startTime
@@ -2880,11 +2860,14 @@ public class LNGScenarioTransformer {
 	/**
 	 * Create the distance matrix for the given builder.
 	 * 
-	 * @param builder           the builder we are working with
-	 * @param portAssociation   an association between ports in the EMF model and
-	 *                          IPorts in the builder
-	 * @param allPorts          the list of all IPorts constructed so far
-	 * @param portIndices       a reverse-lookup for the ports in allPorts
+	 * @param builder
+	 *            the builder we are working with
+	 * @param portAssociation
+	 *            an association between ports in the EMF model and IPorts in the builder
+	 * @param allPorts
+	 *            the list of all IPorts constructed so far
+	 * @param portIndices
+	 *            a reverse-lookup for the ports in allPorts
 	 * @param vesselAssociation
 	 * @throws IncompleteScenarioException
 	 */
@@ -2946,8 +2929,7 @@ public class LNGScenarioTransformer {
 		}
 
 		/*
-		 * Now fill out the distances from the distance model. Firstly we need to create
-		 * the default distance matrix.
+		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
 		for (final Route r : portModel.getRoutes()) {
@@ -3189,10 +3171,10 @@ public class LNGScenarioTransformer {
 	/**
 	 * Construct the fleet model for the scenario
 	 * 
-	 * @param builder         a builder which has had its ports and distances
-	 *                        instantiated
-	 * @param portAssociation the Port <-> IPort association to connect EMF Ports
-	 *                        with builder IPorts
+	 * @param builder
+	 *            a builder which has had its ports and distances instantiated
+	 * @param portAssociation
+	 *            the Port <-> IPort association to connect EMF Ports with builder IPorts
 	 * @param modelEntityMap
 	 * @return
 	 */
@@ -3683,8 +3665,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
-	 * use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3711,8 +3692,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
-	 * use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3739,8 +3719,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
-	 * use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3901,8 +3880,7 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Given the number spot slots available to create, optionally limit this
-	 * number.
+	 * Given the number spot slots available to create, optionally limit this number.
 	 * 
 	 * @param count
 	 * @return

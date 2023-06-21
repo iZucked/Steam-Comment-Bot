@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -32,11 +30,14 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.ICharterOutVesselEventPortSlot;
 
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
@@ -87,8 +88,65 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
+		});
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCharterOutWithExtensionPeriod() throws Exception {
+
+		// Create the required basic elements
+		// Create a vessel and its availability
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		vessel.setSafetyHeel(500);
+
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withCharterRate("30000") //
+				.withStartWindow(LocalDateTime.of(2017, 12, 1, 0, 0, 0), LocalDateTime.of(2017, 12, 3, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2017, 12, 29, 0, 0, 0)) //
+				.build();
+
+		// Construct the charterOutEvent
+		final CharterOutEvent charterOutEvent = cargoModelBuilder //
+				.makeCharterOutEvent("charter_out_test_solo", LocalDateTime.of(2017, 12, 5, 0, 0, 0), LocalDateTime.of(2017, 12, 10, 0, 0, 0),
+						portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
+				.withHireRate(500_000) //
+				.withDurationInDays(5) //
+				.withExtensionInDays(5) //
+				.withOptional(false) //
+				.withVesselAssignment(vesselCharter, 1) //
+				.build();
+
+		optimiseWithLSOTest(scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+
+			// Check that's a cargoes free scenario
+			Assertions.assertEquals(0, optimiserScenario.getCargoModel().getCargoes().size());
+
+			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
+			Assertions.assertNotNull(schedule);
+
+			// Check if the charter out event is present
+			final List<VesselEventVisit> charterOuts = findCOVisitEvents(schedule.getSequences().get(0));
+			Assertions.assertEquals(1, charterOuts.size());
+
+			Assertions.assertEquals(10 * 24, charterOuts.get(0).getDuration());
+			Assertions.assertEquals(10 * 30000, charterOuts.get(0).getCharterCost());
+			// Revenue is not explicitly calculated in output, but stored in optimiser object
+			final ICharterOutVesselEventPortSlot optimiserObject = scenarioToOptimiserBridge.getFullDataTransformer()
+					.getModelEntityMap()
+					.getOptimiserObject(charterOutEvent, ICharterOutVesselEventPortSlot.class);
+
+			Assertions.assertEquals(OptimiserUnitConvertor.convertToInternalFixedCost(5 * 500_000), optimiserObject.getVesselEvent().getHireOutRevenue());
 		});
 	}
 
@@ -137,7 +195,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
 		});
 
@@ -189,7 +247,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
 		});
 
@@ -251,7 +309,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
 		});
 	}
@@ -287,9 +345,9 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.withDurationInDays(5) //
 				.withAllowedVessels(vessel) //
 				.build();
-		
+
 		portModelBuilder.configureDischargePort(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), 24, null, null);
-		
+
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "5") //
@@ -315,7 +373,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the optional charter out event is present
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
 		});
 
@@ -353,7 +411,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 				.build();
 
 		portModelBuilder.configureDischargePort(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), 24, null, null);
-		
+
 		// Construct the cargoes
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 12, 4), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "5") //
@@ -379,7 +437,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is present
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
 		});
 	}
@@ -438,7 +496,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check that their is only only charter out event schedule
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
 
 			// Check if the correct charter out event is planned
@@ -502,7 +560,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(schedule);
 
 			// Check if the charter out event is not present
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(0, charterOuts.size());
 		});
 	}
@@ -546,7 +604,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final Sequence sequence = schedule.getSequences().get(0);
 
 			// Check charter out not in the schedule
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(0, charterOuts.size());
 
 			// Check unusedElement
@@ -555,13 +613,13 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			// Create the export command and try to execute it
 			final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-			Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, schedule);
+			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, schedule);
 
 			Assertions.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that everything is still there
-			VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
+			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
 			Assertions.assertNull(availability);
 		}, null);
 	}
@@ -603,7 +661,7 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			final Sequence sequence = schedule.getSequences().get(0);
 
 			// Check charter out in the schedule
-			List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
+			final List<CharterOutEvent> charterOuts = findCOEvents(schedule.getSequences().get(0));
 			Assertions.assertEquals(1, charterOuts.size());
 
 			// Check no unusedElement
@@ -612,24 +670,37 @@ public class CharterOutTests extends AbstractMicroTestCase {
 			// Create the export command and try to execute it
 			final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-			Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, schedule);
+			final Command cmd = LNGSchedulerJobUtils.exportSchedule(scenarioToOptimiserBridge.getInjector(), lngScenarioModel, editingDomain, schedule);
 
 			Assertions.assertTrue(cmd.canExecute());
 			cmd.execute();
 
 			// Get the exported CargoModel and check that the charter out was not exported out
-			VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
+			final VesselAssignmentType availability = charterOutEvent.getVesselAssignmentType();
 			Assertions.assertNotNull(availability);
 		}, null);
 	}
 
-	private List<CharterOutEvent> findCOEvents(Sequence sequence) {
-		List<CharterOutEvent> charterOuts = new ArrayList<CharterOutEvent>();
-		for (Event e : sequence.getEvents()) {
+	private List<CharterOutEvent> findCOEvents(final Sequence sequence) {
+		final List<CharterOutEvent> charterOuts = new ArrayList<>();
+		for (final Event e : sequence.getEvents()) {
 			if (e instanceof VesselEventVisitImpl) {
-				VesselEvent vesselEvent = ((VesselEventVisitImpl) e).getVesselEvent();
+				final VesselEvent vesselEvent = ((VesselEventVisitImpl) e).getVesselEvent();
 				if (vesselEvent instanceof CharterOutEvent) {
 					charterOuts.add((CharterOutEvent) (vesselEvent));
+				}
+			}
+		}
+		return charterOuts;
+	}
+
+	private List<VesselEventVisit> findCOVisitEvents(final Sequence sequence) {
+		final List<VesselEventVisit> charterOuts = new ArrayList<>();
+		for (final Event e : sequence.getEvents()) {
+			if (e instanceof final VesselEventVisit visit) {
+				final VesselEvent vesselEvent = visit.getVesselEvent();
+				if (vesselEvent instanceof CharterOutEvent) {
+					charterOuts.add(visit);
 				}
 			}
 		}

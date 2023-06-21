@@ -28,6 +28,9 @@ public class CharterOutEventComponentHelper extends DefaultComponentHelper {
 
 	@Override
 	protected void sortEditors(List<IInlineEditor> editors) {
+		
+		sortEditorAfterOtherEditor(editors,  CargoPackage.Literals.VESSEL_EVENT__DURATION_IN_DAYS,  CargoPackage.Literals.CHARTER_OUT_EVENT__EXTENSION_PERIOD);
+		
 		// Move the notes editor to the end
 
 		var feature = CargoPackage.Literals.VESSEL_EVENT__NOTES;

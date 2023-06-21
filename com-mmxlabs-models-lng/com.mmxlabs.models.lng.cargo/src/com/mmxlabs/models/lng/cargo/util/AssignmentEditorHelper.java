@@ -138,7 +138,7 @@ public class AssignmentEditorHelper {
 		} else if (element instanceof VesselEvent) {
 			final ZonedDateTime dateTime = ((VesselEvent) element).getStartByAsDateTime();
 			if (dateTime != null) {
-				return dateTime.plusDays(((VesselEvent) element).getDurationInDays());
+				return dateTime.plusDays(((VesselEvent) element).getSchedulingDurationInDays());
 			}
 		} else if (element instanceof Slot) {
 			final Slot<?> slot = (Slot<?>) element;
@@ -377,7 +377,7 @@ public class AssignmentEditorHelper {
 	}
 
 	public static @NonNull ZonedDateTime getMinEndDate(@NonNull final VesselEvent e) {
-		return e.getStartAfterAsDateTime().plusDays(e.getDurationInDays());
+		return e.getStartAfterAsDateTime().plusDays(e.getSchedulingDurationInDays());
 	}
 
 	public static boolean checkInsertion(@NonNull final WrappedAssignableElement before, @NonNull final WrappedAssignableElement e, @NonNull final WrappedAssignableElement after) {

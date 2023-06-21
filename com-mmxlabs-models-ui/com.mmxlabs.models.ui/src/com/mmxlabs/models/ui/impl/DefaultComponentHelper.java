@@ -224,6 +224,34 @@ public class DefaultComponentHelper implements IComponentHelper {
 			editors.addAll(idx, editorsForFeature);
 		}
 	}
+	/**
+	 * Move the afterfeature to after the beforefeature
+	 * 
+	 * @param editors
+	 * @param beforeFeature
+	 * @param afterFeature
+	 */
+	protected void sortEditorAfterOtherEditor(final List<IInlineEditor> editors, EStructuralFeature beforeFeature, EStructuralFeature afterFeature) {
+		
+		// There may be multiple editors for the same feature, so gather them here...
+		final List<IInlineEditor> editorsForFeature = new LinkedList<>();
+		IInlineEditor beforeEditor = null;
+		for (final var editor : editors) {
+			if (editor.getFeature() == afterFeature) {
+				editorsForFeature.add(editor);
+			}
+			if (beforeEditor == null && editor.getFeature() == beforeFeature) {
+				beforeEditor = editor;
+			}
+		}
+		
+		if (beforeEditor != null && !editorsForFeature.isEmpty()) {
+			editors.removeAll(editorsForFeature);
+			int idx = editors.indexOf(beforeEditor);
+			// if idx -- size(), we may just need to call addAll without an index
+			editors.addAll(idx + 1, editorsForFeature);
+		}
+	}
  
 	protected List<IInlineEditor> getEditorsForFeature(final List<IInlineEditor> editors, EStructuralFeature feature) {
 

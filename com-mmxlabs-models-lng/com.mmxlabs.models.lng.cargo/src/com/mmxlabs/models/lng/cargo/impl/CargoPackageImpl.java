@@ -2080,6 +2080,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getVesselEvent__GetSchedulingDurationInDays() {
+		return vesselEventEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMaintenanceEvent() {
 		return maintenanceEventEClass;
 	}
@@ -2152,6 +2162,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EReference getCharterOutEvent_AvailableHeel() {
 		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCharterOutEvent_ExtensionPeriod() {
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -3535,6 +3555,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__NOTES);
 		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME);
+		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS);
 
 		maintenanceEventEClass = createEClass(MAINTENANCE_EVENT);
 
@@ -3548,6 +3569,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__REPOSITIONING_FEE);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__REQUIRED_HEEL);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__AVAILABLE_HEEL);
+		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__EXTENSION_PERIOD);
 		createEOperation(charterOutEventEClass, CHARTER_OUT_EVENT___GET_END_PORT);
 
 		assignableElementEClass = createEClass(ASSIGNABLE_ELEMENT);
@@ -4056,6 +4078,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getVesselEvent__GetStartAfterAsDateTime(), theDateTimePackage.getDateTime(), "getStartAfterAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEOperation(getVesselEvent__GetSchedulingDurationInDays(), ecorePackage.getEInt(), "getSchedulingDurationInDays", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(maintenanceEventEClass, MaintenanceEvent.class, "MaintenanceEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(dryDockEventEClass, DryDockEvent.class, "DryDockEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -4068,6 +4092,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCharterOutEvent_RepositioningFee(), ecorePackage.getEInt(), "repositioningFee", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOutEvent_RequiredHeel(), theCommercialPackage.getEndHeelOptions(), null, "requiredHeel", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOutEvent_AvailableHeel(), theCommercialPackage.getStartHeelOptions(), null, "availableHeel", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutEvent_ExtensionPeriod(), ecorePackage.getEInt(), "extensionPeriod", null, 0, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCharterOutEvent__GetEndPort(), thePortPackage.getPort(), "getEndPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 

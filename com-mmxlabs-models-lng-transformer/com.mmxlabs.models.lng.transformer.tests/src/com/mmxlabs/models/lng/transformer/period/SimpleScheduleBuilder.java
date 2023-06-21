@@ -187,7 +187,7 @@ public class SimpleScheduleBuilder {
 			visit.setVesselEvent(vesselEvent);
 
 			visit.setStart(vesselEvent.getStartAfterAsDateTime());
-			visit.setEnd(visit.getStart().plusDays(vesselEvent.getDurationInDays()));
+			visit.setEnd(visit.getStart().plusDays(vesselEvent.getSchedulingDurationInDays()));
 			visit.setPort(vesselEvent.getPort());
 
 			if (vesselEvent instanceof CharterOutEvent) {

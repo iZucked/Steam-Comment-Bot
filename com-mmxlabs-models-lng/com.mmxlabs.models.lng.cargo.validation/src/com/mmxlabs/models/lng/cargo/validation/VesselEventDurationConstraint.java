@@ -24,8 +24,7 @@ public class VesselEventDurationConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) target;
+		if (target instanceof VesselEvent vesselEvent) {
 			final int duration = vesselEvent.getDurationInDays();
 			if (duration < 1) {				
 				final String msg = String.format("Vessel event '%s' has no duration set.", vesselEvent.getName());

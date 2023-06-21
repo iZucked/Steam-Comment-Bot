@@ -5200,13 +5200,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
 
 	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
+
+	/**
 	 * The number of operations of the '<em>Vessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
+	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5387,6 +5396,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAINTENANCE_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS;
 
 	/**
 	 * The number of operations of the '<em>Maintenance Event</em>' class.
@@ -5578,6 +5596,15 @@ public interface CargoPackage extends EPackage {
 	int DRY_DOCK_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
 
 	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS;
+
+	/**
 	 * The number of operations of the '<em>Dry Dock Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5767,13 +5794,22 @@ public interface CargoPackage extends EPackage {
 	int CHARTER_OUT_EVENT__AVAILABLE_HEEL = VESSEL_EVENT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Extension Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__EXTENSION_PERIOD = VESSEL_EVENT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 7;
+	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5828,6 +5864,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS;
 
 	/**
 	 * The operation id for the '<em>Get End Port</em>' operation.
@@ -9731,6 +9776,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselEvent__GetStartAfterAsDateTime();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getSchedulingDurationInDays() <em>Get Scheduling Duration In Days</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getSchedulingDurationInDays()
+	 * @generated
+	 */
+	EOperation getVesselEvent__GetSchedulingDurationInDays();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.MaintenanceEvent <em>Maintenance Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9814,6 +9869,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCharterOutEvent_AvailableHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getExtensionPeriod <em>Extension Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Extension Period</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getExtensionPeriod()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_ExtensionPeriod();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}'.
@@ -12418,6 +12484,14 @@ public interface CargoPackage extends EPackage {
 		EOperation VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME = eINSTANCE.getVesselEvent__GetStartAfterAsDateTime();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Scheduling Duration In Days</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = eINSTANCE.getVesselEvent__GetSchedulingDurationInDays();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12486,6 +12560,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_OUT_EVENT__AVAILABLE_HEEL = eINSTANCE.getCharterOutEvent_AvailableHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Extension Period</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__EXTENSION_PERIOD = eINSTANCE.getCharterOutEvent_ExtensionPeriod();
 
 		/**
 		 * The meta object literal for the '<em><b>Hire Rate</b></em>' attribute feature.
