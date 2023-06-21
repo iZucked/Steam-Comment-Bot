@@ -1,6 +1,6 @@
 {
   "identifier" : "303cb9a4-f81d-4aa5-a345-469af4d07fc8",
-  "createdAt" : "2023-05-25T13:35:16.311",
+  "createdAt" : "2023-06-19T13:20:27.314",
   "locations" : [ {
     "mmxId" : "L_DZ_Bethi",
     "name" : "Bethioua",
@@ -47,8 +47,8 @@
       "timeZone" : "Asia/Shanghai"
     },
     "locode" : "CN  NBO",
-    "upstreamID" : "CN0101",
-    "notes" : "Also CN0610 but lat/lon seems off"
+    "upstreamID" : "CN0610",
+    "fallbackUpstreamId" : "CN0101"
   }, {
     "mmxId" : "L_CN_BeiHa",
     "name" : "Bei Hai",
@@ -302,8 +302,7 @@
       "timeZone" : "Australia/Darwin"
     },
     "locode" : "AU  DRW",
-    "upstreamID" : "AU0329",
-    "notes" : "Use AU0328 in future"
+    "upstreamID" : "AU0328"
   }, {
     "mmxId" : "L_AU_Glads",
     "name" : "Gladstone",
@@ -596,8 +595,8 @@
       "timeZone" : "Asia/Chongqing"
     },
     "locode" : "CN  JYG",
-    "upstreamID" : "CN0204",
-    "notes" : "We should be using CN0662"
+    "upstreamID" : "CN0662",
+    "fallbackUpstreamId" : "CN0204"
   }, {
     "mmxId" : "L_CN_Haiko",
     "name" : "Haikou",
@@ -1088,8 +1087,8 @@
       "timeZone" : "Asia/Calcutta"
     },
     "locode" : "IN  HZA",
-    "upstreamID" : "IN0048",
-    "notes" : "Use IN0207 in future"
+    "upstreamID" : "IN0207",
+    "fallbackUpstreamId" : "IN0048"
   }, {
     "mmxId" : "L_IN_Kakin",
     "name" : "Kakinada",
@@ -1617,8 +1616,8 @@
       "timeZone" : "Asia/Tokyo"
     },
     "locode" : "JP  OIT",
-    "upstreamID" : "JP0219",
-    "notes" : "Use JP0359 in future"
+    "upstreamID" : "JP0359",
+    "fallbackUpstreamId" : "JP0219"
   }, {
     "mmxId" : "L_JP_Okina",
     "name" : "Okinawa",
@@ -1654,8 +1653,8 @@
       "timeZone" : "Asia/Tokyo"
     },
     "locode" : "JP  OTR",
-    "upstreamID" : "JP0240",
-    "notes" : "Use JP0448 in future"
+    "upstreamID" : "JP0448",
+    "fallbackUpstreamId" : "JP0240"
   }, {
     "mmxId" : "L_JP_Sakai",
     "name" : "Sakai",
@@ -2027,8 +2026,8 @@
       "timeZone" : "Europe/Amsterdam"
     },
     "locode" : "NL  RTM",
-    "upstreamID" : "NL0051",
-    "notes" : "Use NL0099 in future. Locode is NLEUR"
+    "upstreamID" : "NL0099",
+    "fallbackUpstreamId" : "NL0051"
   }, {
     "mmxId" : "L_NZ_NewPl",
     "name" : "New Plymouth",
@@ -2369,8 +2368,8 @@
       "timeZone" : "Asia/Seoul"
     },
     "locode" : "KR  INC",
-    "upstreamID" : "KR0012",
-    "notes" : "Use KR0072 in future"
+    "upstreamID" : "KR0072",
+    "fallbackUpstreamId" : "KR0012"
   }, {
     "mmxId" : "L_KR_TongY",
     "name" : "Tong Yong",
@@ -2471,8 +2470,8 @@
       "timeZone" : "Asia/Bangkok"
     },
     "locode" : "TH  MTP",
-    "upstreamID" : "TH0017",
-    "notes" : "Use TH0069 in future"
+    "upstreamID" : "TH0069",
+    "fallbackUpstreamId" : "TH0017"
   }, {
     "mmxId" : "L_TT_Point2",
     "name" : "Point Fortin",
@@ -2619,8 +2618,8 @@
       "timeZone" : "America/Chicago"
     },
     "locode" : "US  PGL",
-    "upstreamID" : "US0566",
-    "notes" : "Use US1244 or US1247 in future"
+    "upstreamID" : "US1244",
+    "fallbackUpstreamId" : "US0566"
   }, {
     "mmxId" : "L_US_Plaqu",
     "name" : "Plaquemines",
@@ -2985,8 +2984,9 @@
       "timeZone" : "Australia/Darwin"
     },
     "locode" : "AU  ITH",
-    "upstreamID" : "AU0329",
-    "notes" : "This should really be Bladin Point (AU0438)"
+    "upstreamID" : "AU0438",
+    "notes" : "Fallback to Darwin as there are a lot of missing distances.",
+    "fallbackUpstreamId" : "AU0329"
   }, {
     "mmxId" : "L_AU_Bladi",
     "name" : "Bladin Point",
@@ -3131,8 +3131,7 @@
       "country" : "Malaysia",
       "timeZone" : "Asia/Kuala_Lumpur"
     },
-    "upstreamID" : "MY0189",
-    "notes" : "Currently using PFLNG 1 as proxy"
+    "upstreamID" : "MY0198"
   }, {
     "mmxId" : "L_US_CALCA",
     "name" : "Calcasieu Pass",
@@ -3155,8 +3154,7 @@
       "timeZone" : "Europe/Berlin"
     },
     "locode" : "DE  LBM",
-    "upstreamID" : "PL0021",
-    "notes" : "Currently using Swinoujscie  as proxy"
+    "upstreamID" : "DE0162"
   }, {
     "mmxId" : "L_NL_Eemsh",
     "name" : "Eemshaven",
@@ -3180,6 +3178,144 @@
     "upstreamID" : "BD0003",
     "notes" : "Using Chittagong as an alias"
   }, {
+    "mmxId" : "L_GR_Alexa",
+    "name" : "Alexandroupolis",
+    "geographicPoint" : {
+      "lat" : 40.84000015258789,
+      "lon" : 25.891666412353516,
+      "country" : "Greece",
+      "timeZone" : "Europe/Bucharest"
+    },
+    "locode" : "GR  AXD",
+    "upstreamID" : "GR0018"
+  }, {
+    "mmxId" : "L_DE_Bruns",
+    "name" : "Brunsbuttel",
+    "aliases" : [ "Elbeharbour" ],
+    "geographicPoint" : {
+      "lat" : 53.87968444824219,
+      "lon" : 9.140266418457031,
+      "country" : "Germany",
+      "timeZone" : "Europe/Berlin"
+    },
+    "locode" : "DE  BRB",
+    "upstreamID" : "DE0015"
+  }, {
+    "mmxId" : "L_FI_Inkoo",
+    "name" : "Inkoo",
+    "geographicPoint" : {
+      "lat" : 60.008331298828125,
+      "lon" : 23.963333129882812,
+      "country" : "Finland",
+      "timeZone" : "Europe/Kiev"
+    },
+    "locode" : "FI  INK",
+    "upstreamID" : "FI0030"
+  }, {
+    "mmxId" : "L_IT_Piomb",
+    "name" : "Piombino",
+    "geographicPoint" : {
+      "lat" : 42.93166732788086,
+      "lon" : 10.548333168029785,
+      "country" : "Italy",
+      "timeZone" : "Europe/Berlin"
+    },
+    "locode" : "IT  PIO",
+    "upstreamID" : "IT0122"
+  }, {
+    "mmxId" : "L_RU_Kalin",
+    "name" : "Kaliningrad",
+    "geographicPoint" : {
+      "lat" : 54.70333480834961,
+      "lon" : 20.453332901000977,
+      "country" : "Russian Federation",
+      "timeZone" : "Europe/Kaliningrad"
+    },
+    "locode" : "RU  KGD",
+    "upstreamID" : "XR0005"
+  }, {
+    "mmxId" : "L_IT_Raven",
+    "name" : "Ravenna",
+    "aliases" : [ "San Vitale" ],
+    "geographicPoint" : {
+      "lat" : 44.44333267211914,
+      "lon" : 12.243332862854004,
+      "country" : "Italy",
+      "timeZone" : "Europe/Berlin"
+    },
+    "locode" : "IT  RAN",
+    "upstreamID" : "IT0155"
+  }, {
+    "mmxId" : "L_DE_Stade",
+    "name" : "Stade",
+    "aliases" : [ "Stadersand" ],
+    "geographicPoint" : {
+      "lat" : 53.62616729736328,
+      "lon" : 9.531999588012695,
+      "country" : "Germany",
+      "timeZone" : "Europe/Berlin"
+    },
+    "locode" : "DE  STA",
+    "upstreamID" : "DE0100"
+  }, {
+    "mmxId" : "L_RU_Vysot",
+    "name" : "Vysotsk",
+    "geographicPoint" : {
+      "lat" : 60.621665954589844,
+      "lon" : 28.55500030517578,
+      "country" : "Russian Federation",
+      "timeZone" : "Europe/Moscow"
+    },
+    "locode" : "RU  VYS",
+    "upstreamID" : "RU0226"
+  }, {
+    "mmxId" : "L_TR_Yesil",
+    "name" : "Dortyol",
+    "aliases" : [ "Aygaz LPG Terminal", "Delta Yesil Terminal", "Dortyol Terminal", " Yesil Terminal" ],
+    "geographicPoint" : {
+      "lat" : 36.848331451416016,
+      "lon" : 36.128334045410156,
+      "country" : "Turkey",
+      "timeZone" : "Europe/Istanbul"
+    },
+    "locode" : "TR  YAT",
+    "upstreamID" : "TR0137"
+  }, {
+    "mmxId" : "L_RU_Sabet",
+    "name" : "Sabetta",
+    "geographicPoint" : {
+      "lat" : 71.27665,
+      "lon" : 72.07388333333333,
+      "country" : "Russian Federation",
+      "timeZone" : "Asia/Yekaterinburg"
+    },
+    "locode" : "RU  SAB",
+    "upstreamID" : "RU0307"
+  }, {
+    "mmxId" : "L_KW_Mina ",
+    "name" : "Mina Saud",
+    "aliases" : [ "Mina Al Zour" ],
+    "geographicPoint" : {
+      "lat" : 28.757333755493164,
+      "lon" : 48.46933364868164,
+      "country" : "Kuwait",
+      "timeZone" : "Asia/Riyadh"
+    },
+    "locode" : "KW  MIS",
+    "upstreamID" : "KW0010"
+  }, {
+    "mmxId" : "L_PH_Subic",
+    "name" : "Subic Bay",
+    "aliases" : [ "Olongapo" ],
+    "geographicPoint" : {
+      "lat" : 14.807568550109863,
+      "lon" : 120.2903823852539,
+      "country" : "Philippines",
+      "timeZone" : "Asia/Singapore"
+    },
+    "locode" : "PH  SFS",
+    "upstreamID" : "PH0171"
+  }, {
     "mmxId" : "L_IN_Dhamr",
     "name" : "Dhamra",
     "geographicPoint" : {
@@ -3190,6 +3326,84 @@
     },
     "locode" : "IN  DMA",
     "upstreamID" : "IN0173"
+  }, {
+    "mmxId" : "L_MY_Selat",
+    "name" : "Selat Linggi",
+    "geographicPoint" : {
+      "lat" : 2.2916667461395264,
+      "lon" : 101.9749984741211,
+      "country" : "Malaysia",
+      "timeZone" : "Asia/Singapore"
+    },
+    "upstreamID" : "MY0163"
+  }, {
+    "mmxId" : "L_MZ_Afung",
+    "name" : "Afungi",
+    "geographicPoint" : {
+      "lat" : -10.765000343322754,
+      "lon" : 40.560001373291016,
+      "country" : "Mozambique",
+      "timeZone" : "Africa/Johannesburg"
+    },
+    "upstreamID" : "MZ0044"
+  }, {
+    "mmxId" : "L_CO_Carta",
+    "name" : "Calamari",
+    "aliases" : [ "Muelles El Bosque", "Cartagena, Colombia", "Caratagena de Indias" ],
+    "geographicPoint" : {
+      "lat" : 10.401666641235352,
+      "lon" : -75.53500366210938,
+      "country" : "Colombia",
+      "timeZone" : "America/Bogota"
+    },
+    "locode" : "CO  CTG",
+    "upstreamID" : "CO0008"
+  }, {
+    "mmxId" : "L_BR_Acu",
+    "name" : "Acu",
+    "aliases" : [ "BW Magna" ],
+    "geographicPoint" : {
+      "lat" : -21.850483333333333,
+      "lon" : -41.00665,
+      "country" : "Brazil",
+      "timeZone" : "America/Sao_Paulo"
+    },
+    "locode" : "BR  ACU",
+    "upstreamID" : "BR0264",
+    "notes" : "FSRU BW Magna at ACU terminal 2"
+  }, {
+    "mmxId" : "L_KR_Ulsan",
+    "name" : "Ulsan",
+    "aliases" : [ "Jangseungpo" ],
+    "geographicPoint" : {
+      "lat" : 35.483333587646484,
+      "lon" : 129.39666748046875,
+      "country" : "South Korea",
+      "timeZone" : "Asia/Seoul"
+    },
+    "locode" : "KR  USN",
+    "upstreamID" : "KR0036"
+  }, {
+    "mmxId" : "L_RU_Kamch",
+    "name" : "Kamchatka",
+    "geographicPoint" : {
+      "lat" : 54.189998626708984,
+      "lon" : 168.34666442871094,
+      "country" : "Russian Federation",
+      "timeZone" : "Pacific/Guadalcanal"
+    },
+    "upstreamID" : "SP1000",
+    "notes" : "Using Ostrov Mednyy as proxy. lat/lon are for this routing point"
+  }, {
+    "mmxId" : "L_CN_Binha",
+    "name" : "Binhai LNG Terminal",
+    "geographicPoint" : {
+      "lat" : 34.30603333333333,
+      "lon" : 120.2734,
+      "country" : "China",
+      "timeZone" : "Asia/Shanghai"
+    },
+    "upstreamID" : "CN0678"
   } ],
   "routingPoints" : [ {
     "identifier" : "SUZ",
