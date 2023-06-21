@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.parent</artifactId>
 		<groupId>com.mmxlabs.lingo</groupId>
-		<version>6.6.4-SNAPSHOT</version>
+		<version>6.6.6-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
