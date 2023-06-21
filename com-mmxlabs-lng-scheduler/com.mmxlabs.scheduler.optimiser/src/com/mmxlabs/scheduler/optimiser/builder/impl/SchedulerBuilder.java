@@ -24,9 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.common.curves.UnitLongCurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -653,27 +651,6 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		// Return elements are always end elements?
 		portTypeProvider.setPortType(element, PortType.End);
 
-		if (endRequirement.hasTimeRequirement()) {
-			// We should set the time window for all end elements for this
-			// resource to match the end requirement for the resource
-			// endPortSlot.setTimeWindow(startEndRequirementProvider.getEndRequirement(resource).getTimeWindow());
-		} else {
-			if (vesselProvider.getVesselCharter(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
-				// spot charters have no end time window, because their end date
-				// is very flexible.
-				// spotVesselEndWindows.add((MutableTimeWindow)endRequirement.getTimeWindow());
-			} else if (vesselProvider.getVesselCharter(resource).getVesselInstanceType().equals(VesselInstanceType.ROUND_TRIP)) {
-				// spot charters have no end time window, because their end date
-				// is very flexible.
-			} else {
-				// this defers setting the time windows to
-				// getOptimisationData(), which will
-				// choose a suitable end date for the optimisation and set all
-				// the elements in
-				// this list to have a time window around that end date
-				// endSlotWindows.add((MutableTimeWindow) endPortSlot.getTimeWindow());
-			}
-		}
 		return element;
 	}
 

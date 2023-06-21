@@ -60,7 +60,7 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 	@Override
 	public void manipulate(final IModifiableSequences sequences) {
 
-		for (final IResource resource : sequences.getResources()) {
+RESOURCE_LOOP:	for (final IResource resource : sequences.getResources()) {
 			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 			if (vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
@@ -100,12 +100,14 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 									}
 								}
 							}
-							assert lastDischarge != null;
-							final IPort dischargePort = portSlotProvider.getPortSlot(lastDischarge).getPort();
-							final IPort destPort = returnToClosestInSet(resource, dischargePort, endRequirement.getLocations());
-							returnElement = shortCargoReturnElementProvider.getReturnElement(resource, element, destPort);
+							if (lastDischarge != null) {
+								final IPort dischargePort = portSlotProvider.getPortSlot(lastDischarge).getPort();
+								final IPort destPort = returnToClosestInSet(resource, dischargePort, endRequirement.getLocations());
+								returnElement = shortCargoReturnElementProvider.getReturnElement(resource, element, destPort);
+							} else {
+								continue RESOURCE_LOOP;
+							}
 						}
-						assert returnElement != null;
 
 						// If element is null we expect that a constraint checker will mark the solution
 						// as invalid.... (if not, then expect some sort of failure in the
