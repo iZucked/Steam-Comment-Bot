@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_IWCLkAlJEeubZYeiYJ0UFg">
-  <imports xsi:type="basic:TrimBar" xmi:id="_6XF3kAlgEeubZYeiYJ0UFg" elementId="org.eclipse.ui.trim.status"/>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_B5YkUAlhEeubZYeiYJ0U1Fg" featurename="children" parentElementId="org.eclipse.ui.trim.status" positionInList="index:0">
-    <elements xsi:type="menu:ToolControl" xmi:id="_7mMbIAwwEe6wusMmA6EWOA" elementId="com.mmxlabs.lngdataserver.integration.ui.scenarios.referencedatastatustrimcontribution" contributionURI="bundleclass://com.mmxlabs.lngdataserver.integration.ui.scenarios/com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.ReferenceDataStatusTrimContribution"/>
-    <elements xsi:type="menu:ToolControl" xmi:id="_BWLcwAwxEe6wusMmA6EWOA" elementId="com.mmxlabs.lngdataserver.integration.ui.scenarios.basecasestatustrimcontribution" contributionURI="bundleclass://com.mmxlabs.lngdataserver.integration.ui.scenarios/com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseStatusTrimContribution"/>
+  <imports xsi:type="basic:TrimBar" xmi:id="_6XF3kAlgEeubZYeiYJ01UFg" elementId="org.eclipse.ui.trim.status"/>
+  <imports xsi:type="menu:ToolBar" xmi:id="_uRS8wBD1Ee6h-bUlZK89Jg" elementId="com.mmxlabs.hub.toolbar.0"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Wy6mwBD1Ee6h-bUlZK89Jg" featurename="children" parentElementId="com.mmxlabs.hub.toolbar.0">
+    <elements xsi:type="menu:ToolControl" xmi:id="_4ZG6QBD1Ee6h-bUlZK89Jg" elementId="com.mmxlabs.lngdataserver.integration.ui.scenarios.toolcontrol.0" contributionURI="bundleclass://com.mmxlabs.lngdataserver.integration.ui.scenarios/com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.BaseCaseStatusTrimContribution"/>
+    <elements xsi:type="menu:ToolControl" xmi:id="_79MsEBD1Ee6h-bUlZK89Jg" elementId="com.mmxlabs.lngdataserver.integration.ui.scenarios.toolcontrol.1" contributionURI="bundleclass://com.mmxlabs.lngdataserver.integration.ui.scenarios/com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.ReferenceDataStatusTrimContribution"/>
+    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_BrFs4BD_Ee6h-bUlZK89Jg" elementId="com.mmxlabs.lngdataserver.integration.ui.scenarios.toolbarseparator.0"/>
   </fragments>
 </fragment:ModelFragments>

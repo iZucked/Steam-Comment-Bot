@@ -16,8 +16,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -53,38 +51,8 @@ public class BaseCaseStatusTrimContribution {
 	@PostConstruct
 	protected Control createControl(Composite parent) {
 		
-		final int minHeight = 36;
-		final Composite control = new Composite(parent, SWT.NONE)
-		{
-			@Override
-			protected void checkSubclass() {
-			}
-
-			@Override
-			public Point getSize() {
-				final Point p = super.getSize();
-				return new Point(p.x, Math.max(minHeight, p.y));
-			}
-
-			@Override
-			public void setSize(int width, int height) {
-				super.setSize(width, Math.max(minHeight, height));
-			}
-
-			@Override
-			public Point computeSize(int wHint, int hHint) {
-				final Point p = super.computeSize(wHint, hHint);
-				return new Point(p.x, Math.max(minHeight, p.y));
-			}
-
-			@Override
-			public Point computeSize(int wHint, int hHint, boolean b) {
-				final Point p = super.computeSize(wHint, hHint, b);
-				return new Point(p.x, Math.max(minHeight, p.y));
-			}
-		};
-		control.setLayout(new FillLayout());
-		final Label myLabel = new Label(control, SWT.CENTER);
+		final Label myLabel = new Label(parent, SWT.NONE);
+		myLabel.setText("Base case status");
 		mainLabel = myLabel;
 		myLabel.addMouseListener(new MouseListener() {
 			
@@ -121,7 +89,7 @@ public class BaseCaseStatusTrimContribution {
 			service.addChangedListener(pListener);
 		}
 		setLabelTextAndToolTip(myLabel, false);
-		return control;
+		return myLabel;
 	}
 	
 	private boolean bcChanged(ScenarioInstance si) {
@@ -177,9 +145,6 @@ public class BaseCaseStatusTrimContribution {
 		}
  
 		if (mainLabel != null && !mainLabel.isDisposed()) {
-			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
-				mainLabel.getImage().dispose();
-			}
 			mainLabel.dispose();
 		}
 	}
