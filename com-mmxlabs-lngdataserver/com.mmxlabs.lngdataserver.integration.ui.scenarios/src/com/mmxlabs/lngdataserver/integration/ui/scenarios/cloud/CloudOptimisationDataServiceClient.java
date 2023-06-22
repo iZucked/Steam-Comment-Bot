@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -123,8 +122,6 @@ public class CloudOptimisationDataServiceClient {
 												// Error generating the token
 												exception.printStackTrace();
 											}
-										} else {
-											request.addHeader(HttpHeaders.AUTHORIZATION, HttpClientUtil.basicAuthHeader(getUsername(), getPassword()));
 										}
 									});
 								}
@@ -152,14 +149,6 @@ public class CloudOptimisationDataServiceClient {
 	private CloseableHttpClient getHttpClient(final URI url) {
 		final HttpHost httpHost = URIUtils.extractHost(url);
 		return cache.getUnchecked(httpHost);
-	}
-
-	private String getUsername() {
-		return Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_USERNAME);
-	}
-
-	private String getPassword() {
-		return Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_PASSWORD);
 	}
 
 	private String getGateway() {
