@@ -138,20 +138,21 @@ public class FlowsReport extends ViewPart {
 
 				{
 					final ScheduleModel scheduleModel = ss.getPinnedScenarioResult().getTypedResult(ScheduleModel.class);
-					for (final CargoAllocation ca : scheduleModel.getSchedule().getCargoAllocations()) {
-						final Pair<String, String> p = getKey(dm, ca);
-						if (p.getFirst().equals(p.getSecond())) {
-							continue;
-						}
-						if (mode == CountMode.Volume) {
-							m.merge(p, -ca.getSlotAllocations().get(0).getVolumeTransferred(), Integer::sum);
-						} else if (mode == CountMode.Cargo) {
-							m.merge(p, -1, Integer::sum);
-						} else {
-							throw new IllegalSelectorException();
+					if (scheduleModel != null && scheduleModel.getSchedule() != null) {
+						for (final CargoAllocation ca : scheduleModel.getSchedule().getCargoAllocations()) {
+							final Pair<String, String> p = getKey(dm, ca);
+							if (p.getFirst().equals(p.getSecond())) {
+								continue;
+							}
+							if (mode == CountMode.Volume) {
+								m.merge(p, -ca.getSlotAllocations().get(0).getVolumeTransferred(), Integer::sum);
+							} else if (mode == CountMode.Cargo) {
+								m.merge(p, -1, Integer::sum);
+							} else {
+								throw new IllegalSelectorException();
+							}
 						}
 					}
-
 				}
 				{
 					for (final ScenarioResult r : ss.getOtherScenarioResults()) {
@@ -159,21 +160,23 @@ public class FlowsReport extends ViewPart {
 							continue;
 						}
 						final ScheduleModel scheduleModel = r.getTypedResult(ScheduleModel.class);
-						for (final CargoAllocation ca : scheduleModel.getSchedule().getCargoAllocations()) {
+						if (scheduleModel != null && scheduleModel.getSchedule() != null) {
+							for (final CargoAllocation ca : scheduleModel.getSchedule().getCargoAllocations()) {
 
-							final Pair<String, String> p = getKey(dm, ca);
-							if (p.getFirst().equals(p.getSecond())) {
-								continue;
+								final Pair<String, String> p = getKey(dm, ca);
+								if (p.getFirst().equals(p.getSecond())) {
+									continue;
+								}
+								if (mode == CountMode.Volume) {
+									m.merge(p, ca.getSlotAllocations().get(0).getVolumeTransferred(), Integer::sum);
+								} else if (mode == CountMode.Cargo) {
+									m.merge(p, 1, Integer::sum);
+								} else {
+									throw new IllegalSelectorException();
+								}
 							}
-							if (mode == CountMode.Volume) {
-								m.merge(p, ca.getSlotAllocations().get(0).getVolumeTransferred(), Integer::sum);
-							} else if (mode == CountMode.Cargo) {
-								m.merge(p, 1, Integer::sum);
-							} else {
-								throw new IllegalSelectorException();
-							}
+							break;
 						}
-						break;
 					}
 
 				}
@@ -220,25 +223,27 @@ public class FlowsReport extends ViewPart {
 				if (!ss.getAllScenarioResults().isEmpty()) {
 					// Single report mode
 					final ScheduleModel scheduleModel = ss.getAllScenarioResults().get(0).getTypedResult(ScheduleModel.class);
-					for (final CargoAllocation ca : scheduleModel.getSchedule().getCargoAllocations()) {
+					if (scheduleModel != null && scheduleModel.getSchedule() != null) {
 
-						final Pair<String, String> p = getKey(dm, ca);
-						if (p.getFirst().equals(p.getSecond())) {
-							continue;
-						}
-						if (mode == CountMode.Volume) {
-							m.merge(p, ca.getSlotAllocations().get(0).getVolumeTransferred(), Integer::sum);
-						} else if (mode == CountMode.Cargo) {
-							m.merge(p, 1, Integer::sum);
-						} else {
-							throw new IllegalSelectorException();
+						for (final CargoAllocation ca : scheduleModel.getSchedule().getCargoAllocations()) {
+
+							final Pair<String, String> p = getKey(dm, ca);
+							if (p.getFirst().equals(p.getSecond())) {
+								continue;
+							}
+							if (mode == CountMode.Volume) {
+								m.merge(p, ca.getSlotAllocations().get(0).getVolumeTransferred(), Integer::sum);
+							} else if (mode == CountMode.Cargo) {
+								m.merge(p, 1, Integer::sum);
+							} else {
+								throw new IllegalSelectorException();
+							}
 						}
 					}
-
 					for (final var e : m.entrySet()) {
 						final Flow flow = new Flow();
 						flow.from = e.getKey().getFirst();
-						flow.to = e.getKey().getSecond();
+						flow.to = e.getKey().getSecond(); 
 						flow.value = e.getValue();
 						state.lhsFlows.add(flow);
 					}
