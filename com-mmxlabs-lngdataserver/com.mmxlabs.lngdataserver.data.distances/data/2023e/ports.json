@@ -3396,7 +3396,7 @@
     "notes" : "Using Ostrov Mednyy as proxy. lat/lon are for this routing point"
   }, {
     "mmxId" : "L_CN_Binha",
-    "name" : "Binhai LNG Terminal",
+    "name" : "Binhai",
     "geographicPoint" : {
       "lat" : 34.30603333333333,
       "lon" : 120.2734,
