@@ -19,16 +19,16 @@ public class MigrateToV189 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 187;
-	}
-
-	@Override
-	public int getScenarioDestinationVersion() {
 		return 188;
 	}
 
 	@Override
+	public int getScenarioDestinationVersion() {
+		return 189;
+	}
+
+	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
-		// FOB Vessel Rotations
+		// Charter out extension period
 	}
 }
