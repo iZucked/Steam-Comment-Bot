@@ -136,7 +136,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 							if (mode == ValueMode.VOLUME_TBTU) {
 								return String.format("%,.03f", result);
 							} else {
-								return String.format("%,.01f", result);
+								return String.format("%,.0f", result);
 							}
 						}
 						return "";
