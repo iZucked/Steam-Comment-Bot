@@ -134,18 +134,6 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 
 	@JsonIgnore
 	@Override
-	public double getBOGEmissionRate() {
-		return bogEmissionRate;
-	}
-
-	@JsonIgnore
-	@Override
-	public double getPilotLightEmissionRate() {
-		return pilotLightEmissionRate;
-	}
-	
-	@JsonIgnore
-	@Override
 	public double getMethaneSlipRate() {
 		return methaneSlipRate;
 	}

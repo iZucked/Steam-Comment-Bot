@@ -43,36 +43,36 @@ public class EmissionsUtils {
 	//		}
 	//		return result;
 	//	}
-	
-	public static long getBOGEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
-		long result = 0L;
-		for (final FuelQuantity fq : fuelQuantity) {
-			if (fq.getFuel()==Fuel.FBO || fq.getFuel() == Fuel.NBO) {
-				final Optional<FuelAmount> optM3FuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.M3) //
-						.findFirst();
-				if (optM3FuelAmount.isPresent()) {
-					result += (long) (optM3FuelAmount.get().getQuantity() * model.getBOGEmissionRate());
-				}
-			}
-		}
-		return result;
-	}
-	
-	public static long getPilotLightEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
-		long result = 0L;
-		for (final FuelQuantity fq : fuelQuantity) {
-			if (fq.getFuel()==Fuel.PILOT_LIGHT) {
-				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
-						.findFirst();
-				if (optMtFuelAmount.isPresent()) {
-					result += (long) (optMtFuelAmount.get().getQuantity() * model.getPilotLightEmissionRate());
-				}
-			}
-		}
-		return result;
-	}
+	//
+	//	public static long getBOGEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
+	//		long result = 0L;
+	//		for (final FuelQuantity fq : fuelQuantity) {
+	//			if (fq.getFuel()==Fuel.FBO || fq.getFuel() == Fuel.NBO) {
+	//				final Optional<FuelAmount> optM3FuelAmount = fq.getAmounts().stream() //
+	//						.filter(fa -> fa.getUnit() == FuelUnit.M3) //
+	//						.findFirst();
+	//				if (optM3FuelAmount.isPresent()) {
+	//					result += (long) (optM3FuelAmount.get().getQuantity() * model.getBOGEmissionRate());
+	//				}
+	//			}
+	//		}
+	//		return result;
+	//	}
+	//	
+	//	public static long getPilotLightEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
+	//		long result = 0L;
+	//		for (final FuelQuantity fq : fuelQuantity) {
+	//			if (fq.getFuel()==Fuel.PILOT_LIGHT) {
+	//				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
+	//						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
+	//						.findFirst();
+	//				if (optMtFuelAmount.isPresent()) {
+	//					result += (long) (optMtFuelAmount.get().getQuantity() * model.getPilotLightEmissionRate());
+	//				}
+	//			}
+	//		}
+	//		return result;
+	//	}
 	
 	public static void styleTheCell(final ViewerCell cell, final Field f) {
 		IEmissionReportIDData model = (IEmissionReportIDData) cell.getItem().getData();

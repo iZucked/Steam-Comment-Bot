@@ -16,8 +16,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -61,9 +59,6 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.attainedCII = 0L;
 					int journeyDistance = 0;
 
-					if (e instanceof FuelUsage fu) {
-						processUsage(model, fu.getFuels());
-					}
 					if (e instanceof final SlotVisit sv) {
 						final SlotAllocation sa = sv.getSlotAllocation();
 						model.otherID = sa.getName();
@@ -126,11 +121,6 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		}
 
 		return models;
-	}
-
-	private static void processUsage(final VesselEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		model.bogEmission += EmissionsUtils.getBOGEmission(model, fuelQuantity);
-		model.pilotLightEmission += EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
 	}
 
 	public static File jsonOutput(final List<VesselEmissionAccountingReportModelV1> models) {

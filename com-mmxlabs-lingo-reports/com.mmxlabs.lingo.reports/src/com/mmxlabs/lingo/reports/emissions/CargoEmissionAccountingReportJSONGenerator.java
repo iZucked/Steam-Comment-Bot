@@ -18,8 +18,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -90,10 +88,6 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				eventStart = e.getStart().toLocalDateTime();
 			}
 			model.eventEnd = e.getEnd().toLocalDateTime();
-			
-			if (e instanceof FuelUsage fu) {
-				processUsage(model, fu.getFuels());
-			}
 		}
 		slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
 			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
@@ -101,11 +95,6 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.eventStart = eventStart;
 		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission + 25 * model.methaneSlip;
 		return model;
-	}
-	
-	private static void processUsage(final CargoEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		model.bogEmission += EmissionsUtils.getBOGEmission(model, fuelQuantity);
-		model.pilotLightEmission += EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
 	}
 
 	public static File jsonOutput(final List<CargoEmissionAccountingReportModelV1> models) {

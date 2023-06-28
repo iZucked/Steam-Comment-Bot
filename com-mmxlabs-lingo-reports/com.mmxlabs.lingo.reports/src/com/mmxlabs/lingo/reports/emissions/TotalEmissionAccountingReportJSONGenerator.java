@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -116,12 +115,12 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		// event
 		if (vessel != null) {
 			model.vesselName = vessel.getName();
-			for (final Event e : cargoAllocation.getEvents()) {
-				if (e instanceof FuelUsage fu) {
-					model.shippingEmission += EmissionsUtils.getBOGEmission(model, fu.getFuels());
-					model.shippingEmission += EmissionsUtils.getPilotLightEmission(model, fu.getFuels());
-				}
-			}
+			//			for (final Event e : cargoAllocation.getEvents()) {
+			//				if (e instanceof FuelUsage fu) {
+			//					model.shippingEmission += EmissionsUtils.getBOGEmission(model, fu.getFuels());
+			//					model.shippingEmission += EmissionsUtils.getPilotLightEmission(model, fu.getFuels());
+			//				}
+			//			}
 			slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
 				model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 			});
