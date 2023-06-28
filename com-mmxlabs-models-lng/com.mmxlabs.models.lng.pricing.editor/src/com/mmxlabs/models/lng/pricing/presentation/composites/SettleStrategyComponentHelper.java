@@ -18,5 +18,7 @@ public class SettleStrategyComponentHelper extends DefaultComponentHelper {
 
 	public SettleStrategyComponentHelper() {
 		super(PricingPackage.Literals.SETTLE_STRATEGY);
+		
+		ignoreFeatures.add(PricingPackage.eINSTANCE.getSettleStrategy_PricingCalendar());
 	}
 }

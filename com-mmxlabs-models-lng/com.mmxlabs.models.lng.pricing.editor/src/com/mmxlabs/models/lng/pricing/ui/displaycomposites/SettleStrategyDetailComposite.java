@@ -38,7 +38,6 @@ public class SettleStrategyDetailComposite extends DefaultDetailComposite implem
 		// Sub classes can sort the editor list prior to rendering
 		List<ETypedElement> orderedFeatures = Lists.newArrayList( //
 				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
-				
 				PricingPackage.Literals.SETTLE_STRATEGY__DAY_OF_THE_MONTH,//
 				PricingPackage.Literals.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH//
 		);

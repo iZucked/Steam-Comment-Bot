@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
@@ -15,8 +16,14 @@ import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
  * @generated NOT
  */
 public class PaperDealComponentHelper extends DefaultComponentHelper {
+	
+	private static final CargoPackage cp = CargoPackage.eINSTANCE;
 
 	public PaperDealComponentHelper() {
-		super(CargoPackage.Literals.PAPER_DEAL);
+		super(cp.getPaperDeal());
+		
+		ignoreFeatures.add(cp.getPaperDeal_PricingCalendar());
+		
+		addEditor(cp.getPaperDeal_Comment(), topClass -> new MultiTextInlineEditor(cp.getPaperDeal_Comment()));
 	}
 }

@@ -388,15 +388,18 @@
       <genOperations ecoreOperation="cargo.ecore#//CharterInMarketOverride/getLocalOrDelegateMaxDuration"/>
     </genClasses>
     <genClasses image="false" ecoreClass="cargo.ecore#//PaperDeal">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/price"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingType"/>
-      <genFeatures createChild="false" propertyDescription="Curve" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/index"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/instrument"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/quantity"/>
-      <genFeatures createChild="false" propertyDescription="Month" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingMonth"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/entity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/year"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/comment"/>
+      <genFeatures createChild="false" propertyDescription="Price per unit" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/price"/>
+      <genFeatures createChild="false" propertyDescription="Pricing strategy" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingType"/>
+      <genFeatures createChild="false" propertyDescription="MTM Curve" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/index"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Instrument"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/instrument"/>
+      <genFeatures createChild="false" propertyDescription="Quantity in native values"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/quantity"/>
+      <genFeatures createChild="false" propertyDescription="Contract month" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingMonth"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Entity"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/entity"/>
+      <genFeatures createChild="false" propertyDescription="Year" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/year"/>
+      <genFeatures createChild="false" propertyDescription="Note" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/comment"/>
       <genFeatures createChild="false" propertyDescription="Start of the pricing period"
           ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingPeriodStart"/>
       <genFeatures createChild="false" propertyDescription="End of the pricing period"
