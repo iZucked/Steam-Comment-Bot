@@ -91,8 +91,10 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
 		addNameManipulator("Name");
 		addColumn("Side", createPaperDealTypeFormatter(), null);
-		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), getCommandHandler()));
-		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), getCommandHandler()));
+		addTypicalColumn("Pricing start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart(), getCommandHandler()));
+		addTypicalColumn("Pricing end", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodEnd(), getCommandHandler()));
+		addTypicalColumn("Hedging start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodStart(), getCommandHandler()));
+		addTypicalColumn("Hedging end", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodEnd(), getCommandHandler()));
 		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler()));
 		addTypicalColumn("Index", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler()));
 		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler()));

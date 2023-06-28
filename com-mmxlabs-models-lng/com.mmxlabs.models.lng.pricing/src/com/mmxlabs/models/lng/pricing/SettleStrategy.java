@@ -20,9 +20,9 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getDayOfTheMonth <em>Day Of The Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#isLastDayOfTheMonth <em>Last Day Of The Month</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod <em>Settle Period</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriodUnit <em>Settle Period Unit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettleStartMonthsPrior <em>Settle Start Months Prior</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingCalendar <em>Pricing Calendar</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingPeriod <em>Pricing Period</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getHedgingPeriod <em>Hedging Period</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy()
@@ -57,85 +57,97 @@ public interface SettleStrategy extends NamedObject {
 	void setDayOfTheMonth(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Settle Period</b></em>' attribute.
+	 * Returns the value of the '<em><b>Pricing Calendar</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Settle Period</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Settle Period</em>' attribute.
-	 * @see #setSettlePeriod(int)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_SettlePeriod()
-	 * @model
+	 * @return the value of the '<em>Pricing Calendar</em>' reference.
+	 * @see #isSetPricingCalendar()
+	 * @see #unsetPricingCalendar()
+	 * @see #setPricingCalendar(PricingCalendar)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_PricingCalendar()
+	 * @model unsettable="true"
 	 * @generated
 	 */
-	int getSettlePeriod();
+	PricingCalendar getPricingCalendar();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod <em>Settle Period</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingCalendar <em>Pricing Calendar</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Settle Period</em>' attribute.
-	 * @see #getSettlePeriod()
+	 * @param value the new value of the '<em>Pricing Calendar</em>' reference.
+	 * @see #isSetPricingCalendar()
+	 * @see #unsetPricingCalendar()
+	 * @see #getPricingCalendar()
 	 * @generated
 	 */
-	void setSettlePeriod(int value);
+	void setPricingCalendar(PricingCalendar value);
 
 	/**
-	 * Returns the value of the '<em><b>Settle Period Unit</b></em>' attribute.
-	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.TimePeriod}.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingCalendar <em>Pricing Calendar</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Settle Period Unit</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Settle Period Unit</em>' attribute.
-	 * @see com.mmxlabs.models.lng.types.TimePeriod
-	 * @see #setSettlePeriodUnit(TimePeriod)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_SettlePeriodUnit()
-	 * @model
+	 * @see #isSetPricingCalendar()
+	 * @see #getPricingCalendar()
+	 * @see #setPricingCalendar(PricingCalendar)
 	 * @generated
 	 */
-	TimePeriod getSettlePeriodUnit();
+	void unsetPricingCalendar();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriodUnit <em>Settle Period Unit</em>}' attribute.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingCalendar <em>Pricing Calendar</em>}' reference is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Settle Period Unit</em>' attribute.
-	 * @see com.mmxlabs.models.lng.types.TimePeriod
-	 * @see #getSettlePeriodUnit()
+	 * @return whether the value of the '<em>Pricing Calendar</em>' reference is set.
+	 * @see #unsetPricingCalendar()
+	 * @see #getPricingCalendar()
+	 * @see #setPricingCalendar(PricingCalendar)
 	 * @generated
 	 */
-	void setSettlePeriodUnit(TimePeriod value);
+	boolean isSetPricingCalendar();
 
 	/**
-	 * Returns the value of the '<em><b>Settle Start Months Prior</b></em>' attribute.
+	 * Returns the value of the '<em><b>Pricing Period</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Settle Start Months Prior</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Settle Start Months Prior</em>' attribute.
-	 * @see #setSettleStartMonthsPrior(int)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_SettleStartMonthsPrior()
-	 * @model
+	 * @return the value of the '<em>Pricing Period</em>' containment reference.
+	 * @see #setPricingPeriod(InstrumentPeriod)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_PricingPeriod()
+	 * @model containment="true"
 	 * @generated
 	 */
-	int getSettleStartMonthsPrior();
+	InstrumentPeriod getPricingPeriod();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettleStartMonthsPrior <em>Settle Start Months Prior</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingPeriod <em>Pricing Period</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Settle Start Months Prior</em>' attribute.
-	 * @see #getSettleStartMonthsPrior()
+	 * @param value the new value of the '<em>Pricing Period</em>' containment reference.
+	 * @see #getPricingPeriod()
 	 * @generated
 	 */
-	void setSettleStartMonthsPrior(int value);
+	void setPricingPeriod(InstrumentPeriod value);
+
+	/**
+	 * Returns the value of the '<em><b>Hedging Period</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hedging Period</em>' containment reference.
+	 * @see #setHedgingPeriod(InstrumentPeriod)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSettleStrategy_HedgingPeriod()
+	 * @model containment="true"
+	 * @generated
+	 */
+	InstrumentPeriod getHedgingPeriod();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getHedgingPeriod <em>Hedging Period</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hedging Period</em>' containment reference.
+	 * @see #getHedgingPeriod()
+	 * @generated
+	 */
+	void setHedgingPeriod(InstrumentPeriod value);
 
 	/**
 	 * Returns the value of the '<em><b>Last Day Of The Month</b></em>' attribute.

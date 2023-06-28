@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.cargo;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import java.time.LocalDate;
@@ -28,11 +29,14 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingMonth <em>Pricing Month</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate <em>Start Date</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate <em>End Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getYear <em>Year</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getComment <em>Comment</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodStart <em>Pricing Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodEnd <em>Pricing Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodStart <em>Hedging Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodEnd <em>Hedging Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar <em>Pricing Calendar</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal()
@@ -91,58 +95,6 @@ public interface PaperDeal extends NamedObject {
 	 * @generated
 	 */
 	void setPricingMonth(YearMonth value);
-
-	/**
-	 * Returns the value of the '<em><b>Start Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Start Date</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Start Date</em>' attribute.
-	 * @see #setStartDate(LocalDate)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_StartDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
-	 * @generated
-	 */
-	LocalDate getStartDate();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate <em>Start Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Start Date</em>' attribute.
-	 * @see #getStartDate()
-	 * @generated
-	 */
-	void setStartDate(LocalDate value);
-
-	/**
-	 * Returns the value of the '<em><b>End Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>End Date</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>End Date</em>' attribute.
-	 * @see #setEndDate(LocalDate)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_EndDate()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
-	 * @generated
-	 */
-	LocalDate getEndDate();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate <em>End Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>End Date</em>' attribute.
-	 * @see #getEndDate()
-	 * @generated
-	 */
-	void setEndDate(LocalDate value);
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.
@@ -221,6 +173,143 @@ public interface PaperDeal extends NamedObject {
 	 * @generated
 	 */
 	void setComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Period Start</em>' attribute.
+	 * @see #setPricingPeriodStart(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_PricingPeriodStart()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getPricingPeriodStart();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodStart <em>Pricing Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Period Start</em>' attribute.
+	 * @see #getPricingPeriodStart()
+	 * @generated
+	 */
+	void setPricingPeriodStart(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Period End</em>' attribute.
+	 * @see #setPricingPeriodEnd(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_PricingPeriodEnd()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getPricingPeriodEnd();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodEnd <em>Pricing Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Period End</em>' attribute.
+	 * @see #getPricingPeriodEnd()
+	 * @generated
+	 */
+	void setPricingPeriodEnd(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hedging Period Start</em>' attribute.
+	 * @see #setHedgingPeriodStart(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_HedgingPeriodStart()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getHedgingPeriodStart();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodStart <em>Hedging Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hedging Period Start</em>' attribute.
+	 * @see #getHedgingPeriodStart()
+	 * @generated
+	 */
+	void setHedgingPeriodStart(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hedging Period End</em>' attribute.
+	 * @see #setHedgingPeriodEnd(LocalDate)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_HedgingPeriodEnd()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getHedgingPeriodEnd();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodEnd <em>Hedging Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hedging Period End</em>' attribute.
+	 * @see #getHedgingPeriodEnd()
+	 * @generated
+	 */
+	void setHedgingPeriodEnd(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Calendar</em>' reference.
+	 * @see #isSetPricingCalendar()
+	 * @see #unsetPricingCalendar()
+	 * @see #setPricingCalendar(PricingCalendar)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_PricingCalendar()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	PricingCalendar getPricingCalendar();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar <em>Pricing Calendar</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Calendar</em>' reference.
+	 * @see #isSetPricingCalendar()
+	 * @see #unsetPricingCalendar()
+	 * @see #getPricingCalendar()
+	 * @generated
+	 */
+	void setPricingCalendar(PricingCalendar value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar <em>Pricing Calendar</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPricingCalendar()
+	 * @see #getPricingCalendar()
+	 * @see #setPricingCalendar(PricingCalendar)
+	 * @generated
+	 */
+	void unsetPricingCalendar();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar <em>Pricing Calendar</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pricing Calendar</em>' reference is set.
+	 * @see #unsetPricingCalendar()
+	 * @see #getPricingCalendar()
+	 * @see #setPricingCalendar(PricingCalendar)
+	 * @generated
+	 */
+	boolean isSetPricingCalendar();
 
 	/**
 	 * Returns the value of the '<em><b>Instrument</b></em>' reference.

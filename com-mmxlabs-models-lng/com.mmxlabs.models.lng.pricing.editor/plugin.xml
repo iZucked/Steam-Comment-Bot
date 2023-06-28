@@ -304,6 +304,12 @@
           inheritable="true"
           modelClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
     </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.InstrumentPeriodComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.presentation.composites.InstrumentPeriodComponentHelper"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.InstrumentPeriod">
+    </componentHelper>
    
  </extension>
  <extension

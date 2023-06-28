@@ -40,12 +40,7 @@ public class SettleStrategyDetailComposite extends DefaultDetailComposite implem
 				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
 				
 				PricingPackage.Literals.SETTLE_STRATEGY__DAY_OF_THE_MONTH,//
-				PricingPackage.Literals.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH,//
-				
-				PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_PERIOD,//
-				PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT,//
-				
-				PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR	
+				PricingPackage.Literals.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH//
 		);
 
 		// Reverse the list so that we can move the editors to the head of the list
@@ -78,17 +73,6 @@ public class SettleStrategyDetailComposite extends DefaultDetailComposite implem
 				.withFeature(PricingPackage.Literals.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH, "Last day") //
 				.makeRow() //
 				//
-				.withRow() //
-				.withFeature(PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_PERIOD, "Period") //
-				.makeRow() //
-				//
-				.withRow() //
-				.withFeature(PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT, "Unit") //
-				.makeRow() //
-				//
-				.withRow() //
-				.withFeature(PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR, "Starts") //
-				.makeRow() //
 				.make() //
 		;
 

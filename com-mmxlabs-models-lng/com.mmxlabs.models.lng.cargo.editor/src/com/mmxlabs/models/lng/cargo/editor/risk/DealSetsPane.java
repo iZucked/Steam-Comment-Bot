@@ -159,7 +159,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 					}
 					LocalDate earliestPaper = LocalDate.MAX;
 					if (!ds.getPaperDeals().isEmpty()) {
-						earliestPaper = ds.getPaperDeals().stream().map(PaperDeal::getStartDate).min(LocalDate::compareTo).get();
+						earliestPaper = ds.getPaperDeals().stream().map(PaperDeal::getPricingPeriodStart).min(LocalDate::compareTo).get();
 					}
 					final int res = earliestSlot.compareTo(earliestPaper);
 					final LocalDateTextFormatter formatter = new LocalDateTextFormatter();

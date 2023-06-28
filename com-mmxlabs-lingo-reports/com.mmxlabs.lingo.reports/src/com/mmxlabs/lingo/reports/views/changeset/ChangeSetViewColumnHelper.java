@@ -89,7 +89,6 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
@@ -1371,11 +1370,11 @@ public class ChangeSetViewColumnHelper {
 						}
 						if (pda != null && pda.getPaperDeal() != null) {
 							final PaperDeal paperDeal = pda.getPaperDeal();
-							if (paperDeal.getStartDate() != null && paperDeal.getEndDate() != null) {
+							if (paperDeal.getPricingPeriodStart() != null && paperDeal.getPricingPeriodEnd() != null) {
 								final StringBuilder sb1 = new StringBuilder();
 								sb1.append("Paper deal dates:\n");
-								sb1.append(String.format("First day: %s \n", paperDeal.getStartDate().format(formatter)));
-								sb1.append(String.format("Final day: %s", paperDeal.getEndDate().format(formatter)));
+								sb1.append(String.format("First day: %s \n", paperDeal.getPricingPeriodStart().format(formatter)));
+								sb1.append(String.format("Final day: %s", paperDeal.getPricingPeriodEnd().format(formatter)));
 								return sb1.toString();
 							}
 						}
@@ -1550,8 +1549,8 @@ public class ChangeSetViewColumnHelper {
 							} else if (tableRow.getLhsAfter() != null && tableRow.getLhsAfter().getPaperDealAllocation() != null) {
 								pda = tableRow.getLhsAfter().getPaperDealAllocation();
 							}
-							if (pda != null && pda.getPaperDeal() != null && pda.getPaperDeal().getStartDate() != null) {
-								cell.setText(pda.getPaperDeal().getStartDate().format(formatter));
+							if (pda != null && pda.getPaperDeal() != null && pda.getPaperDeal().getPricingPeriodStart() != null) {
+								cell.setText(pda.getPaperDeal().getPricingPeriodStart().format(formatter));
 							}
 						}
 

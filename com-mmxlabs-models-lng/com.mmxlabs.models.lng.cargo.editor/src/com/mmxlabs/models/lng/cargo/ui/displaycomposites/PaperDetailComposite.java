@@ -37,10 +37,10 @@ public class PaperDetailComposite extends DefaultDetailComposite {
 		PaperDetailGroup cdg = PaperDetailGroup.GENERAL;
 
 		// Here the exceptions are listed for the elements which should go into the bottom
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getPaperDeal_StartDate()
-				|| editor.getFeature() == CargoPackage.eINSTANCE.getPaperDeal_EndDate()) {
-			cdg = PaperDetailGroup.CALENDAR;
-		}
+//		if (editor.getFeature() == CargoPackage.eINSTANCE.getPaperDeal_StartDate()
+//				|| editor.getFeature() == CargoPackage.eINSTANCE.getPaperDeal_EndDate()) {
+//			cdg = PaperDetailGroup.CALENDAR;
+//		}
 
 		return super.addInlineEditor(editor);
 	}

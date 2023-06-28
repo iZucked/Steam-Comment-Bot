@@ -106,10 +106,11 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 					paperDeal.setName(basicPaperDealData.getName());
 					paperDeal.setQuantity(OptimiserUnitConvertor.convertToExternalVolume(basicPaperDealData.getPaperVolume()));
 					paperDeal.setPrice(OptimiserUnitConvertor.convertToExternalPrice(basicPaperDealData.getPaperUnitPrice()));
-					final YearMonth start = YearMonth.from(basicPaperDealData.getStart());
-					paperDeal.setPricingMonth(start);
-					paperDeal.setStartDate(basicPaperDealData.getStart());
-					paperDeal.setEndDate(basicPaperDealData.getEnd());
+					paperDeal.setPricingMonth(YearMonth.from(basicPaperDealData.getContractMonth()));
+					paperDeal.setPricingPeriodStart(basicPaperDealData.getPricingStart());
+					paperDeal.setPricingPeriodEnd(basicPaperDealData.getPricingEnd());
+					paperDeal.setHedgingPeriodStart(basicPaperDealData.getHedgingStart());
+					paperDeal.setHedgingPeriodEnd(basicPaperDealData.getHedgingEnd());
 
 					final PaperPricingType paperPricingType;
 					SettleStrategy settleStrategy = null;
@@ -169,25 +170,31 @@ public class PaperDealsExporterExtension implements IExporterExtension {
 			entry.setPrice(OptimiserUnitConvertor.convertToExternalPrice(optiEntry.getPrice()));
 			entry.setQuantity(OptimiserUnitConvertor.convertToExternalVolume(optiEntry.getQuantity()));
 			entry.setValue(OptimiserUnitConvertor.convertToExternalVolume(optiEntry.getValue()));
+			
+			entry.setHedgingPeriodStart(paperDeal.getHedgingPeriodStart());
+			entry.setHedgingPeriodEnd(paperDeal.getHedgingPeriodEnd());
 
 			if (exposuresEnabled) {
-				for (final BasicExposureRecord record : optiEntry.getExposures()) {
+				for (final BasicExposureRecord basicExposureRecord : optiEntry.getExposures()) {
 					final ExposureDetail newDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
-					final DealType dealType = record.getIndexName().equalsIgnoreCase("PHYSICAL") ? DealType.PHYSICAL : DealType.FINANCIAL;
+					final DealType dealType = basicExposureRecord.getIndexName().equalsIgnoreCase("PHYSICAL") ? DealType.PHYSICAL : DealType.FINANCIAL;
 					newDetail.setDealType(dealType);
-					final int volumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(record.getVolumeMMBTU());
+					final int volumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(basicExposureRecord.getVolumeMMBTU());
 					newDetail.setVolumeInMMBTU(volumeMMBTU);
-					final int volumeNative = OptimiserUnitConvertor.convertToExternalVolume(record.getVolumeNative());
+					final int volumeNative = OptimiserUnitConvertor.convertToExternalVolume(basicExposureRecord.getVolumeNative());
 					newDetail.setVolumeInNativeUnits(volumeNative);
-					final double volumeValueNative = (double) OptimiserUnitConvertor.convertToExternalFixedCost(record.getVolumeValueNative());
+					final double volumeValueNative = (double) OptimiserUnitConvertor.convertToExternalFixedCost(basicExposureRecord.getVolumeValueNative());
 					newDetail.setNativeValue(volumeValueNative);
-					newDetail.setVolumeUnit(record.getVolumeUnit());
-					newDetail.setIndexName(record.getIndexName());
+					newDetail.setVolumeUnit(basicExposureRecord.getVolumeUnit());
+					newDetail.setIndexName(basicExposureRecord.getIndexName());
 					//newDetail.setDate(YearMonth.from(record.getTime()));
 					newDetail.setDate(contractMonth);
 					newDetail.setLocalDate(optiEntry.getDate());
-					newDetail.setUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(record.getUnitPrice()));
-					newDetail.setCurrencyUnit(record.getCurrencyUnit());
+					newDetail.setUnitPrice(OptimiserUnitConvertor.convertToExternalPrice(basicExposureRecord.getUnitPrice()));
+					newDetail.setCurrencyUnit(basicExposureRecord.getCurrencyUnit());
+					
+					newDetail.setHedgingPeriodStart(basicExposureRecord.getHedingStart());
+					newDetail.setHedgingPeriodEnd(basicExposureRecord.getHedgingEnd());
 
 					entry.getExposures().add(newDetail);
 				}

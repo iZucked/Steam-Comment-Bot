@@ -13,18 +13,17 @@ public class BasicInstrumentData {
 	private String name;
 	private int dayOfTheMonth;
 	private boolean lastDayOfTheMonth;
-	private int settlePeriod;
-	private String settlePeriodUnit;
-	private int settleStartMonthsPrior;
 	
-	public BasicInstrumentData(String name, int dayOfTheMonth, boolean lastDayOfTheMonth, int settlePeriod, String settlePeriodUnit, int settleStartMonthsPrior) {
-		super();
+	private BasicInstrumentPeriod pricingPeriod;
+	private BasicInstrumentPeriod hedgingPeriod;
+	
+	public BasicInstrumentData(String name, int dayOfTheMonth, boolean lastDayOfTheMonth, //
+			final BasicInstrumentPeriod pricingPeriod, final BasicInstrumentPeriod hedgingPeriod) {
 		this.name = name;
 		this.dayOfTheMonth = dayOfTheMonth;
 		this.lastDayOfTheMonth = lastDayOfTheMonth;
-		this.settlePeriod = settlePeriod;
-		this.settlePeriodUnit = settlePeriodUnit;
-		this.settleStartMonthsPrior = settleStartMonthsPrior;
+		this.pricingPeriod = pricingPeriod;
+		this.hedgingPeriod = hedgingPeriod;
 	}
 
 	public String getName() {
@@ -38,16 +37,12 @@ public class BasicInstrumentData {
 	public boolean isLastDayOfTheMonth() {
 		return lastDayOfTheMonth;
 	}
-
-	public int getSettlePeriod() {
-		return settlePeriod;
+	
+	public BasicInstrumentPeriod getPricingPeriod() {
+		return pricingPeriod;
 	}
-
-	public String getSettlePeriodUnit() {
-		return settlePeriodUnit;
-	}
-
-	public int getSettleStartMonthsPrior() {
-		return settleStartMonthsPrior;
+	
+	public BasicInstrumentPeriod getHedgingPeriod() {
+		return hedgingPeriod;
 	}
 }

@@ -83,8 +83,12 @@ public class ExposureDetailReportView extends ViewPart {
 		createDealColumn("Deal");
 
 		createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
-		createColumn("Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
-		createColumn("Date", SchedulePackage.Literals.EXPOSURE_DETAIL__LOCAL_DATE);
+		createColumn("Contract Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
+		createColumn("Pricing Date", SchedulePackage.Literals.EXPOSURE_DETAIL__LOCAL_DATE);
+		
+		createColumn("Hedge Period Start", SchedulePackage.Literals.EXPOSURE_DETAIL__HEDGING_PERIOD_START);
+		createColumn("Hedge Period End", SchedulePackage.Literals.EXPOSURE_DETAIL__HEDGING_PERIOD_END);
+		
 		final GridColumnGroup volumeGroup = createGroup("Volume");
 
 		createColumn("Native", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_IN_NATIVE_UNITS);

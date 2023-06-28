@@ -75,6 +75,8 @@ public class ExposureDetailItemProvider
 			addCurrencyUnitPropertyDescriptor(object);
 			addDealTypePropertyDescriptor(object);
 			addLocalDatePropertyDescriptor(object);
+			addHedgingPeriodStartPropertyDescriptor(object);
+			addHedgingPeriodEndPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -300,6 +302,50 @@ public class ExposureDetailItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Hedging Period Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHedgingPeriodStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ExposureDetail_hedgingPeriodStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ExposureDetail_hedgingPeriodStart_feature", "_UI_ExposureDetail_type"),
+				 SchedulePackage.Literals.EXPOSURE_DETAIL__HEDGING_PERIOD_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Hedging Period End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHedgingPeriodEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ExposureDetail_hedgingPeriodEnd_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ExposureDetail_hedgingPeriodEnd_feature", "_UI_ExposureDetail_type"),
+				 SchedulePackage.Literals.EXPOSURE_DETAIL__HEDGING_PERIOD_END,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ExposureDetail.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -347,6 +393,8 @@ public class ExposureDetailItemProvider
 			case SchedulePackage.EXPOSURE_DETAIL__CURRENCY_UNIT:
 			case SchedulePackage.EXPOSURE_DETAIL__DEAL_TYPE:
 			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_START:
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_END:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

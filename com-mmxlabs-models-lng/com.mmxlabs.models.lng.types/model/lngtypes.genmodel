@@ -47,6 +47,12 @@
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//FOBSaleDealType/SOURCE_WITH_DEST"/>
       <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//FOBSaleDealType/DIVERT_TO_DEST"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="lngtypes.ecore#//PricingPeriod">
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PricingPeriod/DAYS"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PricingPeriod/WEEKS"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PricingPeriod/MONTHS"/>
+      <genEnumLiterals ecoreEnumLiteral="lngtypes.ecore#//PricingPeriod/QUARTERS"/>
+    </genEnums>
     <genDataTypes ecoreDataType="lngtypes.ecore#//Iterable">
       <genTypeParameters ecoreTypeParameter="lngtypes.ecore#//Iterable/T"/>
     </genDataTypes>

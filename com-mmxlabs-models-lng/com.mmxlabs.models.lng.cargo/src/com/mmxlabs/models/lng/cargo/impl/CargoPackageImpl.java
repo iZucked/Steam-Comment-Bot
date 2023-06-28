@@ -3020,28 +3020,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPaperDeal_StartDate() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getPaperDeal_EndDate() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getPaperDeal_Entity() {
-		return (EReference)paperDealEClass.getEStructuralFeatures().get(8);
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -3051,7 +3031,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getPaperDeal_Year() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -3061,7 +3041,57 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getPaperDeal_Comment() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_PricingPeriodStart() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_PricingPeriodEnd() {
 		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_HedgingPeriodStart() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_HedgingPeriodEnd() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPaperDeal_PricingCalendar() {
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -3673,11 +3703,14 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(paperDealEClass, PAPER_DEAL__INSTRUMENT);
 		createEAttribute(paperDealEClass, PAPER_DEAL__QUANTITY);
 		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_MONTH);
-		createEAttribute(paperDealEClass, PAPER_DEAL__START_DATE);
-		createEAttribute(paperDealEClass, PAPER_DEAL__END_DATE);
 		createEReference(paperDealEClass, PAPER_DEAL__ENTITY);
 		createEAttribute(paperDealEClass, PAPER_DEAL__YEAR);
 		createEAttribute(paperDealEClass, PAPER_DEAL__COMMENT);
+		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_PERIOD_START);
+		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_PERIOD_END);
+		createEAttribute(paperDealEClass, PAPER_DEAL__HEDGING_PERIOD_START);
+		createEAttribute(paperDealEClass, PAPER_DEAL__HEDGING_PERIOD_END);
+		createEReference(paperDealEClass, PAPER_DEAL__PRICING_CALENDAR);
 
 		buyPaperDealEClass = createEClass(BUY_PAPER_DEAL);
 
@@ -4205,11 +4238,14 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getPaperDeal_Instrument(), thePricingPackage.getSettleStrategy(), null, "instrument", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Quantity(), ecorePackage.getEDouble(), "quantity", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_PricingMonth(), theDateTimePackage.getYearMonth(), "pricingMonth", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPaperDeal_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPaperDeal_EndDate(), theDateTimePackage.getLocalDate(), "endDate", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPaperDeal_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Year(), ecorePackage.getEInt(), "year", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_PricingPeriodStart(), theDateTimePackage.getLocalDate(), "pricingPeriodStart", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_PricingPeriodEnd(), theDateTimePackage.getLocalDate(), "pricingPeriodEnd", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_HedgingPeriodStart(), theDateTimePackage.getLocalDate(), "hedgingPeriodStart", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_HedgingPeriodEnd(), theDateTimePackage.getLocalDate(), "hedgingPeriodEnd", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPaperDeal_PricingCalendar(), thePricingPackage.getPricingCalendar(), null, "pricingCalendar", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyPaperDealEClass, BuyPaperDeal.class, "BuyPaperDeal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

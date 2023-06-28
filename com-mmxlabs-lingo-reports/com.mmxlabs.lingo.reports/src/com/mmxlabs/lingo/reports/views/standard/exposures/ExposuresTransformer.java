@@ -92,7 +92,10 @@ public class ExposuresTransformer {
 								break;
 							}
 						}
-						if (detail.getDate().equals(date)) {
+						final YearMonth hedgeStart = YearMonth.from(detail.getHedgingPeriodStart());
+						final YearMonth hedgeEnd = YearMonth.from(detail.getHedgingPeriodEnd());
+						final boolean dateWithInHedgePeriod = !(date.isBefore(hedgeStart) || date.isAfter(hedgeEnd));
+						if (dateWithInHedgePeriod) {
 							String indexName = detail.getIndexName().equalsIgnoreCase("Physical") ? detail.getIndexName().toLowerCase() : curve2Index.get(detail.getIndexName().toLowerCase());
 							if (indexName == null) {
 								continue;
@@ -162,7 +165,15 @@ public class ExposuresTransformer {
 
 				for (final PaperDealAllocationEntry paperDealAllocationEntry : paperDealAllocation.getEntries()) {
 					for (final ExposureDetail detail : paperDealAllocationEntry.getExposures()) {
-						if (detail.getDate().equals(date)) {
+						
+						/*
+						 *  If the `date` YearMonth is between the month of hedging start date and the month of the hedging end date inclusive
+						 */
+						final YearMonth hedgeStart = YearMonth.from(detail.getHedgingPeriodStart());
+						final YearMonth hedgeEnd = YearMonth.from(detail.getHedgingPeriodEnd());
+						final boolean dateWithInHedgePeriod = !(date.isBefore(hedgeStart) || date.isAfter(hedgeEnd));
+						
+						if (dateWithInHedgePeriod) {
 							String indexName = curve2Index.get(detail.getIndexName());
 							if (indexName == null) {
 								continue;

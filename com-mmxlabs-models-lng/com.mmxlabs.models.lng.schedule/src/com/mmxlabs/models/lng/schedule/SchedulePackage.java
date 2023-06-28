@@ -5346,13 +5346,31 @@ public interface SchedulePackage extends EPackage {
 	int EXPOSURE_DETAIL__LOCAL_DATE = 9;
 
 	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__HEDGING_PERIOD_START = 10;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__HEDGING_PERIOD_END = 11;
+
+	/**
 	 * The number of structural features of the '<em>Exposure Detail</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPOSURE_DETAIL_FEATURE_COUNT = 10;
+	int EXPOSURE_DETAIL_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Exposure Detail</em>' class.
@@ -6815,13 +6833,31 @@ public interface SchedulePackage extends EPackage {
 	int PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES = 5;
 
 	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START = 6;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END = 7;
+
+	/**
 	 * The number of structural features of the '<em>Paper Deal Allocation Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION_ENTRY_FEATURE_COUNT = 6;
+	int PAPER_DEAL_ALLOCATION_ENTRY_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Paper Deal Allocation Entry</em>' class.
@@ -10759,6 +10795,28 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getExposureDetail_LocalDate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodStart <em>Hedging Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodStart()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_HedgingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodEnd <em>Hedging Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period End</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodEnd()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_HedgingPeriodEnd();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails <em>Charter Contract Fee Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11208,6 +11266,28 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPaperDealAllocationEntry_Exposures();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodStart <em>Hedging Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodStart()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_HedgingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodEnd <em>Hedging Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period End</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodEnd()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_HedgingPeriodEnd();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.LumpSumDetails <em>Lump Sum Details</em>}'.
@@ -13396,6 +13476,22 @@ public interface SchedulePackage extends EPackage {
 		EAttribute EXPOSURE_DETAIL__LOCAL_DATE = eINSTANCE.getExposureDetail_LocalDate();
 
 		/**
+		 * The meta object literal for the '<em><b>Hedging Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__HEDGING_PERIOD_START = eINSTANCE.getExposureDetail_HedgingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__HEDGING_PERIOD_END = eINSTANCE.getExposureDetail_HedgingPeriodEnd();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterContractFeeDetailsImpl <em>Charter Contract Fee Details</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13752,6 +13848,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES = eINSTANCE.getPaperDealAllocationEntry_Exposures();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START = eINSTANCE.getPaperDealAllocationEntry_HedgingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END = eINSTANCE.getPaperDealAllocationEntry_HedgingPeriodEnd();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.LumpSumDetailsImpl <em>Lump Sum Details</em>}' class.

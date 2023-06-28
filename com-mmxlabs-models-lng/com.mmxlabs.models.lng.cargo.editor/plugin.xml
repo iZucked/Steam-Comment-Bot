@@ -612,6 +612,10 @@
           id="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SettleStrategyUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.SettleStrategyUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider">
     </ModelCommandProvider>
