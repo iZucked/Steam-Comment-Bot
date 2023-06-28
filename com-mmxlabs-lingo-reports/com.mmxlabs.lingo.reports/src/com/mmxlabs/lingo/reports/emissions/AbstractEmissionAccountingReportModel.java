@@ -124,9 +124,6 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 
 	@JsonIgnore
 	@LingoIgnore
-	public double baseFuelEmissionRate;
-	@JsonIgnore
-	@LingoIgnore
 	public double bogEmissionRate;
 	@JsonIgnore
 	@LingoIgnore
@@ -134,12 +131,6 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@JsonIgnore
 	@LingoIgnore
 	public double methaneSlipRate;
-	
-	@JsonIgnore
-	@Override
-	public double getBaseFuelEmissionRate() {
-		return baseFuelEmissionRate;
-	}
 
 	@JsonIgnore
 	@Override

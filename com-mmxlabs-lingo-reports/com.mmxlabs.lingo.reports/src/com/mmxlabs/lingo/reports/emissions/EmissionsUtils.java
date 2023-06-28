@@ -29,32 +29,20 @@ public class EmissionsUtils {
 	
 	public static final int METHANE_CO2_EQUIVALENT = 25;
 	
-	public static double getBOGEmissionRate(final @NonNull Vessel vessel) {
-		return vessel.getVesselOrDelegateBogEmissionRate();
-	}
-	
-	public static double getPilotLightEmissionRate(final @NonNull Vessel vessel) {
-		return vessel.getVesselOrDelegatePilotLightEmissionRate();
-	}
-	
-	public static double getMethaneSlipEmissionRate(final @NonNull Vessel vessel) {
-		return vessel.getVesselOrDelegateMethaneSlipEmissionRate();
-	}
-	
-	public static long getBaseFuelEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
-		long result = 0L;
-		for (final FuelQuantity fq : fuelQuantity) {
-			if (fq.getFuel()==Fuel.BASE_FUEL) {
-				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
-						.findFirst();
-				if (optMtFuelAmount.isPresent()) {
-					result += (long) (optMtFuelAmount.get().getQuantity() * model.getBaseFuelEmissionRate());
-				}
-			}
-		}
-		return result;
-	}
+	//	public static long getBaseFuelEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
+	//		long result = 0L;
+	//		for (final FuelQuantity fq : fuelQuantity) {
+	//			if (fq.getFuel()==Fuel.BASE_FUEL) {
+	//				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
+	//						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
+	//						.findFirst();
+	//				if (optMtFuelAmount.isPresent()) {
+	//					result += (long) (optMtFuelAmount.get().getQuantity() * model.getBaseFuelEmissionRate());
+	//				}
+	//			}
+	//		}
+	//		return result;
+	//	}
 	
 	public static long getBOGEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
 		long result = 0L;

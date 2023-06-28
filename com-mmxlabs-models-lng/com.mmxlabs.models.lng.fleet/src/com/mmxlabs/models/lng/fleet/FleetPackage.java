@@ -586,31 +586,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__MARKER = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 35;
 
 	/**
-	 * The feature id for the '<em><b>Bog Emission Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__BOG_EMISSION_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 36;
-
-	/**
-	 * The feature id for the '<em><b>Pilot Light Emission Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__PILOT_LIGHT_EMISSION_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 37;
-
-	/**
 	 * The feature id for the '<em><b>Methane Slip Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__METHANE_SLIP_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 38;
+	int VESSEL__METHANE_SLIP_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 36;
 
 	/**
 	 * The feature id for the '<em><b>Dead Weight</b></em>' attribute.
@@ -619,7 +601,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__DEAD_WEIGHT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 39;
+	int VESSEL__DEAD_WEIGHT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 37;
 
 	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
@@ -628,7 +610,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 40;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -1233,28 +1215,6 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVessel_Marker();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Bog Emission Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EAttribute getVessel_BogEmissionRate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pilot Light Emission Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EAttribute getVessel_PilotLightEmissionRate();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}'.
@@ -1964,22 +1924,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL__MARKER = eINSTANCE.getVessel_Marker();
-
-		/**
-		 * The meta object literal for the '<em><b>Bog Emission Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL__BOG_EMISSION_RATE = eINSTANCE.getVessel_BogEmissionRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Pilot Light Emission Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL__PILOT_LIGHT_EMISSION_RATE = eINSTANCE.getVessel_PilotLightEmissionRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Methane Slip Rate</b></em>' attribute feature.

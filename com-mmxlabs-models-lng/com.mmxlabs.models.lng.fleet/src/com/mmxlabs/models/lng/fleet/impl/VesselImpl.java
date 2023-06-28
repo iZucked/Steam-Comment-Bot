@@ -75,8 +75,6 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isReferenceVessel <em>Reference Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMmxReference <em>Mmx Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMarker <em>Marker</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMethaneSlipRate <em>Methane Slip Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getDeadWeight <em>Dead Weight</em>}</li>
  * </ul>
@@ -855,64 +853,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected boolean marker = MARKER_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getBogEmissionRate() <em>Bog Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBogEmissionRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double BOG_EMISSION_RATE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getBogEmissionRate() <em>Bog Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBogEmissionRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected double bogEmissionRate = BOG_EMISSION_RATE_EDEFAULT;
-
-	/**
-	 * This is true if the Bog Emission Rate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean bogEmissionRateESet;
-
-	/**
-	 * The default value of the '{@link #getPilotLightEmissionRate() <em>Pilot Light Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotLightEmissionRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double PILOT_LIGHT_EMISSION_RATE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getPilotLightEmissionRate() <em>Pilot Light Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotLightEmissionRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected double pilotLightEmissionRate = PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
-
-	/**
-	 * This is true if the Pilot Light Emission Rate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean pilotLightEmissionRateESet;
 
 	/**
 	 * The default value of the '{@link #getMethaneSlipRate() <em>Methane Slip Rate</em>}' attribute.
@@ -2022,32 +1962,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		}
 		return getScnt();
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public double getVesselOrDelegateBogEmissionRate() {
-		if (getReference() != null && !isSetBogEmissionRate()) {
-			return getReference().getBogEmissionRate();
-		}
-		return getBogEmissionRate();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public double getVesselOrDelegatePilotLightEmissionRate() {
-		if (getReference() != null && !isSetPilotLightEmissionRate()) {
-			return getReference().getPilotLightEmissionRate();
-		}
-		return getPilotLightEmissionRate();
-	}
 	
 	/**
 	 * <!-- begin-user-doc -->
@@ -2060,19 +1974,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			return getReference().getDeadWeight();
 		}
 		return getDeadWeight();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public double getVesselOrDelegateMethaneSlipEmissionRate() {
-		if (getReference() != null && !isSetMethaneSlipRate()) {
-			return getReference().getMethaneSlipRate();
-		}
-		return getMethaneSlipRate();
 	}
 
 	/**
@@ -2274,106 +2175,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		marker = newMarker;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__MARKER, oldMarker, marker));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getBogEmissionRate() {
-		return bogEmissionRate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setBogEmissionRate(double newBogEmissionRate) {
-		double oldBogEmissionRate = bogEmissionRate;
-		bogEmissionRate = newBogEmissionRate;
-		boolean oldBogEmissionRateESet = bogEmissionRateESet;
-		bogEmissionRateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, bogEmissionRate, !oldBogEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetBogEmissionRate() {
-		double oldBogEmissionRate = bogEmissionRate;
-		boolean oldBogEmissionRateESet = bogEmissionRateESet;
-		bogEmissionRate = BOG_EMISSION_RATE_EDEFAULT;
-		bogEmissionRateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, BOG_EMISSION_RATE_EDEFAULT, oldBogEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetBogEmissionRate() {
-		return bogEmissionRateESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getPilotLightEmissionRate() {
-		return pilotLightEmissionRate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPilotLightEmissionRate(double newPilotLightEmissionRate) {
-		double oldPilotLightEmissionRate = pilotLightEmissionRate;
-		pilotLightEmissionRate = newPilotLightEmissionRate;
-		boolean oldPilotLightEmissionRateESet = pilotLightEmissionRateESet;
-		pilotLightEmissionRateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, pilotLightEmissionRate, !oldPilotLightEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPilotLightEmissionRate() {
-		double oldPilotLightEmissionRate = pilotLightEmissionRate;
-		boolean oldPilotLightEmissionRateESet = pilotLightEmissionRateESet;
-		pilotLightEmissionRate = PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
-		pilotLightEmissionRateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, PILOT_LIGHT_EMISSION_RATE_EDEFAULT, oldPilotLightEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPilotLightEmissionRate() {
-		return pilotLightEmissionRateESet;
 	}
 
 	/**
@@ -3013,10 +2814,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isMmxReference();
 			case FleetPackage.VESSEL__MARKER:
 				return isMarker();
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				return getBogEmissionRate();
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				return getPilotLightEmissionRate();
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				return getMethaneSlipRate();
 			case FleetPackage.VESSEL__DEAD_WEIGHT:
@@ -3144,12 +2941,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MARKER:
 				setMarker((Boolean)newValue);
 				return;
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				setBogEmissionRate((Double)newValue);
-				return;
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				setPilotLightEmissionRate((Double)newValue);
-				return;
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				setMethaneSlipRate((Double)newValue);
 				return;
@@ -3275,12 +3066,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MARKER:
 				setMarker(MARKER_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				unsetBogEmissionRate();
-				return;
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				unsetPilotLightEmissionRate();
-				return;
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				unsetMethaneSlipRate();
 				return;
@@ -3370,10 +3155,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return mmxReference != MMX_REFERENCE_EDEFAULT;
 			case FleetPackage.VESSEL__MARKER:
 				return marker != MARKER_EDEFAULT;
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				return isSetBogEmissionRate();
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				return isSetPilotLightEmissionRate();
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 				return isSetMethaneSlipRate();
 			case FleetPackage.VESSEL__DEAD_WEIGHT:
@@ -3445,10 +3226,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(mmxReference);
 		result.append(", marker: ");
 		result.append(marker);
-		result.append(", bogEmissionRate: ");
-		if (bogEmissionRateESet) result.append(bogEmissionRate); else result.append("<unset>");
-		result.append(", pilotLightEmissionRate: ");
-		if (pilotLightEmissionRateESet) result.append(pilotLightEmissionRate); else result.append("<unset>");
 		result.append(", methaneSlipRate: ");
 		if (methaneSlipRateESet) result.append(methaneSlipRate); else result.append("<unset>");
 		result.append(", deadWeight: ");

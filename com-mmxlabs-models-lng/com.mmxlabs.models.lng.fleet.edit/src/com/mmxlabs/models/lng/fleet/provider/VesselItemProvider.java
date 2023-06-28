@@ -84,8 +84,6 @@ public class VesselItemProvider
 			addReferenceVesselPropertyDescriptor(object);
 			addMmxReferencePropertyDescriptor(object);
 			addMarkerPropertyDescriptor(object);
-			addBogEmissionRatePropertyDescriptor(object);
-			addPilotLightEmissionRatePropertyDescriptor(object);
 			addMethaneSlipRatePropertyDescriptor(object);
 			addDeadWeightPropertyDescriptor(object);
 		}
@@ -687,50 +685,6 @@ public class VesselItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Bog Emission Rate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBogEmissionRatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_bogEmissionRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_bogEmissionRate_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__BOG_EMISSION_RATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Pilot Light Emission Rate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPilotLightEmissionRatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_pilotLightEmissionRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_pilotLightEmissionRate_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__PILOT_LIGHT_EMISSION_RATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Methane Slip Rate feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1024,8 +978,6 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__REFERENCE_VESSEL:
 			case FleetPackage.VESSEL__MMX_REFERENCE:
 			case FleetPackage.VESSEL__MARKER:
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
 			case FleetPackage.VESSEL__DEAD_WEIGHT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

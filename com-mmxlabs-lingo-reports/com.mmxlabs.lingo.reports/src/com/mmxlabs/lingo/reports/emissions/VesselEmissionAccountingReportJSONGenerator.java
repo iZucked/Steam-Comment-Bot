@@ -44,18 +44,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 			final Vessel vessel = ScheduleModelUtils.getVessel(seq);
 			if (vessel != null) {
 				final String vesselName = vessel.getName();
-				final double bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
-				final double pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
-				final double methaneSlipEmissionRate = EmissionsUtils.getMethaneSlipEmissionRate(vessel);
 				for (final Event e : seq.getEvents()) {
 					final VesselEmissionAccountingReportModelV1 model = new VesselEmissionAccountingReportModelV1();
 					model.scenarioName = scenarioName;
 					model.isPinnedFlag = isPinned;
 					model.schedule = schedule;
 					model.vesselName = vesselName;
-					model.bogEmissionRate = bogEmissionRate;
-					model.pilotLightEmissionRate = pilotLightEmissionRate;
-					model.methaneSlipRate = methaneSlipEmissionRate;
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
 
@@ -135,7 +129,6 @@ public class VesselEmissionAccountingReportJSONGenerator {
 	}
 
 	private static void processUsage(final VesselEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		model.baseFuelEmission += EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
 		model.bogEmission += EmissionsUtils.getBOGEmission(model, fuelQuantity);
 		model.pilotLightEmission += EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
 	}

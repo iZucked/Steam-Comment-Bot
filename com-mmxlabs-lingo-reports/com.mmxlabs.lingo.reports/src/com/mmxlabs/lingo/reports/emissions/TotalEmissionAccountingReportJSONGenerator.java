@@ -116,12 +116,8 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		// event
 		if (vessel != null) {
 			model.vesselName = vessel.getName();
-			model.bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
-			model.pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
-			model.methaneSlipRate = EmissionsUtils.getMethaneSlipEmissionRate(vessel);
 			for (final Event e : cargoAllocation.getEvents()) {
 				if (e instanceof FuelUsage fu) {
-					model.shippingEmission += EmissionsUtils.getBaseFuelEmission(model, fu.getFuels());
 					model.shippingEmission += EmissionsUtils.getBOGEmission(model, fu.getFuels());
 					model.shippingEmission += EmissionsUtils.getPilotLightEmission(model, fu.getFuels());
 				}

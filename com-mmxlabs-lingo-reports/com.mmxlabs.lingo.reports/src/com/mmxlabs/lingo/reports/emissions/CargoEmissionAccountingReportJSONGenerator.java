@@ -78,9 +78,6 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		
 		model.eventID = cargoAllocation.getName();
 		model.vesselName = vessel.getName();
-		model.bogEmissionRate = EmissionsUtils.getBOGEmissionRate(vessel);
-		model.pilotLightEmissionRate = EmissionsUtils.getPilotLightEmissionRate(vessel);
-		model.methaneSlipRate = EmissionsUtils.getMethaneSlipEmissionRate(vessel);
 		model.baseFuelEmission = 0L;
 		model.bogEmission = 0L;
 		model.pilotLightEmission = 0L;
@@ -107,7 +104,6 @@ public class CargoEmissionAccountingReportJSONGenerator{
 	}
 	
 	private static void processUsage(final CargoEmissionAccountingReportModelV1 model, List<FuelQuantity> fuelQuantity) {
-		model.baseFuelEmission += EmissionsUtils.getBaseFuelEmission(model, fuelQuantity);
 		model.bogEmission += EmissionsUtils.getBOGEmission(model, fuelQuantity);
 		model.pilotLightEmission += EmissionsUtils.getPilotLightEmission(model, fuelQuantity);
 	}
