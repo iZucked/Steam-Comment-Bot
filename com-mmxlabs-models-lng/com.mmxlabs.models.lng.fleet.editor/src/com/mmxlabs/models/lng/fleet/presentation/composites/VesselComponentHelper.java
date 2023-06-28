@@ -33,7 +33,6 @@ public class VesselComponentHelper extends DefaultComponentHelper {
 
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EMISSIONS)) {
 			ignoreFeatures.add(CommercialPackage.Literals.PURCHASE_CONTRACT__PIPELINE_EMISSION_RATE);
-			ignoreFeatures.add(FleetPackage.Literals.VESSEL__BASE_FUEL_EMISSION_RATE);
 			ignoreFeatures.add(FleetPackage.Literals.VESSEL__BOG_EMISSION_RATE);
 			ignoreFeatures.add(FleetPackage.Literals.VESSEL__PILOT_LIGHT_EMISSION_RATE);
 		}

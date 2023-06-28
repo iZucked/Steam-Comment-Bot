@@ -55,7 +55,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isReferenceVessel <em>Reference Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isMmxReference <em>Mmx Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isMarker <em>Marker</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMethaneSlipRate <em>Methane Slip Rate</em>}</li>
@@ -1128,56 +1127,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	void setMarker(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Base Fuel Emission Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Fuel Emission Rate</em>' attribute.
-	 * @see #isSetBaseFuelEmissionRate()
-	 * @see #unsetBaseFuelEmissionRate()
-	 * @see #setBaseFuelEmissionRate(double)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_BaseFuelEmissionRate()
-	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/MT' formatString='####0.###'"
-	 * @generated
-	 */
-	double getBaseFuelEmissionRate();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Base Fuel Emission Rate</em>' attribute.
-	 * @see #isSetBaseFuelEmissionRate()
-	 * @see #unsetBaseFuelEmissionRate()
-	 * @see #getBaseFuelEmissionRate()
-	 * @generated
-	 */
-	void setBaseFuelEmissionRate(double value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetBaseFuelEmissionRate()
-	 * @see #getBaseFuelEmissionRate()
-	 * @see #setBaseFuelEmissionRate(double)
-	 * @generated
-	 */
-	void unsetBaseFuelEmissionRate();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Base Fuel Emission Rate</em>' attribute is set.
-	 * @see #unsetBaseFuelEmissionRate()
-	 * @see #getBaseFuelEmissionRate()
-	 * @see #setBaseFuelEmissionRate(double)
-	 * @generated
-	 */
-	boolean isSetBaseFuelEmissionRate();
-
-	/**
 	 * Returns the value of the '<em><b>Bog Emission Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1862,14 +1811,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	int getVesselOrDelegateSCNT();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	double getVesselOrDelegateBaseFuelEmissionRate();
 
 	/**
 	 * <!-- begin-user-doc -->

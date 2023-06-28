@@ -84,7 +84,6 @@ public class VesselItemProvider
 			addReferenceVesselPropertyDescriptor(object);
 			addMmxReferencePropertyDescriptor(object);
 			addMarkerPropertyDescriptor(object);
-			addBaseFuelEmissionRatePropertyDescriptor(object);
 			addBogEmissionRatePropertyDescriptor(object);
 			addPilotLightEmissionRatePropertyDescriptor(object);
 			addMethaneSlipRatePropertyDescriptor(object);
@@ -688,28 +687,6 @@ public class VesselItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Base Fuel Emission Rate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addBaseFuelEmissionRatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Vessel_baseFuelEmissionRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_baseFuelEmissionRate_feature", "_UI_Vessel_type"),
-				 FleetPackage.Literals.VESSEL__BASE_FUEL_EMISSION_RATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Bog Emission Rate feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1047,7 +1024,6 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__REFERENCE_VESSEL:
 			case FleetPackage.VESSEL__MMX_REFERENCE:
 			case FleetPackage.VESSEL__MARKER:
-			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
 			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
 			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
 			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
