@@ -29,6 +29,7 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 	public static final String ID = "com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView";
 	private DeltaHelper deltaHelper;
 	
+	@SuppressWarnings("null")
 	public CargoEmissionAccountingReportView() {
 		super(CargoEmissionAccountingReportModelV1.class);
 	}
@@ -81,15 +82,13 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 							model.eventEnd = r1.eventEnd;
 
 							model.baseFuelEmission = r2.baseFuelEmission - r1.baseFuelEmission;
-							model.bogEmission = r2.bogEmission - r1.bogEmission;
 							model.pilotLightEmission = r2.pilotLightEmission - r1.pilotLightEmission;
 							model.totalEmission = r2.totalEmission - r1.totalEmission;
 							model.methaneSlip = r2.methaneSlip - r1.methaneSlip;
 
-							if (model.baseFuelEmission != 0 || model.bogEmission != 0 || model.pilotLightEmission != 0 || model.totalEmission != 0) {
+							if (model.baseFuelEmission != 0  || model.pilotLightEmission != 0 || model.totalEmission != 0) {
 								if (!result.contains(r1) || !result.contains(r2)) {
 									baseFuelEmission += model.baseFuelEmission;
-									bogEmission += model.bogEmission;
 									pilotLightEmission += model.pilotLightEmission;
 									totalEmission += model.totalEmission;
 									r1.setGroup(group);
@@ -112,7 +111,6 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 			final CargoEmissionAccountingReportModelV1 model = new CargoEmissionAccountingReportModelV1();
 			model.scenarioName = "Total Δ";
 			model.baseFuelEmission = baseFuelEmission;
-			model.bogEmission = bogEmission;
 			model.pilotLightEmission = pilotLightEmission;
 			model.totalEmission = totalEmission;
 			result.add(0, model);

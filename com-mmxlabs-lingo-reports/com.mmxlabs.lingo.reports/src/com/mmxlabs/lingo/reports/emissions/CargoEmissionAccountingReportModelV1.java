@@ -9,11 +9,6 @@ import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 
-/**
- * Cargo emissions report data
- * YES it looks exactly the same as Vessel emissions report model
- * But it will most probably be changed
- */
 @SchemaVersion(1)
 public class CargoEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel {
 	
@@ -21,9 +16,13 @@ public class CargoEmissionAccountingReportModelV1 extends AbstractEmissionAccoun
 	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
 	public Long baseFuelEmission;
 	
-	@ColumnName("BOG")
+	@ColumnName("NBO")
 	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
-	public Long bogEmission;
+	public Long nbo;
+	
+	@ColumnName("HFO")
+	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	public Long hfo;
 	
 	@ColumnName("Pilot Light")
 	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)

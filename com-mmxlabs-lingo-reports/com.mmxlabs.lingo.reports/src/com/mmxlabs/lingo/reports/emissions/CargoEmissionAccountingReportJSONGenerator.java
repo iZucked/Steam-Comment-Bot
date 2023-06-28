@@ -77,7 +77,6 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.eventID = cargoAllocation.getName();
 		model.vesselName = vessel.getName();
 		model.baseFuelEmission = 0L;
-		model.bogEmission = 0L;
 		model.pilotLightEmission = 0L;
 		model.totalEmission = 0L;
 		model.methaneSlip = 0L;
@@ -93,7 +92,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 		});
 		model.eventStart = eventStart;
-		model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission + 25 * model.methaneSlip;
+		model.totalEmission += model.baseFuelEmission + model.pilotLightEmission + 25 * model.methaneSlip;
 		return model;
 	}
 

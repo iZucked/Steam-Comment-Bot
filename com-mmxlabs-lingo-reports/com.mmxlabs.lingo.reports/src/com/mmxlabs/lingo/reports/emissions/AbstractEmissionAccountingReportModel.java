@@ -124,12 +124,6 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 
 	@JsonIgnore
 	@LingoIgnore
-	public double bogEmissionRate;
-	@JsonIgnore
-	@LingoIgnore
-	public double pilotLightEmissionRate;
-	@JsonIgnore
-	@LingoIgnore
 	public double methaneSlipRate;
 
 	@JsonIgnore
