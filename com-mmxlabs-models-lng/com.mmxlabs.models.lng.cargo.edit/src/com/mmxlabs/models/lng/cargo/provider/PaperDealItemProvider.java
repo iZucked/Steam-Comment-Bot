@@ -57,11 +57,14 @@ public class PaperDealItemProvider
 			addInstrumentPropertyDescriptor(object);
 			addQuantityPropertyDescriptor(object);
 			addPricingMonthPropertyDescriptor(object);
-			addStartDatePropertyDescriptor(object);
-			addEndDatePropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addYearPropertyDescriptor(object);
 			addCommentPropertyDescriptor(object);
+			addPricingPeriodStartPropertyDescriptor(object);
+			addPricingPeriodEndPropertyDescriptor(object);
+			addHedgingPeriodStartPropertyDescriptor(object);
+			addHedgingPeriodEndPropertyDescriptor(object);
+			addPricingCalendarPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -102,50 +105,6 @@ public class PaperDealItemProvider
 				 getString("_UI_PaperDeal_pricingMonth_feature"),
 				 getString("_UI_PaperDeal_pricingMonth_description"),
 				 CargoPackage.Literals.PAPER_DEAL__PRICING_MONTH,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Start Date feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addStartDatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PaperDeal_startDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_startDate_feature", "_UI_PaperDeal_type"),
-				 CargoPackage.Literals.PAPER_DEAL__START_DATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the End Date feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEndDatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PaperDeal_endDate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_endDate_feature", "_UI_PaperDeal_type"),
-				 CargoPackage.Literals.PAPER_DEAL__END_DATE,
 				 true,
 				 false,
 				 false,
@@ -216,6 +175,116 @@ public class PaperDealItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pricing Period Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingPeriodStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_pricingPeriodStart_feature"),
+				 getString("_UI_PaperDeal_pricingPeriodStart_description"),
+				 CargoPackage.Literals.PAPER_DEAL__PRICING_PERIOD_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pricing Period End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingPeriodEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_pricingPeriodEnd_feature"),
+				 getString("_UI_PaperDeal_pricingPeriodEnd_description"),
+				 CargoPackage.Literals.PAPER_DEAL__PRICING_PERIOD_END,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Hedging Period Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHedgingPeriodStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_hedgingPeriodStart_feature"),
+				 getString("_UI_PaperDeal_hedgingPeriodStart_description"),
+				 CargoPackage.Literals.PAPER_DEAL__HEDGING_PERIOD_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Hedging Period End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHedgingPeriodEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_hedgingPeriodEnd_feature"),
+				 getString("_UI_PaperDeal_hedgingPeriodEnd_description"),
+				 CargoPackage.Literals.PAPER_DEAL__HEDGING_PERIOD_END,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Pricing Calendar feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingCalendarPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_pricingCalendar_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_pricingCalendar_feature", "_UI_PaperDeal_type"),
+				 CargoPackage.Literals.PAPER_DEAL__PRICING_CALENDAR,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -340,10 +409,12 @@ public class PaperDealItemProvider
 			case CargoPackage.PAPER_DEAL__INDEX:
 			case CargoPackage.PAPER_DEAL__QUANTITY:
 			case CargoPackage.PAPER_DEAL__PRICING_MONTH:
-			case CargoPackage.PAPER_DEAL__START_DATE:
-			case CargoPackage.PAPER_DEAL__END_DATE:
 			case CargoPackage.PAPER_DEAL__YEAR:
 			case CargoPackage.PAPER_DEAL__COMMENT:
+			case CargoPackage.PAPER_DEAL__PRICING_PERIOD_START:
+			case CargoPackage.PAPER_DEAL__PRICING_PERIOD_END:
+			case CargoPackage.PAPER_DEAL__HEDGING_PERIOD_START:
+			case CargoPackage.PAPER_DEAL__HEDGING_PERIOD_END:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

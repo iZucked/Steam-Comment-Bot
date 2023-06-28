@@ -20,6 +20,7 @@ import com.mmxlabs.common.calendars.BasicHolidayCalendar;
 import com.mmxlabs.common.calendars.BasicPricingCalendar;
 import com.mmxlabs.common.calendars.BasicPricingCalendarEntry;
 import com.mmxlabs.common.paperdeals.BasicInstrumentData;
+import com.mmxlabs.common.paperdeals.BasicInstrumentPeriod;
 import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.common.paperdeals.PaperDealsLookupData;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
@@ -29,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
+import com.mmxlabs.models.lng.pricing.InstrumentPeriod;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -91,25 +93,24 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 						}
 						final long paperVolume = OptimiserUnitConvertor.convertToInternalVolume(entry.getQuantity());
 						final int paperUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(entry.getPrice());
-						LocalDate start = entry.getStartDate();
-						LocalDate end = entry.getEndDate();
+						LocalDate pricingStart = entry.getPricingPeriodStart();
+						LocalDate pricingEnd = entry.getPricingPeriodEnd();
+						LocalDate hedgingStart = entry.getHedgingPeriodStart();
+						LocalDate hedgingEnd = entry.getHedgingPeriodEnd();
+						LocalDate pricingMonth = entry.getPricingMonth().atDay(1);
 						BasicInstrumentData instrument = null;
 						final String type = entry.getPricingType().getLiteral();
-						if (type.equals("INSTRUMENT") && entry.getInstrument() != null) {
+						if ("INSTRUMENT".equalsIgnoreCase(type) && entry.getInstrument() != null) {
 							instrument = dataHandler.instruments.get(entry.getInstrument().getName().toLowerCase());
-						} 
-						if ((type.equals("INSTRUMENT") || type.equals("CALENDAR")) && entry.getPricingMonth() != null) {
-							final YearMonth month = entry.getPricingMonth();
-							start = LocalDate.of(month.getYear(), month.getMonth(), 1);
-							end = LocalDate.of(month.getYear(), month.getMonth(), month.lengthOfMonth());
 						}
 						final String curveName = entry.getIndex().toLowerCase();
 						final String entity = entry.getEntity().getName();
 						
 						final int year = entry.getYear();
 						final String note = entry.getComment();
-						
-						final BasicPaperDealData basicPaperDealData = new BasicPaperDealData(name, isBuy, paperVolume, paperUnitPrice, start, end, type, instrument, curveName, entity, year, note, false);
+
+						final BasicPaperDealData basicPaperDealData = new BasicPaperDealData(name, isBuy, paperVolume, paperUnitPrice, type,//
+								instrument, curveName, entity, year, note, false, pricingMonth, pricingStart, pricingEnd, hedgingStart, hedgingEnd);
 						paperDeals.add(basicPaperDealData);
 						modelEntityMap.addModelObject(entry, basicPaperDealData);
 					}
@@ -195,8 +196,7 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 			}
 			
 			for (final SettleStrategy settleStrategy : pricingModel.getSettleStrategies()) {
-				final BasicInstrumentData basicInstrumentData = new BasicInstrumentData(settleStrategy.getName().toLowerCase(), settleStrategy.getDayOfTheMonth(), settleStrategy.isLastDayOfTheMonth(), 
-						settleStrategy.getSettlePeriod(), settleStrategy.getSettlePeriodUnit().getLiteral(), settleStrategy.getSettleStartMonthsPrior());
+				final BasicInstrumentData basicInstrumentData = transformSettleStrategyToInstrument(settleStrategy);
 				instruments.putIfAbsent(settleStrategy.getName().toLowerCase(), basicInstrumentData);
 			}
 			
@@ -217,6 +217,21 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 			final BasicHolidayCalendar basicHolidayCalendar = new BasicHolidayCalendar(holidayCalendar.getName().toLowerCase());
 			holidayCalendar.getEntries().forEach(e -> basicHolidayCalendar.getHolidays().add(e.getDate()));
 			return basicHolidayCalendar;
+		}
+		
+		private BasicInstrumentData transformSettleStrategyToInstrument(final SettleStrategy settleStrategy) {
+			BasicInstrumentPeriod pricingPeriod = null;
+			BasicInstrumentPeriod hedgingPeriod = null;
+			if (settleStrategy.getPricingPeriod() != null) {
+				final InstrumentPeriod ip = settleStrategy.getPricingPeriod();
+				pricingPeriod = new BasicInstrumentPeriod(ip.getPeriodSize(), ip.getPeriodSizeUnit().getLiteral(), ip.getPeriodOffset());
+			}
+			if (settleStrategy.getHedgingPeriod() != null) {
+				final InstrumentPeriod ip = settleStrategy.getHedgingPeriod();
+				hedgingPeriod = new BasicInstrumentPeriod(ip.getPeriodSize(), ip.getPeriodSizeUnit().getLiteral(), ip.getPeriodOffset());
+			}
+			return new BasicInstrumentData(settleStrategy.getName().toLowerCase(), settleStrategy.getDayOfTheMonth(), settleStrategy.isLastDayOfTheMonth(), 
+					pricingPeriod, hedgingPeriod);
 		}
 	}
 }

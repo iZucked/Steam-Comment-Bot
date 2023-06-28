@@ -7187,31 +7187,13 @@ public interface CargoPackage extends EPackage {
 	int PAPER_DEAL__PRICING_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PAPER_DEAL__START_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>End Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PAPER_DEAL__END_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__ENTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+	int PAPER_DEAL__ENTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Year</b></em>' attribute.
@@ -7220,7 +7202,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__YEAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int PAPER_DEAL__YEAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -7229,7 +7211,52 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__COMMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+	int PAPER_DEAL__COMMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_PERIOD_START = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_PERIOD_END = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__HEDGING_PERIOD_START = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__HEDGING_PERIOD_END = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The number of structural features of the '<em>Paper Deal</em>' class.
@@ -7238,7 +7265,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7359,24 +7386,6 @@ public interface CargoPackage extends EPackage {
 	int BUY_PAPER_DEAL__PRICING_MONTH = PAPER_DEAL__PRICING_MONTH;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_PAPER_DEAL__START_DATE = PAPER_DEAL__START_DATE;
-
-	/**
-	 * The feature id for the '<em><b>End Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_PAPER_DEAL__END_DATE = PAPER_DEAL__END_DATE;
-
-	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7402,6 +7411,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int BUY_PAPER_DEAL__COMMENT = PAPER_DEAL__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_PERIOD_START = PAPER_DEAL__PRICING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_PERIOD_END = PAPER_DEAL__PRICING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__HEDGING_PERIOD_START = PAPER_DEAL__HEDGING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__HEDGING_PERIOD_END = PAPER_DEAL__HEDGING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_CALENDAR = PAPER_DEAL__PRICING_CALENDAR;
 
 	/**
 	 * The number of structural features of the '<em>Buy Paper Deal</em>' class.
@@ -7531,24 +7585,6 @@ public interface CargoPackage extends EPackage {
 	int SELL_PAPER_DEAL__PRICING_MONTH = PAPER_DEAL__PRICING_MONTH;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SELL_PAPER_DEAL__START_DATE = PAPER_DEAL__START_DATE;
-
-	/**
-	 * The feature id for the '<em><b>End Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SELL_PAPER_DEAL__END_DATE = PAPER_DEAL__END_DATE;
-
-	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7574,6 +7610,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SELL_PAPER_DEAL__COMMENT = PAPER_DEAL__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_PERIOD_START = PAPER_DEAL__PRICING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_PERIOD_END = PAPER_DEAL__PRICING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__HEDGING_PERIOD_START = PAPER_DEAL__HEDGING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__HEDGING_PERIOD_END = PAPER_DEAL__HEDGING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_CALENDAR = PAPER_DEAL__PRICING_CALENDAR;
 
 	/**
 	 * The number of structural features of the '<em>Sell Paper Deal</em>' class.
@@ -10783,28 +10864,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getPaperDeal_PricingMonth();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate <em>Start Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Date</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EAttribute getPaperDeal_StartDate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate <em>End Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>End Date</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EAttribute getPaperDeal_EndDate();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10836,6 +10895,61 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPaperDeal_Comment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodStart <em>Pricing Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodStart()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_PricingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodEnd <em>Pricing Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Period End</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodEnd()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_PricingPeriodEnd();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodStart <em>Hedging Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodStart()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_HedgingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodEnd <em>Hedging Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period End</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodEnd()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_HedgingPeriodEnd();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar <em>Pricing Calendar</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Pricing Calendar</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EReference getPaperDeal_PricingCalendar();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}'.
@@ -13276,22 +13390,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute PAPER_DEAL__PRICING_MONTH = eINSTANCE.getPaperDeal_PricingMonth();
 
 		/**
-		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAPER_DEAL__START_DATE = eINSTANCE.getPaperDeal_StartDate();
-
-		/**
-		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAPER_DEAL__END_DATE = eINSTANCE.getPaperDeal_EndDate();
-
-		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13314,6 +13412,46 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PAPER_DEAL__COMMENT = eINSTANCE.getPaperDeal_Comment();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICING_PERIOD_START = eINSTANCE.getPaperDeal_PricingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICING_PERIOD_END = eINSTANCE.getPaperDeal_PricingPeriodEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__HEDGING_PERIOD_START = eINSTANCE.getPaperDeal_HedgingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__HEDGING_PERIOD_END = eINSTANCE.getPaperDeal_HedgingPeriodEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Calendar</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL__PRICING_CALENDAR = eINSTANCE.getPaperDeal_PricingCalendar();
 
 		/**
 		 * The meta object literal for the '<em><b>Instrument</b></em>' reference feature.

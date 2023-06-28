@@ -229,8 +229,11 @@ public class CreatePaperStripDialog extends FormDialog {
 		sample.eSet(MMXCorePackage.Literals.NAMED_OBJECT__NAME, "option");
 
 		// Set a default start date
-		sample.eSet(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), LocalDate.now());
-		sample.eSet(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), LocalDate.now().plusMonths(1));
+		sample.eSet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart(), LocalDate.now().minusMonths(2));
+		sample.eSet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodEnd(), LocalDate.now().minusMonths(1).minusDays(1));
+		
+		sample.eSet(CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodStart(), LocalDate.now().minusMonths(1));
+		sample.eSet(CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodEnd(), LocalDate.now().minusDays(1));
 
 		// Copy valid features across
 		if (selectedObject != null) {
@@ -469,7 +472,7 @@ public class CreatePaperStripDialog extends FormDialog {
 
 						final LocalDate date = getLocalDateFromDateTimeWidget(pattern_periodStart);
 
-						sample.eSet(CargoPackage.Literals.PAPER_DEAL__START_DATE, date);
+						sample.eSet(CargoPackage.Literals.PAPER_DEAL__PRICING_PERIOD_START, date);
 
 						refreshPreview();
 					}
@@ -553,8 +556,10 @@ public class CreatePaperStripDialog extends FormDialog {
 			previewWiewer.setContentProvider(new ArrayContentProvider());
 
 			createColumn(previewWiewer, MMXCorePackage.eINSTANCE.getNamedObject_Name());
-			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_StartDate());
-			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_EndDate());
+			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart());
+			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodEnd());
+			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodStart());
+			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodEnd());
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_Price());
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_Index());
 			createColumn(previewWiewer, CargoPackage.eINSTANCE.getPaperDeal_Quantity());
@@ -567,8 +572,8 @@ public class CreatePaperStripDialog extends FormDialog {
 
 		final LocalDate localDate;
 		// Only valid for paper deals
-		if (sample.eIsSet(CargoPackage.eINSTANCE.getPaperDeal_StartDate())) {
-			localDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getPaperDeal_StartDate());
+		if (sample.eIsSet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart())) {
+			localDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart());
 		} else {
 			localDate = LocalDate.now();
 		}
@@ -610,8 +615,8 @@ public class CreatePaperStripDialog extends FormDialog {
 		// Sync dates
 		{
 			// Only valid for papers
-			if (sample.eIsSet(CargoPackage.eINSTANCE.getPaperDeal_StartDate())) {
-				final LocalDate date = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getPaperDeal_StartDate());
+			if (sample.eIsSet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart())) {
+				final LocalDate date = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart());
 				pattern_periodStart.setDate(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
 			}
 		}
@@ -681,8 +686,8 @@ public class CreatePaperStripDialog extends FormDialog {
 
 		LocalDate sampleDate;
 		// Only valid for papers
-		if (sample.eIsSet(CargoPackage.eINSTANCE.getPaperDeal_StartDate())) {
-			sampleDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getPaperDeal_StartDate());
+		if (sample.eIsSet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart())) {
+			sampleDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart());
 		} else {
 			sampleDate = LocalDate.now();
 		}
@@ -722,9 +727,9 @@ public class CreatePaperStripDialog extends FormDialog {
 				} else if (feature == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 					final String name = (String) sample.eGet(feature);
 					eObj.eSet(feature, name + "-" + (counter++));
-				} else if (feature == CargoPackage.eINSTANCE.getPaperDeal_StartDate()) {
+				} else if (feature == CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart()) {
 					eObj.eSet(feature, date);
-				} else if (feature == CargoPackage.eINSTANCE.getPaperDeal_EndDate()) {
+				} else if (feature == CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodEnd()) {
 					eObj.eSet(feature, date.plusMonths(1));
 				} else {
 					// Copy from template

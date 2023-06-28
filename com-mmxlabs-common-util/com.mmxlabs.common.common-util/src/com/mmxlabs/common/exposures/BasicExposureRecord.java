@@ -14,7 +14,9 @@ public class BasicExposureRecord {
 	private long volumeValueNative;
 	private long unitPrice;
 	private String priceExpression;
-	private LocalDate time;
+	private LocalDate pricingDate;
+	private LocalDate hedgingStart;
+	private LocalDate hedgingEnd;
 	private String indexName;
 	private String volumeUnit;
 	private String currencyUnit;
@@ -63,10 +65,22 @@ public class BasicExposureRecord {
 		this.priceExpression = priceExpression;
 	}
 	public LocalDate getTime() {
-		return time;
+		return pricingDate;
 	}
 	public void setTime(LocalDate time) {
-		this.time = time;
+		this.pricingDate = time;
+	}
+	public LocalDate getHedingStart() {
+		return hedgingStart;
+	}
+	public void setHedgingStart(LocalDate hedgingStart) {
+		this.hedgingStart = hedgingStart;
+	}
+	public LocalDate getHedgingEnd() {
+		return hedgingEnd;
+	}
+	public void setHedgingEnd(LocalDate hedgingEnd) {
+		this.hedgingEnd = hedgingEnd;
 	}
 	public String getIndexName() {
 		return indexName;

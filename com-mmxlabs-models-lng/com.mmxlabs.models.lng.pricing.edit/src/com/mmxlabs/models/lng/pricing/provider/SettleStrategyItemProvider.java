@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.pricing.provider;
 
 
+import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -53,9 +55,7 @@ public class SettleStrategyItemProvider
 
 			addDayOfTheMonthPropertyDescriptor(object);
 			addLastDayOfTheMonthPropertyDescriptor(object);
-			addSettlePeriodPropertyDescriptor(object);
-			addSettlePeriodUnitPropertyDescriptor(object);
-			addSettleStartMonthsPriorPropertyDescriptor(object);
+			addPricingCalendarPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -83,69 +83,56 @@ public class SettleStrategyItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Settle Period feature.
+	 * This adds a property descriptor for the Pricing Calendar feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSettlePeriodPropertyDescriptor(Object object) {
+	protected void addPricingCalendarPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SettleStrategy_settlePeriod_feature"),
-				 getString("_UI_SettleStrategy_settlePeriod_description"),
-				 PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_PERIOD,
+				 getString("_UI_SettleStrategy_pricingCalendar_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SettleStrategy_pricingCalendar_feature", "_UI_SettleStrategy_type"),
+				 PricingPackage.Literals.SETTLE_STRATEGY__PRICING_CALENDAR,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Settle Period Unit feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSettlePeriodUnitPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SettleStrategy_settlePeriodUnit_feature"),
-				 getString("_UI_SettleStrategy_settlePeriodUnit_description"),
-				 PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(PricingPackage.Literals.SETTLE_STRATEGY__PRICING_PERIOD);
+			childrenFeatures.add(PricingPackage.Literals.SETTLE_STRATEGY__HEDGING_PERIOD);
+		}
+		return childrenFeatures;
 	}
 
 	/**
-	 * This adds a property descriptor for the Settle Start Months Prior feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addSettleStartMonthsPriorPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SettleStrategy_settleStartMonthsPrior_feature"),
-				 getString("_UI_SettleStrategy_settleStartMonthsPrior_description"),
-				 PricingPackage.Literals.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -210,10 +197,11 @@ public class SettleStrategyItemProvider
 		switch (notification.getFeatureID(SettleStrategy.class)) {
 			case PricingPackage.SETTLE_STRATEGY__DAY_OF_THE_MONTH:
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD:
+			case PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -229,6 +217,39 @@ public class SettleStrategyItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SETTLE_STRATEGY__PRICING_PERIOD,
+				 PricingFactory.eINSTANCE.createInstrumentPeriod()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SETTLE_STRATEGY__HEDGING_PERIOD,
+				 PricingFactory.eINSTANCE.createInstrumentPeriod()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == PricingPackage.Literals.SETTLE_STRATEGY__PRICING_PERIOD ||
+			childFeature == PricingPackage.Literals.SETTLE_STRATEGY__HEDGING_PERIOD;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

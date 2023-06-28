@@ -2572,6 +2572,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getExposureDetail_HedgingPeriodStart() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getExposureDetail_HedgingPeriodEnd() {
+		return (EAttribute)exposureDetailEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterContractFeeDetails() {
 		return charterContractFeeDetailsEClass;
 	}
@@ -2984,6 +3004,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EReference getPaperDealAllocationEntry_Exposures() {
 		return (EReference)paperDealAllocationEntryEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDealAllocationEntry_HedgingPeriodStart() {
+		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDealAllocationEntry_HedgingPeriodEnd() {
+		return (EAttribute)paperDealAllocationEntryEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -3771,6 +3811,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__CURRENCY_UNIT);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__DEAL_TYPE);
 		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__LOCAL_DATE);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__HEDGING_PERIOD_START);
+		createEAttribute(exposureDetailEClass, EXPOSURE_DETAIL__HEDGING_PERIOD_END);
 
 		matchingContractDetailsEClass = createEClass(MATCHING_CONTRACT_DETAILS);
 		createEAttribute(matchingContractDetailsEClass, MATCHING_CONTRACT_DETAILS__MATCHED_PORT);
@@ -3820,6 +3862,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
 		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__SETTLED);
 		createEReference(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES);
+		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START);
+		createEAttribute(paperDealAllocationEntryEClass, PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END);
 
 		charterContractFeeDetailsEClass = createEClass(CHARTER_CONTRACT_FEE_DETAILS);
 		createEAttribute(charterContractFeeDetailsEClass, CHARTER_CONTRACT_FEE_DETAILS__FEE);
@@ -4252,6 +4296,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getExposureDetail_CurrencyUnit(), ecorePackage.getEString(), "currencyUnit", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_DealType(), theTypesPackage.getDealType(), "dealType", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getExposureDetail_LocalDate(), theDateTimePackage.getLocalDate(), "localDate", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_HedgingPeriodStart(), theDateTimePackage.getLocalDate(), "hedgingPeriodStart", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExposureDetail_HedgingPeriodEnd(), theDateTimePackage.getLocalDate(), "hedgingPeriodEnd", null, 0, 1, ExposureDetail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(matchingContractDetailsEClass, MatchingContractDetails.class, "MatchingContractDetails", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMatchingContractDetails_MatchedPort(), ecorePackage.getEString(), "matchedPort", "", 1, 1, MatchingContractDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4301,6 +4347,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getPaperDealAllocationEntry_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDealAllocationEntry_Settled(), ecorePackage.getEBoolean(), "settled", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPaperDealAllocationEntry_Exposures(), this.getExposureDetail(), null, "exposures", null, 0, -1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDealAllocationEntry_HedgingPeriodStart(), theDateTimePackage.getLocalDate(), "hedgingPeriodStart", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDealAllocationEntry_HedgingPeriodEnd(), theDateTimePackage.getLocalDate(), "hedgingPeriodEnd", null, 0, 1, PaperDealAllocationEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterContractFeeDetailsEClass, CharterContractFeeDetails.class, "CharterContractFeeDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterContractFeeDetails_Fee(), ecorePackage.getEInt(), "fee", "0", 1, 1, CharterContractFeeDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

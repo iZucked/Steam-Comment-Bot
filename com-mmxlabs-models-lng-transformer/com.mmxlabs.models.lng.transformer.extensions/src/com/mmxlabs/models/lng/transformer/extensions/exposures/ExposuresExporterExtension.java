@@ -99,23 +99,26 @@ public class ExposuresExporterExtension implements IExporterExtension {
 		// Clearing all previous exposures
 		slotAllocation.getExposures().clear();
 
-		for (final BasicExposureRecord record : exposureRecords.records) {
+		for (final BasicExposureRecord basicExposureRecord : exposureRecords.records) {
 			final ExposureDetail newDetail = ScheduleFactory.eINSTANCE.createExposureDetail();
-			final DealType dealType = record.getIndexName().equalsIgnoreCase("PHYSICAL") ? DealType.PHYSICAL : DealType.FINANCIAL;
+			final DealType dealType = basicExposureRecord.getIndexName().equalsIgnoreCase("PHYSICAL") ? DealType.PHYSICAL : DealType.FINANCIAL;
 			newDetail.setDealType(dealType);
-			final int volumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(record.getVolumeMMBTU());
+			final int volumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(basicExposureRecord.getVolumeMMBTU());
 			newDetail.setVolumeInMMBTU(volumeMMBTU);
-			final int volumeNative = OptimiserUnitConvertor.convertToExternalVolume(record.getVolumeNative());
+			final int volumeNative = OptimiserUnitConvertor.convertToExternalVolume(basicExposureRecord.getVolumeNative());
 			newDetail.setVolumeInNativeUnits(volumeNative);
-			final double volumeValueNative = (double) OptimiserUnitConvertor.convertToExternalFixedCost(record.getVolumeValueNative());
-			final double unitPrice = OptimiserUnitConvertor.convertToExternalPrice(record.getUnitPrice());
+			final double volumeValueNative = OptimiserUnitConvertor.convertToExternalFixedCost(basicExposureRecord.getVolumeValueNative());
+			final double unitPrice = OptimiserUnitConvertor.convertToExternalPrice(basicExposureRecord.getUnitPrice());
 			newDetail.setNativeValue(volumeValueNative);
-			newDetail.setVolumeUnit(record.getVolumeUnit());
-			newDetail.setIndexName(record.getIndexName());
-			newDetail.setDate(YearMonth.from(record.getTime().minusMonths(record.getAdjustment())));
-			newDetail.setLocalDate(record.getTime().minusMonths(record.getAdjustment()));
+			newDetail.setVolumeUnit(basicExposureRecord.getVolumeUnit());
+			newDetail.setIndexName(basicExposureRecord.getIndexName());
+			newDetail.setDate(YearMonth.from(basicExposureRecord.getTime().minusMonths(basicExposureRecord.getAdjustment())));
+			newDetail.setLocalDate(basicExposureRecord.getTime().minusMonths(basicExposureRecord.getAdjustment()));
 			newDetail.setUnitPrice(unitPrice);
-			newDetail.setCurrencyUnit(record.getCurrencyUnit());
+			newDetail.setCurrencyUnit(basicExposureRecord.getCurrencyUnit());
+			
+			newDetail.setHedgingPeriodStart(basicExposureRecord.getHedingStart());
+			newDetail.setHedgingPeriodEnd(basicExposureRecord.getHedgingEnd());
 
 			slotAllocation.getExposures().add(newDetail);
 		}

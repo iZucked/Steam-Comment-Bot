@@ -469,7 +469,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(createRow(base + 50, "Quantity", true, "", "", createPaperDealVolumeMMBTu(options, RowType.REVENUE)));
 			rows.add(createRow(base + 60, "P&L", true, "$", "", createPNLTotal(options, RowType.REVENUE)));
 			rows.add(createRow(base + 70, "Month", false, "", "",
-					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getStartDate().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
+					createPaperDealAllocationFormatter(pda -> pda.getPaperDeal().getPricingPeriodStart().format(DateTimeFormatsProvider.INSTANCE.createDateStringDisplayFormatter()))));
 		}
 		return rows;
 	}
