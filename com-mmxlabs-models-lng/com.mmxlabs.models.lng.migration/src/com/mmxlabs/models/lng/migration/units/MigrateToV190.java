@@ -79,7 +79,9 @@ public class MigrateToV190 extends AbstractMigrationUnit {
 		EObjectWrapper scheduleModel = scenarioModel.getRef("scheduleModel");
 		if (scheduleModel != null) {
 			EObjectWrapper schedule = scheduleModel.getRef("schedule");
-			processPaperDeals.accept(schedule.getRefAsList("generatedPaperDeals"));
+			if (schedule != null) {
+				processPaperDeals.accept(schedule.getRefAsList("generatedPaperDeals"));
+			}
 		}
 
 		final EPackage lngTypesPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_LNGTypes);
