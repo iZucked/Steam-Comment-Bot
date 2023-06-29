@@ -2,23 +2,25 @@ package com.mmxlabs.lingo.reports.emissions.columns;
 
 import java.lang.reflect.Field;
 import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.List;
+
+import com.mmxlabs.common.Pair;
 
 /**
- * Used as a provider of a priority queue for ordering
- * the fields of emission models to be used in the reflection.
+ * Compares by ColumnOrderLevel
+ * 
  * @author Andrey Popov
- *
  */
-public class ColumnOrderComparator implements Comparator<Field> {
+public class ColumnOrderComparator {
 	
 	private ColumnOrderComparator() {
-		// Hiding public constructor
 	}
-	
-	@SuppressWarnings({ "unused", "null" })
-	@Override
-	public int compare(final Field firstField, final Field secondField) {
+
+	/**
+	 * Comparator for fields. With in groups
+	 */
+	@SuppressWarnings({ "null", "unused" })
+	public static final Comparator<Field> byField = (firstField, secondField) -> {
 		final ColumnOrderLevel firstFieldColumnLevel = firstField.getAnnotation(ColumnOrderLevel.class);
 		final ColumnOrderLevel secondFieldColumnLevel = secondField.getAnnotation(ColumnOrderLevel.class);
 		if (firstFieldColumnLevel == null && secondFieldColumnLevel == null) {
@@ -33,13 +35,14 @@ public class ColumnOrderComparator implements Comparator<Field> {
 		final int firstLevel = firstFieldColumnLevel.value().getLevelValue();
 		final int secondLevel = secondFieldColumnLevel.value().getLevelValue();
 		return Integer.compare(firstLevel, secondLevel);
-	}
-	
+	};
+
 	/**
-	 * Creates new priority queue for ordering the columns by its column level value
-	 * @return the priority queue itself
+	 * Also comparator for column groups
 	 */
-	public static PriorityQueue<Field> priorityQueue() {
-		return new PriorityQueue<>(new ColumnOrderComparator());
-	}
+	public static final Comparator<Pair<ColumnGroup, List<Field>>> byGroup = (firstEntry, secondEntry) -> {
+		final int firstLevel = firstEntry.getFirst().position().getLevelValue();
+		final int secondLevel = secondEntry.getFirst().position().getLevelValue();
+		return Integer.compare(firstLevel, secondLevel);
+	};
 }

@@ -11,15 +11,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -29,12 +25,16 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Widget;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderComparator;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnGroup;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnGroupSorter;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortFunction;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
@@ -47,6 +47,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.models.ui.tabular.IFilterProvider;
+import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 
 public class ColumnGenerator {
 
@@ -80,11 +81,18 @@ public class ColumnGenerator {
 		final Map<Field, GridViewerColumn> mapOfFieldColumns = new HashMap<>();
 		int counter = -1;
 
-		final Collection<Collection<Field>> columnGrouppedlassFields = orderFields(cls);
+		final List<Pair<ColumnGroup, List<Field>>> columnGrouppedlassFields = ColumnGroupSorter.sortGroups(cls.getFields());
 
-		for (final Collection<Field> group : columnGrouppedlassFields) {
+		for (final Pair<ColumnGroup, List<Field>> groupAndFields : columnGrouppedlassFields) {
+			
+			final ColumnGroup group = groupAndFields.getFirst();
+			final List<Field> fieldsUnderGroup = groupAndFields.getSecond();
+			
+			final GridColumnGroup gridColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+			gridColumnGroup.setText(group.headerTitle());
+			gridColumnGroup.setHeaderRenderer(new CenteringColumnGroupHeaderRenderer());
 
-			for (final Field f : group) {
+			for (final Field f : fieldsUnderGroup) {
 				if (f.getAnnotation(LingoIgnore.class) != null) {
 					continue;
 				}
@@ -93,7 +101,8 @@ public class ColumnGenerator {
 				final GridViewerColumn col;
 
 				if (columnName != null) {
-					col = new GridViewerColumn(viewer, SWT.NONE);
+					final GridColumn columnUnderGroup = new GridColumn(gridColumnGroup, SWT.NONE);
+					col = new GridViewerColumn(viewer, columnUnderGroup);
 					if (!columnName.lingo().isEmpty()) {
 						col.getColumn().setText(columnName.lingo());
 					} else {
@@ -247,24 +256,5 @@ public class ColumnGenerator {
 		}
 
 		return new ColumnInfo(mapOfFields, mapOfFieldColumns);
-	}
-
-	/**
-	 * Sorts the columns with respect to their ColumnOrder annotation
-	 * 
-	 * @param cls
-	 *            is the class to get fields
-	 * @return the collection of fields
-	 */
-	private static Collection<Collection<Field>> orderFields(Class<?> cls) {
-		final PriorityQueue<Field> sortQueue = ColumnOrderComparator.priorityQueue();
-		for (final Field field : cls.getFields()) {
-			sortQueue.add(field);
-		}
-		List<Field> fields = new LinkedList<Field>();
-		while (!sortQueue.isEmpty()) {
-			fields.add(sortQueue.poll());
-		}
-		return List.of(fields);
 	}
 }
