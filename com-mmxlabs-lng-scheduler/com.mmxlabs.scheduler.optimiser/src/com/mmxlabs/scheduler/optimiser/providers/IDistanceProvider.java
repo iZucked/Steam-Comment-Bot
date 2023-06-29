@@ -124,4 +124,12 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	ECanalEntry getRouteOptionCanalEntrance(@NonNull IPort port, ERouteOption routeOption);
 
 	IPort getRouteOptionEntryPort(ERouteOption routeOption, ECanalEntry canalEntry);
+
+	/**
+	 * Returns the exit {@link IPort} for the route, given the <b>entry</b> port.
+	 * @param entryPort
+	 * @param routeOption
+	 * @return
+	 */
+	IPort getCorrespondingRouteOptionExitPort(IPort entryPort, ERouteOption routeOption);
 }
