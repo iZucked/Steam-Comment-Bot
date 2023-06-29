@@ -91,6 +91,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsPaperDeals = false;
 		boolean containsInCharterBallastBonus = false;
 		boolean containsInCharterRepositioning = false;
+		boolean containsOutCharterBallastBonus = false;
+		boolean containsOutCharterRepositioning = false;
 		boolean complexCargo = false;
 		int totalLadenLegs = 0;
 		int totalBallastLegs = 0;
@@ -167,6 +169,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent co) {
 						containsCharterOut = true;
 						containsCOExtensionPeriod |= co.getExtensionPeriod() > 0;
+						containsOutCharterRepositioning = hasRepositioningFee(vesselEventVisit.getSequence());
+						containsOutCharterBallastBonus = hasBallastBonus(vesselEventVisit.getSequence());
 					}
 				}
 				if (target instanceof final EventGrouping eg) {
@@ -218,10 +222,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			if (containsCOExtensionPeriod) {
 				rows.add(createRow(EconsRowMarkers.CHATRTER_START + 35, "    Extension", true, "", "", createCharterExtensionDays(options, RowType.REVENUE)));
 			}
-			if (containsInCharterRepositioning) {
+			if (containsOutCharterRepositioning) {
 				rows.add(createRow(EconsRowMarkers.CHATRTER_START + 40, "    Repositioning", true, "$", "", createCharterOutRepositioning(options, RowType.REVENUE)));
 			}
-			if (containsInCharterBallastBonus) {
+			if (containsOutCharterBallastBonus) {
 				rows.add(createRow(EconsRowMarkers.CHATRTER_START + 50, "    Ballast bonus", true, "$", "", createCharterOutBallastBonus(options, RowType.REVENUE)));
 			}
 		}
@@ -265,6 +269,12 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			if (containsCooldown) {
 				rows.add(createRow(EconsRowMarkers.SHIPPING_START + 100, "    Cooldown Cost", true, "$", "", createShippingCooldownCosts(options, RowType.COST)));
 			}
+		}
+		if (containsStartEvent) {
+			rows.add(createRow(EconsRowMarkers.SHIPPING_START + 120, "Heel Cost", true, "$", "", createStartEventHeelCost(options, RowType.COST)));
+		}
+		if (containsEndEvent) {
+			rows.add(createRow(EconsRowMarkers.SHIPPING_START + 110, "Heel Revenue", true, "$", "", createEndEventHeelRevenue(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {
 			for (int i = 0; i < totalNumDischarges; ++i) {
@@ -977,6 +987,32 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				for (final Event evt : eventGrouping.getEvents()) {
 					if (evt instanceof final Cooldown cooldown) {
 						return cooldown.getCost();
+					}
+				}
+			}
+			return 0;
+		}));
+	}
+	
+	private @NonNull ICellRenderer createEndEventHeelRevenue(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
+			if (object instanceof final EventGrouping eventGrouping) {
+				for (final Event evt : eventGrouping.getEvents()) {
+					if (evt instanceof final EndEvent ee) {
+						return ee.getHeelRevenue();
+					}
+				}
+			}
+			return 0;
+		}));
+	}
+	
+	private @NonNull ICellRenderer createStartEventHeelCost(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
+			if (object instanceof final EventGrouping eventGrouping) {
+				for (final Event evt : eventGrouping.getEvents()) {
+					if (evt instanceof final StartEvent se) {
+						return se.getHeelCost();
 					}
 				}
 			}
