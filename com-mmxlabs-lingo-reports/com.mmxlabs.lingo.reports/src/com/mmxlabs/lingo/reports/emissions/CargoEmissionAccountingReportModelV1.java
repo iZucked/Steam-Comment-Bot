@@ -12,6 +12,18 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 @SchemaVersion(1)
 public class CargoEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel {
 	
+	@ColumnName("Upstream")
+	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	public Long upstreamEmission;
+	
+	@ColumnName("Pipeline")
+	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	public Long pipelineEmission;
+	
+	@ColumnName("Liquefaction")
+	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	public Long liquefactionEmission;
+	
 	@ColumnName("Base Fuel")
 	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
 	public Long baseFuelEmission;
