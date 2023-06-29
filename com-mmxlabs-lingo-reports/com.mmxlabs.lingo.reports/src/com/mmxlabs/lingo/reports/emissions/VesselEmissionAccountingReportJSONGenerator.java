@@ -51,8 +51,6 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
 
-					model.baseFuelEmission = 0L;
-					model.bogEmission = 0L;
 					model.pilotLightEmission = 0L;
 					model.totalEmission = 0L;
 					model.methaneSlip = 0L;
@@ -108,12 +106,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					if (model.eventID == null) {
 						continue; 
 					}
-					model.totalEmission += model.baseFuelEmission + model.bogEmission + model.pilotLightEmission + 25 * model.methaneSlip;
+					model.totalEmission += model.pilotLightEmission + 25 * model.methaneSlip;
 					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
 					if (denominatorForCIICalculation == 0) {
 						model.attainedCII = 0L;
 					} else {						
-						model.attainedCII = TONS_TO_GRAMS * model.baseFuelEmission / denominatorForCIICalculation;
+						model.attainedCII = TONS_TO_GRAMS * 1 / denominatorForCIICalculation;
 					}
 					models.add(model);
 				}

@@ -16,15 +16,48 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 @SchemaVersion(1)
 public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel {
 	
-	@ColumnName("Base Fuel")
+	// Base Fuel
+	@ColumnName("Type")
 	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
-	public Long baseFuelEmission;
+	public String baseFuelType;
 	
-	@ColumnName("BOG")
+	// Base Fuel
+	@ColumnName("Consumed")
 	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
-	public Long bogEmission;
+	public Long baseFuelConsumed;
 	
-	@ColumnName("Pilot Light")
+	// Base Fuel
+	@ColumnName("Emissions")
+	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	public Long baseFuelEmissions;
+	
+	// LNG
+	@ColumnName("NBO")
+	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	public Long consumedNBO;
+	
+	// LNG
+	@ColumnName("FBO")
+	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	public Long consumedFBO;
+	
+	// LNG
+	@ColumnName("Emissions")
+	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	public Long emissionsLNG;
+	
+	// Pilot Light
+	@ColumnName("Type")
+	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	public Long pilotLughtFuelType;
+	
+	// Pilot Light
+	@ColumnName("Consumed")
+	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	public Long pilotLightFuelConsumption;
+	
+	// Pilot Light
+	@ColumnName("Emissions")
 	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
 	public Long pilotLightEmission;
 	
