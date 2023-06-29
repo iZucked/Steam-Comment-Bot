@@ -22,13 +22,17 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.util.ApproximateFuelCosts;
 import com.mmxlabs.scheduler.optimiser.voyage.util.ApproximateVoyageCalculatorHelper;
@@ -54,7 +58,16 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 
 	@Inject
 	private IVesselProvider vesselProvider;
+	
+	@Inject
+	private PanamaBookingHelper panamaBookingHelper;
+	
+	@Inject
+	private IExtraIdleTimeProvider idleTimeProvider;
 
+	@Inject
+	private IPanamaBookingsProvider panamaBookingsProvider;
+	
 	private long calculateNonCharterVariableCosts(final ILoadSlot loadA, final IDischargeSlot dischargeA, final IPortSlot vesselEventA, final IPortSlot startSlotB, final IVesselCharter vessel) {
 		assert ((loadA != null && dischargeA != null) || vesselEventA != null);
 		final int startA = loadA != null ? loadA.getTimeWindow().getInclusiveStart() : vesselEventA.getTimeWindow().getInclusiveStart();
@@ -211,10 +224,23 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 						}
 
 						@NonNull
-						final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), endAPortSlot, startB,
+						final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelRouteAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), endAPortSlot, startB,
 								vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
+						int quickestTravelTime = quickestTravelRouteAToB.getSecond();
+						if(quickestTravelRouteAToB.getFirst() == ERouteOption.PANAMA) {
+							int quickestTravelWithoutPanama = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), endAPortSlot, startB, vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.EXCLUDE_PANAMA).getSecond();
+							int timeFromStartToCanal = panamaBookingHelper.getTravelTimeToCanal(vessel.getVessel(), dischargeA.getPort(), false);
+							IPort panamaEntry = distanceProvider.getRouteOptionEntryPort(endAPortSlot.getPort(), ERouteOption.PANAMA);
+							IPort panamaExit = distanceProvider.getCorrespondingRouteOptionExitPort(panamaEntry, ERouteOption.PANAMA);
+							int timeFromCanalExitToEnd = distanceProvider.getQuickestTravelTime(vessel.getVessel(), panamaExit, startB.getPort(), vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.DIRECT_ONLY).getSecond() + idleTimeProvider.getBufferIdleTimeInHours(startB);
+							int earliestArrival = endAPortSlot.getTimeWindow().getInclusiveStart() + timeFromStartToCanal;
+							int latestDeparture = dischargeA.getTimeWindow().getExclusiveEnd() - timeFromCanalExitToEnd;
+							int worstIdle = panamaBookingsProvider.getWorstIdleHours(vessel.getVessel(), earliestArrival, latestDeparture, false);
+							int quickestTravelWithPanama = timeFromStartToCanal + worstIdle + routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel.getVessel()) + timeFromCanalExitToEnd;
+							quickestTravelTime = Math.min(quickestTravelWithoutPanama, quickestTravelWithPanama);
+						}
 
-						times[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond() + endADuration;
+						times[cargoMap.get(cargoA)][cargoMap.get(cargoB)][vesselMap.get(vessel)] = quickestTravelTime + endADuration;
 					}
 				}
 			}
@@ -239,18 +265,29 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 			final IPortSlot vesselEventA = getVesselEvent(cargoA);
 
 			for (final IVesselCharter vessel : vessels) {
-				if (vesselEventA != null) {
-					final int duration = elementDurationProvider.getElementDuration(portSlotProvider.getElement(vesselEventA), vesselProvider.getResource(vessel));
-					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = duration;
-				} else {
+				final IPortSlot startSlot = vesselEventA != null ? vesselEventA : loadA;
+				int quickestTravelTime = 0;
+				if (vesselEventA == null) {
 					assert loadA != null;
 					assert dischargeA != null;
-					final @NonNull Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTimeAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), loadA, dischargeA,
+					final @NonNull Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelRouteAToB = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), loadA, dischargeA,
 							vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL);
-
-					times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = quickestTravelTimeAToB.getSecond()
-							+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(loadA), vesselProvider.getResource(vessel));
+					quickestTravelTime = quickestTravelRouteAToB.getSecond();
+					if(quickestTravelRouteAToB.getFirst() == ERouteOption.PANAMA) {
+						int quickestTravelWithoutPanama = distanceProvider.getQuickestTravelTimeWithContingency(vessel.getVessel(), loadA, dischargeA, vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.EXCLUDE_PANAMA).getSecond();
+						int timeFromStartToCanal = panamaBookingHelper.getTravelTimeToCanal(vessel.getVessel(), loadA.getPort(), false);
+						IPort panamaEntry = distanceProvider.getRouteOptionEntryPort(loadA.getPort(), ERouteOption.PANAMA);
+						IPort panamaExit = distanceProvider.getCorrespondingRouteOptionExitPort(panamaEntry, ERouteOption.PANAMA);
+						int timeFromCanalExitToEnd = distanceProvider.getQuickestTravelTime(vessel.getVessel(), panamaExit, dischargeA.getPort(), vessel.getVessel().getMaxSpeed(), AvailableRouteChoices.DIRECT_ONLY).getSecond() + idleTimeProvider.getBufferIdleTimeInHours(dischargeA);
+						int earliestArrival = loadA.getTimeWindow().getInclusiveStart() + timeFromStartToCanal;
+						int latestDeparture = dischargeA.getTimeWindow().getExclusiveEnd() - timeFromCanalExitToEnd;
+						int worstIdle = panamaBookingsProvider.getWorstIdleHours(vessel.getVessel(), earliestArrival, latestDeparture, false);
+						int quickestTravelWithPanama = timeFromStartToCanal + worstIdle + routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel.getVessel()) + timeFromCanalExitToEnd;
+						quickestTravelTime = Math.min(quickestTravelWithoutPanama, quickestTravelWithPanama);
+					}
 				}
+				times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = quickestTravelTime
+						+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(startSlot), vesselProvider.getResource(vessel));
 			}
 		}
 		return times;
