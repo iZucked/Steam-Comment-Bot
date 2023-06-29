@@ -94,22 +94,24 @@ public class MigrateToV190 extends AbstractMigrationUnit {
 		final EFactory pricingFactory = pricingPackage.getEFactoryInstance();
 
 		final List<EObjectWrapper> settleStrategies = pricingModel.getRefAsList("settleStrategies");
-		settleStrategies.forEach( ss -> {
-			ss.unsetFeature("settlePeriod");
-			ss.unsetFeature("settlePeriodUnit");
-			ss.unsetFeature("settleStartMonthsPrior");
+		if (settleStrategies != null) {
+			settleStrategies.forEach( ss -> {
+				ss.unsetFeature("settlePeriod");
+				ss.unsetFeature("settlePeriodUnit");
+				ss.unsetFeature("settleStartMonthsPrior");
 
-			final EObjectWrapper pricingPeriod = (EObjectWrapper) pricingFactory.create(eClassInstrumentPeriod);
-			pricingPeriod.setAttrib("periodSize", 1);
-			pricingPeriod.setAttrib("periodSizeUnit", monthsLiteral);
-			pricingPeriod.setAttrib("periodOffset", 1);
-			final EObjectWrapper hedgingPeriod = (EObjectWrapper) pricingFactory.create(eClassInstrumentPeriod);
-			hedgingPeriod.setAttrib("periodSize", 1);
-			hedgingPeriod.setAttrib("periodSizeUnit", monthsLiteral);
-			hedgingPeriod.setAttrib("periodOffset", 0);
+				final EObjectWrapper pricingPeriod = (EObjectWrapper) pricingFactory.create(eClassInstrumentPeriod);
+				pricingPeriod.setAttrib("periodSize", 1);
+				pricingPeriod.setAttrib("periodSizeUnit", monthsLiteral);
+				pricingPeriod.setAttrib("periodOffset", 1);
+				final EObjectWrapper hedgingPeriod = (EObjectWrapper) pricingFactory.create(eClassInstrumentPeriod);
+				hedgingPeriod.setAttrib("periodSize", 1);
+				hedgingPeriod.setAttrib("periodSizeUnit", monthsLiteral);
+				hedgingPeriod.setAttrib("periodOffset", 0);
 
-			ss.setRef("pricingPeriod", pricingPeriod);
-			ss.setRef("hedgingPeriod", hedgingPeriod);
-		});
+				ss.setRef("pricingPeriod", pricingPeriod);
+				ss.setRef("hedgingPeriod", hedgingPeriod);
+			});
+		}
 	}
 }
