@@ -212,14 +212,18 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			}
 		}
 		if (containsCharterOut || containsGeneratedCharterOut) {
-			rows.add(createRow(EconsRowMarkers.CHATRTER_START + 0, "Charter Revenue", true, "$", "", createShippingCharterRevenue(options, RowType.REVENUE)));
+			rows.add(createRow(EconsRowMarkers.CHATRTER_START + 0, "Charter Out", true, "$", "", createShippingCharterRevenue(options, RowType.REVENUE)));
 			rows.add(createRow(EconsRowMarkers.CHATRTER_START + 20, "    Hire Rate", true, "$", "/day", createMeanCharterRatePerDay(options, RowType.REVENUE)));
-			rows.add(createRow(EconsRowMarkers.CHATRTER_START + 30, "    Charter Duration", true, "", "", createCharterDays(options, RowType.REVENUE)));
+			rows.add(createRow(EconsRowMarkers.CHATRTER_START + 30, "    Duration", true, "", "", createCharterDays(options, RowType.REVENUE)));
 			if (containsCOExtensionPeriod) {
-				rows.add(createRow(EconsRowMarkers.CHATRTER_START + 35, "    Charter Extension", true, "", "", createCharterExtensionDays(options, RowType.REVENUE)));
+				rows.add(createRow(EconsRowMarkers.CHATRTER_START + 35, "    Extension", true, "", "", createCharterExtensionDays(options, RowType.REVENUE)));
 			}
-			rows.add(createRow(EconsRowMarkers.CHATRTER_START + 40, "Charter Repositioning", true, "$", "", createCharterOutRepositioning(options, RowType.REVENUE)));
-			rows.add(createRow(EconsRowMarkers.CHATRTER_START + 50, "Charter Ballast bonus", true, "$", "", createCharterOutBallastBonus(options, RowType.REVENUE)));
+			if (containsInCharterRepositioning) {
+				rows.add(createRow(EconsRowMarkers.CHATRTER_START + 40, "    Repositioning", true, "$", "", createCharterOutRepositioning(options, RowType.REVENUE)));
+			}
+			if (containsInCharterBallastBonus) {
+				rows.add(createRow(EconsRowMarkers.CHATRTER_START + 50, "    Ballast bonus", true, "$", "", createCharterOutBallastBonus(options, RowType.REVENUE)));
+			}
 		}
 
 		final boolean containsShippingEvent = containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsPurge || containsStartEvent || containsVesselEvent;
@@ -1279,7 +1283,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static GenericCharterContract getCharterContract(final Sequence sequence) {
 		final GenericCharterContract genericCharterContract;
-		if (sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
+		if (sequence.getCharterInMarket() != null && sequence.getSpotIndex() >= 0) {
 			genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
 		} else if (sequence.getVesselCharter() != null) {
 			if (sequence.getVesselCharter().getContainedCharterContract() != null) {

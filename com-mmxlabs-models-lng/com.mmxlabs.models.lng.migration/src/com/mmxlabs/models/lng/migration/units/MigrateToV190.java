@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -48,6 +49,24 @@ public class MigrateToV190 extends AbstractMigrationUnit {
 		paperDeals.forEach( pd -> {
 			pd.unsetFeature("startDate");
 			pd.unsetFeature("endDate");
+			
+			if (pd.getAttrib("pricingMonth") != null) {
+				final YearMonth contractMonth = (YearMonth) pd.getAttrib("pricingMonth");
+				
+				final YearMonth pricingMonth = contractMonth.minusMonths(2);
+				final LocalDate pricingPeriodStart = pricingMonth.atDay(1);
+				final LocalDate pricingPeriodEnd = pricingMonth.atEndOfMonth();
+				
+				final YearMonth hedgingMonth = contractMonth.minusMonths(1);
+				final LocalDate hedgingPeriodStart = hedgingMonth.atDay(1);
+				final LocalDate hedgingPeriodEnd = hedgingMonth.atEndOfMonth();
+				
+				pd.setAttrib("pricingPeriodStart", pricingPeriodStart);
+				pd.setAttrib("pricingPeriodEnd", pricingPeriodEnd);
+				pd.setAttrib("hedgingPeriodStart", hedgingPeriodStart);
+				pd.setAttrib("hedgingPeriodEnd", hedgingPeriodEnd);
+			}
+			
 		});
 		
 		final EPackage lngTypesPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_LNGTypes);
