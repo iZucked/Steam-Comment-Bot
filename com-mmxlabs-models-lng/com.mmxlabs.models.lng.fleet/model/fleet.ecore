@@ -26,10 +26,9 @@
         <details key="formatString" value="##.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="emissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-        unsettable="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="emissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="t/t"/>
+        <details key="unit" value="mt/mt"/>
         <details key="formatString" value="####0.###"/>
       </eAnnotations>
     </eStructuralFeatures>

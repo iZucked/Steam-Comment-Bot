@@ -85,15 +85,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 */
 	protected double emissionRate = EMISSION_RATE_EDEFAULT;
 	/**
-	 * This is true if the Emission Rate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean emissionRateESet;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -177,35 +168,8 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	public void setEmissionRate(double newEmissionRate) {
 		double oldEmissionRate = emissionRate;
 		emissionRate = newEmissionRate;
-		boolean oldEmissionRateESet = emissionRateESet;
-		emissionRateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.BASE_FUEL__EMISSION_RATE, oldEmissionRate, emissionRate, !oldEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetEmissionRate() {
-		double oldEmissionRate = emissionRate;
-		boolean oldEmissionRateESet = emissionRateESet;
-		emissionRate = EMISSION_RATE_EDEFAULT;
-		emissionRateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.BASE_FUEL__EMISSION_RATE, oldEmissionRate, EMISSION_RATE_EDEFAULT, oldEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetEmissionRate() {
-		return emissionRateESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.BASE_FUEL__EMISSION_RATE, oldEmissionRate, emissionRate));
 	}
 
 	/**
@@ -263,7 +227,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 				setEquivalenceFactor(EQUIVALENCE_FACTOR_EDEFAULT);
 				return;
 			case FleetPackage.BASE_FUEL__EMISSION_RATE:
-				unsetEmissionRate();
+				setEmissionRate(EMISSION_RATE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -282,7 +246,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				return equivalenceFactor != EQUIVALENCE_FACTOR_EDEFAULT;
 			case FleetPackage.BASE_FUEL__EMISSION_RATE:
-				return isSetEmissionRate();
+				return emissionRate != EMISSION_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -334,7 +298,7 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		result.append(", equivalenceFactor: ");
 		result.append(equivalenceFactor);
 		result.append(", emissionRate: ");
-		if (emissionRateESet) result.append(emissionRate); else result.append("<unset>");
+		result.append(emissionRate);
 		result.append(')');
 		return result.toString();
 	}
