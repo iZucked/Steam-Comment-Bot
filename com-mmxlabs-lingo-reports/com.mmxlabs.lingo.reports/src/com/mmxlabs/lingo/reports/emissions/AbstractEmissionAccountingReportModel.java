@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnGroup;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
@@ -19,6 +20,8 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.models.lng.schedule.Schedule;
 
 public class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission {
+	
+	private static final String ID_COLUMN_GROUP = "START_COLUMN_GROUP";
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -35,18 +38,22 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@LingoIgnore
 	public String otherID;
 	
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("Scenario")
 	@ColumnOrderLevel(ColumnOrder.ID_LEVEL)
 	public String scenarioName;
 	
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("Vessel")
 	@ColumnOrderLevel(ColumnOrder.ID_LEVEL)
 	public String vesselName;
 	
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("ID")
 	@ColumnOrderLevel(ColumnOrder.ID_LEVEL)
 	public String eventID;
 	
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("Start")
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
@@ -56,6 +63,7 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventStart;
 	
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("End")
 	@ColumnOrderLevel(ColumnOrder.EARLY_END_DATE)
 	@HubFormat("DD/MM/YY")
@@ -71,6 +79,7 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@ColumnOrderLevel(ColumnOrder.END)
 	public Long methaneSlip;
 	
+	@ColumnGroup(id = "TOTAL_EMISSIONS_GROUP", headerTitle = "", position = ColumnOrder.END)
 	@ColumnName("Total CO2e t")
 	@ColumnOrderLevel(ColumnOrder.END)
 	public Long totalEmission;
