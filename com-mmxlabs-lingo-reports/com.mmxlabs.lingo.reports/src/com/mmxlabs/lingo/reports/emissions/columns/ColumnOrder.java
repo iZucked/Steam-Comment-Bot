@@ -8,11 +8,11 @@ package com.mmxlabs.lingo.reports.emissions.columns;
 public enum ColumnOrder {
 	ID_LEVEL(Integer.MIN_VALUE),
 	START(Integer.MIN_VALUE + 100),
-	EARLY_START_DATE(Integer.MIN_VALUE + 200),
-	EARLY_END_DATE(Integer.MIN_VALUE + 200 + 1),
 	EARLY_LEVEL(0),
-	MIDDLE_LEVEL(100),
-	LATER_LEVEL(200),
+	START_DATE(100),
+	END_DATE(101),
+	MIDDLE_LEVEL(200),
+	LATER_LEVEL(300),
 	END(Integer.MAX_VALUE);
 
 	private final int levelValue;

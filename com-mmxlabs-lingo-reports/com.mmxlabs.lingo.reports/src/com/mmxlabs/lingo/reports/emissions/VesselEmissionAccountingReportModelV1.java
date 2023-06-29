@@ -24,6 +24,11 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	private static final String PILOT_LIGHT_GROUP = "PILOT_LIGHT_GROUP";
 	private static final String PILOT_LIGHT_TITLE = "Pilot Light";
 	
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
+	@ColumnName("Type")
+	@ColumnOrderLevel(ColumnOrder.START)
+	public String eventType;
+	
 	// Base Fuel
 	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.EARLY_LEVEL)
 	@ColumnName("Type")
@@ -64,7 +69,7 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.LATER_LEVEL)
 	@ColumnName("Type")
 	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
-	public Long pilotLughtFuelType;
+	public String pilotLightFuelType;
 	
 	// Pilot Light
 	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.LATER_LEVEL)

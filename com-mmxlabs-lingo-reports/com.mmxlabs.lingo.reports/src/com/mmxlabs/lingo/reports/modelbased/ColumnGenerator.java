@@ -100,17 +100,17 @@ public class ColumnGenerator {
 				final ColumnName columnName = f.getAnnotation(ColumnName.class);
 				final GridViewerColumn col;
 
-				if (columnName != null) {
-					final GridColumn columnUnderGroup = new GridColumn(gridColumnGroup, SWT.NONE);
-					col = new GridViewerColumn(viewer, columnUnderGroup);
-					if (!columnName.lingo().isEmpty()) {
-						col.getColumn().setText(columnName.lingo());
-					} else {
-						col.getColumn().setText(columnName.value());
-					}
-				} else {
+				if (columnName == null) {
 					continue;
 				}
+				final GridColumn columnUnderGroup = new GridColumn(gridColumnGroup, SWT.NONE);
+				col = new GridViewerColumn(viewer, columnUnderGroup);
+				if (!columnName.lingo().isEmpty()) {
+					col.getColumn().setText(columnName.lingo());
+				} else {
+					col.getColumn().setText(columnName.value());
+				}
+
 				GridViewerHelper.configureLookAndFeel(col);
 				col.getColumn().setData(COLUMN_DATA_FIELD, f);
 				mapOfFields.put(++counter, f);

@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 
 public class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission {
 	
-	private static final String ID_COLUMN_GROUP = "START_COLUMN_GROUP";
+	protected static final String ID_COLUMN_GROUP = "START_COLUMN_GROUP";
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -50,14 +50,14 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	
 	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("ID")
-	@ColumnOrderLevel(ColumnOrder.ID_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
 	public String eventID;
 	
 	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("Start")
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
-	@ColumnOrderLevel(ColumnOrder.EARLY_START_DATE)
+	@ColumnOrderLevel(ColumnOrder.START_DATE)
 	@ColumnSortOrder(value = 1)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -65,7 +65,7 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	
 	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
 	@ColumnName("End")
-	@ColumnOrderLevel(ColumnOrder.EARLY_END_DATE)
+	@ColumnOrderLevel(ColumnOrder.END_DATE)
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
 	@ColumnSortOrder(value = 1)

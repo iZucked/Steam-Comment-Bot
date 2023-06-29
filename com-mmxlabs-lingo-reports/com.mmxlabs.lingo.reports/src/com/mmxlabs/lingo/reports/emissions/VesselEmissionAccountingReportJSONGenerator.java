@@ -13,13 +13,19 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -38,7 +44,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 			return models;
 		}
 
-		for (final var seq : schedule.getSequences()) {
+		for (final Sequence seq : schedule.getSequences()) {
 			final Vessel vessel = ScheduleModelUtils.getVessel(seq);
 			if (vessel != null) {
 				final String vesselName = vessel.getName();
@@ -47,6 +53,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.scenarioName = scenarioName;
 					model.isPinnedFlag = isPinned;
 					model.schedule = schedule;
+					
 					model.vesselName = vesselName;
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
@@ -56,7 +63,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.methaneSlip = 0L;
 					model.attainedCII = 0L;
 					int journeyDistance = 0;
-
+					
 					if (e instanceof final SlotVisit sv) {
 						final SlotAllocation sa = sv.getSlotAllocation();
 						model.otherID = sa.getName();
@@ -106,6 +113,47 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					if (model.eventID == null) {
 						continue; 
 					}
+					
+					if (e instanceof FuelUsage fuelUsageEvent) {
+						
+						for (final FuelQuantity fuelQuantity : fuelUsageEvent.getFuels()) {
+
+							final Fuel fuel = fuelQuantity.getFuel();
+							final BaseFuel baseFuel = fuelQuantity.getBaseFuel();
+							final FuelAmount fuelAmount = fuelQuantity.getAmounts().get(0);
+							
+							switch (fuel) {
+							case BASE_FUEL:
+								model.baseFuelType = baseFuel.getName();
+								model.baseFuelConsumed = Math.round(fuelAmount.getQuantity());
+								model.baseFuelEmissions = Math.round(baseFuel.getEquivalenceFactor() * model.baseFuelConsumed * baseFuel.getEmissionRate());
+								break;
+							case PILOT_LIGHT:
+								model.pilotLightFuelType = baseFuel.getName();
+								model.pilotLightFuelConsumption = Math.round(fuelAmount.getQuantity());
+								model.pilotLightEmission = Math.round(baseFuel.getEquivalenceFactor() * model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
+								break;
+							case FBO, NBO:
+								final FuelAmount anotherFuelAmount = fuelQuantity.getAmounts().get(1);
+								model.consumedFBO = Math.round(fuelAmount.getQuantity());
+								model.consumedNBO = Math.round(anotherFuelAmount.getQuantity()); // TODO: Here I am guessing which one is NBO and FBO. Might be wrong way round. Must check with James and Farukh
+								final double guessedEmissionRateOfLNG = 1.23456789;
+								final double guessedEquivalenceFactorOfLNG = 9.87654321;
+								model.emissionsLNG = Math.round((model.consumedFBO + model.consumedNBO) * guessedEmissionRateOfLNG * guessedEquivalenceFactorOfLNG);
+								break;
+							default:
+							}
+							
+							var x = fuelQuantity.getBaseFuel();
+							
+							var y = fuelQuantity.getAmounts();
+							
+							var z = fuelQuantity.getFuel();
+							
+							var w = "2";
+						}
+					}
+					
 					model.totalEmission += model.pilotLightEmission + 25 * model.methaneSlip;
 					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
 					if (denominatorForCIICalculation == 0) {
