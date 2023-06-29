@@ -79,158 +79,161 @@ public class ColumnGenerator {
 		final Map<Integer, Field> mapOfFields = new HashMap<>();
 		final Map<Field, GridViewerColumn> mapOfFieldColumns = new HashMap<>();
 		int counter = -1;
-		
-		final Collection<Field> classFields = orderFields(cls);
 
-		for (final Field f : classFields) {
-			if (f.getAnnotation(LingoIgnore.class) != null) {
-				continue;
-			}
+		final Collection<Collection<Field>> columnGrouppedlassFields = orderFields(cls);
 
-			final ColumnName columnName = f.getAnnotation(ColumnName.class);
-			final GridViewerColumn col;
+		for (final Collection<Field> group : columnGrouppedlassFields) {
 
-			if (columnName != null) {
-				col = new GridViewerColumn(viewer, SWT.NONE);
-				if (!columnName.lingo().isEmpty()) {
-					col.getColumn().setText(columnName.lingo());
+			for (final Field f : group) {
+				if (f.getAnnotation(LingoIgnore.class) != null) {
+					continue;
+				}
+
+				final ColumnName columnName = f.getAnnotation(ColumnName.class);
+				final GridViewerColumn col;
+
+				if (columnName != null) {
+					col = new GridViewerColumn(viewer, SWT.NONE);
+					if (!columnName.lingo().isEmpty()) {
+						col.getColumn().setText(columnName.lingo());
+					} else {
+						col.getColumn().setText(columnName.value());
+					}
 				} else {
-					col.getColumn().setText(columnName.value());
+					continue;
 				}
-			} else {
-				continue;
-			}
-			GridViewerHelper.configureLookAndFeel(col);
-			col.getColumn().setData(COLUMN_DATA_FIELD, f);
-			mapOfFields.put(++counter, f);
-			mapOfFieldColumns.put(f, col);
+				GridViewerHelper.configureLookAndFeel(col);
+				col.getColumn().setData(COLUMN_DATA_FIELD, f);
+				mapOfFields.put(++counter, f);
+				mapOfFieldColumns.put(f, col);
 
-			final Function<Object, String> formatter;
-			Function<Object, Comparable<?>> sortFunction;
-			if (dateTypes.contains(f.getType())) {
-				DateTimeFormatter dtf;
-				final LingoFormat format = f.getAnnotation(LingoFormat.class);
-				if (format != null) {
-					dtf = DateTimeFormatter.ofPattern(format.value());
-				} else {
-					dtf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringEdit());
-				}
-
-				formatter = o -> {
-					if (o == null) {
-						return null;
+				final Function<Object, String> formatter;
+				Function<Object, Comparable<?>> sortFunction;
+				if (dateTypes.contains(f.getType())) {
+					DateTimeFormatter dtf;
+					final LingoFormat format = f.getAnnotation(LingoFormat.class);
+					if (format != null) {
+						dtf = DateTimeFormatter.ofPattern(format.value());
 					} else {
-						return dtf.format((TemporalAccessor) o);
+						dtf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringEdit());
 					}
-				};
-				sortFunction = o -> (Comparable<?>) o;
 
-			} else if (numericTypes.contains(f.getType())) {
-				DecimalFormat df;
-				final LingoFormat format = f.getAnnotation(LingoFormat.class);
-				if (format != null) {
-					df = new DecimalFormat(format.value());
-				} else {
-					df = new DecimalFormat();
-				}
-
-				formatter = o -> {
-					if (o == null) {
-						return null;
-					} else {
-						return df.format(o);
-					}
-				};
-				sortFunction = o -> (Comparable<?>) o;
-
-			} else {
-				formatter = o -> {
-					if (o == null) {
-						return "";
-					} else {
-						return o.toString();
-					}
-				};
-				sortFunction = o -> {
-					if (o == null) {
-						return null;
-					} else {
-						return o.toString();
-					}
-				};
-			}
-
-			final Function<Object, String> rendererFunction = data -> {
-				if (cls.isInstance(data)) {
-					try {
-						return (formatter.apply(f.get(data)));
-					} catch (final Exception e) {
-						e.printStackTrace();
-					}
-				}
-				return null;
-			};
-
-			if (sortingSupport != null && sortFunction != null) {
-				sortingSupport.addSortableColumn(viewer, col, col.getColumn());
-
-				ColumnSortFunction columnSortFunction = f.getAnnotation(ColumnSortFunction.class);
-				Method altSortMethod = null;
-				if (columnSortFunction != null) {
-					try {
-						altSortMethod = cls.getMethod(columnSortFunction.value());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				final Method pAltSortMethod = altSortMethod;
-
-				final IComparableProvider provider = m -> {
-					try {
-						if (pAltSortMethod != null) {
-							return sortFunction.apply(pAltSortMethod.invoke(m));
+					formatter = o -> {
+						if (o == null) {
+							return null;
 						} else {
-							return sortFunction.apply(f.get(m));
+							return dtf.format((TemporalAccessor) o);
 						}
-					} catch (final Exception e1) {
-						e1.printStackTrace();
+					};
+					sortFunction = o -> (Comparable<?>) o;
+
+				} else if (numericTypes.contains(f.getType())) {
+					DecimalFormat df;
+					final LingoFormat format = f.getAnnotation(LingoFormat.class);
+					if (format != null) {
+						df = new DecimalFormat(format.value());
+					} else {
+						df = new DecimalFormat();
+					}
+
+					formatter = o -> {
+						if (o == null) {
+							return null;
+						} else {
+							return df.format(o);
+						}
+					};
+					sortFunction = o -> (Comparable<?>) o;
+
+				} else {
+					formatter = o -> {
+						if (o == null) {
+							return "";
+						} else {
+							return o.toString();
+						}
+					};
+					sortFunction = o -> {
+						if (o == null) {
+							return null;
+						} else {
+							return o.toString();
+						}
+					};
+				}
+
+				final Function<Object, String> rendererFunction = data -> {
+					if (cls.isInstance(data)) {
+						try {
+							return (formatter.apply(f.get(data)));
+						} catch (final Exception e) {
+							e.printStackTrace();
+						}
 					}
 					return null;
 				};
 
-				col.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);
+				if (sortingSupport != null && sortFunction != null) {
+					sortingSupport.addSortableColumn(viewer, col, col.getColumn());
 
-				ColumnSortOrder sortOrder = f.getAnnotation(ColumnSortOrder.class);
-				if (sortOrder != null) {
-					defaultSortColumns.add(new Triple<>(sortOrder.value(), col, sortOrder.ascending()));
-				}
-			}
-			if (filterSupport != null) {
-				filterSupport.createColumnMnemonics(col.getColumn(), col.getColumn().getText());
-
-				final IFilterProvider filterProvider = new IFilterProvider() {
-					@Override
-					public @Nullable String render(final Object object) {
-						return rendererFunction.apply(object);
+					ColumnSortFunction columnSortFunction = f.getAnnotation(ColumnSortFunction.class);
+					Method altSortMethod = null;
+					if (columnSortFunction != null) {
+						try {
+							altSortMethod = cls.getMethod(columnSortFunction.value());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
+					final Method pAltSortMethod = altSortMethod;
+
+					final IComparableProvider provider = m -> {
+						try {
+							if (pAltSortMethod != null) {
+								return sortFunction.apply(pAltSortMethod.invoke(m));
+							} else {
+								return sortFunction.apply(f.get(m));
+							}
+						} catch (final Exception e1) {
+							e1.printStackTrace();
+						}
+						return null;
+					};
+
+					col.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);
+
+					ColumnSortOrder sortOrder = f.getAnnotation(ColumnSortOrder.class);
+					if (sortOrder != null) {
+						defaultSortColumns.add(new Triple<>(sortOrder.value(), col, sortOrder.ascending()));
+					}
+				}
+				if (filterSupport != null) {
+					filterSupport.createColumnMnemonics(col.getColumn(), col.getColumn().getText());
+
+					final IFilterProvider filterProvider = new IFilterProvider() {
+						@Override
+						public @Nullable String render(final Object object) {
+							return rendererFunction.apply(object);
+						}
+
+						@Override
+						public Object getFilterValue(final Object object) {
+							return rendererFunction.apply(object);
+						}
+					};
+
+					col.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
+				}
+				col.setLabelProvider(new CellLabelProvider() {
 
 					@Override
-					public Object getFilterValue(final Object object) {
-						return rendererFunction.apply(object);
+					public void update(final ViewerCell cell) {
+						final Widget item = cell.getItem();
+						cell.setText(rendererFunction.apply(item.getData()));
+						styler.accept(cell, f);
 					}
-				};
-
-				col.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
+				});
 			}
-			col.setLabelProvider(new CellLabelProvider() {
-
-				@Override
-				public void update(final ViewerCell cell) {
-					final Widget item = cell.getItem();
-					cell.setText(rendererFunction.apply(item.getData()));
-					styler.accept(cell, f);
-				}
-			});
 		}
 
 		if (sortingSupport != null && !defaultSortColumns.isEmpty()) {
@@ -248,10 +251,12 @@ public class ColumnGenerator {
 
 	/**
 	 * Sorts the columns with respect to their ColumnOrder annotation
-	 * @param cls is the class to get fields
+	 * 
+	 * @param cls
+	 *            is the class to get fields
 	 * @return the collection of fields
 	 */
-	private static Collection<Field> orderFields(Class<?> cls) {
+	private static Collection<Collection<Field>> orderFields(Class<?> cls) {
 		final PriorityQueue<Field> sortQueue = ColumnOrderComparator.priorityQueue();
 		for (final Field field : cls.getFields()) {
 			sortQueue.add(field);
@@ -260,6 +265,6 @@ public class ColumnGenerator {
 		while (!sortQueue.isEmpty()) {
 			fields.add(sortQueue.poll());
 		}
-		return fields;
+		return List.of(fields);
 	}
 }
