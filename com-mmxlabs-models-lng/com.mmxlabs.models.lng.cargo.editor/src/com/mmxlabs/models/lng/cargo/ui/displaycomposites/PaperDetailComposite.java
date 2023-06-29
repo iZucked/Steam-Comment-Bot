@@ -59,10 +59,12 @@ public class PaperDetailComposite extends DefaultDetailComposite {
 		// Sub classes can sort the editor list prior to rendering
 		List<ETypedElement> orderedFeatures = Lists.newArrayList( //
 				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
-				cp.getPaperDeal_Index(), //
+				
+				cp.getPaperDeal_Quantity(), //
+				cp.getPaperDeal_Entity(), //
 				
 				cp.getPaperDeal_Price(), //
-				cp.getPaperDeal_Quantity(), //
+				cp.getPaperDeal_Index(), //				
 				
 				cp.getPaperDeal_PricingType(), //
 				cp.getPaperDeal_Instrument(), //
@@ -76,7 +78,7 @@ public class PaperDetailComposite extends DefaultDetailComposite {
 				cp.getPaperDeal_HedgingPeriodStart(), //
 				cp.getPaperDeal_HedgingPeriodEnd(), //
 
-				cp.getPaperDeal_Entity(), //
+				
 				
 				cp.getPaperDeal_Comment()
 		);
@@ -101,14 +103,18 @@ public class PaperDetailComposite extends DefaultDetailComposite {
 	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
+//				.withRow() //
+//				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
+//				.makeRow() //
+				//
 				.withRow() //
-				.withFeature(MMXCorePackage.Literals.NAMED_OBJECT__NAME) //
-				.withFeature(cp.getPaperDeal_Index(), "MTM Curve")
+				.withFeature(cp.getPaperDeal_Quantity())
+				.withFeature(cp.getPaperDeal_Entity())
 				.makeRow() //
 				//
 				.withRow() //
 				.withFeature(cp.getPaperDeal_Price(), "Price")
-				.withFeature(cp.getPaperDeal_Quantity())
+				.withFeature(cp.getPaperDeal_Index(), "MTM Curve")
 				.makeRow() //
 				//
 				.withRow() //
