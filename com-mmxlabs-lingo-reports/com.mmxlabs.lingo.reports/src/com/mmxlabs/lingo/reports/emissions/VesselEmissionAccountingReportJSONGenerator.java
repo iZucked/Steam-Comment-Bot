@@ -5,8 +5,10 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -20,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -116,6 +119,10 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					
 					if (e instanceof FuelUsage fuelUsageEvent) {
 						
+						model.baseFuelEmissions = 0L;
+						model.pilotLightEmission = 0L;
+						model.emissionsLNG = 0L;
+						
 						for (final FuelQuantity fuelQuantity : fuelUsageEvent.getFuels()) {
 
 							final Fuel fuel = fuelQuantity.getFuel();
@@ -133,7 +140,9 @@ public class VesselEmissionAccountingReportJSONGenerator {
 								model.pilotLightFuelConsumption = Math.round(fuelAmount.getQuantity());
 								model.pilotLightEmission = Math.round(baseFuel.getEquivalenceFactor() * model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
 								break;
-							case FBO, NBO:
+							case FBO:
+								model.consumedFBO = consumedQuantityLNG(fuelQuantity, FuelUnit.MMBTU);
+							case NBO:
 								final FuelAmount anotherFuelAmount = fuelQuantity.getAmounts().get(1);
 								model.consumedFBO = Math.round(fuelAmount.getQuantity());
 								model.consumedNBO = Math.round(anotherFuelAmount.getQuantity()); // TODO: Here I am guessing which one is NBO and FBO. Might be wrong way round. Must check with James and Farukh
@@ -143,18 +152,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 								break;
 							default:
 							}
-							
-							var x = fuelQuantity.getBaseFuel();
-							
-							var y = fuelQuantity.getAmounts();
-							
-							var z = fuelQuantity.getFuel();
-							
-							var w = "2";
 						}
+						
+						model.totalEmission = model.baseFuelEmissions + model.pilotLightEmission + model.emissionsLNG;
 					}
 					
-					model.totalEmission += model.pilotLightEmission + 25 * model.methaneSlip;
+					model.totalEmission += 25 * model.methaneSlip;
 					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
 					if (denominatorForCIICalculation == 0) {
 						model.attainedCII = 0L;
@@ -167,6 +170,24 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		}
 
 		return models;
+	}
+
+	private static Long consumedQuantityLNG(final FuelQuantity fuelQuantity, final FuelUnit desiredFuelUnit) {
+		
+		final Set<FuelUnit> uniqueUnits = new HashSet<>();
+		for (final FuelAmount fuelAmount : fuelQuantity.getAmounts()) {
+			uniqueUnits.add(fuelAmount.getUnit());
+		}
+		
+		final boolean unitsAreTheSame = uniqueUnits.size() == 1;
+		long quantity = 0;
+				
+		if (unitsAreTheSame) {
+			quantity = Math.round(fuelQuantity.getAmounts().stream().map(amount -> amount.getQuantity()).reduce(Double::sum).orElse(0.0));
+			
+		}
+		
+		return quantity;
 	}
 
 	public static File jsonOutput(final List<VesselEmissionAccountingReportModelV1> models) {
