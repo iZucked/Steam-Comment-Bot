@@ -36,6 +36,9 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class VesselEmissionAccountingReportJSONGenerator {
 	
+	private static final double LNG_DENSITY_TON_PER_M3 = 0.450;
+	private static final double LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL = 2.750;
+	
 	private static final long TONS_TO_GRAMS = 1_000_000;
 
 	public static List<VesselEmissionAccountingReportModelV1> createReportData(final @NonNull ScheduleModel scheduleModel, final boolean isPinned, final String scenarioName) {
@@ -122,6 +125,8 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						model.baseFuelEmissions = 0L;
 						model.pilotLightEmission = 0L;
 						model.emissionsLNG = 0L;
+						model.consumedNBO = 0L;
+						model.consumedFBO = 0L;
 						
 						for (final FuelQuantity fuelQuantity : fuelUsageEvent.getFuels()) {
 
@@ -141,14 +146,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 								model.pilotLightEmission = Math.round(baseFuel.getEquivalenceFactor() * model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
 								break;
 							case FBO:
-								model.consumedFBO = consumedQuantityLNG(fuelQuantity, FuelUnit.MMBTU);
+								model.consumedFBO += consumedQuantityLNG(fuelQuantity, FuelUnit.MMBTU);
+								model.emissionsLNG += Math.round(model.consumedFBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL);
+								break;
 							case NBO:
-								final FuelAmount anotherFuelAmount = fuelQuantity.getAmounts().get(1);
-								model.consumedFBO = Math.round(fuelAmount.getQuantity());
-								model.consumedNBO = Math.round(anotherFuelAmount.getQuantity()); // TODO: Here I am guessing which one is NBO and FBO. Might be wrong way round. Must check with James and Farukh
-								final double guessedEmissionRateOfLNG = 1.23456789;
-								final double guessedEquivalenceFactorOfLNG = 9.87654321;
-								model.emissionsLNG = Math.round((model.consumedFBO + model.consumedNBO) * guessedEmissionRateOfLNG * guessedEquivalenceFactorOfLNG);
+								model.consumedNBO += consumedQuantityLNG(fuelQuantity, FuelUnit.MMBTU);
+								model.emissionsLNG += Math.round(model.consumedNBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL);
 								break;
 							default:
 							}
@@ -180,14 +183,27 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		}
 		
 		final boolean unitsAreTheSame = uniqueUnits.size() == 1;
-		long quantity = 0;
+		double quantity = 0.0;
 				
 		if (unitsAreTheSame) {
-			quantity = Math.round(fuelQuantity.getAmounts().stream().map(amount -> amount.getQuantity()).reduce(Double::sum).orElse(0.0));
+			final FuelUnit unitItSelf = uniqueUnits.stream().findAny().orElseThrow();
+			quantity = fuelQuantity.getAmounts().stream().map(amount -> amount.getQuantity()).reduce(Double::sum).orElse(0.0);
 			
+			// Convert whatever to MT
+			quantity = switch (unitItSelf) {
+				case MMBTU -> throw new IllegalStateException("Bad");
+				case M3 -> quantity * LNG_DENSITY_TON_PER_M3;
+				case MT -> quantity;
+			};
+		} else {
+			for (final FuelAmount amount : fuelQuantity.getAmounts()) {
+				if (amount.getUnit() == FuelUnit.M3) {
+					quantity = amount.getQuantity();
+				}
+			}
+			quantity *= LNG_DENSITY_TON_PER_M3;
 		}
-		
-		return quantity;
+		return Math.round(quantity);
 	}
 
 	public static File jsonOutput(final List<VesselEmissionAccountingReportModelV1> models) {
