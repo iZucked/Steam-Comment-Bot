@@ -842,9 +842,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
 					for (final ExposureDetail detail : sa.getExposures()) {
-						final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodStart());
-						if (result == null || hedgeMonth.isBefore(result)) {
-							result = hedgeMonth;
+						if (detail.getHedgingPeriodStart() != null) {
+							final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodStart());
+							if (result == null || hedgeMonth.isBefore(result)) {
+								result = hedgeMonth;
+							}
 						}
 					}
 				}
@@ -853,9 +855,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				for (final PaperDealAllocation pd : schedule.getPaperDealAllocations()) {
 					for (final var entry: pd.getEntries()) {
 						for (final ExposureDetail detail : entry.getExposures()) {
-							final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodStart());
-							if (result == null || hedgeMonth.isBefore(result)) {
-								result = hedgeMonth;
+							if (detail.getHedgingPeriodStart() != null) {
+								final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodStart());
+								if (result == null || hedgeMonth.isBefore(result)) {
+									result = hedgeMonth;
+								}
 							}
 						}
 					}
@@ -883,9 +887,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
 					for (final ExposureDetail detail : sa.getExposures()) {
-						final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodEnd());
-						if (result == null || hedgeMonth.isAfter(result)) {
-							result = hedgeMonth;
+						if (detail.getHedgingPeriodEnd() != null) {
+							final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodEnd());
+							if (result == null || hedgeMonth.isAfter(result)) {
+								result = hedgeMonth;
+							}
 						}
 					}
 				}
@@ -894,9 +900,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				for (final PaperDealAllocation pd : schedule.getPaperDealAllocations()) {
 					for (final var entry: pd.getEntries()) {
 						for (final ExposureDetail detail : entry.getExposures()) {
-							final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodEnd());
-							if (result == null || hedgeMonth.isAfter(result)) {
-								result = hedgeMonth;
+							if (detail.getHedgingPeriodEnd() != null) {
+								final YearMonth hedgeMonth = YearMonth.from(detail.getHedgingPeriodEnd());
+								if (result == null || hedgeMonth.isAfter(result)) {
+									result = hedgeMonth;
+								}
 							}
 						}
 					}
