@@ -179,7 +179,9 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 			if (rootObject != null) {
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 				for (final BaseFuel e : fleetModel.getBaseFuels()) {
-					handlers.addAll(addFuelColumns(block, e.getName()));
+					if (e.getName() != null && !e.getName().isBlank()) {
+						handlers.addAll(addFuelColumns(block, e.getName()));
+					}
 				}
 			}
 		}
