@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -35,31 +36,43 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class VesselEmissionAccountingReportJSONGenerator {
-	
+
 	private static final double LNG_DENSITY_TON_PER_M3 = 0.450;
 	private static final double LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL = 2.750;
-	
+
 	private static final long TONS_TO_GRAMS = 1_000_000;
 
 	public static List<VesselEmissionAccountingReportModelV1> createReportData(final @NonNull ScheduleModel scheduleModel, final boolean isPinned, final String scenarioName) {
 		final List<VesselEmissionAccountingReportModelV1> models = new LinkedList<>();
 
 		final Schedule schedule = scheduleModel.getSchedule();
-		
+
 		if (schedule == null) {
 			return models;
 		}
 
 		for (final Sequence seq : schedule.getSequences()) {
+			final String cargoId = seq.getEvents().stream()
+					.filter(e -> e instanceof SlotVisit sv)
+					.map(e -> ((SlotVisit) e).getSlotAllocation())
+					.filter(it -> it != null)
+					.map(sa -> sa.getSlot())
+					.filter(s -> s != null)
+					.map(s -> s.getCargo())
+					.filter(it -> it != null)
+					.map(c -> c.getLoadName())
+					.findAny()
+					.orElse("-");
 			final Vessel vessel = ScheduleModelUtils.getVessel(seq);
 			if (vessel != null) {
 				final String vesselName = vessel.getName();
 				for (final Event e : seq.getEvents()) {
 					final VesselEmissionAccountingReportModelV1 model = new VesselEmissionAccountingReportModelV1();
+					model.eventID = cargoId;
 					model.scenarioName = scenarioName;
 					model.isPinnedFlag = isPinned;
 					model.schedule = schedule;
-					
+
 					model.vesselName = vesselName;
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
@@ -69,15 +82,15 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.methaneSlip = 0L;
 					model.attainedCII = 0L;
 					int journeyDistance = 0;
-					
+
 					if (e instanceof final SlotVisit sv) {
+						model.eventType = "Slot Visit";
 						final SlotAllocation sa = sv.getSlotAllocation();
 						model.otherID = sa.getName();
 						if (sa != null) {
 							final Slot<?> slot = sa.getSlot();
 							if (slot != null) {
 								model.equivalents.add(slot);
-								model.eventID = slot.getName();
 								if (slot.getCargo() != null) {
 									model.otherID = slot.getCargo().getUuid();
 								}
@@ -87,20 +100,20 @@ public class VesselEmissionAccountingReportJSONGenerator {
 							}
 						}
 					} else if (e instanceof final StartEvent se) {
-						model.eventID = "Vessel start";
+						model.eventType = "Vessel start";
 						if (se.getSlotAllocation() != null) {
 							model.otherID = se.getSlotAllocation().getName();
 						}
 					} else if (e instanceof final EndEvent ee) {
-						model.eventID = "Vessel end";
+						model.eventType = "Vessel end";
 						if (ee.getSlotAllocation() != null) {
 							model.otherID = ee.getSlotAllocation().getName();
 						}
 					} else if (e instanceof final Journey j) {
 						if (j.isLaden()) {
-							model.eventID = "Laden Leg";
+							model.eventType = "Laden Leg";
 						} else {
-							model.eventID = "Ballast Leg";
+							model.eventType = "Ballast Leg";
 						}
 						if (j.getPreviousEvent() instanceof final SlotVisit sv && sv.getSlotAllocation() != null) {
 							model.otherID = sv.getSlotAllocation().getName();
@@ -108,32 +121,32 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						journeyDistance = j.getDistance();
 					} else if (e instanceof final Idle i) {
 						if (i.isLaden()) {
-							model.eventID = "Laden Idle";
+							model.eventType = "Laden Idle";
 						} else {
-							model.eventID = "Ballast Idle";
+							model.eventType = "Ballast Idle";
 						}
 						if (i.getNextEvent() instanceof final SlotVisit sv && sv.getSlotAllocation() != null) {
 							model.otherID = sv.getSlotAllocation().getName();
 						}
 					}
-					if (model.eventID == null) {
-						continue; 
+					if (model.eventType == null) {
+						continue;
 					}
-					
+
 					if (e instanceof FuelUsage fuelUsageEvent) {
-						
+
 						model.baseFuelEmissions = 0L;
 						model.pilotLightEmission = 0L;
 						model.emissionsLNG = 0L;
 						model.consumedNBO = 0L;
 						model.consumedFBO = 0L;
-						
+
 						for (final FuelQuantity fuelQuantity : fuelUsageEvent.getFuels()) {
 
 							final Fuel fuel = fuelQuantity.getFuel();
 							final BaseFuel baseFuel = fuelQuantity.getBaseFuel();
 							final FuelAmount fuelAmount = fuelQuantity.getAmounts().get(0);
-							
+
 							switch (fuel) {
 							case BASE_FUEL:
 								model.baseFuelType = baseFuel.getName();
@@ -156,15 +169,15 @@ public class VesselEmissionAccountingReportJSONGenerator {
 							default:
 							}
 						}
-						
+
 						model.totalEmission = model.baseFuelEmissions + model.pilotLightEmission + model.emissionsLNG;
 					}
-					
+
 					model.totalEmission += 25 * model.methaneSlip;
 					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
 					if (denominatorForCIICalculation == 0) {
 						model.attainedCII = 0L;
-					} else {						
+					} else {
 						model.attainedCII = TONS_TO_GRAMS * 1 / denominatorForCIICalculation;
 					}
 					models.add(model);
@@ -176,24 +189,24 @@ public class VesselEmissionAccountingReportJSONGenerator {
 	}
 
 	private static Long consumedQuantityLNG(final FuelQuantity fuelQuantity, final FuelUnit desiredFuelUnit) {
-		
+
 		final Set<FuelUnit> uniqueUnits = new HashSet<>();
 		for (final FuelAmount fuelAmount : fuelQuantity.getAmounts()) {
 			uniqueUnits.add(fuelAmount.getUnit());
 		}
-		
+
 		final boolean unitsAreTheSame = uniqueUnits.size() == 1;
 		double quantity = 0.0;
-				
+
 		if (unitsAreTheSame) {
 			final FuelUnit unitItSelf = uniqueUnits.stream().findAny().orElseThrow();
 			quantity = fuelQuantity.getAmounts().stream().map(amount -> amount.getQuantity()).reduce(Double::sum).orElse(0.0);
-			
+
 			// Convert whatever to MT
 			quantity = switch (unitItSelf) {
-				case MMBTU -> throw new IllegalStateException("Bad");
-				case M3 -> quantity * LNG_DENSITY_TON_PER_M3;
-				case MT -> quantity;
+			case MMBTU -> throw new IllegalStateException("Bad");
+			case M3 -> quantity * LNG_DENSITY_TON_PER_M3;
+			case MT -> quantity;
 			};
 		} else {
 			for (final FuelAmount amount : fuelQuantity.getAmounts()) {
