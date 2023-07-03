@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 public class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission {
 	
 	protected static final String ID_COLUMN_GROUP = "START_COLUMN_GROUP";
+	private static final String TOTAL_EMISSIONS_GROUP_ID = "TOTAL_EMISSIONS_GROUP";
+
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -73,13 +75,13 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventEnd;
 	
-	@JsonIgnore
-	@LingoIgnore
+	
+	@ColumnGroup(id = TOTAL_EMISSIONS_GROUP_ID, headerTitle = "", position = ColumnOrder.END)
 	@ColumnName("CH4")
-	@ColumnOrderLevel(ColumnOrder.END)
+	@ColumnOrderLevel(ColumnOrder.START)
 	public Long methaneSlip;
 	
-	@ColumnGroup(id = "TOTAL_EMISSIONS_GROUP", headerTitle = "", position = ColumnOrder.END)
+	@ColumnGroup(id = TOTAL_EMISSIONS_GROUP_ID, headerTitle = "", position = ColumnOrder.END)
 	@ColumnName("Total CO2e t")
 	@ColumnOrderLevel(ColumnOrder.END)
 	public Long totalEmission;

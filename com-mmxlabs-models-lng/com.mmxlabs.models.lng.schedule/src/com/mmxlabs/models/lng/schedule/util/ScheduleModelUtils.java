@@ -425,6 +425,9 @@ public class ScheduleModelUtils {
 		return null;
 	}
 
+	/**
+	 * Needs cargo allocation by the way
+	 */
 	public static Vessel getVesselFromAllocation(final Object allocation) {
 		if (allocation instanceof final CargoAllocation cargoAllocation) {
 			return getVessel(cargoAllocation.getSequence());

@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class CargoEmissionAccountingReportJSONGenerator{
@@ -144,6 +145,23 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.pilotLightEmission = Math.round(pilotLightAccumulator);
 		model.nbo = Math.round(nboAccumulator);
 		model.fbo = Math.round(fboAccumulator);
+		
+		double methaneSlipAccumulator = 0.0;
+		for (final Event event : cargoAllocation.getEvents()) {
+			if (event instanceof final SlotVisit sv) {
+				final SlotAllocation sa = sv.getSlotAllocation();
+				if (sa != null) {
+					final Slot<?> slot = sa.getSlot();
+					if (slot instanceof LoadSlot) {
+						/*
+						 * TODO: Return vesselOrDelegateMethaneSlipRate
+						 */
+						methaneSlipAccumulator += sa.getEnergyTransferred() * vessel.getMethaneSlipRate();
+					}
+				}
+			} 
+		}
+		model.methaneSlip = Math.round(methaneSlipAccumulator);
 		
 		model.eventStart = eventStart;
 		model.totalEmission += model.nbo 
