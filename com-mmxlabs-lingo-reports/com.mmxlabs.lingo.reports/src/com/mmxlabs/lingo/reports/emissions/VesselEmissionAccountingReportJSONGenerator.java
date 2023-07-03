@@ -138,12 +138,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 							case BASE_FUEL:
 								model.baseFuelType = baseFuel.getName();
 								model.baseFuelConsumed = Math.round(fuelAmount.getQuantity());
-								model.baseFuelEmissions = Math.round(baseFuel.getEquivalenceFactor() * model.baseFuelConsumed * baseFuel.getEmissionRate());
+								model.baseFuelEmissions = Math.round(model.baseFuelConsumed * baseFuel.getEmissionRate());
 								break;
 							case PILOT_LIGHT:
 								model.pilotLightFuelType = baseFuel.getName();
 								model.pilotLightFuelConsumption = Math.round(fuelAmount.getQuantity());
-								model.pilotLightEmission = Math.round(baseFuel.getEquivalenceFactor() * model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
+								model.pilotLightEmission = Math.round(model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
 								break;
 							case FBO:
 								model.consumedFBO += consumedQuantityLNG(fuelQuantity, FuelUnit.MMBTU);
