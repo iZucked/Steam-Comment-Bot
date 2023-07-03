@@ -17,10 +17,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -87,7 +93,6 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		
 		calculatePortEmissions(cargoAllocation, model);
 		
-		
 		for (final Event e : cargoAllocation.getEvents()) {
 			if (eventStart == null) {
 				eventStart = e.getStart().toLocalDateTime();
@@ -97,8 +102,58 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
 			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 		});
+		
+		double baseFuelAccumulator = 0.0;
+		double nboAccumulator = 0.0;
+		double fboAccumulator = 0.0;
+		double pilotLightAccumulator = 0.0;
+		for (final Event event : cargoAllocation.getEvents()) {
+			if (event instanceof final FuelUsage fuelUsageEvent) {
+				
+				for (final FuelQuantity fuelQuantity : fuelUsageEvent.getFuels()) {
+
+					final Fuel fuel = fuelQuantity.getFuel();
+					final BaseFuel baseFuel = fuelQuantity.getBaseFuel();
+					final FuelAmount fuelAmount = fuelQuantity.getAmounts().get(0);
+
+					switch (fuel) {
+					case BASE_FUEL:
+						if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
+							throw new IllegalStateException();
+						}
+						baseFuelAccumulator += fuelAmount.getQuantity() * baseFuel.getEmissionRate();
+						break;
+					case PILOT_LIGHT:
+						if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
+							throw new IllegalStateException();
+						}
+						pilotLightAccumulator += fuelAmount.getQuantity() * baseFuel.getEmissionRate();
+						break;
+					case FBO:
+						fboAccumulator += EmissionsUtils.consumedQuantityLNG(fuelQuantity) * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+						break;
+					case NBO:
+						nboAccumulator += EmissionsUtils.consumedQuantityLNG(fuelQuantity) * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+						break;
+					default:
+					}
+				}
+			}
+		}
+		model.baseFuelEmission = Math.round(pilotLightAccumulator);
+		model.pilotLightEmission = Math.round(pilotLightAccumulator);
+		model.nbo = Math.round(nboAccumulator);
+		model.fbo = Math.round(fboAccumulator);
+		
 		model.eventStart = eventStart;
-		model.totalEmission += model.baseFuelEmission + model.pilotLightEmission + 25 * model.methaneSlip;
+		model.totalEmission += model.nbo 
+				+ model.fbo 
+				+ model.baseFuelEmission 
+				+ model.pilotLightEmission 
+				+ model.upstreamEmission
+				+ model.liquefactionEmission
+				+ model.pipelineEmission;
+				//				+ 25 * model.methaneSlip;
 		return model;
 	}
 

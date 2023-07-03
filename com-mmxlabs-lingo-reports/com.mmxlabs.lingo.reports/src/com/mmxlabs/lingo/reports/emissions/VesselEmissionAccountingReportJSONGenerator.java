@@ -5,10 +5,8 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -35,9 +33,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class VesselEmissionAccountingReportJSONGenerator {
-
-	private static final double LNG_DENSITY_TON_PER_M3 = 0.450;
-	private static final double LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL = 2.750;
 
 	private static final long TONS_TO_GRAMS = 1_000_000;
 
@@ -72,7 +67,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.attainedCII = 0L;
 					int journeyDistance = 0;
 					
-					model.eventID = "-";
+					model.eventID = vesselName;
 
 					if (e instanceof final SlotVisit sv) {
 						model.eventType = "Slot Visit";
@@ -124,10 +119,10 @@ public class VesselEmissionAccountingReportJSONGenerator {
 							final SlotAllocation slotAllocation = sv.getSlotAllocation();
 							if (slotAllocation != null) {
 								model.otherID = slotAllocation.getName();
-								final Slot<?> slot = slotAllocation.getSlot();
-								if (slot != null) {
-									model.eventID = slot.getName();
-								}
+								//								final Slot<?> slot = slotAllocation.getSlot();
+								//								if (slot != null) {
+								//									model.eventID = slot.getName();
+								//								}
 							}
 							model.otherID = sv.getSlotAllocation().getName();
 						}
@@ -142,10 +137,10 @@ public class VesselEmissionAccountingReportJSONGenerator {
 							final SlotAllocation slotAllocation = sv.getSlotAllocation();
 							if (slotAllocation != null) {
 								model.otherID = slotAllocation.getName();
-								final Slot<?> slot = slotAllocation.getSlot();
-								if (slot != null) {
-									model.eventID = slot.getName();
-								}
+								//								final Slot<?> slot = slotAllocation.getSlot();
+								//								if (slot != null) {
+								//									model.eventID = slot.getName();
+								//								}
 							}
 							model.otherID = sv.getSlotAllocation().getName();
 						}
@@ -193,12 +188,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 								model.pilotLightEmission = Math.round(model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
 								break;
 							case FBO:
-								model.consumedFBO += consumedQuantityLNG(fuelQuantity);
-								emissionsLNGAccumulator += model.consumedFBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+								model.consumedFBO += EmissionsUtils.consumedQuantityLNG(fuelQuantity);
+								emissionsLNGAccumulator += model.consumedFBO * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
 								break;
 							case NBO:
-								model.consumedNBO += consumedQuantityLNG(fuelQuantity);
-								emissionsLNGAccumulator += model.consumedNBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+								model.consumedNBO += EmissionsUtils.consumedQuantityLNG(fuelQuantity);
+								emissionsLNGAccumulator += model.consumedNBO * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
 								break;
 							default:
 							}
@@ -221,37 +216,6 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		}
 
 		return models;
-	}
-
-	private static Long consumedQuantityLNG(final FuelQuantity fuelQuantity) {
-
-		final Set<FuelUnit> uniqueUnits = new HashSet<>();
-		for (final FuelAmount fuelAmount : fuelQuantity.getAmounts()) {
-			uniqueUnits.add(fuelAmount.getUnit());
-		}
-
-		final boolean unitsAreTheSame = uniqueUnits.size() == 1;
-		double quantity = 0.0;
-
-		if (unitsAreTheSame) {
-			final FuelUnit unitItSelf = uniqueUnits.stream().findAny().orElseThrow();
-			quantity = fuelQuantity.getAmounts().stream().map(amount -> amount.getQuantity()).reduce(Double::sum).orElse(0.0);
-
-			// Convert whatever to MT
-			quantity = switch (unitItSelf) {
-			case MMBTU -> throw new IllegalStateException("Bad");
-			case M3 -> quantity * LNG_DENSITY_TON_PER_M3;
-			case MT -> quantity;
-			};
-		} else {
-			for (final FuelAmount amount : fuelQuantity.getAmounts()) {
-				if (amount.getUnit() == FuelUnit.M3) {
-					quantity = amount.getQuantity();
-				}
-			}
-			quantity *= LNG_DENSITY_TON_PER_M3;
-		}
-		return Math.round(quantity);
 	}
 
 	public static File jsonOutput(final List<VesselEmissionAccountingReportModelV1> models) {

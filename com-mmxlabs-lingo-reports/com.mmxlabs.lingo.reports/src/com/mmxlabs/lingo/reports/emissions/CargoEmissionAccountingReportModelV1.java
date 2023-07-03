@@ -44,9 +44,9 @@ public class CargoEmissionAccountingReportModelV1 extends AbstractEmissionAccoun
 	public Long nbo;
 	
 	@ColumnGroup(id = SHIPPING_GROUP, headerTitle = SHIPPING_TITLE, position = ColumnOrder.MIDDLE_LEVEL)
-	@ColumnName("HFO")
+	@ColumnName("FBO")
 	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
-	public Long hfo;
+	public Long fbo;
 	
 	@ColumnGroup(id = OTHER_GROUP, headerTitle = "", position = ColumnOrder.LATER_LEVEL)
 	@ColumnName("Pilot Light")
