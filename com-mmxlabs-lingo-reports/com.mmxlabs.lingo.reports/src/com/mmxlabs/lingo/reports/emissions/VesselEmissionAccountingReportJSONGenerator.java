@@ -17,8 +17,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
-import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -28,7 +26,6 @@ import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -54,17 +51,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		}
 
 		for (final Sequence seq : schedule.getSequences()) {
-			final String cargoId = seq.getEvents().stream()
-					.filter(e -> e instanceof SlotVisit sv)
-					.map(e -> ((SlotVisit) e).getSlotAllocation())
-					.filter(it -> it != null)
-					.map(sa -> sa.getSlot())
-					.filter(s -> s != null)
-					.map(s -> s.getCargo())
-					.filter(it -> it != null)
-					.map(c -> c.getLoadName())
-					.findAny()
-					.orElse("-");
+			final String cargoId = seq.getEvents().get(0).name();
 			final Vessel vessel = ScheduleModelUtils.getVessel(seq);
 			if (vessel != null) {
 				final String vesselName = vessel.getName();
@@ -84,6 +71,8 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.methaneSlip = 0L;
 					model.attainedCII = 0L;
 					int journeyDistance = 0;
+					
+					model.eventID = "-";
 
 					if (e instanceof final SlotVisit sv) {
 						model.eventType = "Slot Visit";
@@ -91,6 +80,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						model.otherID = sa.getName();
 						if (sa != null) {
 							final Slot<?> slot = sa.getSlot();
+							model.eventID = slot.getName();
 							if (slot != null) {
 								model.equivalents.add(slot);
 								if (slot.getCargo() != null) {
@@ -103,13 +93,26 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						}
 					} else if (e instanceof final StartEvent se) {
 						model.eventType = "Vessel start";
-						if (se.getSlotAllocation() != null) {
-							model.otherID = se.getSlotAllocation().getName();
+						final SlotAllocation slotAllocation = se.getSlotAllocation();
+						if (slotAllocation != null) {
+							model.otherID = slotAllocation.getName();
+							final Slot<?> slot = slotAllocation.getSlot();
+							if (slot != null) {
+								model.eventID = slot.getName();
+							}
 						}
-					} else if (e instanceof final EndEvent ee) {
+					} else if (e instanceof final EndEvent endEvent) {
 						model.eventType = "Vessel end";
-						if (ee.getSlotAllocation() != null) {
-							model.otherID = ee.getSlotAllocation().getName();
+						if (endEvent.getSlotAllocation() != null) {
+							model.otherID = endEvent.getSlotAllocation().getName();
+						}
+						final SlotAllocation slotAllocation = endEvent.getSlotAllocation();
+						if (slotAllocation != null) {
+							model.otherID = slotAllocation.getName();
+							final Slot<?> slot = slotAllocation.getSlot();
+							if (slot != null) {
+								model.eventID = slot.getName();
+							}
 						}
 					} else if (e instanceof final Journey j) {
 						if (j.isLaden()) {
@@ -118,16 +121,32 @@ public class VesselEmissionAccountingReportJSONGenerator {
 							model.eventType = "Ballast Leg";
 						}
 						if (j.getPreviousEvent() instanceof final SlotVisit sv && sv.getSlotAllocation() != null) {
+							final SlotAllocation slotAllocation = sv.getSlotAllocation();
+							if (slotAllocation != null) {
+								model.otherID = slotAllocation.getName();
+								final Slot<?> slot = slotAllocation.getSlot();
+								if (slot != null) {
+									model.eventID = slot.getName();
+								}
+							}
 							model.otherID = sv.getSlotAllocation().getName();
 						}
 						journeyDistance = j.getDistance();
-					} else if (e instanceof final Idle i) {
-						if (i.isLaden()) {
+					} else if (e instanceof final Idle idleEvent) {
+						if (idleEvent.isLaden()) {
 							model.eventType = "Laden Idle";
 						} else {
 							model.eventType = "Ballast Idle";
 						}
-						if (i.getNextEvent() instanceof final SlotVisit sv && sv.getSlotAllocation() != null) {
+						if (idleEvent.getNextEvent() instanceof final SlotVisit sv && sv.getSlotAllocation() != null) {
+							final SlotAllocation slotAllocation = sv.getSlotAllocation();
+							if (slotAllocation != null) {
+								model.otherID = slotAllocation.getName();
+								final Slot<?> slot = slotAllocation.getSlot();
+								if (slot != null) {
+									model.eventID = slot.getName();
+								}
+							}
 							model.otherID = sv.getSlotAllocation().getName();
 						}
 					}
@@ -135,13 +154,17 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						continue;
 					}
 
-					if (e instanceof FuelUsage fuelUsageEvent) {
+					model.baseFuelEmissions = 0L;
+					model.pilotLightEmission = 0L;
+					model.emissionsLNG = 0L;
+					model.consumedNBO = 0L;
+					model.consumedFBO = 0L;
+					model.baseFuelType = "-";
+					model.pilotLightFuelType = "-";
+					model.pilotLightFuelConsumption = 0L;
+					model.baseFuelConsumed = 0L;
 
-						model.baseFuelEmissions = 0L;
-						model.pilotLightEmission = 0L;
-						model.emissionsLNG = 0L;
-						model.consumedNBO = 0L;
-						model.consumedFBO = 0L;
+					if (e instanceof FuelUsage fuelUsageEvent) {	
 
 						double emissionsLNGAccumulator = 0.0;
 						
@@ -150,6 +173,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 							final Fuel fuel = fuelQuantity.getFuel();
 							final BaseFuel baseFuel = fuelQuantity.getBaseFuel();
 							final FuelAmount fuelAmount = fuelQuantity.getAmounts().get(0);
+
 
 							switch (fuel) {
 							case BASE_FUEL:
