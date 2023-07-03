@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -18,6 +17,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -27,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -141,6 +143,8 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						model.consumedNBO = 0L;
 						model.consumedFBO = 0L;
 
+						double emissionsLNGAccumulator = 0.0;
+						
 						for (final FuelQuantity fuelQuantity : fuelUsageEvent.getFuels()) {
 
 							final Fuel fuel = fuelQuantity.getFuel();
@@ -149,27 +153,34 @@ public class VesselEmissionAccountingReportJSONGenerator {
 
 							switch (fuel) {
 							case BASE_FUEL:
+								if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
+									throw new IllegalStateException();
+								}
 								model.baseFuelType = baseFuel.getName();
 								model.baseFuelConsumed = Math.round(fuelAmount.getQuantity());
 								model.baseFuelEmissions = Math.round(model.baseFuelConsumed * baseFuel.getEmissionRate());
 								break;
 							case PILOT_LIGHT:
+								if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
+									throw new IllegalStateException();
+								}
 								model.pilotLightFuelType = baseFuel.getName();
 								model.pilotLightFuelConsumption = Math.round(fuelAmount.getQuantity());
 								model.pilotLightEmission = Math.round(model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
 								break;
 							case FBO:
-								model.consumedFBO += consumedQuantityLNG(fuelQuantity, FuelUnit.MMBTU);
-								model.emissionsLNG += Math.round(model.consumedFBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL);
+								model.consumedFBO += consumedQuantityLNG(fuelQuantity);
+								emissionsLNGAccumulator += model.consumedFBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
 								break;
 							case NBO:
-								model.consumedNBO += consumedQuantityLNG(fuelQuantity, FuelUnit.MMBTU);
-								model.emissionsLNG += Math.round(model.consumedNBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL);
+								model.consumedNBO += consumedQuantityLNG(fuelQuantity);
+								emissionsLNGAccumulator += model.consumedNBO * LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
 								break;
 							default:
 							}
 						}
 
+						model.emissionsLNG = Math.round(emissionsLNGAccumulator);
 						model.totalEmission = model.baseFuelEmissions + model.pilotLightEmission + model.emissionsLNG;
 					}
 
@@ -188,7 +199,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		return models;
 	}
 
-	private static Long consumedQuantityLNG(final FuelQuantity fuelQuantity, final FuelUnit desiredFuelUnit) {
+	private static Long consumedQuantityLNG(final FuelQuantity fuelQuantity) {
 
 		final Set<FuelUnit> uniqueUnits = new HashSet<>();
 		for (final FuelAmount fuelAmount : fuelQuantity.getAmounts()) {
