@@ -14,8 +14,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -56,8 +59,8 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				.stream() //
 				.filter(s -> (s.getSlot() instanceof LoadSlot)) //
 				.findFirst();
-
-		if (!loadOptional.isPresent()) {
+		
+		if (loadOptional.isEmpty()) {
 			return null;
 		}
 
@@ -82,6 +85,9 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.methaneSlip = 0L;
 		LocalDateTime eventStart = null;
 		
+		calculatePortEmissions(cargoAllocation, model);
+		
+		
 		for (final Event e : cargoAllocation.getEvents()) {
 			if (eventStart == null) {
 				eventStart = e.getStart().toLocalDateTime();
@@ -94,6 +100,24 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.eventStart = eventStart;
 		model.totalEmission += model.baseFuelEmission + model.pilotLightEmission + 25 * model.methaneSlip;
 		return model;
+	}
+
+	private static void calculatePortEmissions(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model) {
+		model.upstreamEmission = 0L;
+		model.pipelineEmission = 0L;
+		model.liquefactionEmission = 0L;
+		final Slot<?> slot = cargoAllocation.getSlotAllocations().stream().map(it -> it.getSlot()).findAny().orElse(null);
+		if (slot != null) {			
+			final Port port = ScheduleModelUtils.getPortFromSlot(slot);
+			if (port != null) {
+				final SlotAllocation loadSlotAllocation = ScheduleModelUtils.getLoadAllocation(cargoAllocation);
+				if (loadSlotAllocation != null) {
+					model.upstreamEmission = Math.round(port.getUpstreamEmissionRate() * loadSlotAllocation.getPhysicalVolumeTransferred());
+					model.pipelineEmission = Math.round(port.getPipelineEmissionRate() * loadSlotAllocation.getPhysicalVolumeTransferred());
+					model.liquefactionEmission = Math.round(port.getLiquefactionEmissionRate() * loadSlotAllocation.getPhysicalVolumeTransferred());
+				}
+			}
+		}
 	}
 
 	public static File jsonOutput(final List<CargoEmissionAccountingReportModelV1> models) {
