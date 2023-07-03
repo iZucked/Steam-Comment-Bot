@@ -65,7 +65,9 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 					try (IScenarioDataProvider targetSDP = targetRecord.aquireScenarioDataProvider("FragmentCopyHandler:2")) {
 
 						try {
-							final OptionAnalysisModel model = copySandboxModelWithJSON(sourceSDP, sourceModel, targetSDP);
+							final OptionAnalysisModel copyModel = EMFCopier.copy(sourceModel);
+							copyModel.setResults(null);
+							final OptionAnalysisModel model = copySandboxModelWithJSON(sourceSDP, copyModel, targetSDP);
 							if (model != null) {
 								EvaluateSolutionSetHelper.recomputeSolution(targetRecord, targetRecord.getScenarioInstance(), model.getResults(), true, true);
 								return true;
@@ -109,7 +111,7 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 
 				domain.getCommandStack().undo();
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
-					final String msg = "Unable to find all data references";
+					final String msg = "Unable to copy sandbox";
 
 					final List<Status> ss = new LinkedList<>();
 					final Set<String> messages = new HashSet<>();
@@ -125,8 +127,8 @@ public class FragmentCopyHandler implements IScenarioFragmentCopyHandler {
 					final String pluginId = FrameworkUtil.getBundle(FragmentCopyHandler.class).getSymbolicName();
 					messages.forEach(m -> ss.add(new Status(IStatus.ERROR, pluginId, m)));
 
-					RunnerHelper.syncExecDisplayOptional(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(), "Error copying sandbox", msg,
-							new MultiStatus(pluginId, IStatus.ERROR, ss.toArray(new IStatus[0]), "Unable to find all data references", null)));
+					RunnerHelper.syncExecDisplayOptional(() -> ErrorDialog.openError(Display.getDefault().getActiveShell(), "Unable to copy sandbox", msg,
+							new MultiStatus(pluginId, IStatus.ERROR, ss.toArray(new IStatus[0]), "Target scenario is missing data. See details.", null)));
 
 					// LiNGO failure exit point
 					return null;
