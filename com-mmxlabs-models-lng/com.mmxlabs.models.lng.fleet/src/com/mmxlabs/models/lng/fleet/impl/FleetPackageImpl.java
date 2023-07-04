@@ -1123,6 +1123,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 		addEOperation(vesselEClass, ecorePackage.getEInt(), "getVesselOrDelegateDeadWeight", 1, 1, IS_UNIQUE, IS_ORDERED);
 
+		addEOperation(vesselEClass, ecorePackage.getEDouble(), "getVesselOrDelegateMethaneSlipRate", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(vesselGroupEClass, VesselGroup.class, "VesselGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselGroup_Vessels(), this.getVessel(), null, "vessels", null, 0, -1, VesselGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

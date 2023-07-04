@@ -1718,6 +1718,14 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 */
 	int getVesselOrDelegateDeadWeight();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	double getVesselOrDelegateMethaneSlipRate();
+
 } // end of  Vessel
 
 // finish type fixing

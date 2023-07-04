@@ -65,6 +65,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.totalEmission = 0L;
 					model.methaneSlip = 0L;
 					model.attainedCII = 0L;
+					model.methaneSlipRate = vessel.getVesselOrDelegateMethaneSlipRate();
 					int journeyDistance = 0;
 					
 					model.eventID = vesselName;

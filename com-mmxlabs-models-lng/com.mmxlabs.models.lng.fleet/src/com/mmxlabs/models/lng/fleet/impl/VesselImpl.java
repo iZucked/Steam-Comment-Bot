@@ -1979,6 +1979,19 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double getVesselOrDelegateMethaneSlipRate() {
+		if (getReference() != null && !isSetMethaneSlipRate()) {
+			return getReference().getMethaneSlipRate();
+		}
+		return getMethaneSlipRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

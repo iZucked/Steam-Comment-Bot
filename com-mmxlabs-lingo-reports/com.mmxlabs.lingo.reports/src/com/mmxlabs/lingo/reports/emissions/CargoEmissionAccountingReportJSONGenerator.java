@@ -153,10 +153,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				if (sa != null) {
 					final Slot<?> slot = sa.getSlot();
 					if (slot instanceof LoadSlot) {
-						/*
-						 * TODO: Return vesselOrDelegateMethaneSlipRate
-						 */
-						methaneSlipAccumulator += sa.getEnergyTransferred() * vessel.getMethaneSlipRate();
+						methaneSlipAccumulator += sa.getEnergyTransferred() * vessel.getVesselOrDelegateMethaneSlipRate();
 					}
 				}
 			} 
