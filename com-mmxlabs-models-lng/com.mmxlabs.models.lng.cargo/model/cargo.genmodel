@@ -409,6 +409,8 @@
       <genFeatures createChild="false" propertyDescription="End of the hedging period"
           ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/hedgingPeriodEnd"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/pricingCalendar"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Referrence slot"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/targetObject"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//BuyPaperDeal"/>
     <genClasses ecoreClass="cargo.ecore#//SellPaperDeal"/>

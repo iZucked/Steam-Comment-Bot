@@ -65,6 +65,7 @@ public class PaperDealItemProvider
 			addHedgingPeriodStartPropertyDescriptor(object);
 			addHedgingPeriodEndPropertyDescriptor(object);
 			addPricingCalendarPropertyDescriptor(object);
+			addTargetObjectPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -281,6 +282,28 @@ public class PaperDealItemProvider
 				 getString("_UI_PaperDeal_pricingCalendar_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDeal_pricingCalendar_feature", "_UI_PaperDeal_type"),
 				 CargoPackage.Literals.PAPER_DEAL__PRICING_CALENDAR,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Target Object feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTargetObjectPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDeal_targetObject_feature"),
+				 getString("_UI_PaperDeal_targetObject_description"),
+				 CargoPackage.Literals.PAPER_DEAL__TARGET_OBJECT,
 				 true,
 				 false,
 				 true,

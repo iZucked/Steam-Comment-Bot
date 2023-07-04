@@ -2572,6 +2572,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   new String[] {
 			   "formatString", "#0"
 		   });
+		addAnnotation
+		  (getInstrumentPeriod_PeriodOffset(),
+		   source,
+		   new String[] {
+			   "formatString", "-##0",
+			   "exportFormatString", "##0"
+		   });
 	}
 
 	/**

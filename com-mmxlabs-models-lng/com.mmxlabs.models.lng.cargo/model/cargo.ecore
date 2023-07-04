@@ -689,6 +689,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedgingPeriodEnd" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pricingCalendar" eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//PricingCalendar"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetObject" unsettable="true">
+      <eGenericType eClassifier="#//Slot">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BuyPaperDeal" eSuperTypes="#//PaperDeal"/>
   <eClassifiers xsi:type="ecore:EClass" name="SellPaperDeal" eSuperTypes="#//PaperDeal"/>

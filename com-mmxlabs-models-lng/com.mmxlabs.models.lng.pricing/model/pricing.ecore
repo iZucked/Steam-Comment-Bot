@@ -438,6 +438,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="InstrumentPeriod">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodSizeUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PricingPeriod"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="-##0"/>
+        <details key="exportFormatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

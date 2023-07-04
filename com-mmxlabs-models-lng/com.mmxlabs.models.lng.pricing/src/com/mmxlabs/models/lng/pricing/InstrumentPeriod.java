@@ -84,7 +84,7 @@ public interface InstrumentPeriod extends EObject {
 	 * @return the value of the '<em>Period Offset</em>' attribute.
 	 * @see #setPeriodOffset(int)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getInstrumentPeriod_PeriodOffset()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0' exportFormatString='##0'"
 	 * @generated
 	 */
 	int getPeriodOffset();
