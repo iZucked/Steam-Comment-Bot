@@ -84,16 +84,22 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.pilotLightFuelType = "-";
 					model.pilotLightFuelConsumption = 0L;
 					model.baseFuelConsumed = 0L;
+					model.ciiValue = 0L;
 
 					if (e instanceof FuelUsage fuelUsageEvent) {	
 						processFuelUsageEvent(model, fuelUsageEvent);
 					}
-
-					model.totalEmission += 25 * model.methaneSlip;
-					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
-					if (denominatorForCIICalculation == 0) {
+					
+					final double denominatorCII = journeyDistance * vessel.getVesselOrDelegateDeadWeight();
+					if (denominatorCII == 0) {
+						model.ciiValue = 0L;
+						model.ciiGrade = "-";
 					} else {
+						model.ciiValue = Math.round(EmissionsUtils.MT_TO_GRAMS * model.totalEmission / denominatorCII);
+						model.ciiGrade = "todo";
 					}
+
+					model.totalEmission += EmissionsUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
 					models.add(model);
 				}
 			}
