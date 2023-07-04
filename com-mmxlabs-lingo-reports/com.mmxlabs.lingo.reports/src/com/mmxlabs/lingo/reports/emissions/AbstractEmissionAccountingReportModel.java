@@ -89,7 +89,7 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@ColumnGroup(id = CII_GROUP_ID, headerTitle = CII_GROUP_TITLE, position = ColumnOrder.LAST)
 	@ColumnName("Grade")
 	@ColumnOrderLevel(ColumnOrder.LAST)
-	public Long ciiGrade;
+	public String ciiGrade;
 	
 	@JsonIgnore
 	@Override

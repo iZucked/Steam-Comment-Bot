@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -27,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -89,21 +89,35 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.baseFuelEmission = 0L;
 		model.pilotLightEmission = 0L;
 		model.totalEmission = 0L;
-//		model.methaneSlip = 0L;
+		model.methaneSlip = 0L;
 		LocalDateTime eventStart = null;
 		
 		calculatePortEmissions(cargoAllocation, model);
 		
-		for (final Event e : cargoAllocation.getEvents()) {
+		for (final Event event : cargoAllocation.getEvents()) {
 			if (eventStart == null) {
-				eventStart = e.getStart().toLocalDateTime();
+				eventStart = event.getStart().toLocalDateTime();
 			}
-			model.eventEnd = e.getEnd().toLocalDateTime();
+			model.eventEnd = event.getEnd().toLocalDateTime();
 		}
-		slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
-//			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
-		});
 		
+		calculateFuelEmissions(cargoAllocation, model);
+		calculateMethaneSlip(cargoAllocation, model, vessel);
+		calculateCII(cargoAllocation, model, vessel);
+		
+		model.eventStart = eventStart;
+		model.totalEmission += model.nbo 
+				+ model.fbo 
+				+ model.baseFuelEmission 
+				+ model.pilotLightEmission 
+				+ model.upstreamEmission
+				+ model.liquefactionEmission
+				+ model.methaneSlipEmissionsCO2
+				+ model.pipelineEmission;
+		return model;
+	}
+
+	private static void calculateFuelEmissions(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model) {
 		double baseFuelAccumulator = 0.0;
 		double nboAccumulator = 0.0;
 		double fboAccumulator = 0.0;
@@ -141,11 +155,13 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				}
 			}
 		}
-		model.baseFuelEmission = Math.round(pilotLightAccumulator);
+		model.baseFuelEmission = Math.round(baseFuelAccumulator);
 		model.pilotLightEmission = Math.round(pilotLightAccumulator);
 		model.nbo = Math.round(nboAccumulator);
 		model.fbo = Math.round(fboAccumulator);
-		
+	}
+
+	private static void calculateMethaneSlip(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model, final Vessel vessel) {
 		double methaneSlipAccumulator = 0.0;
 		for (final Event event : cargoAllocation.getEvents()) {
 			if (event instanceof final SlotVisit sv) {
@@ -153,24 +169,39 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				if (sa != null) {
 					final Slot<?> slot = sa.getSlot();
 					if (slot instanceof LoadSlot) {
-						
 						methaneSlipAccumulator += sa.getPhysicalEnergyTransferred() * vessel.getVesselOrDelegateMethaneSlipRate();
 					}
 				}
 			} 
 		}
-//		model.methaneSlip = Math.round(methaneSlipAccumulator);
-		
-		model.eventStart = eventStart;
-		model.totalEmission += model.nbo 
-				+ model.fbo 
-				+ model.baseFuelEmission 
-				+ model.pilotLightEmission 
-				+ model.upstreamEmission
-				+ model.liquefactionEmission
-				+ model.pipelineEmission;
-				//				+ 25 * model.methaneSlip;
-		return model;
+		model.methaneSlip = Math.round(methaneSlipAccumulator);
+		model.methaneSlipEmissionsCO2 = EmissionsUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
+	}
+	
+	private static void calculateCII(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model, final Vessel vessel) {
+		double distanceAccumulator = 0.0;
+		for (final Event event : cargoAllocation.getEvents()) {
+			if (event instanceof final Journey journeyEvent) {
+				distanceAccumulator += journeyEvent.getDistance();
+			} 
+		}
+		final double distance = Math.round(distanceAccumulator);
+		final double denominatorCII = distance * vessel.getVesselOrDelegateDeadWeight();
+		if (denominatorCII == 0) {
+			model.ciiValue = 0L;
+			model.ciiGrade = "-";
+		} else {
+			final double numeratorCII = (double
+					) model.nbo 
+					+ model.fbo 
+					+ model.baseFuelEmission 
+					+ model.pilotLightEmission 
+					+ model.upstreamEmission
+					+ model.liquefactionEmission
+					+ model.pipelineEmission;
+			model.ciiValue = Math.round(EmissionsUtils.MT_TO_GRAMS * numeratorCII / denominatorCII);
+			model.ciiGrade = "todo";
+		}
 	}
 
 	private static void calculatePortEmissions(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model) {
