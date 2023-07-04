@@ -84,7 +84,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 								}
 							}
 							if (slot instanceof LoadSlot) {
-								model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
+								model.methaneSlip += Math.round(sa.getPhysicalEnergyTransferred() * model.methaneSlipRate);
 							}
 						}
 					} else if (e instanceof final StartEvent se) {
