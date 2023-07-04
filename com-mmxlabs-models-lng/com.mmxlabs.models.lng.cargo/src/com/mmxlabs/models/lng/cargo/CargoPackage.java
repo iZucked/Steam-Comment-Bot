@@ -7259,13 +7259,22 @@ public interface CargoPackage extends EPackage {
 	int PAPER_DEAL__PRICING_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 13;
 
 	/**
+	 * The feature id for the '<em><b>Target Object</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__TARGET_OBJECT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Paper Deal</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 14;
+	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7456,6 +7465,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int BUY_PAPER_DEAL__PRICING_CALENDAR = PAPER_DEAL__PRICING_CALENDAR;
+
+	/**
+	 * The feature id for the '<em><b>Target Object</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__TARGET_OBJECT = PAPER_DEAL__TARGET_OBJECT;
 
 	/**
 	 * The number of structural features of the '<em>Buy Paper Deal</em>' class.
@@ -7655,6 +7673,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SELL_PAPER_DEAL__PRICING_CALENDAR = PAPER_DEAL__PRICING_CALENDAR;
+
+	/**
+	 * The feature id for the '<em><b>Target Object</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__TARGET_OBJECT = PAPER_DEAL__TARGET_OBJECT;
 
 	/**
 	 * The number of structural features of the '<em>Sell Paper Deal</em>' class.
@@ -10952,6 +10979,17 @@ public interface CargoPackage extends EPackage {
 	EReference getPaperDeal_PricingCalendar();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject <em>Target Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target Object</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EReference getPaperDeal_TargetObject();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13452,6 +13490,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PAPER_DEAL__PRICING_CALENDAR = eINSTANCE.getPaperDeal_PricingCalendar();
+
+		/**
+		 * The meta object literal for the '<em><b>Target Object</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL__TARGET_OBJECT = eINSTANCE.getPaperDeal_TargetObject();
 
 		/**
 		 * The meta object literal for the '<em><b>Instrument</b></em>' reference feature.

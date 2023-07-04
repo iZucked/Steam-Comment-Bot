@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
@@ -46,6 +47,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getHedgingPeriodStart <em>Hedging Period Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getHedgingPeriodEnd <em>Hedging Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getPricingCalendar <em>Pricing Calendar</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.PaperDealImpl#getTargetObject <em>Target Object</em>}</li>
  * </ul>
  *
  * @generated
@@ -318,6 +320,25 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * @ordered
 	 */
 	protected boolean pricingCalendarESet;
+
+	/**
+	 * The cached value of the '{@link #getTargetObject() <em>Target Object</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTargetObject()
+	 * @generated
+	 * @ordered
+	 */
+	protected Slot<?> targetObject;
+
+	/**
+	 * This is true if the Target Object reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean targetObjectESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -635,6 +656,73 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 	 * @generated
 	 */
 	@Override
+	public Slot<?> getTargetObject() {
+		if (targetObject != null && targetObject.eIsProxy()) {
+			InternalEObject oldTargetObject = (InternalEObject)targetObject;
+			targetObject = (Slot<?>)eResolveProxy(oldTargetObject);
+			if (targetObject != oldTargetObject) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.PAPER_DEAL__TARGET_OBJECT, oldTargetObject, targetObject));
+			}
+		}
+		return targetObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Slot<?> basicGetTargetObject() {
+		return targetObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTargetObject(Slot<?> newTargetObject) {
+		Slot<?> oldTargetObject = targetObject;
+		targetObject = newTargetObject;
+		boolean oldTargetObjectESet = targetObjectESet;
+		targetObjectESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PAPER_DEAL__TARGET_OBJECT, oldTargetObject, targetObject, !oldTargetObjectESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetTargetObject() {
+		Slot<?> oldTargetObject = targetObject;
+		boolean oldTargetObjectESet = targetObjectESet;
+		targetObject = null;
+		targetObjectESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.PAPER_DEAL__TARGET_OBJECT, oldTargetObject, null, oldTargetObjectESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetTargetObject() {
+		return targetObjectESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public SettleStrategy getInstrument() {
 		if (instrument != null && instrument.eIsProxy()) {
 			InternalEObject oldInstrument = (InternalEObject)instrument;
@@ -804,6 +892,9 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 			case CargoPackage.PAPER_DEAL__PRICING_CALENDAR:
 				if (resolve) return getPricingCalendar();
 				return basicGetPricingCalendar();
+			case CargoPackage.PAPER_DEAL__TARGET_OBJECT:
+				if (resolve) return getTargetObject();
+				return basicGetTargetObject();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -857,6 +948,9 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return;
 			case CargoPackage.PAPER_DEAL__PRICING_CALENDAR:
 				setPricingCalendar((PricingCalendar)newValue);
+				return;
+			case CargoPackage.PAPER_DEAL__TARGET_OBJECT:
+				setTargetObject((Slot<?>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -912,6 +1006,9 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 			case CargoPackage.PAPER_DEAL__PRICING_CALENDAR:
 				unsetPricingCalendar();
 				return;
+			case CargoPackage.PAPER_DEAL__TARGET_OBJECT:
+				unsetTargetObject();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -952,6 +1049,8 @@ public abstract class PaperDealImpl extends NamedObjectImpl implements PaperDeal
 				return HEDGING_PERIOD_END_EDEFAULT == null ? hedgingPeriodEnd != null : !HEDGING_PERIOD_END_EDEFAULT.equals(hedgingPeriodEnd);
 			case CargoPackage.PAPER_DEAL__PRICING_CALENDAR:
 				return isSetPricingCalendar();
+			case CargoPackage.PAPER_DEAL__TARGET_OBJECT:
+				return isSetTargetObject();
 		}
 		return super.eIsSet(featureID);
 	}

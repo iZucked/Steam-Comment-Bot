@@ -23,6 +23,7 @@ public class PaperDealComponentHelper extends DefaultComponentHelper {
 		super(cp.getPaperDeal());
 		
 		ignoreFeatures.add(cp.getPaperDeal_PricingCalendar());
+		ignoreFeatures.add(cp.getPaperDeal_TargetObject());
 		
 		addEditor(cp.getPaperDeal_Comment(), topClass -> new MultiTextInlineEditor(cp.getPaperDeal_Comment()));
 	}

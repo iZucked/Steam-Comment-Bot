@@ -3100,6 +3100,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPaperDeal_TargetObject() {
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getPaperDeal_Price() {
 		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(0);
 	}
@@ -3711,6 +3721,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(paperDealEClass, PAPER_DEAL__HEDGING_PERIOD_START);
 		createEAttribute(paperDealEClass, PAPER_DEAL__HEDGING_PERIOD_END);
 		createEReference(paperDealEClass, PAPER_DEAL__PRICING_CALENDAR);
+		createEReference(paperDealEClass, PAPER_DEAL__TARGET_OBJECT);
 
 		buyPaperDealEClass = createEClass(BUY_PAPER_DEAL);
 
@@ -4246,6 +4257,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getPaperDeal_HedgingPeriodStart(), theDateTimePackage.getLocalDate(), "hedgingPeriodStart", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_HedgingPeriodEnd(), theDateTimePackage.getLocalDate(), "hedgingPeriodEnd", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPaperDeal_PricingCalendar(), thePricingPackage.getPricingCalendar(), null, "pricingCalendar", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getSlot());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getPaperDeal_TargetObject(), g1, null, "targetObject", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyPaperDealEClass, BuyPaperDeal.class, "BuyPaperDeal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

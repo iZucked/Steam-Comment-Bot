@@ -37,6 +37,7 @@ import java.time.YearMonth;
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodStart <em>Hedging Period Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodEnd <em>Hedging Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar <em>Pricing Calendar</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject <em>Target Object</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal()
@@ -310,6 +311,55 @@ public interface PaperDeal extends NamedObject {
 	 * @generated
 	 */
 	boolean isSetPricingCalendar();
+
+	/**
+	 * Returns the value of the '<em><b>Target Object</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Target Object</em>' reference.
+	 * @see #isSetTargetObject()
+	 * @see #unsetTargetObject()
+	 * @see #setTargetObject(Slot)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPaperDeal_TargetObject()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	Slot<?> getTargetObject();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject <em>Target Object</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Target Object</em>' reference.
+	 * @see #isSetTargetObject()
+	 * @see #unsetTargetObject()
+	 * @see #getTargetObject()
+	 * @generated
+	 */
+	void setTargetObject(Slot<?> value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject <em>Target Object</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetTargetObject()
+	 * @see #getTargetObject()
+	 * @see #setTargetObject(Slot)
+	 * @generated
+	 */
+	void unsetTargetObject();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject <em>Target Object</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Target Object</em>' reference is set.
+	 * @see #unsetTargetObject()
+	 * @see #getTargetObject()
+	 * @see #setTargetObject(Slot)
+	 * @generated
+	 */
+	boolean isSetTargetObject();
 
 	/**
 	 * Returns the value of the '<em><b>Instrument</b></em>' reference.
