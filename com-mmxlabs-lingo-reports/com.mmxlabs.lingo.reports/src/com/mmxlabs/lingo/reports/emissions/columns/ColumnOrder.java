@@ -6,14 +6,16 @@ package com.mmxlabs.lingo.reports.emissions.columns;
  *
  */
 public enum ColumnOrder {
-	ID_LEVEL(Integer.MIN_VALUE),
-	START(Integer.MIN_VALUE + 100),
-	EARLY_LEVEL(0),
-	START_DATE(100),
-	END_DATE(101),
-	MIDDLE_LEVEL(200),
-	LATER_LEVEL(300),
-	END(Integer.MAX_VALUE);
+	FIRST           (1),
+	SECOND          (2),
+	THIRD           (3),
+	FOURTH          (4),
+	FIFTH           (5),
+	FIFTH_FROM_END  (-5 + Integer.MAX_VALUE),
+	FOURTH_FROM_END (-4 + Integer.MAX_VALUE),
+	THIRD_FROM_END  (-3 + Integer.MAX_VALUE),
+	ONE_BUT_LAST    (-2 + Integer.MAX_VALUE),
+	LAST            (-1 + Integer.MAX_VALUE);
 
 	private final int levelValue;
 

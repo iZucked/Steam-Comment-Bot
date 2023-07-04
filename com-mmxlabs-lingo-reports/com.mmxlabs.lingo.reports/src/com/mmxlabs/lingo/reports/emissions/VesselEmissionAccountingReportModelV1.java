@@ -23,68 +23,69 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	private static final String LNG_TITLE = "LNG";
 	private static final String PILOT_LIGHT_GROUP = "PILOT_LIGHT_GROUP";
 	private static final String PILOT_LIGHT_TITLE = "Pilot Light";
+	private static final String METHANE_SLIP_GROUP_ID = "METHANE_SLIP_GROUP_ID";
 	
-	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Type")
-	@ColumnOrderLevel(ColumnOrder.START)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public String eventType;
 	
 	// Base Fuel
-	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.EARLY_LEVEL)
+	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
 	@ColumnName("Type")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.FIRST)
 	public String baseFuelType;
 	
 	// Base Fuel
-	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.EARLY_LEVEL)
+	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
 	@ColumnName("Consumed")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.SECOND)
 	public Long baseFuelConsumed;
 	
 	// Base Fuel
-	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.EARLY_LEVEL)
+	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
 	@ColumnName("Emissions")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long baseFuelEmissions;
 	
 	// LNG
-	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.MIDDLE_LEVEL)
+	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
 	@ColumnName("NBO")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long consumedNBO;
 	
 	// LNG
-	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.MIDDLE_LEVEL)
+	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
 	@ColumnName("FBO")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long consumedFBO;
 	
 	// LNG
-	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.MIDDLE_LEVEL)
+	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
 	@ColumnName("Emissions")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long emissionsLNG;
 	
 	// Pilot Light
-	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.LATER_LEVEL)
+	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
 	@ColumnName("Type")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public String pilotLightFuelType;
 	
 	// Pilot Light
-	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.LATER_LEVEL)
+	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
 	@ColumnName("Consumed")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long pilotLightFuelConsumption;
 	
 	// Pilot Light
-	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.LATER_LEVEL)
+	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
 	@ColumnName("Emissions")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long pilotLightEmission;
 	
-	@LingoIgnore
-	@ColumnName("CII")
-	@ColumnOrderLevel(ColumnOrder.LATER_LEVEL)
-	public Long attainedCII;
+	@ColumnGroup(id = METHANE_SLIP_GROUP_ID, headerTitle = "", position = ColumnOrder.THIRD_FROM_END)
+	@ColumnName("Methane Slip")
+	@ColumnOrderLevel(ColumnOrder.FIRST)
+	public Long methaneSlip;
 }

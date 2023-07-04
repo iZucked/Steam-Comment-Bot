@@ -84,7 +84,6 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 							model.baseFuelEmission = r2.baseFuelEmission - r1.baseFuelEmission;
 							model.pilotLightEmission = r2.pilotLightEmission - r1.pilotLightEmission;
 							model.totalEmission = r2.totalEmission - r1.totalEmission;
-							model.methaneSlip = r2.methaneSlip - r1.methaneSlip;
 
 							if (model.baseFuelEmission != 0  || model.pilotLightEmission != 0 || model.totalEmission != 0) {
 								if (!result.contains(r1) || !result.contains(r2)) {

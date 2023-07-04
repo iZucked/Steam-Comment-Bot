@@ -65,7 +65,6 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.pilotLightEmission = 0L;
 					model.totalEmission = 0L;
 					model.methaneSlip = 0L;
-					model.attainedCII = 0L;
 					model.methaneSlipRate = vessel.getVesselOrDelegateMethaneSlipRate();
 					int journeyDistance = 0;
 					
@@ -93,9 +92,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.totalEmission += 25 * model.methaneSlip;
 					final int denominatorForCIICalculation = journeyDistance * vessel.getDeadWeight();
 					if (denominatorForCIICalculation == 0) {
-						model.attainedCII = 0L;
 					} else {
-						model.attainedCII = TONS_TO_GRAMS * 1 / denominatorForCIICalculation;
 					}
 					models.add(model);
 				}

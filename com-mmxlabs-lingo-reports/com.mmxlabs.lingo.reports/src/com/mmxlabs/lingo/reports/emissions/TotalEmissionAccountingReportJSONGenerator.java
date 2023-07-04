@@ -76,7 +76,7 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		model.shippingEmission = 0L;
 		model.upstreamEmission = 0L;
 		model.totalEmission = 0L;
-		model.methaneSlip = 0L;
+//		model.methaneSlip = 0L;
 		final LoadSlot loadSlot = ScheduleModelUtils.getLoadSlot(cargoAllocation);
 		int physicalEnergyTransferred = ScheduleModelUtils.getLoadAllocation(cargoAllocation).getPhysicalEnergyTransferred();
 
@@ -115,16 +115,10 @@ public class TotalEmissionAccountingReportJSONGenerator {
 		// event
 		if (vessel != null) {
 			model.vesselName = vessel.getName();
-			//			for (final Event e : cargoAllocation.getEvents()) {
-			//				if (e instanceof FuelUsage fu) {
-			//					model.shippingEmission += EmissionsUtils.getBOGEmission(model, fu.getFuels());
-			//					model.shippingEmission += EmissionsUtils.getPilotLightEmission(model, fu.getFuels());
-			//				}
-			//			}
 			slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
-				model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
+//				model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 			});
-			model.totalEmission += model.shippingEmission + 25 * model.methaneSlip;
+//			model.totalEmission += model.shippingEmission + 25 * model.methaneSlip;
 		}
 
 		// getting the start and the end of the event

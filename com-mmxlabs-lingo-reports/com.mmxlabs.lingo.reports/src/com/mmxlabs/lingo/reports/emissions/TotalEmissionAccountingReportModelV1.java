@@ -20,19 +20,19 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 public class TotalEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel {
 	
 	@ColumnName("Upstream")
-	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.FIFTH_FROM_END)
 	public Long upstreamEmission;
 	
 	@ColumnName("Pipeline")
-	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.FIFTH_FROM_END)
 	public Long pipelineEmission;
 	
 	@ColumnName("Liquefaction")
-	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.FIFTH_FROM_END)
 	public Long liquefactionEmission;
 	
 	@ColumnName("Shipping")
-	@ColumnOrderLevel(ColumnOrder.MIDDLE_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.FIFTH_FROM_END)
 	public Long shippingEmission;
 	
 	@JsonIgnore

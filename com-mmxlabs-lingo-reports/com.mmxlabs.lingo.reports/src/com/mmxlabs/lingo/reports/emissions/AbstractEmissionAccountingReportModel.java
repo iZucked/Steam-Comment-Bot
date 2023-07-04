@@ -23,7 +23,8 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	
 	protected static final String ID_COLUMN_GROUP = "START_COLUMN_GROUP";
 	private static final String TOTAL_EMISSIONS_GROUP_ID = "TOTAL_EMISSIONS_GROUP";
-
+	private static final String CII_GROUP_ID = "CII_GROUP_ID";
+	private static final String CII_GROUP_TITLE = "CII";
 
 	@JsonIgnore
 	@LingoEquivalents
@@ -40,34 +41,34 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@LingoIgnore
 	public String otherID;
 	
-	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Scenario")
-	@ColumnOrderLevel(ColumnOrder.ID_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.FIRST)
 	public String scenarioName;
 	
-	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Vessel")
-	@ColumnOrderLevel(ColumnOrder.ID_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.SECOND)
 	public String vesselName;
 	
-	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("ID")
-	@ColumnOrderLevel(ColumnOrder.EARLY_LEVEL)
+	@ColumnOrderLevel(ColumnOrder.THIRD_FROM_END)
 	public String eventID;
 	
-	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Start")
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
-	@ColumnOrderLevel(ColumnOrder.START_DATE)
+	@ColumnOrderLevel(ColumnOrder.ONE_BUT_LAST)
 	@ColumnSortOrder(value = 1)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventStart;
 	
-	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.ID_LEVEL)
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("End")
-	@ColumnOrderLevel(ColumnOrder.END_DATE)
+	@ColumnOrderLevel(ColumnOrder.LAST)
 	@HubFormat("DD/MM/YY")
 	@LingoFormat("dd/MM/yy")
 	@ColumnSortOrder(value = 1)
@@ -75,16 +76,20 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	public LocalDateTime eventEnd;
 	
-	
-	@ColumnGroup(id = TOTAL_EMISSIONS_GROUP_ID, headerTitle = "", position = ColumnOrder.END)
-	@ColumnName("CH4")
-	@ColumnOrderLevel(ColumnOrder.START)
-	public Long methaneSlip;
-	
-	@ColumnGroup(id = TOTAL_EMISSIONS_GROUP_ID, headerTitle = "", position = ColumnOrder.END)
-	@ColumnName("Total CO2e t")
-	@ColumnOrderLevel(ColumnOrder.END)
+	@ColumnGroup(id = TOTAL_EMISSIONS_GROUP_ID, headerTitle = "", position = ColumnOrder.ONE_BUT_LAST)
+	@ColumnName("Total")
+	@ColumnOrderLevel(ColumnOrder.LAST)
 	public Long totalEmission;
+	
+	@ColumnGroup(id = CII_GROUP_ID, headerTitle = CII_GROUP_TITLE, position = ColumnOrder.LAST)
+	@ColumnName("Value")
+	@ColumnOrderLevel(ColumnOrder.FIRST)
+	public Long ciiValue;
+	
+	@ColumnGroup(id = CII_GROUP_ID, headerTitle = CII_GROUP_TITLE, position = ColumnOrder.LAST)
+	@ColumnName("Grade")
+	@ColumnOrderLevel(ColumnOrder.LAST)
+	public Long ciiGrade;
 	
 	@JsonIgnore
 	@Override

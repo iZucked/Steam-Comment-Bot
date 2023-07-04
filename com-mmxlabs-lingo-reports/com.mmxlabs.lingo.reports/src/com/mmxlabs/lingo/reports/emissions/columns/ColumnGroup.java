@@ -27,5 +27,5 @@ public @interface ColumnGroup {
 	/**
 	 * Higher order positioning of column groups within tables
 	 */
-    public ColumnOrder position() default ColumnOrder.START;
+    public ColumnOrder position() default ColumnOrder.SECOND;
 }

@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface ColumnOrderLevel {
-    public ColumnOrder value() default ColumnOrder.START;
+    public ColumnOrder value() default ColumnOrder.SECOND;
 }

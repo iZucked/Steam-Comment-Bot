@@ -89,7 +89,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.baseFuelEmission = 0L;
 		model.pilotLightEmission = 0L;
 		model.totalEmission = 0L;
-		model.methaneSlip = 0L;
+//		model.methaneSlip = 0L;
 		LocalDateTime eventStart = null;
 		
 		calculatePortEmissions(cargoAllocation, model);
@@ -101,7 +101,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 			model.eventEnd = e.getEnd().toLocalDateTime();
 		}
 		slotAllocations.stream().filter(s -> s.getSlot() instanceof LoadSlot).forEach(sa -> {
-			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
+//			model.methaneSlip += (long) (sa.getEnergyTransferred() * model.methaneSlipRate);
 		});
 		
 		double baseFuelAccumulator = 0.0;
@@ -159,7 +159,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				}
 			} 
 		}
-		model.methaneSlip = Math.round(methaneSlipAccumulator);
+//		model.methaneSlip = Math.round(methaneSlipAccumulator);
 		
 		model.eventStart = eventStart;
 		model.totalEmission += model.nbo 
