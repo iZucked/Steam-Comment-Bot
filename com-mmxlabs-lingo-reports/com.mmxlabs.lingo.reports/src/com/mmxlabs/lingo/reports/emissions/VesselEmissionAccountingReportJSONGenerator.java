@@ -35,8 +35,6 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class VesselEmissionAccountingReportJSONGenerator {
 
-	private static final long TONS_TO_GRAMS = 1_000_000;
-
 	public static List<VesselEmissionAccountingReportModelV1> createReportData(final @NonNull ScheduleModel scheduleModel, final boolean isPinned, final String scenarioName) {
 		final List<VesselEmissionAccountingReportModelV1> models = new LinkedList<>();
 

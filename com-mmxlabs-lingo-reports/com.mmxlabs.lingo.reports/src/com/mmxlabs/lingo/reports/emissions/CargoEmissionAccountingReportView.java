@@ -28,7 +28,7 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 	 */
 	public static final String ID = "com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView";
 	private DeltaHelper deltaHelper;
-	
+
 	@SuppressWarnings("null")
 	public CargoEmissionAccountingReportView() {
 		super(CargoEmissionAccountingReportModelV1.class);
@@ -47,7 +47,7 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 				rows.addAll(data);
 			}
 		}
-		
+
 		final boolean processDeltas = selectedDataProvider.inPinDiffMode();
 		final boolean showScenarioColumn = processDeltas || selectedDataProvider.getAllScenarioResults().size() >= 2;
 		EmissionsUtils.changeScenarioNameColumnVisibility(columnInfo, showScenarioColumn);
@@ -57,63 +57,45 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 		}
 		return rows;
 	}
-	
-	private List<CargoEmissionAccountingReportModelV1> processDeltas(final List<CargoEmissionAccountingReportModelV1> rows){
+
+	private List<CargoEmissionAccountingReportModelV1> processDeltas(final List<CargoEmissionAccountingReportModelV1> rows) {
 		final List<CargoEmissionAccountingReportModelV1> result = new ArrayList<>();
-		long baseFuelEmission = 0L;
-		long bogEmission = 0L;
-		long pilotLightEmission = 0L;
-		long totalEmission = 0L;
 		
+		final CargoEmissionAccountingReportModelV1 totalModel = new CargoEmissionAccountingReportModelV1();
+		totalModel.initZeroes();
+
 		int group = 0;
-		
-		for (final var r1 : rows) {
+
+		for (final CargoEmissionAccountingReportModelV1 r1 : rows) {
 			if (r1.isPinned()) {
-				for (final var r2 : rows) {
-					if (!r2.isPinned()) {
-						if (EmissionsUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
+				for (final CargoEmissionAccountingReportModelV1 r2 : rows) {
+					if (!r2.isPinned() && EmissionsUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
+						
+						final CargoEmissionAccountingReportModelV1 model = new CargoEmissionAccountingReportModelV1();
+						model.setDelta(r2, r1);
 
-							final CargoEmissionAccountingReportModelV1 model = new CargoEmissionAccountingReportModelV1();
-							model.scenarioName = "Δ";
-							model.vesselName = r1.vesselName;
-							model.eventID = r1.eventID;
-							model.otherID = r1.otherID;
-							model.eventStart = r1.eventStart;
-							model.eventEnd = r1.eventEnd;
-
-							model.baseFuelEmission = r2.baseFuelEmission - r1.baseFuelEmission;
-							model.pilotLightEmission = r2.pilotLightEmission - r1.pilotLightEmission;
-							model.totalEmission = r2.totalEmission - r1.totalEmission;
-
-							if (model.baseFuelEmission != 0  || model.pilotLightEmission != 0 || model.totalEmission != 0) {
-								if (!result.contains(r1) || !result.contains(r2)) {
-									baseFuelEmission += model.baseFuelEmission;
-									pilotLightEmission += model.pilotLightEmission;
-									totalEmission += model.totalEmission;
-									r1.setGroup(group);
-									r2.setGroup(group);
-									model.setGroup(group);
-									result.add(r1);
-									result.add(r2);
-									result.add(model);
-									++group;
-								}
-							}
-							break;
+						if (!r1.equals(r2) && !(result.contains(r1) && result.contains(r2))) {
+							totalModel.addToTotal(model);
+							r1.setGroup(group);
+							r2.setGroup(group);
+							model.setGroup(group);
+							result.add(r1);
+							result.add(r2);
+							result.add(model);
+							++group;
 						}
+						break;
 					}
 				}
 			}
 		}
-		
-		if (baseFuelEmission != 0 || bogEmission != 0 || pilotLightEmission != 0 || totalEmission != 0) {
-			final CargoEmissionAccountingReportModelV1 model = new CargoEmissionAccountingReportModelV1();
-			model.scenarioName = "Total Δ";
-			model.baseFuelEmission = baseFuelEmission;
-			model.pilotLightEmission = pilotLightEmission;
-			model.totalEmission = totalEmission;
-			result.add(0, model);
+
+		if (totalModel.isNonZero()) {
+			totalModel.setGroup(Integer.MIN_VALUE);
+			totalModel.scenarioName = "Total Δ";
+			result.add(0, totalModel);
 		}
+		
 		return result;
 	}
 
@@ -121,19 +103,19 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 	protected BiConsumer<ViewerCell, Field> createStyler() {
 		return EmissionsUtils::styleTheCell;
 	}
-	
+
 	@Override
 	protected void makeActions() {
 		getViewSite().getActionBars().getToolBarManager().add(deltaHelper.createDeltaAction());
-		
+
 		super.makeActions();
 	}
-	
+
 	@Override
 	public void createPartControl(final Composite parent) {
 		deltaHelper = new DeltaHelper();
 		super.createPartControl(parent);
-		
+
 		if (viewer != null) {
 			deltaHelper.setViewer(viewer);
 		}

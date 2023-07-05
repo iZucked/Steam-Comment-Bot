@@ -19,7 +19,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.LingoFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.models.lng.schedule.Schedule;
 
-public class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission {
+public abstract class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission, IDeltaDerivable {
 	
 	protected static final String ID_COLUMN_GROUP = "START_COLUMN_GROUP";
 	private static final String TOTAL_EMISSIONS_GROUP_ID = "TOTAL_EMISSIONS_GROUP";
@@ -148,5 +148,62 @@ public class AbstractEmissionAccountingReportModel implements IEmissionReportIDD
 	@Override
 	public double getMethaneSlipRate() {
 		return methaneSlipRate;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof final AbstractEmissionAccountingReportModel otherModel) {
+			return this.ciiGrade == otherModel.ciiGrade
+					&& this.ciiValue == otherModel.ciiValue
+					&& this.totalEmission == otherModel.totalEmission;
+		}
+		return super.equals(other);
+	}
+
+	@Override
+	public void initZeroes() {
+		this.ciiValue = 0L;
+		this.totalEmission = 0L;
+	}
+
+	@Override
+	public void setDelta(IDeltaDerivable first, IDeltaDerivable second) {
+		if (first instanceof final AbstractEmissionAccountingReportModel firstModel && second instanceof final AbstractEmissionAccountingReportModel secondModel) {
+			this.scenarioName = DELTA_SYMBOL;
+			this.vesselName = firstModel.vesselName;
+			this.eventID = firstModel.eventID;
+			this.otherID = firstModel.otherID;
+			this.eventStart = firstModel.eventStart;
+			this.eventEnd = firstModel.eventEnd;
+			this.totalEmission = firstModel.totalEmission - secondModel.totalEmission;
+			this.ciiValue = firstModel.ciiValue - secondModel.ciiValue;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	@Override
+	public void addToTotal(IDeltaDerivable summand) {
+		if (summand instanceof final AbstractEmissionAccountingReportModel summandModel) {
+			this.totalEmission += summandModel.totalEmission;
+			this.ciiValue += summandModel.totalEmission;
+		}
+	}
+
+	@Override
+	public boolean isNonZero() {
+		return ciiValue != 0 || totalEmission != 0;
+	}
+	
+	@Override
+	public int hashCode() {
+		/*
+		 *  I do not like Eclipse warnings. They make me cry.
+		 *  Here is a hashCode implementation for the sake of
+		 *  SonarLint java:S1206. Now I am not crying.
+		 *  
+		 *  Or do I?
+		 */
+		return super.hashCode();
 	}
 }

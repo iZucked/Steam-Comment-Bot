@@ -8,15 +8,14 @@ import com.mmxlabs.lingo.reports.emissions.columns.ColumnGroup;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
-import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 
 /**
  * Emissions report data
  */
 @SchemaVersion(1)
-public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel {
-	
+public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel implements IDeltaDerivable {
+
 	private static final String BASE_FUEL_GROUP = "BASE_FUEL_GROUP";
 	private static final String BASE_FUEL_TITLE = "Base Fuel";
 	private static final String LNG_GROUP = "LNG_GROUP";
@@ -24,68 +23,129 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	private static final String PILOT_LIGHT_GROUP = "PILOT_LIGHT_GROUP";
 	private static final String PILOT_LIGHT_TITLE = "Pilot Light";
 	private static final String METHANE_SLIP_GROUP_ID = "METHANE_SLIP_GROUP_ID";
-	
+
 	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Type")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public String eventType;
-	
-	// Base Fuel
+
 	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
 	@ColumnName("Type")
 	@ColumnOrderLevel(ColumnOrder.FIRST)
 	public String baseFuelType;
-	
-	// Base Fuel
+
 	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
 	@ColumnName("Consumed")
 	@ColumnOrderLevel(ColumnOrder.SECOND)
 	public Long baseFuelConsumed;
-	
-	// Base Fuel
+
 	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
 	@ColumnName("Emissions")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long baseFuelEmissions;
-	
-	// LNG
+
 	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
 	@ColumnName("NBO")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long consumedNBO;
-	
-	// LNG
+
 	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
 	@ColumnName("FBO")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long consumedFBO;
-	
-	// LNG
+
 	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
 	@ColumnName("Emissions")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long emissionsLNG;
-	
-	// Pilot Light
+
 	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
 	@ColumnName("Type")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public String pilotLightFuelType;
-	
-	// Pilot Light
+
 	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
 	@ColumnName("Consumed")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long pilotLightFuelConsumption;
-	
-	// Pilot Light
+
 	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
 	@ColumnName("Emissions")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long pilotLightEmission;
-	
+
 	@ColumnGroup(id = METHANE_SLIP_GROUP_ID, headerTitle = "", position = ColumnOrder.THIRD_FROM_END)
 	@ColumnName("Methane Slip")
 	@ColumnOrderLevel(ColumnOrder.FIRST)
 	public Long methaneSlip;
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof final VesselEmissionAccountingReportModelV1 otherModel) {
+			return super.equals(other) && this.pilotLightEmission == otherModel.pilotLightEmission && this.methaneSlip == otherModel.methaneSlip && this.emissionsLNG == otherModel.emissionsLNG
+					&& this.consumedFBO == otherModel.consumedFBO && this.consumedNBO == otherModel.consumedNBO;
+		}
+		return false;
+	}
+
+	@Override
+	public void initZeroes() {
+		super.initZeroes();
+		pilotLightEmission = 0L;
+		methaneSlip = 0L;
+		emissionsLNG = 0L;
+		consumedFBO = 0L;
+		consumedNBO = 0L;
+		baseFuelConsumed = 0L;
+		baseFuelEmissions = 0L;
+		pilotLightFuelConsumption = 0L;
+	}
+
+	@Override
+	public void setDelta(IDeltaDerivable first, IDeltaDerivable second) {
+		if (first instanceof final VesselEmissionAccountingReportModelV1 firstModel && second instanceof final VesselEmissionAccountingReportModelV1 secondModel) {
+			super.setDelta(firstModel, secondModel);
+			this.methaneSlip = firstModel.methaneSlip - secondModel.methaneSlip;
+			this.emissionsLNG = firstModel.emissionsLNG - secondModel.emissionsLNG;
+			this.consumedFBO = firstModel.consumedFBO - secondModel.consumedFBO;
+			this.consumedNBO = firstModel.consumedNBO - secondModel.consumedNBO;
+			if (firstModel.baseFuelType.equals(secondModel.baseFuelType)) {
+				this.baseFuelType = firstModel.baseFuelType;
+				this.baseFuelConsumed = firstModel.baseFuelConsumed - secondModel.baseFuelConsumed;
+			}
+			this.baseFuelEmissions = firstModel.baseFuelEmissions - secondModel.baseFuelEmissions;
+			if (firstModel.pilotLightFuelType.equals(secondModel.pilotLightFuelType)) {
+				this.pilotLightFuelType = firstModel.baseFuelType;
+				this.pilotLightFuelConsumption = firstModel.pilotLightFuelConsumption - secondModel.pilotLightFuelConsumption;
+			}
+			this.pilotLightEmission = firstModel.pilotLightEmission - secondModel.pilotLightEmission;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	@Override
+	public void addToTotal(IDeltaDerivable summand) {
+		if (summand instanceof final VesselEmissionAccountingReportModelV1 summandModel) {
+			super.addToTotal(summand);
+			this.pilotLightEmission += summandModel.pilotLightEmission;
+			this.methaneSlip += summandModel.methaneSlip;
+			this.emissionsLNG += summandModel.emissionsLNG;
+			this.consumedFBO += summandModel.consumedFBO;
+			this.consumedNBO += summandModel.consumedNBO;
+			this.baseFuelEmissions += summandModel.baseFuelEmissions;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	@Override
+	public boolean isNonZero() {
+		return super.isNonZero() || pilotLightEmission != 0L || methaneSlip != 0L || emissionsLNG != 0L || consumedFBO != 0L || consumedNBO != 0L || baseFuelEmissions != 0L;
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }
