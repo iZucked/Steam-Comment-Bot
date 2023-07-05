@@ -238,7 +238,11 @@ public class ColumnGenerator {
 					@Override
 					public void update(final ViewerCell cell) {
 						final Widget item = cell.getItem();
-						cell.setText(rendererFunction.apply(item.getData()));
+						if (item.getData() == null) {
+							cell.setText("-");
+						} else {
+							cell.setText(rendererFunction.apply(item.getData()));
+						}
 						styler.accept(cell, f);
 					}
 				});

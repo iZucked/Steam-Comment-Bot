@@ -33,8 +33,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
-public class CargoEmissionAccountingReportJSONGenerator{
-	
+public class CargoEmissionAccountingReportJSONGenerator {
+
 	public static List<CargoEmissionAccountingReportModelV1> createReportData(final @NonNull ScheduleModel scheduleModel, final boolean isPinned, final String scenarioName) {
 		final List<CargoEmissionAccountingReportModelV1> models = new LinkedList<>();
 
@@ -42,7 +42,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		if (schedule == null) {
 			return models;
 		}
-		
+
 		for (final CargoAllocation cargoAllocation : scheduleModel.getSchedule().getCargoAllocations()) {
 			final CargoEmissionAccountingReportModelV1 model = createCargoAllocationReportData(cargoAllocation);
 			if (model != null) {
@@ -56,17 +56,17 @@ public class CargoEmissionAccountingReportJSONGenerator{
 
 		return models;
 	}
-	
+
 	public static CargoEmissionAccountingReportModelV1 createCargoAllocationReportData(final CargoAllocation cargoAllocation) {
 		final CargoEmissionAccountingReportModelV1 model = new CargoEmissionAccountingReportModelV1();
-		
+
 		final EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
 
 		final Optional<SlotAllocation> loadOptional = slotAllocations //
 				.stream() //
 				.filter(s -> (s.getSlot() instanceof LoadSlot)) //
 				.findFirst();
-		
+
 		if (loadOptional.isEmpty()) {
 			return null;
 		}
@@ -79,11 +79,11 @@ public class CargoEmissionAccountingReportJSONGenerator{
 				model.equivalents.add(sa.getSlot());
 			}
 		}
-		
+
 		final Vessel vessel = ScheduleModelUtils.getVessel(cargoAllocation.getSequence());
-		if (vessel == null) 
+		if (vessel == null)
 			return null;
-		
+
 		model.eventID = cargoAllocation.getName();
 		model.vesselName = vessel.getName();
 		model.baseFuelEmission = 0L;
@@ -91,28 +91,22 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.totalEmission = 0L;
 		model.methaneSlip = 0L;
 		LocalDateTime eventStart = null;
-		
+
 		calculatePortEmissions(cargoAllocation, model);
-		
+
 		for (final Event event : cargoAllocation.getEvents()) {
 			if (eventStart == null) {
 				eventStart = event.getStart().toLocalDateTime();
 			}
 			model.eventEnd = event.getEnd().toLocalDateTime();
 		}
-		
+
 		calculateFuelEmissions(cargoAllocation, model);
 		calculateMethaneSlip(cargoAllocation, model, vessel);
 		calculateCII(cargoAllocation, model, vessel);
-		
+
 		model.eventStart = eventStart;
-		model.totalEmission += model.nbo 
-				+ model.fbo 
-				+ model.baseFuelEmission 
-				+ model.pilotLightEmission 
-				+ model.upstreamEmission
-				+ model.liquefactionEmission
-				+ model.methaneSlipEmissionsCO2
+		model.totalEmission += model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission + model.methaneSlipEmissionsCO2
 				+ model.pipelineEmission;
 		return model;
 	}
@@ -124,7 +118,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		double pilotLightAccumulator = 0.0;
 		for (final Event event : cargoAllocation.getEvents()) {
 			if (event instanceof final FuelUsage fuelUsageEvent) {
-				
+
 				for (final FuelQuantity fuelQuantity : fuelUsageEvent.getFuels()) {
 
 					final Fuel fuel = fuelQuantity.getFuel();
@@ -172,18 +166,18 @@ public class CargoEmissionAccountingReportJSONGenerator{
 						methaneSlipAccumulator += sa.getPhysicalEnergyTransferred() * vessel.getVesselOrDelegateMethaneSlipRate();
 					}
 				}
-			} 
+			}
 		}
 		model.methaneSlip = Math.round(methaneSlipAccumulator);
 		model.methaneSlipEmissionsCO2 = EmissionsUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
 	}
-	
+
 	private static void calculateCII(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model, final Vessel vessel) {
 		double distanceAccumulator = 0.0;
 		for (final Event event : cargoAllocation.getEvents()) {
 			if (event instanceof final Journey journeyEvent) {
 				distanceAccumulator += journeyEvent.getDistance();
-			} 
+			}
 		}
 		final double distance = Math.round(distanceAccumulator);
 		final double denominatorCII = distance * vessel.getVesselOrDelegateDeadWeight();
@@ -191,13 +185,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 			model.ciiValue = 0L;
 			model.ciiGrade = "-";
 		} else {
-			final double numeratorCII = (double
-					) model.nbo 
-					+ model.fbo 
-					+ model.baseFuelEmission 
-					+ model.pilotLightEmission 
-					+ model.upstreamEmission
-					+ model.liquefactionEmission
+			final double numeratorCII = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission
 					+ model.pipelineEmission;
 			model.ciiValue = Math.round(EmissionsUtils.MT_TO_GRAMS * numeratorCII / denominatorCII);
 			model.ciiGrade = "todo";
@@ -209,7 +197,7 @@ public class CargoEmissionAccountingReportJSONGenerator{
 		model.pipelineEmission = 0L;
 		model.liquefactionEmission = 0L;
 		final Slot<?> slot = cargoAllocation.getSlotAllocations().stream().map(it -> it.getSlot()).findAny().orElse(null);
-		if (slot != null) {			
+		if (slot != null) {
 			final Port port = ScheduleModelUtils.getPortFromSlot(slot);
 			if (port != null) {
 				final SlotAllocation loadSlotAllocation = ScheduleModelUtils.getLoadAllocation(cargoAllocation);

@@ -6,20 +6,15 @@ package com.mmxlabs.lingo.reports.emissions;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 
 import com.mmxlabs.lingo.reports.modelbased.ColumnGenerator.ColumnInfo;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
@@ -29,12 +24,15 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
 public class EmissionsUtils {
 	
+	private EmissionsUtils() {}
+	
 	public static final double LNG_DENSITY_TON_PER_M3 = 0.450;
 	public static final double LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL = 2.750;
 	
 	public static final int METHANE_CO2_EQUIVALENT = 25;
 	public static final double MT_TO_GRAMS = 1_000_000.0;
 	
+	@SuppressWarnings("null")
 	public static Long consumedQuantityLNG(final FuelQuantity fuelQuantity) {
 
 		final Set<FuelUnit> uniqueUnits = new HashSet<>();
@@ -47,7 +45,7 @@ public class EmissionsUtils {
 
 		if (unitsAreTheSame) {
 			final FuelUnit unitItSelf = uniqueUnits.stream().findAny().orElseThrow();
-			quantity = fuelQuantity.getAmounts().stream().map(amount -> amount.getQuantity()).reduce(Double::sum).orElse(0.0);
+			quantity = fuelQuantity.getAmounts().stream().map(FuelAmount::getQuantity).reduce(Double::sum).orElse(0.0);
 
 			// Convert whatever to MT
 			quantity = switch (unitItSelf) {
