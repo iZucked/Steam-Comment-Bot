@@ -861,6 +861,20 @@ public class ChangeSetViewColumnHelper {
 		public final Map<String, Double> sellValues;
 	}
 	
+	private Map<String, GridViewerColumn> indexColumnMap = new HashMap<String, GridViewerColumn>();
+	
+	private GridViewerColumn getOrCreateColumn(final String index) {
+		final GridViewerColumn gvc;
+		if (indexColumnMap.get(index) != null) {
+			gvc = indexColumnMap.get(index);
+		} else {
+			final GridColumn gc = new GridColumn(exposuresColumnGroup, SWT.CENTER);
+			gvc = new GridViewerColumn(viewer, gc);
+			indexColumnMap.put(index, gvc);
+		}
+		return gvc;
+	}
+	
 	public void updateExposuresColumns() {
 		cleanUpExposuresColumns();
 		
@@ -873,8 +887,7 @@ public class ChangeSetViewColumnHelper {
 			if (index == null)
 				continue;
 			
-			final GridColumn gc = new GridColumn(exposuresColumnGroup, SWT.CENTER);
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			final GridViewerColumn gvc = getOrCreateColumn(index);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			gvc.getColumn().setHeaderTooltip(index);
 			gvc.getColumn().setText(index);
@@ -3270,6 +3283,7 @@ public class ChangeSetViewColumnHelper {
 	}
 	
 	public void cleanUpExposuresColumns() {
+		indexColumnMap.clear();
 		if (exposuresColumnGroup != null && !exposuresColumnGroup.isDisposed()) {
 			final GridColumn[] columns = exposuresColumnGroup.getColumns();
 			for (final GridColumn c : columns) {
