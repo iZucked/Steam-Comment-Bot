@@ -492,6 +492,42 @@ public interface ScheduleFactory extends EFactory {
 	SandboxReference createSandboxReference();
 
 	/**
+	 * Returns a new object of class '<em>Non Shipped Sequence</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Non Shipped Sequence</em>'.
+	 * @generated
+	 */
+	NonShippedSequence createNonShippedSequence();
+
+	/**
+	 * Returns a new object of class '<em>Non Shipped Slot Visit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Non Shipped Slot Visit</em>'.
+	 * @generated
+	 */
+	NonShippedSlotVisit createNonShippedSlotVisit();
+
+	/**
+	 * Returns a new object of class '<em>Non Shipped Journey</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Non Shipped Journey</em>'.
+	 * @generated
+	 */
+	NonShippedJourney createNonShippedJourney();
+
+	/**
+	 * Returns a new object of class '<em>Non Shipped Idle</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Non Shipped Idle</em>'.
+	 * @generated
+	 */
+	NonShippedIdle createNonShippedIdle();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

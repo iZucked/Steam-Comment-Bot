@@ -37,8 +37,6 @@ public class PriceExpressionProposalFactory implements IContentProposalFactory {
 			return new PriceExpressionProposalProvider(PriceIndexType.BUNKERS, PriceIndexType.CURRENCY);
 		} else if (ExpressionAnnotationConstants.TYPE_CURRENCY.equals(value)) {
 			return new PriceExpressionProposalProvider(PriceIndexType.CURRENCY);
-		} else if (ExpressionAnnotationConstants.TYPE_PRICING_BASIS.equals(value)) {
-			return new PriceExpressionProposalProvider(PriceIndexType.PRICING_BASIS, PriceIndexType.CURRENCY, PriceIndexType.COMMODITY);
 		}
 		return null;
 	}

@@ -22,6 +22,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.HubColumnStyle;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubSummary;
 import com.mmxlabs.lingo.reports.modelbased.annotations.HubType;
+import com.mmxlabs.lingo.reports.modelbased.annotations.RowGroup;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 
 public class SchemaGenerator {
@@ -39,6 +40,7 @@ public class SchemaGenerator {
 		public List<Column> columns;
 		public List<ColumnStyle> styles;
 		public InitialSort initialSort;
+		public String rowGroupField;
 
 	}
 
@@ -51,7 +53,7 @@ public class SchemaGenerator {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private static class ColumnFormat {
 		public String type;
-//		@JsonRawValue
+		// @JsonRawValue
 		public Object detail;
 	}
 
@@ -126,6 +128,12 @@ public class SchemaGenerator {
 			}
 		}
 		model.columns = doGenerateHubSchema(cls, mode);
+		for (Field f : cls.getFields()) {
+			if (f.getAnnotation(RowGroup.class) != null) {
+				model.rowGroupField = f.getName();
+				break;
+			}
+		}
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(model);
 
@@ -137,6 +145,9 @@ public class SchemaGenerator {
 		for (Field f : cls.getFields()) {
 
 			if (f.getAnnotation(JsonIgnore.class) != null) {
+				continue;
+			}
+			if (f.getAnnotation(RowGroup.class) != null) {
 				continue;
 			}
 
@@ -173,7 +184,7 @@ public class SchemaGenerator {
 				HubType a = f.getAnnotation(HubType.class);
 				if (a != null) {
 					hubType = a.value();
-//					includeEntry = true;
+					// includeEntry = true;
 				}
 			}
 

@@ -59,6 +59,7 @@ public class CharterOutEventItemProvider
 			addRepositioningFeePropertyDescriptor(object);
 			addRequiredHeelPropertyDescriptor(object);
 			addAvailableHeelPropertyDescriptor(object);
+			addExtensionPeriodPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -169,6 +170,28 @@ public class CharterOutEventItemProvider
 				 false,
 				 false,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Extension Period feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addExtensionPeriodPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutEvent_extensionPeriod_feature"),
+				 getString("_UI_CharterOutEvent_extensionPeriod_description"),
+				 CargoPackage.Literals.CHARTER_OUT_EVENT__EXTENSION_PERIOD,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -289,6 +312,7 @@ public class CharterOutEventItemProvider
 			case CargoPackage.CHARTER_OUT_EVENT__HIRE_RATE:
 			case CargoPackage.CHARTER_OUT_EVENT__BALLAST_BONUS:
 			case CargoPackage.CHARTER_OUT_EVENT__REPOSITIONING_FEE:
+			case CargoPackage.CHARTER_OUT_EVENT__EXTENSION_PERIOD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.CHARTER_OUT_EVENT__REQUIRED_HEEL:

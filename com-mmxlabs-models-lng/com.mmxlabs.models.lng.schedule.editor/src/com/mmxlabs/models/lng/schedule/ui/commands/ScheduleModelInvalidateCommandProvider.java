@@ -123,7 +123,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 			delete.addAll(analyticsModel.getBreakevenModels());
 		}
 		if(analyticsModel.getMarketabilityModel() != null) {
-			delete.addAll(analyticsModel.getMarketabilityModel().getRows());
+			delete.add(analyticsModel.getMarketabilityModel());
 		}
 		// Clear sandbox results, but not the sandbox itself
 		if (!analyticsModel.getOptionModels().isEmpty()) {

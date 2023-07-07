@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -54,14 +53,17 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.auth.ICloudAuthenticationProvider;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.debug.CloudOptiDebugContants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.GatewayResponseMaker;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
+import com.mmxlabs.rcp.common.ServiceHelper;
 
 public class CloudOptimisationDataServiceClient {
 
@@ -96,7 +98,7 @@ public class CloudOptimisationDataServiceClient {
 
 				@Override
 				public CloseableHttpClient load(final HttpHost baseUrl) throws Exception {
-					final boolean needsClientAuth = baseUrl.getHostName().contains("gw.minimaxlabs.com");
+					final boolean needsClientAuth = baseUrl.getHostName().endsWith("gw.minimaxlabs.com");
 
 					final HttpClientBuilder builder = HttpClientUtil.createBasicHttpClient(baseUrl, needsClientAuth);
 					builder.addInterceptorFirst(new HttpRequestInterceptor() {
@@ -107,8 +109,21 @@ public class CloudOptimisationDataServiceClient {
 								if (request instanceof final HttpRequestWrapper w) {
 									uri = new URI(w.getOriginal().getRequestLine().getUri());
 								}
-								if (uri.getHost().contains("gw.minimaxlabs.com")) {
-									request.addHeader(HttpHeaders.AUTHORIZATION, HttpClientUtil.basicAuthHeader(getUsername(), getPassword()));
+								if (uri.getHost().endsWith("gw.minimaxlabs.com")) {
+									final URI url = uri;
+									ServiceHelper.withOptionalServiceConsumer(ICloudAuthenticationProvider.class, p -> {
+										if (p != null) {
+											try {
+												final Pair<String, String> header = p.provideAuthenticationHeader(url);
+												if (header != null) {
+													request.addHeader(header.getFirst(), header.getSecond());
+												}
+											} catch (final Exception exception) {
+												// Error generating the token
+												exception.printStackTrace();
+											}
+										}
+									});
 								}
 							} catch (final URISyntaxException e) {
 								throw new IOException(e);
@@ -134,14 +149,6 @@ public class CloudOptimisationDataServiceClient {
 	private CloseableHttpClient getHttpClient(final URI url) {
 		final HttpHost httpHost = URIUtils.extractHost(url);
 		return cache.getUnchecked(httpHost);
-	}
-
-	private String getUsername() {
-		return Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_USERNAME);
-	}
-
-	private String getPassword() {
-		return Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_PASSWORD);
 	}
 
 	private String getGateway() {

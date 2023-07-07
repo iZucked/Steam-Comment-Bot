@@ -35,6 +35,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
@@ -242,6 +244,9 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 
 		final List<String> hints = new LinkedList<>();
 		hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NON_SHIPPED_FOB_ROTATIONS)) {
+			hints.add(LNGTransformerHelper.HINT_NONSHIPPED_ROTATIONS);
+		}
 
 		try {
 

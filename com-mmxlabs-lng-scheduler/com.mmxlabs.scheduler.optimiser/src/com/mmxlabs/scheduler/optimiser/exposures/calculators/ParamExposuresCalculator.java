@@ -25,11 +25,11 @@ public class ParamExposuresCalculator {
 		if ("CV".equalsIgnoreCase(paramNode.getName())) {
 			final long constant = OptimiserUnitConvertor.convertToInternalPrice(OptimiserUnitConvertor.convertToExternalConversionFactor(inputRecord.cargoCV()));
 			return new Pair<>(constant, new Constant(constant, ""));
-		} else if ("VOLUME_MMBTU".equalsIgnoreCase(paramNode.getName())) {
+		} else if ("VOL_MMBTU".equalsIgnoreCase(paramNode.getName())) {
 			double extVolumeMMBTU = OptimiserUnitConvertor.convertToExternalFloatVolume(inputRecord.volumeInMMBTU());
 			final long constant = Math.round(extVolumeMMBTU * (double) Calculator.HighScaleFactor);
 			return new Pair<>(constant, new Constant(constant, ""));
-		} else if ("VOLUME_M3".equalsIgnoreCase(paramNode.getName())) {
+		} else if ("VOL_M3".equalsIgnoreCase(paramNode.getName())) {
 			final long volumeM3 = Calculator.convertMMBTuToM3(inputRecord.volumeInMMBTU(), inputRecord.cargoCV());
 			double extVolumeM3 = OptimiserUnitConvertor.convertToExternalFloatVolume(volumeM3);
 			final long constant = Math.round(extVolumeM3 * (double) Calculator.HighScaleFactor);

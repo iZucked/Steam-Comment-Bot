@@ -545,7 +545,7 @@ public class CPBasedSolver {
 		final Map<Vessel, List<IntervalVar>> dryDockIntervalVars2 = new HashMap<>();
 		for (final Entry<com.mmxlabs.models.lng.fleet.Vessel, List<DryDockEvent>> entry : dryDockEvents.entrySet()) {
 			for (final DryDockEvent event : entry.getValue()) {
-				final int durationInHours = event.getDurationInDays() * 24;
+				final int durationInHours = event.getSchedulingDurationInDays() * 24;
 				final ZonedDateTime startByZdt = event.getStartByAsDateTime().withZoneSameInstant(utcZoneId);
 				final ZonedDateTime startAfterZdt = event.getStartAfterAsDateTime().withZoneSameInstant(utcZoneId);
 				final int startByInt = getHourValue(startByZdt, dateTimeZero);
@@ -1679,7 +1679,7 @@ public class CPBasedSolver {
 								final IntVar dryDockEventSelection = dryDockCargoSelectionVars.get(dryDockEvent).get(cargo);
 								final boolean dryDockIsBeforeCargo = solver.value(dryDockEventSelection) == 1L;
 								if (dryDockIsBeforeCargo) {
-									final int durationInHours = dryDockEvent.getDurationInDays() * 24;
+									final int durationInHours = dryDockEvent.getSchedulingDurationInDays() * 24;
 									final ZonedDateTime startAfterZdt = dryDockEvent.getStartAfterAsDateTime().withZoneSameInstant(utcZoneId);
 									final int startAfterInt = getHourValue(startAfterZdt, dateTimeZero);
 									earliestBallastEnd = Math.max(earliestBallastEnd, startAfterInt);
@@ -1754,7 +1754,7 @@ public class CPBasedSolver {
 								final boolean dryDockIsBeforeNextCargo = solver.value(nextCargoDryDockEventSelection) == 1L;
 								if (dryDockIsAfterCargo && dryDockIsBeforeNextCargo) {
 									earliestBallastEnd += toDryDockBallastTravelTimes.get(vessel.name.toLowerCase()).get(dryDockEvent).get(port.getName().toLowerCase());
-									final int durationInHours = dryDockEvent.getDurationInDays() * 24;
+									final int durationInHours = dryDockEvent.getSchedulingDurationInDays() * 24;
 									final ZonedDateTime startAfterZdt = dryDockEvent.getStartAfterAsDateTime().withZoneSameInstant(utcZoneId);
 									final int startAfterInt = getHourValue(startAfterZdt, dateTimeZero);
 									earliestBallastEnd = Math.max(earliestBallastEnd, startAfterInt);

@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
+import com.mmxlabs.models.lng.pricing.InstrumentPeriod;
+import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 
@@ -13,8 +15,10 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -27,9 +31,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getDayOfTheMonth <em>Day Of The Month</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#isLastDayOfTheMonth <em>Last Day Of The Month</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getSettlePeriod <em>Settle Period</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getSettlePeriodUnit <em>Settle Period Unit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getSettleStartMonthsPrior <em>Settle Start Months Prior</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getPricingCalendar <em>Pricing Calendar</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getPricingPeriod <em>Pricing Period</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SettleStrategyImpl#getHedgingPeriod <em>Hedging Period</em>}</li>
  * </ul>
  *
  * @generated
@@ -76,64 +80,43 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	protected boolean lastDayOfTheMonth = LAST_DAY_OF_THE_MONTH_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getSettlePeriod() <em>Settle Period</em>}' attribute.
+	 * The cached value of the '{@link #getPricingCalendar() <em>Pricing Calendar</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSettlePeriod()
+	 * @see #getPricingCalendar()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int SETTLE_PERIOD_EDEFAULT = 0;
+	protected PricingCalendar pricingCalendar;
 
 	/**
-	 * The cached value of the '{@link #getSettlePeriod() <em>Settle Period</em>}' attribute.
+	 * This is true if the Pricing Calendar reference has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSettlePeriod()
 	 * @generated
 	 * @ordered
 	 */
-	protected int settlePeriod = SETTLE_PERIOD_EDEFAULT;
+	protected boolean pricingCalendarESet;
 
 	/**
-	 * The default value of the '{@link #getSettlePeriodUnit() <em>Settle Period Unit</em>}' attribute.
+	 * The cached value of the '{@link #getPricingPeriod() <em>Pricing Period</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSettlePeriodUnit()
+	 * @see #getPricingPeriod()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final TimePeriod SETTLE_PERIOD_UNIT_EDEFAULT = TimePeriod.HOURS;
+	protected InstrumentPeriod pricingPeriod;
 
 	/**
-	 * The cached value of the '{@link #getSettlePeriodUnit() <em>Settle Period Unit</em>}' attribute.
+	 * The cached value of the '{@link #getHedgingPeriod() <em>Hedging Period</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSettlePeriodUnit()
+	 * @see #getHedgingPeriod()
 	 * @generated
 	 * @ordered
 	 */
-	protected TimePeriod settlePeriodUnit = SETTLE_PERIOD_UNIT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSettleStartMonthsPrior() <em>Settle Start Months Prior</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSettleStartMonthsPrior()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SETTLE_START_MONTHS_PRIOR_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSettleStartMonthsPrior() <em>Settle Start Months Prior</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSettleStartMonthsPrior()
-	 * @generated
-	 * @ordered
-	 */
-	protected int settleStartMonthsPrior = SETTLE_START_MONTHS_PRIOR_EDEFAULT;
+	protected InstrumentPeriod hedgingPeriod;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -183,8 +166,25 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	 * @generated
 	 */
 	@Override
-	public int getSettlePeriod() {
-		return settlePeriod;
+	public PricingCalendar getPricingCalendar() {
+		if (pricingCalendar != null && pricingCalendar.eIsProxy()) {
+			InternalEObject oldPricingCalendar = (InternalEObject)pricingCalendar;
+			pricingCalendar = (PricingCalendar)eResolveProxy(oldPricingCalendar);
+			if (pricingCalendar != oldPricingCalendar) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.SETTLE_STRATEGY__PRICING_CALENDAR, oldPricingCalendar, pricingCalendar));
+			}
+		}
+		return pricingCalendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PricingCalendar basicGetPricingCalendar() {
+		return pricingCalendar;
 	}
 
 	/**
@@ -193,11 +193,13 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	 * @generated
 	 */
 	@Override
-	public void setSettlePeriod(int newSettlePeriod) {
-		int oldSettlePeriod = settlePeriod;
-		settlePeriod = newSettlePeriod;
+	public void setPricingCalendar(PricingCalendar newPricingCalendar) {
+		PricingCalendar oldPricingCalendar = pricingCalendar;
+		pricingCalendar = newPricingCalendar;
+		boolean oldPricingCalendarESet = pricingCalendarESet;
+		pricingCalendarESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD, oldSettlePeriod, settlePeriod));
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__PRICING_CALENDAR, oldPricingCalendar, pricingCalendar, !oldPricingCalendarESet));
 	}
 
 	/**
@@ -206,21 +208,13 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	 * @generated
 	 */
 	@Override
-	public TimePeriod getSettlePeriodUnit() {
-		return settlePeriodUnit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSettlePeriodUnit(TimePeriod newSettlePeriodUnit) {
-		TimePeriod oldSettlePeriodUnit = settlePeriodUnit;
-		settlePeriodUnit = newSettlePeriodUnit == null ? SETTLE_PERIOD_UNIT_EDEFAULT : newSettlePeriodUnit;
+	public void unsetPricingCalendar() {
+		PricingCalendar oldPricingCalendar = pricingCalendar;
+		boolean oldPricingCalendarESet = pricingCalendarESet;
+		pricingCalendar = null;
+		pricingCalendarESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT, oldSettlePeriodUnit, settlePeriodUnit));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PricingPackage.SETTLE_STRATEGY__PRICING_CALENDAR, oldPricingCalendar, null, oldPricingCalendarESet));
 	}
 
 	/**
@@ -229,8 +223,8 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	 * @generated
 	 */
 	@Override
-	public int getSettleStartMonthsPrior() {
-		return settleStartMonthsPrior;
+	public boolean isSetPricingCalendar() {
+		return pricingCalendarESet;
 	}
 
 	/**
@@ -239,11 +233,104 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 	 * @generated
 	 */
 	@Override
-	public void setSettleStartMonthsPrior(int newSettleStartMonthsPrior) {
-		int oldSettleStartMonthsPrior = settleStartMonthsPrior;
-		settleStartMonthsPrior = newSettleStartMonthsPrior;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR, oldSettleStartMonthsPrior, settleStartMonthsPrior));
+	public InstrumentPeriod getPricingPeriod() {
+		return pricingPeriod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPricingPeriod(InstrumentPeriod newPricingPeriod, NotificationChain msgs) {
+		InstrumentPeriod oldPricingPeriod = pricingPeriod;
+		pricingPeriod = newPricingPeriod;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD, oldPricingPeriod, newPricingPeriod);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPricingPeriod(InstrumentPeriod newPricingPeriod) {
+		if (newPricingPeriod != pricingPeriod) {
+			NotificationChain msgs = null;
+			if (pricingPeriod != null)
+				msgs = ((InternalEObject)pricingPeriod).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD, null, msgs);
+			if (newPricingPeriod != null)
+				msgs = ((InternalEObject)newPricingPeriod).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD, null, msgs);
+			msgs = basicSetPricingPeriod(newPricingPeriod, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD, newPricingPeriod, newPricingPeriod));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InstrumentPeriod getHedgingPeriod() {
+		return hedgingPeriod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetHedgingPeriod(InstrumentPeriod newHedgingPeriod, NotificationChain msgs) {
+		InstrumentPeriod oldHedgingPeriod = hedgingPeriod;
+		hedgingPeriod = newHedgingPeriod;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD, oldHedgingPeriod, newHedgingPeriod);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHedgingPeriod(InstrumentPeriod newHedgingPeriod) {
+		if (newHedgingPeriod != hedgingPeriod) {
+			NotificationChain msgs = null;
+			if (hedgingPeriod != null)
+				msgs = ((InternalEObject)hedgingPeriod).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD, null, msgs);
+			if (newHedgingPeriod != null)
+				msgs = ((InternalEObject)newHedgingPeriod).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD, null, msgs);
+			msgs = basicSetHedgingPeriod(newHedgingPeriod, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD, newHedgingPeriod, newHedgingPeriod));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD:
+				return basicSetPricingPeriod(null, msgs);
+			case PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD:
+				return basicSetHedgingPeriod(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -281,12 +368,13 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 				return getDayOfTheMonth();
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				return isLastDayOfTheMonth();
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
-				return getSettlePeriod();
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
-				return getSettlePeriodUnit();
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR:
-				return getSettleStartMonthsPrior();
+			case PricingPackage.SETTLE_STRATEGY__PRICING_CALENDAR:
+				if (resolve) return getPricingCalendar();
+				return basicGetPricingCalendar();
+			case PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD:
+				return getPricingPeriod();
+			case PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD:
+				return getHedgingPeriod();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -305,14 +393,14 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				setLastDayOfTheMonth((Boolean)newValue);
 				return;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
-				setSettlePeriod((Integer)newValue);
+			case PricingPackage.SETTLE_STRATEGY__PRICING_CALENDAR:
+				setPricingCalendar((PricingCalendar)newValue);
 				return;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
-				setSettlePeriodUnit((TimePeriod)newValue);
+			case PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD:
+				setPricingPeriod((InstrumentPeriod)newValue);
 				return;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR:
-				setSettleStartMonthsPrior((Integer)newValue);
+			case PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD:
+				setHedgingPeriod((InstrumentPeriod)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -332,14 +420,14 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				setLastDayOfTheMonth(LAST_DAY_OF_THE_MONTH_EDEFAULT);
 				return;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
-				setSettlePeriod(SETTLE_PERIOD_EDEFAULT);
+			case PricingPackage.SETTLE_STRATEGY__PRICING_CALENDAR:
+				unsetPricingCalendar();
 				return;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
-				setSettlePeriodUnit(SETTLE_PERIOD_UNIT_EDEFAULT);
+			case PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD:
+				setPricingPeriod((InstrumentPeriod)null);
 				return;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR:
-				setSettleStartMonthsPrior(SETTLE_START_MONTHS_PRIOR_EDEFAULT);
+			case PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD:
+				setHedgingPeriod((InstrumentPeriod)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -357,12 +445,12 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 				return dayOfTheMonth != DAY_OF_THE_MONTH_EDEFAULT;
 			case PricingPackage.SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH:
 				return lastDayOfTheMonth != LAST_DAY_OF_THE_MONTH_EDEFAULT;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD:
-				return settlePeriod != SETTLE_PERIOD_EDEFAULT;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_PERIOD_UNIT:
-				return settlePeriodUnit != SETTLE_PERIOD_UNIT_EDEFAULT;
-			case PricingPackage.SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR:
-				return settleStartMonthsPrior != SETTLE_START_MONTHS_PRIOR_EDEFAULT;
+			case PricingPackage.SETTLE_STRATEGY__PRICING_CALENDAR:
+				return isSetPricingCalendar();
+			case PricingPackage.SETTLE_STRATEGY__PRICING_PERIOD:
+				return pricingPeriod != null;
+			case PricingPackage.SETTLE_STRATEGY__HEDGING_PERIOD:
+				return hedgingPeriod != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -381,12 +469,6 @@ public class SettleStrategyImpl extends NamedObjectImpl implements SettleStrateg
 		result.append(dayOfTheMonth);
 		result.append(", lastDayOfTheMonth: ");
 		result.append(lastDayOfTheMonth);
-		result.append(", settlePeriod: ");
-		result.append(settlePeriod);
-		result.append(", settlePeriodUnit: ");
-		result.append(settlePeriodUnit);
-		result.append(", settleStartMonthsPrior: ");
-		result.append(settleStartMonthsPrior);
 		result.append(')');
 		return result.toString();
 	}

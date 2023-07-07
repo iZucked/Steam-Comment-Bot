@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.cargo.PaperDeal;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -17,10 +16,12 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.OtherPNL;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
@@ -49,6 +50,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getPaperDealAllocations <em>Paper Deal Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getOtherPNL <em>Other PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getGeneratedPaperDeals <em>Generated Paper Deals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getNonShippedSequences <em>Non Shipped Sequences</em>}</li>
  * </ul>
  *
  * @generated
@@ -163,6 +165,16 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<PaperDeal> generatedPaperDeals;
+
+	/**
+	 * The cached value of the '{@link #getNonShippedSequences() <em>Non Shipped Sequences</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNonShippedSequences()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<NonShippedSequence> nonShippedSequences;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -364,6 +376,19 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @generated
 	 */
 	@Override
+	public EList<NonShippedSequence> getNonShippedSequences() {
+		if (nonShippedSequences == null) {
+			nonShippedSequences = new EObjectContainmentEList<NonShippedSequence>(NonShippedSequence.class, this, SchedulePackage.SCHEDULE__NON_SHIPPED_SEQUENCES);
+		}
+		return nonShippedSequences;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.SCHEDULE__SEQUENCES:
@@ -386,6 +411,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return basicSetOtherPNL(null, msgs);
 			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
 				return ((InternalEList<?>)getGeneratedPaperDeals()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SCHEDULE__NON_SHIPPED_SEQUENCES:
+				return ((InternalEList<?>)getNonShippedSequences()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -420,6 +447,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getOtherPNL();
 			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
 				return getGeneratedPaperDeals();
+			case SchedulePackage.SCHEDULE__NON_SHIPPED_SEQUENCES:
+				return getNonShippedSequences();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -476,6 +505,10 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				getGeneratedPaperDeals().clear();
 				getGeneratedPaperDeals().addAll((Collection<? extends PaperDeal>)newValue);
 				return;
+			case SchedulePackage.SCHEDULE__NON_SHIPPED_SEQUENCES:
+				getNonShippedSequences().clear();
+				getNonShippedSequences().addAll((Collection<? extends NonShippedSequence>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -521,6 +554,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
 				getGeneratedPaperDeals().clear();
 				return;
+			case SchedulePackage.SCHEDULE__NON_SHIPPED_SEQUENCES:
+				getNonShippedSequences().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -555,6 +591,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return otherPNL != null;
 			case SchedulePackage.SCHEDULE__GENERATED_PAPER_DEALS:
 				return generatedPaperDeals != null && !generatedPaperDeals.isEmpty();
+			case SchedulePackage.SCHEDULE__NON_SHIPPED_SEQUENCES:
+				return nonShippedSequences != null && !nonShippedSequences.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

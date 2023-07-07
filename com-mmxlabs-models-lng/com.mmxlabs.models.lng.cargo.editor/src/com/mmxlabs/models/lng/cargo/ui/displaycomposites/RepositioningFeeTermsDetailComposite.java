@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
@@ -72,8 +74,10 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 		gridDataCheckbox.horizontalSpan = 2;
 		bottomComposite.setLayoutData(gridDataCheckbox);
 		
-		final Label label = toolkit.createLabel(bottomComposite, "Repositioning Fee");
-		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MONTHLY_BALLAST_BONUS)) {
+			final Label label = toolkit.createLabel(bottomComposite, "Repositioning Fee");
+			label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+		}
 		
 		RepositioningFeeTermsTableCreator.createRepositioningFeeTable(bottomComposite, toolkit, dialogContext, commandHandler, originPortRepositioningContract,
 				statusProvider, resizeAction);

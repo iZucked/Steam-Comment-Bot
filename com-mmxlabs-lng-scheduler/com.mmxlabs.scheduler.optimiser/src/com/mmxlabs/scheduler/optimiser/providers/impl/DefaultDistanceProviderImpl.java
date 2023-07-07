@@ -148,7 +148,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		// Need to get exit port as only direct distances available from exit to
 		// destination
 		// (not via panama, since through already).
-		IPort exitPort = this.getRouteOptionExitPort(entryPort, route);
+		IPort exitPort = this.getCorrespondingRouteOptionExitPort(entryPort, route);
 		if (exitPort == null) {
 			return Integer.MAX_VALUE;
 		}
@@ -230,7 +230,8 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		canalDistances.put(route, distance);
 	}
 
-	private IPort getRouteOptionExitPort(IPort entryPort, ERouteOption routeOption) {
+	@Override
+	public IPort getCorrespondingRouteOptionExitPort(IPort entryPort, ERouteOption routeOption) {
 		Pair<IPort, IPort> entryPoints = routeOptionEntryPoints.get(routeOption);
 		if (entryPoints != null) {
 			return entryPoints.getFirst().equals(entryPort) ? entryPoints.getSecond() : entryPoints.getFirst();

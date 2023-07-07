@@ -40,8 +40,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -72,7 +73,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowCounterParty = CargoFeatures.getSlot_WindowCounterParty();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
-	private static final EStructuralFeature PricingBasis = CargoFeatures.getSlot_PricingBasis();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
 
 	Composite contentComposite;
@@ -108,21 +108,28 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<>();
-		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity(), CargoFeatures.getSlot_BusinessUnit() });
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BUSINESS_UNITS)) {
+			mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity(), CargoFeatures.getSlot_BusinessUnit() });
+		} else {
+			mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity()});
+		}
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_VolumeLimitsUnit(),
 				CargoFeatures.getSlot_OperationalTolerance(), CargoFeatures.getSlot_FullCargoLot(), CargoFeatures.getLoadSlot_VolumeCounterParty() });
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SCHEDULED_VOLUME)) {
+			mainFeatures.add(new EStructuralFeature[] { CargoPackage.Literals.SLOT__SCHEDULED_VOLUME, CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT });
+		}
 		mainFeatures.add(new EStructuralFeature[] { CargoPackage.Literals.SLOT__COUNTERPARTY, CargoPackage.Literals.SLOT__CN });
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 
 		pricingFeatures = new ArrayList<>();
 		pricingFeatures.add(new EStructuralFeature[] { Contract, CargoPackage.Literals.SPOT_SLOT__MARKET });
-		pricingFeatures.add(new EStructuralFeature[] { PriceExpression, PricingBasis });
+		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
 		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__OVERRIDE_CONTRACT });
 		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__LOW_EXPRESSION, CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__HIGH_EXPRESSION });
 		pricingFeatures.add(new EStructuralFeature[] { CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__THRESHOLD, CommercialPackage.Literals.VOLUME_TIER_SLOT_PARAMS__VOLUME_LIMITS_UNIT });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingEvent(), CargoFeatures.getSlot_PricingDate() });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MiscCosts(), CargoFeatures.getSlot_CancellationExpression() });
-		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression, PricingBasis);
+		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
 		shippedWindowFeatures = new ArrayList<>();
@@ -195,15 +202,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				final MMXObject mmxEo = (MMXObject) eo;
 				final Contract c = (Contract) mmxEo.eGet(Contract);
 				final String pe = (String) mmxEo.eGet(PriceExpression);
-				final String pb = (String) mmxEo.eGet(PricingBasis);
 				String text = "";
 				if (c != null) {
 					text += c.getName() != null ? c.getName() : "";
 					text += pe != null && pe.length() > 0 ? ", " : "";
-					text += pb != null && pb.length() > 0 ? ", " : "";
 				}
 				text += pe != null ? pe : "";
-				text += pb != null ? pb : "";
 				textClient.setText(text);
 				textClient.update();
 			}
@@ -312,6 +316,20 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					// 64 - magic constant from MultiDetailDialog
 					gd.widthHint = 100;
 					editor.setLabel(null);
+					return gd;
+				}
+				if (feature == CargoPackage.Literals.SLOT__SCHEDULED_VOLUME || feature == CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.widthHint = 100;
+					if (feature == CargoPackage.Literals.SLOT__SCHEDULED_VOLUME) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Scheduled");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
 					return gd;
 				}
 				if (feature == CargoPackage.Literals.SLOT__WINDOW_SIZE || feature == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS) {
@@ -478,7 +496,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
-				if (feature == CargoPackage.Literals.SLOT__PRICE_EXPRESSION || feature == CargoPackage.Literals.SLOT__PRICING_BASIS) {
+				if (feature == CargoPackage.Literals.SLOT__PRICE_EXPRESSION) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					gd.widthHint = 150;
 					return gd;
@@ -512,6 +530,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				case WINDOW:
 					unshippedWindowFeatures.add(new ETypedElement[] { f });
 					shippedWindowFeatures.add(new ETypedElement[] { f });
+					break;
+				case NAME:
+					nameFeatures.add(new ETypedElement[] {f} );
 					break;
 				case OTHER:
 				default:
@@ -676,7 +697,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	private enum Section {
-		OTHER, MAIN, PRICING, WINDOW, TERMS
+		OTHER, MAIN, PRICING, WINDOW, TERMS, NAME
 	}
 
 	private Section getSectionFor(ETypedElement feature) {
@@ -694,6 +715,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					return Section.WINDOW;
 				case "terms":
 					return Section.TERMS;
+				case "name":
+					return Section.NAME;
 				}
 			}
 		}

@@ -29,8 +29,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="pricingCalendars" upperBound="-1"
         eType="#//PricingCalendar" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingBases" upperBound="-1"
-        eType="#//PricingBasis" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formulaeCurves" upperBound="-1"
+        eType="#//CommodityCurve" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataIndex">
     <eTypeParameters name="Value"/>
@@ -428,10 +428,21 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastDayOfTheMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="settlePeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="settlePeriodUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//TimePeriod"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="settleStartMonthsPrior"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingCalendar" eType="#//PricingCalendar"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pricingPeriod" eType="#//InstrumentPeriod"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hedgingPeriod" eType="#//InstrumentPeriod"
+        containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PricingBasis" eSuperTypes="#//AbstractYearMonthCurve"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InstrumentPeriod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodSizeUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PricingPeriod"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="-##0"/>
+        <details key="exportFormatString" value="##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
 </ecore:EPackage>

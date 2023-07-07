@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
 import com.mmxlabs.scenario.service.model.util.encryption.UnknownEncryptionKeyException;
@@ -75,13 +74,13 @@ public final class ResourceHelper {
 		Resource resource = resourceSet.getResource(uri, false);
 		if (resource == null) {
 			resource = resourceSet.createResource(uri);
-			if (resource instanceof ResourceImpl resourceImpl) {
+			if (resource instanceof final ResourceImpl resourceImpl) {
 				// This helps speed up model loading
 				final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<>();
 				resourceImpl.setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
 			}
 		}
-		Map<Object, Object> loadOptions = new HashMap<>(resourceSet.getLoadOptions());
+		final Map<Object, Object> loadOptions = new HashMap<>(resourceSet.getLoadOptions());
 		boolean disabledCipher = false;
 		boolean disabledIDMap = false;
 
@@ -90,7 +89,7 @@ public final class ResourceHelper {
 				// Attempt to load using default options
 				resource.load(loadOptions);
 				break;
-			} catch (IOWrappedException ee) {
+			} catch (final IOWrappedException ee) {
 				if (ee.getCause() instanceof IllegalValueException) {
 					// This can be triggered by multiple entries for the same object instance in a
 					// unique list
@@ -110,14 +109,34 @@ public final class ResourceHelper {
 						continue;
 					}
 				}
-				if (ee.getCause() instanceof org.xml.sax.SAXParseException saxParseException) {
+				if (ee.getCause() instanceof final org.xml.sax.SAXParseException saxParseException) {
 					if (saxParseException.getMessage().equals("Content is not allowed in prolog.")) {
-						URIConverterImpl uc = new URIConverterImpl();
+						final URIConverterImpl uc = new URIConverterImpl();
 						byte[] keyID = new byte[0];
 						try (InputStream is = uc.createInputStream(uri)) {
 							keyID = KeyFileUtil.getKeyID(is);
 
-						} catch (Exception e) {
+						} catch (final Exception e) {
+							throw new RuntimeException(e);
+						}
+
+						throw new UnknownEncryptionKeyException("Unable to open file. Encrypted with key " + KeyFileUtil.byteToString(keyID, ":"), keyID);
+					}
+				}
+				if (ee.getCause() instanceof final CharConversionException /* MalformedByteSequenceException */ e2) {
+					if (!disabledCipher) {
+						// Retry without encryption
+						disabledCipher = true;
+						loadOptions.put(Resource.OPTION_CIPHER, null);
+						resource.unload();
+						continue;
+					} else {
+						// Still failed, read the header bytes - assume these are the expected key id
+						final URIConverterImpl uc = new URIConverterImpl();
+						byte[] keyID = new byte[0];
+						try (InputStream is = uc.createInputStream(uri)) {
+							keyID = KeyFileUtil.getKeyID(is);
+						} catch (final Exception e) {
 							throw new RuntimeException(e);
 						}
 
@@ -125,7 +144,7 @@ public final class ResourceHelper {
 					}
 				}
 				throw ee;
-			} catch (CharConversionException /* MalformedByteSequenceException */ e2) {
+			} catch (final CharConversionException /* MalformedByteSequenceException */ e2) {
 				if (!disabledCipher) {
 					disabledCipher = true;
 					loadOptions.put(Resource.OPTION_CIPHER, null);
@@ -148,7 +167,7 @@ public final class ResourceHelper {
 
 	public static Resource createResource(final ResourceSet resourceSet, final URI uri) {
 		final Resource resource = resourceSet.createResource(uri);
-		if (resource instanceof ResourceImpl resourceImpl) {
+		if (resource instanceof final ResourceImpl resourceImpl) {
 			// This helps speed up model loading
 			final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<>();
 			resourceImpl.setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);

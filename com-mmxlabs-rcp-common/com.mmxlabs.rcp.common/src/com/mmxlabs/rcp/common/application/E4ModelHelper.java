@@ -15,7 +15,11 @@ import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPlaceholder;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MTrimBar;
+import org.eclipse.e4.ui.model.application.ui.basic.MTrimElement;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolBarElement;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -53,6 +57,10 @@ public class E4ModelHelper {
 						parent.getChildren().remove(placeholder);
 						if (parent.getSelectedElement() == placeholder) {
 							parent.setSelectedElement(null);
+							// Pick another child to be the selected element
+							if (!parent.getChildren().isEmpty()) {
+								parent.setSelectedElement(parent.getChildren().get(0));
+							}
 						}
 						placeholder.setRef(null);
 					}
@@ -91,7 +99,7 @@ public class E4ModelHelper {
 				if (parent.getSelectedElement() == part) {
 					boolean foundElement = false;
 					for (MUIElement element : parent.getChildren()) {
-						if (element.isVisible()) {
+						if (element.isVisible() && element.isToBeRendered()) {
 							parent.setSelectedElement(element);
 							foundElement = true;
 							break;
@@ -206,6 +214,22 @@ public class E4ModelHelper {
 				final String tag = tagItr.next();
 				if (tag.startsWith(viewIdPrefix)) {
 					tagItr.remove();
+				}
+			}
+		}
+	}
+	
+	public static void removeChildrenFromTrim(@NonNull final String viewId, @NonNull final MApplication application, @NonNull final EModelService modelService, @NonNull final String... children) {
+		final MUIElement element = modelService.find(viewId, application);
+		if (element instanceof final MTrimBar part) {
+			
+			final Iterator<MTrimElement> iter = part.getChildren().iterator();
+			while(iter.hasNext()) {
+				final MTrimElement c = iter.next();
+				for (final String s : children) {
+					if (c.getElementId().equalsIgnoreCase(s)) {
+						iter.remove();
+					}
 				}
 			}
 		}

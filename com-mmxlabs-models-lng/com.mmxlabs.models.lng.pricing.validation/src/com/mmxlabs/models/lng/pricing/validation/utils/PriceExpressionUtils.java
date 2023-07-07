@@ -137,8 +137,6 @@ public class PriceExpressionUtils {
 				priceIndexType = PriceIndexType.BUNKERS;
 			} else if (ExpressionAnnotationConstants.TYPE_CURRENCY.equals(value)) {
 				priceIndexType = PriceIndexType.CURRENCY;
-			} else if (ExpressionAnnotationConstants.TYPE_PRICING_BASIS.equals(value)) {
-				priceIndexType = PriceIndexType.PRICING_BASIS;
 			}
 		}
 		if (priceIndexType == null) {
@@ -453,8 +451,6 @@ public class PriceExpressionUtils {
 			return PriceIndexType.CHARTER;
 		} else if (namedIndexContainer instanceof BunkerFuelCurve) {
 			return PriceIndexType.BUNKERS;
-		} else if (namedIndexContainer instanceof PricingBasis) {
-			return PriceIndexType.PRICING_BASIS;
 		}
 		return null;
 

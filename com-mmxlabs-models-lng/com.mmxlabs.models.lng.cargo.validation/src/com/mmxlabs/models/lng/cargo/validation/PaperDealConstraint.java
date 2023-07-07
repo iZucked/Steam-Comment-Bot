@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -24,6 +23,13 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class PaperDealConstraint extends AbstractModelMultiConstraint {
+
+	private static final int EARLIEST_VALID_YEAR = 2010;
+	private static final int LATEST_VALID_YEAR = 2100;
+	
+	private static boolean isInvalidYear(int year) {
+		return year < EARLIEST_VALID_YEAR || year > LATEST_VALID_YEAR;
+	}
 
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
@@ -45,12 +51,7 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 						.withMessage("No pricing month specified") //
 						.make(ctx, statuses);
 			} else {
-				if (startMonth.getYear() < 2010) {
-					factory.copyName() //
-							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_MONTH) //
-							.withMessage("Pricing month has invalid year") //
-							.make(ctx, statuses);
-				} else if (startMonth.getYear() > 2100) {
+				if (isInvalidYear(startMonth.getYear())) {
 					factory.copyName() //
 							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_MONTH) //
 							.withMessage("Pricing month has invalid year") //
@@ -58,55 +59,6 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			final LocalDate startDate = paperDeal.getStartDate();
-			if (startDate == null) {
-				factory.copyName() //
-						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__START_DATE) //
-						.withMessage("No start date specified") //
-						.make(ctx, statuses);
-			} else {
-				if (startDate.getYear() < 2010) {
-					factory.copyName() //
-							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__START_DATE) //
-							.withMessage("Start date has invalid year") //
-							.make(ctx, statuses);
-				} else if (startDate.getYear() > 2100) {
-					factory.copyName() //
-							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__START_DATE) //
-							.withMessage("Start date has invalid year") //
-							.make(ctx, statuses);
-				}
-			}
-
-			final LocalDate endDate = paperDeal.getEndDate();
-			if (endDate == null) {
-				factory.copyName() //
-						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__END_DATE) //
-						.withMessage("No end date specified") //
-						.make(ctx, statuses);
-			} else {
-				if (endDate.getYear() < 2010) {
-					factory.copyName() //
-							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__END_DATE) //
-							.withMessage("End date has invalid year") //
-							.make(ctx, statuses);
-				} else if (endDate.getYear() > 2100) {
-					factory.copyName() //
-							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__END_DATE) //
-							.withMessage("End date has invalid year") //
-							.make(ctx, statuses);
-				}
-			}
-
-			if (startDate != null && endDate != null) {
-				if (endDate.isBefore(startDate)) {
-					factory.copyName() //
-							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__START_DATE) //
-							.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__END_DATE) //
-							.withMessage("End date is before start date") //
-							.make(ctx, statuses);
-				}
-			}
 			final String curve = paperDeal.getIndex();
 			if (curve == null || curve.trim().isEmpty()) {
 				factory.copyName() //
@@ -123,7 +75,7 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 			final int year = paperDeal.getYear();
-			if (year == 0 || year < 2010 || year > 2100) {
+			if (year == 0 || year < EARLIEST_VALID_YEAR || year > LATEST_VALID_YEAR) {
 				factory.copyName() //
 						.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__YEAR) //
 						.withMessage("Fiscal year date is not a valid year") //
@@ -150,8 +102,52 @@ public class PaperDealConstraint extends AbstractModelMultiConstraint {
 						.withMessage("Paper deal quantity should be at most 100,000,000") //
 						.make(ctx, statuses);
 			}
-
+			
+			/*
+			 *  Pricing period checks
+			 */
+			if (paperDeal.getPricingPeriodStart() != null && paperDeal.getPricingPeriodEnd() != null &&  (paperDeal.getPricingPeriodStart().isAfter(paperDeal.getPricingPeriodEnd()))) {
+				factory.copyName()
+					.withMessage("Pricing period start should not be later than pricing period end")
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_PERIOD_START)
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_PERIOD_END)
+					.make(ctx, statuses);
+			} 
+			if (paperDeal.getPricingPeriodStart() == null) {
+				factory.copyName()
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_PERIOD_START)
+					.withMessage("Pricing period start is not set")
+					.make(ctx, statuses);
+			} 
+			if (paperDeal.getPricingPeriodEnd() == null) {
+				factory.copyName()
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__PRICING_PERIOD_END)
+					.withMessage("Pricing period end is not set")
+					.make(ctx, statuses);
+			}
+			
+			/*
+			 *  Hedging period checks
+			 */
+			if (paperDeal.getHedgingPeriodStart() != null && paperDeal.getHedgingPeriodEnd() != null &&  (paperDeal.getHedgingPeriodStart().isAfter(paperDeal.getHedgingPeriodEnd()))) {
+				factory.copyName()
+					.withMessage("Hedging period start should not be later than hedging period end")
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__HEDGING_PERIOD_START)
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__HEDGING_PERIOD_END)
+					.make(ctx, statuses);
+			} 
+			if (paperDeal.getHedgingPeriodStart() == null) {
+				factory.copyName()
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__HEDGING_PERIOD_START)
+					.withMessage("Hedging period start is not set")
+					.make(ctx, statuses);
+			} 
+			if (paperDeal.getHedgingPeriodEnd() == null) {
+				factory.copyName()
+					.withObjectAndFeature(paperDeal, CargoPackage.Literals.PAPER_DEAL__HEDGING_PERIOD_END)
+					.withMessage("Hedging period end is not set")
+					.make(ctx, statuses);
+			}
 		}
 	}
-
 }

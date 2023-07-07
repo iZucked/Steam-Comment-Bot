@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -24,8 +25,15 @@ import java.util.function.Supplier;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.ganttchart.dnd.VerticalDragDropManager;
+import org.eclipse.nebula.widgets.ganttchart.label.DefaultEventsLabelCalculator;
+import org.eclipse.nebula.widgets.ganttchart.label.EEventLabelAlignment;
+import org.eclipse.nebula.widgets.ganttchart.label.EventLabelFontSize;
 import org.eclipse.nebula.widgets.ganttchart.label.IEventTextPropertiesGenerator;
-import org.eclipse.nebula.widgets.ganttchart.plaque.IPlaqueContentProvider;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventsLabelCalculator;
+import org.eclipse.nebula.widgets.ganttchart.label.IEventsLabelManager;
+import org.eclipse.nebula.widgets.ganttchart.label.NullEventsLabelManager;
+import org.eclipse.nebula.widgets.ganttchart.label.PreComputedEventsLabelManager;
+import org.eclipse.nebula.widgets.ganttchart.label.internal.GeneratedEventText;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.GanttUndoRedoManager;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.ClusteredCommand;
 import org.eclipse.nebula.widgets.ganttchart.undoredo.commands.IUndoRedoCommand;
@@ -324,9 +332,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 	private ILegendProvider legendProvider = null;
 
-	private IPlaqueContentProvider[] plaqueContentProviders;
-
-	private Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection = null;
+	@NonNull
+	private IEventsLabelManager eventsLabelManager = new NullEventsLabelManager();
 
 	private Comparator<GanttEvent> eventRenderOrderComparator;
 
@@ -1036,8 +1043,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 	// the repaint event, whenever the composite needs to refresh the contents
 	private void repaint(final PaintEvent event) {
 		_paintManager.redrawStarting();
-		final GC gc = event.gc;
-		drawChartOntoGC(gc, null);
+		drawChartOntoGC(event.gc, null);
 	}
 
 	// draws the actual chart.. separated from the repaint event as the
@@ -3379,13 +3385,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			alreadyDrawn.add(ge);
 
 			// draw it
-			drawOneEvent(gc, ge, bounds);
+			drawOneEvent(gc, ge, bounds, gs.isBuySell());
 		}
 	}
 
 	// draws one event onto the chart (or rather, delegates to the correct drawing
 	// method)
-	private void drawOneEvent(final GC gc, final GanttEvent ge, final Rectangle boundsToUse) {
+	private void drawOneEvent(final GC gc, final GanttEvent ge, final Rectangle boundsToUse, final boolean isBuySell) {
 		final int xStart = ge.getX();
 		final int xEventWidth = ge.getWidth();
 
@@ -3402,7 +3408,12 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			gradient = _settings.getDefaultGradientEventColor();
 		}
 
-		final int yDrawPos = ge.getY();
+		final int yDrawPos;
+		if (isBuySell) {
+			yDrawPos = ge.getY();
+		} else {
+			yDrawPos = ge.getY() + GanttChartParameters.getRowPadding();
+		}
 
 		final int dw = getDayWidth();
 
@@ -3441,9 +3452,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		// draw a little plaque saying how many days that this event is long
-		if (_showNumDays && plaqueContentProviders != null) {
-			_paintManager.drawPlaqueOnEvent(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, plaqueContentProviders, bounds);
-		}
+		// if (_showNumDays && plaqueContentProviders != null) {
+		// _paintManager.drawPlaqueOnEvent(this, _settings, _colorManager, ge, gc, _threeDee, xStart, yDrawPos, xEventWidth, plaqueContentProviders, bounds);
+		// }
 
 		// fetch current font
 		final Font oldFont = gc.getFont();
@@ -3457,9 +3468,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		// draw the text if any, o
-		if (ge.getParsedString() != null) {
-			_paintManager.drawEventLabel(this, _settings, ge, gc, this.textGeneratorCollection, xStart, yDrawPos, xEventWidth);
-//			_paintManager.drawEventString(this, _settings, _colorManager, ge, gc, ge.getParsedString(), _threeDee, xStart, yDrawPos, xEventWidth, bounds);
+		if (ge.getParsedString() != null && ge.getSpecialDrawMode() == SpecialDrawModes.NONE) {
+			final List<@NonNull GeneratedEventText> eventTexts = eventsLabelManager.getEventTexts(ge, xEventWidth);
+			if (eventTexts != null && !eventTexts.isEmpty()) {
+				_paintManager.drawEventLabel(this, _settings, ge, gc, eventTexts, xStart, yDrawPos, xEventWidth);
+			}
 		}
 
 		// reset font
@@ -3485,6 +3498,16 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			return;
 		}
 
+		final int actualFixedRowHeight;
+		final int actualEventHeight;
+		if (gs.isBuySell()) {
+			actualFixedRowHeight = GanttChartParameters.buySellFixedRowHeight();
+			actualEventHeight = GanttChartParameters.buySellEventHeight();
+		} else {
+			actualFixedRowHeight = _fixedRowHeight;
+			actualEventHeight = _eventHeight;
+		}
+
 		int yStart = bounds.y + _settings.getEventsTopSpacer();// - mVerticalScrollPosition;
 		// System.err.println(yStart);
 
@@ -3494,7 +3517,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		}
 
 		boolean lastLoopWasGroup = false;
-		// GanttGroup lastGroup = null;
 		final Map<GanttGroup, Integer> groupLocations = new HashMap<>();
 
 		List<? extends IGanttChartItem> events = _ganttEvents;
@@ -3518,9 +3540,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			// if the override is set, set it on events etc so it's used
 			if (_fixedRowHeight != 0) {
-				ge.setFixedRowHeight(_fixedRowHeight);
+				ge.setFixedRowHeight(actualFixedRowHeight);
 				if (ge.getGanttGroup() != null) {
-					ge.getGanttGroup().setFixedRowHeight(_fixedRowHeight);
+					ge.getGanttGroup().setFixedRowHeight(actualFixedRowHeight);
 				}
 			}
 
@@ -3549,7 +3571,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				if (!groupLocations.containsKey(ge.getGanttGroup())) {
 					newGroup = true;
 					if (i != 0 && lastLoopWasGroup) {
-						yStart += _eventHeight + _eventSpacer;
+						yStart += actualEventHeight + _eventSpacer;
 					}
 					groupLocations.put(ge.getGanttGroup(), Integer.valueOf(yStart));
 				}
@@ -3557,7 +3579,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			// event just after a group
 			if (lastLoopWasGroup && !groupedEvent) {
-				yStart += _eventHeight + _eventSpacer;
+				yStart += actualEventHeight + _eventSpacer;
 			}
 
 			// position event will be drawn at vertically
@@ -3568,15 +3590,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				yDrawPos = groupLocations.get(ge.getGanttGroup()).intValue();
 			}
 
-			int fixedRowHeight = _fixedRowHeight;
+			int fixedRowHeight = actualFixedRowHeight;
 			int verticalAlignment = ge.getVerticalEventAlignment();
-			int eventHeight = _eventHeight;
+			int eventHeight = actualEventHeight;
 			if (ge.getGanttGroup() == null) {
 				if (!ge.isAutomaticRowHeight()) {
 					fixedRowHeight = ge.getFixedRowHeight();
 				}
 			} else {
-				// verticalAlignment = ge.getGanttGroup().getVerticalEventAlignment();
 				if (!ge.getGanttGroup().isAutomaticRowHeight()) {
 					fixedRowHeight = ge.getGanttGroup().getFixedRowHeight();
 				}
@@ -3586,10 +3607,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			ge.setHorizontalLineTopY(yStart);
 
-			if (fixedHeight) {
+			if (fixedHeight && gs.isBuySell()) {
 				int extra = 0;
 
-				int halfExtra = ((fixedRowHeight / 2) - (_eventHeight / 2));
+				int halfExtra = ((fixedRowHeight / 2) - (actualEventHeight / 2));
 
 				switch (verticalAlignment) {
 				case SWT.BOTTOM:
@@ -3626,9 +3647,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			}
 
 			if (fixedHeight) {
-				ge.setHorizontalLineBottomY(yDrawPos - _eventHeight);
+				ge.setHorizontalLineBottomY(yDrawPos - actualEventHeight);
 			} else {
-				ge.setHorizontalLineBottomY(yDrawPos + _eventHeight);
+				ge.setHorizontalLineBottomY(yDrawPos + actualEventHeight);
 			}
 
 			// set event bounds
@@ -5304,6 +5325,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		_forceSBUpdate = true;
 		_vScrollBar.setSelection(0);
 		flagForceFullUpdate();
+		eventsLabelManager.reset();
 		redraw();
 	}
 
@@ -5848,7 +5870,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		for (int i = 0; i < _ganttEvents.size(); i++) {
 			final GanttEvent event = _ganttEvents.get(i);
 
-			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
+			if (isInside(me.x, me.y, getBoundingRectangle(event))) {
 				for (int j = 0; j < _eventListeners.size(); j++) {
 					_eventListeners.get(j).eventDoubleClicked(event, me);
 				}
@@ -6021,7 +6043,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				continue;
 			}
 
-			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
+			if (isInside(me.x, me.y, getBoundingRectangle(event))) {
 				final GC gc = new GC(this);
 
 				// if it's a scope and menu is allowed, we can finish right here
@@ -8149,11 +8171,24 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			if (event.getGanttSection() != null && !event.getGanttSection().isVisible()) {
 				continue;
 			}
-			if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
+
+			if (isInside(me.x, me.y, getBoundingRectangle(event))) {
 				showTooltip(event, me);
 				return;
 			}
 		}
+	}
+
+	private Rectangle getBoundingRectangle(final GanttEvent event) {
+		final SpecialDrawModes sdm = event.getSpecialDrawMode();
+		if (sdm != SpecialDrawModes.NONE) {
+			final int width = 3;
+			final int height = event.getBounds().height + 2;
+			final int x = event.getX() - 1;
+			final int y = event.getY();
+			return new Rectangle(x, y, width, height);
+		}
+		return new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight());
 	}
 
 	private void showTooltip(final GanttEvent event, final MouseEvent me) {
@@ -9067,6 +9102,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		return !_specDateRanges.isEmpty();
 	}
 
+	@Override
+	public void dispose() {
+		eventsLabelManager.dispose();
+		// Annoying hack for @NonNull annotations
+		eventsLabelManager = new NullEventsLabelManager();
+	}
+
 	boolean isDDayCalendar() {
 		return _currentView == ISettings.VIEW_D_DAY;
 	}
@@ -9111,19 +9153,54 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 		this.menuAction = menuAction;
 	}
 
-	public void replacePlaqueContentProviders(final Collection<@NonNull IPlaqueContentProvider> plaqueContentProviders) {
-		this.plaqueContentProviders = plaqueContentProviders.toArray(new IPlaqueContentProvider[plaqueContentProviders.size()]);
-	}
-
 	public void setRenderOrderComparator(final @Nullable Comparator<GanttEvent> comparator) {
 		this.eventRenderOrderComparator = comparator;
 	}
 
-	public void replaceTextGenerationCollection(final Collection<Collection<IEventTextPropertiesGenerator>> textGeneratorCollection) {
-		this.textGeneratorCollection = textGeneratorCollection;
+	public void replaceTextGenerationCollection(final @NonNull Collection<@NonNull Collection<@NonNull IEventTextPropertiesGenerator>> textGeneratorCollection) {
+		final List<@NonNull List<@NonNull IEventTextPropertiesGenerator>> sortedGeneratorsList = new ArrayList<>(textGeneratorCollection.size());
+		final boolean[] seenAlignment = new boolean[EEventLabelAlignment.values().length];
+		for (final Collection<@NonNull IEventTextPropertiesGenerator> generators : textGeneratorCollection) {
+			// Reset seen alignments
+			for (int i = 0; i < seenAlignment.length; ++i) {
+				seenAlignment[i] = false;
+			}
+			final List<@NonNull IEventTextPropertiesGenerator> generatorsToKeep = new LinkedList<>();
+			// Each alignment should only be used once
+			for (final IEventTextPropertiesGenerator generator : generators) {
+				final int alignmentIndex = generator.getAlignment().ordinal();
+				if (!seenAlignment[alignmentIndex]) {
+					generatorsToKeep.add(generator);
+					seenAlignment[alignmentIndex] = true;
+				}
+			}
+			final List<@NonNull IEventTextPropertiesGenerator> sortedGenerators = new ArrayList<>(generatorsToKeep);
+			sortedGenerators.sort((g1, g2) -> Integer.compare(g1.getAlignment().ordinal(), g2.getAlignment().ordinal()));
+			sortedGeneratorsList.add(sortedGenerators);
+		}
+		final IEventsLabelCalculator calculator = new DefaultEventsLabelCalculator(evt -> this.isConnected(evt) ? _settings.getTextSpacerConnected() : _settings.getTextSpacerNonConnected(), 5);
+		final IEventsLabelManager newLabelManager = new PreComputedEventsLabelManager(sortedGeneratorsList, calculator);
+		eventsLabelManager.dispose();
+		eventsLabelManager = newLabelManager;
 	}
 
 	public void clearTextGenerationCollection() {
-		this.textGeneratorCollection = null;
+		eventsLabelManager.dispose();
+		eventsLabelManager = new NullEventsLabelManager();
+	}
+
+	public void resetEventLabels() {
+		if (!(eventsLabelManager instanceof NullEventsLabelManager)) {
+			eventsLabelManager.reset();
+			refresh();
+		}
+	}
+
+	public void setEventFont(final @NonNull EventLabelFontSize newFontSize) {
+		final EventLabelFontSize oldFontSize = GanttChartParameters.getFontSize();
+		if (newFontSize != oldFontSize) {
+			eventsLabelManager.reset();
+			GanttChartParameters.updateFontSize(newFontSize);
+		}
 	}
 }

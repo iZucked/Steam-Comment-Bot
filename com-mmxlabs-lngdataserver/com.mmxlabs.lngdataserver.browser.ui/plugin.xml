@@ -13,6 +13,7 @@
       <view
             category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
+            icon="icons:/16/report"
             id="com.mmxlabs.lngdataserver.browser.ui.DataBrowser"
             name="Data Browser"
             restorable="true">

@@ -89,6 +89,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return createDESPurchaseDealTypeFromString(eDataType, initialValue);
 		case TypesPackage.FOB_SALE_DEAL_TYPE:
 			return createFOBSaleDealTypeFromString(eDataType, initialValue);
+		case TypesPackage.PRICING_PERIOD:
+			return createPricingPeriodFromString(eDataType, initialValue);
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
@@ -118,6 +120,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return convertDESPurchaseDealTypeToString(eDataType, instanceValue);
 		case TypesPackage.FOB_SALE_DEAL_TYPE:
 			return convertFOBSaleDealTypeToString(eDataType, instanceValue);
+		case TypesPackage.PRICING_PERIOD:
+			return convertPricingPeriodToString(eDataType, instanceValue);
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
@@ -269,6 +273,27 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * @generated
 	 */
 	public String convertFOBSaleDealTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PricingPeriod createPricingPeriodFromString(EDataType eDataType, String initialValue) {
+		PricingPeriod result = PricingPeriod.get(initialValue);
+		if (result == null)
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertPricingPeriodToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

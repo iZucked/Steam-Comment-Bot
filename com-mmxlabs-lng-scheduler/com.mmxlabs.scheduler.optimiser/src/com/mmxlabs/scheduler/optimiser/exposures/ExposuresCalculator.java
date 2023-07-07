@@ -165,7 +165,10 @@ public class ExposuresCalculator {
 		physical.setVolumeValueNative((isLong ? -1 : 1) * volumeValue);
 		physical.setVolumeUnit("mmBtu");
 		physical.setIndexName("Physical");
+		// all three are the same for the physical
 		physical.setTime(inputRecord.date());
+		physical.setHedgingStart(inputRecord.date());
+		physical.setHedgingEnd(inputRecord.date());
 		physical.setCurrencyUnit("$");
 
 		return physical;
@@ -199,6 +202,8 @@ public class ExposuresCalculator {
 				exposure.setCurrencyUnit(record.currencyUnit());
 				exposure.setVolumeUnit(record.volumeUnit());
 				exposure.setTime(record.date());
+				exposure.setHedgingStart(record.date());
+				exposure.setHedgingEnd(record.date());
 				exposure.setUnitPrice(record.unitPrice());
 				exposure.setVolumeMMBTU(isLong ? -record.mmbtuVolume() / 10 : record.mmbtuVolume() / 10);
 				exposure.setVolumeNative(isLong ? -record.nativeVolume() / 10 : record.nativeVolume() / 10);

@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.exposures;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -27,7 +30,6 @@ import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -41,8 +43,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IExposureDataProviderEditor;
 /**
  */
 public class ExposureDataTransformer implements ISlotTransformer {
-
-	private PricingModel pricingModel;
 	
 	@Inject
 	private IExposureDataProviderEditor exposureDataProviderEditor;
@@ -62,9 +62,9 @@ public class ExposureDataTransformer implements ISlotTransformer {
 	@Named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)
 	private boolean cutoffAtPromptStart;
 	
-	@Inject
-	@Named(SchedulerConstants.PRICING_BASES)
-	private boolean pricingBasesEnabled;
+//	@Inject
+//	@Named(SchedulerConstants.PRICING_BASES)
+//	private boolean pricingBasesEnabled;
 
 	@Override
 	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
@@ -77,27 +77,23 @@ public class ExposureDataTransformer implements ISlotTransformer {
 				VolumeTierSlotParams p = SlotContractParamsHelper.findSlotContractParams(exposedSlot, VolumeTierSlotParams.class, VolumeTierPriceParameters.class);
 				if (p != null && p.isOverrideContract()) {
 					if (p.getVolumeLimitsUnit() == VolumeUnits.M3) {
-						priceExpression = String.format("VOLUMETIERM3(%s,<= %f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
+						priceExpression = String.format("TIERBLEND(@VOL_M3:0, %s, %f, %s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
 					} else {
-						priceExpression = String.format("VOLUMETIERMMBTU(%s,<= %f,%s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
+						priceExpression = String.format("TIERBLEND(@VOL_MMBTU:0, %s, %f, %s)", p.getLowExpression(), p.getThreshold(), p.getHighExpression());
 					}
 				} else {
 					if (vtContract.getVolumeLimitsUnit() == VolumeUnits.M3) {
-						priceExpression = String.format("VOLUMETIERM3(%s,<= %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
+						priceExpression = String.format("TIERBLEND(@VOL_M3:0, %s, %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
 								generateSafeExpression(vtContract.getHighExpression()));
 					} else {
-						priceExpression = String.format("VOLUMETIERMMBTU(%s,<= %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
+						priceExpression = String.format("TIERBLEND(@VOL_MMBTU:0, %s, %f,%s)", generateSafeExpression(vtContract.getLowExpression()), vtContract.getThreshold(),
 								generateSafeExpression(vtContract.getHighExpression()));
 					}
 				}
 			}
 			
 			if (priceExpression == null) {
-				if (pricingBasesEnabled) {
-					priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot, ModelMarketCurveProvider.getOrCreate(pricingModel));
-				} else {
-					priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot);
-				}
+				priceExpression = exposureCustomiser.provideExposedPriceExpression(exposedSlot);
 			}
 			if (priceExpression != null) {
 				exposureDataProviderEditor.addPriceExpressionForPortSlot(optimiserSlot, priceExpression);
@@ -112,7 +108,6 @@ public class ExposureDataTransformer implements ISlotTransformer {
 				final PricingModel pricingModel = lngScenarioModel.getReferenceModel().getPricingModel();
 				final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 				if (pricingModel != null) {
-					this.pricingModel = pricingModel;
 					final ExposuresLookupData lookupData = new ExposuresLookupData();
 					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
 						lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();
@@ -137,7 +132,10 @@ public class ExposureDataTransformer implements ISlotTransformer {
 							}
 						});
 					}
-					pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
+					final List<CommodityCurve> curves = new ArrayList<>(pricingModel.getCommodityCurves());
+					curves.addAll(pricingModel.getFormulaeCurves());
+					
+					curves.stream().filter(idx -> idx.getName() != null)//
 							.forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
 									idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression(), idx.getAdjustment())));
 					pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null)//

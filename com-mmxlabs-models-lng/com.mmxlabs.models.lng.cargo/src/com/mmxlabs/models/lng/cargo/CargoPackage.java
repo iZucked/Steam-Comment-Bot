@@ -952,22 +952,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__WINDOW_COUNTER_PARTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 41;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__PRICING_BASIS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
-
-	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
+	int SLOT__BUSINESS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 42;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
@@ -976,7 +967,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
+	int SLOT__ALLOWED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 43;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Ports Override</b></em>' attribute.
@@ -985,7 +976,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
+	int SLOT__ALLOWED_PORTS_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 44;
 
 	/**
 	 * The feature id for the '<em><b>Compute Exposure</b></em>' attribute.
@@ -994,7 +985,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
+	int SLOT__COMPUTE_EXPOSURE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 45;
 
 	/**
 	 * The feature id for the '<em><b>Compute Hedge</b></em>' attribute.
@@ -1003,7 +994,25 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
+	int SLOT__COMPUTE_HEDGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 46;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SCHEDULED_VOLUME_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 47;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SCHEDULED_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -1012,7 +1021,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 48;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 49;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1663,15 +1672,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
-
-	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1715,6 +1715,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__COMPUTE_HEDGE = SLOT__COMPUTE_HEDGE;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SCHEDULED_VOLUME_UNIT = SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SCHEDULED_VOLUME = SLOT__SCHEDULED_VOLUME;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -2473,15 +2491,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__PRICING_BASIS = SLOT__PRICING_BASIS;
-
-	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2525,6 +2534,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__COMPUTE_HEDGE = SLOT__COMPUTE_HEDGE;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SCHEDULED_VOLUME_UNIT = SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SCHEDULED_VOLUME = SLOT__SCHEDULED_VOLUME;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -3346,15 +3373,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__WINDOW_COUNTER_PARTY = LOAD_SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__PRICING_BASIS = LOAD_SLOT__PRICING_BASIS;
-
-	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3398,6 +3416,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__COMPUTE_HEDGE = LOAD_SLOT__COMPUTE_HEDGE;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SCHEDULED_VOLUME_UNIT = LOAD_SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SCHEDULED_VOLUME = LOAD_SLOT__SCHEDULED_VOLUME;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -4165,15 +4201,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__WINDOW_COUNTER_PARTY = DISCHARGE_SLOT__WINDOW_COUNTER_PARTY;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Basis</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__PRICING_BASIS = DISCHARGE_SLOT__PRICING_BASIS;
-
-	/**
 	 * The feature id for the '<em><b>Business Unit</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4217,6 +4244,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__COMPUTE_HEDGE = DISCHARGE_SLOT__COMPUTE_HEDGE;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SCHEDULED_VOLUME_UNIT = DISCHARGE_SLOT__SCHEDULED_VOLUME_UNIT;
+
+	/**
+	 * The feature id for the '<em><b>Scheduled Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SCHEDULED_VOLUME = DISCHARGE_SLOT__SCHEDULED_VOLUME;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -5083,13 +5128,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5146,13 +5200,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
 
 	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
+
+	/**
 	 * The number of operations of the '<em>Vessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
+	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5263,6 +5326,15 @@ public interface CargoPackage extends EPackage {
 	int MAINTENANCE_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__NOTES = VESSEL_EVENT__NOTES;
+
+	/**
 	 * The number of structural features of the '<em>Maintenance Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5324,6 +5396,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAINTENANCE_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS;
 
 	/**
 	 * The number of operations of the '<em>Maintenance Event</em>' class.
@@ -5443,6 +5524,15 @@ public interface CargoPackage extends EPackage {
 	int DRY_DOCK_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__NOTES = VESSEL_EVENT__NOTES;
+
+	/**
 	 * The number of structural features of the '<em>Dry Dock Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5504,6 +5594,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRY_DOCK_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS;
 
 	/**
 	 * The number of operations of the '<em>Dry Dock Event</em>' class.
@@ -5813,6 +5912,15 @@ public interface CargoPackage extends EPackage {
 	int CHARTER_OUT_EVENT__START_BY = VESSEL_EVENT__START_BY;
 
 	/**
+	 * The feature id for the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__NOTES = VESSEL_EVENT__NOTES;
+
+	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5876,13 +5984,22 @@ public interface CargoPackage extends EPackage {
 	int CHARTER_OUT_EVENT__AVAILABLE_HEEL = VESSEL_EVENT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Extension Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__EXTENSION_PERIOD = VESSEL_EVENT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Charter Out Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 7;
+	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5937,6 +6054,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS;
 
 	/**
 	 * The operation id for the '<em>Get End Port</em>' operation.
@@ -6657,13 +6783,22 @@ public interface CargoPackage extends EPackage {
 	int SCHEDULE_SPECIFICATION__OPEN_EVENTS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Pre Sequences</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE_SPECIFICATION__PRE_SEQUENCES = 3;
+
+	/**
 	 * The number of structural features of the '<em>Schedule Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_SPECIFICATION_FEATURE_COUNT = 3;
+	int SCHEDULE_SPECIFICATION_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Schedule Specification</em>' class.
@@ -6673,6 +6808,43 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SCHEDULE_SPECIFICATION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl <em>Pre Sequence Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPreSequenceGroup()
+	 * @generated
+	 */
+	int PRE_SEQUENCE_GROUP = 22;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_SEQUENCE_GROUP__SEQUENCE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Pre Sequence Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_SEQUENCE_GROUP_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Pre Sequence Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRE_SEQUENCE_GROUP_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl <em>Non Shipped Cargo Specification</em>}' class.
@@ -7205,31 +7377,13 @@ public interface CargoPackage extends EPackage {
 	int PAPER_DEAL__PRICING_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PAPER_DEAL__START_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>End Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PAPER_DEAL__END_DATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__ENTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+	int PAPER_DEAL__ENTITY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Year</b></em>' attribute.
@@ -7238,7 +7392,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__YEAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+	int PAPER_DEAL__YEAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -7247,7 +7401,61 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL__COMMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+	int PAPER_DEAL__COMMENT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_PERIOD_START = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_PERIOD_END = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__HEDGING_PERIOD_START = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__HEDGING_PERIOD_END = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__PRICING_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Target Object</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL__TARGET_OBJECT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The number of structural features of the '<em>Paper Deal</em>' class.
@@ -7256,7 +7464,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 11;
+	int PAPER_DEAL_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7377,24 +7585,6 @@ public interface CargoPackage extends EPackage {
 	int BUY_PAPER_DEAL__PRICING_MONTH = PAPER_DEAL__PRICING_MONTH;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_PAPER_DEAL__START_DATE = PAPER_DEAL__START_DATE;
-
-	/**
-	 * The feature id for the '<em><b>End Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BUY_PAPER_DEAL__END_DATE = PAPER_DEAL__END_DATE;
-
-	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7420,6 +7610,60 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int BUY_PAPER_DEAL__COMMENT = PAPER_DEAL__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_PERIOD_START = PAPER_DEAL__PRICING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_PERIOD_END = PAPER_DEAL__PRICING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__HEDGING_PERIOD_START = PAPER_DEAL__HEDGING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__HEDGING_PERIOD_END = PAPER_DEAL__HEDGING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__PRICING_CALENDAR = PAPER_DEAL__PRICING_CALENDAR;
+
+	/**
+	 * The feature id for the '<em><b>Target Object</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_PAPER_DEAL__TARGET_OBJECT = PAPER_DEAL__TARGET_OBJECT;
 
 	/**
 	 * The number of structural features of the '<em>Buy Paper Deal</em>' class.
@@ -7549,24 +7793,6 @@ public interface CargoPackage extends EPackage {
 	int SELL_PAPER_DEAL__PRICING_MONTH = PAPER_DEAL__PRICING_MONTH;
 
 	/**
-	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SELL_PAPER_DEAL__START_DATE = PAPER_DEAL__START_DATE;
-
-	/**
-	 * The feature id for the '<em><b>End Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SELL_PAPER_DEAL__END_DATE = PAPER_DEAL__END_DATE;
-
-	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7592,6 +7818,60 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SELL_PAPER_DEAL__COMMENT = PAPER_DEAL__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_PERIOD_START = PAPER_DEAL__PRICING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_PERIOD_END = PAPER_DEAL__PRICING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__HEDGING_PERIOD_START = PAPER_DEAL__HEDGING_PERIOD_START;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__HEDGING_PERIOD_END = PAPER_DEAL__HEDGING_PERIOD_END;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__PRICING_CALENDAR = PAPER_DEAL__PRICING_CALENDAR;
+
+	/**
+	 * The feature id for the '<em><b>Target Object</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_PAPER_DEAL__TARGET_OBJECT = PAPER_DEAL__TARGET_OBJECT;
 
 	/**
 	 * The number of structural features of the '<em>Sell Paper Deal</em>' class.
@@ -8592,17 +8872,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_WindowCounterParty();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingBasis <em>Pricing Basis</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pricing Basis</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getPricingBasis()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_PricingBasis();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getBusinessUnit <em>Business Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8656,6 +8925,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_ComputeHedge();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolumeUnit <em>Scheduled Volume Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scheduled Volume Unit</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getScheduledVolumeUnit()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_ScheduledVolumeUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getScheduledVolume <em>Scheduled Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scheduled Volume</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getScheduledVolume()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_ScheduledVolume();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegateMinQuantity() <em>Get Slot Or Delegate Min Quantity</em>}' operation.
@@ -9752,6 +10043,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselEvent_StartBy();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getNotes()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_Notes();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9770,6 +10072,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getVesselEvent__GetStartAfterAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getSchedulingDurationInDays() <em>Get Scheduling Duration In Days</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Scheduling Duration In Days</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getSchedulingDurationInDays()
+	 * @generated
+	 */
+	EOperation getVesselEvent__GetSchedulingDurationInDays();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.MaintenanceEvent <em>Maintenance Event</em>}'.
@@ -9865,6 +10177,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCharterOutEvent_AvailableHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getExtensionPeriod <em>Extension Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Extension Period</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getExtensionPeriod()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_ExtensionPeriod();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}'.
@@ -10374,6 +10697,38 @@ public interface CargoPackage extends EPackage {
 	EReference getScheduleSpecification_OpenEvents();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification#getPreSequences <em>Pre Sequences</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Pre Sequences</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.ScheduleSpecification#getPreSequences()
+	 * @see #getScheduleSpecification()
+	 * @generated
+	 */
+	EReference getScheduleSpecification_PreSequences();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.PreSequenceGroup <em>Pre Sequence Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Pre Sequence Group</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PreSequenceGroup
+	 * @generated
+	 */
+	EClass getPreSequenceGroup();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.PreSequenceGroup#getSequence <em>Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Sequence</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PreSequenceGroup#getSequence()
+	 * @see #getPreSequenceGroup()
+	 * @generated
+	 */
+	EReference getPreSequenceGroup_Sequence();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification <em>Non Shipped Cargo Specification</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10736,28 +11091,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getPaperDeal_PricingMonth();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate <em>Start Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start Date</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getStartDate()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EAttribute getPaperDeal_StartDate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate <em>End Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>End Date</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getEndDate()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EAttribute getPaperDeal_EndDate();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10789,6 +11122,72 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPaperDeal_Comment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodStart <em>Pricing Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodStart()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_PricingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodEnd <em>Pricing Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Period End</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingPeriodEnd()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_PricingPeriodEnd();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodStart <em>Hedging Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodStart()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_HedgingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodEnd <em>Hedging Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period End</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getHedgingPeriodEnd()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_HedgingPeriodEnd();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar <em>Pricing Calendar</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Pricing Calendar</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingCalendar()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EReference getPaperDeal_PricingCalendar();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject <em>Target Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target Object</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getTargetObject()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EReference getPaperDeal_TargetObject();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}'.
@@ -11507,14 +11906,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__WINDOW_COUNTER_PARTY = eINSTANCE.getSlot_WindowCounterParty();
 
 		/**
-		 * The meta object literal for the '<em><b>Pricing Basis</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__PRICING_BASIS = eINSTANCE.getSlot_PricingBasis();
-
-		/**
 		 * The meta object literal for the '<em><b>Business Unit</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11553,6 +11944,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__COMPUTE_HEDGE = eINSTANCE.getSlot_ComputeHedge();
+
+		/**
+		 * The meta object literal for the '<em><b>Scheduled Volume Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__SCHEDULED_VOLUME_UNIT = eINSTANCE.getSlot_ScheduledVolumeUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Scheduled Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__SCHEDULED_VOLUME = eINSTANCE.getSlot_ScheduledVolume();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate Min Quantity</b></em>' operation.
@@ -12405,6 +12812,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute VESSEL_EVENT__START_BY = eINSTANCE.getVesselEvent_StartBy();
 
 		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__NOTES = eINSTANCE.getVesselEvent_Notes();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12419,6 +12834,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME = eINSTANCE.getVesselEvent__GetStartAfterAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Scheduling Duration In Days</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS = eINSTANCE.getVesselEvent__GetSchedulingDurationInDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
@@ -12499,6 +12922,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_OUT_EVENT__AVAILABLE_HEEL = eINSTANCE.getCharterOutEvent_AvailableHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Extension Period</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__EXTENSION_PERIOD = eINSTANCE.getCharterOutEvent_ExtensionPeriod();
 
 		/**
 		 * The meta object literal for the '<em><b>Hire Rate</b></em>' attribute feature.
@@ -12893,6 +13324,32 @@ public interface CargoPackage extends EPackage {
 		EReference SCHEDULE_SPECIFICATION__OPEN_EVENTS = eINSTANCE.getScheduleSpecification_OpenEvents();
 
 		/**
+		 * The meta object literal for the '<em><b>Pre Sequences</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE_SPECIFICATION__PRE_SEQUENCES = eINSTANCE.getScheduleSpecification_PreSequences();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl <em>Pre Sequence Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.PreSequenceGroupImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPreSequenceGroup()
+		 * @generated
+		 */
+		EClass PRE_SEQUENCE_GROUP = eINSTANCE.getPreSequenceGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Sequence</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRE_SEQUENCE_GROUP__SEQUENCE = eINSTANCE.getPreSequenceGroup_Sequence();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.NonShippedCargoSpecificationImpl <em>Non Shipped Cargo Specification</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13181,22 +13638,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute PAPER_DEAL__PRICING_MONTH = eINSTANCE.getPaperDeal_PricingMonth();
 
 		/**
-		 * The meta object literal for the '<em><b>Start Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAPER_DEAL__START_DATE = eINSTANCE.getPaperDeal_StartDate();
-
-		/**
-		 * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAPER_DEAL__END_DATE = eINSTANCE.getPaperDeal_EndDate();
-
-		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13219,6 +13660,54 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PAPER_DEAL__COMMENT = eINSTANCE.getPaperDeal_Comment();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICING_PERIOD_START = eINSTANCE.getPaperDeal_PricingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICING_PERIOD_END = eINSTANCE.getPaperDeal_PricingPeriodEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__HEDGING_PERIOD_START = eINSTANCE.getPaperDeal_HedgingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__HEDGING_PERIOD_END = eINSTANCE.getPaperDeal_HedgingPeriodEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Calendar</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL__PRICING_CALENDAR = eINSTANCE.getPaperDeal_PricingCalendar();
+
+		/**
+		 * The meta object literal for the '<em><b>Target Object</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL__TARGET_OBJECT = eINSTANCE.getPaperDeal_TargetObject();
 
 		/**
 		 * The meta object literal for the '<em><b>Instrument</b></em>' reference feature.

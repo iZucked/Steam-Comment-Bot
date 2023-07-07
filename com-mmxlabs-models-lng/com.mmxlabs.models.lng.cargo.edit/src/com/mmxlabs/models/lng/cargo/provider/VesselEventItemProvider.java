@@ -61,6 +61,7 @@ public class VesselEventItemProvider
 			addPortPropertyDescriptor(object);
 			addStartAfterPropertyDescriptor(object);
 			addStartByPropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -286,6 +287,28 @@ public class VesselEventItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselEvent_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEvent_notes_feature", "_UI_VesselEvent_type"),
+				 CargoPackage.Literals.VESSEL_EVENT__NOTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -318,6 +341,7 @@ public class VesselEventItemProvider
 			case CargoPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 			case CargoPackage.VESSEL_EVENT__START_AFTER:
 			case CargoPackage.VESSEL_EVENT__START_BY:
+			case CargoPackage.VESSEL_EVENT__NOTES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

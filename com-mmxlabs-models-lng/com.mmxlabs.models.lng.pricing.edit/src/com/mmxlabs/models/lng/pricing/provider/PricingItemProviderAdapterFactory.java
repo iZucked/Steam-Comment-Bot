@@ -893,26 +893,26 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PricingBasis} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.InstrumentPeriod} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PricingBasisItemProvider pricingBasisItemProvider;
+	protected InstrumentPeriodItemProvider instrumentPeriodItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PricingBasis}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.InstrumentPeriod}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createPricingBasisAdapter() {
-		if (pricingBasisItemProvider == null) {
-			pricingBasisItemProvider = new PricingBasisItemProvider(this);
+	public Adapter createInstrumentPeriodAdapter() {
+		if (instrumentPeriodItemProvider == null) {
+			instrumentPeriodItemProvider = new InstrumentPeriodItemProvider(this);
 		}
 
-		return pricingBasisItemProvider;
+		return instrumentPeriodItemProvider;
 	}
 
 	/**
@@ -1082,7 +1082,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (holidayCalendarEntryItemProvider != null) holidayCalendarEntryItemProvider.dispose();
 		if (holidayCalendarItemProvider != null) holidayCalendarItemProvider.dispose();
 		if (settleStrategyItemProvider != null) settleStrategyItemProvider.dispose();
-		if (pricingBasisItemProvider != null) pricingBasisItemProvider.dispose();
+		if (instrumentPeriodItemProvider != null) instrumentPeriodItemProvider.dispose();
 	}
 
 }

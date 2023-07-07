@@ -525,6 +525,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.PreSequenceGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PreSequenceGroupItemProvider preSequenceGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.PreSequenceGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPreSequenceGroupAdapter() {
+		if (preSequenceGroupItemProvider == null) {
+			preSequenceGroupItemProvider = new PreSequenceGroupItemProvider(this);
+		}
+
+		return preSequenceGroupItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -997,6 +1020,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (canalBookingSlotItemProvider != null) canalBookingSlotItemProvider.dispose();
 		if (canalBookingsItemProvider != null) canalBookingsItemProvider.dispose();
 		if (scheduleSpecificationItemProvider != null) scheduleSpecificationItemProvider.dispose();
+		if (preSequenceGroupItemProvider != null) preSequenceGroupItemProvider.dispose();
 		if (nonShippedCargoSpecificationItemProvider != null) nonShippedCargoSpecificationItemProvider.dispose();
 		if (vesselScheduleSpecificationItemProvider != null) vesselScheduleSpecificationItemProvider.dispose();
 		if (scheduleSpecificationEventItemProvider != null) scheduleSpecificationEventItemProvider.dispose();

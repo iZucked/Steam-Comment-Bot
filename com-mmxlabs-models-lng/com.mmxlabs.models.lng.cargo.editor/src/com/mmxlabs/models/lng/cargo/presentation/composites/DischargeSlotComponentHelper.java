@@ -34,10 +34,7 @@ public class DischargeSlotComponentHelper extends DefaultComponentHelper {
 		
 		addEditor(CargoPackage.Literals.DISCHARGE_SLOT__HEEL_CARRY, topClass -> {
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_HEEL_RETENTION)) {
-				// Hide for spot loads
-				if (!CargoPackage.Literals.SPOT_DISCHARGE_SLOT.equals(topClass)) {
-					return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__HEEL_CARRY);
-				}
+				return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__HEEL_CARRY);
 			}
 			return null;
 		});

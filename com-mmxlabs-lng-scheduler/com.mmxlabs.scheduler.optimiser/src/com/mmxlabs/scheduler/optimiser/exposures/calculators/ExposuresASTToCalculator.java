@@ -8,7 +8,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.astnodes.ASTNode;
-import com.mmxlabs.common.parser.astnodes.BlendASTNode;
 import com.mmxlabs.common.parser.astnodes.ConstantASTNode;
 import com.mmxlabs.common.parser.astnodes.DatedAvgFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.FunctionASTNode;
@@ -21,8 +20,7 @@ import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.Tier3FunctionASTNode;
-import com.mmxlabs.common.parser.astnodes.VolumeTierASTNode;
-import com.mmxlabs.scheduler.optimiser.exposures.Constant;
+import com.mmxlabs.common.parser.astnodes.TierBlendASTNode;
 import com.mmxlabs.scheduler.optimiser.exposures.IExposureNode;
 import com.mmxlabs.scheduler.optimiser.exposures.InputRecord;
 
@@ -35,8 +33,6 @@ public class ExposuresASTToCalculator {
 			return MonthFunctionExposuresCalculator.getExposureNode(monthNode, inputRecord);
 		} else if (node instanceof final DatedAvgFunctionASTNode averageNode) {
 			return DatedAvgFunctionExposuresCalculator.getExposureNode(averageNode, inputRecord);
-		} else if (node instanceof final VolumeTierASTNode volumeTierNode) {
-			return VolumeTierFunctionExposuresCalculator.getExposureNode(volumeTierNode, inputRecord);
 		} else if (node instanceof final SCurveFunctionASTNode scurveNode) {
 			return SCurveFunctionExposuresCalculator.getExposureNode(scurveNode, inputRecord);
 		} else if (node instanceof final Tier2FunctionASTNode tierNode) {
@@ -53,8 +49,8 @@ public class ExposuresASTToCalculator {
 			return NamedSeriedExposuresCalculator.getExposureNode(namedSeriesNode, inputRecord);
 		} else if (node instanceof final FunctionASTNode functionNode) {
 			return FunctionExposuresCalculator.getExposureNode(functionNode, inputRecord);
-		} else if (node instanceof final BlendASTNode blendNode) {
-			return BlendFunctionExposuresCalculator.getExposureNode(blendNode, inputRecord);
+		} else if (node instanceof final TierBlendASTNode blendNode) {
+			return TierBlendFunctionExposuresCalculator.getExposureNode(blendNode, inputRecord);
 		} else if (node instanceof final ParamASTNode paramNode) {
 			return ParamExposuresCalculator.getExposureNode(paramNode, inputRecord);
 		}

@@ -20,8 +20,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -34,20 +32,17 @@ import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
-import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider.IBaseCaseChanged;
 
 public class ReferenceDataStatusTrimContribution {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceDataStatusTrimContribution.class);
-	protected IBaseCaseChanged listener;
+
 	private Runnable versionChangeRunnable;
-	private final Activator plugin = Activator.getDefault();
 	private final Image circleOrange = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_orange.png"));
 	private final Image circleGreen = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_green.png"));
 	
+	// Future extension to include all reference data
+	@SuppressWarnings("unused")
 	private static final List<String> types = getBaseCaseTypesToCheck();
 	
 	public static class RDSRecords {
@@ -59,44 +54,14 @@ public class ReferenceDataStatusTrimContribution {
 	}
 	
 	private RDSRecords currentRecords;
-	private RDSRecords newRecords;
 	private Label mainLabel = null;
 
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
-		
-		final int minHeight = 36;
-		final Composite control = new Composite(parent, SWT.NONE){
-			@Override
-			protected void checkSubclass() {
-			}
 
-			@Override
-			public Point getSize() {
-				final Point p = super.getSize();
-				return new Point(p.x, Math.max(minHeight, p.y));
-			}
-
-			@Override
-			public void setSize(int width, int height) {
-				super.setSize(width, Math.max(minHeight, height));
-			}
-
-			@Override
-			public Point computeSize(int wHint, int hHint) {
-				final Point p = super.computeSize(wHint, hHint);
-				return new Point(p.x, Math.max(minHeight, p.y));
-			}
-
-			@Override
-			public Point computeSize(int wHint, int hHint, boolean b) {
-				final Point p = super.computeSize(wHint, hHint, b);
-				return new Point(p.x, Math.max(minHeight, p.y));
-			}
-		};
-		control.setLayout(new FillLayout());
-		final Label myLabel = new Label(control, SWT.CENTER);
+		final Label myLabel = new Label(parent, SWT.NONE);
+		myLabel.setText("Pricing version status");
 		mainLabel = myLabel;
 		myLabel.addMouseListener(new MouseListener() {
 			
@@ -116,63 +81,31 @@ public class ReferenceDataStatusTrimContribution {
 			}
 		});
 		
-		final BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
 		currentRecords = getSaved();
-		listener = new IBaseCaseChanged() {
-
-			@Override
-			public void changed() {
-				Display.getDefault().asyncExec(() -> {
-					if (service != null) {
-						setLabelTextAndToolTip(myLabel, bcChanged(service.getBaseCase()));
-					}
-				});
-			}
-		};
-		IBaseCaseChanged pListener = listener;
-		if (service != null && pListener != null) {
-			service.addChangedListener(pListener);
-		}
 		versionChangeRunnable = this::versionChanged;
 		PricingRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
-		control.redraw();
-		return control;
+		setLabelTextAndToolTip(myLabel, !currentRecords.isDismissed);
+		
+		return myLabel;
 	}
 	
-	private boolean bcChanged(ScenarioInstance si) {
-		if (si != null) {
-			boolean versionChanged = false;
-			final Manifest mf = si.getManifest();
-			newRecords = new RDSRecords();
-			if (mf != null) {
-				newRecords.typeVersion = ScenarioStorageUtil.extractScenarioDataVersions(mf);
+	private void changed() {
+		Display.getDefault().asyncExec(() -> {
+			if (mainLabel != null) {
+				setLabelTextAndToolTip(mainLabel, true);
 			}
-			if (!types.isEmpty() && currentRecords != null && !newRecords.typeVersion.isEmpty()) {
-				for (final String type : types) {
-					final String cV = currentRecords.typeVersion.get(type);
-					final String nV = newRecords.typeVersion.get(type);
-					if (nV != null && (cV == null || !cV.equalsIgnoreCase(nV))) {
-						currentRecords = newRecords;
-						versionChanged = true;
-						break;
-					}
-				}
-				if (versionChanged) {
-					saveRecord(currentRecords);
-					return true;
-				}
-			}
-		}
-		return false;
+		});
 	}
 	
 	private void versionChanged() {
 		final String cV = currentRecords.typeVersion.get(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
 		final String nV = PricingRepository.INSTANCE.getCurrentVersion();
 		if (nV != null && (cV == null || !cV.equals(nV))) {
+			currentRecords.isDismissed = false;
 			currentRecords.typeVersion.remove(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
 			currentRecords.typeVersion.put(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), nV);
 			saveRecord(currentRecords);
+			changed();
 		}
 	}
 	
@@ -191,21 +124,14 @@ public class ReferenceDataStatusTrimContribution {
 	
 	@PreDestroy
 	public void dispose() {
-		IBaseCaseChanged pListener = listener;
-		BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
-		if (service != null && pListener != null) {
-			service.removeChangedListener(pListener);
-		}
+
 		if (circleGreen != null && !circleGreen.isDisposed()) {
 			circleGreen.dispose();
 		}
-		if (!circleOrange.isDisposed()) {
+		if (circleOrange != null && !circleOrange.isDisposed()) {
 			circleOrange.dispose();
 		}
 		if (mainLabel != null && !mainLabel.isDisposed()) {
-			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
-				mainLabel.getImage().dispose();
-			}
 			mainLabel.dispose();
 		}
 		if (versionChangeRunnable != null) {
@@ -214,7 +140,6 @@ public class ReferenceDataStatusTrimContribution {
 	}
 	
 	private void saveRecord(final RDSRecords myRecord) {
-		myRecord.isDismissed = false;
 		final File recordsFile = getRecordFile();
 		final ObjectMapper mapper = new ObjectMapper();
 		try {

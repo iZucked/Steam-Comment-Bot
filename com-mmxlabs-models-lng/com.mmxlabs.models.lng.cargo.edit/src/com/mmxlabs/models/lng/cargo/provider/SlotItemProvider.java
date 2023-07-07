@@ -91,12 +91,13 @@ public class SlotItemProvider
 			addLockedPropertyDescriptor(object);
 			addCancelledPropertyDescriptor(object);
 			addWindowCounterPartyPropertyDescriptor(object);
-			addPricingBasisPropertyDescriptor(object);
 			addBusinessUnitPropertyDescriptor(object);
 			addAllowedPortsPropertyDescriptor(object);
 			addAllowedPortsOverridePropertyDescriptor(object);
 			addComputeExposurePropertyDescriptor(object);
 			addComputeHedgePropertyDescriptor(object);
+			addScheduledVolumeUnitPropertyDescriptor(object);
+			addScheduledVolumePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -1026,28 +1027,6 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Pricing Basis feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPricingBasisPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_pricingBasis_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_pricingBasis_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__PRICING_BASIS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Business Unit feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1158,6 +1137,50 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Scheduled Volume Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addScheduledVolumeUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_scheduledVolumeUnit_feature"),
+				 getString("_UI_Slot_scheduledVolumeUnit_description"),
+				 CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Scheduled Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addScheduledVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_scheduledVolume_feature"),
+				 getString("_UI_Slot_scheduledVolume_description"),
+				 CargoPackage.Literals.SLOT__SCHEDULED_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1227,10 +1250,11 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__LOCKED:
 			case CargoPackage.SLOT__CANCELLED:
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
-			case CargoPackage.SLOT__PRICING_BASIS:
 			case CargoPackage.SLOT__ALLOWED_PORTS_OVERRIDE:
 			case CargoPackage.SLOT__COMPUTE_EXPOSURE:
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

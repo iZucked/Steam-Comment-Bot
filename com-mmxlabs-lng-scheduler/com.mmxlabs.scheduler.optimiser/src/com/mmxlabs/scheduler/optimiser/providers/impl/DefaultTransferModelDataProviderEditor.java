@@ -28,8 +28,6 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 	
 	private SeriesParser commodityParser;
 	
-	private SeriesParser pricingBasisParser;
-	
 	private Map<IPortSlot, List<BasicTransferRecord>> slotsToTransferRecords = new HashMap<>();
 
 	@Override
@@ -73,21 +71,15 @@ public class DefaultTransferModelDataProviderEditor implements ITransferModelDat
 	}
 
 	@Override
-	public void setSeriesParsers(SeriesParser commodityParser, SeriesParser pricingBasisParser) {
+	public void setSeriesParsers(SeriesParser commodityParser) {
 		this.commodityParser = commodityParser;
-		this.pricingBasisParser = pricingBasisParser;
 	}
 
 	@Override
-	public int getTransferPrice(String priceExpression, int pricingDate, int internalSalesPrice, boolean isBasis) {
-		ICurve curve = null;
-		if (isBasis) {
-			curve = generateExpressionCurve(priceExpression, pricingBasisParser);
-		} else {
-			double externalSalesPrice = OptimiserUnitConvertor.convertToExternalPrice(internalSalesPrice);
-			String modifiedPriceExpression = priceExpression.toLowerCase().replace("salesprice", String.format("(%f)", externalSalesPrice));
-			curve = generateExpressionCurve(modifiedPriceExpression, commodityParser);
-		}
+	public int getTransferPrice(String priceExpression, int pricingDate, int internalSalesPrice) {
+		double externalSalesPrice = OptimiserUnitConvertor.convertToExternalPrice(internalSalesPrice);
+		String modifiedPriceExpression = priceExpression.toLowerCase().replace("salesprice", String.format("(%f)", externalSalesPrice));
+		final ICurve curve = generateExpressionCurve(modifiedPriceExpression, commodityParser);
 		
 		if (curve != null) {
 			return curve.getValueAtPoint(pricingDate);

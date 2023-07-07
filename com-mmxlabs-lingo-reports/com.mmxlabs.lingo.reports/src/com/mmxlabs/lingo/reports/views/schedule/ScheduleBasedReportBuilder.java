@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.common.notify.Notifier;
@@ -116,7 +117,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			if (dischargeAllocation != null) {
 				final CargoAllocation cargoAllocation = row.getCargoAllocation();
 				if (cargoAllocation != null) {
-					if (cargoAllocation.getSlotAllocations().size() > 0) {
+					if (!cargoAllocation.getSlotAllocations().isEmpty()) {
 						return showEvent(cargoAllocation.getSlotAllocations().get(0).getSlotVisit());
 					}
 				}
@@ -124,8 +125,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		}
 
 		final EObject target = row.getTarget();
-		if (target instanceof Event) {
-			return showEvent((Event) target);
+		if (target instanceof Event evt) {
+			return showEvent(evt);
 		}
 
 		return false;
@@ -186,8 +187,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	}
 
 	protected Pair<EObject, CargoAllocation> getIfCargoAllocation(final Object obj, final EStructuralFeature cargoAllocationRef) {
-		if (obj instanceof EObject) {
-			final EObject eObj = (EObject) obj;
+		if (obj instanceof EObject eObj) {
 			if (eObj.eIsSet(cargoAllocationRef)) {
 				return new Pair<>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
 			}
@@ -233,8 +233,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			if (rootObject != null) {
 				final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(rootObject);
 				for (final BaseLegalEntity e : commercialModel.getEntities()) {
-					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK));
-					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK));
+					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK, StandardScheduleColumnFactory::isFirstRow));
+					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK, StandardScheduleColumnFactory::isFirstRow));
 				}
 			}
 		}
@@ -248,7 +248,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		}
 	}
 
-	public EmfBlockColumnFactory getTotalPNLColumnFactory(final String columnId, @Nullable final EStructuralFeature bookContainmentFeature) {
+	public EmfBlockColumnFactory getTotalPNLColumnFactory(final String columnId, @Nullable final EStructuralFeature bookContainmentFeature, @Nullable Predicate<Object> rowFilter) {
 		return new EmfBlockColumnFactory() {
 			@Override
 			public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
@@ -267,13 +267,17 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 				final String title = String.format("P&L (%s)", book);
 
 				final ColumnBlock block = blockManager.createBlock(columnId, title, ColumnType.NORMAL);
-				return blockManager.createColumn(block, title, new IntegerFormatter() {
-					@Override
-					public Integer getIntValue(final Object object) {
-						final ProfitAndLossContainer container = ScheduleModelUtils.getProfitAndLossContainer(object);
-						return getEntityPNLEntry(container, null, bookContainmentFeature);
-					}
-				}, ScheduleReportPackage.Literals.ROW__TARGET);
+				return blockManager.createColumn(block, title)//
+						.withCellRenderer(new IntegerFormatter() {
+							@Override
+							public Integer getIntValue(final Object object) {
+								final ProfitAndLossContainer container = ScheduleModelUtils.getProfitAndLossContainer(object);
+								return getEntityPNLEntry(container, null, bookContainmentFeature);
+							}
+						}) //
+						.withElementPath(ScheduleReportPackage.Literals.ROW__TARGET) //
+						.withRowFilter(rowFilter) //
+						.build();
 			}
 
 		};
@@ -282,41 +286,41 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	public ColumnHandler addWiringColumn(final String blockId) {
 
-		return blockManager.createColumn(blockManager.getBlockByID(blockId), "Wiring", new ICellRenderer() {
+		return blockManager.createColumn(blockManager.getBlockByID(blockId), "Wiring") //
+				.withCellRenderer(new ICellRenderer() {
 
-			@Override
-			public Comparable getComparable(final Object object) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public Comparable getComparable(final Object object) {
+						return null;
+					}
 
-			@Override
-			public String render(final Object object) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public String render(final Object object) {
+						return null;
+					}
 
-			@Override
-			public Object getFilterValue(final Object object) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public Object getFilterValue(final Object object) {
+						return null;
+					}
 
-			@Override
-			public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
+						return null;
+					}
 
-			@Override
-			public boolean isValueUnset(final Object object) {
-				return false;
-			}
+					@Override
+					public boolean isValueUnset(final Object object) {
+						return false;
+					}
 
-		}, false, ScheduleReportPackage.Literals.ROW__TARGET);
+				}) //
+				.withCreateImmediately(false)
+				.withElementPath(ScheduleReportPackage.Literals.ROW__TARGET) //
+				.build();
 	}
 
-	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature, @Nullable Predicate<Object> rowFilter) {
 		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
@@ -328,13 +332,18 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			entityColumnNames.add(title);
 		}
 
-		return blockManager.createColumn(blockManager.getBlockByID(blockId), title, new IntegerFormatter() {
-			@Override
-			public Integer getIntValue(final Object object) {
-				ProfitAndLossContainer container = ScheduleModelUtils.getProfitAndLossContainer(object);
-				return getEntityPNLEntry(container, entityKey, bookContainmentFeature);
-			}
-		}, false, ScheduleReportPackage.Literals.ROW__TARGET);
+		return blockManager.createColumn(blockManager.getBlockByID(blockId), title) //
+				.withCellRenderer(new IntegerFormatter() {
+					@Override
+					public Integer getIntValue(final Object object) {
+						ProfitAndLossContainer container = ScheduleModelUtils.getProfitAndLossContainer(object);
+						return getEntityPNLEntry(container, entityKey, bookContainmentFeature);
+					}
+				}) //
+				.withRowFilter(rowFilter) //
+				.withCreateImmediately(false) //
+				.withElementPath(ScheduleReportPackage.Literals.ROW__TARGET) //
+				.build();
 	}
 
 	/**

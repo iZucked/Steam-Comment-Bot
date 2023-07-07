@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -15,7 +14,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -95,7 +93,7 @@ public class FOBDESCargoDatesConstraint extends AbstractModelMultiConstraint {
 
 	private LocalDateTime getStartLDT(final Slot<?> s) {
 		final LocalDate ld = s.getWindowStart();
-		return ld.atTime(s.getWindowStartTime(), 0, 0);
+		return ld.atTime((Integer) s.eGetWithDefault(CargoPackage.Literals.SLOT__WINDOW_START_TIME), 0, 0);
 	}
 
 	private LocalDateTime getEndLDT(final Slot<?> s) {

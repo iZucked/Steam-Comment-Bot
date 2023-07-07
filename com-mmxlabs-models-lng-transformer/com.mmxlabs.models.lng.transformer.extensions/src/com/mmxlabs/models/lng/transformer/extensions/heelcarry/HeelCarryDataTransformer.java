@@ -10,7 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IHeelCarrySlotProviderEditor;
@@ -26,7 +25,7 @@ public class HeelCarryDataTransformer implements ISlotTransformer {
 	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
 		if (modelSlot instanceof DischargeSlot discharge) {
 			// Only applies to "real" DES purchases
-			if (discharge.isHeelCarry() && !(discharge instanceof SpotSlot)) {
+			if (discharge.isHeelCarry()) {
 				heelCarrySlotProviderEditor.setHeelCarrySlot(optimiserSlot);
 			}
 		}

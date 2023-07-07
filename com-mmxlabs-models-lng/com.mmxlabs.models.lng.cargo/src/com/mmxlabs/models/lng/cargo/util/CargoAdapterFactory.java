@@ -186,6 +186,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createScheduleSpecificationAdapter();
 			}
 			@Override
+			public Adapter casePreSequenceGroup(PreSequenceGroup object) {
+				return createPreSequenceGroupAdapter();
+			}
+			@Override
 			public Adapter caseNonShippedCargoSpecification(NonShippedCargoSpecification object) {
 				return createNonShippedCargoSpecificationAdapter();
 			}
@@ -654,6 +658,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createScheduleSpecificationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.PreSequenceGroup <em>Pre Sequence Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.PreSequenceGroup
+	 * @generated
+	 */
+	public Adapter createPreSequenceGroupAdapter() {
 		return null;
 	}
 

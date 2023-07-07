@@ -330,13 +330,22 @@ s	 * <!-- end-user-doc -->
 	int BUY_OPPORTUNITY__DES_PURCHASE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUY_OPPORTUNITY__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int BUY_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -345,7 +354,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int BUY_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -354,7 +363,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int BUY_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -363,7 +372,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int BUY_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -372,7 +381,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int BUY_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -381,7 +390,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CV = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int BUY_OPPORTUNITY__CV = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -390,7 +399,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int BUY_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -399,7 +408,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int BUY_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
@@ -408,7 +417,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int BUY_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
@@ -417,7 +426,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int BUY_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -426,7 +435,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int BUY_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
@@ -435,7 +444,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int BUY_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
@@ -444,7 +453,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int BUY_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -453,7 +462,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int BUY_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
@@ -462,7 +471,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int BUY_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
@@ -471,7 +480,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int BUY_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -510,13 +519,22 @@ s	 * <!-- end-user-doc -->
 	int SELL_OPPORTUNITY__FOB_SALE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELL_OPPORTUNITY__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SELL_OPPORTUNITY__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -525,7 +543,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SELL_OPPORTUNITY__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -534,7 +552,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SELL_OPPORTUNITY__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -543,7 +561,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SELL_OPPORTUNITY__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -552,7 +570,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SELL_OPPORTUNITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Expression</b></em>' attribute.
@@ -561,7 +579,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SELL_OPPORTUNITY__CANCELLATION_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Misc Costs</b></em>' attribute.
@@ -570,7 +588,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SELL_OPPORTUNITY__MISC_COSTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Volume Mode</b></em>' attribute.
@@ -579,7 +597,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SELL_OPPORTUNITY__VOLUME_MODE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume</b></em>' attribute.
@@ -588,7 +606,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SELL_OPPORTUNITY__MIN_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume</b></em>' attribute.
@@ -597,7 +615,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SELL_OPPORTUNITY__MAX_VOLUME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Volume Units</b></em>' attribute.
@@ -606,7 +624,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SELL_OPPORTUNITY__VOLUME_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Specify Window</b></em>' attribute.
@@ -615,7 +633,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int SELL_OPPORTUNITY__SPECIFY_WINDOW = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -624,7 +642,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int SELL_OPPORTUNITY__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Window Size Units</b></em>' attribute.
@@ -633,7 +651,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int SELL_OPPORTUNITY__WINDOW_SIZE_UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The number of structural features of the '<em>Sell Opportunity</em>' class.
@@ -642,7 +660,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int SELL_OPPORTUNITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyMarketImpl <em>Buy Market</em>}' class.
@@ -995,13 +1013,31 @@ s	 * <!-- end-user-doc -->
 	int BASE_CASE_ROW = 14;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__BUY_OPTION = 0;
+	int BASE_CASE_ROW__BUY_OPTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Sell Option</b></em>' reference.
@@ -1010,7 +1046,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__SELL_OPTION = 1;
+	int BASE_CASE_ROW__SELL_OPTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event Option</b></em>' reference.
@@ -1019,7 +1055,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__VESSEL_EVENT_OPTION = 2;
+	int BASE_CASE_ROW__VESSEL_EVENT_OPTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Shipping</b></em>' reference.
@@ -1028,7 +1064,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__SHIPPING = 3;
+	int BASE_CASE_ROW__SHIPPING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Optionise</b></em>' attribute.
@@ -1037,7 +1073,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__OPTIONISE = 4;
+	int BASE_CASE_ROW__OPTIONISE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Options</b></em>' containment reference.
@@ -1046,7 +1082,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__OPTIONS = 5;
+	int BASE_CASE_ROW__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Freeze</b></em>' attribute.
@@ -1055,7 +1091,16 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW__FREEZE = 6;
+	int BASE_CASE_ROW__FREEZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__GROUP = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Base Case Row</em>' class.
@@ -1064,7 +1109,53 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_FEATURE_COUNT = 7;
+	int BASE_CASE_ROW_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowGroupImpl <em>Base Case Row Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.BaseCaseRowGroupImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCaseRowGroup()
+	 * @generated
+	 */
+	int BASE_CASE_ROW_GROUP = 15;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_GROUP__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_GROUP__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Rows</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_GROUP__ROWS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Base Case Row Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_GROUP_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowOptionsImpl <em>Base Case Row Options</em>}' class.
@@ -1074,7 +1165,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCaseRowOptions()
 	 * @generated
 	 */
-	int BASE_CASE_ROW_OPTIONS = 15;
+	int BASE_CASE_ROW_OPTIONS = 16;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Laden Route</b></em>' attribute.
@@ -1083,7 +1192,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_OPTIONS__LADEN_ROUTE = 0;
+	int BASE_CASE_ROW_OPTIONS__LADEN_ROUTE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Route</b></em>' attribute.
@@ -1092,7 +1201,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_OPTIONS__BALLAST_ROUTE = 1;
+	int BASE_CASE_ROW_OPTIONS__BALLAST_ROUTE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Laden Fuel Choice</b></em>' attribute.
@@ -1101,7 +1210,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICE = 2;
+	int BASE_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Fuel Choice</b></em>' attribute.
@@ -1110,7 +1219,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICE = 3;
+	int BASE_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Load Date</b></em>' attribute.
@@ -1119,7 +1228,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_OPTIONS__LOAD_DATE = 4;
+	int BASE_CASE_ROW_OPTIONS__LOAD_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Date</b></em>' attribute.
@@ -1128,7 +1237,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_OPTIONS__DISCHARGE_DATE = 5;
+	int BASE_CASE_ROW_OPTIONS__DISCHARGE_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Base Case Row Options</em>' class.
@@ -1137,7 +1246,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_OPTIONS_FEATURE_COUNT = 6;
+	int BASE_CASE_ROW_OPTIONS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl <em>Partial Case Row</em>}' class.
@@ -1147,7 +1256,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRow()
 	 * @generated
 	 */
-	int PARTIAL_CASE_ROW = 16;
+	int PARTIAL_CASE_ROW = 17;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Buy Options</b></em>' reference list.
@@ -1156,7 +1283,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW__BUY_OPTIONS = 0;
+	int PARTIAL_CASE_ROW__BUY_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Sell Options</b></em>' reference list.
@@ -1165,7 +1292,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW__SELL_OPTIONS = 1;
+	int PARTIAL_CASE_ROW__SELL_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event Options</b></em>' reference list.
@@ -1174,7 +1301,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS = 2;
+	int PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Shipping</b></em>' reference list.
@@ -1183,7 +1310,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW__SHIPPING = 3;
+	int PARTIAL_CASE_ROW__SHIPPING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Options</b></em>' containment reference.
@@ -1192,7 +1319,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW__OPTIONS = 4;
+	int PARTIAL_CASE_ROW__OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Commodity Curve Options</b></em>' reference list.
@@ -1201,7 +1328,16 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS = 5;
+	int PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW__GROUP = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Partial Case Row</em>' class.
@@ -1210,7 +1346,53 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_FEATURE_COUNT = 6;
+	int PARTIAL_CASE_ROW_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowGroupImpl <em>Partial Case Row Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.PartialCaseRowGroupImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRowGroup()
+	 * @generated
+	 */
+	int PARTIAL_CASE_ROW_GROUP = 18;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_GROUP__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_GROUP__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Rows</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_GROUP__ROWS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Partial Case Row Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_GROUP_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
@@ -1220,7 +1402,25 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRowOptions()
 	 * @generated
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS = 17;
+	int PARTIAL_CASE_ROW_OPTIONS = 19;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Laden Routes</b></em>' attribute list.
@@ -1229,7 +1429,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS__LADEN_ROUTES = 0;
+	int PARTIAL_CASE_ROW_OPTIONS__LADEN_ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Routes</b></em>' attribute list.
@@ -1238,7 +1438,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS__BALLAST_ROUTES = 1;
+	int PARTIAL_CASE_ROW_OPTIONS__BALLAST_ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Laden Fuel Choices</b></em>' attribute list.
@@ -1247,7 +1447,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICES = 2;
+	int PARTIAL_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Fuel Choices</b></em>' attribute list.
@@ -1256,7 +1456,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICES = 3;
+	int PARTIAL_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Load Dates</b></em>' containment reference list.
@@ -1265,7 +1465,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS__LOAD_DATES = 4;
+	int PARTIAL_CASE_ROW_OPTIONS__LOAD_DATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Dates</b></em>' containment reference list.
@@ -1274,7 +1474,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS__DISCHARGE_DATES = 5;
+	int PARTIAL_CASE_ROW_OPTIONS__DISCHARGE_DATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Partial Case Row Options</em>' class.
@@ -1283,7 +1483,7 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_OPTIONS_FEATURE_COUNT = 6;
+	int PARTIAL_CASE_ROW_OPTIONS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingOptionImpl <em>Shipping Option</em>}' class.
@@ -1293,7 +1493,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingOption()
 	 * @generated
 	 */
-	int SHIPPING_OPTION = 18;
+	int SHIPPING_OPTION = 20;
 
 	/**
 	 * The number of structural features of the '<em>Shipping Option</em>' class.
@@ -1312,7 +1512,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSimpleVesselCharterOption()
 	 * @generated
 	 */
-	int SIMPLE_VESSEL_CHARTER_OPTION = 19;
+	int SIMPLE_VESSEL_CHARTER_OPTION = 21;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1385,7 +1585,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION = 20;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION = 22;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1512,7 +1712,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRoundTripShippingOption()
 	 * @generated
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION = 21;
+	int ROUND_TRIP_SHIPPING_OPTION = 23;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1576,7 +1776,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNominatedShippingOption()
 	 * @generated
 	 */
-	int NOMINATED_SHIPPING_OPTION = 22;
+	int NOMINATED_SHIPPING_OPTION = 24;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1622,7 +1822,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFullVesselCharterOption()
 	 * @generated
 	 */
-	int FULL_VESSEL_CHARTER_OPTION = 23;
+	int FULL_VESSEL_CHARTER_OPTION = 25;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1668,7 +1868,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselCharterOption()
 	 * @generated
 	 */
-	int EXISTING_VESSEL_CHARTER_OPTION = 24;
+	int EXISTING_VESSEL_CHARTER_OPTION = 26;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1714,7 +1914,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultDetail()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_DETAIL = 25;
+	int ANALYSIS_RESULT_DETAIL = 27;
 
 	/**
 	 * The number of structural features of the '<em>Analysis Result Detail</em>' class.
@@ -1733,7 +1933,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProfitAndLossResult()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_RESULT = 26;
+	int PROFIT_AND_LOSS_RESULT = 28;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1761,7 +1961,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_RESULT = 27;
+	int BREAK_EVEN_RESULT = 29;
 
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
@@ -1807,7 +2007,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractAnalysisModel()
 	 * @generated
 	 */
-	int ABSTRACT_ANALYSIS_MODEL = 28;
+	int ABSTRACT_ANALYSIS_MODEL = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1898,7 +2098,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityResultContainer()
 	 * @generated
 	 */
-	int MARKETABILITY_RESULT_CONTAINER = 78;
+	int MARKETABILITY_RESULT_CONTAINER = 80;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -1908,7 +2108,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 29;
+	int OPTION_ANALYSIS_MODEL = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2044,7 +2244,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 31;
+	int BASE_CASE = 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl <em>Partial Case</em>}' class.
@@ -2054,7 +2254,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 32;
+	int PARTIAL_CASE = 34;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.
@@ -2064,7 +2264,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
 	 * @generated
 	 */
-	int EXISTING_CHARTER_MARKET_OPTION = 33;
+	int EXISTING_CHARTER_MARKET_OPTION = 35;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl <em>Abstract Solution Set</em>}' class.
@@ -2074,7 +2274,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSolutionSet()
 	 * @generated
 	 */
-	int ABSTRACT_SOLUTION_SET = 34;
+	int ABSTRACT_SOLUTION_SET = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
@@ -2084,7 +2284,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
 	 * @generated
 	 */
-	int ACTIONABLE_SET_PLAN = 35;
+	int ACTIONABLE_SET_PLAN = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
@@ -2094,7 +2294,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTIONS = 36;
+	int SLOT_INSERTION_OPTIONS = 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.
@@ -2104,7 +2304,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
 	 * @generated
 	 */
-	int SOLUTION_OPTION = 37;
+	int SOLUTION_OPTION = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl <em>Change Description</em>}' class.
@@ -2114,7 +2314,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeDescription()
 	 * @generated
 	 */
-	int CHANGE_DESCRIPTION = 41;
+	int CHANGE_DESCRIPTION = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeImpl <em>Change</em>}' class.
@@ -2124,7 +2324,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChange()
 	 * @generated
 	 */
-	int CHANGE = 42;
+	int CHANGE = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl <em>Open Slot Change</em>}' class.
@@ -2134,7 +2334,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSlotChange()
 	 * @generated
 	 */
-	int OPEN_SLOT_CHANGE = 43;
+	int OPEN_SLOT_CHANGE = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl <em>Cargo Change</em>}' class.
@@ -2144,7 +2344,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoChange()
 	 * @generated
 	 */
-	int CARGO_CHANGE = 44;
+	int CARGO_CHANGE = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl <em>Vessel Event Change</em>}' class.
@@ -2154,7 +2354,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventChange()
 	 * @generated
 	 */
-	int VESSEL_EVENT_CHANGE = 45;
+	int VESSEL_EVENT_CHANGE = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl <em>Vessel Event Descriptor</em>}' class.
@@ -2164,7 +2364,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventDescriptor()
 	 * @generated
 	 */
-	int VESSEL_EVENT_DESCRIPTOR = 46;
+	int VESSEL_EVENT_DESCRIPTOR = 48;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl <em>Slot Descriptor</em>}' class.
@@ -2174,7 +2374,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotDescriptor()
 	 * @generated
 	 */
-	int SLOT_DESCRIPTOR = 47;
+	int SLOT_DESCRIPTOR = 49;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl <em>Real Slot Descriptor</em>}' class.
@@ -2184,7 +2384,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRealSlotDescriptor()
 	 * @generated
 	 */
-	int REAL_SLOT_DESCRIPTOR = 48;
+	int REAL_SLOT_DESCRIPTOR = 50;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl <em>Spot Market Slot Descriptor</em>}' class.
@@ -2194,7 +2394,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSpotMarketSlotDescriptor()
 	 * @generated
 	 */
-	int SPOT_MARKET_SLOT_DESCRIPTOR = 49;
+	int SPOT_MARKET_SLOT_DESCRIPTOR = 51;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl <em>Vessel Allocation Descriptor</em>}' class.
@@ -2204,7 +2404,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int VESSEL_ALLOCATION_DESCRIPTOR = 50;
+	int VESSEL_ALLOCATION_DESCRIPTOR = 52;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl <em>Market Vessel Allocation Descriptor</em>}' class.
@@ -2214,7 +2414,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 51;
+	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 53;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl <em>Fleet Vessel Allocation Descriptor</em>}' class.
@@ -2224,7 +2424,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 52;
+	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 54;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl <em>Position Descriptor</em>}' class.
@@ -2234,7 +2434,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPositionDescriptor()
 	 * @generated
 	 */
-	int POSITION_DESCRIPTOR = 53;
+	int POSITION_DESCRIPTOR = 55;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
@@ -2244,7 +2444,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
 	 * @generated
 	 */
-	int OPTIMISATION_RESULT = 38;
+	int OPTIMISATION_RESULT = 40;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl <em>Dual Mode Solution Option</em>}' class.
@@ -2254,7 +2454,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDualModeSolutionOption()
 	 * @generated
 	 */
-	int DUAL_MODE_SOLUTION_OPTION = 39;
+	int DUAL_MODE_SOLUTION_OPTION = 41;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2399,7 +2599,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSandboxResult()
 	 * @generated
 	 */
-	int SANDBOX_RESULT = 30;
+	int SANDBOX_RESULT = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2564,13 +2764,22 @@ s	 * <!-- end-user-doc -->
 	int BASE_CASE__KEEP_EXISTING_SCENARIO = 2;
 
 	/**
+	 * The feature id for the '<em><b>Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE__GROUPS = 3;
+
+	/**
 	 * The number of structural features of the '<em>Base Case</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_FEATURE_COUNT = 3;
+	int BASE_CASE_FEATURE_COUNT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Partial Case</b></em>' containment reference list.
@@ -2591,13 +2800,22 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE__KEEP_EXISTING_SCENARIO = 1;
 
 	/**
+	 * The feature id for the '<em><b>Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE__GROUPS = 2;
+
+	/**
 	 * The number of structural features of the '<em>Partial Case</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_FEATURE_COUNT = 2;
+	int PARTIAL_CASE_FEATURE_COUNT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3165,7 +3383,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOptionMicroCase()
 	 * @generated
 	 */
-	int SOLUTION_OPTION_MICRO_CASE = 40;
+	int SOLUTION_OPTION_MICRO_CASE = 42;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Specification</b></em>' containment reference.
@@ -3535,7 +3753,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityModel()
 	 * @generated
 	 */
-	int VIABILITY_MODEL = 54;
+	int VIABILITY_MODEL = 56;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3644,7 +3862,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityModel()
 	 * @generated
 	 */
-	int MARKETABILITY_MODEL = 75;
+	int MARKETABILITY_MODEL = 77;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityRowImpl <em>Marketability Row</em>}' class.
@@ -3654,7 +3872,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityRow()
 	 * @generated
 	 */
-	int MARKETABILITY_ROW = 76;
+	int MARKETABILITY_ROW = 78;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityResultImpl <em>Marketability Result</em>}' class.
@@ -3664,7 +3882,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityResult()
 	 * @generated
 	 */
-	int MARKETABILITY_RESULT = 77;
+	int MARKETABILITY_RESULT = 79;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEventImpl <em>Marketability Event</em>}' class.
@@ -3674,7 +3892,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEvent()
 	 * @generated
 	 */
-	int MARKETABILITY_EVENT = 79;
+	int MARKETABILITY_EVENT = 81;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityAssignableElementImpl <em>Marketability Assignable Element</em>}' class.
@@ -3684,7 +3902,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityAssignableElement()
 	 * @generated
 	 */
-	int MARKETABILITY_ASSIGNABLE_ELEMENT = 80;
+	int MARKETABILITY_ASSIGNABLE_ELEMENT = 82;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketabilityEndEventImpl <em>Marketability End Event</em>}' class.
@@ -3694,7 +3912,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketabilityEndEvent()
 	 * @generated
 	 */
-	int MARKETABILITY_END_EVENT = 81;
+	int MARKETABILITY_END_EVENT = 83;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ViabilityRowImpl <em>Viability Row</em>}' class.
@@ -3704,7 +3922,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
 	 * @generated
 	 */
-	int VIABILITY_ROW = 55;
+	int VIABILITY_ROW = 57;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -3813,7 +4031,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
 	 * @generated
 	 */
-	int VIABILITY_RESULT = 56;
+	int VIABILITY_RESULT = 58;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -3895,7 +4113,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
 	 * @generated
 	 */
-	int MTM_MODEL = 57;
+	int MTM_MODEL = 59;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4013,7 +4231,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
 	 * @generated
 	 */
-	int MTM_RESULT = 58;
+	int MTM_RESULT = 60;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4113,7 +4331,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
 	 * @generated
 	 */
-	int MTM_ROW = 59;
+	int MTM_ROW = 61;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4213,7 +4431,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_MODEL = 60;
+	int BREAK_EVEN_ANALYSIS_MODEL = 62;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4322,7 +4540,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_ROW = 61;
+	int BREAK_EVEN_ANALYSIS_ROW = 63;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4404,7 +4622,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT_SET = 62;
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 64;
 
 	/**
 	 * The feature id for the '<em><b>Based On</b></em>' reference.
@@ -4450,7 +4668,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT = 63;
+	int BREAK_EVEN_ANALYSIS_RESULT = 65;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4505,7 +4723,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getLocalDateTimeHolder()
 	 * @generated
 	 */
-	int LOCAL_DATE_TIME_HOLDER = 64;
+	int LOCAL_DATE_TIME_HOLDER = 66;
 
 	/**
 	 * The feature id for the '<em><b>Date Time</b></em>' attribute.
@@ -4533,7 +4751,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OPTION = 65;
+	int COMMODITY_CURVE_OPTION = 67;
 
 	/**
 	 * The number of structural features of the '<em>Commodity Curve Option</em>' class.
@@ -4552,7 +4770,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
 	 * @generated
 	 */
-	int COMMODITY_CURVE_OVERLAY = 66;
+	int COMMODITY_CURVE_OVERLAY = 68;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4607,7 +4825,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivityModel()
 	 * @generated
 	 */
-	int SENSITIVITY_MODEL = 67;
+	int SENSITIVITY_MODEL = 69;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4662,7 +4880,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSensitivitySolutionSet()
 	 * @generated
 	 */
-	int SENSITIVITY_SOLUTION_SET = 68;
+	int SENSITIVITY_SOLUTION_SET = 70;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4825,7 +5043,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSensitivityResult()
 	 * @generated
 	 */
-	int ABSTRACT_SENSITIVITY_RESULT = 69;
+	int ABSTRACT_SENSITIVITY_RESULT = 71;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4898,7 +5116,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPortfolioSensitivityResult()
 	 * @generated
 	 */
-	int PORTFOLIO_SENSITIVITY_RESULT = 70;
+	int PORTFOLIO_SENSITIVITY_RESULT = 72;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -4971,7 +5189,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoPnLResult()
 	 * @generated
 	 */
-	int CARGO_PN_LRESULT = 71;
+	int CARGO_PN_LRESULT = 73;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5053,7 +5271,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixModel()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_MODEL = 72;
+	int SWAP_VALUE_MATRIX_MODEL = 74;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5162,7 +5380,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResult()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT = 73;
+	int SWAP_VALUE_MATRIX_RESULT = 75;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5271,7 +5489,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixResultSet()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_RESULT_SET = 74;
+	int SWAP_VALUE_MATRIX_RESULT_SET = 76;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5668,7 +5886,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixParameters()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_PARAMETERS = 82;
+	int SWAP_VALUE_MATRIX_PARAMETERS = 84;
 
 	/**
 	 * The feature id for the '<em><b>Base Load</b></em>' containment reference.
@@ -5759,7 +5977,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRange()
 	 * @generated
 	 */
-	int RANGE = 83;
+	int RANGE = 85;
 
 	/**
 	 * The feature id for the '<em><b>Min</b></em>' attribute.
@@ -5805,7 +6023,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixCargoResult()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_CARGO_RESULT = 84;
+	int SWAP_VALUE_MATRIX_CARGO_RESULT = 86;
 
 	/**
 	 * The feature id for the '<em><b>Load Price</b></em>' attribute.
@@ -5878,7 +6096,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixShippedCargoResult()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT = 85;
+	int SWAP_VALUE_MATRIX_SHIPPED_CARGO_RESULT = 87;
 
 	/**
 	 * The feature id for the '<em><b>Load Price</b></em>' attribute.
@@ -5978,7 +6196,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSwapValueMatrixNonShippedCargoResult()
 	 * @generated
 	 */
-	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT = 86;
+	int SWAP_VALUE_MATRIX_NON_SHIPPED_CARGO_RESULT = 88;
 
 	/**
 	 * The feature id for the '<em><b>Load Price</b></em>' attribute.
@@ -6060,7 +6278,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 87;
+	int VOLUME_MODE = 89;
 
 
 	/**
@@ -6071,7 +6289,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 88;
+	int SLOT_TYPE = 90;
 
 
 	/**
@@ -6221,6 +6439,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getBuyOpportunity_DesPurchase();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#isOptional <em>Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optional</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#isOptional()
+	 * @see #getBuyOpportunity()
+	 * @generated
+	 */
+	EAttribute getBuyOpportunity_Optional();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPort <em>Port</em>}'.
@@ -6418,6 +6647,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getSellOpportunity_FobSale();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isOptional <em>Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optional</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#isOptional()
+	 * @see #getSellOpportunity()
+	 * @generated
+	 */
+	EAttribute getSellOpportunity_Optional();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPort <em>Port</em>}'.
@@ -6863,6 +7103,38 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBaseCaseRow_Freeze();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getGroup <em>Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Group</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow#getGroup()
+	 * @see #getBaseCaseRow()
+	 * @generated
+	 */
+	EReference getBaseCaseRow_Group();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowGroup <em>Base Case Row Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base Case Row Group</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowGroup
+	 * @generated
+	 */
+	EClass getBaseCaseRowGroup();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowGroup#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Rows</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowGroup#getRows()
+	 * @see #getBaseCaseRowGroup()
+	 * @generated
+	 */
+	EReference getBaseCaseRowGroup_Rows();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions <em>Base Case Row Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7013,6 +7285,38 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getPartialCaseRow_CommodityCurveOptions();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getGroup <em>Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Group</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRow#getGroup()
+	 * @see #getPartialCaseRow()
+	 * @generated
+	 */
+	EReference getPartialCaseRow_Group();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowGroup <em>Partial Case Row Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Partial Case Row Group</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowGroup
+	 * @generated
+	 */
+	EClass getPartialCaseRowGroup();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowGroup#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Rows</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowGroup#getRows()
+	 * @see #getPartialCaseRowGroup()
+	 * @generated
+	 */
+	EReference getPartialCaseRowGroup_Rows();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions <em>Partial Case Row Options</em>}'.
@@ -7949,6 +8253,17 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBaseCase_KeepExistingScenario();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.BaseCase#getGroups <em>Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Groups</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCase#getGroups()
+	 * @see #getBaseCase()
+	 * @generated
+	 */
+	EReference getBaseCase_Groups();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCase <em>Partial Case</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7979,6 +8294,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EAttribute getPartialCase_KeepExistingScenario();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.PartialCase#getGroups <em>Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Groups</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCase#getGroups()
+	 * @see #getPartialCase()
+	 * @generated
+	 */
+	EReference getPartialCase_Groups();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption <em>Existing Charter Market Option</em>}'.
@@ -10159,6 +10485,14 @@ s	 * <!-- end-user-doc -->
 		EAttribute BUY_OPPORTUNITY__DES_PURCHASE = eINSTANCE.getBuyOpportunity_DesPurchase();
 
 		/**
+		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BUY_OPPORTUNITY__OPTIONAL = eINSTANCE.getBuyOpportunity_Optional();
+
+		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10303,6 +10637,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SELL_OPPORTUNITY__FOB_SALE = eINSTANCE.getSellOpportunity_FobSale();
+
+		/**
+		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELL_OPPORTUNITY__OPTIONAL = eINSTANCE.getSellOpportunity_Optional();
 
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
@@ -10649,6 +10991,32 @@ s	 * <!-- end-user-doc -->
 		EAttribute BASE_CASE_ROW__FREEZE = eINSTANCE.getBaseCaseRow_Freeze();
 
 		/**
+		 * The meta object literal for the '<em><b>Group</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_CASE_ROW__GROUP = eINSTANCE.getBaseCaseRow_Group();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowGroupImpl <em>Base Case Row Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.BaseCaseRowGroupImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCaseRowGroup()
+		 * @generated
+		 */
+		EClass BASE_CASE_ROW_GROUP = eINSTANCE.getBaseCaseRowGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Rows</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_CASE_ROW_GROUP__ROWS = eINSTANCE.getBaseCaseRowGroup_Rows();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowOptionsImpl <em>Base Case Row Options</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10763,6 +11131,32 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS = eINSTANCE.getPartialCaseRow_CommodityCurveOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Group</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW__GROUP = eINSTANCE.getPartialCaseRow_Group();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowGroupImpl <em>Partial Case Row Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.PartialCaseRowGroupImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRowGroup()
+		 * @generated
+		 */
+		EClass PARTIAL_CASE_ROW_GROUP = eINSTANCE.getPartialCaseRowGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Rows</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW_GROUP__ROWS = eINSTANCE.getPartialCaseRowGroup_Rows();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
@@ -11507,6 +11901,14 @@ s	 * <!-- end-user-doc -->
 		EAttribute BASE_CASE__KEEP_EXISTING_SCENARIO = eINSTANCE.getBaseCase_KeepExistingScenario();
 
 		/**
+		 * The meta object literal for the '<em><b>Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_CASE__GROUPS = eINSTANCE.getBaseCase_Groups();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl <em>Partial Case</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11531,6 +11933,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute PARTIAL_CASE__KEEP_EXISTING_SCENARIO = eINSTANCE.getPartialCase_KeepExistingScenario();
+
+		/**
+		 * The meta object literal for the '<em><b>Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE__GROUPS = eINSTANCE.getPartialCase_Groups();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.

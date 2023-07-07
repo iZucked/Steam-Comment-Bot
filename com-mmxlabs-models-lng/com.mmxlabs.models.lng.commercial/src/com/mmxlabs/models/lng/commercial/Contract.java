@@ -50,6 +50,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getBusinessUnit <em>Business Unit</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract()
@@ -606,6 +607,63 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setShippingDaysRestriction(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Business Unit</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Business Unit</em>' reference.
+	 * @see #isSetBusinessUnit()
+	 * @see #unsetBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_BusinessUnit()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	BusinessUnit getBusinessUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getBusinessUnit <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Business Unit</em>' reference.
+	 * @see #isSetBusinessUnit()
+	 * @see #unsetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @generated
+	 */
+	void setBusinessUnit(BusinessUnit value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getBusinessUnit <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @generated
+	 */
+	void unsetBusinessUnit();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getBusinessUnit <em>Business Unit</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Business Unit</em>' reference is set.
+	 * @see #unsetBusinessUnit()
+	 * @see #getBusinessUnit()
+	 * @see #setBusinessUnit(BusinessUnit)
+	 * @generated
+	 */
+	boolean isSetBusinessUnit();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	BusinessUnit getContractOrDelegateBusinessUnit();
 
 	/**
 	 * Returns the value of the '<em><b>Contract Year Start</b></em>' attribute.

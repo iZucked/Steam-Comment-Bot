@@ -16,18 +16,15 @@ import com.mmxlabs.models.ui.tabular.columngeneration.BlockColumnFactoryDisplayN
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
-import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
+import com.mmxlabs.models.ui.tabular.columngeneration.SingleColumnFactoryBuilder;
 
 /**
- * A class to manage columns which are shared by reports of the same report
- * type.
+ * A class to manage columns which are shared by reports of the same report type.
  * 
- * Global initialisation code calls the #registerColumn method to associate
- * columns with particular report types.
+ * Global initialisation code calls the #registerColumn method to associate columns with particular report types.
  * 
- * Report code calls the #addColumns method specifying a report type, which adds
- * the relevant columns to the report. A convenience method allows the report to
- * control which columns appear in that report by default.
+ * Report code calls the #addColumns method specifying a report type, which adds the relevant columns to the report. A convenience method allows the report to control which columns appear in that
+ * report by default.
  * 
  * 
  * 
@@ -54,8 +51,7 @@ public class EMFReportColumnManager {
 	}
 
 	/**
-	 * Adds all registered columns of the given report type to the specified report.
-	 * These columns will default to "not visible".
+	 * Adds all registered columns of the given report type to the specified report. These columns will default to "not visible".
 	 * 
 	 * @param report
 	 * @param reportType
@@ -71,7 +67,7 @@ public class EMFReportColumnManager {
 
 	public void registerColumn(final String reportType, final String columnID, final String title, String tooltip, final ColumnType columnType, final ICellRenderer formatter,
 			final ETypedElement... path) {
-		registerColumn(reportType, new SimpleEmfBlockColumnFactory(columnID, title, tooltip, columnType, formatter, path));
+		registerColumn(reportType, new SingleColumnFactoryBuilder(columnID, title).withTooltip(tooltip).withColumnType(columnType).withCellRenderer(formatter).withElementPath(path).build());
 	}
 
 }

@@ -64,7 +64,7 @@ public class EndHeelReportView extends EMFReportView {
 		super.createPartControl(parent);
 		localResourceManager = new LocalResourceManager(JFaceResources.getResources(), parent);
 		Color highlightColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-		
+
 		getBlockManager().setColumnFactory(new EObjectTableViewerColumnFactory(viewer));
 
 		List<ColumnHandler> columns = new ArrayList<>(List.of(addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter),
@@ -142,7 +142,7 @@ public class EndHeelReportView extends EMFReportView {
 								final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 								if (vesselCharter != null) {
 									return String.valueOf(vesselCharter.getEndHeel().getMinimumEndHeel());
-								} else if(charterInMarket != null) {
+								} else if (charterInMarket != null) {
 									return String.valueOf(charterInMarket.getGenericCharterContract().getEndHeel().getMinimumEndHeel());
 								}
 							}
@@ -160,7 +160,7 @@ public class EndHeelReportView extends EMFReportView {
 								final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 								if (vesselCharter != null) {
 									return vesselCharter.getEndHeel().getMinimumEndHeel();
-								} else if(charterInMarket != null) {
+								} else if (charterInMarket != null) {
 									return charterInMarket.getGenericCharterContract().getEndHeel().getMinimumEndHeel();
 								}
 							}
@@ -181,7 +181,7 @@ public class EndHeelReportView extends EMFReportView {
 								final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 								if (vesselCharter != null) {
 									return String.valueOf(vesselCharter.getEndHeel().getMaximumEndHeel());
-								} else if(charterInMarket != null) {
+								} else if (charterInMarket != null) {
 									return String.valueOf(charterInMarket.getGenericCharterContract().getEndHeel().getMaximumEndHeel());
 								}
 							}
@@ -200,7 +200,7 @@ public class EndHeelReportView extends EMFReportView {
 									return vesselCharter.getEndHeel().getMaximumEndHeel();
 								}
 								final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-								if(charterInMarket != null) {
+								if (charterInMarket != null) {
 									return charterInMarket.getGenericCharterContract().getEndHeel().getMaximumEndHeel();
 								}
 							}
@@ -281,10 +281,10 @@ public class EndHeelReportView extends EMFReportView {
 			public void update(ViewerCell cell) {
 				String text = x.getFormatter().render(cell.getElement());
 				cell.setText(text);
-				if(cell.getElement() instanceof CargoAllocation cargoAllocation) {
+				if (cell.getElement() instanceof CargoAllocation cargoAllocation) {
 					final SlotAllocation loadSlotAllocation = cargoAllocation.getSlotAllocations().get(0);
 					final SlotAllocation dischargeSlotAllocation = cargoAllocation.getSlotAllocations().get(1);
-					
+
 					final Sequence sequence = cargoAllocation.getSequence();
 					int endHeel = 0;
 					if (sequence != null) {
@@ -294,13 +294,13 @@ public class EndHeelReportView extends EMFReportView {
 						}
 					}
 					int finalCargoFlex = calculateUpwardFlex(dischargeSlotAllocation) + calculateDownwardFlex(loadSlotAllocation);
-					if(endHeel <= finalCargoFlex) {
-						cell.setForeground(highlightColour);						
+					if (endHeel <= finalCargoFlex) {
+						cell.setForeground(highlightColour);
 					}
 				}
-				
+
 			}
-			
+
 		}));
 
 	}
@@ -544,7 +544,7 @@ public class EndHeelReportView extends EMFReportView {
 			public Object[] getElements(final Object inputElement) {
 				clearInputEquivalents();
 				final Object[] result = superProvider.getElements(inputElement);
-				
+
 				return result;
 			}
 
@@ -579,8 +579,7 @@ public class EndHeelReportView extends EMFReportView {
 						}
 					}
 					if (lastLoad != null && lastLoad.getSlotAllocation() != null) {
-						if(sequence.getVesselCharter() != null || 
-								(sequence.getCharterInMarket() != null && sequence.getCharterInMarket().getGenericCharterContract() != null)) {
+						if (sequence.getVesselCharter() != null || (sequence.getCharterInMarket() != null && sequence.getCharterInMarket().getGenericCharterContract() != null)) {
 							collectedElements.add(lastLoad.getSlotAllocation().getCargoAllocation());
 						}
 					}
@@ -642,12 +641,13 @@ public class EndHeelReportView extends EMFReportView {
 
 	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
-		return getBlockManager().createColumn(block, title, formatter, path);
+		return getBlockManager().createColumn(block, title).withCellRenderer(formatter).withElementPath(path).build();
 	}
 
 	public ColumnHandler addColumn(final ColumnBlock block, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
-		return getBlockManager().createColumn(block, title, formatter, path);
+		return getBlockManager().createColumn(block, title).withCellRenderer(formatter).withElementPath(path).build();
 	}
+
 	@Override
 	public void dispose() {
 		localResourceManager.dispose();

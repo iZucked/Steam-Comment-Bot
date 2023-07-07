@@ -32,11 +32,13 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -48,13 +50,13 @@ public class SequenceHelper {
 
 	public static @NonNull IModifiableSequences createSequences(@NonNull final Injector injector) {
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		return sequences;
 	}
 
 	public static @NonNull IModifiableSequences createSequences(@NonNull final IOptimisationData optimisationData) {
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		return sequences;
 	}
@@ -394,7 +396,7 @@ public class SequenceHelper {
 	public static @NonNull ISequences createFOBDESSequences(final @NonNull Injector injector, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 		@NonNull
 		final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
@@ -462,7 +464,7 @@ public class SequenceHelper {
 		}
 
 		assert o_resource != null;
-		final ModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(o_resource));
+		final ModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(o_resource), new SequencesAttributesProviderImpl());
 
 		@NonNull
 		final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
@@ -608,12 +610,16 @@ public class SequenceHelper {
 	}
 
 	public static @NonNull IModifiableSequences createEmptySequences(final @NonNull Injector injector, @NonNull final List<@NonNull IResource> resources) {
-		final ModifiableSequences sequences = new ModifiableSequences(resources);
+		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 
+		final @NonNull List<@NonNull IResource> optimisableResources = resources.stream() //
+				.filter(resource -> vesselProvider.getVesselCharter(resource).getVesselInstanceType() != VesselInstanceType.NONSHIPPED_ROTATION) //
+				.toList();
+		final ModifiableSequences sequences = new ModifiableSequences(optimisableResources, new SequencesAttributesProviderImpl());
 		final IStartEndRequirementProvider startEndRequirementProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
 		for (@NonNull
-		final IResource o_resource : resources) {
+		final IResource o_resource : optimisableResources) {
 			@NonNull
 			final IModifiableSequence modifiableSequence = sequences.getModifiableSequence(o_resource);
 			modifiableSequence.add(startEndRequirementProvider.getStartElement(o_resource));

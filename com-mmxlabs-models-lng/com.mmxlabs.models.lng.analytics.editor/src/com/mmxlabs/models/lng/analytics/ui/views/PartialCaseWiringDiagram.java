@@ -31,9 +31,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
 
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 
@@ -134,15 +136,23 @@ public class PartialCaseWiringDiagram implements PaintListener {
 			return;
 		}
 
-		final Rectangle ca = getCanvasClientArea();
-
+		final Rectangle cca = getCanvasClientArea();
 		// Could be null is column is no longer visible.
-		if (ca == null) {
+		if (cca == null) {
 			return;
 		}
 
 		if (table == null) {
 			return;
+		}
+
+		final Rectangle ca = new Rectangle(cca.x, cca.y, cca.width, cca.height);
+		if (grid.getHeaderVisible()) {
+			// We don't adjust y as terminal positions already take into account header height.
+			ca.height -= grid.getHeaderHeight();
+		}
+		if (grid.getFooterVisible()) {
+			ca.height -= grid.getFooterHeight();
 		}
 
 		// Copy ref in case of concurrent change during paint
@@ -224,6 +234,57 @@ public class PartialCaseWiringDiagram implements PaintListener {
 				path.dispose();
 
 				graphics.setLineDash(null);
+			}
+		}
+
+		// draw paths
+		for (PartialCaseRowGroup grp : root.getPartialCase().getGroups()) {
+			if (grp.getRows().size() < 2) {
+				continue;
+			}
+			float firstRow = -1;
+			for (PartialCaseRow grpRow : grp.getRows()) {
+
+				// Clear clip rect for dragged wire
+				graphics.setClipping((Rectangle) null);
+
+				// Re-apply clip rect
+				graphics.setClipping(ca);
+
+				// // draw terminal blobs
+				graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+				graphics.setLineWidth(2);
+				rawI = 0;
+				for (final float midpoint : terminalPositions) {
+
+					// Map back between current row (sorted) and data (unsorted)
+					final int i = rawI++;
+					// -1 indicates filtered row
+					if (i == -1) {
+						continue;
+					}
+
+					final PartialCaseRow row = indexToRow.get(i);
+					if (row != grpRow) {
+						continue;
+					}
+
+					if (firstRow < 0) {
+						firstRow = midpoint;
+					}
+
+					final float startMid = firstRow;
+					final float endMid = midpoint;
+
+					int x1 = Math.round(ca.x + 1.5f * terminalSize);
+					int x2 = Math.round(ca.x + ca.width - 2 * terminalSize);
+					int x1a = x1 + ((x2 - x1) * 3 / 4);
+					if (startMid != endMid) {
+						graphics.drawLine(x1a, Math.round(startMid), x2, Math.round(startMid));
+						graphics.drawLine(x1a, Math.round(startMid), x1a, Math.round(endMid));
+					}
+					graphics.drawLine(x1a, Math.round(endMid), x2, Math.round(endMid));
+				}
 			}
 		}
 

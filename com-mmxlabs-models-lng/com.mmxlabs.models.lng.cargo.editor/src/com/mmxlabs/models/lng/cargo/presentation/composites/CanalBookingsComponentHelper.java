@@ -9,18 +9,21 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
@@ -31,6 +34,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.MonthAttributeManipulator;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
@@ -127,7 +131,8 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 			// Add action
 			b.withAction(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), (input, ch, sel) -> {
-				final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) ch.getModelReference().getInstance();
+				final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel(scenarioModel).getCanalBookings();
 				final VesselGroupCanalParameters vgcp = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 				final Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, vgcp);
 				ch.handleCommand(c, vgcp, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
@@ -136,14 +141,39 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 			b.withAction(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled), (input, ch, sel) -> {
 
 				if (sel instanceof final IStructuredSelection ss && !ss.isEmpty()) {
-					final CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
-					final Command c = RemoveCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, ss.toList());
-					ch.handleCommand(c, canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) ch.getModelReference().getInstance();
+					final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+					final CanalBookings canalBookings = cargoModel.getCanalBookings();
+					canalBookings.getCanalBookingSlots();
+					canalBookings.getPanamaSeasonalityRecords();
+					final CompoundCommand cc = new CompoundCommand();
+					findReferences(ch, ss, canalBookings, cc);
+					ch.handleCommand(cc);
 				}
 			}, false, (btn, sel) -> btn.setEnabled(!sel.isEmpty()));
 
 			return b.build(CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
 		};
+	}
+
+	@SuppressWarnings("unchecked")
+	private void findReferences(ICommandHandler ch, IStructuredSelection ss, final CanalBookings canalBookings, final CompoundCommand cc) {
+		ss.forEach( c -> {
+			if (c instanceof final VesselGroupCanalParameters vgcp) {
+				
+				canalBookings.getCanalBookingSlots().forEach( cbs -> {
+					if (vgcp.equals(cbs.getBookingCode())) {
+						cc.append(SetCommand.create(ch.getEditingDomain(), cbs, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_CODE, SetCommand.UNSET_VALUE));
+					}
+				});
+				canalBookings.getPanamaSeasonalityRecords().forEach( psr -> {
+					if (vgcp.equals(psr.getVesselGroupCanalParameter())) {
+						cc.append(DeleteCommand.create(ch.getEditingDomain(), psr));
+					}
+				});
+				cc.append(RemoveCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, vgcp));
+			}
+		});
 	}
 
 	/**

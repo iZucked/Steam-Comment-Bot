@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.analytics.VolumeMode;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class SellOpportunityMaker {
@@ -97,6 +98,17 @@ public class SellOpportunityMaker {
 
 	public SellOpportunityMaker withDate(@NonNull LocalDate date) {
 		opportunity.setDate(date);
+		return this;
+	}
+
+	public SellOpportunityMaker withWindow(int size, TimePeriod units) {
+		opportunity.setWindowSize(size);
+		opportunity.setWindowSizeUnits(units);
+		return this;
+	}
+
+	public SellOpportunityMaker withOptional(boolean optional) {
+		opportunity.setOptional(optional);
 		return this;
 	}
 }

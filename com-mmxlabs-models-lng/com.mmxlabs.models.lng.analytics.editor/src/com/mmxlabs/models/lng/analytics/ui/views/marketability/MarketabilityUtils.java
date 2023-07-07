@@ -54,7 +54,7 @@ public final class MarketabilityUtils {
 	private MarketabilityUtils() {
 	}
 
-	public static MarketabilityModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name, final Integer vesselSpeed) {
+	public static MarketabilityModel createModelFromScenario(final @NonNull LNGScenarioModel sm, final @NonNull String name, final Double vesselSpeed) {
 		final MarketabilityModel model = AnalyticsFactory.eINSTANCE.createMarketabilityModel();
 		model.setName(name);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);

@@ -395,6 +395,12 @@ public class SharedScenarioUpdater {
 					updateLock.lock();
 					try {
 						refresh();
+					} catch (final IllegalStateException e1) {
+						if ("Workbench has not been created yet".equals(e1.getMessage())) {
+							// Ignore - thread started too early
+						} else {
+							e1.printStackTrace();
+						}
 					} catch (final IOException e1) {
 						e1.printStackTrace();
 					} finally {

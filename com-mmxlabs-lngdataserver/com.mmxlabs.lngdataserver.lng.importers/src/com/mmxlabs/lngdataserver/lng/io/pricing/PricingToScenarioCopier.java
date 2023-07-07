@@ -32,6 +32,8 @@ import com.mmxlabs.lngdataserver.integration.pricing.model.DataCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.ExpressionCurve;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -53,6 +55,7 @@ public class PricingToScenarioCopier {
 
 		// Gather existing curves
 		final EnumMap<CurveType, Map<String, AbstractYearMonthCurve>> map = new EnumMap<>(CurveType.class);
+		final Map<String, MarketIndex> marketIndexMap = new HashMap<>();
 		final Set<AbstractYearMonthCurve> existing = new HashSet<>();
 
 		map.put(CurveType.BASE_FUEL, new HashMap<>());
@@ -64,6 +67,7 @@ public class PricingToScenarioCopier {
 		pricingModel.getCharterCurves().forEach(c -> map.get(CurveType.CHARTER).put(c.getName(), c));
 		pricingModel.getCommodityCurves().forEach(c -> map.get(CurveType.COMMODITY).put(c.getName(), c));
 		pricingModel.getCurrencyCurves().forEach(c -> map.get(CurveType.CURRENCY).put(c.getName(), c));
+		pricingModel.getMarketIndices().forEach(mi -> marketIndexMap.putIfAbsent(mi.getName(), mi));
 		pricingModel.getBunkerFuelCurves().forEach(existing::add);
 		pricingModel.getCharterCurves().forEach(existing::add);
 		pricingModel.getCommodityCurves().forEach(existing::add);
@@ -80,14 +84,14 @@ public class PricingToScenarioCopier {
 
 		for (final Curve curve : curves) {
 			final String name = curve.getName();
+			final String marketIndexName = curve.getMarketIndex();
+			final MarketIndex marketIndex = marketIndexMap.getOrDefault(marketIndexName, null);
 
 			List<YearMonthPoint> points = new LinkedList<>();
 			String expression = null;
-			if (curve instanceof ExpressionCurve) {
-				final ExpressionCurve expressionCurve = (ExpressionCurve) curve;
+			if (curve instanceof final ExpressionCurve expressionCurve) {
 				expression = expressionCurve.getExpression();
-			} else if (curve instanceof DataCurve) {
-				final DataCurve dataCurve = (DataCurve) curve;
+			} else if (curve instanceof final DataCurve dataCurve) {
 				if (dataCurve.getCurve() != null) {
 					dataCurve.getCurve().forEach(point -> {
 						final YearMonthPoint indexPoint = PricingPackage.eINSTANCE.getPricingFactory().createYearMonthPoint();
@@ -134,6 +138,9 @@ public class PricingToScenarioCopier {
 				} else {
 					existingCurve.getPoints().addAll(points);
 				}
+				if (existingCurve instanceof final CommodityCurve cc && marketIndex != null) {
+					cc.setMarketIndex(marketIndex);
+				}
 
 				// ADD COMMAND
 				cmd.append(AddCommand.create(editingDomain, pricingModel, ref, existingCurve));
@@ -151,6 +158,15 @@ public class PricingToScenarioCopier {
 
 				cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT, curve.getUnit()));
 				cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT, curve.getCurrency()));
+				if (existingCurve instanceof final CommodityCurve cc) {
+					if (cc.getMarketIndex() != marketIndex) {
+						if (marketIndex != null) {
+							cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.COMMODITY_CURVE__MARKET_INDEX, marketIndex));
+						} else {
+							cmd.append(SetCommand.create(editingDomain, existingCurve, PricingPackage.Literals.COMMODITY_CURVE__MARKET_INDEX, SetCommand.UNSET_VALUE));
+						}
+					}
+				}
 			}
 			updated.add(existingCurve);
 		}

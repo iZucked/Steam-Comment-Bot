@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 public interface IVesselEmission {
+	//Emission rates
 	double getBaseFuelEmissionRate();
 	double getBOGEmissionRate();
 	double getPilotLightEmissionRate();

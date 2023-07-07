@@ -201,6 +201,11 @@
           referenceEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.PaperDealReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.PaperDealReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.cargo.PaperDeal">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.Slot"
           referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
@@ -625,6 +630,10 @@
           id="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SettleStrategyUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.SettleStrategyUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider">
     </ModelCommandProvider>
@@ -666,6 +675,7 @@
       <view
             category="com.mmxlabs.lngdataserver.views.dataserver"
             class="com.mmxlabs.models.lng.cargo.editor.editors.routeslots.RouteOptionsEditorView"
+            icon="icons:/16/report"
             id="com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView"
             name="Panama Bookings"
             restorable="true">

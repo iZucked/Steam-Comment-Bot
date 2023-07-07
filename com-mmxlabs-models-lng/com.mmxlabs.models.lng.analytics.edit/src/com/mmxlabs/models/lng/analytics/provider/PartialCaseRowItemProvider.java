@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,13 +40,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class PartialCaseRowItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -72,6 +67,7 @@ public class PartialCaseRowItemProvider
 			addVesselEventOptionsPropertyDescriptor(object);
 			addShippingPropertyDescriptor(object);
 			addCommodityCurveOptionsPropertyDescriptor(object);
+			addGroupPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -187,6 +183,28 @@ public class PartialCaseRowItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Group feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGroupPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PartialCaseRow_group_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PartialCaseRow_group_feature", "_UI_PartialCaseRow_type"),
+				 AnalyticsPackage.Literals.PARTIAL_CASE_ROW__GROUP,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -235,7 +253,10 @@ public class PartialCaseRowItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PartialCaseRow_type");
+		String label = ((PartialCaseRow)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_PartialCaseRow_type") :
+			getString("_UI_PartialCaseRow_type") + " " + label;
 	}
 	
 
@@ -273,17 +294,6 @@ public class PartialCaseRowItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS,
 				 AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

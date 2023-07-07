@@ -12,6 +12,9 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
+import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ParameterisedColourScheme;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -29,27 +32,81 @@ class HighlightAction extends SchedulerViewAction {
 		final List<IScheduleViewColourScheme> highlighters = lp.getHighlighters();
 
 		for (final IScheduleViewColourScheme highlighter : highlighters) {
-			final Action a = new Action(highlighter.getName(), IAction.AS_CHECK_BOX) {
-				@Override
-				public void run() {
-					lp.toggleHighlighter(highlighter);
-					setChecked(lp.isActive(highlighter));
-					highlighters.stream().filter(localHighlighter -> localHighlighter != highlighter && lp.isActive(localHighlighter)).forEach(localHighlighter -> {
-						lp.toggleHighlighter(localHighlighter);
-						setChecked(lp.isActive(localHighlighter));
-					});
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
+			if (highlighter instanceof ParameterisedColourScheme parameterisedColourScheme) {
+				final List<NamedObject> options = parameterisedColourScheme.getOptions(viewer);
+				if (!options.isEmpty()) {
+					final Action a = new DefaultMenuCreatorAction(highlighter.getName()) {
+
+						@Override
+						protected void populate(Menu menu) {
+							final Action off = new Action("off") {
+								@Override
+								public void run() {
+									parameterisedColourScheme.selectOption(null);
+									if (lp.isActive(highlighter)) {
+										lp.toggleHighlighter(highlighter);
+									}
+									setChecked(lp.isActive(highlighter));
+									highlighters.stream().filter(localHighlighter -> localHighlighter != highlighter && lp.isActive(localHighlighter)).forEach(localHighlighter -> {
+										lp.toggleHighlighter(localHighlighter);
+										setChecked(lp.isActive(localHighlighter));
+									});
+									viewer.setInput(viewer.getInput());
+									schedulerView.redraw();
+								}
+							};
+							addActionToMenu(off, menu);
+							for (final NamedObject option : options) {
+								final Action nextAction = new Action(option.getName()) {
+									@Override
+									public void run() {
+										parameterisedColourScheme.selectOption(option);
+										if (!lp.isActive(highlighter)) {
+											lp.toggleHighlighter(highlighter);
+										}
+										setChecked(lp.isActive(highlighter));
+										highlighters.stream().filter(localHighlighter -> localHighlighter != highlighter && lp.isActive(localHighlighter)).forEach(localHighlighter -> {
+											lp.toggleHighlighter(localHighlighter);
+											setChecked(lp.isActive(localHighlighter));
+										});
+										viewer.setInput(viewer.getInput());
+										schedulerView.redraw();
+									}
+								};
+								addActionToMenu(nextAction, menu);
+							}
+						}
+					};
+					final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
+					actionContributionItem.fill(menu, -1);
+					if (lp.isActive(highlighter)) {
+						a.setChecked(true);
+					}
 				}
-			};
+			} else {
+				final Action a = new Action(highlighter.getName(), IAction.AS_CHECK_BOX) {
 
-			// a.setActionDefinitionId(mode.toString());
-			final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
-			actionContributionItem.fill(menu, -1);
+					@Override
+					public void run() {
+						lp.toggleHighlighter(highlighter);
+						setChecked(lp.isActive(highlighter));
+						highlighters.stream().filter(localHighlighter -> localHighlighter != highlighter && lp.isActive(localHighlighter)).forEach(localHighlighter -> {
+							lp.toggleHighlighter(localHighlighter);
+							setChecked(lp.isActive(localHighlighter));
+						});
+						viewer.setInput(viewer.getInput());
+						schedulerView.redraw();
+					}
+				};
 
-			// Set initially checked item.
-			if (lp.isActive(highlighter)) {
-				a.setChecked(true);
+				// a.setActionDefinitionId(mode.toString());
+				final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
+				actionContributionItem.fill(menu, -1);
+
+				// Set initially checked item.
+				if (lp.isActive(highlighter)) {
+					a.setChecked(true);
+				}
 			}
 		}
 

@@ -589,7 +589,7 @@ public final class UserSettingsHelper {
 
 	private static boolean checkBreakEvenInSlot(final Collection<? extends Slot<?>> slots) {
 		for (final Slot<?> slot : slots) {
-			if (slot.isSetPriceExpression() && slot.getPriceExpression().contains(BREAK_EVEN_MARKER)) {
+			if (slot.isSetPriceExpression() && slot.getPriceExpression() != null && slot.getPriceExpression().contains(BREAK_EVEN_MARKER)) {
 				return true;
 			}
 		}

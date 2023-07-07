@@ -171,7 +171,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 				eventDate = event.getStartAfterAsDateTime();
 			}
 			if (eventDate != null) {
-				eventDate = eventDate.plusDays(event.getDurationInDays());
+				eventDate = eventDate.plusDays(event.getSchedulingDurationInDays());
 
 				if (date == null || date.isBefore(eventDate)) {
 					date = eventDate;

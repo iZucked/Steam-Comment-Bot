@@ -304,8 +304,10 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 		paperDeal.setQuantity(quantity);
 		paperDeal.setPrice(price);
 		paperDeal.setPricingMonth(month);
-		paperDeal.setStartDate(month.atDay(1)); 
-		paperDeal.setEndDate(month.atEndOfMonth());
+		paperDeal.setPricingPeriodStart(month.atDay(1)); 
+		paperDeal.setPricingPeriodEnd(month.atEndOfMonth());
+		paperDeal.setHedgingPeriodStart(month.atDay(1)); 
+		paperDeal.setHedgingPeriodEnd(month.atEndOfMonth());
 		
 		SettleStrategy settleStrategy = null;
 		for (final SettleStrategy ss : pricingModel.getSettleStrategies()) {

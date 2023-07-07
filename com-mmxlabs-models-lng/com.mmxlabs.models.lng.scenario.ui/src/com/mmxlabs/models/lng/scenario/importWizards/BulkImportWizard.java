@@ -224,7 +224,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	}
 
 	private FieldChoice[] getUnifiedChoices() {
-		return new FieldChoice[] { FieldChoice.CHOICE_COMMODITY_INDICES, FieldChoice.CHOICE_CHARTER_INDICES, FieldChoice.CHOICE_BASE_FUEL_CURVES, FieldChoice.CHOICE_CURRENCY_CURVES };
+		return new FieldChoice[] { FieldChoice.CHOICE_COMMODITY_INDICES, FieldChoice.CHOICE_CHARTER_INDICES, FieldChoice.CHOICE_BASE_FUEL_CURVES, FieldChoice.CHOICE_CURRENCY_CURVES, FieldChoice.CHOICE_FORMULAE };
 	}
 
 	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final ModelReference modelReference, final Shell shell, final String importFilePath,
@@ -286,8 +286,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 
 	public ImportAction getImportAction(final FieldChoice importTarget, final ImportAction.ImportHooksProvider ihp, final boolean isMultipleDataTypesInput) {
 		final MMXRootObject root = ihp.getRootObject();
-		if (root instanceof LNGScenarioModel) {
-			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
+		if (root instanceof final LNGScenarioModel scenarioModel) {
 			switch (importTarget) {
 			case CHOICE_COMMODITY_INDICES: {
 				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, isMultipleDataTypesInput);
@@ -303,6 +302,9 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 			}
 			case CHOICE_BASE_FUEL_CURVES: {
 				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BUNKER_FUEL_CURVES, isMultipleDataTypesInput);
+			}
+			case CHOICE_FORMULAE: {
+				return new GenericFormulaImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__FORMULAE_CURVES, isMultipleDataTypesInput);
 			}
 			}
 		}

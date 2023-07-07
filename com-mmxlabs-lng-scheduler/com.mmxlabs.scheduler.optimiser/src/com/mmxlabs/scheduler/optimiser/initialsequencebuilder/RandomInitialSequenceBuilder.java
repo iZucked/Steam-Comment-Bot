@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -61,7 +62,7 @@ public class RandomInitialSequenceBuilder implements IInitialSequenceBuilder {
 
 		final List<IResource> resources = data.getResources();
 
-		final IModifiableSequences sequences = new ModifiableSequences(resources);
+		final IModifiableSequences sequences = new ModifiableSequences(resources, new SequencesAttributesProviderImpl());
 
 		// Add each sequence element to a sequence; at the moment just rotate
 		// through the sequences

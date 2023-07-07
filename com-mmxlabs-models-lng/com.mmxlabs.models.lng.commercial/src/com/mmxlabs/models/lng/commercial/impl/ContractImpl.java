@@ -8,17 +8,24 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BusinessUnit;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -28,6 +35,7 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -65,6 +73,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationExpression <em>Cancellation Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getBusinessUnit <em>Business Unit</em>}</li>
  * </ul>
  *
  * @generated
@@ -566,6 +575,25 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected int shippingDaysRestriction = SHIPPING_DAYS_RESTRICTION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getBusinessUnit() <em>Business Unit</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBusinessUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected BusinessUnit businessUnit;
+
+	/**
+	 * This is true if the Business Unit reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean businessUnitESet;
 
 	/**
 	 * The default value of the '{@link #getWindowNominationSizeUnits() <em>Window Nomination Size Units</em>}' attribute.
@@ -1158,6 +1186,85 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 */
 	@Override
+	public BusinessUnit getBusinessUnit() {
+		if (businessUnit != null && businessUnit.eIsProxy()) {
+			InternalEObject oldBusinessUnit = (InternalEObject)businessUnit;
+			businessUnit = (BusinessUnit)eResolveProxy(oldBusinessUnit);
+			if (businessUnit != oldBusinessUnit) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.CONTRACT__BUSINESS_UNIT, oldBusinessUnit, businessUnit));
+			}
+		}
+		return businessUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BusinessUnit basicGetBusinessUnit() {
+		return businessUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBusinessUnit(BusinessUnit newBusinessUnit) {
+		BusinessUnit oldBusinessUnit = businessUnit;
+		businessUnit = newBusinessUnit;
+		boolean oldBusinessUnitESet = businessUnitESet;
+		businessUnitESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__BUSINESS_UNIT, oldBusinessUnit, businessUnit, !oldBusinessUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetBusinessUnit() {
+		BusinessUnit oldBusinessUnit = businessUnit;
+		boolean oldBusinessUnitESet = businessUnitESet;
+		businessUnit = null;
+		businessUnitESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__BUSINESS_UNIT, oldBusinessUnit, null, oldBusinessUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetBusinessUnit() {
+		return businessUnitESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BusinessUnit getContractOrDelegateBusinessUnit() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getContractYearStart() {
 		return contractYearStart;
 	}
@@ -1422,6 +1529,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getCancellationExpression();
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return getShippingDaysRestriction();
+			case CommercialPackage.CONTRACT__BUSINESS_UNIT:
+				if (resolve) return getBusinessUnit();
+				return basicGetBusinessUnit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1520,6 +1630,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction((Integer)newValue);
 				return;
+			case CommercialPackage.CONTRACT__BUSINESS_UNIT:
+				setBusinessUnit((BusinessUnit)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1613,6 +1726,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__BUSINESS_UNIT:
+				unsetBusinessUnit();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1679,6 +1795,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return CANCELLATION_EXPRESSION_EDEFAULT == null ? cancellationExpression != null : !CANCELLATION_EXPRESSION_EDEFAULT.equals(cancellationExpression);
 			case CommercialPackage.CONTRACT__SHIPPING_DAYS_RESTRICTION:
 				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
+			case CommercialPackage.CONTRACT__BUSINESS_UNIT:
+				return isSetBusinessUnit();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1767,6 +1885,42 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(shippingDaysRestriction);
 		result.append(')');
 		return result.toString();
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NO
+	 */
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		final CommercialPackage commercialPackage = CommercialPackage.eINSTANCE;
+		if (commercialPackage.getContract_BusinessUnit() == feature) {
+			return new DelegateInformation(null, null, null) {
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT == changedFeature);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					
+					if (getEntity() != null) {
+						final BaseLegalEntity entity = getEntity();
+						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : entity.getBusinessUnits()) {
+								if (bu.isDefault()) {
+									return bu;
+								}
+							}
+							return entity.getBusinessUnits().get(0);
+						}
+					}
+					
+					return ECollections.emptyEList();
+				}
+			};
+		}
+		return super.getUnsetValueOrDelegate(feature);
 	}
 
 } // end of ContractImpl

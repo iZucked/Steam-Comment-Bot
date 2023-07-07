@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
+import com.mmxlabs.models.lng.cargo.PreSequenceGroup;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
@@ -238,6 +239,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass scheduleSpecificationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass preSequenceGroupEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -950,18 +958,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlot_PricingBasis() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(41);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSlot_BusinessUnit() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(42);
+		return (EReference)slotEClass.getEStructuralFeatures().get(41);
 	}
 
 	/**
@@ -971,7 +969,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getSlot_AllowedPorts() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(43);
+		return (EReference)slotEClass.getEStructuralFeatures().get(42);
 	}
 
 	/**
@@ -981,7 +979,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_AllowedPortsOverride() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(43);
 	}
 
 	/**
@@ -991,7 +989,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_ComputeExposure() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(45);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(44);
 	}
 
 	/**
@@ -1001,7 +999,27 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getSlot_ComputeHedge() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(45);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlot_ScheduledVolumeUnit() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(46);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlot_ScheduledVolume() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(47);
 	}
 
 	/**
@@ -2040,6 +2058,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getVesselEvent_Notes() {
+		return (EAttribute)vesselEventEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getVesselEvent__GetStartByAsDateTime() {
 		return vesselEventEClass.getEOperations().get(0);
 	}
@@ -2052,6 +2080,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EOperation getVesselEvent__GetStartAfterAsDateTime() {
 		return vesselEventEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getVesselEvent__GetSchedulingDurationInDays() {
+		return vesselEventEClass.getEOperations().get(2);
 	}
 
 	/**
@@ -2142,6 +2180,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EReference getCharterOutEvent_AvailableHeel() {
 		return (EReference)charterOutEventEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCharterOutEvent_ExtensionPeriod() {
+		return (EAttribute)charterOutEventEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -2620,6 +2668,36 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getScheduleSpecification_PreSequences() {
+		return (EReference)scheduleSpecificationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPreSequenceGroup() {
+		return preSequenceGroupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPreSequenceGroup_Sequence() {
+		return (EReference)preSequenceGroupEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNonShippedCargoSpecification() {
 		return nonShippedCargoSpecificationEClass;
 	}
@@ -2960,28 +3038,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPaperDeal_StartDate() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getPaperDeal_EndDate() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getPaperDeal_Entity() {
-		return (EReference)paperDealEClass.getEStructuralFeatures().get(8);
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -2991,7 +3049,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getPaperDeal_Year() {
-		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -3001,7 +3059,67 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getPaperDeal_Comment() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_PricingPeriodStart() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_PricingPeriodEnd() {
 		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_HedgingPeriodStart() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPaperDeal_HedgingPeriodEnd() {
+		return (EAttribute)paperDealEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPaperDeal_PricingCalendar() {
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPaperDeal_TargetObject() {
+		return (EReference)paperDealEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -3389,12 +3507,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__LOCKED);
 		createEAttribute(slotEClass, SLOT__CANCELLED);
 		createEAttribute(slotEClass, SLOT__WINDOW_COUNTER_PARTY);
-		createEAttribute(slotEClass, SLOT__PRICING_BASIS);
 		createEReference(slotEClass, SLOT__BUSINESS_UNIT);
 		createEReference(slotEClass, SLOT__ALLOWED_PORTS);
 		createEAttribute(slotEClass, SLOT__ALLOWED_PORTS_OVERRIDE);
 		createEAttribute(slotEClass, SLOT__COMPUTE_EXPOSURE);
 		createEAttribute(slotEClass, SLOT__COMPUTE_HEDGE);
+		createEAttribute(slotEClass, SLOT__SCHEDULED_VOLUME_UNIT);
+		createEAttribute(slotEClass, SLOT__SCHEDULED_VOLUME);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_MAX_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATE_OPERATIONAL_TOLERANCE);
@@ -3491,8 +3610,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(vesselEventEClass, VESSEL_EVENT__PORT);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__START_AFTER);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__START_BY);
+		createEAttribute(vesselEventEClass, VESSEL_EVENT__NOTES);
 		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME);
+		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS);
 
 		maintenanceEventEClass = createEClass(MAINTENANCE_EVENT);
 
@@ -3508,6 +3629,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__REPOSITIONING_FEE);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__REQUIRED_HEEL);
 		createEReference(charterOutEventEClass, CHARTER_OUT_EVENT__AVAILABLE_HEEL);
+		createEAttribute(charterOutEventEClass, CHARTER_OUT_EVENT__EXTENSION_PERIOD);
 		createEOperation(charterOutEventEClass, CHARTER_OUT_EVENT___GET_END_PORT);
 
 		assignableElementEClass = createEClass(ASSIGNABLE_ELEMENT);
@@ -3561,6 +3683,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS);
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__NON_SHIPPED_CARGO_SPECIFICATIONS);
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__OPEN_EVENTS);
+		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__PRE_SEQUENCES);
+
+		preSequenceGroupEClass = createEClass(PRE_SEQUENCE_GROUP);
+		createEReference(preSequenceGroupEClass, PRE_SEQUENCE_GROUP__SEQUENCE);
 
 		nonShippedCargoSpecificationEClass = createEClass(NON_SHIPPED_CARGO_SPECIFICATION);
 		createEReference(nonShippedCargoSpecificationEClass, NON_SHIPPED_CARGO_SPECIFICATION__SLOT_SPECIFICATIONS);
@@ -3607,11 +3733,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(paperDealEClass, PAPER_DEAL__INSTRUMENT);
 		createEAttribute(paperDealEClass, PAPER_DEAL__QUANTITY);
 		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_MONTH);
-		createEAttribute(paperDealEClass, PAPER_DEAL__START_DATE);
-		createEAttribute(paperDealEClass, PAPER_DEAL__END_DATE);
 		createEReference(paperDealEClass, PAPER_DEAL__ENTITY);
 		createEAttribute(paperDealEClass, PAPER_DEAL__YEAR);
 		createEAttribute(paperDealEClass, PAPER_DEAL__COMMENT);
+		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_PERIOD_START);
+		createEAttribute(paperDealEClass, PAPER_DEAL__PRICING_PERIOD_END);
+		createEAttribute(paperDealEClass, PAPER_DEAL__HEDGING_PERIOD_START);
+		createEAttribute(paperDealEClass, PAPER_DEAL__HEDGING_PERIOD_END);
+		createEReference(paperDealEClass, PAPER_DEAL__PRICING_CALENDAR);
+		createEReference(paperDealEClass, PAPER_DEAL__TARGET_OBJECT);
 
 		buyPaperDealEClass = createEClass(BUY_PAPER_DEAL);
 
@@ -3844,7 +3974,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Cancelled(), ecorePackage.getEBoolean(), "cancelled", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowCounterParty(), ecorePackage.getEBoolean(), "windowCounterParty", "false", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_PricingBasis(), ecorePackage.getEString(), "pricingBasis", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_BusinessUnit(), theCommercialPackage.getBusinessUnit(), null, "businessUnit", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
@@ -3853,6 +3982,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_AllowedPortsOverride(), ecorePackage.getEBoolean(), "allowedPortsOverride", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_ComputeExposure(), ecorePackage.getEBoolean(), "computeExposure", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_ComputeHedge(), ecorePackage.getEBoolean(), "computeHedge", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_ScheduledVolumeUnit(), theTypesPackage.getVolumeUnits(), "scheduledVolumeUnit", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_ScheduledVolume(), ecorePackage.getEInt(), "scheduledVolume", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegateMinQuantity(), ecorePackage.getEInt(), "getSlotOrDelegateMinQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -4006,10 +4137,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getVesselEvent_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselEvent_StartAfter(), theDateTimePackage.getLocalDateTime(), "startAfter", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselEvent_StartBy(), theDateTimePackage.getLocalDateTime(), "startBy", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselEvent_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselEvent__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getVesselEvent__GetStartAfterAsDateTime(), theDateTimePackage.getDateTime(), "getStartAfterAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselEvent__GetSchedulingDurationInDays(), ecorePackage.getEInt(), "getSchedulingDurationInDays", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(maintenanceEventEClass, MaintenanceEvent.class, "MaintenanceEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -4025,6 +4159,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCharterOutEvent_RepositioningFee(), ecorePackage.getEInt(), "repositioningFee", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOutEvent_RequiredHeel(), theCommercialPackage.getEndHeelOptions(), null, "requiredHeel", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterOutEvent_AvailableHeel(), theCommercialPackage.getStartHeelOptions(), null, "availableHeel", null, 1, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutEvent_ExtensionPeriod(), ecorePackage.getEInt(), "extensionPeriod", null, 0, 1, CharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCharterOutEvent__GetEndPort(), thePortPackage.getPort(), "getEndPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -4083,6 +4218,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getScheduleSpecification_VesselScheduleSpecifications(), this.getVesselScheduleSpecification(), null, "vesselScheduleSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScheduleSpecification_NonShippedCargoSpecifications(), this.getNonShippedCargoSpecification(), null, "nonShippedCargoSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScheduleSpecification_OpenEvents(), this.getScheduleSpecificationEvent(), null, "openEvents", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScheduleSpecification_PreSequences(), this.getPreSequenceGroup(), null, "preSequences", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(preSequenceGroupEClass, PreSequenceGroup.class, "PreSequenceGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPreSequenceGroup_Sequence(), this.getScheduleSpecificationEvent(), null, "sequence", null, 0, -1, PreSequenceGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nonShippedCargoSpecificationEClass, NonShippedCargoSpecification.class, "NonShippedCargoSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNonShippedCargoSpecification_SlotSpecifications(), this.getSlotSpecification(), null, "slotSpecifications", null, 0, -1, NonShippedCargoSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4133,11 +4272,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getPaperDeal_Instrument(), thePricingPackage.getSettleStrategy(), null, "instrument", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Quantity(), ecorePackage.getEDouble(), "quantity", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_PricingMonth(), theDateTimePackage.getYearMonth(), "pricingMonth", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPaperDeal_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPaperDeal_EndDate(), theDateTimePackage.getLocalDate(), "endDate", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPaperDeal_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Year(), ecorePackage.getEInt(), "year", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPaperDeal_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_PricingPeriodStart(), theDateTimePackage.getLocalDate(), "pricingPeriodStart", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_PricingPeriodEnd(), theDateTimePackage.getLocalDate(), "pricingPeriodEnd", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_HedgingPeriodStart(), theDateTimePackage.getLocalDate(), "hedgingPeriodStart", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPaperDeal_HedgingPeriodEnd(), theDateTimePackage.getLocalDate(), "hedgingPeriodEnd", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPaperDeal_PricingCalendar(), thePricingPackage.getPricingCalendar(), null, "pricingCalendar", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getSlot());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getPaperDeal_TargetObject(), g1, null, "targetObject", null, 0, 1, PaperDeal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(buyPaperDealEClass, BuyPaperDeal.class, "BuyPaperDeal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -4361,6 +4507,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 			   "formatString", "-###,###,##0"
 		   });
 		addAnnotation
+		  (getSlot_ScheduledVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
 		  (getLoadSlot_CargoCV(),
 		   source,
 		   new String[] {
@@ -4507,12 +4659,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 			   "type", "commodity"
 		   });
 		addAnnotation
-		  (getSlot_PricingBasis(),
-		   source,
-		   new String[] {
-			   "type", "pricingBasis"
-		   });
-		addAnnotation
 		  (getVesselCharter_TimeCharterRate(),
 		   source,
 		   new String[] {
@@ -4548,6 +4694,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		String source = "http://www.mmxlabs.com/models/validation";
 		addAnnotation
 		  (getSlot_Notes(),
+		   source,
+		   new String[] {
+			   "ignore", "true"
+		   });
+		addAnnotation
+		  (getVesselEvent_Notes(),
 		   source,
 		   new String[] {
 			   "ignore", "true"

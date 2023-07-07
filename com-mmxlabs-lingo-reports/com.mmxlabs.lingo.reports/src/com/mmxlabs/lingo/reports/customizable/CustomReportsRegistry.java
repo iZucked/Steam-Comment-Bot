@@ -194,7 +194,7 @@ public class CustomReportsRegistry {
 	private void writePluginXMLExtensionView(final PrintStream out, final String categoryId, final CustomReportDefinition rd) {
 		out.print("    <extension\r\n" + "          point=\"org.eclipse.ui.views\">\r\n" + "       <view\r\n" + "             category=\"" + categoryId + "\"\r\n"
 				+ "             class=\"org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport\"\r\n"
-				+ "             icon=\"platform:/plugin/com.mmxlabs.rcp.icons.lingo/icons/legacy/16x16/exec_statistic_view.gif\"\r\n" + "             id=\"");
+				+ "             icon=\"icons:/16/report\"\r\n" + "             id=\"");
 		out.print(rd.getUuid());
 		out.print("\"\r\n" + "             name=\"");
 		out.print(rd.getName());
@@ -280,9 +280,13 @@ public class CustomReportsRegistry {
 	}
 
 	public void removeDeletedViews(@NonNull final MApplication application, @NonNull final EModelService modelService) {
-		final List<CustomReportDefinition> reportDefinitions = readUserCustomReportDefinitions();
+		final List<CustomReportDefinition> userReportDefinitions = readUserCustomReportDefinitions();
+		final List<CustomReportDefinition> teamReportDefinitions = readTeamCustomReportDefinitions();
 		final Set<String> customReportIds = new HashSet<>();
-		for (final CustomReportDefinition rd : reportDefinitions) {
+		for (final CustomReportDefinition rd : userReportDefinitions) {
+			customReportIds.add(rd.getUuid());
+		}
+		for (final CustomReportDefinition rd : teamReportDefinitions) {
 			customReportIds.add(rd.getUuid());
 		}
 
@@ -295,7 +299,7 @@ public class CustomReportsRegistry {
 				reportIdsToRemove.add(id);
 			}
 		}
-
+		reportIdsToRemove.removeAll(customReportIds);
 		for (final String id : reportIdsToRemove) {
 			E4ModelHelper.removeViewPart(id, application, modelService);
 		}

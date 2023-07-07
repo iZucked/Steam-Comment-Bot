@@ -44,18 +44,6 @@ public class TransferRecordConstraint extends AbstractModelMultiConstraint {
 					dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__INCOTERM);
 					statuses.add(dsd);
 				}
-				
-				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS) &&
-						transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
-					final String failureMessage = String.format("[%s]: only one of the two, price expression or pricing basis, should be set", name);
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.ERROR);
-					dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION);
-					dsd.addEObjectAndFeature(transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS);
-					statuses.add(dsd);
-				}
-				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS)) {
-					validatePrice(ctx, statuses, transferRecord.getPricingBasis(), PriceIndexType.PRICING_BASIS, name, transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS);
-				}
 				if (transferRecord.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
 					validatePrice(ctx, statuses, transferRecord.getPriceExpression(), PriceIndexType.COMMODITY, name, transferRecord, TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION);
 				}

@@ -38,6 +38,7 @@ import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.LocationsToScenari
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.DistanceDataVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
+import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.PortReplacement;
 import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItem;
 import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItemComparator;
 import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItemLabelProvider;
@@ -65,15 +66,18 @@ public class UpdatePortsPage extends WizardPage {
 
 	private List<UpdateItem> steps;
 
+	private List<PortReplacement> portReplacements;
+
 
 	protected UpdatePortsPage(final String pageName, final ModelReference modelReference, final DistanceDataVersion dataVersion, final LocationsVersion locationRecords, final List<AtoBviaCLookupRecord> distanceRecords,
-			final List<AtoBviaCLookupRecord> manualRecords) {
+			final List<AtoBviaCLookupRecord> manualRecords, List<PortReplacement> portReplacements) {
 		super(pageName);
 		this.modelReference = modelReference;
 		this.dataVersion = dataVersion;
 		this.locationRecords = locationRecords;
 		this.distanceRecords = distanceRecords;
 		this.manualRecords = manualRecords;
+		this.portReplacements = portReplacements;
 
 		setTitle("Review changes");
 		String currentVersion = "unknown";
@@ -314,7 +318,7 @@ public class UpdatePortsPage extends WizardPage {
 
 						final PortModel portModel = ScenarioModelUtil.getPortModel((LNGScenarioModel) modelReference.getInstance());
 						final EditingDomain editingDomain = modelReference.getEditingDomain();
-						lsteps.addAll(LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationRecords));
+						lsteps.addAll(LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationRecords, portReplacements));
 
 					} catch (final Exception e) {
 						setErrorMessage(e.getMessage());

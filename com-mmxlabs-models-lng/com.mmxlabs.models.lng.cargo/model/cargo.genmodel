@@ -148,13 +148,15 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancelled"/>
       <genFeatures createChild="false" propertyDescription="This is the counter party's time window."
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowCounterParty"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingBasis"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/businessUnit"/>
       <genFeatures notify="false" createChild="false" propertyDescription="A list of ports to restrict the port this position can be at. Overrides the contract list. Note: This is different to the restricted ports which defines where this position can be sent to."
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedPorts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/allowedPortsOverride"/>
       <genFeatures createChild="false" propertyDescription="Compute exposure" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/computeExposure"/>
       <genFeatures createChild="false" propertyDescription="Compute hedge" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/computeHedge"/>
+      <genFeatures createChild="false" propertyDescription="The volume units used for the scheduled volume"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/scheduledVolumeUnit"/>
+      <genFeatures createChild="false" propertyDescription="Scheduled volume" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/scheduledVolume"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateMaxQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegateOperationalTolerance"/>
@@ -263,8 +265,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselEvent/port"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startAfter"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/startBy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEvent/notes"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartByAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getStartAfterAsDateTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//VesselEvent/getSchedulingDurationInDays"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//MaintenanceEvent"/>
     <genClasses ecoreClass="cargo.ecore#//DryDockEvent"/>
@@ -284,6 +288,8 @@
       <genFeatures property="Readonly" children="true" createChild="true" propertyCategory=""
           propertyDescription="This is the heel range available at the end of the charter to buy back."
           ecoreFeature="ecore:EReference cargo.ecore#//CharterOutEvent/availableHeel"/>
+      <genFeatures createChild="false" propertyDescription="Counterparty extension option. Day will be blocked out, but no revenue will be collected for the period."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//CharterOutEvent/extensionPeriod"/>
       <genOperations ecoreOperation="cargo.ecore#//CharterOutEvent/getEndPort"/>
     </genClasses>
     <genClasses image="false" ecoreClass="cargo.ecore#//AssignableElement">
@@ -340,6 +346,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/nonShippedCargoSpecifications"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/openEvents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/preSequences"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//PreSequenceGroup">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PreSequenceGroup/sequence"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//NonShippedCargoSpecification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//NonShippedCargoSpecification/slotSpecifications"/>
@@ -379,17 +389,29 @@
       <genOperations ecoreOperation="cargo.ecore#//CharterInMarketOverride/getLocalOrDelegateMaxDuration"/>
     </genClasses>
     <genClasses image="false" ecoreClass="cargo.ecore#//PaperDeal">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/price"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingType"/>
-      <genFeatures createChild="false" propertyDescription="Curve" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/index"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/instrument"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/quantity"/>
-      <genFeatures createChild="false" propertyDescription="Month" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingMonth"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/startDate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/endDate"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/entity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/year"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/comment"/>
+      <genFeatures createChild="false" propertyDescription="Price per unit" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/price"/>
+      <genFeatures createChild="false" propertyDescription="Pricing strategy" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingType"/>
+      <genFeatures createChild="false" propertyDescription="MTM Curve" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/index"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Instrument"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/instrument"/>
+      <genFeatures createChild="false" propertyDescription="Quantity in native values"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/quantity"/>
+      <genFeatures createChild="false" propertyDescription="Contract month" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingMonth"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Entity"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/entity"/>
+      <genFeatures createChild="false" propertyDescription="Year" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/year"/>
+      <genFeatures createChild="false" propertyDescription="Note" ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/comment"/>
+      <genFeatures createChild="false" propertyDescription="Start of the pricing period"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingPeriodStart"/>
+      <genFeatures createChild="false" propertyDescription="End of the pricing period"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/pricingPeriodEnd"/>
+      <genFeatures createChild="false" propertyDescription="Start of the hedging period"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/hedgingPeriodStart"/>
+      <genFeatures createChild="false" propertyDescription="End of the hedging period"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//PaperDeal/hedgingPeriodEnd"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/pricingCalendar"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Referrence slot"
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PaperDeal/targetObject"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//BuyPaperDeal"/>
     <genClasses ecoreClass="cargo.ecore#//SellPaperDeal"/>

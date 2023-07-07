@@ -80,4 +80,10 @@
     <eLiterals name="SOURCE_WITH_DEST" value="1"/>
     <eLiterals name="DIVERT_TO_DEST" value="2"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PricingPeriod">
+    <eLiterals name="DAYS"/>
+    <eLiterals name="WEEKS" value="1"/>
+    <eLiterals name="MONTHS" value="2"/>
+    <eLiterals name="QUARTERS" value="3"/>
+  </eClassifiers>
 </ecore:EPackage>

@@ -98,12 +98,13 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isCancelled <em>Cancelled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isWindowCounterParty <em>Window Counter Party</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingBasis <em>Pricing Basis</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getBusinessUnit <em>Business Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isAllowedPortsOverride <em>Allowed Ports Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isComputeExposure <em>Compute Exposure</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isComputeHedge <em>Compute Hedge</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getScheduledVolumeUnit <em>Scheduled Volume Unit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getScheduledVolume <em>Scheduled Volume</em>}</li>
  * </ul>
  *
  * @generated
@@ -1032,35 +1033,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	protected boolean windowCounterParty = WINDOW_COUNTER_PARTY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPricingBasis()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String PRICING_BASIS_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getPricingBasis() <em>Pricing Basis</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPricingBasis()
-	 * @generated
-	 * @ordered
-	 */
-	protected String pricingBasis = PRICING_BASIS_EDEFAULT;
-
-	/**
-	 * This is true if the Pricing Basis attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean pricingBasisESet;
-
-	/**
 	 * The cached value of the '{@link #getBusinessUnit() <em>Business Unit</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1148,6 +1120,46 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @ordered
 	 */
 	protected boolean computeHedge = COMPUTE_HEDGE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getScheduledVolumeUnit() <em>Scheduled Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits SCHEDULED_VOLUME_UNIT_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getScheduledVolumeUnit() <em>Scheduled Volume Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolumeUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits scheduledVolumeUnit = SCHEDULED_VOLUME_UNIT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getScheduledVolume() <em>Scheduled Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SCHEDULED_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getScheduledVolume() <em>Scheduled Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScheduledVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int scheduledVolume = SCHEDULED_VOLUME_EDEFAULT;
 
 	/**
 	 * Clump of methods for computing the schedule time window start and end times etc.
@@ -2753,56 +2765,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * @generated
 	 */
 	@Override
-	public String getPricingBasis() {
-		return pricingBasis;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPricingBasis(String newPricingBasis) {
-		String oldPricingBasis = pricingBasis;
-		pricingBasis = newPricingBasis;
-		boolean oldPricingBasisESet = pricingBasisESet;
-		pricingBasisESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, pricingBasis, !oldPricingBasisESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPricingBasis() {
-		String oldPricingBasis = pricingBasis;
-		boolean oldPricingBasisESet = pricingBasisESet;
-		pricingBasis = PRICING_BASIS_EDEFAULT;
-		pricingBasisESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PRICING_BASIS, oldPricingBasis, PRICING_BASIS_EDEFAULT, oldPricingBasisESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPricingBasis() {
-		return pricingBasisESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public BusinessUnit getBusinessUnit() {
 		if (businessUnit != null && businessUnit.eIsProxy()) {
 			InternalEObject oldBusinessUnit = (InternalEObject)businessUnit;
@@ -2964,6 +2926,52 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		computeHedge = newComputeHedge;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__COMPUTE_HEDGE, oldComputeHedge, computeHedge));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VolumeUnits getScheduledVolumeUnit() {
+		return scheduledVolumeUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setScheduledVolumeUnit(VolumeUnits newScheduledVolumeUnit) {
+		VolumeUnits oldScheduledVolumeUnit = scheduledVolumeUnit;
+		scheduledVolumeUnit = newScheduledVolumeUnit == null ? SCHEDULED_VOLUME_UNIT_EDEFAULT : newScheduledVolumeUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT, oldScheduledVolumeUnit, scheduledVolumeUnit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getScheduledVolume() {
+		return scheduledVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setScheduledVolume(int newScheduledVolume) {
+		int oldScheduledVolume = scheduledVolume;
+		scheduledVolume = newScheduledVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SCHEDULED_VOLUME, oldScheduledVolume, scheduledVolume));
 	}
 
 	/**
@@ -3350,8 +3358,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isCancelled();
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return isWindowCounterParty();
-			case CargoPackage.SLOT__PRICING_BASIS:
-				return getPricingBasis();
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				if (resolve) return getBusinessUnit();
 				return basicGetBusinessUnit();
@@ -3363,6 +3369,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return isComputeExposure();
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				return isComputeHedge();
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				return getScheduledVolumeUnit();
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				return getScheduledVolume();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3505,9 +3515,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty((Boolean)newValue);
 				return;
-			case CargoPackage.SLOT__PRICING_BASIS:
-				setPricingBasis((String)newValue);
-				return;
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				setBusinessUnit((BusinessUnit)newValue);
 				return;
@@ -3523,6 +3530,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				setComputeHedge((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				setScheduledVolumeUnit((VolumeUnits)newValue);
+				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				setScheduledVolume((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -3661,9 +3674,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				setWindowCounterParty(WINDOW_COUNTER_PARTY_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__PRICING_BASIS:
-				unsetPricingBasis();
-				return;
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				unsetBusinessUnit();
 				return;
@@ -3678,6 +3688,12 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return;
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				setComputeHedge(COMPUTE_HEDGE_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				setScheduledVolumeUnit(SCHEDULED_VOLUME_UNIT_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				setScheduledVolume(SCHEDULED_VOLUME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -3791,8 +3807,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return cancelled != CANCELLED_EDEFAULT;
 			case CargoPackage.SLOT__WINDOW_COUNTER_PARTY:
 				return windowCounterParty != WINDOW_COUNTER_PARTY_EDEFAULT;
-			case CargoPackage.SLOT__PRICING_BASIS:
-				return isSetPricingBasis();
 			case CargoPackage.SLOT__BUSINESS_UNIT:
 				return isSetBusinessUnit();
 			case CargoPackage.SLOT__ALLOWED_PORTS:
@@ -3803,6 +3817,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				return computeExposure != COMPUTE_EXPOSURE_EDEFAULT;
 			case CargoPackage.SLOT__COMPUTE_HEDGE:
 				return computeHedge != COMPUTE_HEDGE_EDEFAULT;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME_UNIT:
+				return scheduledVolumeUnit != SCHEDULED_VOLUME_UNIT_EDEFAULT;
+			case CargoPackage.SLOT__SCHEDULED_VOLUME:
+				return scheduledVolume != SCHEDULED_VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -4005,14 +4023,16 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(cancelled);
 		result.append(", windowCounterParty: ");
 		result.append(windowCounterParty);
-		result.append(", pricingBasis: ");
-		if (pricingBasisESet) result.append(pricingBasis); else result.append("<unset>");
 		result.append(", allowedPortsOverride: ");
 		result.append(allowedPortsOverride);
 		result.append(", computeExposure: ");
 		result.append(computeExposure);
 		result.append(", computeHedge: ");
 		result.append(computeHedge);
+		result.append(", scheduledVolumeUnit: ");
+		result.append(scheduledVolumeUnit);
+		result.append(", scheduledVolume: ");
+		result.append(scheduledVolume);
 		result.append(')');
 		return result.toString();
 	}
@@ -4160,15 +4180,21 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				
 				@Override
 				public Object getValue(final EObject object) {
+					if (getContract() != null) {
+						final Contract o_contract = getContract();
+						if (o_contract != null && o_contract.eIsSet(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT)) {
+							return o_contract.eGet(CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT);
+						}
+					}
 					if (getSlotOrDelegateEntity() != null) {
-						final BaseLegalEntity entity = getSlotOrDelegateEntity();
-						if (entity.getBusinessUnits() != null && !entity.getBusinessUnits().isEmpty()) {
-							for (final var bu : entity.getBusinessUnits()) {
+						final BaseLegalEntity o_entity = getSlotOrDelegateEntity();
+						if (o_entity.getBusinessUnits() != null && !o_entity.getBusinessUnits().isEmpty()) {
+							for (final var bu : o_entity.getBusinessUnits()) {
 								if (bu.isDefault()) {
 									return bu;
 								}
 							}
-							return entity.getBusinessUnits().get(0);
+							return o_entity.getBusinessUnits().get(0);
 						}
 					}
 					return null;

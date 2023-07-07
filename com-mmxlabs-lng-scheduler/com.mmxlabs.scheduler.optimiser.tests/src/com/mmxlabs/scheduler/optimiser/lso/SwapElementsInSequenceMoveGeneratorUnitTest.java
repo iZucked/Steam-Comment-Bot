@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapSingleSequenceElements;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
@@ -44,7 +45,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 
 		// TODO: Build up a sequences structure - permit single combinations
 		final IResource resource = Mockito.mock(IResource.class);
-		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(resource));
+		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(resource), new SequencesAttributesProviderImpl());
 
 		final ISequenceElement elementA = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement elementB = Mockito.mock(ISequenceElement.class);
@@ -111,7 +112,7 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		final SwapElementsInSequenceMoveGeneratorUnit mg = create(cmg, followersAndPreceders);
 
 		final IResource resource = Mockito.mock(IResource.class);
-		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(resource));
+		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(resource), new SequencesAttributesProviderImpl());
 
 		final ISequenceElement elementA = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement elementB = Mockito.mock(ISequenceElement.class);

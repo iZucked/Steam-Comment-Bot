@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
@@ -43,15 +44,17 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
+import org.eclipse.nebula.widgets.ganttchart.GanttChartParameters;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
@@ -61,6 +64,7 @@ import org.eclipse.nebula.widgets.ganttchart.IGanttChartItem;
 import org.eclipse.nebula.widgets.ganttchart.ILegendItem;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.nebula.widgets.ganttchart.LegendItemImpl;
+import org.eclipse.nebula.widgets.ganttchart.label.EventLabelFontSize;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
@@ -76,6 +80,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.collect.Lists;
@@ -90,11 +95,15 @@ import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.rendering.DefaultRenderOrderComparator;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Category;
 import com.mmxlabs.lingo.reports.scheduleview.views.ScenarioViewerComparator.Mode;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProvider;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.PositionsSequenceProviderException;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -109,12 +118,16 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -125,6 +138,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.MultiEvent;
+import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
@@ -140,6 +154,12 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class SchedulerView extends ViewPart implements IPreferenceChangeListener {
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
+
+	private static final Set<String> IGNORED_PREFERENCES = new HashSet<>();
+
+	static {
+		IGNORED_PREFERENCES.add(PreferenceConstants.P_REPORT_DURATION_FORMAT);
+	}
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -159,6 +179,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	private Action sortModeAction;
 
 	private RunnableAction toggleLegend;
+	private RunnableAction gotoPreferences;
+
 	protected EMFScheduleContentProvider contentProvider;
 	private ScenarioViewerComparator viewerComparator;
 
@@ -177,11 +199,16 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 	boolean showNominalsByDefault = false;
 
+	private @NonNull ENonShippedRotationSelection rotationSelection = ENonShippedRotationSelection.OFF;
+	private final @NonNull Set<Contract> fobRotationSelectedContracts = new HashSet<>();
+	private final @NonNull Set<Predicate<NonShippedSequence>> fobRotationsToShow = new HashSet<>();
+
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	/**
-	 * Basic colour only items. Other are rendered directly once the ganttchart has been created
+	 * Basic colour only items. Other are rendered directly once the ganttchart has
+	 * been created
 	 */
 	private static final List<ILegendItem> basiclegendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
@@ -217,6 +244,9 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 			if (memento.getChild(SchedulerViewConstants.Highlight_) == null) {
 				memento.createChild(SchedulerViewConstants.Highlight_);
 			}
+			if (memento.getChild(SchedulerViewConstants.Partition_) == null) {
+				memento.createChild(SchedulerViewConstants.Partition_);
+			}
 
 			this.showNominalsByDefault = memento.getBoolean(SchedulerViewConstants.Show_Nominals);
 		}
@@ -234,6 +264,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
 		memento.putString(SchedulerViewConstants.SortMode, viewerComparator.getMode().toString());
 		memento.putString(SchedulerViewConstants.SortCategory, viewerComparator.getCategory().toString());
+
+		// Only save the settings for providers where there are no errors
+		IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
+		contentProvider.enabledPSPTracker.saveToMemento(partitionSettings);
 
 		super.saveState(memento);
 	}
@@ -382,7 +416,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						}
 					}
 				}
-				// Canal events are always selected with journeys 
+				// Canal events are always selected with journeys
 				final List<Object> additionalElements = l.stream() //
 						.filter(Journey.class::isInstance) //
 						.map(Journey.class::cast) //
@@ -396,6 +430,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				// - Fade out objects which are not selected.
 				// - Fade out pinned scenario objects more.
 
+				final Set<GanttEvent> seenEvents = new HashSet<>();
 				final ArrayList<GanttEvent> selectedEvents;
 				final Set<GanttSection> selectedSections = new HashSet<>();
 				if (l != null) {
@@ -406,7 +441,11 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 						for (final GanttEvent ganttEvent : ganttChart.getGanttComposite().getEvents()) {
 							// Render CanalJourneyEvent without change to alpha
 							if (!(ganttEvent.getData() instanceof CanalJourneyEvent)) {
-								ganttEvent.setStatusAlpha(130);
+								if (isNonShippedOrOpen(ganttEvent)) {
+									ganttEvent.setStatusAlpha(60);
+								} else {
+									ganttEvent.setStatusAlpha(130);
+								}
 							} else {
 								ganttEvent.setStatusAlpha(255);
 							}
@@ -509,6 +548,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 										visible = true;
 									}
 								}
+							} else if (d instanceof NonShippedSequence sequence) {
+								visible = fobRotationsToShow.stream().anyMatch(pred -> pred.test(sequence));
 							}
 
 							ganttSection.setVisible(visible);
@@ -528,7 +569,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 									visible = true;
 								}
 							}
+						} else if (d instanceof final NonShippedSequence sequence) {
+							visible = fobRotationsToShow.stream().anyMatch(pred -> pred.test(sequence));
 						}
+
 						ganttSection.setVisible(visible);
 					}
 				}
@@ -628,6 +672,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							if (ee.getSequence() != null && ee.getSequence().getVesselCharter() != null) {
 								return Collections.singletonList(ee.getSequence().getVesselCharter());
 							}
+						} else if (event instanceof final NonShippedSlotVisit slotVisit) {
+							return Collections.singletonList(slotVisit.getSlot());
 						}
 
 						return Collections.emptyList();
@@ -664,8 +710,62 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 				}
 				return null;
 			}
+
+			@Override
+			protected final List<@NonNull PositionsSequence> getPositionsSequences(Schedule schedule, final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore) {
+				List<@NonNull PositionsSequence> result = new ArrayList<>();
+
+				if (enabledPSPTracker.hasInputChanged()) {
+					enabledPSPTracker.clearErrors();
+					enabledPSPTracker.collectErrors(positionsSequenceProviderExtensions, schedule, slotVisitsToIgnore);
+					enabledPSPTracker.setInputChanged(false);
+				}
+
+				if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+					for (var ext : positionsSequenceProviderExtensions) {
+						ISchedulePositionsSequenceProvider provider = ext.createInstance();
+						try {
+							if (enabledPSPTracker.isEnabledWithNoError(provider.getId())) {
+								result.addAll(provider.provide(schedule, slotVisitsToIgnore));
+							}
+						} catch (PositionsSequenceProviderException e) {
+							enabledPSPTracker.addError(provider.getId(), e);
+							MessageDialog dialog = new MessageDialog(viewer.getControl().getShell(), e.getTitle(), null, e.getDescription(), 0, 0, "OK");
+							dialog.create();
+							dialog.open();
+						}
+					}
+				}
+
+				if (result.isEmpty()) {
+					try {
+						return new BuySellSplit().provide(schedule, slotVisitsToIgnore);
+					} catch (PositionsSequenceProviderException e) {
+						// BuySellSplit should never throw this exception
+					}
+				}
+
+				return result;
+			}
 		};
+
 		viewer.setContentProvider(contentProvider);
+		contentProvider.injectExtensionPoints();
+
+		// Restore positions sequence (partition) settings
+		{
+			final IMemento partitionSettings = memento.getChild(SchedulerViewConstants.Partition_);
+			if (partitionSettings != null) {
+				for (final var ext : contentProvider.positionsSequenceProviderExtensions) {
+					ISchedulePositionsSequenceProvider provider = ext.createInstance();
+					if (partitionSettings.getBoolean(provider.getId()) == Boolean.TRUE) {
+						// Only restore if an error hasn't been found
+						contentProvider.enabledPSPTracker.enableIfNoError(provider.getId());
+					}
+				}
+			}
+		}
+
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, scenarioComparisonService);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
@@ -966,132 +1066,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	private ISettings createGanttSettings() {
-		return new AbstractSettings() {
-			@Override
-			public boolean enableResizing() {
-				return false;
-			}
-
-			@Override
-			public boolean useSplitArrowConnections() {
-				return false;
-			}
-
-			@Override
-			public Color getDefaultEventColor() {
-				return ColorCache.getColor(221, 220, 221);
-			}
-
-			@Override
-			public boolean showPlannedDates() {
-				return false;
-			}
-
-			@Override
-			public String getTextDisplayFormat() {
-				return "#name#";
-			}
-
-			@Override
-			public int getSectionTextSpacer() {
-				return 0;
-			}
-
-			@Override
-			public int getMinimumSectionHeight() {
-				return 5;
-			}
-
-			@Override
-			public int getNumberOfDaysToAppendForEndOfDay() {
-				return 0;
-			}
-
-			@Override
-			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
-				return true;
-			}
-
-			@Override
-			public boolean lockHeaderOnVerticalScroll() {
-				return true;
-			}
-
-			@Override
-			public boolean drawFillsToBottomWhenUsingGanttSections() {
-				return true;
-			}
-
-			@Override
-			public int getSectionBarDividerHeight() {
-				return 1;
-			}
-
-			@Override
-			public boolean showGradientEventBars() {
-				return false;
-			}
-
-			@Override
-			public boolean drawSectionsWithGradients() {
-				return false;
-			}
-
-			@Override
-			public boolean allowArrowKeysToScrollChart() {
-				return true;
-			}
-
-			@Override
-			public boolean showBarsIn3D() {
-				return false;
-			}
-
-			@Override
-			public int getEventsTopSpacer() {
-				return 0;
-			}
-
-			@Override
-			public int getEventsBottomSpacer() {
-				return 0;
-			}
-
-			@Override
-			public boolean showDeleteMenuOption() {
-				return false;
-			}
-
-			@Override
-			public boolean showMenuItemsOnRightClick() {
-				return true;
-			}
-
-			@Override
-			public boolean showDefaultMenuItemsOnEventRightClick() {
-				return false;
-			}
-
-			@Override
-			public int getSelectionLineWidth() {
-				return 3;
-			}
-
-			@Override
-			public int getSelectionLineStyle() {
-				return SWT.LINE_SOLID;
-			}
-
-			@Override
-			public int getHeaderMonthHeight() {
-				return 22;
-			}
-
-			@Override
-			public int getHeaderDayHeight() {
-				return 22;
-			}
-		};
+		return GanttChartParameters.getSettings();
 	}
 
 	@Override
@@ -1125,6 +1100,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(toggleLegend);
+		manager.add(gotoPreferences);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -1167,6 +1143,12 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		});
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
 
+		gotoPreferences = new RunnableAction("Preferences", () -> {
+			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage",
+					new String[] { "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage" }, null);
+			dialog.open();
+		});
+
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
@@ -1201,6 +1183,10 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 				final boolean needFit = viewer.getInput() == null;
 
+				SchedulerView.this.clearFobRotations();
+				if (viewer.getContentProvider() instanceof EMFScheduleContentProvider emfScheduleContentProvider) {
+					emfScheduleContentProvider.clearFobRotations();
+				}
 				viewer.setInput(input);
 
 				if ((input != null) && needFit) {
@@ -1297,7 +1283,8 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 	}
 
 	/**
-	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
+	 * Helper method to expand cargo selections to include the whole set of events
+	 * representing the cargo
 	 * 
 	 * @param selectedObjects
 	 * @return
@@ -1319,6 +1306,15 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 							newSelection.addAll(cargoAllocation.getEvents());
 						}
 					}
+				} else if (object instanceof final OpenSlotAllocation openSlotAllocation) {
+					newSelection.add(openSlotAllocation);
+				} else if (object instanceof final MultiEvent multiEvent) {
+					newSelection.add(multiEvent);
+					newSelection.addAll(multiEvent.getElements());
+				} else if (object instanceof final @NonNull NonShippedSlotVisit slotVisit) {
+					if (!newSelection.contains(slotVisit)) {
+						newSelection.addAll(getNonShippedExtraEvents(slotVisit));
+					}
 				}
 			} else {
 				if (equivalents.containsKey(o)) {
@@ -1328,11 +1324,44 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		}
 		newSelection.retainAll(contents);
 		return new ArrayList<>(newSelection);
+	}
 
+	private NonShippedSlotVisit getFirstCommonCargoNonShippedSlotVisit(final @NonNull NonShippedSlotVisit slotVisit) {
+		final Cargo commonCargo = slotVisit.getSlot().getCargo();
+		NonShippedSlotVisit currentFirst = slotVisit;
+		Event currentEvent = slotVisit.getPreviousEvent();
+		while (currentEvent != null) {
+			if (currentEvent instanceof NonShippedSlotVisit currentSlotVisit) {
+				if (currentSlotVisit.getSlot().getCargo() == commonCargo) {
+					currentFirst = currentSlotVisit;
+				} else {
+					break;
+				}
+			}
+			currentEvent = currentEvent.getPreviousEvent();
+		}
+		return currentFirst;
+	}
+
+	private List<Event> getNonShippedExtraEvents(final @NonNull NonShippedSlotVisit slotVisit) {
+		final List<Event> events = new LinkedList<>();
+		final Cargo commonCargo = slotVisit.getSlot().getCargo();
+		assert commonCargo != null;
+		final NonShippedSlotVisit firstLoadVisit = getFirstCommonCargoNonShippedSlotVisit(slotVisit);
+		Event currentEvent = firstLoadVisit;
+		while (currentEvent != null) {
+			if (currentEvent instanceof NonShippedSlotVisit currentSlotVisit && currentSlotVisit.getSlot().getCargo() != commonCargo) {
+				break;
+			}
+			events.add(currentEvent);
+			currentEvent = currentEvent.getNextEvent();
+		}
+		return events;
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to
+	 * reset pin mode data
 	 * 
 	 */
 	private void clearPinModeData() {
@@ -1366,7 +1395,29 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 	@Override
 	public void preferenceChange(final PreferenceChangeEvent event) {
-		viewer.setInput(viewer.getInput());
+		final String preferenceKey = event.getKey();
+		if (preferenceKey != null) {
+			if (preferenceKey.equals(PreferenceConstants.P_SCHEDULE_CHART_EVENT_LABEL_FONT_SIZE)) {
+				final Object newValueObj = event.getNewValue();
+				if (newValueObj == null) {
+					// default case - small
+					viewer.getGanttChart().getGanttComposite().setEventFont(EventLabelFontSize.SMALL);
+					viewer.setInput(viewer.getInput());
+				} else if (newValueObj instanceof String newValue) {
+					final EventLabelFontSize fontSize = switch (newValue) {
+					case "MEDIUM" -> EventLabelFontSize.MEDIUM;
+					case "LARGE" -> EventLabelFontSize.LARGE;
+					default -> EventLabelFontSize.SMALL;
+					};
+					viewer.getGanttChart().getGanttComposite().setEventFont(fontSize);
+					viewer.setInput(viewer.getInput());
+				}
+			} else if (preferenceKey.equals(PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT)) {
+				viewer.getGanttChart().getGanttComposite().resetEventLabels();
+			} else if (!IGNORED_PREFERENCES.contains(preferenceKey)){
+				viewer.setInput(viewer.getInput());
+			}
+		}
 	}
 
 	@NonNull
@@ -1375,6 +1426,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		public void selectedDataProviderChanged(final ISelectedDataProvider selectedDataProvider, final boolean block) {
 			ViewerHelper.runIfViewerValid(viewer, block, () -> {
 				SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
+				SchedulerView.this.clearFobRotations();
 
 				final ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 
@@ -1526,4 +1578,73 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		};
 	}
 
+	private static boolean isNonShippedOrOpen(final GanttEvent event) {
+		final Object data = event.getData();
+		if (data instanceof OpenSlotAllocation) {
+			return true;
+		} else if (data instanceof SlotVisit visit) {
+			final Slot<?> slot = visit.getSlotAllocation().getSlot();
+			if (slot instanceof LoadSlot ls) {
+				if (ls.isDESPurchase()) {
+					return true;
+				} else {
+					final Cargo cargo = ls.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(1) instanceof DischargeSlot ds && ds.isFOBSale()) {
+							return true;
+						}
+					}
+				}
+			} else if (slot instanceof DischargeSlot ds) {
+				if (ds.isFOBSale()) {
+					return true;
+				} else {
+					final Cargo cargo = ds.getCargo();
+					if (cargo != null) {
+						final List<Slot<?>> sortedSlots = cargo.getSortedSlots();
+						if (sortedSlots.size() == 2 && sortedSlots.get(0) instanceof LoadSlot ls && ls.isDESPurchase()) {
+							return true;
+						}
+					}
+				}
+			}
+		} else if (data instanceof MultiEvent) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean toggleSelectedContract(final Contract selectedContract) {
+		if (fobRotationSelectedContracts.contains(selectedContract)) {
+			fobRotationSelectedContracts.remove(selectedContract);
+			return false;
+		} else {
+			fobRotationSelectedContracts.add(selectedContract);
+			return true;
+		}
+	}
+
+	public Set<Contract> getSelectedContracts() {
+		return fobRotationSelectedContracts;
+	}
+
+	public ENonShippedRotationSelection getFobRotationOptionSelection() {
+		return rotationSelection;
+	}
+
+	public void setFobRotationOptionSelection(final @NonNull ENonShippedRotationSelection rotationSelection) {
+		this.rotationSelection = rotationSelection;
+	}
+
+	public void clearFobRotations() {
+		setFobRotationOptionSelection(ENonShippedRotationSelection.OFF);
+		fobRotationsToShow.clear();
+		fobRotationSelectedContracts.clear();
+	}
+
+	public void replaceFobRotations(final @NonNull Collection<@NonNull Predicate<NonShippedSequence>> predicates) {
+		fobRotationsToShow.clear();
+		fobRotationsToShow.addAll(predicates);
+	}
 }

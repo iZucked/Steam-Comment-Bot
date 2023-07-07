@@ -202,7 +202,7 @@ public class InclusionChecker {
 			}
 			if (periodRecord.lowerCutoff != null) {
 				// Look to see if the ballast leg finishes before the lower cutoff. We assume the next port visit after the event is the marker for end of the ballast leg
-				final ZonedDateTime cal = getScheduledStart(event, portVisit).plusDays(event.getDurationInDays());
+				final ZonedDateTime cal = getScheduledStart(event, portVisit).plusDays(event.getSchedulingDurationInDays());
 				if (cal.isBefore(periodRecord.lowerCutoff)) {
 					if (portVisit != null) {
 						Event evt = portVisit.getNextEvent();
@@ -229,7 +229,7 @@ public class InclusionChecker {
 				InclusionType type = InclusionType.In;
 				Position pos = Position.Unknown;
 				if (periodRecord.upperBoundary != null) {
-					if (event.getStartByAsDateTime().plusDays(event.getDurationInDays()).isAfter(periodRecord.upperBoundary)) {
+					if (event.getStartByAsDateTime().plusDays(event.getSchedulingDurationInDays()).isAfter(periodRecord.upperBoundary)) {
 						type = InclusionType.Boundary;
 						pos = Position.After;
 					}

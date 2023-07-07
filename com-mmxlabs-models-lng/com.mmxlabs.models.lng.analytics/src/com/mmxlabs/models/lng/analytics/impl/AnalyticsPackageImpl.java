@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult;
@@ -66,6 +67,7 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.PortfolioSensitivityResult;
 import com.mmxlabs.models.lng.analytics.PositionDescriptor;
@@ -231,6 +233,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass baseCaseRowGroupEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass baseCaseRowOptionsEClass = null;
 
 	/**
@@ -239,6 +248,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass partialCaseRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass partialCaseRowGroupEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -964,8 +980,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getBuyOpportunity_Port() {
-		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(2);
+	public EAttribute getBuyOpportunity_Optional() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -974,7 +990,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getBuyOpportunity_Contract() {
+	public EReference getBuyOpportunity_Port() {
 		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -984,8 +1000,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_Date() {
-		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(4);
+	public EReference getBuyOpportunity_Contract() {
+		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -994,7 +1010,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_PriceExpression() {
+	public EAttribute getBuyOpportunity_Date() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -1004,8 +1020,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getBuyOpportunity_PriceExpression() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getBuyOpportunity_Entity() {
-		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(6);
+		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -1015,16 +1041,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getBuyOpportunity_Cv() {
-		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getBuyOpportunity_CancellationExpression() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -1034,7 +1050,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_MiscCosts() {
+	public EAttribute getBuyOpportunity_CancellationExpression() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -1044,7 +1060,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_VolumeMode() {
+	public EAttribute getBuyOpportunity_MiscCosts() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -1054,17 +1070,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_VolumeUnits() {
-		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(13);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getBuyOpportunity_MinVolume() {
+	public EAttribute getBuyOpportunity_VolumeMode() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -1074,17 +1080,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_MaxVolume() {
-		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(12);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getBuyOpportunity_SpecifyWindow() {
+	public EAttribute getBuyOpportunity_VolumeUnits() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -1094,7 +1090,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_WindowSize() {
+	public EAttribute getBuyOpportunity_MinVolume() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBuyOpportunity_MaxVolume() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBuyOpportunity_SpecifyWindow() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -1104,8 +1120,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBuyOpportunity_WindowSizeUnits() {
+	public EAttribute getBuyOpportunity_WindowSize() {
 		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBuyOpportunity_WindowSizeUnits() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -1144,8 +1170,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getSellOpportunity_Port() {
-		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(2);
+	public EAttribute getSellOpportunity_Optional() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1154,7 +1180,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getSellOpportunity_Contract() {
+	public EReference getSellOpportunity_Port() {
 		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1164,8 +1190,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSellOpportunity_Date() {
-		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(4);
+	public EReference getSellOpportunity_Contract() {
+		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1174,7 +1200,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSellOpportunity_PriceExpression() {
+	public EAttribute getSellOpportunity_Date() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -1184,8 +1210,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSellOpportunity_PriceExpression() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getSellOpportunity_Entity() {
-		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(6);
+		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -1195,16 +1231,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	@Override
 	public EAttribute getSellOpportunity_CancellationExpression() {
-		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSellOpportunity_MiscCosts() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -1214,7 +1240,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSellOpportunity_VolumeMode() {
+	public EAttribute getSellOpportunity_MiscCosts() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -1224,17 +1250,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSellOpportunity_VolumeUnits() {
-		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(12);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSellOpportunity_MinVolume() {
+	public EAttribute getSellOpportunity_VolumeMode() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -1244,17 +1260,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSellOpportunity_MaxVolume() {
-		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSellOpportunity_SpecifyWindow() {
+	public EAttribute getSellOpportunity_VolumeUnits() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -1264,7 +1270,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSellOpportunity_WindowSize() {
+	public EAttribute getSellOpportunity_MinVolume() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSellOpportunity_MaxVolume() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSellOpportunity_SpecifyWindow() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -1274,8 +1300,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSellOpportunity_WindowSizeUnits() {
+	public EAttribute getSellOpportunity_WindowSize() {
 		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSellOpportunity_WindowSizeUnits() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(16);
 	}
 
 	/**
@@ -1554,6 +1590,36 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EReference getBaseCaseRow_Group() {
+		return (EReference)baseCaseRowEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getBaseCaseRowGroup() {
+		return baseCaseRowGroupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBaseCaseRowGroup_Rows() {
+		return (EReference)baseCaseRowGroupEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getBaseCaseRowOptions() {
 		return baseCaseRowOptionsEClass;
 	}
@@ -1686,6 +1752,36 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	@Override
 	public EReference getPartialCaseRow_CommodityCurveOptions() {
 		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPartialCaseRow_Group() {
+		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPartialCaseRowGroup() {
+		return partialCaseRowGroupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPartialCaseRowGroup_Rows() {
+		return (EReference)partialCaseRowGroupEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -2564,6 +2660,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EReference getBaseCase_Groups() {
+		return (EReference)baseCaseEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPartialCase() {
 		return partialCaseEClass;
 	}
@@ -2586,6 +2692,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	@Override
 	public EAttribute getPartialCase_KeepExistingScenario() {
 		return (EAttribute)partialCaseEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPartialCase_Groups() {
+		return (EReference)partialCaseEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -4527,6 +4643,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		buyOpportunityEClass = createEClass(BUY_OPPORTUNITY);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__NAME);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__DES_PURCHASE);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__OPTIONAL);
 		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__PORT);
 		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__CONTRACT);
 		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__DATE);
@@ -4546,6 +4663,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		sellOpportunityEClass = createEClass(SELL_OPPORTUNITY);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__NAME);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__FOB_SALE);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__OPTIONAL);
 		createEReference(sellOpportunityEClass, SELL_OPPORTUNITY__PORT);
 		createEReference(sellOpportunityEClass, SELL_OPPORTUNITY__CONTRACT);
 		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__DATE);
@@ -4594,6 +4712,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(baseCaseRowEClass, BASE_CASE_ROW__OPTIONISE);
 		createEReference(baseCaseRowEClass, BASE_CASE_ROW__OPTIONS);
 		createEAttribute(baseCaseRowEClass, BASE_CASE_ROW__FREEZE);
+		createEReference(baseCaseRowEClass, BASE_CASE_ROW__GROUP);
+
+		baseCaseRowGroupEClass = createEClass(BASE_CASE_ROW_GROUP);
+		createEReference(baseCaseRowGroupEClass, BASE_CASE_ROW_GROUP__ROWS);
 
 		baseCaseRowOptionsEClass = createEClass(BASE_CASE_ROW_OPTIONS);
 		createEAttribute(baseCaseRowOptionsEClass, BASE_CASE_ROW_OPTIONS__LADEN_ROUTE);
@@ -4610,6 +4732,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__SHIPPING);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__OPTIONS);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS);
+		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__GROUP);
+
+		partialCaseRowGroupEClass = createEClass(PARTIAL_CASE_ROW_GROUP);
+		createEReference(partialCaseRowGroupEClass, PARTIAL_CASE_ROW_GROUP__ROWS);
 
 		partialCaseRowOptionsEClass = createEClass(PARTIAL_CASE_ROW_OPTIONS);
 		createEAttribute(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__LADEN_ROUTES);
@@ -4679,10 +4805,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(baseCaseEClass, BASE_CASE__BASE_CASE);
 		createEAttribute(baseCaseEClass, BASE_CASE__PROFIT_AND_LOSS);
 		createEAttribute(baseCaseEClass, BASE_CASE__KEEP_EXISTING_SCENARIO);
+		createEReference(baseCaseEClass, BASE_CASE__GROUPS);
 
 		partialCaseEClass = createEClass(PARTIAL_CASE);
 		createEReference(partialCaseEClass, PARTIAL_CASE__PARTIAL_CASE);
 		createEAttribute(partialCaseEClass, PARTIAL_CASE__KEEP_EXISTING_SCENARIO);
+		createEReference(partialCaseEClass, PARTIAL_CASE__GROUPS);
 
 		existingCharterMarketOptionEClass = createEClass(EXISTING_CHARTER_MARKET_OPTION);
 		createEReference(existingCharterMarketOptionEClass, EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET);
@@ -5025,6 +5153,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		vesselEventReferenceEClass.getESuperTypes().add(this.getVesselEventOption());
 		charterOutOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		charterOutOpportunityEClass.getESuperTypes().add(this.getVesselEventOption());
+		baseCaseRowEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		baseCaseRowGroupEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		baseCaseRowOptionsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		partialCaseRowEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		partialCaseRowGroupEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		partialCaseRowOptionsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		simpleVesselCharterOptionEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		simpleVesselCharterOptionEClass.getESuperTypes().add(this.getShippingOption());
 		optionalSimpleVesselCharterOptionEClass.getESuperTypes().add(this.getSimpleVesselCharterOption());
@@ -5097,6 +5231,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(buyOpportunityEClass, BuyOpportunity.class, "BuyOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBuyOpportunity_Name(), ecorePackage.getEString(), "name", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_DesPurchase(), ecorePackage.getEBoolean(), "desPurchase", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_Optional(), ecorePackage.getEBoolean(), "optional", "true", 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBuyOpportunity_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBuyOpportunity_Contract(), theCommercialPackage.getPurchaseContract(), null, "contract", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBuyOpportunity_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5116,6 +5251,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(sellOpportunityEClass, SellOpportunity.class, "SellOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSellOpportunity_Name(), ecorePackage.getEString(), "name", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_FobSale(), ecorePackage.getEBoolean(), "fobSale", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_Optional(), ecorePackage.getEBoolean(), "optional", "true", 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSellOpportunity_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSellOpportunity_Contract(), theCommercialPackage.getSalesContract(), null, "contract", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSellOpportunity_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5164,6 +5300,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getBaseCaseRow_Optionise(), ecorePackage.getEBoolean(), "optionise", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBaseCaseRow_Options(), this.getBaseCaseRowOptions(), null, "options", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBaseCaseRow_Freeze(), ecorePackage.getEBoolean(), "freeze", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseCaseRow_Group(), this.getBaseCaseRowGroup(), this.getBaseCaseRowGroup_Rows(), "group", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(baseCaseRowGroupEClass, BaseCaseRowGroup.class, "BaseCaseRowGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBaseCaseRowGroup_Rows(), this.getBaseCaseRow(), this.getBaseCaseRow_Group(), "rows", null, 0, -1, BaseCaseRowGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseCaseRowOptionsEClass, BaseCaseRowOptions.class, "BaseCaseRowOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBaseCaseRowOptions_LadenRoute(), thePortPackage.getRouteOption(), "ladenRoute", null, 0, 1, BaseCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5180,6 +5320,10 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getPartialCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_Options(), this.getPartialCaseRowOptions(), null, "options", null, 0, 1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_CommodityCurveOptions(), this.getCommodityCurveOption(), null, "commodityCurveOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCaseRow_Group(), this.getPartialCaseRowGroup(), this.getPartialCaseRowGroup_Rows(), "group", null, 0, 1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(partialCaseRowGroupEClass, PartialCaseRowGroup.class, "PartialCaseRowGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPartialCaseRowGroup_Rows(), this.getPartialCaseRow(), this.getPartialCaseRow_Group(), "rows", null, 0, -1, PartialCaseRowGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(partialCaseRowOptionsEClass, PartialCaseRowOptions.class, "PartialCaseRowOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPartialCaseRowOptions_LadenRoutes(), thePortPackage.getRouteOption(), "ladenRoutes", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5249,10 +5393,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getBaseCase_BaseCase(), this.getBaseCaseRow(), null, "baseCase", null, 0, -1, BaseCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBaseCase_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, BaseCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBaseCase_KeepExistingScenario(), ecorePackage.getEBoolean(), "keepExistingScenario", null, 0, 1, BaseCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseCase_Groups(), this.getBaseCaseRowGroup(), null, "groups", null, 0, -1, BaseCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(partialCaseEClass, PartialCase.class, "PartialCase", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCase_PartialCase(), this.getPartialCaseRow(), null, "partialCase", null, 0, -1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPartialCase_KeepExistingScenario(), ecorePackage.getEBoolean(), "keepExistingScenario", null, 0, 1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCase_Groups(), this.getPartialCaseRowGroup(), null, "groups", null, 0, -1, PartialCase.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(existingCharterMarketOptionEClass, ExistingCharterMarketOption.class, "ExistingCharterMarketOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getExistingCharterMarketOption_CharterInMarket(), theSpotMarketsPackage.getCharterInMarket(), null, "charterInMarket", null, 0, 1, ExistingCharterMarketOption.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -5567,6 +5713,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			   "formatString", "#0.###"
 		   });
 		addAnnotation
+		  (getBuyOpportunity_MinVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
+		  (getBuyOpportunity_MaxVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
 		  (getBuyOpportunity_WindowSize(),
 		   source,
 		   new String[] {
@@ -5577,6 +5735,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source,
 		   new String[] {
 			   "formatString", "##,##0"
+		   });
+		addAnnotation
+		  (getSellOpportunity_MinVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
+		   });
+		addAnnotation
+		  (getSellOpportunity_MaxVolume(),
+		   source,
+		   new String[] {
+			   "formatString", "#,###,##0"
 		   });
 		addAnnotation
 		  (getSellOpportunity_WindowSize(),

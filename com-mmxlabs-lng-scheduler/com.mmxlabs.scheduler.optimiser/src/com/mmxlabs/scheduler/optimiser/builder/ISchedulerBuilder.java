@@ -166,6 +166,7 @@ public interface ISchedulerBuilder {
 	 * @param startPort         the port where the client is collecting the vessel
 	 * @param endPort           the port where the vessel is being returned to
 	 * @param durationHours     how long the charter out is for, in hours
+	 * @param extensionHours     how long the charter out extension period is for, in hours
 	 * @param optional
 	 * 
 	 * @return

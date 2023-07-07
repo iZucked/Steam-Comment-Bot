@@ -188,20 +188,6 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 
 		return getLookupData().getLinkedCurves(priceExpression, type);
 	}
-	
-	public @NonNull String convertPricingBasisToPriceExpression(final String pricingBasis) {
-		if (pricingBasis == null || pricingBasis.isBlank()) {
-			return "";
-		}
-		String priceExpression = "";
-		final PricingDataCache pricingDataCache = getLookupData();
-		try {
-			priceExpression = pricingDataCache.getSeriesParser(PriceIndexType.PRICING_BASIS).parse(pricingBasis).asString();
-		} catch (Exception e) {
-			return priceExpression;
-		}
-		return priceExpression;
-	}
 
 	/**
 	 * Given an expression and pricing date, work out which data curves have been used and the earliest date needed for that curve. E.g. a DATEDAVG expression will need dates before the pricing date.

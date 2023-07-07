@@ -30,7 +30,6 @@ import com.mmxlabs.common.parser.astnodes.CommoditySeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.CurrencySeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.DatedAvgFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.MonthFunctionASTNode;
-import com.mmxlabs.common.parser.astnodes.PricingBasisSeriesASTNode;
 import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -39,7 +38,6 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.YearMonthPoint;
@@ -51,7 +49,6 @@ public final class PricingDataCache {
 	private final PricingModel pricingModel;
 
 	private final Map<String, CommodityCurve> commodityMap = new HashMap<>();
-	private final Map<String, PricingBasis> pricingBases = new HashMap<>(); // Key is lowercase
 	private final Map<String, CharterCurve> charterMap = new HashMap<>(); // Key is lowercase
 	private final Map<String, BunkerFuelCurve> baseFuelMap = new HashMap<>(); // Key is lowercase
 	private final Map<String, CurrencyCurve> currencyMap = new HashMap<>(); // Key is lowercase
@@ -73,7 +70,7 @@ public final class PricingDataCache {
 		final PricingDataCache lookupData = new PricingDataCache(pricingModel);
 
 		pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getPricingBases().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.pricingBases.put(idx.getName().toLowerCase(), idx));
+		pricingModel.getFormulaeCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getCharterCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.charterMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getBunkerFuelCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.baseFuelMap.put(idx.getName().toLowerCase(), idx));
@@ -108,16 +105,15 @@ public final class PricingDataCache {
 		};
 
 		pricingModel.getCommodityCurves().forEach(c -> lookupData.firstDateCache.put(c, finder.apply(c)));
+		pricingModel.getFormulaeCurves().forEach(c -> lookupData.firstDateCache.put(c, finder.apply(c)));
 		pricingModel.getCharterCurves().forEach(c -> lookupData.firstDateCache.put(c, finder.apply(c)));
 		pricingModel.getBunkerFuelCurves().forEach(c -> lookupData.firstDateCache.put(c, finder.apply(c)));
 		pricingModel.getCurrencyCurves().forEach(c -> lookupData.firstDateCache.put(c, finder.apply(c)));
-		pricingModel.getPricingBases().forEach(c -> lookupData.firstDateCache.put(c, finder.apply(c)));
 
 		lookupData.parserCache.put(PriceIndexType.COMMODITY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.COMMODITY));
 		lookupData.parserCache.put(PriceIndexType.CHARTER, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CHARTER));
 		lookupData.parserCache.put(PriceIndexType.BUNKERS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.BUNKERS));
 		lookupData.parserCache.put(PriceIndexType.CURRENCY, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.CURRENCY));
-		lookupData.parserCache.put(PriceIndexType.PRICING_BASIS, PriceIndexUtils.getParserFor(pricingModel, PriceIndexType.PRICING_BASIS));
 
 		return lookupData;
 	}
@@ -129,7 +125,6 @@ public final class PricingDataCache {
 		case CHARTER -> charterMap.get(name.toLowerCase());
 		case COMMODITY -> commodityMap.get(name.toLowerCase());
 		case CURRENCY -> currencyMap.get(name.toLowerCase());
-		case PRICING_BASIS -> pricingBases.get(name.toLowerCase());
 		default -> null;
 		};
 	}
@@ -207,8 +202,6 @@ public final class PricingDataCache {
 			return make(charterMap.get(charterNode.getName().toLowerCase()), date);
 		} else if (node instanceof final BunkersSeriesASTNode bunkersNode) {
 			return make(baseFuelMap.get(bunkersNode.getName().toLowerCase()), date);
-		} else if (node instanceof final PricingBasisSeriesASTNode basisNode) {
-			return make(pricingBases.get(basisNode.getName().toLowerCase()), date);
 		} else {
 			return mergeIterables(date, node.getChildren());
 		}
@@ -244,8 +237,6 @@ public final class PricingDataCache {
 			s.addAll(Collections.singleton(lookupData.baseFuelMap.get(n.getName().toLowerCase())));
 		} else if (parentNode instanceof final CurrencySeriesASTNode n) {
 			s.addAll(Collections.singleton(lookupData.currencyMap.get(n.getName().toLowerCase())));
-		} else if (parentNode instanceof final PricingBasisSeriesASTNode n) {
-			s.addAll(Collections.singleton(lookupData.pricingBases.get(n.getName().toLowerCase())));
 		}
 
 		for (final ASTNode child : parentNode.getChildren()) {

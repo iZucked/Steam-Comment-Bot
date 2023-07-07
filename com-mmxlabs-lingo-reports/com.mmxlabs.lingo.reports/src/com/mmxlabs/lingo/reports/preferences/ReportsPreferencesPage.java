@@ -66,6 +66,7 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 		
 		addLeewayDaysPreferences(labelLayoutData);
 		addScheduleChartDaysFormatOverride();
+		addScheduleChartEventLabelTextSize();
 		
 	    Label separator2 = new Label(getFieldEditorParent(), SWT.HORIZONTAL | SWT.SEPARATOR);
 	    separator2.setLayoutData(gd);
@@ -98,6 +99,14 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 			{ "Days and hours (1d 12h)", Formatters.DurationMode.DAYS_HOURS_HUMAN.name() }, //
 			{ "Days to 1 d.p. (1.5)", Formatters.DurationMode.DECIMAL.name() } };
 		addField(new ComboFieldEditor(PreferenceConstants.P_SCHEDULE_CHART_NUM_DAY_OVERRIDE_FORMAT, "&Schedule chart number of days format", durationValues, getFieldEditorParent()));
+	}
+	
+	private void addScheduleChartEventLabelTextSize() {
+		final String[][] fontSizeValues = new String[][] { //
+			{ "Small", EventLabelFontSize.SMALL.name() }, //
+			{ "Medium", EventLabelFontSize.MEDIUM.name() }, //
+			{ "Large", EventLabelFontSize.LARGE.name() } };
+		addField(new ComboFieldEditor(PreferenceConstants.P_SCHEDULE_CHART_EVENT_LABEL_FONT_SIZE, "&Schedule chart labels font size", fontSizeValues, getFieldEditorParent()));
 	}
 
 	private void addDurationFormatPreferences(final GridDataFactory labelLayoutData) {
@@ -132,4 +141,9 @@ public class ReportsPreferencesPage extends FieldEditorPreferencePage implements
 		return c;
 	}
 
+	private enum EventLabelFontSize {
+		SMALL,
+		MEDIUM,
+		LARGE;
+	}
 }

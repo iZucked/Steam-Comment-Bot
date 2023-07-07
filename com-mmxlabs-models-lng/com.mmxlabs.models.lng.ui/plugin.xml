@@ -73,6 +73,16 @@
          </FeatureAnyOf>
       </editorFactory>
       <editorFactory
+            factoryClass="com.mmxlabs.models.ui.editors.PricingPeriodUnitsInlineEditorFactory"
+            id="com.mmxlabs.models.ui.editors.PricingPeriodUnitsInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="PricingPeriod"
+                  EDataTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+            </EDataTypeIs>
+         </FeatureAnyOf>
+      </editorFactory>
+      <editorFactory
             factoryClass="com.mmxlabs.models.ui.editors.DESPurchaseDealTypeInlineEditorFactory"
             id="com.mmxlabs.models.ui.editors.DESPurchaseDealTypeInlineEditorFactory">
          <FeatureAnyOf>

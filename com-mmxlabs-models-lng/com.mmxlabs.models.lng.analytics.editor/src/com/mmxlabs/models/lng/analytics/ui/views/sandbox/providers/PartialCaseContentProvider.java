@@ -12,9 +12,8 @@ public class PartialCaseContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
-		if (inputElement instanceof OptionAnalysisModel) {
-			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
-			return model.getPartialCase().getPartialCase().toArray();
+		if (inputElement instanceof OptionAnalysisModel model) {
+			return model.getPartialCase().getGroups().stream().flatMap(g -> g.getRows().stream()).toArray();
 		}
 		return new Object[0];
 	}

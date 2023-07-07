@@ -54,24 +54,7 @@ public class DefaultExposuresCustomiser implements IExposuresCustomiser{
 
 	@Override
 	public @Nullable String provideExposedPriceExpression(@NonNull Slot<?> slot, final ModelMarketCurveProvider mmCurveProvider) {
-		String priceExpression = provideExposedPriceExpression(slot);
-		if (slot.eIsSet(CargoPackage.Literals.SLOT__PRICING_BASIS)) {
-			priceExpression = slot.getPricingBasis();
-		} else if (slot.eIsSet(CargoPackage.Literals.SLOT__CONTRACT)){
-			final Contract contract = slot.getContract();
-			if (contract != null) {
-				final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
-				if (priceInfo instanceof ExpressionPriceParameters priceParams) {
-					if (priceParams.getPricingBasis() != null && !priceParams.getPricingBasis().isBlank()) {
-						priceExpression = priceParams.getPricingBasis();
-					}
-				}
-			}
-		}
-		if (priceExpression != null && mmCurveProvider != null) {
-			priceExpression = mmCurveProvider.convertPricingBasisToPriceExpression(priceExpression);
-		}
-		return priceExpression;
+		return provideExposedPriceExpression(slot);
 	}
 
 }

@@ -23,7 +23,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/settledPricesVersionRecord"/>
       <genFeatures property="None" children="true" createChild="true" propertyDescription="Pricing calendars"
           ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/pricingCalendars"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/pricingBases"/>
+      <genFeatures property="None" children="true" createChild="true" propertyDescription="Formulae based curves"
+          ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/formulaeCurves"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -216,11 +217,15 @@
     <genClasses ecoreClass="pricing.ecore#//SettleStrategy">
       <genFeatures createChild="false" propertyDescription="Day of the month" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/dayOfTheMonth"/>
       <genFeatures createChild="false" propertyDescription="Last day" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/lastDayOfTheMonth"/>
-      <genFeatures createChild="false" propertyDescription="Settle period" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriod"/>
-      <genFeatures createChild="false" propertyDescription="Settle period unit" ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settlePeriodUnit"/>
-      <genFeatures createChild="false" propertyDescription="Start settling months prior"
-          ecoreFeature="ecore:EAttribute pricing.ecore#//SettleStrategy/settleStartMonthsPrior"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SettleStrategy/pricingCalendar"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SettleStrategy/pricingPeriod"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SettleStrategy/hedgingPeriod"/>
     </genClasses>
-    <genClasses ecoreClass="pricing.ecore#//PricingBasis"/>
+    <genClasses ecoreClass="pricing.ecore#//InstrumentPeriod">
+      <genFeatures createChild="false" propertyDescription="Period length" ecoreFeature="ecore:EAttribute pricing.ecore#//InstrumentPeriod/periodSize"/>
+      <genFeatures createChild="false" propertyDescription="Units" ecoreFeature="ecore:EAttribute pricing.ecore#//InstrumentPeriod/periodSizeUnit"/>
+      <genFeatures createChild="false" propertyDescription="Offset (positive to start prior; negative to start after)"
+          ecoreFeature="ecore:EAttribute pricing.ecore#//InstrumentPeriod/periodOffset"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

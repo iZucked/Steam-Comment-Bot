@@ -154,6 +154,24 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 
 	private @Nullable Image getImage(final String[] lhsImages, final String[] rhsImages) {
 
+		// Check to see if we have requested an image. If not then return null;
+		boolean nonNull = false;
+		for (String str : lhsImages) {
+			if (str != null) {
+				nonNull = true;
+				break;
+			}
+		}
+		for (String str : rhsImages) {
+			if (str != null) {
+				nonNull = true;
+				break;
+			}
+		}
+		if (!nonNull) {
+			return null;
+		}
+
 		// Define a key for this set of images
 		final String imageName = "Buy" + String.join(",", lhsImages) + "Sell" + String.join(",", rhsImages);
 
@@ -231,7 +249,7 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 		for (int x = 0; x < dashWidth; x++) {
 			for (int y = 7; y < 9; y++) {
 				final int destPos = width * y + xpos + x;
-				//+3 here is because we are looking at alpha byte as in : RGBA
+				// +3 here is because we are looking at alpha byte as in : RGBA
 				final byte b = d[destPos * 4 + 3];
 				destArray[destPos] = b;
 			}
@@ -260,7 +278,7 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 			}
 			xpos += 16;
 		}
-		
+
 		// Create a new image merging in the alpha channel
 		final ImageData data = image.getImageData();
 		data.alphaData = destArray;

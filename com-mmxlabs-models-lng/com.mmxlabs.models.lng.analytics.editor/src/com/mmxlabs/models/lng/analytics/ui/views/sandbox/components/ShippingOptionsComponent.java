@@ -141,7 +141,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 						DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
 					}));
-					if (!portfolioMode) {
+					if (true || !portfolioMode) {
 						helper.addAction(new RunnableAction("Simple Charter", () -> {
 							final SimpleVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createOptionalSimpleVesselCharterOption();
 							AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);

@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
@@ -47,15 +46,13 @@ public class PriceIndexUtils {
 	public static final @NonNull LocalDateTime dateTimeZero = LocalDateTime.of(dateZero.getYear(), dateZero.getMonthValue(), 1, 0, 0);
 
 	public enum PriceIndexType {
-		COMMODITY, CHARTER, BUNKERS, CURRENCY, PRICING_BASIS;
+		COMMODITY, CHARTER, BUNKERS, CURRENCY;
 	}
 
 	/**
-	 * Provides a {@link SeriesParser} object based on the default activator (the
-	 * one returned by {@link Activator.getDefault()}).
+	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
-	 * @return A {@link SeriesParser} object for use in validating price
-	 *         expressions.
+	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
 	private static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull EReference reference) {
 		SeriesParserData seriesParserData = new SeriesParserData();
@@ -109,10 +106,6 @@ public class PriceIndexUtils {
 		{
 			final List<AbstractYearMonthCurve> curves = (List<AbstractYearMonthCurve>) pricingModel.eGet(reference);
 			for (final AbstractYearMonthCurve curve : curves) {
-				if (curve.getName() == null) {
-					continue;
-				}
-
 				SeriesType seriesType = null;
 				if (curve instanceof CommodityCurve) {
 					seriesType = SeriesType.COMMODITY;
@@ -122,40 +115,22 @@ public class PriceIndexUtils {
 					seriesType = SeriesType.BUNKERS;
 				} else if (curve instanceof CurrencyCurve) {
 					seriesType = SeriesType.CURRENCY;
-				} else if (curve instanceof PricingBasis) {
-					seriesType = SeriesType.PRICING_BASIS;
 				} else {
 					throw new IllegalStateException();
 				}
-				if (curve.isSetExpression()) {
-					indices.addSeriesExpression(curve.getName(), seriesType, curve.getExpression());
-				} else {
-					addSeriesDataFromDataIndex(indices, curve.getName(), seriesType, dateZero, curve);
-				}
+				addCurveData(curve, seriesType, indices);
 			}
+		}
+		if (reference == PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES) {
+			for (final AbstractYearMonthCurve curve : pricingModel.getFormulaeCurves()) {
+				addCurveData(curve, SeriesType.COMMODITY, indices);
+			} 
 		}
 		// Add in currency curves
 		if (reference != PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES) {
 			final List<CurrencyCurve> curves = pricingModel.getCurrencyCurves();
 			for (final AbstractYearMonthCurve curve : curves) {
-				if (curve.isSetExpression()) {
-					indices.addSeriesExpression(curve.getName(), SeriesType.CURRENCY, curve.getExpression());
-				} else {
-					addSeriesDataFromDataIndex(indices, curve.getName(), SeriesType.CURRENCY, dateZero, curve);
-				}
-			}
-		}
-		if (reference == PricingPackage.Literals.PRICING_MODEL__PRICING_BASES) {
-			final List<CommodityCurve> curves = pricingModel.getCommodityCurves();
-			for (final AbstractYearMonthCurve curve : curves) {
-				if (curve.getName() == null) {
-					continue;
-				}
-				if (curve.isSetExpression()) {
-					indices.addSeriesExpression(curve.getName(), SeriesType.PRICING_BASIS, curve.getExpression());
-				} else {
-					addSeriesDataFromDataIndex(indices, curve.getName(), SeriesType.PRICING_BASIS, dateZero, curve);
-				}
+				addCurveData(curve, SeriesType.CURRENCY, indices);
 			}
 		}
 
@@ -173,12 +148,30 @@ public class PriceIndexUtils {
 		return indices;
 	}
 
+	private static boolean addCurveData(final AbstractYearMonthCurve curve, final @NonNull SeriesType seriesType, final @NonNull SeriesParser indices) {
+		boolean added = false;
+		if (curve != null) {
+			final String curveName = curve.getName();
+			if (curveName != null) {
+				if (curve.isSetExpression()) {
+					final String expression = curve.getExpression();
+					if (expression != null) {
+						indices.addSeriesExpression(curveName, seriesType, expression);
+						added = true;
+					}
+				} else {
+					addSeriesDataFromDataIndex(indices, curveName, seriesType, dateZero, curve);
+					added = true;
+				}
+			}
+		}
+		return added;
+	}
+
 	/**
-	 * Provides a {@link SeriesParser} object based on the default activator (the
-	 * one returned by {@link Activator.getDefault()}).
+	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
-	 * @return A {@link SeriesParser} object for use in validating price
-	 *         expressions.
+	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
 
 	public static @NonNull SeriesParser getParserFor(final @NonNull PricingModel pricingModel, final @NonNull PriceIndexType priceIndexType) {
@@ -191,24 +184,24 @@ public class PriceIndexUtils {
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES);
 		case CURRENCY:
 			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
-		case PRICING_BASIS:
-			return getParserFor(pricingModel, PricingPackage.Literals.PRICING_MODEL__PRICING_BASES);
 		default:
 			throw new IllegalArgumentException();
 		}
 	}
 
 	/**
-	 * Add data from a DataIndex object to a SeriesParser object (which allows the
-	 * evaluation of price expressions).
+	 * Add data from a DataIndex object to a SeriesParser object (which allows the evaluation of price expressions).
 	 * 
-	 * @param parser   The parser to add the index data information to.
-	 * @param name     The index name to use.
-	 * @param dateZero Internally, dates are represented for the SeriesParser in
-	 *                 offsets from a "date zero" value.
-	 * @param index    The index data to use.
+	 * @param parser
+	 *            The parser to add the index data information to.
+	 * @param name
+	 *            The index name to use.
+	 * @param dateZero
+	 *            Internally, dates are represented for the SeriesParser in offsets from a "date zero" value.
+	 * @param index
+	 *            The index data to use.
 	 */
-	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, SeriesType seriesType, final YearMonth dateZero, final AbstractYearMonthCurve curve) {
+	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final @NonNull String name, SeriesType seriesType, final YearMonth dateZero, final AbstractYearMonthCurve curve) {
 		final int[] times;
 		final Number[] values;
 
@@ -234,7 +227,7 @@ public class PriceIndexUtils {
 				}
 			});
 			for (final YearMonthPoint pt : curve.getPoints()) {
-				vals.add(new Pair<YearMonth, Double>(pt.getDate(), pt.getValue()));
+				vals.add(Pair.of(pt.getDate(), pt.getValue()));
 			}
 			times = new int[vals.size()];
 			values = new Number[vals.size()];
@@ -253,8 +246,7 @@ public class PriceIndexUtils {
 	}
 
 	/**
-	 * Code duplication from DateAndCurveHelper.java to avoid circular project
-	 * dependencies. Keep this method in sync!
+	 * Code duplication from DateAndCurveHelper.java to avoid circular project dependencies. Keep this method in sync!
 	 * 
 	 * @param earliest
 	 * @param windowStart

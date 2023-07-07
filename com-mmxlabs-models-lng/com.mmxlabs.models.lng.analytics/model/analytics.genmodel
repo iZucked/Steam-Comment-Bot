@@ -36,6 +36,8 @@
       <genFeatures createChild="false" propertyDescription="Optional name for the opportunity to override the name generated from select attributes"
           ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/desPurchase"/>
+      <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/optional"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/port"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BuyOpportunity/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BuyOpportunity/date"/>
@@ -58,6 +60,8 @@
       <genFeatures createChild="false" propertyDescription="Optional name for the opportunity to override the name generated from select attributes"
           ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/fobSale"/>
+      <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
+          ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/optional"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/port"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//SellOpportunity/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//SellOpportunity/date"/>
@@ -112,6 +116,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRow/optionise"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/options"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRow/freeze"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/group"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BaseCaseRowGroup">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRowGroup/rows"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//BaseCaseRowOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRowOptions/ladenRoute"/>
@@ -128,6 +136,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/shipping"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/options"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/commodityCurveOptions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/group"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//PartialCaseRowGroup">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRowGroup/rows"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//PartialCaseRowOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCaseRowOptions/ladenRoutes"/>
@@ -194,10 +206,12 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCase/baseCase"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCase/profitAndLoss"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCase/keepExistingScenario"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCase/groups"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//PartialCase">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCase/partialCase"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCase/keepExistingScenario"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCase/groups"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//ExistingCharterMarketOption">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ExistingCharterMarketOption/charterInMarket"/>

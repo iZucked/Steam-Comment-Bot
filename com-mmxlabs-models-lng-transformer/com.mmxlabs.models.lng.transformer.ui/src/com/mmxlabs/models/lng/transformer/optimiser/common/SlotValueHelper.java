@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstrain
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselUsageSlotGroupConstraintCheckerFactory;
 
 public class SlotValueHelper {
 	public static LoadDischargePairValueCalculatorStep createLoadDischargeCalculatorUnit(final LNGDataTransformer dataTransformer) {
@@ -39,10 +40,14 @@ public class SlotValueHelper {
 			if (constraint.getName().equals(PortShipSizeConstraintCheckerFactory.NAME)) {
 				iterator.remove();
 			}
+			if (constraint.getName().equals(VesselUsageSlotGroupConstraintCheckerFactory.NAME)) {
+				iterator.remove();
+			}
 		}
 		ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 		ScenarioUtils.createOrUpdateContraints(MinMaxVolumeConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 		ScenarioUtils.createOrUpdateContraints(LadenIdleTimeConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
+		ScenarioUtils.createOrUpdateContraints(VesselUsageSlotGroupConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 
 		return new LoadDischargePairValueCalculatorStep(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(),
 				constraintAndFitnessSettings, dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());

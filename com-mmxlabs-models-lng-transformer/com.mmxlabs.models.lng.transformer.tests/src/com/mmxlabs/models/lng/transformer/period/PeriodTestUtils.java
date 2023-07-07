@@ -172,7 +172,7 @@ public class PeriodTestUtils {
 		vesselEventVisit.setStart(vesselEvent.getStartAfterAsDateTime());
 
 		if (vesselEventVisit.getStart() != null) {
-			final ZonedDateTime date = vesselEventVisit.getStart().plusDays(vesselEvent.getDurationInDays());
+			final ZonedDateTime date = vesselEventVisit.getStart().plusDays(vesselEvent.getSchedulingDurationInDays());
 			vesselEventVisit.setEnd(date);
 		}
 		return vesselEventVisit;

@@ -75,6 +75,8 @@ public class PaperDealAllocationEntryItemProvider
 			addPricePropertyDescriptor(object);
 			addValuePropertyDescriptor(object);
 			addSettledPropertyDescriptor(object);
+			addHedgingPeriodStartPropertyDescriptor(object);
+			addHedgingPeriodEndPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -190,6 +192,50 @@ public class PaperDealAllocationEntryItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Hedging Period Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHedgingPeriodStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDealAllocationEntry_hedgingPeriodStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDealAllocationEntry_hedgingPeriodStart_feature", "_UI_PaperDealAllocationEntry_type"),
+				 SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Hedging Period End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHedgingPeriodEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PaperDealAllocationEntry_hedgingPeriodEnd_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PaperDealAllocationEntry_hedgingPeriodEnd_feature", "_UI_PaperDealAllocationEntry_type"),
+				 SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -263,6 +309,8 @@ public class PaperDealAllocationEntryItemProvider
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__PRICE:
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__VALUE:
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__SETTLED:
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START:
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES:

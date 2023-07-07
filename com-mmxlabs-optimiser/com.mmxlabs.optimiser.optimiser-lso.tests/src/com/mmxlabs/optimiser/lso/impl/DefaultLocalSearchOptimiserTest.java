@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 
@@ -70,7 +71,7 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(r1, OptimiserTestUtil.makeSequence(1, 3, 2, 4), r2, OptimiserTestUtil.makeSequence(5, 8, 7, 6));
 
-		final IModifiableSequences sequences = new ModifiableSequences(CollectionsUtil.makeArrayList(r1, r2), map);
+		final IModifiableSequences sequences = new ModifiableSequences(CollectionsUtil.makeArrayList(r1, r2), map, new SequencesAttributesProviderImpl());
 
 		final OptimisationData data = new OptimisationData();
 
@@ -122,7 +123,7 @@ public class DefaultLocalSearchOptimiserTest {
 				bind(int.class).annotatedWith(Names.named(SingleThreadLocalSearchOptimiser.RESTART_ITERATIONS_THRESHOLD)).toInstance(-1);
 				
 				
-				ISequences seq = new ModifiableSequences(Collections.emptyList());
+				ISequences seq = new ModifiableSequences(Collections.emptyList(), new SequencesAttributesProviderImpl());
 				bind(ISequences.class).annotatedWith(Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)).toInstance(seq);
 //				bind(IFitnessCombiner.class).toInstance(((LinearSimulatedAnnealingFitnessEvaluator)lso.getFitnessEvaluator()).getFitnessCombiner());
 			}

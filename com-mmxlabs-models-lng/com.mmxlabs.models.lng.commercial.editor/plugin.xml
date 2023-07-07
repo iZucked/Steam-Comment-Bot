@@ -89,6 +89,12 @@
           id="com.mmxlabs.models.lng.commercial.ui.valueproviders.GenericCharterContractValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.valueproviders.BusinessUnitReferenceValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.commercial.Contract"
+          referenceEClass="com.mmxlabs.models.lng.commercial.BusinessUnit">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">

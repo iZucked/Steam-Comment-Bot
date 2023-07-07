@@ -37,6 +37,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getCurrencyUnit <em>Currency Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getDealType <em>Deal Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getLocalDate <em>Local Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getHedgingPeriodStart <em>Hedging Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ExposureDetailImpl#getHedgingPeriodEnd <em>Hedging Period End</em>}</li>
  * </ul>
  *
  * @generated
@@ -241,6 +243,46 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * @ordered
 	 */
 	protected LocalDate localDate = LOCAL_DATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHedgingPeriodStart() <em>Hedging Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate HEDGING_PERIOD_START_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getHedgingPeriodStart() <em>Hedging Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate hedgingPeriodStart = HEDGING_PERIOD_START_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHedgingPeriodEnd() <em>Hedging Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate HEDGING_PERIOD_END_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getHedgingPeriodEnd() <em>Hedging Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate hedgingPeriodEnd = HEDGING_PERIOD_END_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -497,6 +539,52 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 	 * @generated
 	 */
 	@Override
+	public LocalDate getHedgingPeriodStart() {
+		return hedgingPeriodStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHedgingPeriodStart(LocalDate newHedgingPeriodStart) {
+		LocalDate oldHedgingPeriodStart = hedgingPeriodStart;
+		hedgingPeriodStart = newHedgingPeriodStart;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_START, oldHedgingPeriodStart, hedgingPeriodStart));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalDate getHedgingPeriodEnd() {
+		return hedgingPeriodEnd;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHedgingPeriodEnd(LocalDate newHedgingPeriodEnd) {
+		LocalDate oldHedgingPeriodEnd = hedgingPeriodEnd;
+		hedgingPeriodEnd = newHedgingPeriodEnd;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_END, oldHedgingPeriodEnd, hedgingPeriodEnd));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SchedulePackage.EXPOSURE_DETAIL__INDEX_NAME:
@@ -519,6 +607,10 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return getDealType();
 			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
 				return getLocalDate();
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_START:
+				return getHedgingPeriodStart();
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_END:
+				return getHedgingPeriodEnd();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -560,6 +652,12 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return;
 			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
 				setLocalDate((LocalDate)newValue);
+				return;
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_START:
+				setHedgingPeriodStart((LocalDate)newValue);
+				return;
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_END:
+				setHedgingPeriodEnd((LocalDate)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -603,6 +701,12 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
 				setLocalDate(LOCAL_DATE_EDEFAULT);
 				return;
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_START:
+				setHedgingPeriodStart(HEDGING_PERIOD_START_EDEFAULT);
+				return;
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_END:
+				setHedgingPeriodEnd(HEDGING_PERIOD_END_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -635,6 +739,10 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 				return dealType != DEAL_TYPE_EDEFAULT;
 			case SchedulePackage.EXPOSURE_DETAIL__LOCAL_DATE:
 				return LOCAL_DATE_EDEFAULT == null ? localDate != null : !LOCAL_DATE_EDEFAULT.equals(localDate);
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_START:
+				return HEDGING_PERIOD_START_EDEFAULT == null ? hedgingPeriodStart != null : !HEDGING_PERIOD_START_EDEFAULT.equals(hedgingPeriodStart);
+			case SchedulePackage.EXPOSURE_DETAIL__HEDGING_PERIOD_END:
+				return HEDGING_PERIOD_END_EDEFAULT == null ? hedgingPeriodEnd != null : !HEDGING_PERIOD_END_EDEFAULT.equals(hedgingPeriodEnd);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -669,6 +777,10 @@ public class ExposureDetailImpl extends EObjectImpl implements ExposureDetail {
 		result.append(dealType);
 		result.append(", localDate: ");
 		result.append(localDate);
+		result.append(", hedgingPeriodStart: ");
+		result.append(hedgingPeriodStart);
+		result.append(", hedgingPeriodEnd: ");
+		result.append(hedgingPeriodEnd);
 		result.append(')');
 		return result.toString();
 	}

@@ -453,11 +453,12 @@ public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			StartEvent start = getStartEvent(vesselCharter);
-			Assertions.assertEquals(-1_435_733 - 2_762_812, start.getGroupProfitAndLoss().getProfitAndLoss());
-			Assertions.assertEquals(cargoPNL - (1_435_733 + 2_762_812), ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+			final int expectedCharterContractFee = 2_756_250;
+			Assertions.assertEquals(-1_435_733 - expectedCharterContractFee, start.getGroupProfitAndLoss().getProfitAndLoss());
+			Assertions.assertEquals(cargoPNL - (1_435_733 + expectedCharterContractFee), ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 			
 			if (start.getGeneralPNLDetails().get(0) instanceof CharterContractFeeDetails gcfd){
-				Assertions.assertEquals(2_762_812, gcfd.getFee());
+				Assertions.assertEquals(expectedCharterContractFee, gcfd.getFee());
 			}
 		});
 	}

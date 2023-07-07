@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.widgets.ganttchart.AdvancedTooltip;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
+import org.eclipse.nebula.widgets.ganttchart.GanttChartParameters;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttEventListenerAdapter;
 import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
@@ -248,157 +249,160 @@ public class GanttChartViewer extends StructuredViewer {
 		// Process content and label providers to get some content
 		final IContentProvider contentProvider = getContentProvider();
 		final ILabelProvider labelProvider = (ILabelProvider) getLabelProvider();
-
-		if (contentProvider instanceof ITreeContentProvider treeContentProvider) {
-			final Object[] resources = treeContentProvider.getElements(getInput());
-
-			if (resources == null) {
-				return;
-			}
-
-			// Sort resources using the ViewerComparator if set
-			final ViewerComparator comparator = getComparator();
-			if (comparator != null) {
-				comparator.sort(this, resources);
-			}
-
-			int layer = 0;
-			// Each resource to map to a GanntSection
-			try {
-
-				final Map<Object, GanttEvent> eventMap = new HashMap<>();
-				ganttChart.getGanttComposite().setFixedRowHeightOverride(21);
-				ganttChart.getGanttComposite().setEventSpacerOverride(0);
-				for (final Object r : resources) {
-					final String rName = getLabelProviderText(labelProvider, r);
-					final GanttSection section = new GanttSection(ganttChart, rName);
-					final Image img = getLabelProviderImage(labelProvider, r);
-					section.setImage(img);
-					section.setData(r);
-					section.setVisible(isVisibleByDefault(contentProvider, r));
-					final Map<String, GanttGroup> ganttGroups = new TreeMap<>();
-
-					if (treeContentProvider.hasChildren(r)) {
-						final GanttGroup defaultGroup = new GanttGroup(ganttChart);
-						defaultGroup.setVerticalEventAlignment(SWT.CENTER);
-
-						final Object[] children = treeContentProvider.getChildren(r);
-						for (final Object c : children) {
-
-							final String cName = getLabelProviderText(labelProvider, c);
-							final Image image = getLabelProviderImage(labelProvider, c);
-							final String ganttGroup = null;// getGanttGroup(treeContentProvider, c);
-
-							// Get date/time information from content provider
-							final Calendar startDate = getEventStartDate(treeContentProvider, c);
-							final Calendar endDate = getEventEndDate(treeContentProvider, c);
-
-							final Calendar plannedStartDate = getEventPlannedStartDate(treeContentProvider, c);
-							final Calendar plannedEndDate = getEventPlannedEndDate(treeContentProvider, c);
-
-							final GanttEvent event;
-							if (plannedStartDate != null) {
-								event = new GanttEvent(ganttChart, c, cName, plannedStartDate, plannedEndDate, startDate, endDate, 0);
-							} else {
-								event = new GanttEvent(ganttChart, c, cName, startDate, endDate, 0);
-							}
-							eventMap.put(c, event);
-							int align = getLabelProviderAlign(contentProvider, event);
-
-							event.setVerticalEventAlignment(align);
-							event.setGanttSection(section);
-
-							if (image != null) {
-								event.setImage(true);
-								event.setPicture(image);
-							}
-
-							// Get colour from label provider
-							final Color statusColour = getLabelProviderColor(labelProvider, c);
-							if (statusColour != null) {
-								event.setStatusColor(statusColour);
-							}
-							final Color statusForegroundColour = getLabelProviderForegroundColour(labelProvider, c);
-							if (statusForegroundColour != null) {
-								event.setStatusForegroundColour(statusForegroundColour);
-							}
-
-							final Color statusBorderColour = getLabelProviderBorderColor(labelProvider, c);
-							if (statusBorderColour != null) {
-								event.setStatusBorderColor(statusBorderColour);
-							} else if (statusColour != null) {
-								event.setStatusBorderColor(statusColour);
-							}
-
-							event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
-							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
-
-							event.setSpecialDrawMode(getSpecialDrawMode(labelProvider, c));
-
-							event.setHorizontalTextLocation(SWT.CENTER);
-
-							// Get tooltip from label provider
-							final AdvancedTooltip toolTip = getTooltip(labelProvider, c);
-							if (toolTip != null) {
-								event.setAdvancedTooltip(toolTip);
-							}
-
-							// Standard parameters
-							event.setMoveable(false);
-							event.setResizable(false);
-
-							event.setLayer(layer);
-
-							if (ganttGroup == null) {
-								defaultGroup.addEvent(event);
-							} else {
-								GanttGroup g;
-								if (ganttGroups.containsKey(ganttGroup)) {
-									g = ganttGroups.get(ganttGroup);
-								} else {
-									g = new GanttGroup(ganttChart);
-//									g.setVerticalEventAlignment(SWT.CENTER);
-									ganttGroups.put(ganttGroup, g);
-								}
-								g.addEvent(event);
-							}
-
-							internalMap.put(c, event);
-							internalReverseMap.put(event, c);
-
-						}
-						// Make section text horizontal rather than vertical as we
-						// expect only a single line of entries due to the group
-						section.setTextOrientation(SWT.HORIZONTAL);
-
-						// Include the default group if there are no special groups or if it has some
-						// content.
-						if (ganttGroups.isEmpty() || !defaultGroup.getEventMembers().isEmpty()) {
-							section.addGanttEvent(defaultGroup);
-						}
-						// Add in the special groups
-						for (final GanttGroup g : ganttGroups.values()) {
-							section.addGanttEvent(g);
-						}
-					}
-
-					layer++;
-				}
-				if (contentProvider instanceof IGanttChartContentProvider cp) {
-
-					for (final Entry<Object, GanttEvent> entry : eventMap.entrySet()) {
-						final Object elementDependency = cp.getElementDependency(entry.getKey());
-						if (elementDependency != null) {
-							ganttChart.addDependency(entry.getValue(), eventMap.get(elementDependency));
-						}
-					}
-				}
-
-			} catch (final Exception ex) {
-				LOG.error(ex.getMessage(), ex);
-			}
-		} else {
+		
+		//
+		// Ensuring proper provider type
+		if (!(contentProvider instanceof ITreeContentProvider)) {
 			throw new IllegalArgumentException("ContentProvider should be an instance of " + ITreeContentProvider.class.getCanonicalName());
+		}
+		ITreeContentProvider treeContentProvider = (ITreeContentProvider) contentProvider;
+		
+		final Object[] resources = treeContentProvider.getElements(getInput());
+
+		if (resources == null) {
+			return;
+		}
+
+		// Sort resources using the ViewerComparator if set
+		final ViewerComparator comparator = getComparator();
+		if (comparator != null) {
+			comparator.sort(this, resources);
+		}
+
+		int layer = 0;
+		// Each resource to map to a GanntSection
+		try {
+
+			final Map<Object, GanttEvent> eventMap = new HashMap<>();
+			ganttChart.getGanttComposite().setFixedRowHeightOverride(GanttChartParameters.getRowHeight());
+			ganttChart.getGanttComposite().setEventSpacerOverride(GanttChartParameters.getEventSpacerSize());
+			for (final Object r : resources) {
+				final String rName = getLabelProviderText(labelProvider, r);
+				final GanttSection section = new GanttSection(ganttChart, rName);
+				final Image img = getLabelProviderImage(labelProvider, r);
+				section.setImage(img);
+				section.setData(r);
+				section.setVisible(isVisibleByDefault(contentProvider, r));
+				final Map<String, GanttGroup> ganttGroups = new TreeMap<>();
+
+				if (treeContentProvider.hasChildren(r)) {
+					final GanttGroup defaultGroup = new GanttGroup(ganttChart);
+					defaultGroup.setVerticalEventAlignment(SWT.CENTER);
+
+					final Object[] children = treeContentProvider.getChildren(r);
+					for (final Object c : children) {
+
+						final String cName = getLabelProviderText(labelProvider, c);
+						final Image image = getLabelProviderImage(labelProvider, c);
+						final String ganttGroup = null;// getGanttGroup(treeContentProvider, c);
+
+						// Get date/time information from content provider
+						final Calendar startDate = getEventStartDate(treeContentProvider, c);
+						final Calendar endDate = getEventEndDate(treeContentProvider, c);
+
+						final Calendar plannedStartDate = getEventPlannedStartDate(treeContentProvider, c);
+						final Calendar plannedEndDate = getEventPlannedEndDate(treeContentProvider, c);
+
+						final GanttEvent event;
+						if (plannedStartDate != null) {
+							event = new GanttEvent(ganttChart, c, cName, plannedStartDate, plannedEndDate, startDate, endDate, 0);
+						} else {
+							event = new GanttEvent(ganttChart, c, cName, startDate, endDate, 0);
+						}
+						eventMap.put(c, event);
+						int align = getLabelProviderAlign(contentProvider, event);
+
+						event.setVerticalEventAlignment(align);
+						event.setGanttSection(section);
+
+						if (image != null) {
+							event.setImage(true);
+							event.setPicture(image);
+						}
+
+						// Get colour from label provider
+						final Color statusColour = getLabelProviderColor(labelProvider, c);
+						if (statusColour != null) {
+							event.setStatusColor(statusColour);
+						}
+						final Color statusForegroundColour = getLabelProviderForegroundColour(labelProvider, c);
+						if (statusForegroundColour != null) {
+							event.setStatusForegroundColour(statusForegroundColour);
+						}
+
+						final Color statusBorderColour = getLabelProviderBorderColor(labelProvider, c);
+						if (statusBorderColour != null) {
+							event.setStatusBorderColor(statusBorderColour);
+						} else if (statusColour != null) {
+							event.setStatusBorderColor(statusColour);
+						}
+
+						event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
+						event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
+
+						event.setSpecialDrawMode(getSpecialDrawMode(labelProvider, c));
+
+						event.setHorizontalTextLocation(SWT.CENTER);
+
+						// Get tooltip from label provider
+						final AdvancedTooltip toolTip = getTooltip(labelProvider, c);
+						if (toolTip != null) {
+							event.setAdvancedTooltip(toolTip);
+						}
+
+						// Standard parameters
+						event.setMoveable(false);
+						event.setResizable(false);
+
+						event.setLayer(layer);
+
+						if (ganttGroup == null) {
+							defaultGroup.addEvent(event);
+						} else {
+							GanttGroup g;
+							if (ganttGroups.containsKey(ganttGroup)) {
+								g = ganttGroups.get(ganttGroup);
+							} else {
+								g = new GanttGroup(ganttChart);
+//									g.setVerticalEventAlignment(SWT.CENTER);
+								ganttGroups.put(ganttGroup, g);
+							}
+							g.addEvent(event);
+						}
+
+						internalMap.put(c, event);
+						internalReverseMap.put(event, c);
+
+					}
+					// Make section text horizontal rather than vertical as we
+					// expect only a single line of entries due to the group
+					section.setTextOrientation(SWT.HORIZONTAL);
+
+					// Include the default group if there are no special groups or if it has some
+					// content.
+					if (ganttGroups.isEmpty() || !defaultGroup.getEventMembers().isEmpty()) {
+						section.addGanttEvent(defaultGroup);
+					}
+					// Add in the special groups
+					for (final GanttGroup g : ganttGroups.values()) {
+						section.addGanttEvent(g);
+					}
+				}
+
+				layer++;
+			}
+			if (contentProvider instanceof IGanttChartContentProvider cp) {
+
+				for (final Entry<Object, GanttEvent> entry : eventMap.entrySet()) {
+					final Object elementDependency = cp.getElementDependency(entry.getKey());
+					if (elementDependency != null) {
+						ganttChart.addDependency(entry.getValue(), eventMap.get(elementDependency));
+					}
+				}
+			}
+
+		} catch (final Exception ex) {
+			LOG.error(ex.getMessage(), ex);
 		}
 	}
 

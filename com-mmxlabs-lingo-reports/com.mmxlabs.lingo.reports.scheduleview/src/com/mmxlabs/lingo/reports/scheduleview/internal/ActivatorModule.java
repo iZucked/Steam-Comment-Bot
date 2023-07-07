@@ -9,6 +9,7 @@ import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
+import com.mmxlabs.lingo.reports.scheduleview.views.positionssequences.ISchedulePositionsSequenceProviderExtension;
 
 /**
  * An activation module.
@@ -22,5 +23,6 @@ public class ActivatorModule extends AbstractModule {
 	protected void configure() {
 
 		bind(iterable(ISchedulerViewColourSchemeExtension.class)).toProvider(service(ISchedulerViewColourSchemeExtension.class).multiple());
+		bind(iterable(ISchedulePositionsSequenceProviderExtension.class)).toProvider(service(ISchedulePositionsSequenceProviderExtension.class).multiple());
 	}
 }

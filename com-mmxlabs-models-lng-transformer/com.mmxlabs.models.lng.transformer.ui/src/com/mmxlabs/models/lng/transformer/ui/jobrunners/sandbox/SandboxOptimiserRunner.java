@@ -75,21 +75,21 @@ public class SandboxOptimiserRunner {
 
 	private final LNGScenarioRunner scenarioRunner;
 
-	private final EditingDomain originalEditingDomain;
-
-	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
-			SchedulerConstants.HINT_DISABLE_CACHES, //
-			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
+//	private final EditingDomain originalEditingDomain;
+//
+//	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
+//			SchedulerConstants.HINT_DISABLE_CACHES, //
+//			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
 
 	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
 			// LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT
 	};
 
 	private final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
-
-	private final LNGDataTransformer dataTransformer;
-
-	private final UserSettings userSettings;
+//
+//	private final LNGDataTransformer dataTransformer;
+//
+//	private final UserSettings userSettings;
 
 	private OptimisationPlan plan;
 
@@ -98,8 +98,8 @@ public class SandboxOptimiserRunner {
 			@Nullable final TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, @Nullable final Consumer<LNGOptimisationBuilder> builderCustomiser) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
-		this.originalEditingDomain = editingDomain;
-		this.userSettings = userSettings;
+//		this.originalEditingDomain = editingDomain;
+//		this.userSettings = userSettings;
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		plan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
@@ -125,7 +125,7 @@ public class SandboxOptimiserRunner {
 		scenarioRunner = runner.getScenarioRunner();
 
 		scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-		dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
+//		dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 	}
 
 	private IOptimiserInjectorService buildExtraModules(final ExtraDataProvider extraDataProvider,

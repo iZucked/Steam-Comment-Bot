@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,13 +40,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class PartialCaseRowOptionsItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -213,7 +208,10 @@ public class PartialCaseRowOptionsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PartialCaseRowOptions_type");
+		String label = ((PartialCaseRowOptions)object).getUuid();
+		return label == null || label.length() == 0 ?
+			getString("_UI_PartialCaseRowOptions_type") :
+			getString("_UI_PartialCaseRowOptions_type") + " " + label;
 	}
 
 
@@ -286,17 +284,6 @@ public class PartialCaseRowOptionsItemProvider
 				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

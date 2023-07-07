@@ -12,6 +12,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.rcp.common.actions.copyutils.CopyAction;
 import com.mmxlabs.rcp.common.internal.Activator;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -22,7 +23,7 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
  * @author Simon Goodall
  * 
  */
-public class CopyGridToHtmlClipboardAction extends Action{
+public class CopyGridToHtmlClipboardAction extends CopyAction {
 
 	protected CopyGridToHtmlStringUtil util;
 	protected Runnable preOperation;
@@ -38,7 +39,7 @@ public class CopyGridToHtmlClipboardAction extends Action{
 		this.preOperation = preOperation;
 		this.postOperation = postOperation;
 
-		util = new CopyGridToHtmlStringUtil(table, includeRowHeaders, false);
+		util = new CopyGridToHtmlStringUtil(table, includeRowHeaders, false, this);
 		
 		setText("Copy");
 		setDescription("Copies grid data into the clipboard");

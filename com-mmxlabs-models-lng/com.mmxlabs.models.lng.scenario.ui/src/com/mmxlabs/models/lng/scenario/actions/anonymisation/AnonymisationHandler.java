@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -49,6 +50,7 @@ public class AnonymisationHandler {
 		cmd.append(SetCommand.create(ed, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Anonymised(), anonymise));
 		if (anonymise) {
 			renameVessels(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename, stripNotes);
+			renameVesselEvents(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename, stripNotes);
 			renameSlots(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename, stripNotes);
 			renameContracts(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename, stripNotes);
 			AnonymisationMapIO.write(records, anonyMap);
@@ -57,6 +59,7 @@ public class AnonymisationHandler {
 				records.addAll(AnonymisationMapIO.read(anonyMap));
 			}
 			renameVessels(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal, false);
+			renameVesselEvents(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename, false);
 			renameSlots(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal, false);
 			renameContracts(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal, false);
 		}
@@ -69,12 +72,25 @@ public class AnonymisationHandler {
 		for (final Vessel v : fleetModel.getVessels()) {
 			renameCommand.append(renameFunction.apply(new AnonymisationEntry(editingDomain, records, v, v.getName(), //
 					MMXCorePackage.Literals.NAMED_OBJECT__NAME, VesselID, AnonymisationRecordType.VesselID, usedIDStrings)));
-			
+
 			renameCommand.append(renameFunction.apply(new AnonymisationEntry(editingDomain, records, v, v.getShortName(), //
 					FleetPackage.Literals.VESSEL__SHORT_NAME, VesselShortID, AnonymisationRecordType.VesselShortID, usedIDStrings)));
-			
+
 			if (stripNotes) {
 				renameCommand.append(SetCommand.create(editingDomain, v, FleetPackage.Literals.VESSEL__NOTES, SetCommand.UNSET_VALUE));
+			}
+		}
+	}
+
+	private void renameVesselEvents(final @NonNull LNGScenarioModel currentModel, final EditingDomain editingDomain, final List<AnonymisationRecord> records, //
+			final CompoundCommand renameCommand, final Set<String> usedIDStrings, final Function<AnonymisationEntry, Command> renameFunction, boolean stripNotes) {
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(currentModel);
+
+		// TODO: (De-)Anonymise vessel events?
+
+		for (final VesselEvent v : cargoModel.getVesselEvents()) {
+			if (stripNotes) {
+				renameCommand.append(SetCommand.create(editingDomain, v, CargoPackage.Literals.VESSEL_EVENT__NOTES, SetCommand.UNSET_VALUE));
 			}
 		}
 	}

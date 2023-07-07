@@ -171,8 +171,7 @@ public class ChangeSetView extends ViewPart {
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
 
 	/**
-	 * This is used to avoid the re-entrant code when we change the selected
-	 * ScenarioResults in this view so it is not treated as a pin/diff update.
+	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
 	 */
 	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
@@ -397,7 +396,7 @@ public class ChangeSetView extends ViewPart {
 			// Extract vessel columns and generate.
 
 			final Set<VesselData> vesselnames = new LinkedHashSet<>();
-
+			columnHelper.resetExposures();
 			final ChangeSetTableRoot tableRootDefault = newViewState.tableRootDefault;
 			if (tableRootDefault != null) {
 				for (final ChangeSetTableGroup group : tableRootDefault.getGroups()) {
@@ -419,10 +418,11 @@ public class ChangeSetView extends ViewPart {
 				}
 			}
 
-			columnHelper.updateVesselColumns(vesselnames);
+			// Make sure these are called in the same order they were originally added to the table
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
 				columnHelper.updateExposuresColumns();
 			}
+			columnHelper.updateVesselColumns(vesselnames);
 			
 
 			for (final GridColumn gc : viewer.getGrid().getColumns()) {
@@ -920,11 +920,11 @@ public class ChangeSetView extends ViewPart {
 						if (!r.isMajorChange()) {
 
 							Collection<ChangeSetTableRow> rows = r.getWiringGroup().getRows();
-//							if (r.getCargoGroup() != null) {
-//								rows = r.getCargoGroup().getRows();
-//							} else {
-//								rows = Collections.singleton(r);
-//							}
+							// if (r.getCargoGroup() != null) {
+							// rows = r.getCargoGroup().getRows();
+							// } else {
+							// rows = Collections.singleton(r);
+							// }
 
 							int small = 0;
 							for (var row : rows) {
@@ -1573,12 +1573,15 @@ public class ChangeSetView extends ViewPart {
 					final ChangeSetTableGroup changeSetTableGroup;
 					if (directSelectedGroups.size() == 1) {
 						changeSetTableGroup = directSelectedGroups.iterator().next();
-						helper.addAction(new CreateSandboxFromResultAction(changeSetTableGroup.getRows(), changeSetTableGroup.getDescription(), changeSetTableGroup.getBaseScenario()));
+						// Filter out non-change rows.
+						var filteredRows = changeSetTableGroup.getRows().stream().filter(r -> r.getWiringGroup().getRows().get(0).isWiringOrVesselChange()).toList();
+						helper.addAction(new CreateSandboxFromResultAction(filteredRows, changeSetTableGroup.getDescription(), changeSetTableGroup.getBaseScenario()));
 					} else {
 						changeSetTableGroup = selectedSets.iterator().next();
 						helper.addAction(new CreateSandboxFromResultAction(directSelectedRows, changeSetTableGroup.getDescription(), changeSetTableGroup.getBaseScenario()));
 					}
 					if (false) {
+						// TODO: This does not handle LDD cargoes
 						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(changeSetTableGroup.getBaseScenario().getScenarioDataProvider());
 						if (analyticsModel.getOptionModels().size() == 1) {
 							final OptionAnalysisModel sandbox = analyticsModel.getOptionModels().get(0);

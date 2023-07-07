@@ -94,12 +94,8 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				if (object instanceof TransferRecord tr) {
 					if (tr.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION)) {
 						return tr.getPriceExpression();
-					} else if (tr.eIsSet(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_BASIS)){
-						return tr.getPricingBasis();
 					} else if (tr.getRecordOrDelegatePriceExpression() != null && !tr.getRecordOrDelegatePriceExpression().isBlank()) {
 						return tr.getRecordOrDelegatePriceExpression();
-					} else if (tr.getRecordOrDelegatePricingBasis() != null && !tr.getRecordOrDelegatePricingBasis().isBlank()) {
-						return tr.getRecordOrDelegatePricingBasis();
 					}
 				}
 				return null;

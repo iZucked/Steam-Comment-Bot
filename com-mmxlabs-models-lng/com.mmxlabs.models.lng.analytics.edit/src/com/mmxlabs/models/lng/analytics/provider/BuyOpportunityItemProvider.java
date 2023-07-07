@@ -50,6 +50,7 @@ public class BuyOpportunityItemProvider
 
 			addNamePropertyDescriptor(object);
 			addDesPurchasePropertyDescriptor(object);
+			addOptionalPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addContractPropertyDescriptor(object);
 			addDatePropertyDescriptor(object);
@@ -83,6 +84,28 @@ public class BuyOpportunityItemProvider
 				 getString("_UI_BuyOpportunity_desPurchase_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_desPurchase_feature", "_UI_BuyOpportunity_type"),
 				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__DES_PURCHASE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Optional feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOptionalPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyOpportunity_optional_feature"),
+				 getString("_UI_BuyOpportunity_optional_description"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__OPTIONAL,
 				 true,
 				 false,
 				 false,
@@ -482,6 +505,7 @@ public class BuyOpportunityItemProvider
 		switch (notification.getFeatureID(BuyOpportunity.class)) {
 			case AnalyticsPackage.BUY_OPPORTUNITY__NAME:
 			case AnalyticsPackage.BUY_OPPORTUNITY__DES_PURCHASE:
+			case AnalyticsPackage.BUY_OPPORTUNITY__OPTIONAL:
 			case AnalyticsPackage.BUY_OPPORTUNITY__DATE:
 			case AnalyticsPackage.BUY_OPPORTUNITY__PRICE_EXPRESSION:
 			case AnalyticsPackage.BUY_OPPORTUNITY__CV:

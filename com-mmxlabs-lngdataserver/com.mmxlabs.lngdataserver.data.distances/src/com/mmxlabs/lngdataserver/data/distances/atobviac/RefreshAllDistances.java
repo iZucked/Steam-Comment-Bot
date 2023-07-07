@@ -40,10 +40,10 @@ public class RefreshAllDistances {
 
 	public static void main(String[] args) throws Exception {
 
-		Util.PERFORM_UPSTREAM_QUERIES = false;
+		Util.PERFORM_UPSTREAM_QUERIES = true;
 
-		String sourceData = "2023b"; //Source data for comparison
-		String destData = "2023c"; // Dest folder - expects ports.json to be present
+		String sourceData = "2023d"; //Source data for comparison
+		String destData = "2023e"; // Dest folder - expects ports.json to be present
 
 		gatherNew(destData);
 
@@ -134,12 +134,27 @@ public class RefreshAllDistances {
 						e.printStackTrace();
 					}
 
+//					// Remove the bad distances from the cache
+//					localDataStore.clearBadGateway();
+//					localDataStore.clearTimeouts();
+//					
+//					try (FileOutputStream fos = new FileOutputStream(cacheFile, false)) {
+//							localDataStore.setLogStream(fos);
+//							localDataStore.saveAll();
+//							
+//							if (true) {
+//								return;
+//							}
+//							
+//					}
+					
 					System.out.println("Reduced queries " + lookups.size());
 				}
 				// Run the distance query
 				try (FileOutputStream fos = new FileOutputStream(cacheFile, true)) {
 					if (Util.PERFORM_UPSTREAM_QUERIES) {
 						localDataStore.setLogStream(fos);
+						
 						Future<Void> batchRefresh = service.batchRefresh(lookups);
 						// block until finished
 						batchRefresh.get();

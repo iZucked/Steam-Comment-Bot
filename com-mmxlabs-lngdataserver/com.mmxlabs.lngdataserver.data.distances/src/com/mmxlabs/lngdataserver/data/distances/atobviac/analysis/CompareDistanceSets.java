@@ -18,7 +18,7 @@ import com.mmxlabs.lngdataserver.data.distances.atobviac.impl.AtoBviaCLookupReco
 public class CompareDistanceSets {
 
 	public static void main(String[] args) throws Exception {
-		compare("2023b", "2023c");
+		compare("2023d", "2023e");
 	}
 
 	private static TypeReference<List<AtoBviaCLookupRecord>> DISTANCE_TYPE = new TypeReference<List<AtoBviaCLookupRecord>>() {
@@ -65,7 +65,7 @@ public class CompareDistanceSets {
 						stillMissing++;
 					} else if (oldRecord.getDistance() < 0.0) {
 						fixedDistance++;
-						System.out.println(key + " F  " + newRecord.getFrom() + " -- " + oldRecord.getTo() + " --- " + newRecord.getDistance());
+						System.out.println(key + " Fixed " + newRecord.getFrom() + " -- " + oldRecord.getTo() + " --- " + newRecord.getDistance());
 
 					} else if (newRecord.getDistance() < 0.0) {
 						System.out.println(key + "  " + newRecord.getErrorCode() + " -- " + +oldRecord.getDistance());
@@ -105,7 +105,7 @@ public class CompareDistanceSets {
 
 			for (Pair<String, String> key : oldMap.keySet()) {
 				if (!newMap.containsKey(key)) {
-					// System.out.println(key);
+					 System.out.println(" Lost " + key);
 					lostDistance++;
 				}
 			}

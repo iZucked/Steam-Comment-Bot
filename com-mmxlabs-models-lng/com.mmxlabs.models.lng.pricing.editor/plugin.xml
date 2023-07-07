@@ -44,12 +44,6 @@
           factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.AbstractYearMonthCurveCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.editor.CurrencyCurveCompositeFactory"
           inheritable="true">
-    </displayCompositeFactory>    
-    <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.pricing.PricingBasis"
-          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.AbstractYearMonthCurveCompositeFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.PricingBasisCompositeFactory"
-          inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
           eClass="com.mmxlabs.models.lng.pricing.SettleStrategy"
@@ -135,11 +129,6 @@
           id="com.mmxlabs.models.lng.pricing.ui.valueproviders.SettleStrategyReferenceValueProviderFactory"
           referenceEClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
     </valueProvider>
-    <valueProvider
-          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.PricingBasisReferenceValueProviderFactory"
-          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.PricingBasisReferenceValueProviderFactory"
-          referenceEClass="com.mmxlabs.models.lng.pricing.PricingBasis">
-    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -203,12 +192,6 @@
            factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Commodity Curve"
           targetEClass="com.mmxlabs.models.lng.pricing.CommodityCurve">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.pricingBasisFactory"
-           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Pricing Basis"
-          targetEClass="com.mmxlabs.models.lng.pricing.PricingBasis">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.cooldownPricing"
@@ -321,6 +304,12 @@
           inheritable="true"
           modelClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
     </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.InstrumentPeriodComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.presentation.composites.InstrumentPeriodComponentHelper"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.InstrumentPeriod">
+    </componentHelper>
    
  </extension>
  <extension
@@ -345,7 +334,7 @@
           class="com.mmxlabs.models.lng.pricing.ui.views.CooldownCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.CooldownCostsView"
           name="Cooldown Costs"
-          icon="icons:/icons/16x16/table.png"
+          icon="icons:/16/report"
           restorable="true">
     </view>
     <view
@@ -353,7 +342,7 @@
           class="com.mmxlabs.models.lng.pricing.ui.views.PortCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.PortCostsView"
           name="Port Costs"
-          icon="icons:/icons/16x16/table.png"
+          icon="icons:/16/report"
           restorable="true">
     </view>
     <view
@@ -361,7 +350,7 @@
           class="com.mmxlabs.models.lng.pricing.ui.views.CanalCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.CanalCostsView"
           name="Canal Costs"
-          icon="icons:/icons/16x16/table.png"
+          icon="icons:/16/report"
           restorable="true">
     </view>
  </extension>

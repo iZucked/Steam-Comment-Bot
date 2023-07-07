@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.HolidayCalendarEntry;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.InstrumentPeriod;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
@@ -330,7 +331,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass pricingBasisEClass = null;
+	private EClass instrumentPeriodEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -538,7 +539,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPricingModel_PricingBases() {
+	public EReference getPricingModel_FormulaeCurves() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -1800,8 +1801,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSettleStrategy_SettlePeriod() {
-		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(2);
+	public EReference getSettleStrategy_PricingCalendar() {
+		return (EReference)settleStrategyEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1810,8 +1811,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSettleStrategy_SettlePeriodUnit() {
-		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(3);
+	public EReference getSettleStrategy_PricingPeriod() {
+		return (EReference)settleStrategyEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1820,8 +1821,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSettleStrategy_SettleStartMonthsPrior() {
-		return (EAttribute)settleStrategyEClass.getEStructuralFeatures().get(4);
+	public EReference getSettleStrategy_HedgingPeriod() {
+		return (EReference)settleStrategyEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1830,8 +1831,38 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getPricingBasis() {
-		return pricingBasisEClass;
+	public EClass getInstrumentPeriod() {
+		return instrumentPeriodEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInstrumentPeriod_PeriodSize() {
+		return (EAttribute)instrumentPeriodEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInstrumentPeriod_PeriodSizeUnit() {
+		return (EAttribute)instrumentPeriodEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInstrumentPeriod_PeriodOffset() {
+		return (EAttribute)instrumentPeriodEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1876,7 +1907,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(pricingModelEClass, PRICING_MODEL__MARKET_CURVES_VERSION_RECORD);
 		createEReference(pricingModelEClass, PRICING_MODEL__SETTLED_PRICES_VERSION_RECORD);
 		createEReference(pricingModelEClass, PRICING_MODEL__PRICING_CALENDARS);
-		createEReference(pricingModelEClass, PRICING_MODEL__PRICING_BASES);
+		createEReference(pricingModelEClass, PRICING_MODEL__FORMULAE_CURVES);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -2038,11 +2069,14 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		settleStrategyEClass = createEClass(SETTLE_STRATEGY);
 		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__DAY_OF_THE_MONTH);
 		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH);
-		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_PERIOD);
-		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_PERIOD_UNIT);
-		createEAttribute(settleStrategyEClass, SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR);
+		createEReference(settleStrategyEClass, SETTLE_STRATEGY__PRICING_CALENDAR);
+		createEReference(settleStrategyEClass, SETTLE_STRATEGY__PRICING_PERIOD);
+		createEReference(settleStrategyEClass, SETTLE_STRATEGY__HEDGING_PERIOD);
 
-		pricingBasisEClass = createEClass(PRICING_BASIS);
+		instrumentPeriodEClass = createEClass(INSTRUMENT_PERIOD);
+		createEAttribute(instrumentPeriodEClass, INSTRUMENT_PERIOD__PERIOD_SIZE);
+		createEAttribute(instrumentPeriodEClass, INSTRUMENT_PERIOD__PERIOD_SIZE_UNIT);
+		createEAttribute(instrumentPeriodEClass, INSTRUMENT_PERIOD__PERIOD_OFFSET);
 	}
 
 	/**
@@ -2114,7 +2148,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		pricingCalendarEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		holidayCalendarEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		settleStrategyEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		pricingBasisEClass.getESuperTypes().add(this.getAbstractYearMonthCurve());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2130,7 +2163,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_MarketCurvesVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "marketCurvesVersionRecord", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_SettledPricesVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "settledPricesVersionRecord", null, 0, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_PricingCalendars(), this.getPricingCalendar(), null, "pricingCalendars", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPricingModel_PricingBases(), this.getPricingBasis(), null, "pricingBases", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_FormulaeCurves(), this.getCommodityCurve(), null, "formulaeCurves", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());
@@ -2341,11 +2374,14 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEClass(settleStrategyEClass, SettleStrategy.class, "SettleStrategy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSettleStrategy_DayOfTheMonth(), ecorePackage.getEInt(), "dayOfTheMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSettleStrategy_LastDayOfTheMonth(), ecorePackage.getEBoolean(), "lastDayOfTheMonth", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSettleStrategy_SettlePeriod(), ecorePackage.getEInt(), "settlePeriod", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSettleStrategy_SettlePeriodUnit(), theTypesPackage.getTimePeriod(), "settlePeriodUnit", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSettleStrategy_SettleStartMonthsPrior(), ecorePackage.getEInt(), "settleStartMonthsPrior", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSettleStrategy_PricingCalendar(), this.getPricingCalendar(), null, "pricingCalendar", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSettleStrategy_PricingPeriod(), this.getInstrumentPeriod(), null, "pricingPeriod", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSettleStrategy_HedgingPeriod(), this.getInstrumentPeriod(), null, "hedgingPeriod", null, 0, 1, SettleStrategy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(pricingBasisEClass, PricingBasis.class, "PricingBasis", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(instrumentPeriodEClass, InstrumentPeriod.class, "InstrumentPeriod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInstrumentPeriod_PeriodSize(), ecorePackage.getEInt(), "periodSize", null, 0, 1, InstrumentPeriod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInstrumentPeriod_PeriodSizeUnit(), theTypesPackage.getPricingPeriod(), "periodSizeUnit", null, 0, 1, InstrumentPeriod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInstrumentPeriod_PeriodOffset(), ecorePackage.getEInt(), "periodOffset", null, 0, 1, InstrumentPeriod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -2535,6 +2571,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   source,
 		   new String[] {
 			   "formatString", "#0"
+		   });
+		addAnnotation
+		  (getInstrumentPeriod_PeriodOffset(),
+		   source,
+		   new String[] {
+			   "formatString", "-##0",
+			   "exportFormatString", "##0"
 		   });
 	}
 

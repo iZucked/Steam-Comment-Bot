@@ -23,6 +23,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#isDesPurchase <em>Des Purchase</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getDate <em>Date</em>}</li>
@@ -70,6 +71,29 @@ public interface BuyOpportunity extends UUIDObject, BuyOption {
 	 * @generated
 	 */
 	void setDesPurchase(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Optional</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Optional</em>' attribute.
+	 * @see #setOptional(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity_Optional()
+	 * @model default="true"
+	 * @generated
+	 */
+	boolean isOptional();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#isOptional <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Optional</em>' attribute.
+	 * @see #isOptional()
+	 * @generated
+	 */
+	void setOptional(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.
@@ -376,7 +400,7 @@ public interface BuyOpportunity extends UUIDObject, BuyOption {
 	 * @return the value of the '<em>Min Volume</em>' attribute.
 	 * @see #setMinVolume(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity_MinVolume()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMinVolume();
@@ -402,7 +426,7 @@ public interface BuyOpportunity extends UUIDObject, BuyOption {
 	 * @return the value of the '<em>Max Volume</em>' attribute.
 	 * @see #setMaxVolume(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity_MaxVolume()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMaxVolume();

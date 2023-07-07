@@ -709,26 +709,26 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PreferredPricingBasesWrapperItemProvider preferredPricingBasesWrapperItemProvider;
+	protected PreferredFormulaeWrapperItemProvider preferredFormulaeWrapperItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PreferredPricingBasesWrapper}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PreferredFormulaeWrapper}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createPreferredPricingBasesWrapperAdapter() {
-		if (preferredPricingBasesWrapperItemProvider == null) {
-			preferredPricingBasesWrapperItemProvider = new PreferredPricingBasesWrapperItemProvider(this);
+	public Adapter createPreferredFormulaeWrapperAdapter() {
+		if (preferredFormulaeWrapperItemProvider == null) {
+			preferredFormulaeWrapperItemProvider = new PreferredFormulaeWrapperItemProvider(this);
 		}
 
-		return preferredPricingBasesWrapperItemProvider;
+		return preferredFormulaeWrapperItemProvider;
 	}
 
 	/**
@@ -890,7 +890,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
 		if (regasPricingParamsItemProvider != null) regasPricingParamsItemProvider.dispose();
 		if (businessUnitItemProvider != null) businessUnitItemProvider.dispose();
-		if (preferredPricingBasesWrapperItemProvider != null) preferredPricingBasesWrapperItemProvider.dispose();
+		if (preferredFormulaeWrapperItemProvider != null) preferredFormulaeWrapperItemProvider.dispose();
 	}
 
 }

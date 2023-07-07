@@ -19,8 +19,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.calendars.BasicPricingCalendar;
-import com.mmxlabs.common.calendars.BasicPricingCalendarEntry;
 import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.BasicExposureRecord;
@@ -239,7 +237,8 @@ public class PaperDealsCalculator {
 							}
 						}
 					}
-					final BasicPaperDealData basicPaperDealData = new BasicPaperDealData(name, isBuy, quantity, paperUnitPrice, start, end, type, instrument, curveName, entity, year, note, true);
+					final BasicPaperDealData basicPaperDealData = new BasicPaperDealData(name, isBuy, quantity, paperUnitPrice, type,//
+							instrument, curveName, entity, year, note, true, month.atDay(1), start, end, start, end);
 					results.add(basicPaperDealData);
 				}
 			}
@@ -295,73 +294,19 @@ public class PaperDealsCalculator {
 		final ISeries series = commodityIndices.getSeries(curveName).get();
 		final ExposuresLookupData exposuresLookupData = exposureDataProvider.getExposuresLookupData();
 		final BasicCommodityCurveData curveData = exposuresLookupData.commodityMap.get(curveName);
-
-		LocalDate start = basicPaperDealData.getStart();
-		LocalDate end = basicPaperDealData.getEnd();
-
-		final YearMonth month = YearMonth.from(start);
-		if ("CALENDAR".equals(basicPaperDealData.getType())) {
-			BasicPricingCalendar basicPricingCalendar = null;
-			if (curveData != null) {
-				basicPricingCalendar = lookupData.pricingCalendars.get(curveName);
-			}
-			if (basicPricingCalendar == null || basicPricingCalendar.getEntries().isEmpty()) {
-				return result;
-			}
-			final List<BasicPricingCalendarEntry> basicPricingCalendarEntries = new LinkedList<>();
-			for (final BasicPricingCalendarEntry entry : basicPricingCalendar.getEntries()) {
-				if (month.equals(entry.getMonth())) {
-					basicPricingCalendarEntries.add(entry);
-				}
-			}
-			if (basicPricingCalendarEntries.isEmpty()) {
-				return result;
-			}
-			final BasicPricingCalendarEntry basicPricingCalendarEntry = basicPricingCalendarEntries.get(0);
-			start = basicPricingCalendarEntry.getStart();
-			end = basicPricingCalendarEntry.getEnd();
-		} else if ("INSTRUMENT".equals(basicPaperDealData.getType())) {
-			final BasicInstrumentData basicInstrumentData = basicPaperDealData.getInstrument();
-			if (basicInstrumentData == null) {
-				return result;
-			}
-			final YearMonth originalMonth = month;
-			final YearMonth startMonth = originalMonth.plusMonths(-1L * basicInstrumentData.getSettleStartMonthsPrior());
-
-			int settlingPeriodDurationInDays = 0;
-
-			switch (basicInstrumentData.getSettlePeriodUnit()) {
-			case "HOURS":
-				settlingPeriodDurationInDays = basicInstrumentData.getSettlePeriod() / 24;
-				break;
-			case "DAYS":
-				settlingPeriodDurationInDays = basicInstrumentData.getSettlePeriod();
-				break;
-			case "MONTHS":
-				settlingPeriodDurationInDays = basicInstrumentData.getSettlePeriod() * 30;
-				break;
-			default:
-				break;
-			}
-
-			int startDay = basicInstrumentData.isLastDayOfTheMonth() ? startMonth.lengthOfMonth() : basicInstrumentData.getDayOfTheMonth();
-			if (startDay == 0) {
-				startDay = 1;
-			}
-			start = getNonWeekendStart(startMonth, startDay);
-			end = start.plusDays(settlingPeriodDurationInDays - 1L);
-		}
-		return settlePaper(basicPaperDealData, settledPrices, series, curveData, start, end, exposuresLookupData, generated);
+		return settlePaper(basicPaperDealData, settledPrices, series, curveData, exposuresLookupData, generated);
 	}
-
+	
 	private List<BasicPaperDealAllocationEntry> settlePaper(final BasicPaperDealData basicPaperDealData, final Map<LocalDate, Double> settledPrices, //
-			final ISeries series, final BasicCommodityCurveData curveData, final LocalDate extStart, final LocalDate extEnd, final ExposuresLookupData exposuresLookupData, final boolean generated) {
+			final ISeries series, final BasicCommodityCurveData curveData, final ExposuresLookupData exposuresLookupData, final boolean generated) {
 		final List<BasicPaperDealAllocationEntry> result = new LinkedList<>();
 		final boolean isBuy = basicPaperDealData.isBuy();
-		LocalDate start = extStart;
+		LocalDate start = basicPaperDealData.getPricingStart();
+		LocalDate hedgingStart = basicPaperDealData.getHedgingStart();
+		LocalDate hedgingEnd = basicPaperDealData.getHedgingEnd();
 		int days = 0;
 		// Count trading days
-		while (!start.isAfter(extEnd)) {
+		while (!start.isAfter(basicPaperDealData.getPricingEnd())) {
 			final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
 
 			start = start.plusDays(1);
@@ -371,11 +316,10 @@ public class PaperDealsCalculator {
 			// If holiday continue
 			++days;
 		}
-
-		start = extStart;
+		start = basicPaperDealData.getPricingStart();
 		// MTM Part
 		// Count trading days
-		while (!start.isAfter(extEnd)) {
+		while (!start.isAfter(basicPaperDealData.getPricingEnd())) {
 			final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
 			if (!isWeekend) {
 				double price = series.evaluate(dateProvider.convertTime(start), Collections.emptyMap()).doubleValue();
@@ -398,7 +342,8 @@ public class PaperDealsCalculator {
 					value = (quantity * (internalPrice - basicPaperDealData.getPaperUnitPrice())) / 1_000_000;
 				}
 
-				final BasicPaperDealAllocationEntry entry = new BasicPaperDealAllocationEntry(start, quantity, internalPrice, value, settled);
+				final BasicPaperDealAllocationEntry entry = 
+						new BasicPaperDealAllocationEntry(start, hedgingStart, hedgingEnd, quantity, internalPrice, value, settled);
 
 				if (!settled && exposuresEnabled) {
 					final BasicExposureRecord exposure = new BasicExposureRecord();
@@ -407,6 +352,8 @@ public class PaperDealsCalculator {
 					exposure.setCurrencyUnit(curveData.getCurrencyUnit());
 					exposure.setVolumeUnit(curveData.getVolumeUnit());
 					exposure.setTime(start);
+					exposure.setHedgingStart(hedgingStart);
+					exposure.setHedgingEnd(hedgingEnd);
 					exposure.setUnitPrice(internalPrice);
 					exposure.setVolumeNative(quantity);
 
@@ -437,17 +384,6 @@ public class PaperDealsCalculator {
 				result.add(entry);
 			}
 			start = start.plusDays(1);
-		}
-		return result;
-	}
-
-	private @NonNull LocalDate getNonWeekendStart(final YearMonth startMonth, int startDay) {
-
-		LocalDate result = LocalDate.of(startMonth.getYear(), startMonth.getMonthValue(), startDay);
-		boolean isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
-		while (isWeekend) {
-			result = result.plusDays(1);
-			isWeekend = result.getDayOfWeek() == DayOfWeek.SATURDAY || result.getDayOfWeek() == DayOfWeek.SUNDAY;
 		}
 		return result;
 	}

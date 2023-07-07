@@ -196,13 +196,13 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__PRICING_CALENDARS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Bases</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Formulae Curves</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL__PRICING_BASES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int PRICING_MODEL__FORMULAE_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -2212,31 +2212,31 @@ public interface PricingPackage extends EPackage {
 	int SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Settle Period</b></em>' attribute.
+	 * The feature id for the '<em><b>Pricing Calendar</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SETTLE_STRATEGY__SETTLE_PERIOD = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int SETTLE_STRATEGY__PRICING_CALENDAR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Settle Period Unit</b></em>' attribute.
+	 * The feature id for the '<em><b>Pricing Period</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SETTLE_STRATEGY__SETTLE_PERIOD_UNIT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int SETTLE_STRATEGY__PRICING_PERIOD = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Settle Start Months Prior</b></em>' attribute.
+	 * The feature id for the '<em><b>Hedging Period</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int SETTLE_STRATEGY__HEDGING_PERIOD = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Settle Strategy</em>' class.
@@ -2248,86 +2248,50 @@ public interface PricingPackage extends EPackage {
 	int SETTLE_STRATEGY_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl <em>Basis</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.InstrumentPeriodImpl <em>Instrument Period</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl
-	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingBasis()
+	 * @see com.mmxlabs.models.lng.pricing.impl.InstrumentPeriodImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getInstrumentPeriod()
 	 * @generated
 	 */
-	int PRICING_BASIS = 37;
+	int INSTRUMENT_PERIOD = 37;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Period Size</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_BASIS__EXTENSIONS = ABSTRACT_YEAR_MONTH_CURVE__EXTENSIONS;
+	int INSTRUMENT_PERIOD__PERIOD_SIZE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * The feature id for the '<em><b>Period Size Unit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_BASIS__UUID = ABSTRACT_YEAR_MONTH_CURVE__UUID;
+	int INSTRUMENT_PERIOD__PERIOD_SIZE_UNIT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Period Offset</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_BASIS__NAME = ABSTRACT_YEAR_MONTH_CURVE__NAME;
+	int INSTRUMENT_PERIOD__PERIOD_OFFSET = 2;
 
 	/**
-	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
+	 * The number of structural features of the '<em>Instrument Period</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_BASIS__POINTS = ABSTRACT_YEAR_MONTH_CURVE__POINTS;
-
-	/**
-	 * The feature id for the '<em><b>Currency Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__CURRENCY_UNIT = ABSTRACT_YEAR_MONTH_CURVE__CURRENCY_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Volume Unit</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__VOLUME_UNIT = ABSTRACT_YEAR_MONTH_CURVE__VOLUME_UNIT;
-
-	/**
-	 * The feature id for the '<em><b>Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS__EXPRESSION = ABSTRACT_YEAR_MONTH_CURVE__EXPRESSION;
-
-	/**
-	 * The number of structural features of the '<em>Basis</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRICING_BASIS_FEATURE_COUNT = ABSTRACT_YEAR_MONTH_CURVE_FEATURE_COUNT + 0;
+	int INSTRUMENT_PERIOD_FEATURE_COUNT = 3;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
@@ -2472,15 +2436,15 @@ public interface PricingPackage extends EPackage {
 	EReference getPricingModel_PricingCalendars();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getPricingBases <em>Pricing Bases</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.PricingModel#getFormulaeCurves <em>Formulae Curves</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Pricing Bases</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getPricingBases()
+	 * @return the meta object for the containment reference list '<em>Formulae Curves</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getFormulaeCurves()
 	 * @see #getPricingModel()
 	 * @generated
 	 */
-	EReference getPricingModel_PricingBases();
+	EReference getPricingModel_FormulaeCurves();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -3822,47 +3786,80 @@ public interface PricingPackage extends EPackage {
 	EAttribute getSettleStrategy_LastDayOfTheMonth();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod <em>Settle Period</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingCalendar <em>Pricing Calendar</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Settle Period</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriod()
+	 * @return the meta object for the reference '<em>Pricing Calendar</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingCalendar()
 	 * @see #getSettleStrategy()
 	 * @generated
 	 */
-	EAttribute getSettleStrategy_SettlePeriod();
+	EReference getSettleStrategy_PricingCalendar();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriodUnit <em>Settle Period Unit</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingPeriod <em>Pricing Period</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Settle Period Unit</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getSettlePeriodUnit()
+	 * @return the meta object for the containment reference '<em>Pricing Period</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getPricingPeriod()
 	 * @see #getSettleStrategy()
 	 * @generated
 	 */
-	EAttribute getSettleStrategy_SettlePeriodUnit();
+	EReference getSettleStrategy_PricingPeriod();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getSettleStartMonthsPrior <em>Settle Start Months Prior</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.SettleStrategy#getHedgingPeriod <em>Hedging Period</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Settle Start Months Prior</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getSettleStartMonthsPrior()
+	 * @return the meta object for the containment reference '<em>Hedging Period</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SettleStrategy#getHedgingPeriod()
 	 * @see #getSettleStrategy()
 	 * @generated
 	 */
-	EAttribute getSettleStrategy_SettleStartMonthsPrior();
+	EReference getSettleStrategy_HedgingPeriod();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingBasis <em>Basis</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.InstrumentPeriod <em>Instrument Period</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Basis</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PricingBasis
+	 * @return the meta object for class '<em>Instrument Period</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.InstrumentPeriod
 	 * @generated
 	 */
-	EClass getPricingBasis();
+	EClass getInstrumentPeriod();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.InstrumentPeriod#getPeriodSize <em>Period Size</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Period Size</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.InstrumentPeriod#getPeriodSize()
+	 * @see #getInstrumentPeriod()
+	 * @generated
+	 */
+	EAttribute getInstrumentPeriod_PeriodSize();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.InstrumentPeriod#getPeriodSizeUnit <em>Period Size Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Period Size Unit</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.InstrumentPeriod#getPeriodSizeUnit()
+	 * @see #getInstrumentPeriod()
+	 * @generated
+	 */
+	EAttribute getInstrumentPeriod_PeriodSizeUnit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.InstrumentPeriod#getPeriodOffset <em>Period Offset</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Period Offset</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.InstrumentPeriod#getPeriodOffset()
+	 * @see #getInstrumentPeriod()
+	 * @generated
+	 */
+	EAttribute getInstrumentPeriod_PeriodOffset();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -3993,12 +3990,12 @@ public interface PricingPackage extends EPackage {
 		EReference PRICING_MODEL__PRICING_CALENDARS = eINSTANCE.getPricingModel_PricingCalendars();
 
 		/**
-		 * The meta object literal for the '<em><b>Pricing Bases</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Formulae Curves</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PRICING_MODEL__PRICING_BASES = eINSTANCE.getPricingModel_PricingBases();
+		EReference PRICING_MODEL__FORMULAE_CURVES = eINSTANCE.getPricingModel_FormulaeCurves();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -5073,38 +5070,62 @@ public interface PricingPackage extends EPackage {
 		EAttribute SETTLE_STRATEGY__LAST_DAY_OF_THE_MONTH = eINSTANCE.getSettleStrategy_LastDayOfTheMonth();
 
 		/**
-		 * The meta object literal for the '<em><b>Settle Period</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Pricing Calendar</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SETTLE_STRATEGY__SETTLE_PERIOD = eINSTANCE.getSettleStrategy_SettlePeriod();
+		EReference SETTLE_STRATEGY__PRICING_CALENDAR = eINSTANCE.getSettleStrategy_PricingCalendar();
 
 		/**
-		 * The meta object literal for the '<em><b>Settle Period Unit</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Pricing Period</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SETTLE_STRATEGY__SETTLE_PERIOD_UNIT = eINSTANCE.getSettleStrategy_SettlePeriodUnit();
+		EReference SETTLE_STRATEGY__PRICING_PERIOD = eINSTANCE.getSettleStrategy_PricingPeriod();
 
 		/**
-		 * The meta object literal for the '<em><b>Settle Start Months Prior</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Hedging Period</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SETTLE_STRATEGY__SETTLE_START_MONTHS_PRIOR = eINSTANCE.getSettleStrategy_SettleStartMonthsPrior();
+		EReference SETTLE_STRATEGY__HEDGING_PERIOD = eINSTANCE.getSettleStrategy_HedgingPeriod();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl <em>Basis</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.InstrumentPeriodImpl <em>Instrument Period</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingBasisImpl
-		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingBasis()
+		 * @see com.mmxlabs.models.lng.pricing.impl.InstrumentPeriodImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getInstrumentPeriod()
 		 * @generated
 		 */
-		EClass PRICING_BASIS = eINSTANCE.getPricingBasis();
+		EClass INSTRUMENT_PERIOD = eINSTANCE.getInstrumentPeriod();
+
+		/**
+		 * The meta object literal for the '<em><b>Period Size</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INSTRUMENT_PERIOD__PERIOD_SIZE = eINSTANCE.getInstrumentPeriod_PeriodSize();
+
+		/**
+		 * The meta object literal for the '<em><b>Period Size Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INSTRUMENT_PERIOD__PERIOD_SIZE_UNIT = eINSTANCE.getInstrumentPeriod_PeriodSizeUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Period Offset</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INSTRUMENT_PERIOD__PERIOD_OFFSET = eINSTANCE.getInstrumentPeriod_PeriodOffset();
 
 
 	}

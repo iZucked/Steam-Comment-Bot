@@ -344,7 +344,7 @@ public class ScenarioBuilder {
 				locationsVersion = mapper.readValue(inputStream, LocationsVersion.class);
 			}
 
-			final List<UpdateItem> steps = LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationsVersion);
+			final List<UpdateItem> steps = LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationsVersion, null);
 
 			final CompoundCommand command = new CompoundCommand("Update ports");
 			// Apply basic updates
@@ -476,7 +476,7 @@ public class ScenarioBuilder {
 				locationsVersion = mapper.readValue(portInputStream, LocationsVersion.class);
 			}
 
-			final List<UpdateItem> steps = LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationsVersion);
+			final List<UpdateItem> steps = LocationsToScenarioCopier.generateUpdates(editingDomain, portModel, locationsVersion, null);
 
 			final CompoundCommand command = new CompoundCommand("Update ports");
 			// Apply basic updates

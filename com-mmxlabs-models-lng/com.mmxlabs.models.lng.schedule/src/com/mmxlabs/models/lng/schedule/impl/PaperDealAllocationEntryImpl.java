@@ -42,6 +42,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl#getValue <em>Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl#isSettled <em>Settled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl#getExposures <em>Exposures</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl#getHedgingPeriodStart <em>Hedging Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PaperDealAllocationEntryImpl#getHedgingPeriodEnd <em>Hedging Period End</em>}</li>
  * </ul>
  *
  * @generated
@@ -156,6 +158,46 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * @ordered
 	 */
 	protected EList<ExposureDetail> exposures;
+
+	/**
+	 * The default value of the '{@link #getHedgingPeriodStart() <em>Hedging Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate HEDGING_PERIOD_START_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getHedgingPeriodStart() <em>Hedging Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate hedgingPeriodStart = HEDGING_PERIOD_START_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHedgingPeriodEnd() <em>Hedging Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDate HEDGING_PERIOD_END_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getHedgingPeriodEnd() <em>Hedging Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedgingPeriodEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate hedgingPeriodEnd = HEDGING_PERIOD_END_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -310,6 +352,52 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 	 * @generated
 	 */
 	@Override
+	public LocalDate getHedgingPeriodStart() {
+		return hedgingPeriodStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHedgingPeriodStart(LocalDate newHedgingPeriodStart) {
+		LocalDate oldHedgingPeriodStart = hedgingPeriodStart;
+		hedgingPeriodStart = newHedgingPeriodStart;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START, oldHedgingPeriodStart, hedgingPeriodStart));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalDate getHedgingPeriodEnd() {
+		return hedgingPeriodEnd;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHedgingPeriodEnd(LocalDate newHedgingPeriodEnd) {
+		LocalDate oldHedgingPeriodEnd = hedgingPeriodEnd;
+		hedgingPeriodEnd = newHedgingPeriodEnd;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END, oldHedgingPeriodEnd, hedgingPeriodEnd));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES:
@@ -338,6 +426,10 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 				return isSettled();
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES:
 				return getExposures();
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START:
+				return getHedgingPeriodStart();
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END:
+				return getHedgingPeriodEnd();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -370,6 +462,12 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 				getExposures().clear();
 				getExposures().addAll((Collection<? extends ExposureDetail>)newValue);
 				return;
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START:
+				setHedgingPeriodStart((LocalDate)newValue);
+				return;
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END:
+				setHedgingPeriodEnd((LocalDate)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -400,6 +498,12 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES:
 				getExposures().clear();
 				return;
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START:
+				setHedgingPeriodStart(HEDGING_PERIOD_START_EDEFAULT);
+				return;
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END:
+				setHedgingPeriodEnd(HEDGING_PERIOD_END_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -424,6 +528,10 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 				return settled != SETTLED_EDEFAULT;
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES:
 				return exposures != null && !exposures.isEmpty();
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START:
+				return HEDGING_PERIOD_START_EDEFAULT == null ? hedgingPeriodStart != null : !HEDGING_PERIOD_START_EDEFAULT.equals(hedgingPeriodStart);
+			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END:
+				return HEDGING_PERIOD_END_EDEFAULT == null ? hedgingPeriodEnd != null : !HEDGING_PERIOD_END_EDEFAULT.equals(hedgingPeriodEnd);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -448,6 +556,10 @@ public class PaperDealAllocationEntryImpl extends EObjectImpl implements PaperDe
 		result.append(value);
 		result.append(", settled: ");
 		result.append(settled);
+		result.append(", hedgingPeriodStart: ");
+		result.append(hedgingPeriodStart);
+		result.append(", hedgingPeriodEnd: ");
+		result.append(hedgingPeriodEnd);
 		result.append(')');
 		return result.toString();
 	}

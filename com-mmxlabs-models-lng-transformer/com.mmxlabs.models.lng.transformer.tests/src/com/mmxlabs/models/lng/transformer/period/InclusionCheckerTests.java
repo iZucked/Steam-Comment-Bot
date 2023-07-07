@@ -489,6 +489,7 @@ public class InclusionCheckerTests {
 		Mockito.when(event.getStartAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
 		Mockito.when(event.getStartBy()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 9, 0));
 		Mockito.when(event.getDurationInDays()).thenReturn(2);
+		Mockito.when(event.getSchedulingDurationInDays()).thenReturn(2);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
@@ -506,6 +507,7 @@ public class InclusionCheckerTests {
 		Mockito.when(event.getStartAfterAsDateTime()).thenReturn(PeriodTestUtils.createDate("UTC", 2014, Calendar.JULY, 8, 0));
 		Mockito.when(event.getStartByAsDateTime()).thenReturn(PeriodTestUtils.createDate("UTC", 2014, Calendar.JULY, 9, 0));
 		Mockito.when(event.getDurationInDays()).thenReturn(2);
+		Mockito.when(event.getSchedulingDurationInDays()).thenReturn(2);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -269,7 +267,7 @@ public class LatenessReportView extends EMFReportView {
 
 	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
-		return getBlockManager().createColumn(block, title, formatter, path);
+		return getBlockManager().createColumn(block, title).withCellRenderer(formatter).withElementPath(path).build();
 	}
 
 	@Override

@@ -7,7 +7,6 @@ package com.mmxlabs.rcp.common.actions;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
@@ -17,6 +16,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.csv.CSVWriter;
+import com.mmxlabs.rcp.common.actions.copyutils.CopyAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -27,13 +27,13 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
  * @author Simon Goodall
  * 
  */
-public class CopyGridToClipboardAction extends Action {
+public class CopyGridToClipboardAction extends CopyAction {
 
 	private final Grid table;
 
 	private final char separator;
 
-	private boolean rowHeadersIncluded = false;
+	protected boolean rowHeadersIncluded = false;
 
 	private Runnable preOperation;
 	private Runnable postOperation;
@@ -113,6 +113,7 @@ public class CopyGridToClipboardAction extends Action {
 				// String unit = row.unit;
 				// }
 				final GridColumn tc = table.getColumn(i);
+				
 				cw.addValue(tc.getText());
 				if ((i + 1) == numColumns) {
 					cw.endRow();
@@ -121,6 +122,7 @@ public class CopyGridToClipboardAction extends Action {
 
 			for (final GridItem item : table.getItems()) {
 				// Ensure at least 1 column to grab data
+				
 				processTableItem(cw, Math.max(1, numColumns), item);
 			}
 		} catch (IOException e) {
@@ -130,12 +132,12 @@ public class CopyGridToClipboardAction extends Action {
 		return sw;
 	}
 
-	private void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
+	protected void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
 		if (rowHeadersIncluded) {
 			cw.addValue(item.getHeaderText());
 		}
 		for (int i = 0; i < numColumns; ++i) {
-			cw.addValue(item.getText(i));
+			cw.addValue(reformatText(item.getText(i)));
 			// end row
 			if ((i + 1) == numColumns) {
 				cw.endRow();

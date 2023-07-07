@@ -30,6 +30,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -233,7 +234,7 @@ public class OptimiserDataMapper {
 		final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 		@NonNull
 		final IOptimisationData optimisationData = dataTransformer.getOptimisationData();
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
@@ -284,7 +285,7 @@ public class OptimiserDataMapper {
 		final LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 		@NonNull
 		final IOptimisationData optimisationData = dataTransformer.getOptimisationData();
-		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+		final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 		@NonNull
 		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();

@@ -8,6 +8,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="schedulerViewColourScheme" name="Scheduler View Colour Scheme" schema="schema/schedulerViewColourScheme.exsd"/>
+   <extension-point id="scheduleViewPositionsSequenceProvider" name="Schedule View Positions Sequence Provider" schema="schema/scheduleViewPositionsSequenceProvider.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
@@ -34,5 +35,4 @@
             name="Shipping Risk">
       </ColourScheme>
    </extension>
-
 </plugin>

@@ -73,6 +73,9 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class VesselViewerPane_View extends ScenarioTableViewerPane {
@@ -310,10 +313,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 	class BaseFuelEditorAction extends AbstractMenuLockableAction {
 		public BaseFuelEditorAction() {
 			super("Base Fuels");
-			try {
-				setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.fleet.editor/icons/oildrop.png")));
-			} catch (final MalformedURLException e) {
-			}
+			setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Fuel, IconMode.Enabled));
 		}
 
 		@Override

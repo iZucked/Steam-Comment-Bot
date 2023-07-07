@@ -272,13 +272,22 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__GENERATED_PAPER_DEALS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Non Shipped Sequences</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__NON_SHIPPED_SEQUENCES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5355,13 +5364,31 @@ public interface SchedulePackage extends EPackage {
 	int EXPOSURE_DETAIL__LOCAL_DATE = 9;
 
 	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__HEDGING_PERIOD_START = 10;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPOSURE_DETAIL__HEDGING_PERIOD_END = 11;
+
+	/**
 	 * The number of structural features of the '<em>Exposure Detail</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPOSURE_DETAIL_FEATURE_COUNT = 10;
+	int EXPOSURE_DETAIL_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Exposure Detail</em>' class.
@@ -6824,13 +6851,31 @@ public interface SchedulePackage extends EPackage {
 	int PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES = 5;
 
 	/**
+	 * The feature id for the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START = 6;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END = 7;
+
+	/**
 	 * The number of structural features of the '<em>Paper Deal Allocation Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAPER_DEAL_ALLOCATION_ENTRY_FEATURE_COUNT = 6;
+	int PAPER_DEAL_ALLOCATION_ENTRY_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Paper Deal Allocation Entry</em>' class.
@@ -7948,6 +7993,667 @@ public interface SchedulePackage extends EPackage {
 	int SANDBOX_REFERENCE_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedSequenceImpl <em>Non Shipped Sequence</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedSequenceImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedSequence()
+	 * @generated
+	 */
+	int NON_SHIPPED_SEQUENCE = 55;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Non Shipped Sequence</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Non Shipped Sequence</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SEQUENCE_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedSlotVisitImpl <em>Non Shipped Slot Visit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedSlotVisitImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedSlotVisit()
+	 * @generated
+	 */
+	int NON_SHIPPED_SLOT_VISIT = 56;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__SLOT = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Non Shipped Slot Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT___NAME = EVENT___NAME;
+
+	/**
+	 * The number of operations of the '<em>Non Shipped Slot Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedJourneyImpl <em>Non Shipped Journey</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedJourneyImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedJourney()
+	 * @generated
+	 */
+	int NON_SHIPPED_JOURNEY = 57;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Laden</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__LADEN = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Destination</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__DESTINATION = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Non Shipped Journey</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY___NAME = EVENT___NAME;
+
+	/**
+	 * The number of operations of the '<em>Non Shipped Journey</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedIdleImpl <em>Non Shipped Idle</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedIdleImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedIdle()
+	 * @generated
+	 */
+	int NON_SHIPPED_IDLE = 58;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Laden</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__LADEN = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Non Shipped Idle</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE___NAME = EVENT___NAME;
+
+	/**
+	 * The number of operations of the '<em>Non Shipped Idle</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7955,7 +8661,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 57;
+	int FUEL_UNIT = 61;
 
 
 	/**
@@ -7966,7 +8672,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 56;
+	int FUEL = 60;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -7976,7 +8682,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 55;
+	int SEQUENCE_TYPE = 59;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -7986,7 +8692,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 58;
+	int CAPACITY_VIOLATION_TYPE = 62;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -7996,7 +8702,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 59;
+	int PORT_VISIT_LATENESS_TYPE = 63;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -8006,7 +8712,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 60;
+	int SLOT_ALLOCATION_TYPE = 64;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -8016,7 +8722,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 61;
+	int PANAMA_BOOKING_PERIOD = 65;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -8026,7 +8732,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 62;
+	int CALENDAR = 66;
 
 
 	/**
@@ -8037,7 +8743,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 63;
+	int ITERABLE = 67;
 
 
 	/**
@@ -8048,7 +8754,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 64;
+	int OBJECT = 68;
 
 
 	/**
@@ -8213,6 +8919,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_GeneratedPaperDeals();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getNonShippedSequences <em>Non Shipped Sequences</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Non Shipped Sequences</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getNonShippedSequences()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_NonShippedSequences();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.Sequence <em>Sequence</em>}'.
@@ -10096,6 +10813,28 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getExposureDetail_LocalDate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodStart <em>Hedging Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodStart()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_HedgingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodEnd <em>Hedging Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period End</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ExposureDetail#getHedgingPeriodEnd()
+	 * @see #getExposureDetail()
+	 * @generated
+	 */
+	EAttribute getExposureDetail_HedgingPeriodEnd();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails <em>Charter Contract Fee Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10547,6 +11286,28 @@ public interface SchedulePackage extends EPackage {
 	EReference getPaperDealAllocationEntry_Exposures();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodStart <em>Hedging Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodStart()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_HedgingPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodEnd <em>Hedging Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Period End</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodEnd()
+	 * @see #getPaperDealAllocationEntry()
+	 * @generated
+	 */
+	EAttribute getPaperDealAllocationEntry_HedgingPeriodEnd();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.LumpSumDetails <em>Lump Sum Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10902,6 +11663,112 @@ public interface SchedulePackage extends EPackage {
 	EReference getSandboxReference_Reference();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.NonShippedSequence <em>Non Shipped Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Non Shipped Sequence</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSequence
+	 * @generated
+	 */
+	EClass getNonShippedSequence();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.NonShippedSequence#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSequence#getVessel()
+	 * @see #getNonShippedSequence()
+	 * @generated
+	 */
+	EReference getNonShippedSequence_Vessel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.NonShippedSequence#getEvents <em>Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Events</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSequence#getEvents()
+	 * @see #getNonShippedSequence()
+	 * @generated
+	 */
+	EReference getNonShippedSequence_Events();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit <em>Non Shipped Slot Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Non Shipped Slot Visit</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSlotVisit
+	 * @generated
+	 */
+	EClass getNonShippedSlotVisit();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSlotVisit#getSlot()
+	 * @see #getNonShippedSlotVisit()
+	 * @generated
+	 */
+	EReference getNonShippedSlotVisit_Slot();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.NonShippedJourney <em>Non Shipped Journey</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Non Shipped Journey</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedJourney
+	 * @generated
+	 */
+	EClass getNonShippedJourney();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NonShippedJourney#isLaden <em>Laden</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedJourney#isLaden()
+	 * @see #getNonShippedJourney()
+	 * @generated
+	 */
+	EAttribute getNonShippedJourney_Laden();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.NonShippedJourney#getDestination <em>Destination</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Destination</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedJourney#getDestination()
+	 * @see #getNonShippedJourney()
+	 * @generated
+	 */
+	EReference getNonShippedJourney_Destination();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.NonShippedIdle <em>Non Shipped Idle</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Non Shipped Idle</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedIdle
+	 * @generated
+	 */
+	EClass getNonShippedIdle();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.NonShippedIdle#isLaden <em>Laden</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedIdle#isLaden()
+	 * @see #getNonShippedIdle()
+	 * @generated
+	 */
+	EAttribute getNonShippedIdle_Laden();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11149,6 +12016,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__GENERATED_PAPER_DEALS = eINSTANCE.getSchedule_GeneratedPaperDeals();
+
+		/**
+		 * The meta object literal for the '<em><b>Non Shipped Sequences</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__NON_SHIPPED_SEQUENCES = eINSTANCE.getSchedule_NonShippedSequences();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -12619,6 +13494,22 @@ public interface SchedulePackage extends EPackage {
 		EAttribute EXPOSURE_DETAIL__LOCAL_DATE = eINSTANCE.getExposureDetail_LocalDate();
 
 		/**
+		 * The meta object literal for the '<em><b>Hedging Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__HEDGING_PERIOD_START = eINSTANCE.getExposureDetail_HedgingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPOSURE_DETAIL__HEDGING_PERIOD_END = eINSTANCE.getExposureDetail_HedgingPeriodEnd();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CharterContractFeeDetailsImpl <em>Charter Contract Fee Details</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12977,6 +13868,22 @@ public interface SchedulePackage extends EPackage {
 		EReference PAPER_DEAL_ALLOCATION_ENTRY__EXPOSURES = eINSTANCE.getPaperDealAllocationEntry_Exposures();
 
 		/**
+		 * The meta object literal for the '<em><b>Hedging Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_START = eINSTANCE.getPaperDealAllocationEntry_HedgingPeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL_ALLOCATION_ENTRY__HEDGING_PERIOD_END = eINSTANCE.getPaperDealAllocationEntry_HedgingPeriodEnd();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.LumpSumDetailsImpl <em>Lump Sum Details</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13255,6 +14162,94 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SANDBOX_REFERENCE__REFERENCE = eINSTANCE.getSandboxReference_Reference();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedSequenceImpl <em>Non Shipped Sequence</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedSequenceImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedSequence()
+		 * @generated
+		 */
+		EClass NON_SHIPPED_SEQUENCE = eINSTANCE.getNonShippedSequence();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NON_SHIPPED_SEQUENCE__VESSEL = eINSTANCE.getNonShippedSequence_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NON_SHIPPED_SEQUENCE__EVENTS = eINSTANCE.getNonShippedSequence_Events();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedSlotVisitImpl <em>Non Shipped Slot Visit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedSlotVisitImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedSlotVisit()
+		 * @generated
+		 */
+		EClass NON_SHIPPED_SLOT_VISIT = eINSTANCE.getNonShippedSlotVisit();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NON_SHIPPED_SLOT_VISIT__SLOT = eINSTANCE.getNonShippedSlotVisit_Slot();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedJourneyImpl <em>Non Shipped Journey</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedJourneyImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedJourney()
+		 * @generated
+		 */
+		EClass NON_SHIPPED_JOURNEY = eINSTANCE.getNonShippedJourney();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NON_SHIPPED_JOURNEY__LADEN = eINSTANCE.getNonShippedJourney_Laden();
+
+		/**
+		 * The meta object literal for the '<em><b>Destination</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NON_SHIPPED_JOURNEY__DESTINATION = eINSTANCE.getNonShippedJourney_Destination();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedIdleImpl <em>Non Shipped Idle</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.NonShippedIdleImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNonShippedIdle()
+		 * @generated
+		 */
+		EClass NON_SHIPPED_IDLE = eINSTANCE.getNonShippedIdle();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NON_SHIPPED_IDLE__LADEN = eINSTANCE.getNonShippedIdle_Laden();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

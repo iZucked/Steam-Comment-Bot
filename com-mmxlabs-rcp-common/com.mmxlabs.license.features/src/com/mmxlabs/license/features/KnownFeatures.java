@@ -7,7 +7,8 @@ package com.mmxlabs.license.features;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * This really should not be here.... but a shared place to store feature constants.
+ * This really should not be here.... but a shared place to store feature
+ * constants.
  * 
  * @author Simon Goodall
  *
@@ -54,12 +55,15 @@ public final class KnownFeatures {
 	 * Enable Exposures calculations
 	 */
 	public static final String FEATURE_EXPOSURES = "features:exposures";
-	// compute exposures using any slope applied to the non-mmBTu curve instead of using energy conversion from non-mmBTu to mmBTu
+	// compute exposures using any slope applied to the non-mmBTu curve instead of
+	// using energy conversion from non-mmBTu to mmBTu
 	public static final String FEATURE_EXPOSURES_IGNORE_ENERGY_CONVERSION = "features:exposures-ignore-energy-conversion";
 	public static final String FEATURE_EXPOSURES_CUTOFF_AT_PROMPT_START = "features:exposures-cutoff-at-prompt-start";
-	// compute exposures (and subsequently hedge, if enabled) for a slot which has OpenSlotAllocaiton
+	// compute exposures (and subsequently hedge, if enabled) for a slot which has
+	// OpenSlotAllocaiton
 	public static final String FEATURE_OPEN_SLOT_EXPOSURE = "features:open-slot-exposure";
-	// compute exposures (and subsequently hedge, if enabled) only for the checked exposures
+	// compute exposures (and subsequently hedge, if enabled) only for the checked
+	// exposures
 	public static final String FEATURE_INDIVIDUAL_EXPOSURES = "features:individual-exposures";
 	// Deal sets generation
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CARGOES = "features:deal-sets-generate-from-cargoes";
@@ -74,12 +78,11 @@ public final class KnownFeatures {
 	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
 	public static final String FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START = "features:re-hedge-cutoff-at-prompt-start";
 	public static final String FEATURE_IGNORE_HEDGES_PNL_DURING_OPTIMISATION = "features:ignore-hedges-pnl-during-optimisation";
-	
 
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
-	
+
 	public static final String FEATURE_MULL_SLOT_GENERATION = "features:mull-slot-generation";
-	/** 
+	/**
 	 * MTM
 	 */
 	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
@@ -115,8 +118,6 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_NOMINATIONS = "features:nominations";
 
-	
-
 	public static final String FEATURE_PURGE = "features:purge";
 
 	public static final String FEATURE_DATAHUB_BASECASE_ARCHIVE = "features:datahub-basecase-archive";
@@ -133,6 +134,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_ADP_SPACING_RATEABILITY = "features:adp-spacing-rateability";
 
+	public static final String FEATURE_ADP_VESSEL_USAGE_CONSTRAINT = "features:adp-vessel-usage-constraint";
+
 	public static final String FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS = "features:grouped-optional-slots-constraints";
 
 	public static final String FEATURE_MMX_REFERENCE_VESSELS = "features:mmx-reference-vessels";
@@ -142,12 +145,14 @@ public final class KnownFeatures {
 	public static final String FEATURE_MARKET_MODEL_CONTRACTS = "features:market-model-contracts";
 
 	public static final String FEATURE_MARKETABLE_WINDOWS = "features:marketability";
-	
-	public static final String FEATURE_PRICING_BASES = "features:pricing-bases";
-	
-	public static final String FEATURE_PREFERRED_PRICING_BASES = "features:preferred-pricing-bases";
-	
+
+	public static final String FEATURE_PREFERRED_FORMULAE = "features:preferred-formulae";
+
 	public static final String FEATURE_BUSINESS_UNITS = "features:business-units";
+	
+	public static final String FEATURE_THIRD_PARTY_ENTITIES = "features:third-party-entities";
+
+	public static final String FEATURE_NON_SHIPPED_FOB_ROTATIONS = "features:non-shipped-fob-rotations";
 
 	/**
 	 * Scenario repair features
@@ -159,6 +164,7 @@ public final class KnownFeatures {
 	 */
 	public static final String FEATURE_TRANSFER_MODEL = "features:transfer-model";
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_AGREEMENT_GROUPING = "features:transfer-model-transfer-agreement-grouping";
+	public static final String FEATURE_TRANSFER_MODEL_ALLOW_TRANSFER_WITING_ENTITY = "features:transfer-model-allow-transfer-within-entity";
 	// reserved NOT used
 	public static final String FEATURE_TRANSFER_MODEL_TRANSFER_RECORD_EXPOSURE = "features:transfer-model-transfer-record-exposure";
 	/**
@@ -172,16 +178,22 @@ public final class KnownFeatures {
 	public static final String FEATURE_HEADLINE_EQUITY_BOOK = "features:report-equity-book";
 	public static final String FEATURE_HEADLINE_IDLE_DAYS = "features:headline-idle-days";
 	public static final String FEATURE_HEADLINE_PURCHASE_COST = "features:headline-purchase-cost";
-	
-	//emissions
+
+	// emissions
 	public static final String FEATURE_EMISSIONS = "features:emissions";
 
-	
 	/**
 	 * Enable LDD etc style cargoes
 	 */
 	public static final String FEATURE_COMPLEX_CARGO = "features:complex-cargo";
-	
+
 	public static final String FEATURE_MONTHLY_BALLAST_BONUS = "features:monthly-ballast-bonus";
+	
+	public static final String FEATURE_SCHEDULED_VOLUME = "features:scheduled-volume";
+
+	/**
+	 *  Temporary features
+	 */
+	public static final String FEATURE_ADP_IMPORT_CONTRACT_DATES_FROM_CSV = "features:adp-import-contract-dates-from-csv";
 
 }

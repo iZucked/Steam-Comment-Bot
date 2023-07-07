@@ -7,15 +7,14 @@ package com.mmxlabs.lingo.app;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionException;
@@ -27,10 +26,11 @@ import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.descriptor.basic.MPartDescriptor;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
@@ -41,6 +41,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IPluginContribution;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPage;
@@ -49,10 +51,14 @@ import org.eclipse.ui.activities.WorkbenchActivityHelper;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
+import org.eclipse.ui.internal.PerspectiveExtensionReader;
 import org.eclipse.ui.internal.WorkbenchMessages;
+import org.eclipse.ui.internal.WorkbenchPage;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.WorkbenchWindow;
+import org.eclipse.ui.internal.e4.compatibility.ModeledPageLayout;
 import org.eclipse.ui.internal.intro.IIntroConstants;
+import org.eclipse.ui.internal.registry.PerspectiveDescriptor;
 import org.eclipse.ui.internal.registry.ViewDescriptor;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
@@ -60,56 +66,63 @@ import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.ui.views.IViewDescriptor;
 import org.eclipse.ui.views.IViewRegistry;
 
+import com.google.common.collect.Sets;
+
 /**
  * A <code>ShowViewMenu</code> is used to populate a menu manager with Show View actions. The visible views are determined by user preference from the Perspective Customize dialog.
  * 
  * 
- * Custom version to link up e4 views from perspective short cuts.
- * TODO: Fix up dialog box
+ * Custom version to link up e4 views from perspective short cuts. TODO: Fix up dialog box
  * 
  * 
  * @author sg
  *
  */
+@SuppressWarnings("restriction")
 public class ShowViewMenu extends ContributionItem {
+
+	// These are the display names for the category. The API's used here do no get the underlying id.
+	private static final String CAT_USER_REPORTS = "User Reports";
+	private static final String CAT_TEAM_REPORTS = "Team Reports";
+	private static final String CAT_SCHEDULE = "Schedule";
+	private static final String CAT_GENERAL = "General";
+
+	// Part ids to always ignore
+	private static final Set<String> IGNORED = Sets.newHashSet(IIntroConstants.INTRO_VIEW_ID);
+	private static final Set<String> ALWAYS = Sets.newHashSet("com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.TaskManagerView");
 
 	public static final String SHOW_VIEW_ID = "com.mmxlabs.rcp.common.openview";
 
 	public static final String VIEW_ID_PARM = "view.id";
-	private IWorkbenchWindow window;
+	private final IWorkbenchWindow window;
 
 	private static final String NO_TARGETS_MSG = WorkbenchMessages.Workbench_showInNoTargets;
 
-	private Comparator actionComparator = new Comparator() {
-		@Override
-		public int compare(Object o1, Object o2) {
-			if (collator == null) {
-				collator = Collator.getInstance();
-			}
-			CommandContributionItemParameter a1 = (CommandContributionItemParameter) o1;
-			CommandContributionItemParameter a2 = (CommandContributionItemParameter) o2;
-			return collator.compare(a1.label, a2.label);
+	private final Comparator<CommandContributionItemParameter> actionComparator = (o1, o2) -> {
+		if (collator == null) {
+			collator = Collator.getInstance();
 		}
+		final CommandContributionItemParameter a1 = o1;
+		final CommandContributionItemParameter a2 = o2;
+		return collator.compare(a1.label, a2.label);
 	};
 
-	private Action showDlgAction;
-
-	private Map actions = new HashMap(21);
+	private final Action showDlgAction;
 
 	// Maps pages to a list of opened views
-	private Map openedViews = new HashMap();
+	// private final Map<IWorkbenchPage, List<String>> openedViews = new HashMap<>();
 
 	private MenuManager menuManager;
 
-	private IMenuListener menuListener = new IMenuListener() {
-		@Override
-		public void menuAboutToShow(IMenuManager manager) {
-			manager.markDirty();
-		}
-	};
-	private boolean makeFast;
+	private final IMenuListener menuListener = IMenuManager::markDirty;
+
+	private final boolean makeFast;
 
 	private static Collator collator;
+
+	private final EModelService eModelService;
+	private final MApplication eApplication;
+	private final EPartService ePartService;
 
 	/**
 	 * Creates a Show View menu.
@@ -119,7 +132,7 @@ public class ShowViewMenu extends ContributionItem {
 	 * @param id
 	 *            the id
 	 */
-	public ShowViewMenu(IWorkbenchWindow window, String id) {
+	public ShowViewMenu(final IWorkbenchWindow window, final String id) {
 		this(window, id, false);
 	}
 
@@ -133,38 +146,31 @@ public class ShowViewMenu extends ContributionItem {
 	 * @param makeFast
 	 *            use the fact view variant of the command
 	 */
-
-	private EPartService ePartService;
-	private EModelService eModelService;
-	private MApplication eApplication;
-
-	public ShowViewMenu(IWorkbenchWindow window, String id, final boolean makeFast) {
+	public ShowViewMenu(final IWorkbenchWindow window, final String id, final boolean makeFast) {
 		super(id);
 		this.window = window;
 		this.makeFast = makeFast;
-		final IHandlerService handlerService = (IHandlerService) window.getService(IHandlerService.class);
-		final ICommandService commandService = (ICommandService) window.getService(ICommandService.class);
+		final IHandlerService handlerService = window.getService(IHandlerService.class);
+		final ICommandService commandService = window.getService(ICommandService.class);
 
-		eApplication = (MApplication) window.getService(MApplication.class);
-
-		ePartService = (EPartService) window.getService(EPartService.class);
-
-		eModelService = (EModelService) window.getService(EModelService.class);
+		eApplication = window.getService(MApplication.class);
+		eModelService = window.getService(EModelService.class);
+		ePartService = window.getService(EPartService.class);
 
 		final ParameterizedCommand cmd = getCommand(commandService, makeFast);
 
-		showDlgAction = new Action(WorkbenchMessages.ShowView_title) {
+		showDlgAction = new Action("Search...") {
 			@Override
 			public void run() {
 				try {
 					handlerService.executeCommand(cmd, null);
 				} catch (final ExecutionException e) {
 					// Do nothing.
-				} catch (NotDefinedException e) {
+				} catch (final NotDefinedException e) {
 					// Do nothing.
-				} catch (NotEnabledException e) {
+				} catch (final NotEnabledException e) {
 					// Do nothing.
-				} catch (NotHandledException e) {
+				} catch (final NotHandledException e) {
 					// Do nothing.
 				}
 			}
@@ -172,8 +178,8 @@ public class ShowViewMenu extends ContributionItem {
 
 		window.getWorkbench().getHelpSystem().setHelp(showDlgAction, IWorkbenchHelpContextIds.SHOW_VIEW_OTHER_ACTION);
 		// indicate that a show views submenu has been created
-		if (window instanceof WorkbenchWindow) {
-			((WorkbenchWindow) window).addSubmenu(WorkbenchWindow.SHOW_VIEW_SUBMENU);
+		if (window instanceof final WorkbenchWindow ww) {
+			ww.addSubmenu(WorkbenchWindow.SHOW_VIEW_SUBMENU);
 		}
 
 		showDlgAction.setActionDefinitionId(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW);
@@ -191,12 +197,12 @@ public class ShowViewMenu extends ContributionItem {
 	/**
 	 * Fills the menu with Show View actions.
 	 */
-	private void fillMenu(IMenuManager innerMgr) {
+	private void fillMenu(final IMenuManager innerMgr) {
 		// Remove all.
 		innerMgr.removeAll();
 
 		// If no page disable all.
-		IWorkbenchPage page = window.getActivePage();
+		final IWorkbenchPage page = window.getActivePage();
 		if (page == null) {
 			return;
 		}
@@ -205,34 +211,120 @@ public class ShowViewMenu extends ContributionItem {
 		if (page.getPerspective() == null) {
 			return;
 		}
+		// Construct the sub-set of views we are interested in.
+		// Add views we always want
+		final Set<String> viewIds = new HashSet<>(ALWAYS);
 
-		// Get visible actions.
-		List viewIds = Arrays.asList(page.getShowViewShortcuts());
+		// Add the views based on the perspective.
+		// We don't use the following as this is the persisted state rather the hard-coded state.
 
-		Collection<MPart> parts = ePartService.getParts();
+		// viewIds.addAll(Arrays.asList(page.getShowViewShortcuts()));
 
-		// add all open views
-		viewIds = addOpenedViews(page, viewIds);
+		// Instead, use this snippet from page.resetPerspective() to create a new model element and then read the shortcuts from it.
+		{
+			final MPerspective dummyPerspective = eModelService.createModelElement(MPerspective.class);
+			dummyPerspective.setElementId(page.getPerspective().getId());
+			final IPerspectiveDescriptor desc = page.getPerspective();
+			final IPerspectiveFactory factory = ((PerspectiveDescriptor) desc).createFactory();
 
-		List actions = new ArrayList(viewIds.size());
-		for (Iterator i = viewIds.iterator(); i.hasNext();) {
-			String id = (String) i.next();
-			if (id.equals(IIntroConstants.INTRO_VIEW_ID)) {
-				continue;
-			}
-			CommandContributionItemParameter item = getItem(id);
-			if (item != null) {
-				actions.add(item);
+			// The initial perspective factory definition
+			final ModeledPageLayout modelLayout = new ModeledPageLayout(((WorkbenchPage) page).getWindowModel(), eModelService, ePartService, dummyPerspective, desc, (WorkbenchPage) page, false);
+			factory.createInitialLayout(modelLayout);
+
+			// Then add in any perspective extensions
+			final PerspectiveExtensionReader reader = new PerspectiveExtensionReader();
+			reader.extendLayout(window.getExtensionTracker(), desc.getId(), modelLayout);
+
+			// Finally the perspective shortcuts are tags in the format prefix:viewid
+			dummyPerspective.getTags()
+					.stream() //
+					.filter(t -> t.startsWith(ModeledPageLayout.SHOW_VIEW_TAG)) //
+					.map(t -> t.substring(ModeledPageLayout.SHOW_VIEW_TAG.length())) //
+					.forEach(viewIds::add);
+		}
+		//
+		// // add all open views
+		// viewIds = addOpenedViews(page, viewIds);
+		for (var viewRef : page.getViewReferences()) {
+			viewIds.add(viewRef.getId());
+		}
+		// Add all user and team reports.
+		{
+			final IViewRegistry reg = WorkbenchPlugin.getDefault().getViewRegistry();
+			for (final var cat : reg.getViews()) {
+				if (cat.getCategoryPath().length > 0) {
+					if (cat.getCategoryPath()[0].equals(CAT_TEAM_REPORTS) || cat.getCategoryPath()[0].equals(CAT_USER_REPORTS)) {
+						viewIds.add(cat.getId());
+					}
+				}
 			}
 		}
-		Collections.sort(actions, actionComparator);
-		for (Iterator i = actions.iterator(); i.hasNext();) {
-			CommandContributionItemParameter ccip = (CommandContributionItemParameter) i.next();
-			if (WorkbenchActivityHelper.filterItem(ccip)) {
+
+		// Filter out views we are not interested in.
+		viewIds.removeAll(IGNORED);
+
+		// Next from the collection of id's, find the category and put the info in a grouped map
+		final Map<String, List<CommandContributionItemParameter>> m = new HashMap<>();
+		for (final String id : viewIds) {
+			getItem(id, m);
+		}
+
+		// Sort alphabetically...
+		final List<String> keys = new LinkedList<>(m.keySet());
+		Collections.sort(keys);
+		// .. but move some specific ones to the top...
+		if (keys.contains(CAT_SCHEDULE)) {
+			keys.remove(CAT_SCHEDULE);
+			keys.add(0, CAT_SCHEDULE);
+		}
+		if (keys.contains(CAT_TEAM_REPORTS)) {
+			keys.remove(CAT_TEAM_REPORTS);
+			keys.add(0, CAT_TEAM_REPORTS);
+		}
+		if (keys.contains(CAT_USER_REPORTS)) {
+			keys.remove(CAT_USER_REPORTS);
+			keys.add(0, CAT_USER_REPORTS);
+		}
+		// ... and others to the bottom
+		if (keys.contains(CAT_GENERAL)) {
+			keys.remove(CAT_GENERAL);
+			keys.add(CAT_GENERAL);
+		}
+
+		for (final String key : keys) {
+			final var views = m.get(key);
+			// Activity bindings should filter out the views
+			views.removeIf(WorkbenchActivityHelper::filterItem);
+			if (views.isEmpty()) {
 				continue;
 			}
-			CommandContributionItem item = new CommandContributionItem(ccip);
-			innerMgr.add(item);
+
+			Collections.sort(views, actionComparator);
+			// These categories become sub menus rather than inlined.
+			if (key.equals(CAT_USER_REPORTS) || key.equals(CAT_TEAM_REPORTS)) {
+				final MenuManager minimgr = new MenuManager(key);
+				innerMgr.add(minimgr);
+				for (final var ccip : views) {
+					minimgr.add(new CommandContributionItem(ccip));
+				}
+			} else {
+				final Action a = new Action("- " + key + " -") {
+
+				};
+				a.setEnabled(false);
+
+				final ActionContributionItem aci = new ActionContributionItem(a) {
+
+					@Override
+					public boolean isSeparator() {
+						return true;
+					}
+				};
+				innerMgr.add(aci);
+				for (final var ccip : views) {
+					innerMgr.add(new CommandContributionItem(ccip));
+				}
+			}
 		}
 
 		// We only want to add the separator if there are show view shortcuts,
@@ -248,10 +340,10 @@ public class ShowViewMenu extends ContributionItem {
 
 	static class PluginCCIP extends CommandContributionItemParameter implements IPluginContribution {
 
-		private String localId;
-		private String pluginId;
+		private final String localId;
+		private final String pluginId;
 
-		public PluginCCIP(IViewDescriptor v, IServiceLocator serviceLocator, String id, String commandId, int style) {
+		public PluginCCIP(final IViewDescriptor v, final IServiceLocator serviceLocator, final String id, final String commandId, final int style) {
 			super(serviceLocator, id, commandId, style);
 			localId = ((ViewDescriptor) v).getLocalId();
 			pluginId = ((ViewDescriptor) v).getPluginId();
@@ -279,104 +371,104 @@ public class ShowViewMenu extends ContributionItem {
 
 	}
 
-	private CommandContributionItemParameter getItem(String viewId) {
+	private boolean getItem(final String viewId, final Map<String, List<CommandContributionItemParameter>> groupedViews) {
+		// This disabled code queried the view part before the view description.
+		// SG: I think we want to ignore this as we often get the wrong name/icon from the persisted state rather than original definition
+		// {
+		// List<MPart> findElements = eModelService.findElements(eApplication, viewId, MPart.class, (List) null);
+		// if (findElements.size() == 1) {
+		// MPart p = findElements.get(0);
+		// String label = p.getLabel();
+		//
+		// CommandContributionItemParameter parms = new CommandContributionItemParameter(window, viewId, SHOW_VIEW_ID, CommandContributionItem.STYLE_PUSH);
+		// parms.label = label;
+		// try {
+		// parms.icon = ImageDescriptor.createFromURL(new URL(p.getIconURI()));
+		// } catch (MalformedURLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// parms.parameters = new HashMap();
+		//
+		// parms.parameters.put(VIEW_ID_PARM, viewId);
+		// if (makeFast) {
+		// parms.parameters.put(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW, "true"); //$NON-NLS-1$
+		// }
+		//
+		// groupedViews.computeIfAbsent(p.get, null)
+		// return parms;
+		// }
+		// }
 		{
-			List findElements = eModelService.findElements(eApplication, viewId, MPart.class, (List) null);
+			final List<MPartDescriptor> findElements = eModelService.findElements(eApplication, viewId, MPartDescriptor.class, (List) null);
 			if (findElements.size() == 1) {
-				MPart p = (MPart) findElements.get(0);
-				String label = p.getLabel();
+				final MPartDescriptor p = findElements.get(0);
+				final String label = p.getLabel();
 
-				CommandContributionItemParameter parms = new CommandContributionItemParameter(window, viewId, SHOW_VIEW_ID, CommandContributionItem.STYLE_PUSH);
+				final CommandContributionItemParameter parms = new CommandContributionItemParameter(window, viewId, SHOW_VIEW_ID, CommandContributionItem.STYLE_PUSH);
 				parms.label = label;
 				try {
 					parms.icon = ImageDescriptor.createFromURL(new URL(p.getIconURI()));
-				} catch (MalformedURLException e) {
+				} catch (final MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				parms.parameters = new HashMap();
+				parms.parameters = new HashMap<Object, Object>();
 
 				parms.parameters.put(VIEW_ID_PARM, viewId);
 				if (makeFast) {
 					parms.parameters.put(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW, "true"); //$NON-NLS-1$
 				}
-				return parms;
+
+				groupedViews.computeIfAbsent(p.getCategory(), k -> new LinkedList<>()).add(parms);
+				return true;
 			}
 		}
-		{
-			List findElements = eModelService.findElements(eApplication, viewId, MPartDescriptor.class, (List) null);
-			if (findElements.size() == 1) {
-				MPartDescriptor p = (MPartDescriptor) findElements.get(0);
-				String label = p.getLabel();
-
-				CommandContributionItemParameter parms = new CommandContributionItemParameter(window, viewId, SHOW_VIEW_ID, CommandContributionItem.STYLE_PUSH);
-				parms.label = label;
-				try {
-					parms.icon = ImageDescriptor.createFromURL(new URL(p.getIconURI()));
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				parms.parameters = new HashMap();
-
-				parms.parameters.put(VIEW_ID_PARM, viewId);
-				if (makeFast) {
-					parms.parameters.put(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW, "true"); //$NON-NLS-1$
-				}
-				return parms;
-			}
-		}
-		IViewRegistry reg = WorkbenchPlugin.getDefault().getViewRegistry();
-		IViewDescriptor desc = reg.find(viewId);
+		final IViewRegistry reg = WorkbenchPlugin.getDefault().getViewRegistry();
+		final IViewDescriptor desc = reg.find(viewId);
 		if (desc == null) {
-			return null;
+			return false;
 		}
-		String label = desc.getLabel();
+		final String label = desc.getLabel();
 
-		CommandContributionItemParameter parms = new PluginCCIP(desc, window, viewId, SHOW_VIEW_ID, CommandContributionItem.STYLE_PUSH);
+		final CommandContributionItemParameter parms = new PluginCCIP(desc, window, viewId, SHOW_VIEW_ID, CommandContributionItem.STYLE_PUSH);
 		parms.label = label;
 		parms.icon = desc.getImageDescriptor();
-		parms.parameters = new HashMap();
+		parms.parameters = new HashMap<Object, Object>();
 
 		parms.parameters.put(VIEW_ID_PARM, viewId);
 		if (makeFast) {
 			parms.parameters.put(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW, "true"); //$NON-NLS-1$
 		}
-		return parms;
+		groupedViews.computeIfAbsent(desc.getCategoryPath()[0], k -> new LinkedList<>()).add(parms);
+		return true;
 	}
 
-	private List addOpenedViews(IWorkbenchPage page, List actions) {
-		ArrayList views = getParts(page);
-		ArrayList result = new ArrayList(views.size() + actions.size());
-
-		for (int i = 0; i < actions.size(); i++) {
-			Object element = actions.get(i);
-			if (result.indexOf(element) < 0) {
-				result.add(element);
-			}
-		}
-		for (int i = 0; i < views.size(); i++) {
-			Object element = views.get(i);
-			if (result.indexOf(element) < 0) {
-				result.add(element);
-			}
-		}
-		return result;
-	}
-
-	private ArrayList getParts(IWorkbenchPage page) {
-		ArrayList parts = (ArrayList) openedViews.get(page);
-		if (parts == null) {
-			parts = new ArrayList();
-			openedViews.put(page, parts);
-		}
-		return parts;
-	}
+	// private List<String> addOpenedViews(final IWorkbenchPage page, final List<String> actions) {
+	// final List<String> views = getParts(page);
+	// final List<String> result = new ArrayList<>(views.size() + actions.size());
+	//
+	// for (final String element : actions) {
+	// if (!result.contains(element)) {
+	// result.add(element);
+	// }
+	// }
+	// for (final String element : views) {
+	// if (!result.contains(element)) {
+	// result.add(element);
+	// }
+	// }
+	// return result;
+	// }
+	//
+	// private List<String> getParts(final IWorkbenchPage page) {
+	// return openedViews.computeIfAbsent(page, k -> new LinkedList<>());
+	// }
 
 	@Override
-	public void fill(Menu menu, int index) {
-		if (getParent() instanceof MenuManager) {
-			((MenuManager) getParent()).addMenuListener(menuListener);
+	public void fill(final Menu menu, int index) {
+		if (getParent() instanceof final MenuManager mgr) {
+			mgr.addMenuListener(menuListener);
 		}
 
 		if (menuManager != null) {
@@ -386,9 +478,9 @@ public class ShowViewMenu extends ContributionItem {
 
 		menuManager = new MenuManager();
 		fillMenu(menuManager);
-		IContributionItem items[] = menuManager.getItems();
+		final IContributionItem[] items = menuManager.getItems();
 		if (items.length == 0) {
-			MenuItem item = new MenuItem(menu, SWT.NONE, index++);
+			final MenuItem item = new MenuItem(menu, SWT.NONE, index);
 			item.setText(NO_TARGETS_MSG);
 			item.setEnabled(false);
 		} else {
@@ -398,24 +490,19 @@ public class ShowViewMenu extends ContributionItem {
 		}
 	}
 
-	// for dynamic UI
-	protected void removeAction(String viewId) {
-		actions.remove(viewId);
-	}
-
 	/**
 	 * @param commandService
 	 * @param makeFast
 	 */
-	private ParameterizedCommand getCommand(ICommandService commandService, final boolean makeFast) {
-		Command c = commandService.getCommand(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW);
+	private ParameterizedCommand getCommand(final ICommandService commandService, final boolean makeFast) {
+		final Command c = commandService.getCommand(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW);
 		Parameterization[] parms = null;
 		if (makeFast) {
 			try {
-				IParameter parmDef = c.getParameter(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW);
+				final IParameter parmDef = c.getParameter(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW);
 				parms = new Parameterization[] { new Parameterization(parmDef, "true") //$NON-NLS-1$
 				};
-			} catch (NotDefinedException e) {
+			} catch (final NotDefinedException e) {
 				// this should never happen
 			}
 		}

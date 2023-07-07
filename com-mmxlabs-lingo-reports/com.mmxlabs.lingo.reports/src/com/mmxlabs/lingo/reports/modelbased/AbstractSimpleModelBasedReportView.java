@@ -76,6 +76,8 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 	private EObjectTableViewerFilterSupport filterSupport;
 	protected FilterField filterField;
 
+	private EObjectTableViewerSortingSupport sortingSupport;
+
 	protected ColumnInfo columnInfo;
 	
 	protected EventHandler todayHandler;
@@ -114,7 +116,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		viewer.getGrid().setHeaderVisible(true);
 
 		if (enableSorting) {
-			sortingSupport = new EObjectTableViewerSortingSupport();
+			sortingSupport = createSortingSupport();
 			viewer.setComparator(sortingSupport.createViewerComparer());
 		}
 		if (enableFilter) {
@@ -231,8 +233,10 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		}
 
 	};
-
-	private EObjectTableViewerSortingSupport sortingSupport;
+	
+	protected EObjectTableViewerSortingSupport createSortingSupport() {
+		return new EObjectTableViewerSortingSupport();
+	}
 
 	@Override
 	public void setFocus() {

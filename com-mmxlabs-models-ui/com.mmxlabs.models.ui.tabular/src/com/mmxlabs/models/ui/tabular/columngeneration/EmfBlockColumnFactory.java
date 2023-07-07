@@ -16,12 +16,11 @@ import java.util.List;
  * 
  * TODO: refactor all EMFReportView#addColumn calls through this class, so that column logic is uniform.
  */
-public abstract class EmfBlockColumnFactory {
-	public abstract ColumnHandler addColumn(final ColumnBlockManager blockManager);
+public interface EmfBlockColumnFactory {
 
-//	public abstract ColumnHandler addColumn(AbstractConfigurableGridReportView report);
+	ColumnHandler addColumn(final ColumnBlockManager blockManager);
 
-	public List<ColumnHandler> addColumns(final ColumnBlockManager blockManager) {
+	default List<ColumnHandler> addColumns(final ColumnBlockManager blockManager) {
 		final List<ColumnHandler> result = new ArrayList<>();
 		result.add(addColumn(blockManager));
 		return result;

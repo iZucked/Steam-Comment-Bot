@@ -375,8 +375,7 @@ public class ScenarioStorageUtil {
 						final Consumer<InstanceData> closeCallback = createCloseCallback(tmpFilesList);
 
 						final TriConsumer<ModelRecord, URI, IProgressMonitor> migrationCallback = (r, uri, mon) -> {
-							if (r instanceof ScenarioModelRecord) {
-								final ScenarioModelRecord mr = (ScenarioModelRecord) r;
+							if (r instanceof ScenarioModelRecord mr) {
 								migrateLiNGOFile(mr, mon, uri, allowMigration);
 								// Add any new artifacts
 								for (final ModelArtifact artifact : manifest.getModelDependencies()) {

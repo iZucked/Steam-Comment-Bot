@@ -23,6 +23,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isFobSale <em>Fob Sale</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getDate <em>Date</em>}</li>
@@ -69,6 +70,29 @@ public interface SellOpportunity extends UUIDObject, SellOption {
 	 * @generated
 	 */
 	void setFobSale(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Optional</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Optional</em>' attribute.
+	 * @see #setOptional(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_Optional()
+	 * @model default="true"
+	 * @generated
+	 */
+	boolean isOptional();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#isOptional <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Optional</em>' attribute.
+	 * @see #isOptional()
+	 * @generated
+	 */
+	void setOptional(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.
@@ -321,7 +345,7 @@ public interface SellOpportunity extends UUIDObject, SellOption {
 	 * @return the value of the '<em>Min Volume</em>' attribute.
 	 * @see #setMinVolume(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_MinVolume()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMinVolume();
@@ -347,7 +371,7 @@ public interface SellOpportunity extends UUIDObject, SellOption {
 	 * @return the value of the '<em>Max Volume</em>' attribute.
 	 * @see #setMaxVolume(int)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getSellOpportunity_MaxVolume()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMaxVolume();

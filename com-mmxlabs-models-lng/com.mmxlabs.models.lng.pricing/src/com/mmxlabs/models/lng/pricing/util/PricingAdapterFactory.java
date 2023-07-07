@@ -233,8 +233,8 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createSettleStrategyAdapter();
 			}
 			@Override
-			public Adapter casePricingBasis(PricingBasis object) {
-				return createPricingBasisAdapter();
+			public Adapter caseInstrumentPeriod(InstrumentPeriod object) {
+				return createInstrumentPeriodAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -787,16 +787,16 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.PricingBasis <em>Basis</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.InstrumentPeriod <em>Instrument Period</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.PricingBasis
+	 * @see com.mmxlabs.models.lng.pricing.InstrumentPeriod
 	 * @generated
 	 */
-	public Adapter createPricingBasisAdapter() {
+	public Adapter createInstrumentPeriodAdapter() {
 		return null;
 	}
 

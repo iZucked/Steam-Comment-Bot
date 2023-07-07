@@ -21,14 +21,16 @@ public class DataCurve extends Curve{
             @JsonProperty(value = "description") String description,
             @JsonProperty(value = "unit", required = true) String unit,
             @JsonProperty(value = "currency", required = true) String currency,
-            @JsonProperty(value = "curve") List<CurvePoint> curve
+            @JsonProperty(value = "curve") List<CurvePoint> curve,
+            @JsonProperty(value = "marketIndex") String marketIndex
     ) {
         super(
                 name,
                 curveType,
                 description,
                 unit,
-                currency
+                currency,
+                marketIndex
         );
         this.curve = curve;
     }

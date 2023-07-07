@@ -13,5 +13,4 @@ public interface ITransferAgreement {
 	String priceExpression();
 	IEntity fromEntity();
 	IEntity toEntity();
-	boolean isBasis();
 }

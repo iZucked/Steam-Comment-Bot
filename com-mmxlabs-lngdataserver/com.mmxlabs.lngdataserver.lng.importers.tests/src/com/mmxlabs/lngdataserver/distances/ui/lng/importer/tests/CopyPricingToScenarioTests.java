@@ -311,7 +311,7 @@ public class CopyPricingToScenarioTests {
 		final PricingVersion pricingVersion = createDefaultPricingVersion();
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
-		final ExpressionCurve c1 = new ExpressionCurve("REL_HH", CurveType.COMMODITY, null, null, null, "105%HH");
+		final ExpressionCurve c1 = new ExpressionCurve("REL_HH", CurveType.COMMODITY, null, null, null, "105%HH", null);
 
 		pricingVersion.getCurves().put(c1.getName(), c1);
 
@@ -335,7 +335,7 @@ public class CopyPricingToScenarioTests {
 		final EditingDomain ed = createLocalEditingDomain(pricingModel);
 
 		final DataCurve c1 = new DataCurve("COOL", CurveType.CHARTER, null, "day", "USD",
-				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 8000d), new CurvePoint(LocalDate.of(2017, 2, 1), 9000d)));
+				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 8000d), new CurvePoint(LocalDate.of(2017, 2, 1), 9000d)), null);
 
 		pricingVersion.getCurves().put(c1.getName(), c1);
 
@@ -359,9 +359,9 @@ public class CopyPricingToScenarioTests {
 		final Map<String, Curve> m = new HashMap<>();
 
 		final DataCurve c1 = new DataCurve("HH", CurveType.COMMODITY, null, "m3", "USD",
-				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.1d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.2d)));
+				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.1d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.2d)), null);
 		final DataCurve c2 = new DataCurve("II", CurveType.COMMODITY, null, "m3", "USD",
-				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.3d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.4d)));
+				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.3d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.4d)), null);
 
 		m.put(c1.getName(), c1);
 		m.put(c2.getName(), c2);
@@ -377,9 +377,9 @@ public class CopyPricingToScenarioTests {
 		final Map<String, Curve> m = new HashMap<>();
 
 		final DataCurve c1 = new DataCurve("HH", CurveType.COMMODITY, null, "m3", "USD",
-				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.1d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.2d)));
+				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.1d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.2d)), null);
 		final DataCurve c2 = new DataCurve("II", CurveType.COMMODITY, null, "m3", "USD",
-				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.3d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.4d)));
+				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.3d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.4d)), null);
 
 		m.put(c1.getName(), c1);
 		m.put(c2.getName(), c2);
@@ -395,9 +395,9 @@ public class CopyPricingToScenarioTests {
 		final Map<String, Curve> m = new HashMap<>();
 
 		final DataCurve c1 = new DataCurve("HH.extra", CurveType.COMMODITY, null, "m3", "USD",
-				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.1d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.2d)));
+				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.1d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.2d)), null);
 		final DataCurve c2 = new DataCurve("II.extra", CurveType.COMMODITY, null, "m3", "USD",
-				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.3d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.4d)));
+				CollectionsUtil.makeArrayList(new CurvePoint(LocalDate.of(2017, 1, 1), 7.3d), new CurvePoint(LocalDate.of(2017, 2, 1), 7.4d)), null);
 
 		m.put(Curve.encodedName(c1.getName()), c1);
 		m.put(Curve.encodedName(c2.getName()), c2);

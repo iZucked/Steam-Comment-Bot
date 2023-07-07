@@ -91,11 +91,13 @@ public final class ColourPalette {
 		setItemColour(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Background, Vessel_Laden_Idle);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background, Vessel_Ballast_Journey);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background, Vessel_Ballast_Idle);
+		setItemColour(ColourPaletteItems.Voyage_Ballast_Non_Shipped_Idle, ColourElements.Background, Vessel_Charter_Length);
 
 		setItemColour(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Foreground, White);
 		setItemColour(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Foreground, Black);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Foreground, White);
 		setItemColour(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Foreground, Black);
+		setItemColour(ColourPaletteItems.Voyage_Ballast_Non_Shipped_Idle, ColourElements.Foreground, Black);
 
 		setItemColour(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background, Vessel_Generated_Charter_Out);
 		setItemColour(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background, Vessel_Charter_Length);
@@ -153,6 +155,9 @@ public final class ColourPalette {
 
 		setItemColour(ColourPaletteItems.Destination_Based_Highlight_Journey, ColourElements.Background, Dark_Yellow);
 		setItemColour(ColourPaletteItems.Destination_Based_Highlight_Idle, ColourElements.Background, Warning_Yellow);
+
+		setItemColour(ColourPaletteItems.Source_Contract_Based_Highlight_Journey, ColourElements.Background, Dark_Yellow);
+		setItemColour(ColourPaletteItems.Source_Contract_Based_Highlight_Idle, ColourElements.Background, Warning_Yellow);
 	}
 
 	public enum ColourElements {
@@ -167,6 +172,7 @@ public final class ColourPalette {
 		Voyage_Load, Voyage_Discharge,
 		Voyage_Laden_Journey, Voyage_Laden_Idle,
 		Voyage_Ballast_Journey, Voyage_Ballast_Idle,
+		Voyage_Ballast_Non_Shipped_Idle,
 		Voyage_Cooldown, Voyage_Purge,
 		Voyage_GeneratedCharterOut,
 		Voyage_CharterLength,
@@ -182,7 +188,9 @@ public final class ColourPalette {
 		
 		Charter_Range,
 		
-		Destination_Based_Highlight_Journey, Destination_Based_Highlight_Idle
+		Destination_Based_Highlight_Journey, Destination_Based_Highlight_Idle,
+
+		Source_Contract_Based_Highlight_Journey, Source_Contract_Based_Highlight_Idle,
 	}
 	// @formatter:on	
 	private final Map<RGB, Color> colourMap = new HashMap<>();

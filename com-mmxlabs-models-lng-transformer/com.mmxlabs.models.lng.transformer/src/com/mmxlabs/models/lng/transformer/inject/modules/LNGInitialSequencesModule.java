@@ -23,12 +23,13 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.CargoModelToScheduleSpecification;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -40,13 +41,12 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.SimpleInitialSequenceBuilder;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures. This is a {@link PrivateModule} to avoid "leakage" into the parent injector
@@ -73,10 +73,7 @@ public class LNGInitialSequencesModule extends PrivateModule {
 
 		bind(IFitnessHelper.class).to(FitnessHelper.class);
 
-		bind(SimpleInitialSequenceBuilder.class).in(Singleton.class);
-		bind(IInitialSequenceBuilder.class).to(SimpleInitialSequenceBuilder.class);
-
-		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
+		bind(CargoModelToScheduleSpecification.class).in(Singleton.class);
 	}
 
 	@Provides
@@ -92,12 +89,21 @@ public class LNGInitialSequencesModule extends PrivateModule {
 	@Singleton
 	@Named(KEY_GENERATED_RAW_SEQUENCES)
 	@Exposed
-	private ISequences provideInitialSequences(@NonNull final IOptimisationTransformer optimisationTransformer, @NonNull final IPhaseOptimisationData data,
+	private ISequences provideInitialSequences(
+			IScenarioDataProvider sdp,
+			@NonNull final CargoModelToScheduleSpecification builder,
+			@NonNull final ScheduleSpecificationTransformer scheduleSpecificationTransformer, 
+			@NonNull final IPhaseOptimisationData data,
+			@NonNull final IOptimisationData optiData,
+			Injector injector,
 			@NonNull final ModelEntityMap modelEntityMap) {
 
-		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
+		
+		var spec = builder.generateScheduleSpecifications(sdp, ScenarioModelUtil.getCargoModel(sdp));
+		return scheduleSpecificationTransformer.createSequences(spec, modelEntityMap, optiData, injector, true);
+//		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
 
-		return sequences;
+//		return sequences;
 	}
 
 	@Provides

@@ -59,7 +59,7 @@ public class EventDurationConstraint extends AbstractModelConstraint {
 				return (IConstraintStatus) ctx.createFailureStatus("No known maximum duration for events of type '" + event.getClass().getName() + "'.");
 			}
 			
-			final int duration = event.getDurationInDays();
+			final int duration = event.getSchedulingDurationInDays();
 			if (duration > max) {
 				String message = String.format("%s event duration %d days (> %d days maximum)", type, duration, max);
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));

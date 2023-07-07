@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.PricingPeriod;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -121,6 +122,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EEnum fobSaleDealTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum pricingPeriodEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -341,6 +349,16 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	@Override
+	public EEnum getPricingPeriod() {
+		return pricingPeriodEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getIterable() {
 		return iterableEDataType;
 	}
@@ -395,6 +413,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		dealTypeEEnum = createEEnum(DEAL_TYPE);
 		desPurchaseDealTypeEEnum = createEEnum(DES_PURCHASE_DEAL_TYPE);
 		fobSaleDealTypeEEnum = createEEnum(FOB_SALE_DEAL_TYPE);
+		pricingPeriodEEnum = createEEnum(PRICING_PERIOD);
 
 		// Create data types
 		iterableEDataType = createEDataType(ITERABLE);
@@ -518,6 +537,12 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		addEEnumLiteral(fobSaleDealTypeEEnum, FOBSaleDealType.SOURCE_ONLY);
 		addEEnumLiteral(fobSaleDealTypeEEnum, FOBSaleDealType.SOURCE_WITH_DEST);
 		addEEnumLiteral(fobSaleDealTypeEEnum, FOBSaleDealType.DIVERT_TO_DEST);
+
+		initEEnum(pricingPeriodEEnum, PricingPeriod.class, "PricingPeriod");
+		addEEnumLiteral(pricingPeriodEEnum, PricingPeriod.DAYS);
+		addEEnumLiteral(pricingPeriodEEnum, PricingPeriod.WEEKS);
+		addEEnumLiteral(pricingPeriodEEnum, PricingPeriod.MONTHS);
+		addEEnumLiteral(pricingPeriodEEnum, PricingPeriod.QUARTERS);
 
 		// Initialize data types
 		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

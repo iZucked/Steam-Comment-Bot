@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -71,7 +72,7 @@ public final class SequencesSerialiser {
 	public static @NonNull ISequences load(final @NonNull IOptimisationData optimisationData, final @NonNull InputStream in) throws Exception {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 
-			final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources());
+			final ModifiableSequences sequences = new ModifiableSequences(optimisationData.getResources(), new SequencesAttributesProviderImpl());
 
 			final Map<String, IResource> resourceMap = new HashMap<>();
 			final Map<String, ISequenceElement> sequenceElementMap = new HashMap<>();

@@ -14,12 +14,12 @@ import org.eclipse.jdt.annotation.NonNull;
  *
  */
 public class BasicPaperDealData {
+	
+
 	private String name;
 	private boolean isBuy; //side of the paper buy or sell
 	private long paperVolume; // always MMBTU
 	private int paperUnitPrice; // fixed cost per mmbtu
-	private LocalDate start; //also pricing month if type is instrument or calendar
-	private LocalDate end;
 	private String type; //PERIOD_AVG, CALENDAR, INSTRUMENT
 	private BasicInstrumentData instrument; //instrument which is used for settling
 	private final @NonNull String indexName; //name of the curve
@@ -28,15 +28,19 @@ public class BasicPaperDealData {
 	private String notes; //notes
 	private boolean virtual;
 	
-	public BasicPaperDealData(String name, boolean isBuy, long paperVolume, int paperUnitPrice, LocalDate start, LocalDate end, 
-			String type, BasicInstrumentData instrument, String indexName, String entity, int year, String notes, boolean virtual) {
+	private LocalDate contractMonth;
+	private LocalDate pricingStart;
+	private LocalDate pricingEnd;
+	private LocalDate hedgingStart;
+	private LocalDate hedgingEnd;
+	
+	public BasicPaperDealData(String name, boolean isBuy, long paperVolume, int paperUnitPrice, String type, BasicInstrumentData instrument, @NonNull String indexName, String entity, int year,
+			String notes, boolean virtual, LocalDate contractMonth, LocalDate pricingStart, LocalDate pricingEnd, LocalDate hedgingStart, LocalDate hedgingEnd) {
 		super();
 		this.name = name;
 		this.isBuy = isBuy;
 		this.paperVolume = paperVolume;
 		this.paperUnitPrice = paperUnitPrice;
-		this.start = start;
-		this.end = end;
 		this.type = type;
 		this.instrument = instrument;
 		this.indexName = indexName;
@@ -44,6 +48,11 @@ public class BasicPaperDealData {
 		this.year = year;
 		this.notes = notes;
 		this.virtual = virtual;
+		this.contractMonth = contractMonth;
+		this.pricingStart = pricingStart;
+		this.pricingEnd = pricingEnd;
+		this.hedgingStart = hedgingStart;
+		this.hedgingEnd = hedgingEnd;
 	}
 
 	public String getName() {
@@ -60,14 +69,6 @@ public class BasicPaperDealData {
 
 	public int getPaperUnitPrice() {
 		return paperUnitPrice;
-	}
-
-	public LocalDate getStart() {
-		return start;
-	}
-
-	public LocalDate getEnd() {
-		return end;
 	}
 
 	public String getType() {
@@ -100,5 +101,25 @@ public class BasicPaperDealData {
 	
 	public boolean isVirtual() {
 		return virtual;
+	}
+
+	public LocalDate getContractMonth() {
+		return contractMonth;
+	}
+
+	public LocalDate getPricingStart() {
+		return pricingStart;
+	}
+
+	public LocalDate getPricingEnd() {
+		return pricingEnd;
+	}
+
+	public LocalDate getHedgingStart() {
+		return hedgingStart;
+	}
+
+	public LocalDate getHedgingEnd() {
+		return hedgingEnd;
 	}
 }

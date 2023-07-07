@@ -28,6 +28,7 @@ import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.DataManifest
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.DistanceDataVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.Entry;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
+import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.PortReplacement;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui.UpdateDistancesWizard;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -39,6 +40,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 public class LingoDistanceUpdater {
 
 	private static final TypeReference<List<AtoBviaCLookupRecord>> TYPE_LIST = new TypeReference<List<AtoBviaCLookupRecord>>() {
+	};
+	private static final TypeReference<List<PortReplacement>> REPLACEMENT_LIST = new TypeReference<List<PortReplacement>>() {
 	};
 
 	public void importIntoScenario(final String filename, final ScenarioInstance scenarioInstance) throws IOException {
@@ -63,7 +66,7 @@ public class LingoDistanceUpdater {
 		// We should really find the version from the file.
 		final DistanceDataVersion distanceDataVersion = new DistanceDataVersion();
 		distanceDataVersion.setVersion("manual");
-		
+
 		final LocationsVersion locationsVersion;
 		final List<AtoBviaCLookupRecord> distanceRecords;
 		try (InputStream inputStream = uc.createInputStream(URI.createURI(baseURI + "/" + entries.get("basic-locations").getPath()))) {
@@ -73,7 +76,7 @@ public class LingoDistanceUpdater {
 			distanceRecords = mapper.readValue(inputStream, TYPE_LIST);
 		}
 
-		importIntoScenario(scenarioInstance, distanceDataVersion, locationsVersion, distanceRecords, null);
+		importIntoScenario(scenarioInstance, distanceDataVersion, locationsVersion, distanceRecords, null, null);
 	}
 
 	public static void importLocalIntoScenario(final ScenarioInstance scenarioInstance) throws IOException {
@@ -86,6 +89,7 @@ public class LingoDistanceUpdater {
 		final LocationsVersion locationsVersion;
 		final List<AtoBviaCLookupRecord> distanceRecords;
 		final List<AtoBviaCLookupRecord> manualDistanceRecords;
+		final List<PortReplacement> portReplacements;
 		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/distances-version.json")) {
 			dataVersion = mapper.readValue(inputStream, DistanceDataVersion.class);
 		}
@@ -98,12 +102,15 @@ public class LingoDistanceUpdater {
 		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/distances-manual.json")) {
 			manualDistanceRecords = mapper.readValue(inputStream, TYPE_LIST);
 		}
+		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/port-replacements.json")) {
+			portReplacements = mapper.readValue(inputStream, REPLACEMENT_LIST);
+		}
 
-		importIntoScenario(scenarioInstance, dataVersion, locationsVersion, distanceRecords, manualDistanceRecords);
+		importIntoScenario(scenarioInstance, dataVersion, locationsVersion, distanceRecords, manualDistanceRecords, portReplacements);
 	}
 
 	public static void importIntoScenario(final ScenarioInstance scenarioInstance, final DistanceDataVersion dataVersion, final LocationsVersion locationsVersion,
-			final List<AtoBviaCLookupRecord> distanceRecords, final List<AtoBviaCLookupRecord> manualRecords) throws IOException {
+			final List<AtoBviaCLookupRecord> distanceRecords, final List<AtoBviaCLookupRecord> manualRecords, final List<PortReplacement> portReplacements) throws IOException {
 		// Check for null inputs
 		if (locationsVersion == null || distanceRecords == null) {
 			return;
@@ -118,7 +125,7 @@ public class LingoDistanceUpdater {
 				modelReference.executeWithLock(true, () -> {
 					try {
 
-						final UpdateDistancesWizard wizard = new UpdateDistancesWizard(modelReference, dataVersion, locationsVersion, distanceRecords, manualRecords);
+						final UpdateDistancesWizard wizard = new UpdateDistancesWizard(modelReference, dataVersion, locationsVersion, distanceRecords, manualRecords, portReplacements);
 						if (activeWorkbenchWindow == null) {
 							// action has been disposed
 							return;

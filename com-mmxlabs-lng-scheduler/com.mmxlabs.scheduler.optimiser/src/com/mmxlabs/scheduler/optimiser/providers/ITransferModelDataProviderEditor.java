@@ -18,5 +18,5 @@ public interface ITransferModelDataProviderEditor extends ITransferModelDataProv
 	
 	void setLookupData(TransfersLookupData lookupdata);
 	
-	void setSeriesParsers(SeriesParser commodityParser, SeriesParser pricingBasisParser);
+	void setSeriesParsers(SeriesParser commodityParser);
 }

@@ -19,14 +19,16 @@ public class ExpressionCurve extends Curve {
             @JsonProperty(value = "description") String description,
             @JsonProperty(value = "unit") String unit,
             @JsonProperty(value = "currency") String currency,
-            @JsonProperty(value = "expression") String expression
+            @JsonProperty(value = "expression") String expression,
+            @JsonProperty(value = "marketIndex") String marketIndex
     ) {
         super(
                 name,
                 curveType,
                 description,
                 unit,
-                currency
+                currency,
+                marketIndex
         );
         this.expression = expression;
     }

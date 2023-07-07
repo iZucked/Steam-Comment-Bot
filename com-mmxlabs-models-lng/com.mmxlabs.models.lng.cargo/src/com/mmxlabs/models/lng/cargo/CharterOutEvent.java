@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.port.Port;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRequiredHeel <em>Required Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getAvailableHeel <em>Available Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getExtensionPeriod <em>Extension Period</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent()
@@ -190,6 +191,28 @@ public interface CharterOutEvent extends VesselEvent {
 	 * @generated
 	 */
 	void setAvailableHeel(StartHeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Extension Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Extension Period</em>' attribute.
+	 * @see #setExtensionPeriod(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCharterOutEvent_ExtensionPeriod()
+	 * @model
+	 * @generated
+	 */
+	int getExtensionPeriod();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getExtensionPeriod <em>Extension Period</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Extension Period</em>' attribute.
+	 * @see #getExtensionPeriod()
+	 * @generated
+	 */
+	void setExtensionPeriod(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Hire Rate</b></em>' attribute.

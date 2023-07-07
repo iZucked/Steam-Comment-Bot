@@ -51,6 +51,7 @@ public final class CommonImages {
 		PinnedRow(8, "icons/8x8/pin.png"), //
 		
 		// 12x12
+		Lock_12(12, "icons/12x12/lock.png"), //
 		Transfer_12(12, "icons/12x12/transfer.png"), //
 		Notes_12(12, "icons/12x12/notes.png"), //
 		HeelCarry_12(12, "icons/12x12/heel_carry.png"), //
@@ -79,6 +80,7 @@ public final class CommonImages {
 		Fuel(16, "icons/16x16/fuel.png"), //
 		Highlighter(16, "icons/16x16/highlighter.png"), //
 		Hub(16, "icons/16x16/hub.png"), //
+		Inventory(16, "icons/16x16/inventory.png"), //
 		Label(16, "icons/16x16/label.png"), //
 		Lateness(16, "icons/16x16/lateness.png"), //
 		Local(16, "icons/16x16/local.png"), //
@@ -95,6 +97,7 @@ public final class CommonImages {
 		PNLDetails(16, "icons/16x16/pnl_details.png"), //
 		ReEvaluate_16(16, "icons/16x16/reevaluate.png"), //
 		ResetWiring(16, "icons/16x16/reset_wiring.png"), //
+		Flows(16, "icons/16x16/flows.png"), //
 		Sandbox(16, "icons/16x16/sandbox.png"), //
 		Scenario(16, "icons/16x16/scenario.png"), //
 		ScenarioDiff(16, "icons/16x16/scenario_diff.png"), //
@@ -111,6 +114,8 @@ public final class CommonImages {
 		Warning(16, "icons/legacy/16x16/warning.gif"), //
 		
 		Read(16, "icons/legacy/16x16/read_obj.gif"), //
+		
+		Report(16, "icons/16x16/report.png"), //
 
 		// 24x12
 		NotesAndTransfer(24, "icons/24x12/notes_and_transfer.png"), //

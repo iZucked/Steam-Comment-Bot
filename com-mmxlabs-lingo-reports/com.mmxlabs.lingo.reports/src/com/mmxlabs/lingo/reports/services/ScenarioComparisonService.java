@@ -329,6 +329,8 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 				LOGGER.error(e.getMessage(), e);
 			}
 		}
+		PlatformUI.getWorkbench().getService(ESelectionService.class).setPostSelection(selection);
+
 	}
 
 	private void updateChangeSetFromSelection(final ISelection selection, final SelectedDataProviderImpl selectedDataProvider) {
@@ -386,8 +388,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	/**
-	 * Update the current Selection. Note this will not update selected ChangeSet
-	 * information.
+	 * Update the current Selection. Note this will not update selected ChangeSet information.
 	 * 
 	 * @param newSelection
 	 */
@@ -396,8 +397,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	/**
-	 * Update the current Selection and selected ChangeSet information based on
-	 * ChangeSet objects in the ISelection
+	 * Update the current Selection and selected ChangeSet information based on ChangeSet objects in the ISelection
 	 * 
 	 * @param newSelection
 	 */
@@ -431,8 +431,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	/**
-	 * Command stack listener method, cause the linked viewer to refresh on command
-	 * execution
+	 * Command stack listener method, cause the linked viewer to refresh on command execution
 	 *
 	 */
 	private class MyCommandStackListener implements CommandStackListener {

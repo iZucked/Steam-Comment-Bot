@@ -4,7 +4,7 @@
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre.feature.feature.group" version="0.0.0"/>
-<repository location="mvn:com.mmxlabs.jre:jre.p2:17.0.3.2022a:zip"/>
+<repository location="mvn:com.mmxlabs.jre:jre.p2:17.7.7.2023c:zip"/>
 </location>
 </locations>
 </target>

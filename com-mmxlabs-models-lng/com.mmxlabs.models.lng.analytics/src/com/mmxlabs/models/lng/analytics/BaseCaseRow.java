@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -24,13 +25,14 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise <em>Optionise</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isFreeze <em>Freeze</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getGroup <em>Group</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow()
  * @model
  * @generated
  */
-public interface BaseCaseRow extends EObject {
+public interface BaseCaseRow extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Buy Option</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -200,5 +202,29 @@ public interface BaseCaseRow extends EObject {
 	 * @generated
 	 */
 	void setFreeze(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Group</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowGroup#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Group</em>' reference.
+	 * @see #setGroup(BaseCaseRowGroup)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow_Group()
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowGroup#getRows
+	 * @model opposite="rows"
+	 * @generated
+	 */
+	BaseCaseRowGroup getGroup();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getGroup <em>Group</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Group</em>' reference.
+	 * @see #getGroup()
+	 * @generated
+	 */
+	void setGroup(BaseCaseRowGroup value);
 
 } // BaseCaseRow

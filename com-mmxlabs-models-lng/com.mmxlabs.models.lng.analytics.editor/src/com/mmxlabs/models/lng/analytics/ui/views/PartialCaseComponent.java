@@ -38,8 +38,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -82,7 +80,7 @@ public class PartialCaseComponent extends AbstractSandboxComponent<OptionModelle
 				final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 				final PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(scenarioEditingLocation, partialCaseViewer);
 				inputWants.add(listener::setOptionAnalysisModel);
-				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE | DND.DROP_LINK);
+				final DropTarget dropTarget = new DropTarget(expandableCompo, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
 				dropTarget.setTransfer(types);
 				dropTarget.addDropListener(listener);
 			}, true);
@@ -93,7 +91,7 @@ public class PartialCaseComponent extends AbstractSandboxComponent<OptionModelle
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
 			final PartialCaseDropTargetListener listener = new PartialCaseDropTargetListener(scenarioEditingLocation, partialCaseViewer);
 			inputWants.add(listener::setOptionAnalysisModel);
-			partialCaseViewer.addDropSupport(DND.DROP_MOVE | DND.DROP_LINK, types, listener);
+			partialCaseViewer.addDropSupport(DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK, types, listener);
 			expandable.setExpanded(expanded);
 
 			expandable.addExpansionListener(expansionListener);
@@ -110,6 +108,9 @@ public class PartialCaseComponent extends AbstractSandboxComponent<OptionModelle
 
 		partialCaseViewer.getGrid().setAutoHeight(true);
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
+		partialCaseViewer.getGrid().setFooterVisible(true); // To allow DND to create a new row when table is full
+		partialCaseViewer.getGrid().setEmptyColumnFooterRenderer(new SandboxFooterRenderer());
+		partialCaseViewer.getGrid().setBottomLeftRenderer(new SandboxBottomLeftRenderer());
 
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER | SWT.WRAP);
@@ -189,7 +190,7 @@ public class PartialCaseComponent extends AbstractSandboxComponent<OptionModelle
 		}
 
 		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
-		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING).getColumn().setWordWrap(true);
+		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
 		GridViewerColumn voyageOptsCol = createColumn(partialCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS);
 		voyageOptsCol.getColumn().setWordWrap(true);
 		// 122 is precalculated width of the rendered image. 8px is padding
@@ -236,6 +237,10 @@ public class PartialCaseComponent extends AbstractSandboxComponent<OptionModelle
 				}
 			});
 
+		}
+
+		for (var g : partialCaseViewer.getGrid().getColumns()) {
+			g.setFooterRenderer(new SandboxFooterRenderer());
 		}
 
 		return partialCaseViewer.getGrid();

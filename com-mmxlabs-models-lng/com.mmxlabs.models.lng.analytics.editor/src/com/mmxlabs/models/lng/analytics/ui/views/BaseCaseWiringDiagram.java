@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.StandardConstants;
+
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -32,10 +34,12 @@ import org.eclipse.swt.widgets.ScrollBar;
 
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 
 /**
  * A control for drawing a wiring diagram. This just displays an arbitrary bipartite graph / matching.
@@ -132,22 +136,29 @@ public class BaseCaseWiringDiagram implements PaintListener {
 			return;
 		}
 
-		final Rectangle ca = getCanvasClientArea();
-
+		final Rectangle cca = getCanvasClientArea();
 		// Could be null is column is no longer visible.
-		if (ca == null) {
+		if (cca == null) {
 			return;
 		}
 
 		if (table == null) {
 			return;
 		}
+		final Rectangle ca = new Rectangle(cca.x, cca.y, cca.width, cca.height);
+		if (grid.getHeaderVisible()) {
+			// We don't adjust y as terminal positions already take into account header height.
+			ca.height -= grid.getHeaderHeight();
+		}
+		if (grid.getFooterVisible()) {
+			ca.height -= grid.getFooterHeight();
+		}
 
 		// Copy ref in case of concurrent change during paint
 		final BaseCase root = table.getBaseCase();
 		// Get a list of terminal positions from subclass
-		Map<BaseCaseRow, Integer> rowIndices = new HashMap<>();
-		Map<Integer, BaseCaseRow> indexToRow = new HashMap<>();
+		final Map<BaseCaseRow, Integer> rowIndices = new HashMap<>();
+		final Map<Integer, BaseCaseRow> indexToRow = new HashMap<>();
 
 		final List<Float> terminalPositions = getTerminalPositions(rowIndices, indexToRow);
 		final GC graphics = e.gc;
@@ -164,9 +175,58 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		// Fill whole area - not for use in a table
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-
 		// draw paths
-		for (BaseCaseRow baseCaseRow : root.getBaseCase()) {
+		for (BaseCaseRowGroup grp : root.getGroups()) {
+			if (grp.getRows().size() < 2) {
+				continue;
+			}
+			float firstRow = -1;
+			for (BaseCaseRow grpRow : grp.getRows()) {
+
+				// Clear clip rect for dragged wire
+				graphics.setClipping((Rectangle) null);
+
+				// Re-apply clip rect
+				graphics.setClipping(ca);
+
+				// // draw terminal blobs
+				graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+				graphics.setLineWidth(2);
+				rawI = 0;
+				for (final float midpoint : terminalPositions) {
+
+					// Map back between current row (sorted) and data (unsorted)
+					final int i = rawI++;
+					// -1 indicates filtered row
+					if (i == -1) {
+						continue;
+					}
+
+					final BaseCaseRow row = indexToRow.get(i);
+					if (row != grpRow) {
+						continue;
+					}
+
+					if (firstRow < 0) {
+						firstRow = midpoint;
+					}
+
+					final float startMid = firstRow;
+					final float endMid = midpoint;
+
+					int x1 = Math.round(ca.x + 1.5f * terminalSize);
+					int x2 = Math.round(ca.x + ca.width - 2 * terminalSize);
+					int x1a = x1 + ((x2 - x1) * 3 / 4);
+					if (startMid != endMid) {
+						graphics.drawLine(x1a, Math.round(startMid), x2, Math.round(startMid));
+						graphics.drawLine(x1a, Math.round(startMid), x1a, Math.round(endMid));
+					}
+					graphics.drawLine(x1a, Math.round(endMid), x2, Math.round(endMid));
+				}
+			}
+		}
+		// draw paths
+		for (final BaseCaseRow baseCaseRow : root.getBaseCase()) {
 
 			// Clear clip rect for dragged wire
 			graphics.setClipping((Rectangle) null);
@@ -194,24 +254,28 @@ public class BaseCaseWiringDiagram implements PaintListener {
 				// Draw left hand terminal
 				if (row.getBuyOption() != null) {
 					final BuyOption buy = row.getBuyOption();
-					boolean isDES = !AnalyticsBuilder.isShipped(buy);
+					final boolean isDES = !AnalyticsBuilder.isShipped(buy);
+					// Define mode does not take into account optionality
+					final boolean isOptional = table.getMode() != SandboxModeConstants.MODE_DEFINE && AnalyticsBuilder.isOptional(buy);
 					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
-					boolean isSpot = AnalyticsBuilder.isSpot(buy);
-
-					drawTerminal(true, isDES, terminalColour, false, isSpot, ca, graphics, midpoint);
+					final boolean isSpot = AnalyticsBuilder.isSpot(buy);
+					drawTerminal(true, isDES, terminalColour, isOptional, isSpot, ca, graphics, midpoint);
 				}
 
 				graphics.setLineWidth(linewidth);
 				// Draw right hand terminal
 				if (row.getSellOption() != null) {
 					final SellOption sell = row.getSellOption();
-					boolean isFOB = !AnalyticsBuilder.isShipped(sell);
+					final boolean isFOB = !AnalyticsBuilder.isShipped(sell);
+					// Define mode does not take into account optionality
+					final boolean isOptional = table.getMode() != SandboxModeConstants.MODE_DEFINE && AnalyticsBuilder.isOptional(sell);
 					final Color terminalColour = ValidTerminalColour;// : InvalidTerminalColour;
-					boolean isSpot = AnalyticsBuilder.isSpot(sell);
-					drawTerminal(false, !isFOB, terminalColour, false, isSpot, ca, graphics, midpoint);
+					final boolean isSpot = AnalyticsBuilder.isSpot(sell);
+					drawTerminal(false, !isFOB, terminalColour, isOptional, isSpot, ca, graphics, midpoint);
 				}
 			}
 		}
+
 	}
 
 	private void drawTerminal(final boolean isLeft, final boolean hollow, Color terminalColour, final boolean isOptional, final boolean isSpot, final Rectangle ca, final GC graphics,
@@ -258,7 +322,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		grid.redraw();
 	}
 
-	protected List<Float> getTerminalPositions(Map<BaseCaseRow, Integer> rTI, Map<Integer, BaseCaseRow> iTR) {
+	protected List<Float> getTerminalPositions(final Map<BaseCaseRow, Integer> rTI, final Map<Integer, BaseCaseRow> iTR) {
 
 		// Determine the mid-point in each row and generate an ordered list of heights.
 
@@ -274,13 +338,13 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		heights[0] = grid.getHeaderHeight();
 		{
 			int idx = 1;
-			for (GridItem item : items) {
+			for (final GridItem item : items) {
 				if (item.isVisible()) {
 					heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 
-					Object data = item.getData();
+					final Object data = item.getData();
 					if (data instanceof BaseCaseRow) {
-						BaseCaseRow changeSetRow = (BaseCaseRow) data;
+						final BaseCaseRow changeSetRow = (BaseCaseRow) data;
 						rTI.put(changeSetRow, idx - 1);
 						iTR.put(idx - 1, changeSetRow);
 					}
@@ -295,7 +359,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		// heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 		// }
 		// Find the row at the top of the table and get it's "height" so we can adjust it later
-		ScrollBar verticalBar = grid.getVerticalBar();
+		final ScrollBar verticalBar = grid.getVerticalBar();
 		final int vPod = verticalBar == null ? 0 : verticalBar.getSelection();
 		final int hOffset = (verticalBar == null || vPod >= heights.length) ? 0 : (heights[vPod]) - grid.getHeaderHeight();
 		// Pass 2 get mid-points
@@ -364,7 +428,7 @@ public class BaseCaseWiringDiagram implements PaintListener {
 		return new Rectangle(area.x + offset, area.y + grid.getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 	}
 
-	public void setRoot(OptionAnalysisModel root) {
+	public void setRoot(final OptionAnalysisModel root) {
 		this.table = root;
 	}
 }

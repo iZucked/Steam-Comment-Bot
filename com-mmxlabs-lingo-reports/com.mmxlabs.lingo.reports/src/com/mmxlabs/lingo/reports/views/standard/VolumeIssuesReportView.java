@@ -292,7 +292,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 		final EObject row = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, null);
 		row.eSet(refRowOwner, owner);
 		row.eSet(attribRowType, type);
-		
+
 		if (type == CapacityViolationType.FORCED_COOLDOWN && qty == 0) {
 			// Show nothing as not all cooldowns have a quantity
 		} else {
@@ -306,7 +306,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
-		return getBlockManager().createColumn(block, title, formatter, path);
+		return getBlockManager().createColumn(block, title).withCellRenderer(formatter).withElementPath(path).build();
 	}
 
 	@Override

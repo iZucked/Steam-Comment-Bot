@@ -346,6 +346,21 @@ public class SequenceItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createNonShippedSlotVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createNonShippedJourney()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createNonShippedIdle()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__FITNESSES,
 				 ScheduleFactory.eINSTANCE.createFitness()));
 	}

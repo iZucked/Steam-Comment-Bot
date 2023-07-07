@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.LocalDateTimeHolder;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowGroup;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
@@ -24,13 +25,14 @@ public class PartialCaseRowMaker {
 
 	protected PartialCaseRow row = null;
 
-	public PartialCaseRowMaker(@NonNull final SandboxModelBuilder builder) {
+	public PartialCaseRowMaker(@NonNull final SandboxModelBuilder builder, PartialCaseRowGroup group) {
 		this.builder = builder;
 		this.row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+		this.builder.getOptionAnalysisModel().getPartialCase().getPartialCase().add(row);
+		row.setGroup(group);
 	}
 
 	public @NonNull PartialCaseRow build() {
-		this.builder.getOptionAnalysisModel().getPartialCase().getPartialCase().add(row);
 		return row;
 	}
 

@@ -163,6 +163,13 @@
       <genFeatures createChild="false" propertyDescription="Maximum number of cargoes in the defined period"
           ecoreFeature="ecore:EAttribute adp.ecore#//PeriodDistribution/maxCargoes"/>
     </genClasses>
+    <genClasses ecoreClass="adp.ecore#//VesselUsageDistributionProfileConstraint">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//VesselUsageDistributionProfileConstraint/distributions"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//VesselUsageDistribution">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//VesselUsageDistribution/cargoes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//VesselUsageDistribution/vessels"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="adp.ecore#//FleetConstraint"/>
     <genClasses ecoreClass="adp.ecore#//TargetCargoesOnVesselConstraint">
       <genFeatures notify="false" createChild="false" propertyDescription="Vessel name"

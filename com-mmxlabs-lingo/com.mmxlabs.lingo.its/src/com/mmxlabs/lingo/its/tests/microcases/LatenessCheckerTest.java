@@ -86,7 +86,6 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 	public void testEvent_WithLateness() throws Exception {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
-		
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
@@ -196,7 +195,6 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 		@NonNull
 		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
-
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
 		vessel.setMaxSpeed(15.0);
@@ -282,6 +280,45 @@ public class LatenessCheckerTest extends AbstractMicroTestCase {
 			final PortVisitLateness lateness2 = visit2.getLateness();
 			Assertions.assertNotNull(lateness2);
 			Assertions.assertEquals(1, lateness2.getLatenessInHours());
+		});
+	}
+
+	/**
+	 * Regression test - min/max duration greater than the generated end window would be incorrectly flagged as late.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testMinMaxDurationNoLateness() throws Exception {
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_155);
+
+		final VesselCharter vesselCharter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withMinDuration(100)
+				.withMaxDuration(100)
+				// .withCharterRate("50000")
+				.build();
+
+		final @NonNull Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+
+		final @NonNull Port port2 = portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN);
+
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L", LocalDate.of(2023, 1, 1), port1, null, entity, "5") //
+				.build() //
+				//
+				.makeDESSale("D", LocalDate.of(2023, 1, 20), port2, null, entity, "7") //
+				.build() //
+				//
+				.withVesselAssignment(vesselCharter, 1) //
+				.build();
+
+		evaluateWithLSOTest(scenarioRunner -> {
+
+			final var visit1 = MicroTestUtils.findVesselEndEvent(lngScenarioModel);
+			final PortVisitLateness lateness1 = visit1.getLateness();
+			Assertions.assertNull(lateness1);
 		});
 	}
 }

@@ -104,7 +104,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.HOLIDAY_CALENDAR_ENTRY: return createHolidayCalendarEntry();
 			case PricingPackage.HOLIDAY_CALENDAR: return createHolidayCalendar();
 			case PricingPackage.SETTLE_STRATEGY: return createSettleStrategy();
-			case PricingPackage.PRICING_BASIS: return createPricingBasis();
+			case PricingPackage.INSTRUMENT_PERIOD: return createInstrumentPeriod();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -501,9 +501,9 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * @generated
 	 */
 	@Override
-	public PricingBasis createPricingBasis() {
-		PricingBasisImpl pricingBasis = new PricingBasisImpl();
-		return pricingBasis;
+	public InstrumentPeriod createInstrumentPeriod() {
+		InstrumentPeriodImpl instrumentPeriod = new InstrumentPeriodImpl();
+		return instrumentPeriod;
 	}
 
 	/**

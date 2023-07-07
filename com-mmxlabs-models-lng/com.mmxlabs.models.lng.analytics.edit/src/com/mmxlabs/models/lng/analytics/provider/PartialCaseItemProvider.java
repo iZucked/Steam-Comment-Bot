@@ -108,6 +108,7 @@ public class PartialCaseItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE);
+			childrenFeatures.add(AnalyticsPackage.Literals.PARTIAL_CASE__GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -165,6 +166,7 @@ public class PartialCaseItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.PARTIAL_CASE__PARTIAL_CASE:
+			case AnalyticsPackage.PARTIAL_CASE__GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -186,6 +188,11 @@ public class PartialCaseItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE,
 				 AnalyticsFactory.eINSTANCE.createPartialCaseRow()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PARTIAL_CASE__GROUPS,
+				 AnalyticsFactory.eINSTANCE.createPartialCaseRowGroup()));
 	}
 
 	/**

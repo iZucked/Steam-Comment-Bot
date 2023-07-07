@@ -27,6 +27,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getValue <em>Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#isSettled <em>Settled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getExposures <em>Exposures</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodStart <em>Hedging Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodEnd <em>Hedging Period End</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getPaperDealAllocationEntry()
@@ -179,5 +181,49 @@ public interface PaperDealAllocationEntry extends EObject {
 	 * @generated
 	 */
 	EList<ExposureDetail> getExposures();
+
+	/**
+	 * Returns the value of the '<em><b>Hedging Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hedging Period Start</em>' attribute.
+	 * @see #setHedgingPeriodStart(LocalDate)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getPaperDealAllocationEntry_HedgingPeriodStart()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getHedgingPeriodStart();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodStart <em>Hedging Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hedging Period Start</em>' attribute.
+	 * @see #getHedgingPeriodStart()
+	 * @generated
+	 */
+	void setHedgingPeriodStart(LocalDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Hedging Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hedging Period End</em>' attribute.
+	 * @see #setHedgingPeriodEnd(LocalDate)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getPaperDealAllocationEntry_HedgingPeriodEnd()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getHedgingPeriodEnd();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry#getHedgingPeriodEnd <em>Hedging Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hedging Period End</em>' attribute.
+	 * @see #getHedgingPeriodEnd()
+	 * @generated
+	 */
+	void setHedgingPeriodEnd(LocalDate value);
 
 } // PaperDealAllocationEntry

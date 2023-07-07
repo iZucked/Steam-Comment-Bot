@@ -359,14 +359,9 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PricingPackage.PRICING_BASIS: {
-				PricingBasis pricingBasis = (PricingBasis)theEObject;
-				T result = casePricingBasis(pricingBasis);
-				if (result == null) result = caseAbstractYearMonthCurve(pricingBasis);
-				if (result == null) result = caseYearMonthPointContainer(pricingBasis);
-				if (result == null) result = caseUUIDObject(pricingBasis);
-				if (result == null) result = caseNamedObject(pricingBasis);
-				if (result == null) result = caseMMXObject(pricingBasis);
+			case PricingPackage.INSTRUMENT_PERIOD: {
+				InstrumentPeriod instrumentPeriod = (InstrumentPeriod)theEObject;
+				T result = caseInstrumentPeriod(instrumentPeriod);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -930,17 +925,17 @@ public class PricingSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Basis</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Instrument Period</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Basis</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Instrument Period</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePricingBasis(PricingBasis object) {
+	public T caseInstrumentPeriod(InstrumentPeriod object) {
 		return null;
 	}
 

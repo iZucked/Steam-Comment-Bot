@@ -23,5 +23,5 @@ public interface ITransferModelDataProvider extends IDataComponentProvider {
 	
 	TransfersLookupData getTransferLookupData();
 	
-	int getTransferPrice(String priceExpression, int pricingDate, int internalSalesPrice, boolean isBasis);
+	int getTransferPrice(String priceExpression, int pricingDate, int internalSalesPrice);
 }

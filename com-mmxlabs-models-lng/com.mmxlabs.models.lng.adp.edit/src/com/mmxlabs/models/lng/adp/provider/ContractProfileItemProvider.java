@@ -324,6 +324,11 @@ public class ContractProfileItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS,
 				 ADPFactory.eINSTANCE.createPeriodDistributionProfileConstraint()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS,
+				 ADPFactory.eINSTANCE.createVesselUsageDistributionProfileConstraint()));
 	}
 
 	/**

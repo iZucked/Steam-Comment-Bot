@@ -44,7 +44,6 @@ import com.mmxlabs.models.lng.analytics.SensitivitySolutionSet;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.analytics.services.IAnalyticsScenarioEvaluator.BreakEvenMode;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSpecification;
-import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.Mapper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
@@ -165,20 +164,22 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 		return createPriceSensitivityFunction(sdp, null, userSettings, lngScenarioModel.getSensitivityModel().getSensitivityModel()).apply(subMonitor);
 	}
 
-	public Function<IProgressMonitor, AbstractSolutionSet> createPriceSensitivityFunction(final IScenarioDataProvider sdp, @Nullable final ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model) {
+	public Function<IProgressMonitor, AbstractSolutionSet> createPriceSensitivityFunction(final IScenarioDataProvider sdp, @Nullable final ScenarioInstance scenarioInstance,
+			final UserSettings userSettings, final OptionAnalysisModel model) {
 		final SensitivitySolutionSet sensitivityResult = AnalyticsFactory.eINSTANCE.createSensitivitySolutionSet();
 		sensitivityResult.setUseScenarioBase(true);
 		return createPriceSetFunction(sdp, scenarioInstance, userSettings, model, sensitivityResult, (mapper, baseScheduleSpecification) -> {
-			model.getCommodityCurves().stream() //
+			model.getCommodityCurves()
+					.stream() //
 					.filter(CommodityCurveOverlay.class::isInstance) //
 					.map(CommodityCurveOverlay.class::cast) //
 					.forEach(mapper::addMapping);
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-			final LNGSchedulerPriceCurveSetRunner priceSensitivityRunner = new LNGSchedulerPriceCurveSetRunner(scenarioInstance, model, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider, (mem, data, injector) -> {
-				final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
-				return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
-			}, new LinkedList<>());
+			final LNGSchedulerPriceCurveSetRunner priceSensitivityRunner = new LNGSchedulerPriceCurveSetRunner(scenarioInstance, model, sdp, sdp.getEditingDomain(), userSettings, extraDataProvider,
+					(mem, data, injector) -> {
+						final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
+						return transformer.createSequences(baseScheduleSpecification, mem, data, injector, true);
+					}, new LinkedList<>());
 			return new SandboxJob() {
 				@Override
 				public LNGScenarioToOptimiserBridge getScenarioRunner() {
@@ -309,16 +310,7 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 	}
 
 	private ScheduleSpecification createBaseScheduleSpecification(final IScenarioDataProvider scenarioDataProvider, final OptionAnalysisModel model, final IMapperClass mapper) {
-		ScheduleSpecification baseScheduleSpecification;
-
-		if (model.getBaseCase().isKeepExistingScenario()) {
-			final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(scenarioDataProvider, mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase(), false);
-		} else {
-
-			final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), mapper);
-			baseScheduleSpecification = builder.generate(model.getBaseCase(), false);
-		}
-		return baseScheduleSpecification;
+		final BaseCaseToScheduleSpecification builder = new BaseCaseToScheduleSpecification(scenarioDataProvider, mapper);
+		return builder.generate(model.getBaseCase(), model.getBaseCase().isKeepExistingScenario(), false);
 	}
 }

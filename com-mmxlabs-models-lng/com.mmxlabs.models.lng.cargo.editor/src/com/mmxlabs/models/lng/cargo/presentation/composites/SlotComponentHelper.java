@@ -2,24 +2,30 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
+/**
+
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotExpressionWrapper;
-import com.mmxlabs.models.lng.cargo.editor.SlotPricingBasisWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.RestrictionsOverrideMultiReferenceInlineEditor;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.VolumeInlineEditor;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortReferenceInlineEditor;
-import com.mmxlabs.models.lng.pricing.editor.PricingBasisInlineEditor;
+import com.mmxlabs.models.lng.pricing.editor.PriceExpressionWithFormulaeCurvesInlineEditor;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
@@ -42,8 +48,6 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__ALLOWED_PORTS_OVERRIDE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_EXPOSURE);
 		ignoreFeatures.add(CargoPackage.Literals.SLOT__COMPUTE_HEDGE);
-		//TODO: check layout for the feature:
-		// ignoreFeatures.add(CargoPackage.Literals.SLOT__PRICING_BASIS);
 
 		addEditor(CargoPackage.Literals.SLOT__WINDOW_START, topClass -> {
 			if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
@@ -53,27 +57,10 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 				return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START);
 			}
 		});
-
-		addEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, topClass -> {
-			return new SlotExpressionWrapper(new TextInlineEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION) {
-				@Override
-				protected boolean updateOnChangeToFeature(final Object changedFeature) {
-					return CargoPackage.Literals.SLOT__CONTRACT.equals(changedFeature);
-				}
-
-				@Override
-				protected void updateDisplay(final Object value) {
-					if (value == null) {
-						updateValueDisplay(value);
-					} else {
-						super.updateDisplay(value);
-					}
-				}
-			});
-		});
 		
-		addEditorWithWrapperForLicenseFeature(KnownFeatures.FEATURE_PRICING_BASES, CargoPackage.Literals.SLOT__PRICING_BASIS, //
-				PricingBasisInlineEditor::new, SlotPricingBasisWrapper::new);
+		addEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION, topClass -> {
+			return new SlotExpressionWrapper(new PriceExpressionWithFormulaeCurvesInlineEditor(CargoPackage.Literals.SLOT__PRICE_EXPRESSION));
+		});
 
 		addEditor(CargoPackage.Literals.SLOT__NOTES, topClass -> new MultiTextInlineEditor(CargoPackage.Literals.SLOT__NOTES));
 
@@ -99,7 +86,6 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 				return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT);
 			}
 			return null;
-
 		});
 		addEditor(CargoPackage.Literals.SLOT__PORT, topClass -> new TextualPortReferenceInlineEditor(CargoPackage.Literals.SLOT__PORT));
 		addEditor(CargoPackage.Literals.SLOT__CN, topClass -> new TextInlineEditor(CargoPackage.Literals.SLOT__CN));
@@ -116,5 +102,42 @@ public class SlotComponentHelper extends DefaultComponentHelper {
 			editor.addNotificationChangedListener(new PricingEventInlineEditorChangedListener());
 			return editor;
 		});
+		
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_BUSINESS_UNITS)) {
+			addEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT, topClass -> {
+				return new ReferenceInlineEditor(CargoPackage.Literals.SLOT__BUSINESS_UNIT) {
+					@Override
+					protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+						if (currentlySettingValue) {
+							return;
+						}
+						if (value == null && !valueList.isEmpty()) {
+							doSetValue(valueList.get(0), forceCommandExecution);
+						} else {
+							doSetValue(value, forceCommandExecution);
+						}
+					}
+				};
+			});
+		} else {
+			ignoreFeatures.add(CargoPackage.Literals.SLOT__BUSINESS_UNIT);
+		}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SCHEDULED_VOLUME)) {
+			addEditor(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME, topClass -> {
+				if (!CargoPackage.Literals.SPOT_SLOT.isSuperTypeOf(topClass)) {
+					return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__SCHEDULED_VOLUME);
+				}
+				return null;
+			});
+			addEditor(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT, topClass -> {
+				if (!CargoPackage.Literals.SPOT_SLOT.isSuperTypeOf(topClass)) {
+					return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT);
+				}
+				return null;
+			});
+		} else {
+			ignoreFeatures.add(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME);
+			ignoreFeatures.add(CargoPackage.Literals.SLOT__SCHEDULED_VOLUME_UNIT);
+		}
 	}
 }

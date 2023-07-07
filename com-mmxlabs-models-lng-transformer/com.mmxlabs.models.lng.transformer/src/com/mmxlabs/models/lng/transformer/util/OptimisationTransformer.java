@@ -44,6 +44,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -125,7 +126,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			return x;
 		});
 
-		final IModifiableSequences advice = new ModifiableSequences(resources);
+		final IModifiableSequences advice = new ModifiableSequences(resources, new SequencesAttributesProviderImpl());
 
 		/**
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.

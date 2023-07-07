@@ -446,7 +446,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		if (locked) {
 			return;
 		}
-
+		if (e.button != 1) {
+			return;
+		}
 		// detect whether we have clicked on a terminal
 		final Rectangle ca = getCanvasClientArea();
 		if (ca == null) {
@@ -547,7 +549,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			// New Load -> Discharge pairing
 			// May contain a null key!
-			final Map<RowData, RowData> newWiring = new HashMap<RowData, RowData>();
+			final Map<RowData, RowData> newWiring = new HashMap<>();
 
 			final RowData fromRowData = rootData.getRows().get(sortedIndex);
 
@@ -569,7 +571,22 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 					// clear wire
 					newWiring.put(fromRowData, null);
 				}
-				wiringChanged(newWiring, ctrlPressed, shiftPressed, altPressed);
+
+				var itr = newWiring.entrySet().iterator();
+				while (itr.hasNext()) {
+					var entry = itr.next();
+					if (entry.getKey() != null && entry.getValue() != null) {
+						if (entry.getKey() == entry.getValue() && entry.getKey().cargo != null) {
+							if (entry.getKey().cargo.getSlots().size() <= 2) {
+								itr.remove();
+							}
+						}
+					}
+
+				}
+				if (!newWiring.isEmpty()) {
+					wiringChanged(newWiring, ctrlPressed, shiftPressed, altPressed);
+				}
 			}
 		}
 

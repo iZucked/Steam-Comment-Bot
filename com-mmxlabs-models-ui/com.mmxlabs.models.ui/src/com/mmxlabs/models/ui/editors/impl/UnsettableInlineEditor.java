@@ -162,14 +162,15 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 					} else {
 
 						if (setButton.getSelection()) {
-							doSetValue(lastSetValue, true);
+							doSetOverride(lastSetValue, true);
+							//doSetValue(lastSetValue, true);
 							setControlEnabled(inner, true);
 							currentlySettingValue = true;
 							updateValueDisplay(getValue());
 							currentlySettingValue = false;
 						} else {
 							// unset value
-							unsetValue();
+							doUnsetOverride();
 							setControlEnabled(inner, false);
 							if (input instanceof MMXObject) {
 								currentlySettingValue = true;
@@ -268,6 +269,14 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (setButton == null || setButton.getSelection()) {
 			super.doSetValue(value, forceCommandExecution);
 		}
+	}
+	
+	protected void doSetOverride(final Object value, final boolean forceCommandExecution) {
+		doSetValue(value, forceCommandExecution);
+	}
+	
+	protected void doUnsetOverride() {
+		unsetValue();
 	}
 
 	protected boolean valueIsSet() {

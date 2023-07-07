@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
@@ -582,7 +583,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// OK, we have done our best, now build the modifiablesequences
 		// from the intermediate gack
 
-		final IModifiableSequences result = new ModifiableSequences(resources);
+		final IModifiableSequences result = new ModifiableSequences(resources, new SequencesAttributesProviderImpl());
 		for (final IResource resource : resources) {
 			final IModifiableSequence realseq = result.getModifiableSequence(resource);
 			final List<SequenceChunk> seq = sequences.get(resource);

@@ -52,6 +52,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getStartAfter <em>Start After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getStartBy <em>Start By</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getNotes <em>Notes</em>}</li>
  * </ul>
  *
  * @generated
@@ -226,6 +227,26 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * @ordered
 	 */
 	protected LocalDateTime startBy = START_BY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOTES_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected String notes = NOTES_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -503,6 +524,29 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
+		notes = newNotes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_EVENT__NOTES, oldNotes, notes));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public ZonedDateTime getStartByAsDateTime() {
@@ -524,6 +568,16 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 			return ldt.atZone(ZoneId.of(getTimeZone(CargoPackage.Literals.VESSEL_EVENT__START_AFTER)));
 		}
 		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public int getSchedulingDurationInDays() {
+		return getDurationInDays();
 	}
 
 	/**
@@ -575,6 +629,8 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 				return getStartAfter();
 			case CargoPackage.VESSEL_EVENT__START_BY:
 				return getStartBy();
+			case CargoPackage.VESSEL_EVENT__NOTES:
+				return getNotes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -619,6 +675,9 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 			case CargoPackage.VESSEL_EVENT__START_BY:
 				setStartBy((LocalDateTime)newValue);
 				return;
+			case CargoPackage.VESSEL_EVENT__NOTES:
+				setNotes((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -661,6 +720,9 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 			case CargoPackage.VESSEL_EVENT__START_BY:
 				setStartBy(START_BY_EDEFAULT);
 				return;
+			case CargoPackage.VESSEL_EVENT__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -693,6 +755,8 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 				return START_AFTER_EDEFAULT == null ? startAfter != null : !START_AFTER_EDEFAULT.equals(startAfter);
 			case CargoPackage.VESSEL_EVENT__START_BY:
 				return START_BY_EDEFAULT == null ? startBy != null : !START_BY_EDEFAULT.equals(startBy);
+			case CargoPackage.VESSEL_EVENT__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -795,6 +859,8 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 				return getStartByAsDateTime();
 			case CargoPackage.VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME:
 				return getStartAfterAsDateTime();
+			case CargoPackage.VESSEL_EVENT___GET_SCHEDULING_DURATION_IN_DAYS:
+				return getSchedulingDurationInDays();
 			case CargoPackage.VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -825,6 +891,8 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		result.append(startAfter);
 		result.append(", startBy: ");
 		result.append(startBy);
+		result.append(", notes: ");
+		result.append(notes);
 		result.append(')');
 		return result.toString();
 	}

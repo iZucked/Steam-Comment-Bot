@@ -36,8 +36,6 @@ public interface ITradesColumnFactory {
 	public static final String CARGO_START_GROUP = "TradesBasedColumnFactory.CARGO_START_GROUP";
 	public static final String CARGO_END_GROUP = "TradesBasedColumnFactory.CARGO_END_GROUP";
 
-	public static final String DEFAULT_BLOCK_TYPE = null;
-	public static final String DEFAULT_ORDER_KEY = null;
 
 	public static boolean isLoadGroup(String group) {
 		if (group == null) {
