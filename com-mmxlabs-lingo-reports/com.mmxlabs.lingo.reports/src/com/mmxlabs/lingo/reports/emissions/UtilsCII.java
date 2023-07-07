@@ -62,7 +62,7 @@ public class UtilsCII {
 		
 		//
 		// Rating boundaries
-		final double[][] letterGradeBoundaries = new double[4][2];
+		final double[][] letterGradeBoundaries = new double[2][4];
 		//
 		for (final Grade grade : Grade.values()) {
 			final double lowerExponentBoundary = GRADES_EXPONENT_BOUNDARY_TABLES[DWT_LESS_THAN_100K][grade.index];
@@ -90,7 +90,7 @@ public class UtilsCII {
 			prevBoundary = boundary;
 		}
 		if (result == null) {
-			return null;
+			return "-";
 		}
 		return result.toString();
 	}

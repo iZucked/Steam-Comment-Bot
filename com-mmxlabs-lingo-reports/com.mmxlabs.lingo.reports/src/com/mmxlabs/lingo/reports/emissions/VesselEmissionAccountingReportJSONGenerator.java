@@ -90,11 +90,11 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					
 					final double denominatorCII = journeyDistance * vessel.getVesselOrDelegateDeadWeight();
 					if (denominatorCII == 0) {
-						model.ciiValue = 0L;
+						model.ciiValue = null;
 						model.ciiGrade = "-";
 					} else {
 						model.ciiValue = Math.round(EmissionsUtils.MT_TO_GRAMS * model.totalEmission / denominatorCII);
-						model.ciiGrade = "todo";
+						model.ciiGrade = UtilsCII.getLetterGrade(vessel, model.ciiValue);
 					}
 
 					model.totalEmission += EmissionsUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
