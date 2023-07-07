@@ -77,14 +77,21 @@ public class UtilsCII {
 	}
 	
 	public static String getLetterGrade(final Vessel vessel, final double ciiValue) {
-//		final int deadweightIndex = vessel.getVesselOrDelegateDeadWeight() >= LARGE_DWT_THESHOLD ? 1 : 0;
-//		final double[][] gradesTableForThatVessel = getLetterGradeBoundaries(vessel);
-//		Grade
-//		Grade result = null;
-//		for (final Grade grade : Grade.values()) {
-//			final double boundary = gradesTableForThatVessel[deadweightIndex][grade.index];
-//			if (ciiValue < boundary)
-//		}
-		return null;
+		final int deadweightIndex = vessel.getVesselOrDelegateDeadWeight() >= LARGE_DWT_THESHOLD ? 1 : 0;
+		final double[][] gradesTableForThatVessel = getLetterGradeBoundaries(vessel);
+		double prevBoundary = -1;
+		Grade result = null;
+		for (final Grade grade : Grade.values()) {
+			final double boundary = gradesTableForThatVessel[deadweightIndex][grade.index];
+			if (prevBoundary <= ciiValue && ciiValue < boundary) {
+				result = grade;
+				break;
+			}
+			prevBoundary = boundary;
+		}
+		if (result == null) {
+			return null;
+		}
+		return result.toString();
 	}
 }

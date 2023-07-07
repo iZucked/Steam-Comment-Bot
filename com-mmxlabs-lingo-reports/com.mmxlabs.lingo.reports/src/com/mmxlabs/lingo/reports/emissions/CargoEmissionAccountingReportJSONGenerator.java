@@ -182,13 +182,13 @@ public class CargoEmissionAccountingReportJSONGenerator {
 		final double distance = Math.round(distanceAccumulator);
 		final double denominatorCII = distance * vessel.getVesselOrDelegateDeadWeight();
 		if (denominatorCII == 0) {
-			model.ciiValue = 0L;
+			model.ciiValue = null;
 			model.ciiGrade = "-";
 		} else {
 			final double numeratorCII = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission
 					+ model.pipelineEmission;
 			model.ciiValue = Math.round(EmissionsUtils.MT_TO_GRAMS * numeratorCII / denominatorCII);
-			model.ciiGrade = "todo";
+			model.ciiGrade = UtilsCII.getLetterGrade(vessel, model.ciiValue);
 		}
 	}
 
