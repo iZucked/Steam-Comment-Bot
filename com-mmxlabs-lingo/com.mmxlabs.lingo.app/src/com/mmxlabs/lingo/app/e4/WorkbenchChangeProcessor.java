@@ -140,6 +140,11 @@ public class WorkbenchChangeProcessor {
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.minimap.MinimapView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProblemView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.TaskList", application, modelService);
+		
+		E4ModelHelper.removeChildrenFromTrim("org.eclipse.ui.trim.status", application, modelService, //
+				"com.mmxlabs.hub.toolcontrol.status",//
+				"com.mmxlabs.lngdataserver.integration.ui.scenarios.basecasestatustrimcontribution",//
+				"com.mmxlabs.lngdataserver.integration.ui.scenarios.referencedatastatustrimcontribution");
 
 	}
 
