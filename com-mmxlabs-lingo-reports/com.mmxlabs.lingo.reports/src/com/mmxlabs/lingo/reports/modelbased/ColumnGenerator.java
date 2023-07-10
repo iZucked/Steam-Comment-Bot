@@ -79,173 +79,37 @@ public class ColumnGenerator {
 
 		final Map<Integer, Field> mapOfFields = new HashMap<>();
 		final Map<Field, GridViewerColumn> mapOfFieldColumns = new HashMap<>();
-		int counter = -1;
+		int counter = 0;
 
-		final List<Pair<ColumnGroup, List<Field>>> columnGrouppedlassFields = ColumnGroupSorter.sortGroups(cls.getFields());
+		final boolean columnGrouppingIsRequired = ColumnGroupSorter.groupSortingIsRequired(cls.getFields());
 
-		for (final Pair<ColumnGroup, List<Field>> groupAndFields : columnGrouppedlassFields) {
-			
-			final ColumnGroup group = groupAndFields.getFirst();
-			final List<Field> fieldsUnderGroup = groupAndFields.getSecond();
-			
-			final GridColumnGroup gridColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
-			gridColumnGroup.setText(group.headerTitle());
-			gridColumnGroup.setHeaderRenderer(new CenteringColumnGroupHeaderRenderer());
+		if (columnGrouppingIsRequired) {
+			final List<Pair<ColumnGroup, List<Field>>> columnGrouppedlassFields = ColumnGroupSorter.sortGroups(cls.getFields());
 
-			for (final Field f : fieldsUnderGroup) {
-				if (f.getAnnotation(LingoIgnore.class) != null) {
+			for (final Pair<ColumnGroup, List<Field>> groupAndFields : columnGrouppedlassFields) {
+
+				final ColumnGroup group = groupAndFields.getFirst();
+				final List<Field> fieldsUnderGroup = groupAndFields.getSecond();
+
+				final GridColumnGroup gridColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+				gridColumnGroup.setText(group.headerTitle());
+				gridColumnGroup.setHeaderRenderer(new CenteringColumnGroupHeaderRenderer());
+
+				for (final Field f : fieldsUnderGroup) {
+					if (f.getAnnotation(LingoIgnore.class) != null || f.getAnnotation(ColumnName.class) == null) {
+						continue;
+					}
+					processField(f, mapOfFields, mapOfFieldColumns, gridColumnGroup, viewer, cls, defaultSortColumns, sortingSupport, styler, filterSupport, counter);
+					counter++;
+				}
+			}
+		} else {
+			for (final Field f : cls.getFields()) {
+				if (f.getAnnotation(LingoIgnore.class) != null || f.getAnnotation(ColumnName.class) == null) {
 					continue;
 				}
-
-				final ColumnName columnName = f.getAnnotation(ColumnName.class);
-				final GridViewerColumn col;
-
-				if (columnName == null) {
-					continue;
-				}
-				final GridColumn columnUnderGroup = new GridColumn(gridColumnGroup, SWT.NONE);
-				col = new GridViewerColumn(viewer, columnUnderGroup);
-				if (!columnName.lingo().isEmpty()) {
-					col.getColumn().setText(columnName.lingo());
-				} else {
-					col.getColumn().setText(columnName.value());
-				}
-
-				GridViewerHelper.configureLookAndFeel(col);
-				col.getColumn().setData(COLUMN_DATA_FIELD, f);
-				mapOfFields.put(++counter, f);
-				mapOfFieldColumns.put(f, col);
-
-				final Function<Object, String> formatter;
-				Function<Object, Comparable<?>> sortFunction;
-				if (dateTypes.contains(f.getType())) {
-					DateTimeFormatter dtf;
-					final LingoFormat format = f.getAnnotation(LingoFormat.class);
-					if (format != null) {
-						dtf = DateTimeFormatter.ofPattern(format.value());
-					} else {
-						dtf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringEdit());
-					}
-
-					formatter = o -> {
-						if (o == null) {
-							return null;
-						} else {
-							return dtf.format((TemporalAccessor) o);
-						}
-					};
-					sortFunction = o -> (Comparable<?>) o;
-
-				} else if (numericTypes.contains(f.getType())) {
-					DecimalFormat df;
-					final LingoFormat format = f.getAnnotation(LingoFormat.class);
-					if (format != null) {
-						df = new DecimalFormat(format.value());
-					} else {
-						df = new DecimalFormat();
-					}
-
-					formatter = o -> {
-						if (o == null) {
-							return null;
-						} else {
-							return df.format(o);
-						}
-					};
-					sortFunction = o -> (Comparable<?>) o;
-
-				} else {
-					formatter = o -> {
-						if (o == null) {
-							return "";
-						} else {
-							return o.toString();
-						}
-					};
-					sortFunction = o -> {
-						if (o == null) {
-							return null;
-						} else {
-							return o.toString();
-						}
-					};
-				}
-
-				final Function<Object, String> rendererFunction = data -> {
-					if (cls.isInstance(data)) {
-						try {
-							return (formatter.apply(f.get(data)));
-						} catch (final Exception e) {
-							e.printStackTrace();
-						}
-					}
-					return null;
-				};
-
-				if (sortingSupport != null && sortFunction != null) {
-					sortingSupport.addSortableColumn(viewer, col, col.getColumn());
-
-					ColumnSortFunction columnSortFunction = f.getAnnotation(ColumnSortFunction.class);
-					Method altSortMethod = null;
-					if (columnSortFunction != null) {
-						try {
-							altSortMethod = cls.getMethod(columnSortFunction.value());
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-					final Method pAltSortMethod = altSortMethod;
-
-					final IComparableProvider provider = m -> {
-						try {
-							if (pAltSortMethod != null) {
-								return sortFunction.apply(pAltSortMethod.invoke(m));
-							} else {
-								return sortFunction.apply(f.get(m));
-							}
-						} catch (final Exception e1) {
-							e1.printStackTrace();
-						}
-						return null;
-					};
-
-					col.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);
-
-					ColumnSortOrder sortOrder = f.getAnnotation(ColumnSortOrder.class);
-					if (sortOrder != null) {
-						defaultSortColumns.add(new Triple<>(sortOrder.value(), col, sortOrder.ascending()));
-					}
-				}
-				if (filterSupport != null) {
-					filterSupport.createColumnMnemonics(col.getColumn(), col.getColumn().getText());
-
-					final IFilterProvider filterProvider = new IFilterProvider() {
-						@Override
-						public @Nullable String render(final Object object) {
-							return rendererFunction.apply(object);
-						}
-
-						@Override
-						public Object getFilterValue(final Object object) {
-							return rendererFunction.apply(object);
-						}
-					};
-
-					col.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
-				}
-				col.setLabelProvider(new CellLabelProvider() {
-
-					@Override
-					public void update(final ViewerCell cell) {
-						final Widget item = cell.getItem();
-						if (item.getData() == null) {
-							cell.setText("-");
-						} else {
-							cell.setText(rendererFunction.apply(item.getData()));
-						}
-						styler.accept(cell, f);
-					}
-				});
+				processField(f, mapOfFields, mapOfFieldColumns, null, viewer, cls, defaultSortColumns, sortingSupport, styler, filterSupport, counter);
+				counter++;
 			}
 		}
 
@@ -260,5 +124,168 @@ public class ColumnGenerator {
 		}
 
 		return new ColumnInfo(mapOfFields, mapOfFieldColumns);
+	}
+
+	@SuppressWarnings("null")
+	private static void processField(final Field f, final Map<Integer, Field> mapOfFields, final Map<Field, GridViewerColumn> mapOfFieldColumns, final GridColumnGroup gridColumnGroup,
+			final GridTableViewer viewer, Class<?> cls, List<Triple<Integer, GridViewerColumn, Boolean>> defaultSortColumns, EObjectTableViewerSortingSupport sortingSupport,
+			final BiConsumer<ViewerCell, Field> styler, EObjectTableViewerFilterSupport filterSupport, final int counter) {
+
+
+		final ColumnName columnName = f.getAnnotation(ColumnName.class);
+		if (columnName == null) {
+			return;
+		}
+
+		final GridViewerColumn col;
+
+		if (gridColumnGroup != null) {
+			final GridColumn columnUnderGroup = new GridColumn(gridColumnGroup, SWT.NONE);
+			col = new GridViewerColumn(viewer, columnUnderGroup);
+		} else {
+			col = new GridViewerColumn(viewer, SWT.NONE);
+		}
+
+		if (!columnName.lingo().isEmpty()) {
+			col.getColumn().setText(columnName.lingo());
+		} else {
+			col.getColumn().setText(columnName.value());
+		}
+
+		GridViewerHelper.configureLookAndFeel(col);
+		col.getColumn().setData(COLUMN_DATA_FIELD, f);
+		mapOfFields.put(counter, f);
+		mapOfFieldColumns.put(f, col);
+
+		final Function<Object, String> formatter;
+		Function<Object, Comparable<?>> sortFunction;
+		if (dateTypes.contains(f.getType())) {
+			DateTimeFormatter dtf;
+			final LingoFormat format = f.getAnnotation(LingoFormat.class);
+			if (format != null) {
+				dtf = DateTimeFormatter.ofPattern(format.value());
+			} else {
+				dtf = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringEdit());
+			}
+
+			formatter = o -> {
+				if (o == null) {
+					return null;
+				} else {
+					return dtf.format((TemporalAccessor) o);
+				}
+			};
+			sortFunction = o -> (Comparable<?>) o;
+
+		} else if (numericTypes.contains(f.getType())) {
+			DecimalFormat df;
+			final LingoFormat format = f.getAnnotation(LingoFormat.class);
+			if (format != null) {
+				df = new DecimalFormat(format.value());
+			} else {
+				df = new DecimalFormat();
+			}
+
+			formatter = o -> {
+				if (o == null) {
+					return null;
+				} else {
+					return df.format(o);
+				}
+			};
+			sortFunction = o -> (Comparable<?>) o;
+
+		} else {
+			formatter = o -> {
+				if (o == null) {
+					return "";
+				} else {
+					return o.toString();
+				}
+			};
+			sortFunction = o -> {
+				if (o == null) {
+					return null;
+				} else {
+					return o.toString();
+				}
+			};
+		}
+
+		final Function<Object, String> rendererFunction = data -> {
+			if (cls.isInstance(data)) {
+				try {
+					return (formatter.apply(f.get(data)));
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+		};
+
+		if (sortingSupport != null && sortFunction != null) {
+			sortingSupport.addSortableColumn(viewer, col, col.getColumn());
+
+			ColumnSortFunction columnSortFunction = f.getAnnotation(ColumnSortFunction.class);
+			Method altSortMethod = null;
+			if (columnSortFunction != null) {
+				try {
+					altSortMethod = cls.getMethod(columnSortFunction.value());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			final Method pAltSortMethod = altSortMethod;
+
+			final IComparableProvider provider = m -> {
+				try {
+					if (pAltSortMethod != null) {
+						return sortFunction.apply(pAltSortMethod.invoke(m));
+					} else {
+						return sortFunction.apply(f.get(m));
+					}
+				} catch (final Exception e1) {
+					e1.printStackTrace();
+				}
+				return null;
+			};
+
+			col.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, provider);
+
+			ColumnSortOrder sortOrder = f.getAnnotation(ColumnSortOrder.class);
+			if (sortOrder != null) {
+				defaultSortColumns.add(new Triple<>(sortOrder.value(), col, sortOrder.ascending()));
+			}
+		}
+		if (filterSupport != null) {
+			filterSupport.createColumnMnemonics(col.getColumn(), col.getColumn().getText());
+
+			final IFilterProvider filterProvider = new IFilterProvider() {
+				@Override
+				public @Nullable String render(final Object object) {
+					return rendererFunction.apply(object);
+				}
+
+				@Override
+				public Object getFilterValue(final Object object) {
+					return rendererFunction.apply(object);
+				}
+			};
+
+			col.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
+		}
+		col.setLabelProvider(new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Widget item = cell.getItem();
+				if (item.getData() == null) {
+					cell.setText("-");
+				} else {
+					cell.setText(rendererFunction.apply(item.getData()));
+				}
+				styler.accept(cell, f);
+			}
+		});
 	}
 }

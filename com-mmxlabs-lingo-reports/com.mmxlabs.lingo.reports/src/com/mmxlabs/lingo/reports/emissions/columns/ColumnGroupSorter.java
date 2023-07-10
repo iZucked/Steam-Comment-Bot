@@ -49,4 +49,13 @@ public class ColumnGroupSorter {
 		entryFields.add(field);
 		entries.add(new Pair<>(group, entryFields));
 	}
+
+	public static boolean groupSortingIsRequired(Field[] fields) {
+		for (final Field field : fields) {
+			if (field.getAnnotation(ColumnGroup.class) != null) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
