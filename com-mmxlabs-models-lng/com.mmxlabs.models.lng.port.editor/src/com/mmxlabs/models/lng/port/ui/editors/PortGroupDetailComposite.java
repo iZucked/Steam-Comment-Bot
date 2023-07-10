@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.ui.editors;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -24,7 +25,8 @@ public class PortGroupDetailComposite extends DefaultDetailComposite {
 		super(parent, style, toolkit);
 	}
 
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	@Override
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new DefaultDisplayCompositeLayoutProvider() {
 
 			@Override

@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.nominations.ui.displaycomposites;
  */
 
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -100,7 +101,8 @@ public class NominationSpecsDetailComposite extends DefaultDetailComposite imple
 		super(parent, style, toolkit);
 	}
 
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	@Override
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new NominationSpecDisplayCompositeLayoutProvider();
 	}
 }
