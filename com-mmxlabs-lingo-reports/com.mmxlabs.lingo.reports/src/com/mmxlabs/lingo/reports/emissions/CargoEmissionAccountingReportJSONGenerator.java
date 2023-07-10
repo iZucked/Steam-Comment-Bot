@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -182,13 +183,15 @@ public class CargoEmissionAccountingReportJSONGenerator {
 		final double distance = Math.round(distanceAccumulator);
 		final double denominatorCII = distance * vessel.getVesselOrDelegateDeadWeight();
 		if (denominatorCII == 0) {
-			model.ciiValue = null;
+			model.ciiValue = -1;
 			model.ciiGrade = "-";
+			model.ciiValueDisplayed = "-";
 		} else {
 			final double numeratorCII = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission
 					+ model.pipelineEmission;
-			model.ciiValue = Math.round(EmissionsUtils.MT_TO_GRAMS * numeratorCII / denominatorCII);
+			model.ciiValue = EmissionsUtils.MT_TO_GRAMS * numeratorCII / denominatorCII;
 			model.ciiGrade = UtilsCII.getLetterGrade(vessel, model.ciiValue);
+			model.ciiValueDisplayed = UtilsCII.formatCII(model.ciiValue);
 		}
 	}
 

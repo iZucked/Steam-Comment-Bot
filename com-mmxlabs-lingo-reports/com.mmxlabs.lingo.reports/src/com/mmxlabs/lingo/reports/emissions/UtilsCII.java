@@ -1,5 +1,6 @@
 package com.mmxlabs.lingo.reports.emissions;
 
+import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.Map;
 
@@ -93,5 +94,9 @@ public class UtilsCII {
 			return "-";
 		}
 		return result.toString();
+	}
+
+	public static String formatCII(double ciiValue) {
+		return new DecimalFormat("###0.###").format(ciiValue);
 	}
 }

@@ -84,7 +84,9 @@ public abstract class AbstractEmissionAccountingReportModel implements IEmission
 	@ColumnGroup(id = CII_GROUP_ID, headerTitle = CII_GROUP_TITLE, position = ColumnOrder.LAST)
 	@ColumnName("Value")
 	@ColumnOrderLevel(ColumnOrder.FIRST)
-	public Long ciiValue;
+	public String ciiValueDisplayed;
+	
+	public double ciiValue;
 	
 	@ColumnGroup(id = CII_GROUP_ID, headerTitle = CII_GROUP_TITLE, position = ColumnOrder.LAST)
 	@ColumnName("Grade")
