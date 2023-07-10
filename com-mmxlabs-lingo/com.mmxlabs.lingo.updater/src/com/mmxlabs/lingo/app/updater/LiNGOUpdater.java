@@ -426,6 +426,8 @@ public class LiNGOUpdater {
 					}
 					if (uri.getHost().contains("update.minimaxlabs.com")) {
 						withAuthHeader(url, request);
+					} else if (uri.getHost().contains("updates.minimaxlabs.com")) {
+						withAuthHeader(url, request);
 					}
 				} catch (final URISyntaxException e) {
 					throw new IOException(e);
