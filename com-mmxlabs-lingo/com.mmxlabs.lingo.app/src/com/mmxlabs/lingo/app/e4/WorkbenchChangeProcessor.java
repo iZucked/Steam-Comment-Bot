@@ -133,6 +133,7 @@ public class WorkbenchChangeProcessor {
 		}
 
 		// Remove views from the IDE plugin
+		E4ModelHelper.removeViewPart("com.mmxlabs.lingo.reports.emissions.CIIReportView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ProgressView", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.ResourceNavigator", application, modelService);
 		E4ModelHelper.removeViewPart("org.eclipse.ui.views.BookmarkView", application, modelService);

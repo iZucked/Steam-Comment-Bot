@@ -32,6 +32,13 @@
             class="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView"
             id="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView">
       </view>
+      <view
+            name="CII Emissions"
+            icon="icons:/icons/16x16/emissions_total.png"
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.emissions.cii.CIIReportView"
+            id="com.mmxlabs.lingo.reports.emissions.cii.CIIReportView">
+      </view>
 	</extension>
 
 </plugin>

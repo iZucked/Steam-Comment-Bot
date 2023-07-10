@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.emissions;
+package com.mmxlabs.lingo.reports.emissions.cii;
 
 import java.text.DecimalFormat;
 import java.time.Year;
