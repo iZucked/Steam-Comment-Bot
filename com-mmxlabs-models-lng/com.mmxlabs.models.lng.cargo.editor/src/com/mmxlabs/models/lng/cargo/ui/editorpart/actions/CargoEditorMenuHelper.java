@@ -135,14 +135,9 @@ public class CargoEditorMenuHelper {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * For a given transfer agreement creates an action
 	 * which allows creation of the new transfer record
 	 * for a list of slots
-=======
-	 * For a given transfer agreement creates an action which allows creation of the new transfer record
-	 * 
->>>>>>> origin/master
 	 * @author FM
 	 *
 	 */
@@ -344,7 +339,14 @@ public class CargoEditorMenuHelper {
 				}
 				
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
-					createExposuresAndHedgingActions(manager, Set.of(dischargeSlot));
+					final Set<Slot<?>> allSlots = new HashSet<>();
+					allSlots.add(dischargeSlot);
+					if (dischargeSlot.getCargo() != null) {
+						for (final Slot<?> slot : dischargeSlot.getCargo().getSlots()) {
+							allSlots.add(slot);
+						}
+					}
+					createExposuresAndHedgingActions(manager, allSlots);
 				}
 			}
 
@@ -715,12 +717,16 @@ public class CargoEditorMenuHelper {
 				}
 			}
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
-				if (!discharges.isEmpty()) {
-					createExposuresAndHedgingActions(manager, discharges);
+				
+				final Set<Slot<?>> allSlots = new HashSet<>();
+				allSlots.addAll(discharges);
+				allSlots.addAll(loads);
+				for (final Cargo cargo : cargoes) {
+					for (final Slot<?> slot : cargo.getSlots()) {
+						allSlots.add(slot);
+					}
 				}
-				if (!loads.isEmpty()) {
-					createExposuresAndHedgingActions(manager, loads);
-				}
+				createExposuresAndHedgingActions(manager, allSlots);
 			}
 		};
 	}
@@ -794,7 +800,14 @@ public class CargoEditorMenuHelper {
 			}
 			
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
-				createExposuresAndHedgingActions(manager, Set.of(loadSlot));
+				final Set<Slot<?>> allSlots = new HashSet<>();
+				allSlots.add(loadSlot);
+				if (loadSlot.getCargo() != null) {
+					for (final Slot<?> slot : loadSlot.getCargo().getSlots()) {
+						allSlots.add(slot);
+					}
+				}
+				createExposuresAndHedgingActions(manager, allSlots);
 			}
 
 		};
