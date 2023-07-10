@@ -31,6 +31,7 @@ public class EmissionsUtils {
 	
 	public static final int METHANE_CO2_EQUIVALENT = 25;
 	public static final double MT_TO_GRAMS = 1_000_000.0;
+	public static final double GRAMS_TO_TONS = 0.000_001;
 	
 	@SuppressWarnings("null")
 	public static Long consumedQuantityLNG(final FuelQuantity fuelQuantity) {

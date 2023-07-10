@@ -239,7 +239,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 				}
 			}
 			if (slot instanceof LoadSlot) {
-				model.methaneSlip += Math.round(slotAllocation.getPhysicalEnergyTransferred() * model.methaneSlipRate);
+				model.methaneSlip += Math.round(EmissionsUtils.GRAMS_TO_TONS * slotAllocation.getPhysicalEnergyTransferred() * model.methaneSlipRate);
 			}
 		}
 	}

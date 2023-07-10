@@ -1294,7 +1294,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVessel_MethaneSlipRate(),
 		   source,
 		   new String[] {
-			   "unit", "t/mmBtu",
+			   "unit", "g/mmBtu",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation

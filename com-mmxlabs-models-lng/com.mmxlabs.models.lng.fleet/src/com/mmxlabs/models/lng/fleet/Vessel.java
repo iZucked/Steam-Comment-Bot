@@ -1134,7 +1134,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #setMethaneSlipRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MethaneSlipRate()
 	 * @model unique="false" unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='t/mmBtu' formatString='####0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='g/mmBtu' formatString='####0.###'"
 	 * @generated
 	 */
 	double getMethaneSlipRate();
