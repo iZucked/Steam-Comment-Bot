@@ -98,8 +98,11 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 						// Ignore completely
 					} else if (feature == MMXCorePackage.Literals.NAMED_OBJECT__NAME || feature == CargoPackage.Literals.SLOT__WINDOW_START || feature == CargoPackage.Literals.SPOT_SLOT__MARKET) {
 
-					} else if (feature == CargoPackage.Literals.SLOT__OPTIONAL || feature == CargoPackage.Literals.SLOT__WINDOW_START_TIME || feature == CargoPackage.Literals.SLOT__WINDOW_SIZE
-							|| feature == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS || feature == CargoPackage.Literals.SLOT__PORT) {
+					} else if (feature == CargoPackage.Literals.SLOT__OPTIONAL //
+							|| feature == CargoPackage.Literals.SLOT__WINDOW_START_TIME //
+							|| feature == CargoPackage.Literals.SLOT__WINDOW_SIZE || feature == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS //
+							|| feature == CargoPackage.Literals.SLOT__PORT //
+							|| feature == CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE || feature == CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE) {
 						// Values need to have a specific value
 					} else {
 						{
