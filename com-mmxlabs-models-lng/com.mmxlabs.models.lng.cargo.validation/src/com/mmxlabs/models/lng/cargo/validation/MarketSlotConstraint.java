@@ -7,12 +7,21 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
@@ -44,11 +53,12 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  * @author SG
  * 
- *         NOTE! Restricted elements constraint is in
- *         EmptyRestrictionsConstraint
+ *         NOTE! Restricted elements constraint is in EmptyRestrictionsConstraint
  *
  */
 public class MarketSlotConstraint extends AbstractModelMultiConstraint {
+
+	private final ComposedAdapterFactory adapterFactory = createAdapterFactory();
 
 	@Override
 	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> failures) {
@@ -70,85 +80,84 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 			}
 
 			String type = "<Unknown type>";
-			Slot slot = null;
-			if (spotSlot instanceof SpotLoadSlot) {
-				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
+			Slot<?> slot = null;
+			if (spotSlot instanceof SpotLoadSlot spotLoadSlot) {
 				type = spotLoadSlot.isDESPurchase() ? "DES Purchase" : "FOB Purchase";
 				slot = spotLoadSlot;
-			} else if (spotSlot instanceof SpotDischargeSlot) {
-				final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) spotSlot;
+			} else if (spotSlot instanceof SpotDischargeSlot spotDischargeSlot) {
 				type = spotDischargeSlot.isFOBSale() ? "FOB Sale" : "DES Sale";
 				slot = spotDischargeSlot;
 			}
 
 			// Generic constraints
 			if (slot != null) {
-				if (slot.getContract() != null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a contract set."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-					failures.add(dsd);
-				}
+				for (var feature : slot.eClass().getEAllStructuralFeatures()) {
+					// feature == Name
+					if (feature == CargoPackage.Literals.SLOT__CARGO //
+							|| feature == CargoPackage.Literals.SLOT__NOTES || feature == MMXCorePackage.Literals.UUID_OBJECT__UUID) {
+						// Ignore completely
+					} else if (feature == MMXCorePackage.Literals.NAMED_OBJECT__NAME || feature == CargoPackage.Literals.SLOT__WINDOW_START || feature == CargoPackage.Literals.SPOT_SLOT__MARKET) {
 
-				if (slot.isSetCancellationExpression()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a cancellation fee set."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_CancellationExpression());
-					failures.add(dsd);
-				}
+					} else if (feature == CargoPackage.Literals.SLOT__OPTIONAL || feature == CargoPackage.Literals.SLOT__WINDOW_START_TIME || feature == CargoPackage.Literals.SLOT__WINDOW_SIZE
+							|| feature == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS || feature == CargoPackage.Literals.SLOT__PORT) {
+						// Values need to have a specific value
+					} else {
+						{
+							EAttribute overrideToggleFeature = null;
+							EAnnotation eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
+							if (eAnnotation == null) {
+								eAnnotation = feature.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverrideByContainer");
+							}
+							if (eAnnotation != null) {
+								for (EAttribute f : feature.getEContainingClass().getEAllAttributes()) {
+									if (f.getName().equals(feature.getName() + "Override")) {
+										overrideToggleFeature = f;
+									}
+								}
+							}
 
-				if (slot.getEntity() != null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have an entity set."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Entity());
-					failures.add(dsd);
-				}
-				if (slot.getPriceExpression() != null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a price expression set."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
-					failures.add(dsd);
-				}
-				if (slot.getPricingDate() != null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a pricing date set."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PricingDate());
-					failures.add(dsd);
-				}
-				if (slot.isSetMinQuantity()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a min quantity."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
-					failures.add(dsd);
-				}
-				if (slot.isSetMaxQuantity()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a max quantity."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
-					failures.add(dsd);
-				}
-				if (slot.isSetPricingEvent()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a pricing event."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PricingEvent());
-					failures.add(dsd);
-				}
-				if (slot.getWindowFlex() != 0) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have window flex."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowFlex());
-					failures.add(dsd);
-				}
-				if (slot instanceof SpotLoadSlot) {
-					SpotLoadSlot spotLoadSlot = (SpotLoadSlot) slot;
-					if (spotLoadSlot.isSchedulePurge()) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have a purge scheduled."));
-						dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getLoadSlot_SchedulePurge());
-						failures.add(dsd);
+							if ((overrideToggleFeature == null && slot.eIsSet(feature)) //
+									|| (overrideToggleFeature != null && (Boolean) slot.eGet(overrideToggleFeature))) {
+
+								// This will fetch the property source of the input object
+								final IItemPropertySource inputPropertySource = (IItemPropertySource) adapterFactory.adapt(slot, IItemPropertySource.class);
+
+								String featureName = feature.getName();
+								// Iterate through the property descriptors to find a matching
+								// descriptor for the feature
+								for (final IItemPropertyDescriptor descriptor : inputPropertySource.getPropertyDescriptors(slot)) {
+
+									if (feature.equals(descriptor.getFeature(slot))) {
+										// Found match
+										featureName = descriptor.getDisplayName(slot);
+										break;
+									}
+								}
+
+								if (feature == CargoPackage.Literals.SLOT__DURATION || feature == CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT
+								// Mark as warnings for now (2023/07/10) pending clients making changes to scenarios
+								) {
+									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+											(IConstraintStatus) ctx.createFailureStatus(
+													"[Market model|" + slot.getName() + "] " + type + " should not have " + featureName + " set. NOTE: This warning will soon become an ERROR."),
+											IStatus.WARNING);
+									dsd.addEObjectAndFeature(slot, feature);
+
+									failures.add(dsd);
+								} else {
+
+									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+											(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should not have " + featureName + " set."));
+									dsd.addEObjectAndFeature(slot, feature);
+									failures.add(dsd);
+								}
+							}
+						}
 					}
 				}
+				 
 				if (!extraContext.isRelaxedChecking()) {
+					// Period scenarios can alter these values
 					if (slot.getWindowStart() != null && slot.getWindowStart().getDayOfMonth() != 1) {
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type + " should start on the 1st of the month."));
@@ -192,14 +201,6 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 			}
 
 			if (spotSlot instanceof SpotLoadSlot spotLoadSlot) {
-
-				if (spotLoadSlot.isSetCargoCV()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName() + "] " + type + " should not have CV set."));
-					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
-					failures.add(dsd);
-				}
-
 				if (market instanceof DESPurchaseMarket desPurchaseMarket) {
 
 					final EList<APortSet<Port>> destinationPortSets = desPurchaseMarket.getDestinationPorts();
@@ -274,4 +275,15 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
+	/**
+	 * Utility method to create a {@link ComposedAdapterFactory}. Taken from org.eclipse.emf.compare.util.AdapterUtils.
+	 * 
+	 * @return
+	 */
+	private static ComposedAdapterFactory createAdapterFactory() {
+		final List<AdapterFactory> factories = new ArrayList<>();
+		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+		factories.add(new ReflectiveItemProviderAdapterFactory());
+		return new ComposedAdapterFactory(factories);
+	}
 }
