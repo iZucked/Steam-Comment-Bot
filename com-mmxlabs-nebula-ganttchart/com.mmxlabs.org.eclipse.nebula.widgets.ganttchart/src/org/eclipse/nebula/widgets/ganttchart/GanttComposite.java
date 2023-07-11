@@ -8199,7 +8199,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			final int y = event.getY();
 			return new Rectangle(x, y, width, height);
 		}
-		return new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight());
+		final int yDrawPos = event.getY() + GanttChartParameters.getRowPadding();
+		return new Rectangle(event.getX(), yDrawPos, event.getWidth(), _settings.getEventHeight());
 	}
 
 	private void showTooltip(final GanttEvent event, final MouseEvent me) {
