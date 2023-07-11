@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
-import com.google.common.hash.HashCode;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 
 /**
@@ -36,9 +35,7 @@ public class SequencesAttributesProviderImpl implements ISequencesAttributesProv
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof SequencesAttributesProviderImpl) {
-			final SequencesAttributesProviderImpl other = (SequencesAttributesProviderImpl) obj;
-
+		if (obj instanceof SequencesAttributesProviderImpl other) {
 			if (!Objects.equal(providerMap, other.providerMap)) {
 				return false;
 			}
