@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.app;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -27,11 +30,13 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.garbagecollector.GarbageCollector;
+import org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -57,7 +62,6 @@ import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseManager;
 import com.mmxlabs.license.ssl.LicenseState;
-import com.mmxlabs.license.ssl.TrustStoreManager;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistryHook;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
@@ -87,8 +91,7 @@ public class Application implements IApplication {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
-	 * IApplicationContext)
+	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app. IApplicationContext)
 	 */
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
@@ -161,14 +164,11 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Runs the 5 following startup tasks and monitors their progress with the
-	 * IProgressMonitor: login, permission check, license check, p2 cleanup,
-	 * (optional) re-encryption
+	 * Runs the 5 following startup tasks and monitors their progress with the IProgressMonitor: login, permission check, license check, p2 cleanup, (optional) re-encryption
 	 *
 	 * @param display
 	 * @param monitor
-	 * @return an CONTINUE {@see com.mmxlabs.lingo.app.intro.ApplicationCode} or
-	 *         IApplication.EXIT_OK
+	 * @return an CONTINUE {@see com.mmxlabs.lingo.app.intro.ApplicationCode} or IApplication.EXIT_OK
 	 * @throws Exception
 	 */
 	public Object startupTasks(final Display display, final IProgressMonitor monitor) throws Exception {
@@ -251,8 +251,7 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Checks whether a valid license keystore exists in one of the pre-defined
-	 * locations. See {@link LicenseChecker#doCheckLicense(KeyStore)} for more info
+	 * Checks whether a valid license keystore exists in one of the pre-defined locations. See {@link LicenseChecker#doCheckLicense(KeyStore)} for more info
 	 *
 	 * @return true if there is a valid license, false other
 	 * @throws IOException
@@ -274,7 +273,7 @@ public class Application implements IApplication {
 
 		try {
 			final KeyStore licenseKeystore = LicenseManager.getLicenseKeystore();
-			X509Certificate cert = LicenseManager.getClientLicense(licenseKeystore);
+			final X509Certificate cert = LicenseManager.getClientLicense(licenseKeystore);
 			final Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, withinDays);
 			if (cert.getNotAfter().before(c.getTime())) {
@@ -287,8 +286,7 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Check if the DataHub is online. If it is, start the authentication prompt
-	 * then re-check the online status
+	 * Check if the DataHub is online. If it is, start the authentication prompt then re-check the online status
 	 */
 	private void datahubLogin(final IProgressMonitor monitor) {
 		final var loginMonitor = SubMonitor.convert(monitor, 1);
@@ -403,8 +401,7 @@ public class Application implements IApplication {
 	}
 
 	/**
-	 * Wait up to 30 seconds for the hub to come online. Tries to connect once every
-	 * second
+	 * Wait up to 30 seconds for the hub to come online. Tries to connect once every second
 	 *
 	 * @param display
 	 */
@@ -447,11 +444,14 @@ public class Application implements IApplication {
 			// IProvisioningAgentProvider provider = // obtain the
 			// IProvisioningAgentProvider using OSGi services
 			final IProvisioningAgent agent = provider.createAgent(null); // null = location for running system
-			if (agent == null)
+			if (agent == null) {
 				throw new RuntimeException("Location was not provisioned by p2");
+			}
 			final IProfileRegistry profileRegistry = (IProfileRegistry) agent.getService(IProfileRegistry.SERVICE_NAME);
-			if (profileRegistry == null)
+			if (profileRegistry == null) {
 				throw new RuntimeException("Unable to acquire the profile registry service.");
+			}
+
 			// can also use IProfileRegistry.SELF for the current profile
 			final IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
 			// Profile can be null if we have not enabled p2 support in the runtime config
@@ -460,14 +460,26 @@ public class Application implements IApplication {
 				final GarbageCollector gc = (GarbageCollector) agent.getService(GarbageCollector.SERVICE_NAME);
 				gc.runGC(profile);
 			}
+
+			{
+				// Try and clean up old update sites from updater code
+				final List<URI> toRemove = new LinkedList<>();
+				final IMetadataRepositoryManager manager = new MetadataRepositoryManager(agent);
+				for (final URI uri : manager.getKnownRepositories(IMetadataRepositoryManager.REPOSITORIES_ALL)) {
+					final String str = uri.toString();
+					if (str.matches("jar:.*/workspace/updates/.*!/LiNGO")) {
+						toRemove.add(uri);
+					}
+				}
+				toRemove.forEach(manager::removeRepository);
+			}
+
 		} catch (final ProvisionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			// When you're done, make sure you 'unget' the service.
 			context.ungetService(providerRef);
 		}
-		// return result;
 	}
 
 	private void initAccessControl() {
@@ -495,5 +507,11 @@ public class Application implements IApplication {
 				workbench.close();
 			}
 		});
+	}
+
+	public static void main(final String[] args) {
+		final String str = "jar:file:/D:/builds/v/LiNGO/workspace/updates/6.7.1.RELEASE.zip!/LiNGO";
+		System.out.println(str.matches("jar:.*!/LiNGO"));
+
 	}
 }
