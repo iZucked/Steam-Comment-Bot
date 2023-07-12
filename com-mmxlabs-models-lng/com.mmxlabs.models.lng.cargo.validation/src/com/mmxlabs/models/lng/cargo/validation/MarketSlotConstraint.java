@@ -29,6 +29,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
@@ -102,7 +103,10 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 							|| feature == CargoPackage.Literals.SLOT__WINDOW_START_TIME //
 							|| feature == CargoPackage.Literals.SLOT__WINDOW_SIZE || feature == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS //
 							|| feature == CargoPackage.Literals.SLOT__PORT //
-							|| feature == CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE || feature == CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE) {
+							|| feature == CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE || feature == CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE //
+							|| (feature == CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS && slot.getWindowFlex() == 0) // ignore units change if flex is zero
+							|| (feature == CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD && ((LoadSlot) slot).isDESPurchase()) //
+							) {
 						// Values need to have a specific value
 					} else {
 						{
