@@ -2,16 +2,11 @@ package com.mmxlabs.lingo.reports.emissions.cii;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -28,15 +23,10 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.lingo.reports.emissions.VesselEmissionAccountingReportJSONGenerator;
 import com.mmxlabs.lingo.reports.emissions.VesselEmissionAccountingReportModelV1;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -46,7 +36,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class CIIReportView extends ScenarioInstanceView {
 
 	private GridTableViewer gradesGridTableViewer;
-	private List<VesselGrades> grades;
 	private Year earliestYear = Year.of(2020);
 	private Year latestYear = Year.of(2029);
 
@@ -130,7 +119,6 @@ public class CIIReportView extends ScenarioInstanceView {
 		}
 	}
 
-	@SuppressWarnings("null")
 	private ScheduleModel getScheduleModel() {
 		if (rootObject != null && rootObject instanceof final LNGScenarioModel lngScenarioModel) {
 			return ScenarioModelUtil.getScheduleModel(lngScenarioModel);
@@ -146,8 +134,13 @@ public class CIIReportView extends ScenarioInstanceView {
 	}
 
 	private void updateTable() {
+		final ScheduleModel scheduleModel = getScheduleModel();
+		if (scheduleModel == null) {
+			return;
+		}
+		final List<VesselEmissionAccountingReportModelV1> vesselEventEmissionModels = VesselEmissionAccountingReportJSONGenerator.createReportData(scheduleModel, false, "-");
+
 		final Map<Vessel, Map<Year, CumulativeCII>> vesselYearCIIs = new HashMap<>();
-		final List<VesselEmissionAccountingReportModelV1> vesselEventEmissionModels = VesselEmissionAccountingReportJSONGenerator.createReportData(getScheduleModel(), false, "-");
 		for (final VesselEmissionAccountingReportModelV1 model : vesselEventEmissionModels) {
 			final Vessel vessel = model.getVessel();
 			vesselYearCIIs.computeIfAbsent(vessel, v -> new HashMap<>());
@@ -175,7 +168,7 @@ public class CIIReportView extends ScenarioInstanceView {
 			}
 		}
 		
-		grades = new LinkedList<>();
+		final List<VesselGrades> grades = new LinkedList<>();
 		vesselYearCIIs.forEach((vessel, accumulatedCIIs) -> {
 			final Map<Year, String> vesselGradesMap = new HashMap<>();
 			accumulatedCIIs.forEach((year, cumulativeCII) -> {
