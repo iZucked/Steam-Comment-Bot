@@ -1,9 +1,13 @@
 package com.mmxlabs.lingo.reports.emissions.cii;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -141,45 +145,7 @@ public class CIIReportView extends ScenarioInstanceView {
 		}
 	}
 
-	private Vessel tempMockVessel(String name) {
-		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
-		vessel.setName(name);
-		return vessel;
-	}
-
 	private void updateTable() {
-
-		grades = List.of(new VesselGrades(tempMockVessel("Vessel XXX"), Map.of(Year.of(2021), "A", Year.of(2022), "B", Year.of(2023), "C", Year.of(2024), "A")),
-				new VesselGrades(tempMockVessel("Vessel YYY"), Map.of(Year.of(2021), "D", Year.of(2022), "B", Year.of(2023), "A", Year.of(2024), "A")),
-				new VesselGrades(tempMockVessel("Vessel ZZZ"), Map.of(Year.of(2021), "A", Year.of(2022), "-", Year.of(2023), "C", Year.of(2024), "A", Year.of(2026), "D")));
-
-		// final Map<Vessel, List<Sequence>> vesselSequences = new HashMap<>();
-		// for (final Sequence sequence : getScheduleModel().getSchedule().getSequences()) {
-		// final Vessel vessel = ScheduleModelUtils.getVessel(sequence);
-		// vesselSequences.computeIfAbsent(vessel, v -> new ArrayList<>());
-		// vesselSequences.get(vessel).add(sequence);
-		// }
-		//
-		// vesselSequences.forEach((vessel, sequences) -> {
-		// final Map<Year, String> grades = new HashMap<>();
-		// final Map<Year, CummulativeCII> yearEvents = new HashMap<>();
-		// for (final Sequence sequence : sequences) {
-		// for (final Event event : sequence.getEvents()) {
-		// if (event instanceof Journey) {
-		// final LocalDate startDate = event.getStart().toLocalDate();
-		// final LocalDate endDate = event.getEnd().toLocalDate();
-		// if (startDate.getYear() == endDate.getYear()) {
-		// final Year year = Year.of(startDate.getYear());
-		// yearEvents.computeIfAbsent(year, y -> new ArrayList<>());
-		// yearEvents.get(year).add(event);
-		// } else {
-		//
-		// }
-		// }
-		// }
-		// }
-		// });
-
 		final Map<Vessel, Map<Year, CumulativeCII>> vesselYearCIIs = new HashMap<>();
 		final List<VesselEmissionAccountingReportModelV1> vesselEventEmissionModels = VesselEmissionAccountingReportJSONGenerator.createReportData(getScheduleModel(), false, "-");
 		for (final VesselEmissionAccountingReportModelV1 model : vesselEventEmissionModels) {
@@ -195,9 +161,29 @@ public class CIIReportView extends ScenarioInstanceView {
 				final CumulativeCII cumulativeCII = vesselCIIs.get(year);
 				cumulativeCII.accumulateEventModel(model);
 			} else {
+				final LocalDate newYearMidPoint = LocalDate.of(startDate.getYear(), 12, 31);
+				final double earlyEventLinearInterpolationCoefficient = Duration.between(startDate, newYearMidPoint).toDays() / (double) Duration.between(startDate, endDate).toDays();
+				final double lateEventLinearInterpolationCoefficient = 1 - earlyEventLinearInterpolationCoefficient;
+				
+				final Year startYear = Year.of(startDate.getYear());
+				vesselCIIs.computeIfAbsent(startYear, y -> new CumulativeCII(vessel));
+				vesselCIIs.get(startYear).accumulateEventModel(model, earlyEventLinearInterpolationCoefficient);
 
+				final Year endYear = Year.of(endDate.getYear());
+				vesselCIIs.computeIfAbsent(endYear, y -> new CumulativeCII(vessel));
+				vesselCIIs.get(endYear).accumulateEventModel(model, lateEventLinearInterpolationCoefficient);
 			}
 		}
+		
+		grades = new LinkedList<>();
+		vesselYearCIIs.forEach((vessel, accumulatedCIIs) -> {
+			final Map<Year, String> vesselGradesMap = new HashMap<>();
+			accumulatedCIIs.forEach((year, cumulativeCII) -> {
+				final String letterGrade = UtilsCII.getLetterGrade(vessel, cumulativeCII.findCII());
+				vesselGradesMap.put(year, letterGrade);
+			});
+			grades.add(new VesselGrades(vessel, vesselGradesMap));
+		});
 
 		gradesGridTableViewer.setInput(grades);
 	}

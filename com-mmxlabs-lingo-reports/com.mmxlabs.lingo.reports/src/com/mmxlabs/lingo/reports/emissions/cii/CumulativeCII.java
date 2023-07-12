@@ -24,15 +24,19 @@ public class CumulativeCII {
 	final double findCII() {
 		return UtilsCII.findCII(vessel, totalEmission, totalDistance);
 	}
-
+	
 	public void accumulateEventModel(final VesselEmissionAccountingReportModelV1 model) {
+		accumulateEventModel(model, 1.0);
+	}
+	
+	public void accumulateEventModel(final VesselEmissionAccountingReportModelV1 model, final double linearInterpolationCoefficient) {
 		final Event event = model.getEvent();
 		if (event == null) {
 			return;
 		}
 		if (event instanceof final Journey journey) {
-			totalDistance += journey.getDistance();
+			totalDistance += journey.getDistance() * linearInterpolationCoefficient;
 		}
-		totalEmission += model.totalEmission;
+		totalEmission += model.totalEmission * linearInterpolationCoefficient;
 	}
 }
