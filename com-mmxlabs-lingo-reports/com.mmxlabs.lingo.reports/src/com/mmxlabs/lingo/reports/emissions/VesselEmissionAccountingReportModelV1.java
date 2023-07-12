@@ -10,6 +10,7 @@ import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.Event;
 
 /**
  * Emissions report data
@@ -26,6 +27,7 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	private static final String METHANE_SLIP_GROUP_ID = "METHANE_SLIP_GROUP_ID";
 	
 	private Vessel vessel;
+	private Event event;
 	
 	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Type")
@@ -158,5 +160,13 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 
 	public void setVessel(Vessel vessel) {
 		this.vessel = vessel;
+	}
+
+	public Event getEvent() {
+		return event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 }

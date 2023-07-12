@@ -180,20 +180,20 @@ public class CIIReportView extends ScenarioInstanceView {
 		// }
 		// });
 
-		final Map<Vessel, Map<Year, CummulativeCII>> vesselYearCIIs = new HashMap<>();
+		final Map<Vessel, Map<Year, CumulativeCII>> vesselYearCIIs = new HashMap<>();
 		final List<VesselEmissionAccountingReportModelV1> vesselEventEmissionModels = VesselEmissionAccountingReportJSONGenerator.createReportData(getScheduleModel(), false, "-");
 		for (final VesselEmissionAccountingReportModelV1 model : vesselEventEmissionModels) {
 			final Vessel vessel = model.getVessel();
 			vesselYearCIIs.computeIfAbsent(vessel, v -> new HashMap<>());
-			final Map<Year, CummulativeCII> vesselCIIs = vesselYearCIIs.get(vessel);
+			final Map<Year, CumulativeCII> vesselCIIs = vesselYearCIIs.get(vessel);
 
 			final LocalDate startDate = model.eventStart.toLocalDate();
 			final LocalDate endDate = model.eventStart.toLocalDate();
 			if (startDate.getYear() == endDate.getYear()) {
 				final Year year = Year.of(startDate.getYear());
-				vesselCIIs.computeIfAbsent(year, y -> new CummulativeCII());
-				final CummulativeCII cum = null;
-				vesselCIIs.get(year).add(event);
+				vesselCIIs.computeIfAbsent(year, y -> new CumulativeCII(vessel));
+				final CumulativeCII cumulativeCII = vesselCIIs.get(year);
+				cumulativeCII.accumulateEventModel(model);
 			} else {
 
 			}

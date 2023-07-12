@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.io.File;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lingo.reports.emissions.cii.UtilsCII;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -181,19 +179,10 @@ public class CargoEmissionAccountingReportJSONGenerator {
 				distanceAccumulator += journeyEvent.getDistance();
 			}
 		}
+		final double emission = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission
+				+ model.pipelineEmission;
 		final double distance = Math.round(distanceAccumulator);
-		final double denominatorCII = distance * vessel.getVesselOrDelegateDeadWeight();
-		if (denominatorCII == 0) {
-			model.ciiValue = -1;
-			model.ciiGrade = "-";
-			model.ciiValueDisplayed = "-";
-		} else {
-			final double numeratorCII = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission
-					+ model.pipelineEmission;
-			model.ciiValue = EmissionsUtils.MT_TO_GRAMS * numeratorCII / denominatorCII;
-			model.ciiGrade = UtilsCII.getLetterGrade(vessel, model.ciiValue);
-			model.ciiValueDisplayed = UtilsCII.formatCII(model.ciiValue);
-		}
+		model.setCII(vessel, emission, distance);
 	}
 
 	private static void calculatePortEmissions(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model) {

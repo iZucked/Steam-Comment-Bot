@@ -57,6 +57,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.isPinnedFlag = isPinned;
 					model.schedule = schedule;
 					model.setVessel(vessel);
+					model.setEvent(e);
 					
 					model.vesselName = vesselName;
 					model.eventStart = e.getStart().toLocalDateTime();
@@ -90,16 +91,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						processFuelUsageEvent(model, fuelUsageEvent);
 					}
 					
-					final double denominatorCII = journeyDistance * vessel.getVesselOrDelegateDeadWeight();
-					if (denominatorCII == 0) {
-						model.ciiValue = -1;
-						model.ciiGrade = "-";
-						model.ciiValueDisplayed = "-";
-					} else {
-						model.ciiValue = EmissionsUtils.MT_TO_GRAMS * model.totalEmission / denominatorCII;
-						model.ciiGrade = UtilsCII.getLetterGrade(vessel, model.ciiValue);
-						model.ciiValueDisplayed = UtilsCII.formatCII(model.ciiValue);
-					}
+					model.setCII(vessel, model.totalEmission, journeyDistance);
 					model.totalEmission += EmissionsUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
 					models.add(model);
 				}

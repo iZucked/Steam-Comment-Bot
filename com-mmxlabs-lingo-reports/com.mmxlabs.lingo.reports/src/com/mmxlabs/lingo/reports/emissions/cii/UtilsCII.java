@@ -4,9 +4,12 @@ import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.Map;
 
+import com.mmxlabs.lingo.reports.emissions.EmissionsUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 public class UtilsCII {
+	
+	public static final double INFINITE_CII = -1;
 	
 	private static final double POWER_NON_LARGE_DWT = 2.673;
 	private static final double MIN_CAPACITY = 65_000.0;
@@ -98,5 +101,13 @@ public class UtilsCII {
 
 	public static String formatCII(double ciiValue) {
 		return new DecimalFormat("###0.###").format(ciiValue);
+	}
+
+	public static double findCII(final Vessel vessel, final double totalEmission, final double totalDistance) {
+		final double denominatorCII = totalDistance * vessel.getVesselOrDelegateDeadWeight();
+		if (denominatorCII == 0) {
+			return INFINITE_CII;
+		}
+		return EmissionsUtils.MT_TO_GRAMS * totalEmission / denominatorCII;
 	}
 }
