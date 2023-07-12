@@ -33,6 +33,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -72,8 +73,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 
 /***
- * Note: "run as: JUnit plug-in ITS test" otherwise will not inject all classes
- * needed and will fail.
+ * Note: "run as: JUnit plug-in ITS test" otherwise will not inject all classes needed and will fail.
  */
 @ExtendWith(ShiroRunner.class)
 public class CharterCostCalculatorTests extends AbstractMicroTestCase {
@@ -106,13 +106,15 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		IOptimiserInjectorService optimiserInjectorService = OptimiserInjectorServiceMaker.begin()
-				.withModuleOverrideBind(ModuleType.Module_LNGTransformerModule, ICharterCostCalculator.class, charterCostImplClass).make();
+				.withModuleOverrideBind(ModuleType.Module_LNGTransformerModule, ICharterCostCalculator.class, charterCostImplClass)
+				.make();
 
 		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlanCustomiser(tweaker) //
 				.withRunnerHookFactory(runnerHookFactory) //
 				.withUserSettings(userSettings) //
-				.withOptimiserInjectorService(optimiserInjectorService).withThreadCount(getThreadCount()) //
+				.withOptimiserInjectorService(optimiserInjectorService)
+				.withThreadCount(getThreadCount()) //
 				.buildDefaultRunner();
 
 		runnerBuilder.evaluateInitialState();
@@ -153,7 +155,8 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(charterInMarket_1, 0, 0).build();
+				.withVesselAssignment(charterInMarket_1, 0, 0)
+				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
 			validateCharterCosts(scenarioRunner, 0, charterCostImplClass);
@@ -194,7 +197,8 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(charterInMarket_1, 0, 0).build();
+				.withVesselAssignment(charterInMarket_1, 0, 0)
+				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
 			validateCharterCosts(scenarioRunner, 0, charterCostImplClass);
@@ -232,7 +236,8 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(charterInMarket_1, 0, 0).build();
+				.withVesselAssignment(charterInMarket_1, 0, 0)
+				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
 			validateCharterCosts(scenarioRunner, 0, charterCostImplClass);
@@ -270,7 +275,8 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 				.withWindowSize(0, TimePeriod.HOURS) //
 				.build() //
 				//
-				.withVesselAssignment(charterInMarket_1, 0, 0).build();
+				.withVesselAssignment(charterInMarket_1, 0, 0)
+				.build();
 
 		evaluateTest(null, null, scenarioRunner -> {
 			validateCharterCosts(scenarioRunner, 0, charterCostImplClass);
@@ -421,12 +427,236 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 	}
 
 	private CharterInMarket createChartInMarket() {
-		this.charterCurve = this.pricingModelBuilder.makeCharterDataCurve("TestCharterCurve1", "$", "day").addIndexPoint(YearMonth.of(2015, 12), 100000).addIndexPoint(YearMonth.of(2016, 1), 500000)
-				.addIndexPoint(YearMonth.of(2016, 2), 1000000).build();
+		this.charterCurve = this.pricingModelBuilder.makeCharterDataCurve("TestCharterCurve1", "$", "day")
+				.addIndexPoint(YearMonth.of(2015, 12), 100000)
+				.addIndexPoint(YearMonth.of(2016, 1), 500000)
+				.addIndexPoint(YearMonth.of(2016, 2), 1000000)
+				.build();
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 		vessel.setMaxSpeed(15.0);
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "TestCharterCurve1", 1);
 		charterInMarket_1.setNominal(false);
 		return charterInMarket_1;
+	}
+
+	/**
+	 * Test 10day/90day cost split for the weight avg and the switch function, no timezone shift
+	 * 
+	 * @param charterCostImplClass
+	 * @throws Exception
+	 */
+	@Tag(TestCategories.MICRO_TEST)
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("getTestParameters")
+	public void testCargoSameMonthSwitchCharterCost(@NonNull Class<? extends ICharterCostCalculator> charterCostImplClass) throws Exception {
+		// map into same timezone to make expectations easier
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+		final LocalDateTime startDate = LocalDateTime.of(2023, 1, 1, 0, 0, 0);
+		final LocalDateTime endDate = startDate.plusDays(100);
+
+		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withCharterRate("SWITCH(10000, 2023-1-11,20000)")
+				.withStartWindow(startDate)
+				.withEndWindow(endDate)
+				.build();
+
+		evaluateTest(null, null, scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule();
+
+			long actualTotalCharterCost = 0L;
+			for (final Sequence sequence : schedule.getSequences()) {
+				for (final Event event : sequence.getEvents()) {
+					actualTotalCharterCost += event.getCharterCost();
+				}
+			}
+
+			if (charterCostImplClass == WeightedAverageCharterCostCalculator.class) {
+				Assertions.assertEquals(10_000 * 10 + 20_000 * 90, actualTotalCharterCost);
+			} else {
+				Assertions.assertEquals(10_000 * 100, actualTotalCharterCost);
+			}
+		}, charterCostImplClass);
+	}
+
+	/**
+	 * Test 10day/90day cost split for the weight avg and the switch function, including timezone shifts. Expect same as no-timezone as weighted avg is all UTC based as it vessel start time.
+	 * 
+	 * @param charterCostImplClass
+	 * @throws Exception
+	 */
+	@Tag(TestCategories.MICRO_TEST)
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("getTestParameters")
+	public void testCargoSameMonthSwitchCharterCost2(@NonNull Class<? extends ICharterCostCalculator> charterCostImplClass) throws Exception {
+		//
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
+		//
+		//
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+		// // Set distance and speed to exact multiple -- quickest travel time is 100 days
+		vessel.setMaxSpeed(15.0);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500 * 24, 2000 * 24, 2000 * 24, true);
+
+		final LocalDateTime startDate = LocalDateTime.of(2023, 1, 1, 0, 0, 0);
+		final LocalDateTime endDate = startDate.plusDays(100);
+
+		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withCharterRate("SWITCH(10000, 2023-1-11,40000)")
+				.withStartWindow(startDate)
+				.withEndWindow(endDate)
+				.withStartPort(port1)
+				.withEndPort(port2)
+				.build();
+
+		evaluateTest(null, null, scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule();
+
+			long actualTotalCharterCost = 0L;
+			long actualDuration = 0L;
+			for (final Sequence sequence : schedule.getSequences()) {
+				for (final Event event : sequence.getEvents()) {
+					actualTotalCharterCost += event.getCharterCost();
+					actualDuration += event.getDuration();
+				}
+			}
+
+			Assertions.assertEquals(24 * 100, actualDuration);
+			if (charterCostImplClass == WeightedAverageCharterCostCalculator.class) {
+				Assertions.assertEquals(10_000 * 10 + 40_000 * 90, actualTotalCharterCost);
+			} else {
+				Assertions.assertEquals(10_000 * 100, actualTotalCharterCost);
+			}
+		}, charterCostImplClass);
+	}
+
+	/**
+	 * Test 0day/100day cost split for the weight avg and the switch function, including timezone shifts. Expect Weighted avg to pick up 40k/day as UTC, but standard mode to pick up 10k as port local
+	 * time is 31st Dec rather than 1st Jan.
+	 * 
+	 * @param charterCostImplClass
+	 * @throws Exception
+	 */
+	@Tag(TestCategories.MICRO_TEST)
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("getTestParameters")
+	public void testCargoSameMonthSwitchCharterCost3(@NonNull Class<? extends ICharterCostCalculator> charterCostImplClass) throws Exception {
+
+		//
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
+		//
+		//
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+		// // Set distance and speed to exact multiple -- quickest travel time is 100 days
+		vessel.setMaxSpeed(15.0);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500 * 24, 2000 * 24, 2000 * 24, true);
+
+		final LocalDateTime startDate = LocalDateTime.of(2023, 1, 1, 0, 0, 0);
+		final LocalDateTime endDate = startDate.plusDays(100);
+
+		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withCharterRate("SWITCH(10000, 2023-1-1,40000)")
+				.withStartWindow(startDate)
+				.withEndWindow(endDate)
+				.withStartPort(port1)
+				.withEndPort(port2)
+				.build();
+
+		evaluateTest(null, null, scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule();
+
+			long actualTotalCharterCost = 0L;
+			long actualDuration = 0L;
+			for (final Sequence sequence : schedule.getSequences()) {
+				for (final Event event : sequence.getEvents()) {
+					actualTotalCharterCost += event.getCharterCost();
+					actualDuration += event.getDuration();
+				}
+			}
+
+			Assertions.assertEquals(24 * 100, actualDuration);
+			if (charterCostImplClass == WeightedAverageCharterCostCalculator.class) {
+				Assertions.assertEquals(40_000 * 100, actualTotalCharterCost);
+			} else {
+				Assertions.assertEquals(10_000 * 100, actualTotalCharterCost);
+			}
+		}, charterCostImplClass);
+	}
+
+	/**
+	 * Testing nested switch function.
+	 * 
+	 * @param charterCostImplClass
+	 * @throws Exception
+	 */
+	@Tag(TestCategories.MICRO_TEST)
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("getTestParameters")
+	public void testCargoSameMonthSwitchCharterCost4(@NonNull Class<? extends ICharterCostCalculator> charterCostImplClass) throws Exception {
+		// map into same timezone to make expectations easier
+		// portModelBuilder.setAllExistingPortsToUTC();
+		//
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
+		//
+		//
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+		// // Set distance and speed to exact multiple -- quickest travel time is 100 days
+		vessel.setMaxSpeed(15.0);
+		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500 * 24, 2000 * 24, 2000 * 24, true);
+
+		final LocalDateTime startDate = LocalDateTime.of(2023, 1, 1, 0, 0, 0);
+		final LocalDateTime endDate = startDate.plusDays(100);
+
+		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
+				.withCharterRate("SWITCH(10000, 2023-1-11,SWITCH(20000, 2023-1-21,30000))")
+				.withStartWindow(startDate)
+				.withEndWindow(endDate)
+				.withStartPort(port1)
+				.withEndPort(port2)
+				.build();
+
+		evaluateTest(null, null, scenarioRunner -> {
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			// Check spot index has been updated
+			final IScenarioDataProvider optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
+			final Schedule schedule = ScenarioModelUtil.getScheduleModel(optimiserScenario).getSchedule();
+
+			long actualTotalCharterCost = 0L;
+			long actualDuration = 0L;
+			for (final Sequence sequence : schedule.getSequences()) {
+				for (final Event event : sequence.getEvents()) {
+					actualTotalCharterCost += event.getCharterCost();
+					actualDuration += event.getDuration();
+				}
+			}
+
+			Assertions.assertEquals(24 * 100, actualDuration);
+			if (charterCostImplClass == WeightedAverageCharterCostCalculator.class) {
+				Assertions.assertEquals(10 * 10_000 + 10 * 20_000 + 30_000 * 80, actualTotalCharterCost);
+			} else {
+				Assertions.assertEquals(10_000 * 100, actualTotalCharterCost);
+			}
+		}, charterCostImplClass);
 	}
 }

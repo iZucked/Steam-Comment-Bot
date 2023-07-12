@@ -18,6 +18,7 @@ import com.mmxlabs.common.parser.astnodes.ParamASTNode;
 import com.mmxlabs.common.parser.astnodes.SCurveFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.ShiftFunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.SplitMonthFunctionASTNode;
+import com.mmxlabs.common.parser.astnodes.SwitchASTNode;
 import com.mmxlabs.common.parser.astnodes.Tier2FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.Tier3FunctionASTNode;
 import com.mmxlabs.common.parser.astnodes.TierBlendASTNode;
@@ -53,6 +54,8 @@ public class ExposuresASTToCalculator {
 			return TierBlendFunctionExposuresCalculator.getExposureNode(blendNode, inputRecord);
 		} else if (node instanceof final ParamASTNode paramNode) {
 			return ParamExposuresCalculator.getExposureNode(paramNode, inputRecord);
+		} else if (node instanceof final SwitchASTNode paramNode) {
+			return SwitchFunctionExposuresCalculator.getExposureNode(paramNode, inputRecord);
 		}
 		throw new IllegalStateException("Unexpected node type");
 	}

@@ -145,6 +145,12 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		} else {
 			curve.setDefaultValue(0);
 			for (final int i : series.getChangePoints()) {
+				// SPECIAL CASE THS?
+				
+//				WHAT ABOUT SPLIT M<ONTH?>
+//				if (i == Integer.MIN_VALUE) {
+//					curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, Collections.emptyMap()).doubleValue()));
+//				}
 				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, Collections.emptyMap()).doubleValue()));
 			}
 		}
@@ -182,20 +188,20 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		return generateLongExpressionCurve(parsed);
 	}
 
-	public PreGeneratedLongCurve generateLongExpressionCurve(final ISeries seried) {
+	public PreGeneratedLongCurve generateLongExpressionCurve(final ISeries series) {
 
-		if (seried.isParameterised()) {
+		if (series.isParameterised()) {
 			throw new IllegalArgumentException();
 		}
 
 		final PreGeneratedLongCurve curve;
-		if (seried.getChangePoints().length == 0) {
+		if (series.getChangePoints().length == 0) {
 			curve = new PreGeneratedLongCurve();
-			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalDailyCost(seried.evaluate(0, Collections.emptyMap()).doubleValue()));
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalDailyCost(series.evaluate(0, Collections.emptyMap()).doubleValue()));
 		} else {
 			curve = new PreGeneratedLongCurve();
-			for (final int i : seried.getChangePoints()) {
-				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalDailyCost(seried.evaluate(i, Collections.emptyMap()).doubleValue()));
+			for (final int i : series.getChangePoints()) {
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalDailyCost(series.evaluate(i, Collections.emptyMap()).doubleValue()));
 			}
 			curve.setDefaultValue(0L);
 		}

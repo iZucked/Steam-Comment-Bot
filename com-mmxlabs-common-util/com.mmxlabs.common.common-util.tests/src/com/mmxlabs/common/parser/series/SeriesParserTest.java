@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.mmxlabs.common.time.Hours;
+
 public class SeriesParserTest {
 
 	public static Iterable<Object[]> generateTests() {
@@ -75,8 +77,10 @@ public class SeriesParserTest {
 
 				{ "TIERBLEND(50,1,50,2)", 1.0 }, // Expect lower bound
 				{ "TIERBLEND(100,1,50,2)", 1.5 }, // Expect blended price
+				{ "SWITCH(5, 2023-01-2, 10)", 5 }, // Expect LHS price
+				{ "SWITCH(5, 2023-01-1, 10)", 10 }, // Expect RHS price as >= 
+				{ "SWITCH(5, 2022-12-1, 10)", 10 }, // Expect RHS price
 
-				
 		});
 	}
 
@@ -105,6 +109,11 @@ public class SeriesParserTest {
 			@Override
 			public int mapChangePointToMonth(int currentChangePoint) {
 				return currentChangePoint;
+			}
+
+			@Override
+			public int mapTimePoint(LocalDateTime ldt) {
+				return Hours.between(LocalDateTime.of(2023, 1, 1, 0, 0, 0), ldt);
 			}
 		});
 

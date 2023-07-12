@@ -352,6 +352,21 @@ public class BasicExposuresTest {
 				), //
 						indicesOf(//
 								makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 1), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)) }, //
+				
+				// Switch expression testing 2016-4 < 2016-5 so expect HH
+				{ "switch(HH,2016-5-1,JKM)", "switch(HH,2016-5-1,JKM)", "HH", single(//
+						calcExpected("HH", YearMonth.of(2016, 4), 4, 1.0) //
+				), //
+						indicesOf(//
+								makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 1), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), //
+								makeIndex("JKM", "$", "mmbtu", YearMonth.of(2016, 1), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)) }, //
+				// Switch expression testing 2016-4 >= 2016-4 so expect JKM
+				{ "switch(HH,2016-4-1,JKM)", "switch(HH,2016-4-1,JKM)", "HH", single(//
+						calcExpected("JKM", YearMonth.of(2016, 4), 4, 1.0) //
+						), //
+									indicesOf(//
+											makeIndex("HH", "$", "mmbtu", YearMonth.of(2016, 1), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), //
+											makeIndex("JKM", "$", "mmbtu", YearMonth.of(2016, 1), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)) }, //
 
 		});
 	}
