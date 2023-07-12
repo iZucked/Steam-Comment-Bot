@@ -43,7 +43,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView implements CommandStackListener {
 	private Composite childComposite;
-	private final LinkedList<ScenarioTableViewerPane> viewerPanes = new LinkedList<ScenarioTableViewerPane>();
+	private final LinkedList<ScenarioTableViewerPane> viewerPanes = new LinkedList<>();
 	private UndoAction undoAction;
 	private RedoAction redoAction;
 	private CommandStack currentCommandStack;
@@ -171,7 +171,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 		super.setLocked(locked);
 	}
 
-	abstract protected List<ScenarioTableViewerPane> createViewerPanes();
+	protected abstract List<ScenarioTableViewerPane> createViewerPanes();
 
 	@Override
 	public void openStatus(final IStatus status) {
@@ -180,9 +180,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 			openStatus(status.getChildren()[0]);
 		}
 
-		if (status instanceof DetailConstraintStatusDecorator) {
-
-			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+		if (status instanceof DetailConstraintStatusDecorator dcsd) {
 			final EObject target = dcsd.getTarget();
 
 			final EReference[][] paths = getPaneRootPaths();

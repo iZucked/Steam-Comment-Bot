@@ -32,19 +32,17 @@ public class PublishBaseCaseCommandHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
-		final Exception exceptions[] = new Exception[1];
+		final Exception[] exceptions = new Exception[1];
 
 		final Display display = HandlerUtil.getActiveShellChecked(event).getDisplay();
 		BusyIndicator.showWhile(display, () -> {
 			final ISelection selection = activePage.getSelection();
-			if (selection instanceof IStructuredSelection) {
-				final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+			if (selection instanceof IStructuredSelection strucSelection) {
 				final Iterator<?> itr = strucSelection.iterator();
 				while (itr.hasNext()) {
 					final Object element = itr.next();
 
-					if (element instanceof ScenarioInstance) {
-						final ScenarioInstance instance = (ScenarioInstance) element;
+					if (element instanceof ScenarioInstance instance) {
 						try {
 							ScenarioServicePublishAction.publishScenario(instance);
 						} catch (final Exception e) {
@@ -55,9 +53,7 @@ public class PublishBaseCaseCommandHandler extends AbstractHandler {
 			}
 		});
 
-		if (exceptions[0] != null)
-
-		{
+		if (exceptions[0] != null) {
 			throw new ExecutionException("Unable to publish basecase: " + exceptions[0], exceptions[0]);
 		}
 
