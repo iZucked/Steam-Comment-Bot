@@ -9,6 +9,7 @@ import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
+import com.mmxlabs.models.lng.fleet.Vessel;
 
 /**
  * Emissions report data
@@ -23,7 +24,9 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	private static final String PILOT_LIGHT_GROUP = "PILOT_LIGHT_GROUP";
 	private static final String PILOT_LIGHT_TITLE = "Pilot Light";
 	private static final String METHANE_SLIP_GROUP_ID = "METHANE_SLIP_GROUP_ID";
-
+	
+	private Vessel vessel;
+	
 	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Type")
 	@ColumnOrderLevel(ColumnOrder.THIRD)
@@ -147,5 +150,13 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	@Override
 	public int hashCode() {
 		return super.hashCode();
+	}
+
+	public Vessel getVessel() {
+		return vessel;
+	}
+
+	public void setVessel(Vessel vessel) {
+		this.vessel = vessel;
 	}
 }

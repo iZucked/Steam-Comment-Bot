@@ -56,7 +56,8 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.scenarioName = scenarioName;
 					model.isPinnedFlag = isPinned;
 					model.schedule = schedule;
-
+					model.setVessel(vessel);
+					
 					model.vesselName = vesselName;
 					model.eventStart = e.getStart().toLocalDateTime();
 					model.eventEnd = e.getEnd().toLocalDateTime();
