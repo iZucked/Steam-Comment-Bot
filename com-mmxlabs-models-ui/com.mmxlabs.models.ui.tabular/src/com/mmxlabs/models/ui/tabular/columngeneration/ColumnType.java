@@ -16,5 +16,17 @@ public enum ColumnType {
 	/**
 	 * Column shown in pin/diff mode
 	 */
-	DIFF
+	DIFF,
+	/**
+	* Column only shown in non diff comparison mode
+	*/
+	DELTA,
+	/**
+	* Column only shown in diff comparison mode
+	*/
+	NONDELTA,
+	/**
+	* Column only shown in non diff comparison mode but their are multiple scenarios selected
+	*/
+	NONDELTAMULTIPLE
 }

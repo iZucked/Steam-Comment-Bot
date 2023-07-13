@@ -101,36 +101,53 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			final Runnable r = () -> {
 				currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
-				// Add Difference/Change columns when in Pin/Diff mode
-				final boolean pinDiffMode = selectedDataProvider.inPinDiffMode();
-				final boolean isMultiple = selectedDataProvider.getAllScenarioResults().size() > 1;
-
-				for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
-					if (handler != null) {
-						handler.setViewState(isMultiple, pinDiffMode);
-					}
-				}
-
-				final List<Object> rowElements = new LinkedList<>();
-				final IScenarioInstanceElementCollector elementCollector = getElementCollector();
-
-				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
-				elementCollector.beginCollecting(pinned != null);
-				if (pinned != null) {
-					final Collection<? extends Object> elements = elementCollector.collectElements(pinned, true);
-					rowElements.addAll(elements);
-				}
-				for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
-					final Collection<? extends Object> elements = elementCollector.collectElements(other, false);
-					rowElements.addAll(elements);
-				}
-				elementCollector.endCollecting();
-				ViewerHelper.setInput(viewer, true, rowElements);
+				updateElements(selectedDataProvider);
 			};
 
 			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
+
+	protected void updateElements() {
+		updateElements(currentSelectedDataProvider);
+	}
+	
+	private void updateElements(ISelectedDataProvider selectedDataProvider) {
+		// Add Difference/Change columns when in Pin/Diff mode
+		final boolean pinDiffMode = selectedDataProvider.inPinDiffMode();
+		final boolean isMultiple = selectedDataProvider.getAllScenarioResults().size() > 1;
+
+		renderColumns(isMultiple, pinDiffMode);
+		List<Object> rowElements = getRowElements(selectedDataProvider);
+
+		ViewerHelper.setInput(viewer, true, rowElements);
+	}
+
+	protected void renderColumns(boolean isMultiple, boolean pinDiffMode) {
+		for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
+			if (handler != null) {
+				handler.setViewState(isMultiple, pinDiffMode);
+			}
+		}
+	}
+
+	protected List<Object> getRowElements(ISelectedDataProvider selectedDataProvider) {
+		final List<Object> rowElements = new LinkedList<>();
+		final IScenarioInstanceElementCollector elementCollector = getElementCollector();
+
+		ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+		elementCollector.beginCollecting(pinned != null);
+		if (pinned != null) {
+			final Collection<? extends Object> elements = elementCollector.collectElements(pinned, true);
+			rowElements.addAll(elements);
+		}
+		for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
+			final Collection<? extends Object> elements = elementCollector.collectElements(other, false);
+			rowElements.addAll(elements);
+		}
+		elementCollector.endCollecting();
+		return rowElements;
+	}
 
 	protected EMFReportView(final String helpContextId) {
 		this.helpContextId = helpContextId;
@@ -174,7 +191,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	 */
 	protected ITreeContentProvider getContentProvider() {
 		return new ITreeContentProvider() {
- 
+
 			@Override
 			public Object[] getElements(final Object inputElement) {
 
@@ -505,7 +522,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		manager.appendToGroup("copy", copyTableAction);
 	}
 
-	private void makeActions() {
+	protected void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
