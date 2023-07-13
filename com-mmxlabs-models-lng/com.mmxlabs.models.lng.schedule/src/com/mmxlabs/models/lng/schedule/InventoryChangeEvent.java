@@ -6,11 +6,10 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import java.time.LocalDateTime;
-
-import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+
+import java.time.LocalDateTime;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,8 +25,6 @@ import com.mmxlabs.models.lng.cargo.InventoryEventRow;
  *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentLevel <em>Current Level</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentMin <em>Current Min</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentMax <em>Current Max</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMin <em>Current CV Min</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMax <em>Current CV Max</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getEvent <em>Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getSlotAllocation <em>Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getOpenSlotAllocation <em>Open Slot Allocation</em>}</li>
@@ -169,50 +166,6 @@ public interface InventoryChangeEvent extends EObject {
 	 * @generated
 	 */
 	void setCurrentMax(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Current CV Min</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Current CV Min</em>' attribute.
-	 * @see #setCurrentCVMin(double)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getInventoryChangeEvent_CurrentCVMin()
-	 * @model
-	 * @generated
-	 */
-	double getCurrentCVMin();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMin <em>Current CV Min</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Current CV Min</em>' attribute.
-	 * @see #getCurrentCVMin()
-	 * @generated
-	 */
-	void setCurrentCVMin(double value);
-
-	/**
-	 * Returns the value of the '<em><b>Current CV Max</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Current CV Max</em>' attribute.
-	 * @see #setCurrentCVMax(double)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getInventoryChangeEvent_CurrentCVMax()
-	 * @model
-	 * @generated
-	 */
-	double getCurrentCVMax();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMax <em>Current CV Max</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Current CV Max</em>' attribute.
-	 * @see #getCurrentCVMax()
-	 * @generated
-	 */
-	void setCurrentCVMax(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Event</b></em>' reference.

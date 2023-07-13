@@ -19,13 +19,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
-import com.mmxlabs.models.lng.cargo.InventoryFeedRow;
-import com.mmxlabs.models.lng.cargo.InventoryOfftakeRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -110,8 +108,8 @@ public class InventoryExtraImporter implements IExtraModelImporter {
 
 		final Map<String, Inventory> inventories = new HashMap<>();
 
-		final Map<String, List<InventoryFeedRow>> feeds = new HashMap<>();
-		final Map<String, List<InventoryOfftakeRow>> offtakes = new HashMap<>();
+		final Map<String, List<InventoryEventRow>> feeds = new HashMap<>();
+		final Map<String, List<InventoryEventRow>> offtakes = new HashMap<>();
 		final Map<String, List<InventoryCapacityRow>> capacities = new HashMap<>();
 
 		final InventoryImporter importer = new InventoryImporter();
@@ -128,9 +126,9 @@ public class InventoryExtraImporter implements IExtraModelImporter {
 				final String inventory = row.get(KEY_INVENTORY_NAME);
 				final String type = row.get(KEY_TYPE);
 				if (KEY_FLOW_TYPE_FEED.equals(type)) {
-					feeds.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryFeedRow) importObject.importedObject);
+					feeds.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryEventRow) importObject.importedObject);
 				} else if (KEY_FLOW_TYPE_OFFTAKE.equals(type)) {
-					offtakes.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryOfftakeRow) importObject.importedObject);
+					offtakes.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryEventRow) importObject.importedObject);
 				} else if (KEY_CAPACITY.equals(type)) {
 					capacities.computeIfAbsent(inventory, k -> new LinkedList<>()).add((InventoryCapacityRow) importObject.importedObject);
 				}

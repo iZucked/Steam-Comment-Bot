@@ -162,14 +162,6 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createInventoryEventRowAdapter();
 			}
 			@Override
-			public Adapter caseInventoryOfftakeRow(InventoryOfftakeRow object) {
-				return createInventoryOfftakeRowAdapter();
-			}
-			@Override
-			public Adapter caseInventoryFeedRow(InventoryFeedRow object) {
-				return createInventoryFeedRowAdapter();
-			}
-			@Override
 			public Adapter caseInventoryCapacityRow(InventoryCapacityRow object) {
 				return createInventoryCapacityRowAdapter();
 			}
@@ -578,34 +570,6 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createInventoryEventRowAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.InventoryOfftakeRow <em>Inventory Offtake Row</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.cargo.InventoryOfftakeRow
-	 * @generated
-	 */
-	public Adapter createInventoryOfftakeRowAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.InventoryFeedRow <em>Inventory Feed Row</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.cargo.InventoryFeedRow
-	 * @generated
-	 */
-	public Adapter createInventoryFeedRowAdapter() {
 		return null;
 	}
 

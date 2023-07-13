@@ -80,7 +80,6 @@ public final class KnownFeatures {
 	public static final String FEATURE_IGNORE_HEDGES_PNL_DURING_OPTIMISATION = "features:ignore-hedges-pnl-during-optimisation";
 
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
-	public static final String FEATURE_INVENTORY_CV_MODEL = "features:inventory-cv-model";
 
 	public static final String FEATURE_MULL_SLOT_GENERATION = "features:mull-slot-generation";
 	/**

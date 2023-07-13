@@ -30,7 +30,7 @@ import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.presentation.customisation.IInventoryBasedGenerationPresentationCustomiser;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
-import com.mmxlabs.models.lng.cargo.InventoryFeedRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.port.Port;
@@ -197,15 +197,15 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 				});
 	}
 
-	private int getLevelPriorToAdpStart(final List<InventoryFeedRow> feeds, final LocalDate adpStartDate) {
-		final Iterator<InventoryFeedRow> levelFeedsBeforeAdpStartIter = feeds.stream().filter(f -> f.getPeriod() == InventoryFrequency.LEVEL && f.getStartDate().isBefore(adpStartDate)).iterator();
+	private int getLevelPriorToAdpStart(final List<InventoryEventRow> feeds, final LocalDate adpStartDate) {
+		final Iterator<InventoryEventRow> levelFeedsBeforeAdpStartIter = feeds.stream().filter(f -> f.getPeriod() == InventoryFrequency.LEVEL && f.getStartDate().isBefore(adpStartDate)).iterator();
 
 		if (!levelFeedsBeforeAdpStartIter.hasNext()) {
 			return 0;
 		}
-		InventoryFeedRow lastPreAdpLevel = levelFeedsBeforeAdpStartIter.next();
+		InventoryEventRow lastPreAdpLevel = levelFeedsBeforeAdpStartIter.next();
 		while (levelFeedsBeforeAdpStartIter.hasNext()) {
-			final InventoryFeedRow feed = levelFeedsBeforeAdpStartIter.next();
+			final InventoryEventRow feed = levelFeedsBeforeAdpStartIter.next();
 			if (lastPreAdpLevel.getStartDate().isBefore(feed.getStartDate())) {
 				lastPreAdpLevel = feed;
 			}

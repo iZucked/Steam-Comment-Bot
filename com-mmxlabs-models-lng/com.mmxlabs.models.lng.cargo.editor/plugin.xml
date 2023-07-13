@@ -77,24 +77,11 @@
         
        
          <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryFeedRowComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryFeedRowComponentHelper"
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
                inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.InventoryFeedRow">
+               modelClass="com.mmxlabs.models.lng.cargo.InventoryEventRow">
          </componentHelper>
-          <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryOfftakeRowComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryOfftakeRowComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.InventoryOfftakeRow">
-         </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryCapacityRowComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryCapacityRowComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.InventoryCapacityRow">
-         </componentHelper>
-         
      
          <componentHelper
                helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingSlotComponentHelper"
@@ -314,12 +301,6 @@
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.cargo.InventoryFeedRow"
-          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.InventoryFeedRowCompositeFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.inventoryFeedRowCompositeFactory"
-          inheritable="true">
-    </displayCompositeFactory>
-    <displayCompositeFactory
           eClass="com.mmxlabs.models.lng.cargo.LoadSlot"
           factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.LoadSlotCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.LoadSlotCompositeFactory"
@@ -491,16 +472,12 @@
           targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.cargo.InventoryFeedRow.Factory"
+          ID="com.mmxlabs.models.lng.cargo.InventoryEventRow.Factory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Feed"
-          targetEClass="com.mmxlabs.models.lng.cargo.InventoryFeedRow">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.cargo.InventoryOfftakeRow.Factory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Offtake"
-          targetEClass="com.mmxlabs.models.lng.cargo.InventoryOfftakeRow">
+          label="Event"
+          outputEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow"
+          replacementEReference="offtakes"
+          targetEClass="com.mmxlabs.models.lng.cargo.InventoryEventRow">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.cargo.InventoryCapacityRow.factory"

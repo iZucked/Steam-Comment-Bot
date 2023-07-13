@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -105,8 +106,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.DRY_DOCK_EVENT: return createDryDockEvent();
 			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			case CargoPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
-			case CargoPackage.INVENTORY_OFFTAKE_ROW: return createInventoryOfftakeRow();
-			case CargoPackage.INVENTORY_FEED_ROW: return createInventoryFeedRow();
+			case CargoPackage.INVENTORY_EVENT_ROW: return createInventoryEventRow();
 			case CargoPackage.INVENTORY_CAPACITY_ROW: return createInventoryCapacityRow();
 			case CargoPackage.INVENTORY: return createInventory();
 			case CargoPackage.CANAL_BOOKING_SLOT: return createCanalBookingSlot();
@@ -324,20 +324,9 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	@Override
-	public InventoryOfftakeRow createInventoryOfftakeRow() {
-		InventoryOfftakeRowImpl inventoryOfftakeRow = new InventoryOfftakeRowImpl();
-		return inventoryOfftakeRow;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public InventoryFeedRow createInventoryFeedRow() {
-		InventoryFeedRowImpl inventoryFeedRow = new InventoryFeedRowImpl();
-		return inventoryFeedRow;
+	public InventoryEventRow createInventoryEventRow() {
+		InventoryEventRowImpl inventoryEventRow = new InventoryEventRowImpl();
+		return inventoryEventRow;
 	}
 
 	/**

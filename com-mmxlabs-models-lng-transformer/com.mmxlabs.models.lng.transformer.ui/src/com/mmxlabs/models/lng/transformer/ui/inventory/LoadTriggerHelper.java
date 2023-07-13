@@ -225,7 +225,7 @@ public class LoadTriggerHelper {
 		return loadDates;
 	}
 
-	private void addNetVolumes(final List<? extends InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, final TreeMap<LocalDate, InventoryDailyEvent> insAndOuts,
+	private void addNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, final TreeMap<LocalDate, InventoryDailyEvent> insAndOuts,
 			final IntUnaryOperator volumeFunction) {
 		for (final InventoryEventRow inventoryEventRow : events) {
 			if (inventoryEventRow.getStartDate() != null) {

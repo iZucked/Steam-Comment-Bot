@@ -364,49 +364,26 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.InventoryOfftakeRow} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.InventoryEventRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected InventoryOfftakeRowItemProvider inventoryOfftakeRowItemProvider;
+	protected InventoryEventRowItemProvider inventoryEventRowItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.InventoryOfftakeRow}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.InventoryEventRow}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createInventoryOfftakeRowAdapter() {
-		if (inventoryOfftakeRowItemProvider == null) {
-			inventoryOfftakeRowItemProvider = new InventoryOfftakeRowItemProvider(this);
+	public Adapter createInventoryEventRowAdapter() {
+		if (inventoryEventRowItemProvider == null) {
+			inventoryEventRowItemProvider = new InventoryEventRowItemProvider(this);
 		}
 
-		return inventoryOfftakeRowItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.InventoryFeedRow} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected InventoryFeedRowItemProvider inventoryFeedRowItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.InventoryFeedRow}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createInventoryFeedRowAdapter() {
-		if (inventoryFeedRowItemProvider == null) {
-			inventoryFeedRowItemProvider = new InventoryFeedRowItemProvider(this);
-		}
-
-		return inventoryFeedRowItemProvider;
+		return inventoryEventRowItemProvider;
 	}
 
 	/**
@@ -1013,8 +990,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
 		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
-		if (inventoryOfftakeRowItemProvider != null) inventoryOfftakeRowItemProvider.dispose();
-		if (inventoryFeedRowItemProvider != null) inventoryFeedRowItemProvider.dispose();
+		if (inventoryEventRowItemProvider != null) inventoryEventRowItemProvider.dispose();
 		if (inventoryCapacityRowItemProvider != null) inventoryCapacityRowItemProvider.dispose();
 		if (inventoryItemProvider != null) inventoryItemProvider.dispose();
 		if (canalBookingSlotItemProvider != null) canalBookingSlotItemProvider.dispose();

@@ -6,25 +6,27 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+
+import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
-import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
-import com.mmxlabs.models.lng.cargo.InventoryFeedRow;
-import com.mmxlabs.models.lng.cargo.InventoryOfftakeRow;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -62,7 +64,7 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<InventoryFeedRow> feeds;
+	protected EList<InventoryEventRow> feeds;
 
 	/**
 	 * The cached value of the '{@link #getOfftakes() <em>Offtakes</em>}' containment reference list.
@@ -72,7 +74,7 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<InventoryOfftakeRow> offtakes;
+	protected EList<InventoryEventRow> offtakes;
 
 	/**
 	 * The cached value of the '{@link #getCapacities() <em>Capacities</em>}' containment reference list.
@@ -129,9 +131,9 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * @generated
 	 */
 	@Override
-	public EList<InventoryFeedRow> getFeeds() {
+	public EList<InventoryEventRow> getFeeds() {
 		if (feeds == null) {
-			feeds = new EObjectContainmentEList.Resolving<InventoryFeedRow>(InventoryFeedRow.class, this, CargoPackage.INVENTORY__FEEDS);
+			feeds = new EObjectContainmentEList.Resolving<InventoryEventRow>(InventoryEventRow.class, this, CargoPackage.INVENTORY__FEEDS);
 		}
 		return feeds;
 	}
@@ -142,9 +144,9 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 	 * @generated
 	 */
 	@Override
-	public EList<InventoryOfftakeRow> getOfftakes() {
+	public EList<InventoryEventRow> getOfftakes() {
 		if (offtakes == null) {
-			offtakes = new EObjectContainmentEList.Resolving<InventoryOfftakeRow>(InventoryOfftakeRow.class, this, CargoPackage.INVENTORY__OFFTAKES);
+			offtakes = new EObjectContainmentEList.Resolving<InventoryEventRow>(InventoryEventRow.class, this, CargoPackage.INVENTORY__OFFTAKES);
 		}
 		return offtakes;
 	}
@@ -280,11 +282,11 @@ public class InventoryImpl extends NamedObjectImpl implements Inventory {
 				return;
 			case CargoPackage.INVENTORY__FEEDS:
 				getFeeds().clear();
-				getFeeds().addAll((Collection<? extends InventoryFeedRow>)newValue);
+				getFeeds().addAll((Collection<? extends InventoryEventRow>)newValue);
 				return;
 			case CargoPackage.INVENTORY__OFFTAKES:
 				getOfftakes().clear();
-				getOfftakes().addAll((Collection<? extends InventoryOfftakeRow>)newValue);
+				getOfftakes().addAll((Collection<? extends InventoryEventRow>)newValue);
 				return;
 			case CargoPackage.INVENTORY__CAPACITIES:
 				getCapacities().clear();

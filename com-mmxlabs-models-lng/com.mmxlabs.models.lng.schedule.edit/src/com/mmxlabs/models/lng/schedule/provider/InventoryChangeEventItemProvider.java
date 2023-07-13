@@ -71,8 +71,6 @@ public class InventoryChangeEventItemProvider
 			addCurrentLevelPropertyDescriptor(object);
 			addCurrentMinPropertyDescriptor(object);
 			addCurrentMaxPropertyDescriptor(object);
-			addCurrentCVMinPropertyDescriptor(object);
-			addCurrentCVMaxPropertyDescriptor(object);
 			addEventPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
 			addOpenSlotAllocationPropertyDescriptor(object);
@@ -188,50 +186,6 @@ public class InventoryChangeEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Current CV Min feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCurrentCVMinPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_InventoryChangeEvent_currentCVMin_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryChangeEvent_currentCVMin_feature", "_UI_InventoryChangeEvent_type"),
-				 SchedulePackage.Literals.INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Current CV Max feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCurrentCVMaxPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_InventoryChangeEvent_currentCVMax_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryChangeEvent_currentCVMax_feature", "_UI_InventoryChangeEvent_type"),
-				 SchedulePackage.Literals.INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -390,8 +344,6 @@ public class InventoryChangeEventItemProvider
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_LEVEL:
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_MIN:
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_MAX:
-			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN:
-			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX:
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__BREACHED_MIN:
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__BREACHED_MAX:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

@@ -33,7 +33,7 @@ import org.eclipse.emf.common.util.EList;
 public interface Inventory extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Feeds</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.InventoryFeedRow}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.InventoryEventRow}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Feeds</em>' containment reference list isn't clear,
@@ -45,11 +45,11 @@ public interface Inventory extends NamedObject {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<InventoryFeedRow> getFeeds();
+	EList<InventoryEventRow> getFeeds();
 
 	/**
 	 * Returns the value of the '<em><b>Offtakes</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.InventoryOfftakeRow}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.InventoryEventRow}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Offtakes</em>' containment reference list isn't clear,
@@ -61,7 +61,7 @@ public interface Inventory extends NamedObject {
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	EList<InventoryOfftakeRow> getOfftakes();
+	EList<InventoryEventRow> getOfftakes();
 
 	/**
 	 * Returns the value of the '<em><b>Capacities</b></em>' containment reference list.

@@ -6,8 +6,6 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
-import org.eclipse.emf.ecore.EClass;
-
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
@@ -16,12 +14,12 @@ import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
  *
  * @generated NOT
  */
-public abstract class InventoryEventRowComponentHelper extends DefaultComponentHelper {
+public class InventoryEventRowComponentHelper extends DefaultComponentHelper {
+ 
+	public InventoryEventRowComponentHelper() {
+		super(CargoPackage.Literals.INVENTORY_EVENT_ROW);
 
-	protected InventoryEventRowComponentHelper(final EClass targetClass) {
-		super(targetClass);
 		ignoreFeatures.add(CargoPackage.Literals.INVENTORY_EVENT_ROW__VOLUME_LOW);
 		ignoreFeatures.add(CargoPackage.Literals.INVENTORY_EVENT_ROW__VOLUME_HIGH);
-
 	}
 }

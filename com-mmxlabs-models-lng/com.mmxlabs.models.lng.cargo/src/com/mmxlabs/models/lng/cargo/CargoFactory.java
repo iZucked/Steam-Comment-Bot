@@ -133,22 +133,13 @@ public interface CargoFactory extends EFactory {
 	VesselTypeGroup createVesselTypeGroup();
 
 	/**
-	 * Returns a new object of class '<em>Inventory Offtake Row</em>'.
+	 * Returns a new object of class '<em>Inventory Event Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Inventory Offtake Row</em>'.
+	 * @return a new object of class '<em>Inventory Event Row</em>'.
 	 * @generated
 	 */
-	InventoryOfftakeRow createInventoryOfftakeRow();
-
-	/**
-	 * Returns a new object of class '<em>Inventory Feed Row</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Inventory Feed Row</em>'.
-	 * @generated
-	 */
-	InventoryFeedRow createInventoryFeedRow();
+	InventoryEventRow createInventoryEventRow();
 
 	/**
 	 * Returns a new object of class '<em>Inventory Capacity Row</em>'.

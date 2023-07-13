@@ -29,8 +29,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl#getMinVolume <em>Min Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl#getMaxVolume <em>Max Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl#getMinCV <em>Min CV</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl#getMaxCV <em>Max CV</em>}</li>
  * </ul>
  *
  * @generated
@@ -95,46 +93,6 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * @ordered
 	 */
 	protected int maxVolume = MAX_VOLUME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getMinCV() <em>Min CV</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMinCV()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double MIN_CV_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getMinCV() <em>Min CV</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMinCV()
-	 * @generated
-	 * @ordered
-	 */
-	protected double minCV = MIN_CV_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getMaxCV() <em>Max CV</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMaxCV()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double MAX_CV_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getMaxCV() <em>Max CV</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMaxCV()
-	 * @generated
-	 * @ordered
-	 */
-	protected double maxCV = MAX_CV_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -230,52 +188,6 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 	 * @generated
 	 */
 	@Override
-	public double getMinCV() {
-		return minCV;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setMinCV(double newMinCV) {
-		double oldMinCV = minCV;
-		minCV = newMinCV;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY_CAPACITY_ROW__MIN_CV, oldMinCV, minCV));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getMaxCV() {
-		return maxCV;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setMaxCV(double newMaxCV) {
-		double oldMaxCV = maxCV;
-		maxCV = newMaxCV;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.INVENTORY_CAPACITY_ROW__MAX_CV, oldMaxCV, maxCV));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CargoPackage.INVENTORY_CAPACITY_ROW__DATE:
@@ -284,10 +196,6 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 				return getMinVolume();
 			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_VOLUME:
 				return getMaxVolume();
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MIN_CV:
-				return getMinCV();
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_CV:
-				return getMaxCV();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -308,12 +216,6 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 				return;
 			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_VOLUME:
 				setMaxVolume((Integer)newValue);
-				return;
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MIN_CV:
-				setMinCV((Double)newValue);
-				return;
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_CV:
-				setMaxCV((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -336,12 +238,6 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_VOLUME:
 				setMaxVolume(MAX_VOLUME_EDEFAULT);
 				return;
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MIN_CV:
-				setMinCV(MIN_CV_EDEFAULT);
-				return;
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_CV:
-				setMaxCV(MAX_CV_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -360,10 +256,6 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 				return minVolume != MIN_VOLUME_EDEFAULT;
 			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_VOLUME:
 				return maxVolume != MAX_VOLUME_EDEFAULT;
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MIN_CV:
-				return minCV != MIN_CV_EDEFAULT;
-			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_CV:
-				return maxCV != MAX_CV_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -384,10 +276,6 @@ public class InventoryCapacityRowImpl extends EObjectImpl implements InventoryCa
 		result.append(minVolume);
 		result.append(", maxVolume: ");
 		result.append(maxVolume);
-		result.append(", minCV: ");
-		result.append(minCV);
-		result.append(", maxCV: ");
-		result.append(maxCV);
 		result.append(')');
 		return result.toString();
 	}

@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.importer.InventoryExtraImporter;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
+import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 /**
@@ -70,7 +71,7 @@ public class InventoryImportAction extends ImportAction {
 					for (Entry<String, List<InventoryEventRow>> entry2 : entry.getValue().entrySet()) {
 						final String type = entry2.getKey();
 						final Object feature;
-						final List<? extends InventoryEventRow> oldEventRows;
+						final List<InventoryEventRow> oldEventRows;
 						if (type.equals("feed")) {
 							feature = CargoPackage.Literals.INVENTORY__FEEDS;
 							oldEventRows = inventory.getFeeds();

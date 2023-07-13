@@ -39,12 +39,6 @@ public class InventoryCapacityRowConstraint extends AbstractModelMultiConstraint
 					failure.addEObjectAndFeature(inventory, CargoPackage.Literals.INVENTORY_CAPACITY_ROW__MIN_VOLUME);
 					failures.add(failure);
 				}
-				if(icr.getMaxCV() < icr.getMinCV()) {
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(String.format("Inventory model '%s': min CV is greater than the max CV!", inventory.getName())));
-					failure.addEObjectAndFeature(inventory, CargoPackage.Literals.INVENTORY_CAPACITY_ROW__MIN_VOLUME);
-					failures.add(failure);
-				}
 			}
 		}
 	}

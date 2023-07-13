@@ -11,11 +11,8 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.standard.InventoryReport;
-import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -26,17 +23,15 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 	private Menu lastMenu = null;
 	private boolean showingCargoes;
 	private boolean showingOpenSlots;
-	private boolean showingCV;
 	private final Action showCargoesAction;
 	private final Action showOpenSlotsAction;
-	private final Action showCVAction;
 
 	public ChartColourSchemeAction(final InventoryReport report) {
-		super("Filter", IAction.AS_DROP_DOWN_MENU);
+		super("Colour Scheme", IAction.AS_DROP_DOWN_MENU);
 		this.report = report;
 		showingCargoes = true;
 		showingOpenSlots = true;
-		showCargoesAction = new Action("Cargoes", IAction.AS_CHECK_BOX) {
+		showCargoesAction = new Action("Show cargoes", IAction.AS_CHECK_BOX) {
 			@Override
 			public void run() {
 				showingCargoes = !showingCargoes;
@@ -44,7 +39,7 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 				report.setCargoVisibilityInInventoryChart(showingCargoes);
 			}
 		};
-		showOpenSlotsAction = new Action("Open", IAction.AS_CHECK_BOX) {
+		showOpenSlotsAction = new Action("Show open", IAction.AS_CHECK_BOX) {
 			@Override
 			public void run() {
 				showingOpenSlots = !showingOpenSlots;
@@ -52,17 +47,7 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 				report.setOpenSlotVisibilityInInventoryChart(showingOpenSlots);
 			}
 		};
-		final Inventory inv = report.getSelectedInventory();
-		showingCV = inv != null && inv.getFacilityType() != InventoryFacilityType.UPSTREAM && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
-		showCVAction = new Action("CV", IAction.AS_CHECK_BOX) {
-			@Override
-			public void run() {
-				showingCV = !showingCV;
-				setChecked(showingCV);
-				report.setCVVisibilityInInventoryChart(showingCV);
-			}
-		};
-		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Label, IconMode.Enabled));
 	}
 
 	@Override
@@ -105,17 +90,7 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 		showOpenSlotsAction.setChecked(showingOpenSlots);
 		final ActionContributionItem showOpenSlotsAci = new ActionContributionItem(showOpenSlotsAction);
 		showOpenSlotsAci.fill(menu, 0);
-		showCVAction.setChecked(showingCV);
-		final Inventory inv = report.getSelectedInventory();
-		if (inv != null && inv.getFacilityType() != InventoryFacilityType.UPSTREAM && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL)) {
-			final ActionContributionItem showCVAci = new ActionContributionItem(showCVAction);
-			showCVAci.fill(menu, 0);
-		}
-	}
-	
-	public void update() {
-		final Inventory inv = report.getSelectedInventory();
-		showingCV = inv != null && inv.getFacilityType() != InventoryFacilityType.UPSTREAM && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
+
 	}
 
 	public boolean isShowingCargoes() {
@@ -124,9 +99,5 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 
 	public boolean isShowingOpenSlots() {
 		return this.showingOpenSlots;
-	}
-
-	public boolean isShowingCV() {
-		return this.showingCV;
 	}
 }

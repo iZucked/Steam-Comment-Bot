@@ -6606,31 +6606,13 @@ public interface SchedulePackage extends EPackage {
 	int INVENTORY_CHANGE_EVENT__CURRENT_MAX = 4;
 
 	/**
-	 * The feature id for the '<em><b>Current CV Min</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN = 5;
-
-	/**
-	 * The feature id for the '<em><b>Current CV Max</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX = 6;
-
-	/**
 	 * The feature id for the '<em><b>Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_CHANGE_EVENT__EVENT = 7;
+	int INVENTORY_CHANGE_EVENT__EVENT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -6639,7 +6621,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_CHANGE_EVENT__SLOT_ALLOCATION = 8;
+	int INVENTORY_CHANGE_EVENT__SLOT_ALLOCATION = 6;
 
 	/**
 	 * The feature id for the '<em><b>Open Slot Allocation</b></em>' reference.
@@ -6648,7 +6630,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_CHANGE_EVENT__OPEN_SLOT_ALLOCATION = 9;
+	int INVENTORY_CHANGE_EVENT__OPEN_SLOT_ALLOCATION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Breached Min</b></em>' attribute.
@@ -6657,7 +6639,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_CHANGE_EVENT__BREACHED_MIN = 10;
+	int INVENTORY_CHANGE_EVENT__BREACHED_MIN = 8;
 
 	/**
 	 * The feature id for the '<em><b>Breached Max</b></em>' attribute.
@@ -6666,7 +6648,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_CHANGE_EVENT__BREACHED_MAX = 11;
+	int INVENTORY_CHANGE_EVENT__BREACHED_MAX = 9;
 
 	/**
 	 * The number of structural features of the '<em>Inventory Change Event</em>' class.
@@ -6675,7 +6657,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_CHANGE_EVENT_FEATURE_COUNT = 12;
+	int INVENTORY_CHANGE_EVENT_FEATURE_COUNT = 10;
 
 	/**
 	 * The number of operations of the '<em>Inventory Change Event</em>' class.
@@ -11123,28 +11105,6 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getInventoryChangeEvent_CurrentMax();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMin <em>Current CV Min</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Current CV Min</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMin()
-	 * @see #getInventoryChangeEvent()
-	 * @generated
-	 */
-	EAttribute getInventoryChangeEvent_CurrentCVMin();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMax <em>Current CV Max</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Current CV Max</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getCurrentCVMax()
-	 * @see #getInventoryChangeEvent()
-	 * @generated
-	 */
-	EAttribute getInventoryChangeEvent_CurrentCVMax();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.InventoryChangeEvent#getEvent <em>Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13764,22 +13724,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INVENTORY_CHANGE_EVENT__CURRENT_MAX = eINSTANCE.getInventoryChangeEvent_CurrentMax();
-
-		/**
-		 * The meta object literal for the '<em><b>Current CV Min</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN = eINSTANCE.getInventoryChangeEvent_CurrentCVMin();
-
-		/**
-		 * The meta object literal for the '<em><b>Current CV Max</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX = eINSTANCE.getInventoryChangeEvent_CurrentCVMax();
 
 		/**
 		 * The meta object literal for the '<em><b>Event</b></em>' reference feature.
