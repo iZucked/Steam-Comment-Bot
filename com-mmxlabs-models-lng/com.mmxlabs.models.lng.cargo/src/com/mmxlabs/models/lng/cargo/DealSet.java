@@ -21,6 +21,8 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DealSet#getSlots <em>Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DealSet#getPaperDeals <em>Paper Deals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.DealSet#isAllowExposure <em>Allow Exposure</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.DealSet#isAllowHedging <em>Allow Hedging</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDealSet()
@@ -59,5 +61,49 @@ public interface DealSet extends NamedObject {
 	 * @generated
 	 */
 	EList<PaperDeal> getPaperDeals();
+
+	/**
+	 * Returns the value of the '<em><b>Allow Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allow Exposure</em>' attribute.
+	 * @see #setAllowExposure(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDealSet_AllowExposure()
+	 * @model
+	 * @generated
+	 */
+	boolean isAllowExposure();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DealSet#isAllowExposure <em>Allow Exposure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Allow Exposure</em>' attribute.
+	 * @see #isAllowExposure()
+	 * @generated
+	 */
+	void setAllowExposure(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Allow Hedging</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allow Hedging</em>' attribute.
+	 * @see #setAllowHedging(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDealSet_AllowHedging()
+	 * @model
+	 * @generated
+	 */
+	boolean isAllowHedging();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DealSet#isAllowHedging <em>Allow Hedging</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Allow Hedging</em>' attribute.
+	 * @see #isAllowHedging()
+	 * @generated
+	 */
+	void setAllowHedging(boolean value);
 
 } // DealSet

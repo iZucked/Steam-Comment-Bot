@@ -20,6 +20,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.DealSet} object.
@@ -51,6 +53,8 @@ public class DealSetItemProvider extends NamedObjectItemProvider {
 
 			addSlotsPropertyDescriptor(object);
 			addPaperDealsPropertyDescriptor(object);
+			addAllowExposurePropertyDescriptor(object);
+			addAllowHedgingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -100,6 +104,50 @@ public class DealSetItemProvider extends NamedObjectItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Allow Exposure feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowExposurePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DealSet_allowExposure_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DealSet_allowExposure_feature", "_UI_DealSet_type"),
+				 CargoPackage.Literals.DEAL_SET__ALLOW_EXPOSURE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allow Hedging feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowHedgingPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DealSet_allowHedging_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DealSet_allowHedging_feature", "_UI_DealSet_type"),
+				 CargoPackage.Literals.DEAL_SET__ALLOW_HEDGING,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns DealSet.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -135,6 +183,13 @@ public class DealSetItemProvider extends NamedObjectItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(DealSet.class)) {
+			case CargoPackage.DEAL_SET__ALLOW_EXPOSURE:
+			case CargoPackage.DEAL_SET__ALLOW_HEDGING:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
