@@ -22,12 +22,17 @@ import com.mmxlabs.lingo.reports.emissions.cii.managers.CIIYearColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class CIIReportTransformer implements AbstractSimpleTabularReportTransformer<CIIGradesData> {
-	
+
+	private Year earliestYear = null;
+	private Year latestYear = null;
+
 	private @NonNull List<CIIGradesData> diffModeData(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair, @NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult> pair) {
 		return List.of();
 	}
@@ -38,15 +43,15 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 		if (pinnedPair != null) {
 			return diffModeData(pinnedPair, otherPairs.get(0));
 		}
-		
+
+		findYearsRange(pinnedPair, otherPairs);
+
 		final List<CIIGradesData> outputData = new LinkedList<>();
-		
+
 		for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> scenarioPair : otherPairs) {
 			final ScenarioResult scenarioResult = scenarioPair.getSecond();
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioResult.getScenarioDataProvider());
-			if (scheduleModel == null) {
-				continue;
-			}
+			
 			final List<VesselEmissionAccountingReportModelV1> vesselEventEmissionModels = VesselEmissionAccountingReportJSONGenerator.createReportData(scheduleModel, false, "-");
 
 			final Map<Vessel, Map<Year, CumulativeCII>> vesselYearCIIs = new HashMap<>();
@@ -66,7 +71,7 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 					final LocalDate newYearMidPoint = LocalDate.of(startDate.getYear(), 12, 31);
 					final double earlyEventLinearInterpolationCoefficient = Duration.between(startDate, newYearMidPoint).toDays() / (double) Duration.between(startDate, endDate).toDays();
 					final double lateEventLinearInterpolationCoefficient = 1 - earlyEventLinearInterpolationCoefficient;
-					
+
 					final Year startYear = Year.of(startDate.getYear());
 					vesselCIIs.computeIfAbsent(startYear, y -> new CumulativeCII(vessel));
 					vesselCIIs.get(startYear).accumulateEventModel(model, earlyEventLinearInterpolationCoefficient);
@@ -76,7 +81,7 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 					vesselCIIs.get(endYear).accumulateEventModel(model, lateEventLinearInterpolationCoefficient);
 				}
 			}
-			
+
 			vesselYearCIIs.forEach((vessel, accumulatedCIIs) -> {
 				final Map<Year, String> vesselGradesMap = new HashMap<>();
 				accumulatedCIIs.forEach((year, cumulativeCII) -> {
@@ -86,9 +91,40 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 				outputData.add(new CIIGradesData(vessel, vesselGradesMap, scenarioResult));
 			});
 		}
-		
-		
+
 		return outputData;
+	}
+
+	private void findYearsRange(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair, @NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
+		earliestYear = null;
+		latestYear = null;
+		if (pinnedPair != null) {
+			maybeSetYearsRangeFromScenario(pinnedPair);
+		}
+		for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> pair : otherPairs) {
+			maybeSetYearsRangeFromScenario(pair);
+		}
+		if (earliestYear == null || latestYear == null) {
+			throw new IllegalStateException();
+		}
+	}
+
+	private void maybeSetYearsRangeFromScenario(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> scenarioPair) {
+		final ScenarioResult scenarioResult = scenarioPair.getSecond();
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioResult.getScenarioDataProvider());
+		
+		for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
+			for (final Event event : sequence.getEvents()) {
+				final Year startDateYear = Year.from(event.getStart());
+				if (earliestYear == null || earliestYear.isAfter(startDateYear)) {
+					earliestYear = startDateYear;
+				}
+				final Year endDateYear = Year.from(event.getEnd());
+				if (latestYear == null || latestYear.isBefore(endDateYear)) {
+					latestYear = endDateYear;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -98,10 +134,7 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 			result.add(new CIIScenarioColumnManager());
 		}
 		result.add(new CIIVesselColumnManager());
-		
-		final Year earliestYear = Year.of(2020);
-		final Year latestYear = Year.of(2029);
-		
+
 		for (Year year = earliestYear; !year.isAfter(latestYear); year = year.plusYears(1)) {
 			result.add(new CIIYearColumnManager(year));
 		}

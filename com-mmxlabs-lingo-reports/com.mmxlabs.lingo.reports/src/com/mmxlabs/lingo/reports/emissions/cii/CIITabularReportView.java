@@ -6,8 +6,8 @@ import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 
 public class CIITabularReportView extends SimpleTabularReportView<CIIGradesData> {
 
-	protected CIITabularReportView() {
-		super("CII_Grades_ReportView");
+	public CIITabularReportView() {
+		super("com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView");
 	}
 
 	@Override

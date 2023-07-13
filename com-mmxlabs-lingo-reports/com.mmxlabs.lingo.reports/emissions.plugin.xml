@@ -36,8 +36,8 @@
             name="CII Emissions"
             icon="icons:/icons/16x16/emissions_total.png"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.emissions.cii.CIIReportView"
-            id="com.mmxlabs.lingo.reports.emissions.cii.CIIReportView">
+            class="com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView"
+            id="com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView">
       </view>
 	</extension>
 
