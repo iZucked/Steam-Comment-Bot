@@ -12,6 +12,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -31,6 +33,10 @@ public class InventoryCapacityPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_Date(), getCommandHandler()));
 		addTypicalColumn("Min (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MinVolume(), getCommandHandler()));
 		addTypicalColumn("Max (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MaxVolume(), getCommandHandler()));
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL)) {
+			addTypicalColumn("Min CV", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MinCV(), getCommandHandler()));
+			addTypicalColumn("Max CV", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryCapacityRow_MaxCV(), getCommandHandler()));
+		}
 
 		setTitle("Capacity");
 	}

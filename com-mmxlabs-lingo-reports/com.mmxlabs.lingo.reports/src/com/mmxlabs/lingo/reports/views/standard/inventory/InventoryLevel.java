@@ -25,6 +25,8 @@ public class InventoryLevel {
 	public int cargoIn = 0;
 	public int volumeLow = 0;
 	public int volumeHigh = 0;
+	
+	public double tankCV = 0;
 
 	public int runningTotal = 0;
 	public int ttlLow = 0;
@@ -53,6 +55,8 @@ public class InventoryLevel {
 		this.purchaseContract = lvl.vessel != null ? lvl.purchaseContract : this.purchaseContract;
 		this.purchaseDate = lvl.vessel != null ? lvl.purchaseDate : this.purchaseDate;
 		this.breach = lvl.breach || this.breach;
+		// Assumes that lvl is later in the day than this
+		this.tankCV = lvl.tankCV;
 	}
 
 	public InventoryLevel(final LocalDate date, final InventoryFrequency type, final int changeInM3, final String vessel, final String dischargeId, //

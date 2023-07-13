@@ -397,6 +397,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentLevel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentCVMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentCVMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//InventoryEventRow"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" eType="#//SlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocation" eType="#//OpenSlotAllocation"/>

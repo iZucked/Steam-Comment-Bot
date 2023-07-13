@@ -66,6 +66,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.Chart;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.IBarSeries;
 import org.eclipse.swtchart.ILineSeries;
@@ -82,8 +84,12 @@ import org.osgi.service.event.EventHandler;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.common.util.QuadFunction;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.reports.ColourPalette;
+import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
+import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
@@ -103,6 +109,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
+import com.mmxlabs.models.lng.cargo.InventoryFeedRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -150,6 +157,8 @@ public class InventoryReport extends ViewPart {
 	private Chart mullMonthlyOverliftChart;
 	private Chart mullMonthlyCargoCountChart;
 
+	private IAxis cvAxis;
+
 	private GridTableViewer inventoryTableViewer;
 
 	private GridTableViewer mullMonthlyTableViewer;
@@ -195,15 +204,25 @@ public class InventoryReport extends ViewPart {
 	private LocalResourceManager localResourceManager;
 
 	private Color[] mullChartColourSequence;
-	private Color colourOrange;
 	private Color colourLightGrey;
 	private Color colourRed;
+	private Color colourVol;
+	private Color colourCV;
+	private Color colourOpen;
 
 	private EventHandler todayHandler;
 
 	private IBarSeries cargoSeries;
 	private IBarSeries openSeries;
 	private IBarSeries thirdPartyCargoSeries;
+
+	private ILineSeries<?> cvSeries;
+	private ILineSeries<?> minCVSeries;
+	private ILineSeries<?> maxCVSeries;
+	
+	private GridViewerColumn cvTableColumn;
+	
+	private boolean isCVEnabled;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -241,6 +260,7 @@ public class InventoryReport extends ViewPart {
 						}
 						if (selectedInventory == null) {
 							selectedInventory = cargoModel.getInventoryModels().get(0);
+							updateTable(selectedInventory != null && selectedInventory.getFacilityType() != InventoryFacilityType.UPSTREAM);
 						}
 						lastFacility = selectedInventory.getName();
 						comboViewer.setSelection(new StructuredSelection(selectedInventory));
@@ -256,6 +276,10 @@ public class InventoryReport extends ViewPart {
 			ViewerHelper.runIfViewerValid(comboViewer, block, r);
 		}
 	};
+	
+	public Inventory getSelectedInventory() {
+		return selectedInventory;
+	}
 
 	private ScenarioComparisonService selectedScenariosService;
 
@@ -270,10 +294,15 @@ public class InventoryReport extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		this.localResourceManager = new LocalResourceManager(JFaceResources.getResources(), parent);
 
-		this.colourOrange = this.localResourceManager.createColor(new RGB(255, 200, 15));
 		this.colourLightGrey = this.localResourceManager.createColor(new RGB(230, 230, 230));
 		this.colourRed = this.localResourceManager.createColor(new RGB(255, 36, 0));
 
+		this.colourVol = ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_Volume, ColourElements.Foreground);
+		this.colourCV = ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_CV, ColourElements.Foreground);
+		this.colourOpen = this.localResourceManager.createColor(new RGB(218, 103, 05));
+		
+		this.isCVEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
+		
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			mullMonthlyTableFilterField = new FilterField(parent);
 			mullMonthlyCumulativeFilterField = new FilterField(parent);
@@ -308,6 +337,7 @@ public class InventoryReport extends ViewPart {
 					lastFacility = null;
 				}
 				updatePlots(Collections.singleton(selectedInventory), currentResult);
+				updateTable(selectedInventory != null && selectedInventory.getFacilityType() != InventoryFacilityType.UPSTREAM);
 			});
 		}
 
@@ -329,6 +359,9 @@ public class InventoryReport extends ViewPart {
 
 			inventoryInsAndOutChart.getTitle().setVisible(false);
 			chartItem.setControl(inventoryInsAndOutChart);
+
+			final int cvAxisId = inventoryInsAndOutChart.getAxisSet().createYAxis();
+			cvAxis = inventoryInsAndOutChart.getAxisSet().getYAxis(cvAxisId);
 		}
 		{
 			inventoryDailyChartViewer = new Chart(folder, SWT.None);
@@ -353,6 +386,7 @@ public class InventoryReport extends ViewPart {
 				createColumn("Total Cargo Out", 150, o -> String.format("%,d", o.cargoOut));
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
+				cvTableColumn = createColumn("Tank CV", 150, o -> String.format("%.3f", o.tankCV));
 				createColumn("Vessel", 150, o -> o.vessel);
 				createColumn("D-ID", 150, o -> o.dischargeId);
 				createColumn("Buyer", 150, o -> o.salesContract);
@@ -634,6 +668,32 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 
+	public void setCVVisibilityInInventoryChart(final boolean isVisible) {
+		if (cvSeries != null) {
+			cvSeries.setVisible(isVisible && isCVEnabled);
+			cvSeries.setVisibleInLegend(isVisible&& isCVEnabled);
+		}
+		if (minCVSeries != null) {
+			minCVSeries.setVisible(isVisible&& isCVEnabled);
+		}
+		if (maxCVSeries != null) {
+			maxCVSeries.setVisible(isVisible&& isCVEnabled);
+			maxCVSeries.setVisibleInLegend(isVisible&& isCVEnabled);
+		}
+		if (cvAxis != null) {
+			cvAxis.getTitle().setVisible(isVisible&& isCVEnabled);
+			cvAxis.getTick().setVisible(isVisible&& isCVEnabled);
+			if (isVisible) {
+				cvAxis.getGrid().setStyle(LineStyle.DOT);
+			} else {
+				cvAxis.getGrid().setStyle(LineStyle.NONE);
+			}
+		}
+		adjustInAndOutsRange();
+		inventoryInsAndOutChart.updateLayout();
+		inventoryInsAndOutChart.redraw();
+	}
+
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
@@ -654,6 +714,10 @@ public class InventoryReport extends ViewPart {
 			eventBroker.unsubscribe(this.todayHandler);
 		}
 		super.dispose();
+	}
+	
+	private void updateTable(boolean cvVisible) {
+		cvTableColumn.getColumn().setVisible(cvVisible);
 	}
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
@@ -683,6 +747,8 @@ public class InventoryReport extends ViewPart {
 		final List<Pair<MullDailyInformation, MullDailyInformation>> pairedDailyMullList = new LinkedList<>();
 
 		Optional<InventoryChangeEvent> firstInventoryData = Optional.empty();
+		
+		colourSchemeAction.update();
 
 		if (toDisplay != null) {
 			final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
@@ -694,7 +760,7 @@ public class InventoryReport extends ViewPart {
 						if (!inventoryModels.contains(inventory) || inventory.getName() == null) {
 							continue;
 						}
-						final List<InventoryEventRow> invs = inventory.getFeeds();
+						final List<InventoryFeedRow> invs = inventory.getFeeds();
 						if (invs == null) {
 							continue;
 						}
@@ -1195,25 +1261,53 @@ public class InventoryReport extends ViewPart {
 									.filter(filterFunction) //
 									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
 									.collect(Collectors.toList());
+
+							final QuadFunction<Double, Integer, Double, Integer, Double> cvBlendFunction = (oldCV, oldQuantity, inCV, deltaQuantity) -> {
+								if (oldQuantity < 0.0) {
+									return inCV;
+								} else if (deltaQuantity < 0.0) {
+									return oldCV;
+								} else {
+									return (oldCV * oldQuantity + inCV * deltaQuantity) / (oldQuantity + deltaQuantity);
+								}
+							};
 							if (!inventoryLevels.isEmpty()) {
 								final TreeMap<LocalDateTime, Integer> hourlyLevels = new TreeMap<>();
+								final TreeMap<LocalDateTime, Double> hourlyCvLevels = new TreeMap<>();
 								for (final InventoryChangeEvent event : inventoryEvents.getEvents()) {
 									final InventoryEventRow eventRow = event.getEvent();
 									if (eventRow != null) {
-										if (eventRow.getPeriod() == InventoryFrequency.LEVEL) {
-											hourlyLevels.compute(event.getDate(), (k, v) -> v == null ? event.getChangeQuantity() : v + event.getChangeQuantity());
-										} else if (eventRow.getPeriod() == InventoryFrequency.CARGO) {
-											hourlyLevels.compute(event.getDate(), (k, v) -> v == null ? event.getChangeQuantity() : v + event.getChangeQuantity());
-										} else if (eventRow.getPeriod() == InventoryFrequency.HOURLY) {
-											hourlyLevels.compute(event.getDate(), (k, v) -> v == null ? event.getChangeQuantity() : v + event.getChangeQuantity());
+										int volumeDelta = event.getChangeQuantity();
+										if (eventRow.getPeriod() == InventoryFrequency.LEVEL || eventRow.getPeriod() == InventoryFrequency.CARGO || eventRow.getPeriod() == InventoryFrequency.HOURLY) {
+											if (eventRow instanceof InventoryFeedRow feedRow) {
+												hourlyCvLevels.compute(event.getDate(),
+														(k, v) -> v == null ? feedRow.getCv() : cvBlendFunction.apply(v, hourlyLevels.get(k), feedRow.getCv(), volumeDelta));
+											} else {
+												hourlyCvLevels.compute(event.getDate(), (k, v) -> v == null ? 0 : cvBlendFunction.apply(v, hourlyLevels.get(k), 0.0, volumeDelta));
+											}
+
+											hourlyLevels.compute(event.getDate(), (k, v) -> v == null ? volumeDelta : v + volumeDelta);
 										} else if (eventRow.getPeriod() == InventoryFrequency.DAILY) {
 											final int delta = event.getChangeQuantity() / 24;
 											final int firstAmount = delta + (event.getChangeQuantity() % 24);
 											LocalDateTime currentDateTime = event.getDate();
+											if (eventRow instanceof InventoryFeedRow feedRow) {
+												hourlyCvLevels.compute(currentDateTime,
+														(k, v) -> v == null ? feedRow.getCv() : cvBlendFunction.apply(v, hourlyLevels.get(k), feedRow.getCv(), firstAmount));
+											} else {
+												hourlyCvLevels.compute(event.getDate(), (k, v) -> v == null ? 0 : cvBlendFunction.apply(v, hourlyLevels.get(k), 0.0, volumeDelta));
+											}
 											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
 											for (int hour = 1; hour < 24; hour++) {
 												currentDateTime = currentDateTime.plusHours(1);
+												if (eventRow instanceof InventoryFeedRow feedRow) {
+													hourlyCvLevels.compute(currentDateTime,
+															(k, v) -> v == null ? feedRow.getCv() : cvBlendFunction.apply(v, hourlyLevels.get(k), feedRow.getCv(), delta));
+												} else {
+													hourlyCvLevels.compute(event.getDate(), (k, v) -> v == null ? 0 : cvBlendFunction.apply(v, hourlyLevels.get(k), 0.0, volumeDelta));
+												}
 												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
+
 											}
 										} else if (eventRow.getPeriod() == InventoryFrequency.MONTHLY) {
 											final Duration dur = Duration.between(event.getDate(), event.getDate().plusMonths(1));
@@ -1221,10 +1315,23 @@ public class InventoryReport extends ViewPart {
 											final int delta = event.getChangeQuantity() / numHours;
 											final int firstAmount = delta + (event.getChangeQuantity() % numHours);
 											LocalDateTime currentDateTime = event.getDate();
+											if (eventRow instanceof InventoryFeedRow feedRow) {
+												hourlyCvLevels.compute(currentDateTime,
+														(k, v) -> v == null ? feedRow.getCv() : cvBlendFunction.apply(v, hourlyLevels.get(k), feedRow.getCv(), firstAmount));
+											} else {
+												hourlyCvLevels.compute(event.getDate(), (k, v) -> v == null ? 0 : cvBlendFunction.apply(v, hourlyLevels.get(k), 0.0, volumeDelta));
+											}
 											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
 											for (int hour = 1; hour < numHours; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
+												if (eventRow instanceof InventoryFeedRow feedRow) {
+													hourlyCvLevels.compute(currentDateTime,
+															(k, v) -> v == null ? feedRow.getCv() : cvBlendFunction.apply(v, hourlyLevels.get(k), feedRow.getCv(), delta));
+												} else {
+													hourlyCvLevels.compute(event.getDate(), (k, v) -> v == null ? 0 : cvBlendFunction.apply(v, hourlyLevels.get(k), 0.0, volumeDelta));
+												}
 												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
+
 											}
 										}
 									} else if (event.getSlotAllocation() != null) {
@@ -1233,29 +1340,57 @@ public class InventoryReport extends ViewPart {
 										final int volumeTransferred = slotAllocation.getVolumeTransferred();
 										final int delta = volumeTransferred / slotDuration;
 										final int firstAmount = delta + (volumeTransferred % slotDuration);
+										final double cargoCV = slotAllocation.getCv();
+
 										LocalDateTime currentDateTime = slotAllocation.getSlotVisit().getStart().toLocalDateTime();
 										if (cargoIn) {
+											hourlyCvLevels.compute(currentDateTime, (k, v) -> v == null ? cargoCV : cvBlendFunction.apply(v, hourlyLevels.get(k), cargoCV, firstAmount));
 											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
 											for (int hour = 1; hour < slotDuration; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
+												hourlyCvLevels.compute(currentDateTime, (k, v) -> v == null ? cargoCV : cvBlendFunction.apply(v, hourlyLevels.get(k), cargoCV, delta));
 												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
 											}
 										} else {
+											hourlyCvLevels.compute(currentDateTime, (k, v) -> v == null ? cargoCV : cvBlendFunction.apply(v, hourlyLevels.get(k), cargoCV, -firstAmount));
 											hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -firstAmount : v - firstAmount);
 											for (int hour = 1; hour < slotDuration; ++hour) {
 												currentDateTime = currentDateTime.plusHours(1);
+												hourlyCvLevels.compute(currentDateTime, (k, v) -> v == null ? cargoCV : cvBlendFunction.apply(v, hourlyLevels.get(k), cargoCV, -delta));
 												hourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -delta : v - delta);
 											}
 										}
 									}
 								}
 								final LongAccumulator acc = new LongAccumulator(Long::sum, 0L);
-								final List<Pair<LocalDateTime, Integer>> hourlyInventoryLevels = hourlyLevels.entrySet().stream() //
+								final TreeMap<LocalDateTime, Integer> cumulativeHourlyInventoryLevelsMap = hourlyLevels.entrySet().stream() //
 										.map(entry -> {
 											acc.accumulate(entry.getValue().longValue());
 											return Pair.of(entry.getKey(), acc.intValue());
 										}) //
-										.collect(Collectors.toList());
+										.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond, (x, y) -> y, TreeMap::new));
+
+								final List<@NonNull Pair<LocalDateTime, Double>> hourlyInventoryLevels = cumulativeHourlyInventoryLevelsMap.entrySet().stream()
+										.map(entry -> Pair.of(entry.getKey(), entry.getValue().doubleValue())).toList();
+
+								Pair<Double, Integer> lastCVVol = Pair.of(hourlyCvLevels.firstEntry().getValue(), cumulativeHourlyInventoryLevelsMap.get(hourlyCvLevels.firstEntry().getKey()));
+
+								final TreeMap<LocalDateTime, Double> hourlyBlendedCVLevels = new TreeMap<>();
+								for (var hourlyCVEntry : hourlyCvLevels.entrySet()) {
+									final LocalDateTime currentDateTime = hourlyCVEntry.getKey();
+									final Pair<LocalDateTime, Double> cvEntry = Pair.of(currentDateTime, hourlyCVEntry.getValue());
+									final Integer hourlyVolume = hourlyLevels.get(cvEntry.getFirst());
+									if (cumulativeHourlyInventoryLevelsMap.get(currentDateTime) <= 0) {
+										hourlyBlendedCVLevels.put(currentDateTime, lastCVVol.getFirst());
+										lastCVVol.setSecond(0);
+									} else if (hourlyVolume > 0) {
+										Double newCV = cvBlendFunction.apply(lastCVVol.getFirst(), lastCVVol.getSecond(), cvEntry.getSecond(), hourlyVolume);
+										hourlyBlendedCVLevels.put(currentDateTime, newCV);
+										lastCVVol.setBoth(newCV, cumulativeHourlyInventoryLevelsMap.get(cvEntry.getFirst()));
+									} else {
+										hourlyBlendedCVLevels.put(currentDateTime, lastCVVol.getFirst());
+									}
+								}
 
 								final TreeMap<LocalDateTime, Integer> dailyLevelsMap = new TreeMap<>();
 								for (final InventoryChangeEvent event : inventoryEvents.getEvents()) {
@@ -1265,23 +1400,119 @@ public class InventoryReport extends ViewPart {
 										dailyLevelsMap.compute(event.getDate(), (k, v) -> v == null ? change : v + change);
 									}
 								}
-								final List<Pair<LocalDateTime, Integer>> dailyInventoryLevels = dailyLevelsMap.entrySet().stream() //
-										.map(entry -> Pair.of(entry.getKey(), entry.getValue())) //
+								final List<Pair<LocalDateTime, Double>> dailyInventoryLevels = dailyLevelsMap.entrySet().stream() //
+										.map(entry -> Pair.of(entry.getKey(), entry.getValue().doubleValue())) //
 										.collect(Collectors.toList());
 
 								final ILineSeries seriesDaily = createSmoothLineSeries(inventoryDailyChartSeriesSet, "Production", dailyInventoryLevels);
 								seriesDaily.setSymbolType(PlotSymbolType.NONE);
 								seriesDaily.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 
-								final ILineSeries seriesHourly = createSmoothLineSeries(seriesSet, "Inventory", hourlyInventoryLevels);
+								final ILineSeries seriesHourly = createSmoothLineSeries(seriesSet, "Volume", hourlyInventoryLevels);
 								// seriesHourly.setSymbolSize(1);
 								seriesHourly.setSymbolType(PlotSymbolType.NONE);
-								seriesHourly.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+								seriesHourly.setLineColor(colourVol);
+
+								{
+
+									final List<Pair<LocalDateTime, Double>> limitsLevels = inventoryEvents.getEvents().stream() //
+											.collect(Collectors.toMap( //
+													InventoryChangeEvent::getDate, //
+													x -> (double) x.getCurrentMin(), //
+													(a, b) -> (b), // Take latest value
+													LinkedHashMap::new))
+											.entrySet().stream() //
+											.map(e -> new Pair<>(e.getKey(), e.getValue())) //
+											.toList();
+									if (!limitsLevels.isEmpty()) {
+										final ILineSeries series = createStepLineSeries(seriesSet, "Vol Min/Max", limitsLevels);
+										series.setSymbolSize(1);
+										series.setSymbolType(PlotSymbolType.NONE);
+										series.setLineStyle(LineStyle.DASH);
+										series.setLineColor(colourVol);
+									}
+								}
+								{
+
+									final List<Pair<LocalDateTime, Double>> limitsLevels = inventoryEvents.getEvents().stream() //
+											.collect(Collectors.toMap( //
+													InventoryChangeEvent::getDate, //
+													x -> (double) x.getCurrentMax(), //
+													(a, b) -> (b), // Take latest value
+													LinkedHashMap::new))
+											.entrySet().stream() //
+											.map(e -> new Pair<>(e.getKey(), e.getValue())) //
+											.toList();
+									if (!limitsLevels.isEmpty()) {
+
+										final ILineSeries series = createStepLineSeries(seriesSet, "Tank max", limitsLevels);
+										series.setSymbolSize(1);
+										series.setSymbolType(PlotSymbolType.NONE);
+										series.setLineStyle(LineStyle.DASH);
+										series.setLineColor(colourVol);
+										series.setVisibleInLegend(false);
+									}
+								}
 
 								minDate = inventoryLevels.get(0).getFirst().toLocalDate();
 								maxDate = inventoryLevels.get(inventoryLevels.size() - 1).getFirst().toLocalDate();
+								final ILineSeries cvSeriesHourly = createSmoothLineSeries(seriesSet, "CV", hourlyBlendedCVLevels.entrySet().stream()//
+										.map(x -> Pair.of(x.getKey(), x.getValue()))//
+										.toList());
+								cvSeriesHourly.setYAxisId(cvAxis.getId());
+								cvSeriesHourly.setSymbolType(PlotSymbolType.NONE);
+								cvSeriesHourly.setLineColor(colourCV);
+								cvSeriesHourly.setVisible(colourSchemeAction.isShowingCV());
+								cvSeriesHourly.setVisibleInLegend(colourSchemeAction.isShowingCV());
+								cvSeries = cvSeriesHourly;
 
-								inventoryEvents.getEvents().forEach(e -> {
+								{
+									final List<Pair<LocalDateTime, Double>> cvMaxLevels = inventoryEvents.getEvents().stream() //
+											.filter(x -> x.getCurrentMax() != 0).collect(Collectors.toMap( //
+													InventoryChangeEvent::getDate, //
+													x -> x.getCurrentCVMax(), //
+													(a, b) -> (b), // Take latest value
+													LinkedHashMap::new))
+											.entrySet().stream() //
+											.map(e -> new Pair<>(e.getKey(), e.getValue())) //
+											.toList();
+									if (!cvMaxLevels.isEmpty()) {
+
+										final ILineSeries<?> series = createStepLineSeries(seriesSet, "CV Min/Max", cvMaxLevels);
+										series.setSymbolSize(1);
+										series.setSymbolType(PlotSymbolType.NONE);
+										series.setLineStyle(LineStyle.DASH);
+										series.setLineColor(colourCV);
+										series.setYAxisId(cvAxis.getId());
+										series.setVisible(colourSchemeAction.isShowingCV() && isCVEnabled);
+										series.setVisibleInLegend(colourSchemeAction.isShowingCV() && isCVEnabled);
+										maxCVSeries = series;
+									}
+
+									final List<Pair<LocalDateTime, Double>> cvMinLevels = inventoryEvents.getEvents().stream() //
+											.filter(x -> x.getCurrentMax() != 0).collect(Collectors.toMap( //
+													InventoryChangeEvent::getDate, //
+													x -> x.getCurrentCVMin(), //
+													(a, b) -> (b), // Take latest value
+													LinkedHashMap::new))
+											.entrySet().stream() //
+											.map(e -> new Pair<>(e.getKey(), e.getValue())) //
+											.toList();
+									if (!cvMinLevels.isEmpty()) {
+
+										final ILineSeries<?> series = createStepLineSeries(seriesSet, "Min CV", cvMinLevels);
+										series.setSymbolSize(1);
+										series.setSymbolType(PlotSymbolType.NONE);
+										series.setLineStyle(LineStyle.DASH);
+										series.setLineColor(colourCV);
+										series.setYAxisId(cvAxis.getId());
+										series.setVisible(colourSchemeAction.isShowingCV() && isCVEnabled);
+										series.setVisibleInLegend(false);
+										minCVSeries = series;
+									}
+								}
+								for (int i = 0; i < inventoryEvents.getEvents().size(); i++) {
+									final @NonNull InventoryChangeEvent e = inventoryEvents.getEvents().get(i);
 									String type = "Unknown";
 									if (e.getSlotAllocation() != null) {
 										type = "Cargo";
@@ -1323,7 +1554,16 @@ public class InventoryReport extends ViewPart {
 										if (inventory.getFacilityType() == InventoryFacilityType.UPSTREAM || inventory.getFacilityType() == InventoryFacilityType.HUB) {
 											lvl.cargoOut = lvl.changeInM3;
 										}
-										addToInventoryLevelList(tableLevels, lvl);
+										double cv = hourlyBlendedCVLevels.get(e.getSlotAllocation().getSlotVisit().getStart().toLocalDateTime());
+										// Test if event is the last event for the day
+										if (i != inventoryEvents.getEvents().size() - 1) {
+											final @NonNull InventoryChangeEvent nextEvent = inventoryEvents.getEvents().get(i + 1);
+											if (nextEvent.getDate().toLocalDate().isAfter(e.getDate().toLocalDate())) {
+												lvl.breach |= cv > e.getCurrentCVMax() || cv < e.getCurrentCVMin();
+											}
+										}
+										final InventoryLevel mergedLevel = addToInventoryLevelList(tableLevels, lvl);
+										mergedLevel.tankCV = cv;
 									} else if (e.getOpenSlotAllocation() != null) {
 										type = "Open";
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), null, null, null, null, null, null, null, null, null);
@@ -1332,9 +1572,18 @@ public class InventoryReport extends ViewPart {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
 											lvl.volumeHigh = e.getEvent().getVolumeHigh();
 										}
+										double cv = hourlyBlendedCVLevels.floorEntry(e.getDate()).getValue();
 										// FM
 										setInventoryLevelFeed(lvl);
-										addToInventoryLevelList(tableLevels, lvl);
+										// Test if event is the last event for the day
+										if (i != inventoryEvents.getEvents().size() - 1) {
+											final @NonNull InventoryChangeEvent nextEvent = inventoryEvents.getEvents().get(i + 1);
+											if (nextEvent.getDate().toLocalDate().isAfter(e.getDate().toLocalDate())) {
+												lvl.breach |= cv > e.getCurrentCVMax() || cv < e.getCurrentCVMin();
+											}
+										}
+										final InventoryLevel mergedLevel = addToInventoryLevelList(tableLevels, lvl);
+										mergedLevel.tankCV = cv;
 									} else if (e.getEvent() != null) {
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null, null,
 												null, null, null);
@@ -1343,53 +1592,24 @@ public class InventoryReport extends ViewPart {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
 											lvl.volumeHigh = e.getEvent().getVolumeHigh();
 										}
+										double cv = hourlyBlendedCVLevels.get(e.getDate());
 
 										// FM
 										setInventoryLevelFeed(lvl);
-										addToInventoryLevelList(tableLevels, lvl);
+										// Test if event is the last event for the day
+										if (i != inventoryEvents.getEvents().size() - 1) {
+											final @NonNull InventoryChangeEvent nextEvent = inventoryEvents.getEvents().get(i + 1);
+											if (nextEvent.getDate().toLocalDate().isAfter(e.getDate().toLocalDate())) {
+												lvl.breach |= cv > e.getCurrentCVMax() || cv < e.getCurrentCVMin();
+											}
+										}
+										final InventoryLevel mergedLevel = addToInventoryLevelList(tableLevels, lvl);
+										mergedLevel.tankCV = cv;
 									}
-								});
+								}
 							}
 						}
-						{
 
-							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
-									.collect(Collectors.toMap( //
-											InventoryChangeEvent::getDate, //
-											InventoryChangeEvent::getCurrentMin, //
-											(a, b) -> (b), // Take latest value
-											LinkedHashMap::new))
-									.entrySet().stream() //
-									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
-									.toList();
-							if (!inventoryLevels.isEmpty()) {
-								final ILineSeries series = createStepLineSeries(seriesSet, "Tank min", inventoryLevels);
-								series.setSymbolSize(1);
-								series.setSymbolType(PlotSymbolType.NONE);
-								series.setLineStyle(LineStyle.DASH);
-								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW));
-							}
-						}
-						{
-
-							final List<Pair<LocalDateTime, Integer>> inventoryLevels = inventoryEvents.getEvents().stream() //
-									.collect(Collectors.toMap( //
-											InventoryChangeEvent::getDate, //
-											InventoryChangeEvent::getCurrentMax, //
-											(a, b) -> (b), // Take latest value
-											LinkedHashMap::new))
-									.entrySet().stream() //
-									.map(e -> new Pair<>(e.getKey(), e.getValue())) //
-									.toList();
-							if (!inventoryLevels.isEmpty()) {
-
-								final ILineSeries series = createStepLineSeries(seriesSet, "Tank max", inventoryLevels);
-								series.setSymbolSize(1);
-								series.setSymbolType(PlotSymbolType.NONE);
-								series.setLineStyle(LineStyle.DASH);
-								series.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-							}
-						}
 						{
 
 							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
@@ -1401,7 +1621,7 @@ public class InventoryReport extends ViewPart {
 
 								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Cargoes", values);
 								series.setBarWidth(1);
-								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 								series.setVisible(colourSchemeAction.isShowingCargoes());
 								series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
 								cargoSeries = series;
@@ -1416,7 +1636,7 @@ public class InventoryReport extends ViewPart {
 
 								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Open", values);
 								series.setBarWidth(1);
-								series.setBarColor(colourOrange);
+								series.setBarColor(colourOpen);
 								series.setVisible(colourSchemeAction.isShowingOpenSlots());
 								series.setVisibleInLegend(colourSchemeAction.isShowingOpenSlots());
 								openSeries = series;
@@ -1436,9 +1656,10 @@ public class InventoryReport extends ViewPart {
 									}
 								}
 								if (!values.isEmpty()) {
-									final IBarSeries series = createDaySizedBarSeries(seriesSet, "3rd-party", values);
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "Third party", values);
 									series.setBarWidth(2);
-									series.setBarColor(colourOrange);
+									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+
 									series.setVisible(colourSchemeAction.isShowingCargoes());
 									series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
 									thirdPartyCargoSeries = series;
@@ -1450,20 +1671,28 @@ public class InventoryReport extends ViewPart {
 				}
 			}
 		}
-		final IAxisSet axisSet = inventoryInsAndOutChart.getAxisSet();
-
 		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTitle().setText("Date");
 		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTick().setFormat(dateFormat);
+		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTitle().setVisible(false);
 
 		inventoryInsAndOutChart.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		inventoryInsAndOutChart.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 		inventoryInsAndOutChart.getAxisSet().getYAxis(0).getTitle().setText("Volume");
+
+		cvAxis.setPosition(Position.Secondary);
+		cvAxis.getTitle().setText("CV");
+		cvAxis.getTitle().setVisible(colourSchemeAction.isShowingCV() && isCVEnabled);
+		cvAxis.getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		cvAxis.getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		cvAxis.getTick().setVisible(colourSchemeAction.isShowingCV() && isCVEnabled);
 		// 5. adjust the range for all axes.
 
 		// Auto adjust everything
-		axisSet.adjustRange();
+		adjustInAndOutsRange();
+
+		// Align y axis ticks
+		inventoryInsAndOutChart.getAxisSet().getYAxis(0).getGrid().setStyle(LineStyle.NONE);
+		cvAxis.getGrid().setStyle(LineStyle.NONE);
 		// Month align the date range
 		if (minDate != null && maxDate != null) {
 			inventoryInsAndOutChart.getAxisSet().getXAxis(0).setRange(new Range( //
@@ -1589,19 +1818,31 @@ public class InventoryReport extends ViewPart {
 		return ret;
 	}
 
-	private void addToInventoryLevelList(final List<InventoryLevel> tableLevels, final InventoryLevel lvl) {
+	private InventoryLevel addToInventoryLevelList(final List<InventoryLevel> tableLevels, final InventoryLevel lvl) {
 		// can swap with proper search through the list
 		final int i = tableLevels.size();
 		if (i > 0) {
 			final InventoryLevel tlvl = tableLevels.get(i - 1);
 			if (tlvl.date.equals(lvl.date)) {
 				tlvl.merge(lvl);
+				return tlvl;
 			} else {
 				tableLevels.add(lvl);
+				return lvl;
 			}
 		} else {
 			tableLevels.add(lvl);
+			return lvl;
 		}
+	}
+
+	private void adjustInAndOutsRange() {
+		inventoryInsAndOutChart.getAxisSet().adjustRange();
+		final IAxis volAxis = inventoryInsAndOutChart.getAxisSet().getYAxis(0);
+		volAxis.zoomOut();
+		cvAxis.zoomOut();
+		volAxis.scrollUp();
+		cvAxis.scrollDown();
 	}
 
 	private void setInventoryLevelFeed(final InventoryLevel lvl) {
@@ -1612,16 +1853,16 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 
-	private ILineSeries createSmoothLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
+	private ILineSeries createSmoothLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Double>> data) {
 
 		final Date[] dates = new Date[data.size()];
 		final double[] values = new double[data.size()];
 		int idx = 0;
-		for (final Pair<LocalDateTime, Integer> e : data) {
-			final int sum = e.getSecond();
+		for (final Pair<LocalDateTime, Double> e : data) {
+			final double sum = e.getSecond();
 
 			dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
-			values[idx] = (double) sum;
+			values[idx] = sum;
 			idx++;
 		}
 
@@ -1631,22 +1872,22 @@ public class InventoryReport extends ViewPart {
 		return series;
 	}
 
-	private ILineSeries createStepLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Integer>> data) {
+	private ILineSeries createStepLineSeries(final ISeriesSet seriesSet, final String name, final List<Pair<LocalDateTime, Double>> data) {
 
 		final Date[] dates = new Date[2 * data.size() - 1];
 		final double[] values = new double[2 * data.size() - 1];
 		int idx = 0;
-		for (final Pair<LocalDateTime, Integer> e : data) {
+		for (final Pair<LocalDateTime, Double> e : data) {
 			if (idx != 0) {
 				dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
 				values[idx] = values[idx - 1];
 				idx++;
 			}
 
-			final int sum = e.getSecond();
+			final double sum = e.getSecond();
 
 			dates[idx] = Date.from(e.getFirst().atZone(ZoneId.of("UTC")).toInstant());
-			values[idx] = (double) sum;
+			values[idx] = sum;
 			idx++;
 		}
 
@@ -2167,7 +2408,7 @@ public class InventoryReport extends ViewPart {
 		return insAndOuts;
 	}
 
-	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, IntUnaryOperator volumeFunction) {
+	private void addNetVolumes(List<? extends InventoryEventRow> events, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, IntUnaryOperator volumeFunction) {
 		for (InventoryEventRow inventoryEventRow : events) {
 			if (inventoryEventRow.getStartDate() != null && inventoryEventRow.getEndDate() != null) {
 				final LocalDate exclusiveEnd = inventoryEventRow.getStartDate().equals(inventoryEventRow.getEndDate()) ? inventoryEventRow.getStartDate().plusDays(1L) : inventoryEventRow.getEndDate();

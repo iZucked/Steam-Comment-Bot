@@ -22,6 +22,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMinVolume <em>Min Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMaxVolume <em>Max Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMinCV <em>Min CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMaxCV <em>Max CV</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryCapacityRow()
@@ -106,5 +108,49 @@ public interface InventoryCapacityRow extends EObject {
 	 * @generated
 	 */
 	void setMaxVolume(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Min CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min CV</em>' attribute.
+	 * @see #setMinCV(double)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryCapacityRow_MinCV()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
+	 * @generated
+	 */
+	double getMinCV();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMinCV <em>Min CV</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min CV</em>' attribute.
+	 * @see #getMinCV()
+	 * @generated
+	 */
+	void setMinCV(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Max CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Max CV</em>' attribute.
+	 * @see #setMaxCV(double)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryCapacityRow_MaxCV()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
+	 * @generated
+	 */
+	double getMaxCV();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMaxCV <em>Max CV</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Max CV</em>' attribute.
+	 * @see #getMaxCV()
+	 * @generated
+	 */
+	void setMaxCV(double value);
 
 } // InventoryCapacityRow

@@ -129,7 +129,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	protected Label label;
 
 	private boolean editorEnabled = true;
-	private final boolean editorVisible = true;
+	private boolean editorVisible = true;
 	private boolean editorLocked = false;
 
 	private IItemPropertyDescriptor propertyDescriptor;
@@ -197,7 +197,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 
 		setControlsEnabled(!isFeatureReadonly() && isEditorEnabled());
-
+		setControlsVisible(isEditorVisible());
+		
 		if (proposalHelper != null) {
 			proposalHelper.setRootObject(rootObject);
 			proposalHelper.setInputOject(input);
@@ -523,7 +524,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 */
 	@Override
 	public void setEditorVisible(final boolean visible) {
-		this.editorEnabled = visible;
+		this.editorVisible = visible;
 		setControlsVisible(visible);
 	}
 

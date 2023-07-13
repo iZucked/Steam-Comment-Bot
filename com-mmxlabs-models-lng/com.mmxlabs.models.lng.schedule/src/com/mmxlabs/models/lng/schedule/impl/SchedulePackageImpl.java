@@ -2862,27 +2862,27 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getInventoryChangeEvent_CurrentCVMin() {
+		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInventoryChangeEvent_CurrentCVMax() {
+		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getInventoryChangeEvent_Event() {
-		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getInventoryChangeEvent_SlotAllocation() {
-		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getInventoryChangeEvent_OpenSlotAllocation() {
 		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -2892,8 +2892,28 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EReference getInventoryChangeEvent_SlotAllocation() {
+		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getInventoryChangeEvent_OpenSlotAllocation() {
+		return (EReference)inventoryChangeEventEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getInventoryChangeEvent_BreachedMin() {
-		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -2903,7 +2923,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	@Override
 	public EAttribute getInventoryChangeEvent_BreachedMax() {
-		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)inventoryChangeEventEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -3845,6 +3865,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__CURRENT_LEVEL);
 		createEAttribute(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__CURRENT_MIN);
 		createEAttribute(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__CURRENT_MAX);
+		createEAttribute(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN);
+		createEAttribute(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX);
 		createEReference(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__EVENT);
 		createEReference(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__SLOT_ALLOCATION);
 		createEReference(inventoryChangeEventEClass, INVENTORY_CHANGE_EVENT__OPEN_SLOT_ALLOCATION);
@@ -4330,6 +4352,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getInventoryChangeEvent_CurrentLevel(), ecorePackage.getEInt(), "currentLevel", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryChangeEvent_CurrentMin(), ecorePackage.getEInt(), "currentMin", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryChangeEvent_CurrentMax(), ecorePackage.getEInt(), "currentMax", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryChangeEvent_CurrentCVMin(), ecorePackage.getEDouble(), "currentCVMin", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryChangeEvent_CurrentCVMax(), ecorePackage.getEDouble(), "currentCVMax", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventoryChangeEvent_Event(), theCargoPackage.getInventoryEventRow(), null, "event", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventoryChangeEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventoryChangeEvent_OpenSlotAllocation(), this.getOpenSlotAllocation(), null, "openSlotAllocation", null, 0, 1, InventoryChangeEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

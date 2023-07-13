@@ -6165,6 +6165,251 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY_EVENT_ROW_OPERATION_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryOfftakeRowImpl <em>Inventory Offtake Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.InventoryOfftakeRowImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryOfftakeRow()
+	 * @generated
+	 */
+	int INVENTORY_OFFTAKE_ROW = 17;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__START_DATE = INVENTORY_EVENT_ROW__START_DATE;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__END_DATE = INVENTORY_EVENT_ROW__END_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__PERIOD = INVENTORY_EVENT_ROW__PERIOD;
+
+	/**
+	 * The feature id for the '<em><b>Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__COUNTER_PARTY = INVENTORY_EVENT_ROW__COUNTER_PARTY;
+
+	/**
+	 * The feature id for the '<em><b>Reliability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__RELIABILITY = INVENTORY_EVENT_ROW__RELIABILITY;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__VOLUME = INVENTORY_EVENT_ROW__VOLUME;
+
+	/**
+	 * The feature id for the '<em><b>Forecast Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__FORECAST_DATE = INVENTORY_EVENT_ROW__FORECAST_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Low</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__VOLUME_LOW = INVENTORY_EVENT_ROW__VOLUME_LOW;
+
+	/**
+	 * The feature id for the '<em><b>Volume High</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW__VOLUME_HIGH = INVENTORY_EVENT_ROW__VOLUME_HIGH;
+
+	/**
+	 * The number of structural features of the '<em>Inventory Offtake Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW_FEATURE_COUNT = INVENTORY_EVENT_ROW_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Reliable Volume</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW___GET_RELIABLE_VOLUME = INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME;
+
+	/**
+	 * The number of operations of the '<em>Inventory Offtake Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_OFFTAKE_ROW_OPERATION_COUNT = INVENTORY_EVENT_ROW_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryFeedRowImpl <em>Inventory Feed Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.InventoryFeedRowImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFeedRow()
+	 * @generated
+	 */
+	int INVENTORY_FEED_ROW = 18;
+
+	/**
+	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__START_DATE = INVENTORY_EVENT_ROW__START_DATE;
+
+	/**
+	 * The feature id for the '<em><b>End Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__END_DATE = INVENTORY_EVENT_ROW__END_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Period</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__PERIOD = INVENTORY_EVENT_ROW__PERIOD;
+
+	/**
+	 * The feature id for the '<em><b>Counter Party</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__COUNTER_PARTY = INVENTORY_EVENT_ROW__COUNTER_PARTY;
+
+	/**
+	 * The feature id for the '<em><b>Reliability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__RELIABILITY = INVENTORY_EVENT_ROW__RELIABILITY;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__VOLUME = INVENTORY_EVENT_ROW__VOLUME;
+
+	/**
+	 * The feature id for the '<em><b>Forecast Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__FORECAST_DATE = INVENTORY_EVENT_ROW__FORECAST_DATE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Low</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__VOLUME_LOW = INVENTORY_EVENT_ROW__VOLUME_LOW;
+
+	/**
+	 * The feature id for the '<em><b>Volume High</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__VOLUME_HIGH = INVENTORY_EVENT_ROW__VOLUME_HIGH;
+
+	/**
+	 * The feature id for the '<em><b>Cv</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW__CV = INVENTORY_EVENT_ROW_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Inventory Feed Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW_FEATURE_COUNT = INVENTORY_EVENT_ROW_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Reliable Volume</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW___GET_RELIABLE_VOLUME = INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME;
+
+	/**
+	 * The number of operations of the '<em>Inventory Feed Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_FEED_ROW_OPERATION_COUNT = INVENTORY_EVENT_ROW_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl <em>Inventory Capacity Row</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6172,7 +6417,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryCapacityRow()
 	 * @generated
 	 */
-	int INVENTORY_CAPACITY_ROW = 17;
+	int INVENTORY_CAPACITY_ROW = 19;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -6202,13 +6447,31 @@ public interface CargoPackage extends EPackage {
 	int INVENTORY_CAPACITY_ROW__MAX_VOLUME = 2;
 
 	/**
+	 * The feature id for the '<em><b>Min CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CAPACITY_ROW__MIN_CV = 3;
+
+	/**
+	 * The feature id for the '<em><b>Max CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INVENTORY_CAPACITY_ROW__MAX_CV = 4;
+
+	/**
 	 * The number of structural features of the '<em>Inventory Capacity Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INVENTORY_CAPACITY_ROW_FEATURE_COUNT = 3;
+	int INVENTORY_CAPACITY_ROW_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Inventory Capacity Row</em>' class.
@@ -6227,7 +6490,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventory()
 	 * @generated
 	 */
-	int INVENTORY = 18;
+	int INVENTORY = 20;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6345,7 +6608,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookingSlot()
 	 * @generated
 	 */
-	int CANAL_BOOKING_SLOT = 19;
+	int CANAL_BOOKING_SLOT = 21;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6463,7 +6726,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookings()
 	 * @generated
 	 */
-	int CANAL_BOOKINGS = 20;
+	int CANAL_BOOKINGS = 22;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6563,7 +6826,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecification()
 	 * @generated
 	 */
-	int SCHEDULE_SPECIFICATION = 21;
+	int SCHEDULE_SPECIFICATION = 23;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Schedule Specifications</b></em>' containment reference list.
@@ -6627,7 +6890,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPreSequenceGroup()
 	 * @generated
 	 */
-	int PRE_SEQUENCE_GROUP = 22;
+	int PRE_SEQUENCE_GROUP = 24;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference list.
@@ -6664,7 +6927,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getNonShippedCargoSpecification()
 	 * @generated
 	 */
-	int NON_SHIPPED_CARGO_SPECIFICATION = 23;
+	int NON_SHIPPED_CARGO_SPECIFICATION = 25;
 
 	/**
 	 * The feature id for the '<em><b>Slot Specifications</b></em>' containment reference list.
@@ -6701,7 +6964,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselScheduleSpecification()
 	 * @generated
 	 */
-	int VESSEL_SCHEDULE_SPECIFICATION = 24;
+	int VESSEL_SCHEDULE_SPECIFICATION = 26;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Allocation</b></em>' reference.
@@ -6756,7 +7019,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecificationEvent()
 	 * @generated
 	 */
-	int SCHEDULE_SPECIFICATION_EVENT = 25;
+	int SCHEDULE_SPECIFICATION_EVENT = 27;
 
 	/**
 	 * The number of structural features of the '<em>Schedule Specification Event</em>' class.
@@ -6784,7 +7047,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEventSpecification()
 	 * @generated
 	 */
-	int VESSEL_EVENT_SPECIFICATION = 26;
+	int VESSEL_EVENT_SPECIFICATION = 28;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -6830,7 +7093,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVoyageSpecification()
 	 * @generated
 	 */
-	int VOYAGE_SPECIFICATION = 27;
+	int VOYAGE_SPECIFICATION = 29;
 
 	/**
 	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
@@ -6876,7 +7139,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlotSpecification()
 	 * @generated
 	 */
-	int SLOT_SPECIFICATION = 28;
+	int SLOT_SPECIFICATION = 30;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -6922,7 +7185,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterInMarketOverride()
 	 * @generated
 	 */
-	int CHARTER_IN_MARKET_OVERRIDE = 29;
+	int CHARTER_IN_MARKET_OVERRIDE = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7112,7 +7375,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperDeal()
 	 * @generated
 	 */
-	int PAPER_DEAL = 30;
+	int PAPER_DEAL = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7320,7 +7583,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getBuyPaperDeal()
 	 * @generated
 	 */
-	int BUY_PAPER_DEAL = 31;
+	int BUY_PAPER_DEAL = 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7528,7 +7791,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSellPaperDeal()
 	 * @generated
 	 */
-	int SELL_PAPER_DEAL = 32;
+	int SELL_PAPER_DEAL = 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7736,7 +7999,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDealSet()
 	 * @generated
 	 */
-	int DEAL_SET = 33;
+	int DEAL_SET = 35;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7845,7 +8108,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselGroupCanalParameters()
 	 * @generated
 	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS = 34;
+	int VESSEL_GROUP_CANAL_PARAMETERS = 36;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7927,7 +8190,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPanamaSeasonalityRecord()
 	 * @generated
 	 */
-	int PANAMA_SEASONALITY_RECORD = 35;
+	int PANAMA_SEASONALITY_RECORD = 37;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Group Canal Parameter</b></em>' reference.
@@ -8009,7 +8272,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedSlotsConstraint()
 	 * @generated
 	 */
-	int GROUPED_SLOTS_CONSTRAINT = 36;
+	int GROUPED_SLOTS_CONSTRAINT = 38;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -8055,7 +8318,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedDischargeSlotsConstraint()
 	 * @generated
 	 */
-	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT = 37;
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT = 39;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -8101,7 +8364,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 38;
+	int CARGO_TYPE = 40;
 
 
 	/**
@@ -8112,7 +8375,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 39;
+	int VESSEL_TYPE = 41;
 
 
 	/**
@@ -8123,7 +8386,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 40;
+	int INVENTORY_FACILITY_TYPE = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -8133,7 +8396,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 41;
+	int INVENTORY_FREQUENCY = 43;
 
 
 	/**
@@ -8144,7 +8407,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 42;
+	int PAPER_PRICING_TYPE = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
@@ -8154,7 +8417,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
 	 * @generated
 	 */
-	int FUEL_CHOICE = 43;
+	int FUEL_CHOICE = 45;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -8164,7 +8427,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 44;
+	int SCHEDULING_TIME_WINDOW = 46;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -10234,6 +10497,37 @@ public interface CargoPackage extends EPackage {
 	EOperation getInventoryEventRow__GetReliableVolume();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.InventoryOfftakeRow <em>Inventory Offtake Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory Offtake Row</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryOfftakeRow
+	 * @generated
+	 */
+	EClass getInventoryOfftakeRow();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.InventoryFeedRow <em>Inventory Feed Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Inventory Feed Row</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFeedRow
+	 * @generated
+	 */
+	EClass getInventoryFeedRow();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryFeedRow#getCv <em>Cv</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryFeedRow#getCv()
+	 * @see #getInventoryFeedRow()
+	 * @generated
+	 */
+	EAttribute getInventoryFeedRow_Cv();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow <em>Inventory Capacity Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10275,6 +10569,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getInventoryCapacityRow_MaxVolume();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMinCV <em>Min CV</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min CV</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMinCV()
+	 * @see #getInventoryCapacityRow()
+	 * @generated
+	 */
+	EAttribute getInventoryCapacityRow_MinCV();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMaxCV <em>Max CV</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max CV</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.InventoryCapacityRow#getMaxCV()
+	 * @see #getInventoryCapacityRow()
+	 * @generated
+	 */
+	EAttribute getInventoryCapacityRow_MaxCV();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Inventory <em>Inventory</em>}'.
@@ -12936,6 +13252,34 @@ public interface CargoPackage extends EPackage {
 		EOperation INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME = eINSTANCE.getInventoryEventRow__GetReliableVolume();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryOfftakeRowImpl <em>Inventory Offtake Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.InventoryOfftakeRowImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryOfftakeRow()
+		 * @generated
+		 */
+		EClass INVENTORY_OFFTAKE_ROW = eINSTANCE.getInventoryOfftakeRow();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryFeedRowImpl <em>Inventory Feed Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.InventoryFeedRowImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFeedRow()
+		 * @generated
+		 */
+		EClass INVENTORY_FEED_ROW = eINSTANCE.getInventoryFeedRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Cv</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_FEED_ROW__CV = eINSTANCE.getInventoryFeedRow_Cv();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryCapacityRowImpl <em>Inventory Capacity Row</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12968,6 +13312,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INVENTORY_CAPACITY_ROW__MAX_VOLUME = eINSTANCE.getInventoryCapacityRow_MaxVolume();
+
+		/**
+		 * The meta object literal for the '<em><b>Min CV</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CAPACITY_ROW__MIN_CV = eINSTANCE.getInventoryCapacityRow_MinCV();
+
+		/**
+		 * The meta object literal for the '<em><b>Max CV</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INVENTORY_CAPACITY_ROW__MAX_CV = eINSTANCE.getInventoryCapacityRow_MaxCV();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryImpl <em>Inventory</em>}' class.
