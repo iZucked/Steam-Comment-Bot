@@ -3200,6 +3200,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDealSet_AllowExposure() {
+		return (EAttribute)dealSetEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDealSet_AllowHedging() {
+		return (EAttribute)dealSetEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getVesselGroupCanalParameters() {
 		return vesselGroupCanalParametersEClass;
 	}
@@ -3730,6 +3750,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		dealSetEClass = createEClass(DEAL_SET);
 		createEReference(dealSetEClass, DEAL_SET__SLOTS);
 		createEReference(dealSetEClass, DEAL_SET__PAPER_DEALS);
+		createEAttribute(dealSetEClass, DEAL_SET__ALLOW_EXPOSURE);
+		createEAttribute(dealSetEClass, DEAL_SET__ALLOW_HEDGING);
 
 		vesselGroupCanalParametersEClass = createEClass(VESSEL_GROUP_CANAL_PARAMETERS);
 		createEReference(vesselGroupCanalParametersEClass, VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
@@ -4272,6 +4294,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getDealSet_Slots(), g1, null, "slots", null, 0, -1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDealSet_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDealSet_AllowExposure(), ecorePackage.getEBoolean(), "allowExposure", null, 0, 1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDealSet_AllowHedging(), ecorePackage.getEBoolean(), "allowHedging", null, 0, 1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselGroupCanalParametersEClass, VesselGroupCanalParameters.class, "VesselGroupCanalParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAVesselSet());

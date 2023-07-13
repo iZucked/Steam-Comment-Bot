@@ -121,6 +121,12 @@
                inheritable="false"
                modelClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
          </componentHelper>
+         
+         <componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.DealSet"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.DealSetComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.DealSet" />
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -623,6 +629,10 @@
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.CargoCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.DealSetUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.DealSetUpdatingCommandProvider">
     </ModelCommandProvider>
     <!--<ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider"

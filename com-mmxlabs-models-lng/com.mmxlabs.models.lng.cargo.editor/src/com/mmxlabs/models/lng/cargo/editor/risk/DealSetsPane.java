@@ -95,6 +95,7 @@ import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -125,6 +126,41 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 		
 		addColumn("Earliest Date", dealSetStartDateFormatter(), null);
 		addColumn("Estimated P&L", dealSetPNLEstimateFormatter(), null);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
+			addTypicalColumn("Exposure", new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getDealSet_AllowExposure(),//
+					getCommandHandler()) {
+				@Override
+				public void doSetValue(final Object object, final Object value) {
+					if (object instanceof DealSet) {
+						super.doSetValue(object, value);
+					}
+				}
+				
+				@Override
+				public Object getValue(final Object object) {
+					if (object instanceof DealSet) {
+						return super.getValue(object);
+					}
+					return false;
+				}
+			});
+			addTypicalColumn("Hedging", new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getDealSet_AllowHedging(),//
+					getCommandHandler()) {
+				@Override
+				public void doSetValue(final Object object, final Object value) {
+					if (object instanceof DealSet) {
+						super.doSetValue(object, value);
+					}
+				}
+				@Override
+				public Object getValue(final Object object) {
+					if (object instanceof DealSet) {
+						return super.getValue(object);
+					}
+					return false;
+				}
+			});
+		}
 		
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -151,8 +187,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 
 			@Override
 			public @Nullable String render(Object object) {
-				if (object instanceof DealSet) {
-					final DealSet ds = (DealSet) object;
+				if (object instanceof final DealSet ds) {
 					LocalDate earliestSlot = LocalDate.MAX;
 					if (!ds.getSlots().isEmpty()) {
 						earliestSlot = ds.getSlots().stream().map(Slot::getWindowStart).min(LocalDate::compareTo).get();
@@ -287,12 +322,10 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 		@Override
 		public Object[] getElements(final Object inputElement) {
 
-			if (inputElement instanceof Collection<?>) {
-				Collection<?> collection = (Collection<?>) inputElement;
+			if (inputElement instanceof final Collection<?> collection) {
 				return collection.toArray();
 			}
-			if (inputElement instanceof LNGScenarioModel) {
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
+			if (inputElement instanceof final LNGScenarioModel scenarioModel) {
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 				final List<DealSet> dealSets = cargoModel.getDealSets();
 				if (dealSets != null) {
@@ -309,14 +342,12 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof Collection<?>) {
-				Collection<?> collection = (Collection<?>) parentElement;
+			if (parentElement instanceof final Collection<?> collection) {
 				return collection.toArray();
 			}
-			if (parentElement instanceof DealSet) {
+			if (parentElement instanceof final DealSet ds) {
 				boolean goAhead = false;
 				final List<Object> objects = new ArrayList<Object>();
-				final DealSet ds = (DealSet) parentElement;
 				if (ds.getSlots() != null) {
 					objects.addAll(ds.getSlots());
 					goAhead = true;
