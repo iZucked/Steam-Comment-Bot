@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class ValidationLabelProvider extends ColumnLabelProvider {
 
@@ -44,6 +45,18 @@ public class ValidationLabelProvider extends ColumnLabelProvider {
 		}
 
 		return super.getBackground(element);
+	}
+
+	@Override
+	public Color getForeground(final Object element) {
+		if (validationErrors.containsKey(element)) {
+			final IStatus s = validationErrors.get(element);
+			if (s instanceof DetailConstraintStatusDecorator dcsd && dcsd.isFlagged()) {
+				return errorColour;
+			}
+		}
+
+		return super.getForeground(element);
 	}
 
 	@Override

@@ -9,21 +9,26 @@ import java.util.Map;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
- * Simple label provider for {@link IStatus} objects showing the message and an
- * icon based on severity.
+ * Simple label provider for {@link IStatus} objects showing the message and an icon based on severity.
  * 
  * @author Simon Goodall
  * 
  */
 public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
+
+	private final Color errorColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 
 	private final Image imgError;
 	private final Image imgWarn;
@@ -35,7 +40,6 @@ public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
 		imgWarn = CommonImages.getImage(IconPaths.Warning, IconMode.Enabled);
 		imgInfo = CommonImages.getImage(IconPaths.Information, IconMode.Enabled);
 	}
-
 
 	@Override
 	public Image getImage(Object element) {
@@ -56,13 +60,12 @@ public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
 				return imgInfo;
 			}
 		}
-		if (element instanceof Map.Entry) {
-			Map.Entry entry = (Map.Entry) element;
+		if (element instanceof Map.Entry<?, ?> entry) {
 			element = entry.getValue();
 		}
 
-		if (element instanceof IStatus) {
-			final int severity = ((IStatus) element).getSeverity();
+		if (element instanceof IStatus status) {
+			final int severity = status.getSeverity();
 
 			if (severity == IStatus.ERROR) {
 				return imgError;
@@ -77,21 +80,28 @@ public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public String getText(final Object element) {
-		if (element instanceof GroupedValidationStatusContentProvider.Node) {
-			return ((GroupedValidationStatusContentProvider.Node) element).desc;
+		if (element instanceof GroupedValidationStatusContentProvider.Node node) {
+			return node.desc;
 		}
-		if (element instanceof Map.Entry) {
-			Map.Entry entry = (Map.Entry) element;
+		if (element instanceof Map.Entry<?, ?> entry) {
 			Object key = entry.getKey();
-			if (key instanceof ScenarioModelRecord) {
-				ScenarioModelRecord modelRecord = (ScenarioModelRecord) key;
+			if (key instanceof ScenarioModelRecord modelRecord) {
 				return modelRecord.getName();
 			}
 		}
 
-		if (element instanceof IStatus) {
-			return ((IStatus) element).getMessage();
+		if (element instanceof IStatus status) {
+			return status.getMessage();
 		}
+		return null;
+	}
+
+	@Override
+	public Color getForeground(final Object element) {
+		if (element instanceof DetailConstraintStatusDecorator dcsd && dcsd.isFlagged()) {
+			return errorColour;
+		}
+
 		return null;
 	}
 

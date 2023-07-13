@@ -106,7 +106,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 							|| feature == CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE || feature == CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE //
 							|| (feature == CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS && slot.getWindowFlex() == 0) // ignore units change if flex is zero
 							|| (feature == CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD && ((LoadSlot) slot).isDESPurchase()) //
-							) {
+					) {
 						// Values need to have a specific value
 					} else {
 						{
@@ -149,7 +149,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 													"[Market model|" + slot.getName() + "] " + type + " should not have " + featureName + " set. NOTE: This warning will soon become an ERROR."),
 											IStatus.WARNING);
 									dsd.addEObjectAndFeature(slot, feature);
-
+									dsd.setFlagged(true);
 									failures.add(dsd);
 								} else {
 
@@ -162,7 +162,7 @@ public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 						}
 					}
 				}
-				 
+
 				if (!extraContext.isRelaxedChecking()) {
 					// Period scenarios can alter these values
 					if (slot.getWindowStart() != null && slot.getWindowStart().getDayOfMonth() != 1) {
