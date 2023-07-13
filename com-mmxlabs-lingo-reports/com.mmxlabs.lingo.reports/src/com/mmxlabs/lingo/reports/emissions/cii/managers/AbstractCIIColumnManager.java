@@ -1,7 +1,7 @@
 package com.mmxlabs.lingo.reports.emissions.cii.managers;
 
 import com.mmxlabs.lingo.reports.components.ColumnManager;
-import com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView.CIIGradesData;
+import com.mmxlabs.lingo.reports.emissions.cii.CIIGradesData;
 
 public abstract class AbstractCIIColumnManager extends ColumnManager<CIIGradesData> {
 

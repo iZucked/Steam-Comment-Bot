@@ -1,6 +1,6 @@
 package com.mmxlabs.lingo.reports.emissions.cii.managers;
 
-import com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView.CIIGradesData;
+import com.mmxlabs.lingo.reports.emissions.cii.CIIGradesData;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class CIIScenarioColumnManager extends AbstractCIIColumnManager {

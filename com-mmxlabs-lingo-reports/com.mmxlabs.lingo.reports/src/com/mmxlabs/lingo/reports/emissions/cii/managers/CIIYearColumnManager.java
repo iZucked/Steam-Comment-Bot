@@ -2,9 +2,7 @@ package com.mmxlabs.lingo.reports.emissions.cii.managers;
 
 import java.time.Year;
 
-import com.mmxlabs.lingo.reports.components.ColumnManager;
-import com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView.CIIGradesData;
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.lingo.reports.emissions.cii.CIIGradesData;
 
 public class CIIYearColumnManager extends AbstractCIIColumnManager {
 	
