@@ -7775,13 +7775,31 @@ public interface CargoPackage extends EPackage {
 	int DEAL_SET__PAPER_DEALS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Allow Exposure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEAL_SET__ALLOW_EXPOSURE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Allow Hedging</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEAL_SET__ALLOW_HEDGING = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Deal Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DEAL_SET_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int DEAL_SET_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -11086,6 +11104,28 @@ public interface CargoPackage extends EPackage {
 	EReference getDealSet_PaperDeals();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DealSet#isAllowExposure <em>Allow Exposure</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Allow Exposure</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DealSet#isAllowExposure()
+	 * @see #getDealSet()
+	 * @generated
+	 */
+	EAttribute getDealSet_AllowExposure();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DealSet#isAllowHedging <em>Allow Hedging</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Allow Hedging</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DealSet#isAllowHedging()
+	 * @see #getDealSet()
+	 * @generated
+	 */
+	EAttribute getDealSet_AllowHedging();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13576,6 +13616,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DEAL_SET__PAPER_DEALS = eINSTANCE.getDealSet_PaperDeals();
+
+		/**
+		 * The meta object literal for the '<em><b>Allow Exposure</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEAL_SET__ALLOW_EXPOSURE = eINSTANCE.getDealSet_AllowExposure();
+
+		/**
+		 * The meta object literal for the '<em><b>Allow Hedging</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DEAL_SET__ALLOW_HEDGING = eINSTANCE.getDealSet_AllowHedging();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl <em>Vessel Group Canal Parameters</em>}' class.

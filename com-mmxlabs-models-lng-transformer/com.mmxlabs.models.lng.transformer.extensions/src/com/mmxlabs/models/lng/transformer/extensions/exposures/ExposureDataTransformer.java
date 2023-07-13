@@ -19,6 +19,8 @@ import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
@@ -61,10 +63,6 @@ public class ExposureDataTransformer implements ISlotTransformer {
 	@Inject
 	@Named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)
 	private boolean cutoffAtPromptStart;
-	
-//	@Inject
-//	@Named(SchedulerConstants.PRICING_BASES)
-//	private boolean pricingBasesEnabled;
 
 	@Override
 	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
@@ -115,20 +113,21 @@ public class ExposureDataTransformer implements ISlotTransformer {
 					if (individualExposures) {
 						cargoModel.getLoadSlots().forEach( s-> {
 							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
-								String prefix = "FP-";
-								if (s.isDESPurchase()) {
-									prefix = "DP-";
-								}
-								lookupData.slotsToInclude.add(prefix + s.getName());
+								lookupData.slotsToInclude.add(determinePrefix(s) + s.getName());
 							}
 						});
 						cargoModel.getDischargeSlots().forEach( s-> {
 							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
-								String prefix = "DS-";
-								if (s.isFOBSale()) {
-									prefix = "FS-";
+								lookupData.slotsToInclude.add(determinePrefix(s) + s.getName());
+							}
+						});
+						cargoModel.getDealSets().forEach( ds -> {
+							for (final Slot<?> s : ds.getSlots()) {
+								if (ds.isAllowExposure()) {
+									lookupData.slotsToInclude.add(determinePrefix(s) + s.getName());
+								} else {
+									lookupData.slotsToInclude.removeIf(f -> f.equalsIgnoreCase(determinePrefix(s) + s.getName()));
 								}
-								lookupData.slotsToInclude.add(prefix + s.getName());
 							}
 						});
 					}
@@ -187,5 +186,20 @@ public class ExposureDataTransformer implements ISlotTransformer {
 			return "0";
 		}
 		return expression;
+	}
+	
+	private String determinePrefix(final Slot<?> slot) {
+		String prefix = "FP-";
+		if (slot instanceof final LoadSlot s) {
+			if (s.isDESPurchase()) {
+				prefix = "DP-";
+			}
+		} else if (slot instanceof final DischargeSlot s) {
+			prefix = "DS-";
+			if (s.isFOBSale()) {
+				prefix = "FS-";
+			}
+		}
+		return prefix;
 	}
 }
