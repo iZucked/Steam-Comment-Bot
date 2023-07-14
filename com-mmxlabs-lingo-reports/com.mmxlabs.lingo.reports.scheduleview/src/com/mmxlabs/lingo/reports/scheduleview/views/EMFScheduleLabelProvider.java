@@ -11,6 +11,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Destination_Labels;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
@@ -78,12 +81,14 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.cii.CIIGradeFinder;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.MultiEvent;
@@ -238,6 +243,19 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return sequence.toString();
 		} else if (element instanceof Sequence sequence) {
 			String seqText = vesselFormatter.render(sequence);
+			
+			String grade = "-";
+			final ISelectedDataProvider selectedDataProviderForGrade = selectedScenariosService.getCurrentSelectedDataProvider();
+			if (selectedDataProviderForGrade != null) {
+				final ScenarioResult scenarioResult = selectedDataProviderForGrade.getScenarioResult(sequence);
+				if (scenarioResult != null && scenarioResult.getRootObject() instanceof final LNGScenarioModel lngScenarioModel) {
+					final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+					final Year year = Year.now();
+					final Vessel vesselForGrade = sequence.getVesselCharter().getVessel();
+					grade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, vesselForGrade, year);
+				}
+			}
+			seqText += " " + grade;
 
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();
@@ -332,6 +350,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof CombinedSequence combinedSequence) {
 			final Vessel vessel = combinedSequence.getVessel();
 			String seqText = vessel == null ? "<Unallocated>" : vesselFormatter.render(vessel);
+			
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();
 			if (input instanceof Collection<?> collection && collection.size() > 1) {

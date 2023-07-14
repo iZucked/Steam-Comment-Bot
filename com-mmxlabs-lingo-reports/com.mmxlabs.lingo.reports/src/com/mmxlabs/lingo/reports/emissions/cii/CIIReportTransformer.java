@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.cii.CIIAccumulatableEventModel;
+import com.mmxlabs.models.lng.schedule.cii.CumulativeCII;
 import com.mmxlabs.models.lng.schedule.cii.UtilsCII;
 import com.mmxlabs.scenario.service.ScenarioResult;
 

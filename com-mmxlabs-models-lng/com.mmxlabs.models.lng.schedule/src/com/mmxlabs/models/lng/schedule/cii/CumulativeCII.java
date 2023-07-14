@@ -1,10 +1,8 @@
-package com.mmxlabs.lingo.reports.emissions.cii;
+package com.mmxlabs.models.lng.schedule.cii;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.cii.CIIAccumulatableEventModel;
-import com.mmxlabs.models.lng.schedule.cii.UtilsCII;
 
 /**
  * class which is dedicated to accumulate information from events and then compute final CII
@@ -21,7 +19,7 @@ public class CumulativeCII {
 		this.vessel = vessel;
 	}
 	
-	final double findCII() {
+	public double findCII() {
 		return UtilsCII.findCII(vessel, totalEmission, totalDistance);
 	}
 	
