@@ -3,8 +3,7 @@
   "Vessel" : "LNG Lagos",
   "Cause ID" : "Lagos",
   "ID" : "Charter Out - Lagos",
-  "Date" : "12/06/11",
-  "Time" : "10:00",
+  "Date" : "12/06/11 10:00",
   "Port" : "Bonny",
   "Cost" : "0"
 }, {
@@ -12,8 +11,7 @@
   "Vessel" : "LNG River Orashi",
   "Cause ID" : "RO drydock",
   "ID" : "Charter Out - RO drydock",
-  "Date" : "23/08/11",
-  "Time" : "13:00",
+  "Date" : "23/08/11 13:00",
   "Port" : "Bonny",
   "Cost" : "0"
 } ]

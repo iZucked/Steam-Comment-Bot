@@ -3,8 +3,7 @@
   "Vessel" : "Methane Becki Anne",
   "Cause ID" : "Methane Becki Anne",
   "ID" : "load-cargo-21",
-  "Date" : "21/12/10",
-  "Time" : "07:00",
+  "Date" : "21/12/10 07:00",
   "Port" : "Punta Europa",
   "Cost" : "231,198"
 }, {
@@ -12,8 +11,7 @@
   "Vessel" : "Methane Heather Sally",
   "Cause ID" : "Dry Dock",
   "ID" : "load-cargo-66",
-  "Date" : "16/05/11",
-  "Time" : "14:00",
+  "Date" : "16/05/11 14:00",
   "Port" : "Punta Europa",
   "Cost" : "231,424"
 }, {
@@ -21,8 +19,7 @@
   "Vessel" : "Methane Julia Louise",
   "Cause ID" : "Methane Julia Louise",
   "ID" : "load-cargo-32",
-  "Date" : "31/12/10",
-  "Time" : "07:00",
+  "Date" : "31/12/10 07:00",
   "Port" : "Punta Europa",
   "Cost" : "231,198"
 } ]

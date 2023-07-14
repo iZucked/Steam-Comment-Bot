@@ -3,8 +3,7 @@
   "Vessel" : "Methane Heather Sally",
   "Cause ID" : "Dry Dock",
   "ID" : "load-cargo-78",
-  "Date" : "23/03/11",
-  "Time" : "07:00",
+  "Date" : "23/03/11 07:00",
   "Port" : "Damietta",
   "Cost" : "203,604"
 }, {
@@ -12,8 +11,7 @@
   "Vessel" : "Methane Heather Sally",
   "Cause ID" : "Methane Heather Sally",
   "ID" : "load-cargo-21",
-  "Date" : "21/12/10",
-  "Time" : "07:00",
+  "Date" : "21/12/10 07:00",
   "Port" : "Punta Europa LNG",
   "Cost" : "226,176"
 }, {
@@ -21,8 +19,7 @@
   "Vessel" : "Methane Julia Louise",
   "Cause ID" : "Methane Julia Louise",
   "ID" : "load-cargo-32",
-  "Date" : "31/12/10",
-  "Time" : "07:00",
+  "Date" : "31/12/10 07:00",
   "Port" : "Punta Europa LNG",
   "Cost" : "226,176"
 } ]
