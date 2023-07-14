@@ -30,6 +30,7 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class CIIReportTransformer implements AbstractSimpleTabularReportTransformer<CIIGradesData> {
 
+	private static final double FULL_YEAR_VALUE_INTERPOLATION = 1.0;
 	private Year earliestYear = null;
 	private Year latestYear = null;
 
@@ -62,24 +63,18 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 
 				final LocalDate startDate = model.eventStart.toLocalDate();
 				final LocalDate endDate = model.eventStart.toLocalDate();
+				
 				if (startDate.getYear() == endDate.getYear()) {
-					final Year year = Year.of(startDate.getYear());
-					vesselCIIs.computeIfAbsent(year, y -> new CumulativeCII(vessel));
-					final CumulativeCII cumulativeCII = vesselCIIs.get(year);
-					cumulativeCII.accumulateEventModel(model);
-				} else {
-					final LocalDate newYearMidPoint = LocalDate.of(startDate.getYear(), 12, 31);
-					final double earlyEventLinearInterpolationCoefficient = Duration.between(startDate, newYearMidPoint).toDays() / (double) Duration.between(startDate, endDate).toDays();
-					final double lateEventLinearInterpolationCoefficient = 1 - earlyEventLinearInterpolationCoefficient;
-
-					final Year startYear = Year.of(startDate.getYear());
-					vesselCIIs.computeIfAbsent(startYear, y -> new CumulativeCII(vessel));
-					vesselCIIs.get(startYear).accumulateEventModel(model, earlyEventLinearInterpolationCoefficient);
-
-					final Year endYear = Year.of(endDate.getYear());
-					vesselCIIs.computeIfAbsent(endYear, y -> new CumulativeCII(vessel));
-					vesselCIIs.get(endYear).accumulateEventModel(model, lateEventLinearInterpolationCoefficient);
+					accumulateVesselYearCII(model, vessel, vesselCIIs, startDate, FULL_YEAR_VALUE_INTERPOLATION);
+					continue;
 				}
+				
+				final LocalDate newYearMidPoint = LocalDate.of(startDate.getYear(), 12, 31);
+				final double earlyEventLinearInterpolationCoefficient = Duration.between(startDate, newYearMidPoint).toDays() / (double) Duration.between(startDate, endDate).toDays();
+				final double lateEventLinearInterpolationCoefficient = 1 - earlyEventLinearInterpolationCoefficient;
+
+				accumulateVesselYearCII(model, vessel, vesselCIIs, startDate, earlyEventLinearInterpolationCoefficient);
+				accumulateVesselYearCII(model, vessel, vesselCIIs, endDate, lateEventLinearInterpolationCoefficient);
 			}
 
 			vesselYearCIIs.forEach((vessel, accumulatedCIIs) -> {
@@ -93,6 +88,13 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 		}
 
 		return outputData;
+	}
+
+	private void accumulateVesselYearCII(final VesselEmissionAccountingReportModelV1 model, final Vessel vessel, final Map<Year, CumulativeCII> vesselCIIs, final LocalDate startDate,
+			final double earlyEventLinearInterpolationCoefficient) {
+		final Year startYear = Year.of(startDate.getYear());
+		vesselCIIs.computeIfAbsent(startYear, y -> new CumulativeCII(vessel));
+		vesselCIIs.get(startYear).accumulateEventModel(model, earlyEventLinearInterpolationCoefficient);
 	}
 
 	private void findYearsRange(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair, @NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
@@ -140,4 +142,4 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 		}
 		return result;
 	}
-};
+}
