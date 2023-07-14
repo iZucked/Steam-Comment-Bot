@@ -244,6 +244,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Sequence sequence) {
 			String seqText = vesselFormatter.render(sequence);
 			
+			//
+			// CII Grade appendix
+			//
 			String grade = "-";
 			final ISelectedDataProvider selectedDataProviderForGrade = selectedScenariosService.getCurrentSelectedDataProvider();
 			if (selectedDataProviderForGrade != null) {
@@ -256,6 +259,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 			}
 			seqText += " " + grade;
+			//
 
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();
