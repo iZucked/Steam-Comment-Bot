@@ -300,7 +300,7 @@
     <genClasses ecoreClass="cargo.ecore#//VesselTypeGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselTypeGroup/vesselType"/>
     </genClasses>
-    <genClasses ecoreClass="cargo.ecore#//InventoryEventRow">
+    <genClasses image="false" ecoreClass="cargo.ecore#//InventoryEventRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/startDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/endDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/period"/>
@@ -312,10 +312,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/volumeHigh"/>
       <genOperations ecoreOperation="cargo.ecore#//InventoryEventRow/getReliableVolume"/>
     </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//InventoryOfftakeRow"/>
+    <genClasses ecoreClass="cargo.ecore#//InventoryFeedRow">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryFeedRow/cv"/>
+    </genClasses>
     <genClasses ecoreClass="cargo.ecore#//InventoryCapacityRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/date"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/minVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/maxVolume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/minCV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryCapacityRow/maxCV"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//Inventory">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Inventory/port"/>

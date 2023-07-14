@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ETypedElement;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
@@ -23,13 +24,15 @@ public class InventoryPeriodInlineEditorFactory implements IInlineEditorFactory 
 		for (final InventoryFrequency type : InventoryFrequency.values()) {
 			final String name;
 			switch (type) {
-		 
+
 			default:
 				name = type.getName();
 				break;
 			}
-			objectsList.add(name);
-			objectsList.add(type);
+			if (!(owner == CargoPackage.eINSTANCE.getInventoryOfftakeRow() && type == InventoryFrequency.LEVEL)) {
+				objectsList.add(name);
+				objectsList.add(type);
+			}
 		}
 		return new EENumInlineEditor((EAttribute) feature, objectsList.toArray());
 	}

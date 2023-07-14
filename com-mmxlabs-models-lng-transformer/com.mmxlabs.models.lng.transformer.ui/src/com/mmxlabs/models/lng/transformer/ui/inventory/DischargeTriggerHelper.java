@@ -198,7 +198,7 @@ public class DischargeTriggerHelper {
 		return null;
 	}
 	
-	private void processNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final List<InventoryDailyEvent> idEvents, final boolean isIntake) {
+	private void processNetVolumes(final List<? extends InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final List<InventoryDailyEvent> idEvents, final boolean isIntake) {
 		for (final InventoryEventRow inventoryEventRow : events) {
 			if (inventoryEventRow.getStartDate() != null && inventoryEventRow.getEndDate() != null) {
 				switch(inventoryEventRow.getPeriod()) {

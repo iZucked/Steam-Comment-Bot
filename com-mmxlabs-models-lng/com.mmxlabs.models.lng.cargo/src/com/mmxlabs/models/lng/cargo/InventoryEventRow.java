@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.cargo;
 
@@ -31,17 +27,13 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getInventoryEventRow()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface InventoryEventRow extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Start Date</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start Date</em>' attribute.
 	 * @see #setStartDate(LocalDate)
@@ -64,10 +56,6 @@ public interface InventoryEventRow extends EObject {
 	/**
 	 * Returns the value of the '<em><b>End Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>End Date</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End Date</em>' attribute.
 	 * @see #setEndDate(LocalDate)
@@ -91,10 +79,6 @@ public interface InventoryEventRow extends EObject {
 	 * Returns the value of the '<em><b>Period</b></em>' attribute.
 	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.cargo.InventoryFrequency}.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Period</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Period</em>' attribute.
 	 * @see com.mmxlabs.models.lng.cargo.InventoryFrequency
@@ -119,10 +103,6 @@ public interface InventoryEventRow extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Counter Party</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Counter Party</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Counter Party</em>' attribute.
 	 * @see #setCounterParty(String)
@@ -146,10 +126,6 @@ public interface InventoryEventRow extends EObject {
 	 * Returns the value of the '<em><b>Reliability</b></em>' attribute.
 	 * The default value is <code>"100.0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Reliability</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Reliability</em>' attribute.
 	 * @see #setReliability(double)
@@ -172,10 +148,6 @@ public interface InventoryEventRow extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Volume</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume</em>' attribute.
 	 * @see #setVolume(int)
@@ -198,10 +170,6 @@ public interface InventoryEventRow extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Forecast Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Forecast Date</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Forecast Date</em>' attribute.
 	 * @see #isSetForecastDate()
@@ -252,10 +220,6 @@ public interface InventoryEventRow extends EObject {
 	 * Returns the value of the '<em><b>Volume Low</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Volume Low</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume Low</em>' attribute.
 	 * @see #setVolumeLow(int)
@@ -279,10 +243,6 @@ public interface InventoryEventRow extends EObject {
 	 * Returns the value of the '<em><b>Volume High</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Volume High</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Volume High</em>' attribute.
 	 * @see #setVolumeHigh(int)

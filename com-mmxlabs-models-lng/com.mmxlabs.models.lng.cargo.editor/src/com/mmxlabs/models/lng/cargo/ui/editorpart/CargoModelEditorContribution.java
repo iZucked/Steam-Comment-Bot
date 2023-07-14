@@ -283,7 +283,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					editBtn.setEnabled(false);
 				} else {
 					final Inventory inventory = (Inventory) ((IStructuredSelection) selection).getFirstElement();
-					inventoryFeedPane.getViewer().setInput(inventory);
+					inventoryFeedPane.setInput(inventory);
 					inventoryOfftakePane.getViewer().setInput(inventory);
 					inventoryCapacityPane.getViewer().setInput(inventory);
 					lastFacility = inventory.getName();

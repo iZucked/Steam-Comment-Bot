@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
@@ -11,11 +7,13 @@ import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 
 import java.lang.reflect.InvocationTargetException;
+
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -42,7 +40,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class InventoryEventRowImpl extends EObjectImpl implements InventoryEventRow {
+public abstract class InventoryEventRowImpl extends EObjectImpl implements InventoryEventRow {
 	/**
 	 * The default value of the '{@link #getStartDate() <em>Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->

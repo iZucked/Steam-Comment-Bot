@@ -70,6 +70,8 @@ public class InventoryCapacityRowItemProvider
 			addDatePropertyDescriptor(object);
 			addMinVolumePropertyDescriptor(object);
 			addMaxVolumePropertyDescriptor(object);
+			addMinCVPropertyDescriptor(object);
+			addMaxCVPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -141,6 +143,50 @@ public class InventoryCapacityRowItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min CV feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinCVPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_InventoryCapacityRow_minCV_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryCapacityRow_minCV_feature", "_UI_InventoryCapacityRow_type"),
+				 CargoPackage.Literals.INVENTORY_CAPACITY_ROW__MIN_CV,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max CV feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxCVPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_InventoryCapacityRow_maxCV_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InventoryCapacityRow_maxCV_feature", "_UI_InventoryCapacityRow_type"),
+				 CargoPackage.Literals.INVENTORY_CAPACITY_ROW__MAX_CV,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns InventoryCapacityRow.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -182,6 +228,8 @@ public class InventoryCapacityRowItemProvider
 			case CargoPackage.INVENTORY_CAPACITY_ROW__DATE:
 			case CargoPackage.INVENTORY_CAPACITY_ROW__MIN_VOLUME:
 			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_VOLUME:
+			case CargoPackage.INVENTORY_CAPACITY_ROW__MIN_CV:
+			case CargoPackage.INVENTORY_CAPACITY_ROW__MAX_CV:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
