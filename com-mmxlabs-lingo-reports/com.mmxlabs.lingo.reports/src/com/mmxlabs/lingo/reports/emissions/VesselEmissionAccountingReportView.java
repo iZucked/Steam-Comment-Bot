@@ -52,7 +52,7 @@ public class VesselEmissionAccountingReportView extends AbstractSimpleModelBased
 
 		final boolean processDeltas = selectedDataProvider.inPinDiffMode();
 		final boolean showScenarioColumn = processDeltas || selectedDataProvider.getAllScenarioResults().size() >= 2;
-		EmissionsUtils.changeScenarioNameColumnVisibility(columnInfo, showScenarioColumn);
+		EmissionReportUtils.changeScenarioNameColumnVisibility(columnInfo, showScenarioColumn);
 		deltaHelper.setProcessDeltas(processDeltas);
 		if (processDeltas) {
 			return processDeltas(rows);
@@ -71,7 +71,7 @@ public class VesselEmissionAccountingReportView extends AbstractSimpleModelBased
 		for (final VesselEmissionAccountingReportModelV1 r1 : rows) {
 			if (r1.isPinned()) {
 				for (final VesselEmissionAccountingReportModelV1 r2 : rows) {
-					if (!r2.isPinned() && EmissionsUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
+					if (!r2.isPinned() && EmissionReportUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
 
 						final VesselEmissionAccountingReportModelV1 model = new VesselEmissionAccountingReportModelV1();
 						model.setDelta(r2, r1);
@@ -103,7 +103,7 @@ public class VesselEmissionAccountingReportView extends AbstractSimpleModelBased
 
 	@Override
 	protected BiConsumer<ViewerCell, Field> createStyler() {
-		return EmissionsUtils::styleTheCell;
+		return EmissionReportUtils::styleTheCell;
 	}
 
 	@Override

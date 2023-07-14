@@ -50,7 +50,7 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 
 		final boolean processDeltas = selectedDataProvider.inPinDiffMode();
 		final boolean showScenarioColumn = processDeltas || selectedDataProvider.getAllScenarioResults().size() >= 2;
-		EmissionsUtils.changeScenarioNameColumnVisibility(columnInfo, showScenarioColumn);
+		EmissionReportUtils.changeScenarioNameColumnVisibility(columnInfo, showScenarioColumn);
 		deltaHelper.setProcessDeltas(processDeltas);
 		if (processDeltas) {
 			return processDeltas(rows);
@@ -69,7 +69,7 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 		for (final CargoEmissionAccountingReportModelV1 r1 : rows) {
 			if (r1.isPinned()) {
 				for (final CargoEmissionAccountingReportModelV1 r2 : rows) {
-					if (!r2.isPinned() && EmissionsUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
+					if (!r2.isPinned() && EmissionReportUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
 						
 						final CargoEmissionAccountingReportModelV1 model = new CargoEmissionAccountingReportModelV1();
 						model.setDelta(r2, r1);
@@ -101,7 +101,7 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 
 	@Override
 	protected BiConsumer<ViewerCell, Field> createStyler() {
-		return EmissionsUtils::styleTheCell;
+		return EmissionReportUtils::styleTheCell;
 	}
 
 	@Override

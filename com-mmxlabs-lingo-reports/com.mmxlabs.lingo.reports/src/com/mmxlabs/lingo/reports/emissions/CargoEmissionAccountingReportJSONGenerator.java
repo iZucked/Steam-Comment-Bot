@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.emissions.EmissionModelUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class CargoEmissionAccountingReportJSONGenerator {
@@ -139,10 +140,10 @@ public class CargoEmissionAccountingReportJSONGenerator {
 						pilotLightAccumulator += fuelAmount.getQuantity() * baseFuel.getEmissionRate();
 						break;
 					case FBO:
-						fboAccumulator += EmissionsUtils.consumedQuantityLNG(fuelQuantity) * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+						fboAccumulator += EmissionModelUtils.consumedCarbonEquivalentEmissionLNG(fuelQuantity);
 						break;
 					case NBO:
-						nboAccumulator += EmissionsUtils.consumedQuantityLNG(fuelQuantity) * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+						nboAccumulator += EmissionModelUtils.consumedCarbonEquivalentEmissionLNG(fuelQuantity);
 						break;
 					default:
 					}
@@ -163,13 +164,13 @@ public class CargoEmissionAccountingReportJSONGenerator {
 				if (sa != null) {
 					final Slot<?> slot = sa.getSlot();
 					if (slot instanceof LoadSlot) {
-						methaneSlipAccumulator += EmissionsUtils.GRAMS_TO_TONS * sa.getPhysicalEnergyTransferred() * vessel.getVesselOrDelegateMethaneSlipRate();
+						methaneSlipAccumulator += EmissionModelUtils.GRAMS_TO_TONS * sa.getPhysicalEnergyTransferred() * vessel.getVesselOrDelegateMethaneSlipRate();
 					}
 				}
 			}
 		}
 		model.methaneSlip = Math.round(methaneSlipAccumulator);
-		model.methaneSlipEmissionsCO2 = EmissionsUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
+		model.methaneSlipEmissionsCO2 = EmissionModelUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
 	}
 
 	private static void calculateCII(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model, final Vessel vessel) {

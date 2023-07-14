@@ -1,11 +1,11 @@
-package com.mmxlabs.lingo.reports.emissions.cii;
+package com.mmxlabs.models.lng.schedule.cii;
 
 import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.Map;
 
-import com.mmxlabs.lingo.reports.emissions.EmissionsUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.emissions.EmissionModelUtils;
 
 public class UtilsCII {
 	
@@ -108,6 +108,6 @@ public class UtilsCII {
 		if (denominatorCII == 0) {
 			return INFINITE_CII;
 		}
-		return EmissionsUtils.MT_TO_GRAMS * totalEmission / denominatorCII;
+		return EmissionModelUtils.MT_TO_GRAMS * totalEmission / denominatorCII;
 	}
 }

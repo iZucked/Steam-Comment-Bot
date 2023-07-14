@@ -4,19 +4,23 @@
  */
 package com.mmxlabs.lingo.reports.emissions;
 
+import java.time.LocalDate;
+
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnGroup;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
+import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.cii.CIIAccumulatableEventModel;
 
 /**
  * Emissions report data
  */
 @SchemaVersion(1)
-public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel implements IDeltaDerivable {
+public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel implements IDeltaDerivable, CIIAccumulatableEventModel {
 
 	private static final String BASE_FUEL_GROUP = "BASE_FUEL_GROUP";
 	private static final String BASE_FUEL_TITLE = "Base Fuel";
@@ -26,8 +30,6 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	private static final String PILOT_LIGHT_TITLE = "Pilot Light";
 	private static final String METHANE_SLIP_GROUP_ID = "METHANE_SLIP_GROUP_ID";
 	
-	private Vessel vessel;
-	private Event event;
 	
 	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
 	@ColumnName("Type")
@@ -83,6 +85,17 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 	@ColumnName("Methane Slip")
 	@ColumnOrderLevel(ColumnOrder.FIRST)
 	public Long methaneSlip;
+	
+	@LingoIgnore
+	private double totalEmissionForCII;
+	@LingoIgnore
+	private LocalDate eventStartForCII;
+	@LingoIgnore
+	private LocalDate eventEndForCII;
+	@LingoIgnore
+	private Vessel vesselForCII;
+	@LingoIgnore
+	private Event eventForCII;
 
 	@Override
 	public boolean equals(Object other) {
@@ -154,19 +167,53 @@ public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccou
 		return super.hashCode();
 	}
 
-	public Vessel getVessel() {
-		return vessel;
+	@Override
+	public Vessel getCIIVessel() {
+		return vesselForCII;
 	}
 
-	public void setVessel(Vessel vessel) {
-		this.vessel = vessel;
+	@Override
+	public Event getCIIEvent() {
+		return eventForCII;
 	}
 
-	public Event getEvent() {
-		return event;
+	@Override
+	public LocalDate getCIIStartDate() {
+		return eventStart.toLocalDate();
 	}
 
-	public void setEvent(Event event) {
-		this.event = event;
+	@Override
+	public LocalDate getCIIEndDate() {
+		return eventEnd.toLocalDate();
+	}
+
+	@Override
+	public double getTotalEmissionForCII() {
+		return totalEmissionForCII;
+	}
+
+	@Override
+	public void setCIIVessel(Vessel vessel) {
+		this.vesselForCII = vessel;
+	}
+
+	@Override
+	public void setCIIEvent(Event event) {
+		this.eventForCII = event;
+	}
+
+	@Override
+	public void setCIIStartDate(LocalDate startDate) {
+		this.eventStartForCII = startDate;
+	}
+
+	@Override
+	public void setCIIEndDate(LocalDate endDate) {
+		this.eventEndForCII = endDate;
+	}
+
+	@Override
+	public void addToTotalEmissionForCII(double emission) {
+		this.totalEmissionForCII += emission;
 	}
 }

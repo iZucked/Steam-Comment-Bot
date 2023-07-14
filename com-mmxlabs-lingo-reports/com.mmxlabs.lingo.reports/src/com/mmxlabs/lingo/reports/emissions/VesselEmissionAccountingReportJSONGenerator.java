@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.lingo.reports.emissions.cii.UtilsCII;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -32,9 +31,14 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.cii.ModelUtilsCII;
+import com.mmxlabs.models.lng.schedule.emissions.EmissionModelUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class VesselEmissionAccountingReportJSONGenerator {
+	
+	private VesselEmissionAccountingReportJSONGenerator() {
+	}
 
 	public static List<VesselEmissionAccountingReportModelV1> createReportData(final @NonNull ScheduleModel scheduleModel, final boolean isPinned, final String scenarioName) {
 		final List<VesselEmissionAccountingReportModelV1> models = new LinkedList<>();
@@ -50,18 +54,17 @@ public class VesselEmissionAccountingReportJSONGenerator {
 			final Vessel vessel = ScheduleModelUtils.getVessel(seq);
 			if (vessel != null) {
 				final String vesselName = vessel.getName();
-				for (final Event e : seq.getEvents()) {
+				for (final Event event : seq.getEvents()) {
 					final VesselEmissionAccountingReportModelV1 model = new VesselEmissionAccountingReportModelV1();
+					ModelUtilsCII.processAccumulatableEventModelForCII(model, vessel, event);
 					model.eventID = cargoId;
 					model.scenarioName = scenarioName;
 					model.isPinnedFlag = isPinned;
 					model.schedule = schedule;
-					model.setVessel(vessel);
-					model.setEvent(e);
 					
 					model.vesselName = vesselName;
-					model.eventStart = e.getStart().toLocalDateTime();
-					model.eventEnd = e.getEnd().toLocalDateTime();
+					model.eventStart = event.getStart().toLocalDateTime();
+					model.eventEnd = event.getEnd().toLocalDateTime();
 
 					model.pilotLightEmission = 0L;
 					model.totalEmission = 0L;
@@ -71,7 +74,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					
 					model.eventID = vesselName;
 
-					journeyDistance = processEvent(e, model, journeyDistance);
+					journeyDistance = processEvent(event, model, journeyDistance);
 					if (model.eventType == null) {
 						continue;
 					}
@@ -87,12 +90,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.baseFuelConsumed = 0L;
 					model.ciiValue = 0L;
 
-					if (e instanceof FuelUsage fuelUsageEvent) {	
+					if (event instanceof FuelUsage fuelUsageEvent) {	
 						processFuelUsageEvent(model, fuelUsageEvent);
 					}
 					
 					model.setCII(vessel, model.totalEmission, journeyDistance);
-					model.totalEmission += EmissionsUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
+					model.totalEmission += EmissionModelUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
 					models.add(model);
 				}
 			}
@@ -129,12 +132,12 @@ public class VesselEmissionAccountingReportJSONGenerator {
 				model.pilotLightEmission = Math.round(model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
 				break;
 			case FBO:
-				model.consumedFBO += EmissionsUtils.consumedQuantityLNG(fuelQuantity);
-				emissionsLNGAccumulator += model.consumedFBO * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+				model.consumedFBO += EmissionModelUtils.consumedQuantityLNG(fuelQuantity);
+				emissionsLNGAccumulator += model.consumedFBO * EmissionModelUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
 				break;
 			case NBO:
-				model.consumedNBO += EmissionsUtils.consumedQuantityLNG(fuelQuantity);
-				emissionsLNGAccumulator += model.consumedNBO * EmissionsUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
+				model.consumedNBO += EmissionModelUtils.consumedQuantityLNG(fuelQuantity);
+				emissionsLNGAccumulator += model.consumedNBO * EmissionModelUtils.LNG_EMISSION_RATE_TON_CO2_PER_TON_FUEL;
 				break;
 			default:
 			}
@@ -233,7 +236,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 				}
 			}
 			if (slot instanceof LoadSlot) {
-				model.methaneSlip += Math.round(EmissionsUtils.GRAMS_TO_TONS * slotAllocation.getPhysicalEnergyTransferred() * model.methaneSlipRate);
+				model.methaneSlip += Math.round(EmissionModelUtils.GRAMS_TO_TONS * slotAllocation.getPhysicalEnergyTransferred() * model.methaneSlipRate);
 			}
 		}
 	}

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.mmxlabs.lingo.reports.emissions.cii.UtilsCII;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnGroup;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
 import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
@@ -20,6 +19,7 @@ import com.mmxlabs.lingo.reports.modelbased.annotations.LingoFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.cii.UtilsCII;
 
 public abstract class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission, IDeltaDerivable {
 	

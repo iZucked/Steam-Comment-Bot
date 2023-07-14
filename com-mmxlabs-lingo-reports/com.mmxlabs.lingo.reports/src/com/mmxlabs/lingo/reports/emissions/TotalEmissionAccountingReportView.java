@@ -49,7 +49,7 @@ public class TotalEmissionAccountingReportView extends AbstractSimpleModelBasedR
 		
 		final boolean processDeltas = selectedDataProvider.inPinDiffMode();
 		final boolean showScenarioColumn = processDeltas || selectedDataProvider.getAllScenarioResults().size() >= 2;
-		EmissionsUtils.changeScenarioNameColumnVisibility(columnInfo, showScenarioColumn);
+		EmissionReportUtils.changeScenarioNameColumnVisibility(columnInfo, showScenarioColumn);
 		deltaHelper.setProcessDeltas(processDeltas);
 		if (processDeltas) {
 			return processDeltas(rows);
@@ -72,7 +72,7 @@ public class TotalEmissionAccountingReportView extends AbstractSimpleModelBasedR
 			if (r1.isPinned()) {
 				for (final var r2 : rows) {
 					if (!r2.isPinned()) {
-						if (EmissionsUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
+						if (EmissionReportUtils.checkIVesselEmissionsAreSimilar(r1, r2)) {
 
 							final TotalEmissionAccountingReportModelV1 model = new TotalEmissionAccountingReportModelV1();
 							model.scenarioName = "Δ";
@@ -126,7 +126,7 @@ public class TotalEmissionAccountingReportView extends AbstractSimpleModelBasedR
 
 	@Override
 	protected BiConsumer<ViewerCell, Field> createStyler() {
-		return EmissionsUtils::styleTheCell;
+		return EmissionReportUtils::styleTheCell;
 	}
 	
 	@Override
