@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
@@ -37,6 +38,11 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 	private static final double FULL_YEAR_VALUE_INTERPOLATION = 1.0;
 	private Year earliestYear = null;
 	private Year latestYear = null;
+	private final Image pinImage;
+
+	public CIIReportTransformer(final Image pinImage) {
+		this.pinImage = pinImage;
+	}
 
 	@Override
 	public @NonNull List<CIIGradesData> createData(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
@@ -140,7 +146,7 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 	public @NonNull List<@NonNull ColumnManager<CIIGradesData>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider) {
 		final List<@NonNull ColumnManager<CIIGradesData>> result = new LinkedList<>();
 		if (selectedDataProvider.getAllScenarioResults().size() > 1) {
-			result.add(new CIIScenarioColumnManager());
+			result.add(new CIIScenarioColumnManager(selectedDataProvider, pinImage));
 		}
 		result.add(new CIIVesselColumnManager());
 

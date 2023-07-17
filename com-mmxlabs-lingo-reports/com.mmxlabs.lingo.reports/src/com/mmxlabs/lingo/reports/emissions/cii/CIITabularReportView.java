@@ -17,6 +17,6 @@ public class CIITabularReportView extends SimpleTabularReportView<CIIGradesData>
 
 	@Override
 	protected AbstractSimpleTabularReportTransformer<CIIGradesData> createTransformer() {
-		return new CIIReportTransformer();
+		return new CIIReportTransformer(pinImage);
 	}
 }
