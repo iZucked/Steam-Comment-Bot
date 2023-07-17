@@ -103,15 +103,15 @@ public abstract class AbstractVerticalReportVisualiser {
 			if (vesselEvent instanceof MaintenanceEvent) {
 				return colourPalette.getColourFor(ColourPaletteItems.Event_Maintenance, ColourElements.Background);
 			}
-			if (vesselEvent instanceof com.mmxlabs.models.lng.cargo.CharterLengthEvent) {
-				return colourPalette.getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
+			if (vesselEvent instanceof CharterLengthEvent) {
+				return colourPalette.getColourFor(ColourPaletteItems.Event_CharterLength, ColourElements.Background);
 			}
 		}
 		if (event instanceof GeneratedCharterOut) {
 			return colourPalette.getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
 		}
 		if (event instanceof GeneratedCharterLengthEvent) {
-			return colourPalette.getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourElements.Background);
+			return colourPalette.getColourFor(ColourPaletteItems.Voyage_GeneratedCharterLength, ColourElements.Background);
 		}
 
 		if (event instanceof Idle) {

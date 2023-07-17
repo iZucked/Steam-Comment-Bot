@@ -221,7 +221,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourPalette.ColourElements.Background)),
 			new LegendItemImpl("Dry-dock/Maintenance", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourPalette.ColourElements.Background),
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, ColourPalette.ColourElements.Background)),
-			new LegendItemImpl("Charter Length", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, ColourPalette.ColourElements.Background)));
+			new LegendItemImpl("Charter Length", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterLength, ColourPalette.ColourElements.Background)));
 	private final List<ILegendItem> legendItems = new LinkedList<>();
 
 	@Override

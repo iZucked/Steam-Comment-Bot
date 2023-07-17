@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
+import com.mmxlabs.models.lng.cargo.CharterLengthEvent;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -90,11 +91,13 @@ public class VesselStateColourScheme extends ColourScheme {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, colourElement);
 			} else if (vev.getVesselEvent() instanceof CharterOutEvent) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_CharterOut, colourElement);
+			} else if (vev.getVesselEvent() instanceof CharterLengthEvent) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_CharterLength, colourElement);
 			}
 		} else if (element instanceof GeneratedCharterOut) {
 			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, colourElement);
 		} else if (element instanceof GeneratedCharterLengthEvent) {
-			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_CharterLength, colourElement);
+			return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_GeneratedCharterLength, colourElement);
 
 		} else if (element instanceof final CanalJourneyEvent canalBookingEvent) {
 			final Journey journey = canalBookingEvent.getLinkedJourney();
