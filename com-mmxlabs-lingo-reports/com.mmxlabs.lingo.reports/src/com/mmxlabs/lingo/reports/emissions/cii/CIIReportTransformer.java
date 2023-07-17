@@ -3,6 +3,7 @@ package com.mmxlabs.lingo.reports.emissions.cii;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,22 +37,21 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 	private Year earliestYear = null;
 	private Year latestYear = null;
 
-	private @NonNull List<CIIGradesData> diffModeData(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair, @NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult> pair) {
-		return List.of();
-	}
-
 	@Override
 	public @NonNull List<CIIGradesData> createData(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
 			@NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
+		
+		
+		final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairsWithMaybePinnedOneAsWell = new ArrayList<>(otherPairs);
 		if (pinnedPair != null) {
-			return diffModeData(pinnedPair, otherPairs.get(0));
+			otherPairsWithMaybePinnedOneAsWell.add(pinnedPair);
 		}
 
 		findYearsRange(pinnedPair, otherPairs);
 
 		final List<CIIGradesData> outputData = new LinkedList<>();
 
-		for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> scenarioPair : otherPairs) {
+		for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> scenarioPair : otherPairsWithMaybePinnedOneAsWell) {
 			final ScenarioResult scenarioResult = scenarioPair.getSecond();
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioResult.getScenarioDataProvider());
 			
@@ -139,8 +139,10 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 		}
 		result.add(new CIIVesselColumnManager());
 
-		for (Year year = earliestYear; !year.isAfter(latestYear); year = year.plusYears(1)) {
-			result.add(new CIIYearColumnManager(year));
+		if (earliestYear != null) {
+			for (Year year = earliestYear; !year.isAfter(latestYear); year = year.plusYears(1)) {
+				result.add(new CIIYearColumnManager(year));
+			}
 		}
 		return result;
 	}
