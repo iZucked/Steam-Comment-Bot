@@ -338,6 +338,7 @@ public class GanttChartViewer extends StructuredViewer {
 						}
 
 						event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
+						event.setStatusBorderInner(getLabelProviderIsBorderInner(labelProvider, c));
 						event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
 						event.setSpecialDrawMode(getSpecialDrawMode(labelProvider, c));
@@ -446,6 +447,13 @@ public class GanttChartViewer extends StructuredViewer {
 			return colourProvider.getBorderWidth(c);
 		}
 		return 1;
+	}
+	
+	protected boolean getLabelProviderIsBorderInner(final ILabelProvider labelProvider, final Object c) {
+		if (labelProvider instanceof IGanttChartColourProvider colourProvider) {
+			return colourProvider.getIsBorderInner(c);
+		}
+		return false;
 	}
 
 	protected int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {

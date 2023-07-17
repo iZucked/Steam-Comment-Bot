@@ -15,10 +15,12 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
@@ -31,6 +33,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DealSetImpl#getSlots <em>Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DealSetImpl#getPaperDeals <em>Paper Deals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DealSetImpl#isAllowExposure <em>Allow Exposure</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DealSetImpl#isAllowHedging <em>Allow Hedging</em>}</li>
  * </ul>
  *
  * @generated
@@ -55,6 +59,46 @@ public class DealSetImpl extends NamedObjectImpl implements DealSet {
 	 * @ordered
 	 */
 	protected EList<PaperDeal> paperDeals;
+
+	/**
+	 * The default value of the '{@link #isAllowExposure() <em>Allow Exposure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowExposure()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ALLOW_EXPOSURE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAllowExposure() <em>Allow Exposure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowExposure()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean allowExposure = ALLOW_EXPOSURE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isAllowHedging() <em>Allow Hedging</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowHedging()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ALLOW_HEDGING_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAllowHedging() <em>Allow Hedging</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAllowHedging()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean allowHedging = ALLOW_HEDGING_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -107,12 +151,62 @@ public class DealSetImpl extends NamedObjectImpl implements DealSet {
 	 * @generated
 	 */
 	@Override
+	public boolean isAllowExposure() {
+		return allowExposure;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAllowExposure(boolean newAllowExposure) {
+		boolean oldAllowExposure = allowExposure;
+		allowExposure = newAllowExposure;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.DEAL_SET__ALLOW_EXPOSURE, oldAllowExposure, allowExposure));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isAllowHedging() {
+		return allowHedging;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAllowHedging(boolean newAllowHedging) {
+		boolean oldAllowHedging = allowHedging;
+		allowHedging = newAllowHedging;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.DEAL_SET__ALLOW_HEDGING, oldAllowHedging, allowHedging));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CargoPackage.DEAL_SET__SLOTS:
 				return getSlots();
 			case CargoPackage.DEAL_SET__PAPER_DEALS:
 				return getPaperDeals();
+			case CargoPackage.DEAL_SET__ALLOW_EXPOSURE:
+				return isAllowExposure();
+			case CargoPackage.DEAL_SET__ALLOW_HEDGING:
+				return isAllowHedging();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -134,6 +228,12 @@ public class DealSetImpl extends NamedObjectImpl implements DealSet {
 				getPaperDeals().clear();
 				getPaperDeals().addAll((Collection<? extends PaperDeal>)newValue);
 				return;
+			case CargoPackage.DEAL_SET__ALLOW_EXPOSURE:
+				setAllowExposure((Boolean)newValue);
+				return;
+			case CargoPackage.DEAL_SET__ALLOW_HEDGING:
+				setAllowHedging((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -152,6 +252,12 @@ public class DealSetImpl extends NamedObjectImpl implements DealSet {
 			case CargoPackage.DEAL_SET__PAPER_DEALS:
 				getPaperDeals().clear();
 				return;
+			case CargoPackage.DEAL_SET__ALLOW_EXPOSURE:
+				setAllowExposure(ALLOW_EXPOSURE_EDEFAULT);
+				return;
+			case CargoPackage.DEAL_SET__ALLOW_HEDGING:
+				setAllowHedging(ALLOW_HEDGING_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -168,8 +274,30 @@ public class DealSetImpl extends NamedObjectImpl implements DealSet {
 				return slots != null && !slots.isEmpty();
 			case CargoPackage.DEAL_SET__PAPER_DEALS:
 				return paperDeals != null && !paperDeals.isEmpty();
+			case CargoPackage.DEAL_SET__ALLOW_EXPOSURE:
+				return allowExposure != ALLOW_EXPOSURE_EDEFAULT;
+			case CargoPackage.DEAL_SET__ALLOW_HEDGING:
+				return allowHedging != ALLOW_HEDGING_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (allowExposure: ");
+		result.append(allowExposure);
+		result.append(", allowHedging: ");
+		result.append(allowHedging);
+		result.append(')');
+		return result.toString();
 	}
 
 } //DealSetImpl

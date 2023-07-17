@@ -39,4 +39,6 @@ public interface IGanttChartColourProvider extends IColorProvider {
 	int getBorderWidth(Object element);
 
 	SpecialDrawModes getSpecialDrawMode(Object element);
+
+	boolean getIsBorderInner(Object element);
 }

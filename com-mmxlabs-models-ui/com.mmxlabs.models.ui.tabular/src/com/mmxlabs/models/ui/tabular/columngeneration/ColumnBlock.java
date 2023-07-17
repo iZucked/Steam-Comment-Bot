@@ -102,12 +102,25 @@ public class ColumnBlock {
 	}
 
 	public void setViewState(final boolean isMultiple, final boolean isPinDiff) {
+		setViewState(isMultiple, isPinDiff, false);
+	}
+	
+	public void setViewState(final boolean isMultiple, final boolean isPinDiff, final boolean isDeltaPinDiff) {
 		switch (columnType) {
 		case DIFF:
 			modeVisible = isPinDiff;
 			break;
 		case MULTIPLE:
 			modeVisible = isMultiple;
+			break;
+		case NONDELTA:
+			modeVisible = !isDeltaPinDiff;
+			break;
+		case DELTA:
+			modeVisible = isDeltaPinDiff;
+			break;
+		case NONDELTAMULTIPLE:
+			modeVisible = isMultiple && !isDeltaPinDiff;
 			break;
 		case NORMAL:
 		default:

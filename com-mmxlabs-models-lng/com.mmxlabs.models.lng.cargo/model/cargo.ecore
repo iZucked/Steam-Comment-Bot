@@ -508,7 +508,7 @@
       <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InventoryEventRow">
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryEventRow" abstract="true">
     <eOperations name="getReliableVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
@@ -524,17 +524,35 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeHigh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryOfftakeRow" eSuperTypes="#//InventoryEventRow"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InventoryFeedRow" eSuperTypes="#//InventoryEventRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InventoryCapacityRow">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCV" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCV" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Inventory" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="feeds" upperBound="-1"
-        eType="#//InventoryEventRow" containment="true"/>
+        eType="#//InventoryFeedRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="offtakes" upperBound="-1"
-        eType="#//InventoryEventRow" containment="true"/>
+        eType="#//InventoryOfftakeRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="capacities" upperBound="-1"
         eType="#//InventoryCapacityRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="facilityType" eType="#//InventoryFacilityType"/>
@@ -706,6 +724,8 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="paperDeals" upperBound="-1"
         eType="#//PaperDeal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowExposure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowHedging" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="SchedulingTimeWindow" instanceClassName="com.mmxlabs.models.lng.cargo.SchedulingTimeWindow"/>
   <eClassifiers xsi:type="ecore:EEnum" name="PaperPricingType">

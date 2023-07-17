@@ -940,6 +940,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 		return 1;
 	}
+	
+	@Override
+	public boolean getIsBorderInner(final Object element) {
+		if (currentScheme != null) {
+			return currentScheme.getIsBorderInner(element);
+			
+		}
+		return false;
+	}
 
 	private Integer getPnL(final Object object) {
 		ProfitAndLossContainer container = null;

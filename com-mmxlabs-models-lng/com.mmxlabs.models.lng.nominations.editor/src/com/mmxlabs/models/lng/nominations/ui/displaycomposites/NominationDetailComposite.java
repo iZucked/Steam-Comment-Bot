@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.nominations.ui.displaycomposites;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -24,7 +25,8 @@ public class NominationDetailComposite extends NominationSpecsDetailComposite im
 		super(parent, style, toolkit);
 	}
 
-	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
+	@Override
+	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new NominationSpecsDetailComposite.NominationSpecDisplayCompositeLayoutProvider() {
 			@Override
 			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {

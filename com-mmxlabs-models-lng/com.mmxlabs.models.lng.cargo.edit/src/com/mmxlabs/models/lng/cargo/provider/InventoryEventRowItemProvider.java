@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.cargo.provider;
 
@@ -279,17 +275,6 @@ public class InventoryEventRowItemProvider
 	}
 
 	/**
-	 * This returns InventoryEventRow.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/InventoryEventRow"));
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -303,7 +288,7 @@ public class InventoryEventRowItemProvider
 			getString("_UI_InventoryEventRow_type") :
 			getString("_UI_InventoryEventRow_type") + " " + label;
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

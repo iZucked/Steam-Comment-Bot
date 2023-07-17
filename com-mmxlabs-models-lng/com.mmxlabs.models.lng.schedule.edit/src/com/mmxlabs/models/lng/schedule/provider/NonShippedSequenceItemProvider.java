@@ -211,7 +211,7 @@ public class NonShippedSequenceItemProvider extends MMXObjectItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.NON_SHIPPED_SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createCharterLengthEvent()));
+				 ScheduleFactory.eINSTANCE.createGeneratedCharterLengthEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.adp.mull.InventoryDateTimeEvent;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import com.mmxlabs.models.lng.cargo.InventoryFeedRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
@@ -106,7 +107,7 @@ public class InventoryGlobalState {
 
 	private static int calculateYearlyProduction(final Inventory inventory, final LocalDateTime startTimeInclusive, final LocalDateTime endTimeExclusive) {
 		int production = 0;
-		for (final InventoryEventRow eventRow : inventory.getFeeds()) {
+		for (final InventoryFeedRow eventRow : inventory.getFeeds()) {
 			final LocalDate eventStart = eventRow.getStartDate();
 			if (eventStart != null && !eventStart.isBefore(startTimeInclusive.toLocalDate()) && eventStart.isBefore(endTimeExclusive.toLocalDate())) {
 				final InventoryFrequency freq = eventRow.getPeriod();
@@ -136,10 +137,10 @@ public class InventoryGlobalState {
 				.collect(Collectors.toMap(InventoryCapacityRow::getDate, Function.identity(), (oldVal, newVal) -> newVal, TreeMap::new));
 		final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts = new TreeMap<>();
 
-		final InventoryEventRow lastPreAdpLevel = getLastPreTimeLevelFeed(inventory.getFeeds(), startTimeInclusive);
-		final Stream<InventoryEventRow> inTimeRangeFeedsStream = inventory.getFeeds().stream().filter(f -> !f.getStartDate().isBefore(startTimeInclusive.toLocalDate()));
-		final Stream<InventoryEventRow> feedsOfInterest = lastPreAdpLevel == null ? inTimeRangeFeedsStream : Stream.concat(Stream.of(lastPreAdpLevel), inTimeRangeFeedsStream);
-		final List<InventoryEventRow> filteredFeeds = feedsOfInterest.toList();
+		final InventoryFeedRow lastPreAdpLevel = getLastPreTimeLevelFeed(inventory.getFeeds(), startTimeInclusive);
+		final Stream<InventoryFeedRow> inTimeRangeFeedsStream = inventory.getFeeds().stream().filter(f -> !f.getStartDate().isBefore(startTimeInclusive.toLocalDate()));
+		final Stream<InventoryFeedRow> feedsOfInterest = lastPreAdpLevel == null ? inTimeRangeFeedsStream : Stream.concat(Stream.of(lastPreAdpLevel), inTimeRangeFeedsStream);
+		final List<InventoryFeedRow> filteredFeeds = feedsOfInterest.toList();
 
 		addHourlyNetVolumes(filteredFeeds, capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
 		addHourlyNetVolumes(inventory.getOfftakes(), capacityTreeMap, insAndOuts, a -> -a);
@@ -158,17 +159,17 @@ public class InventoryGlobalState {
 	}
 
 	@Nullable
-	private static InventoryEventRow getLastPreTimeLevelFeed(final List<InventoryEventRow> feeds, final LocalDateTime startDateTimeInclusive) {
+	private static InventoryFeedRow getLastPreTimeLevelFeed(final List<InventoryFeedRow> feeds, final LocalDateTime startDateTimeInclusive) {
 		final LocalDate startLocalDateInclusive = startDateTimeInclusive.toLocalDate();
-		final Iterator<InventoryEventRow> levelFeedsBeforeAdpStartIter = feeds.stream().filter(f -> f.getPeriod() == InventoryFrequency.LEVEL && f.getStartDate().isBefore(startLocalDateInclusive))
+		final Iterator<InventoryFeedRow> levelFeedsBeforeAdpStartIter = feeds.stream().filter(f -> f.getPeriod() == InventoryFrequency.LEVEL && f.getStartDate().isBefore(startLocalDateInclusive))
 				.iterator();
 
 		if (!levelFeedsBeforeAdpStartIter.hasNext()) {
 			return null;
 		}
-		InventoryEventRow lastPreAdpLevel = levelFeedsBeforeAdpStartIter.next();
+		InventoryFeedRow lastPreAdpLevel = levelFeedsBeforeAdpStartIter.next();
 		while (levelFeedsBeforeAdpStartIter.hasNext()) {
-			final InventoryEventRow feed = levelFeedsBeforeAdpStartIter.next();
+			final InventoryFeedRow feed = levelFeedsBeforeAdpStartIter.next();
 			if (lastPreAdpLevel.getStartDate().isBefore(feed.getStartDate())) {
 				lastPreAdpLevel = feed;
 			}
@@ -176,7 +177,7 @@ public class InventoryGlobalState {
 		return lastPreAdpLevel;
 	}
 
-	private static void addHourlyNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap,
+	private static void addHourlyNetVolumes(final List<? extends InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap,
 			final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction) {
 		for (final InventoryEventRow inventoryEventRow : events) {
 			final LocalDate eventStart = inventoryEventRow.getStartDate();

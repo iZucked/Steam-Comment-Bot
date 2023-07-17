@@ -164,6 +164,10 @@ public abstract class AbstractSettings implements ISettings {
 	public boolean showPlannedDates() {
 		return false;
 	}
+	
+	public boolean showLatenessBars() {
+		return true;
+	}
 
 	public boolean showGradientEventBars() {
 		return true;

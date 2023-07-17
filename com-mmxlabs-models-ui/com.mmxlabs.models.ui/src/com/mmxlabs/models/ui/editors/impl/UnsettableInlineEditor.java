@@ -322,6 +322,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 		final boolean innerEnabled = !isFeatureReadonly() && isEditorEnabled() && !isEditorLocked() && setEnabled;
 		if (inner != null) {
+			inner.setVisible(isEditorVisible());
 			setControlEnabled(inner, innerEnabled);
 		}
 	}
@@ -354,6 +355,8 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			} else {
 				setButton.setVisible(visible);
 			}
+		}else if (inner != null) {
+			inner.setEnabled(visible);
 		}
 	}
 

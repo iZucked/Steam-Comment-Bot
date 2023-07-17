@@ -36,6 +36,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus,
 	private @Nullable String baseMessage;
 	private @Nullable ValidationGroup tag;
 	private @Nullable Object constraintKey;
+	private boolean flagged;
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status) {
 		this(status, status.getSeverity());
@@ -199,6 +200,14 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus,
 		}
 		
 		return findTargetInObjectTree(node.eContainer(), target);
+	}
+
+	public boolean isFlagged() {
+		return flagged;
+	}
+
+	public void setFlagged(boolean flagged) {
+		this.flagged = flagged;
 	}
 	
 }

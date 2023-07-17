@@ -145,6 +145,8 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
 	private int _savedVerticalDragY;
 
 	private Rectangle _preVerticalDragBounds;
+	
+	private boolean _isStatusBorderInner = false;
 
 	private SpecialDrawModes specialDrawMode = SpecialDrawModes.NONE;
 
@@ -2208,6 +2210,14 @@ public	void setBounds(final Rectangle bounds) {
 
 	public SpecialDrawModes getSpecialDrawMode() {
 		return specialDrawMode;
+	}
+	
+	public void setStatusBorderInner(boolean isBorderInner) {
+		_isStatusBorderInner = isBorderInner;
+	}
+	
+	public boolean isStatusBorderInner() {
+		return _isStatusBorderInner;
 	}
  
 }

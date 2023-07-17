@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -399,22 +400,23 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 
 	@Override
 	public Calendar getElementPlannedStartTime(final Object element) {
-		if (element instanceof final SlotVisit visit) {
-			final Slot<?> slot = visit.getSlotAllocation().getSlot();
-			if (slot != null) {
-				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();
-				if (windowStartWithSlotOrPortTime != null) {
-					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
-				}
+		if (element instanceof final SlotVisit visit && visit.getSlotAllocation().getCargoAllocation().getCargoType() == CargoType.FLEET) {
+			final PortVisitLateness pvl = visit.getLateness();
+			if (pvl != null && pvl.getLatenessInHours() > 0) {
+				final ZonedDateTime latenessStart = visit.getStart().minusHours(pvl.getLatenessInHours());
+				return GregorianCalendar.from(latenessStart);
 			}
 		}
-
 		return null;
 	}
 
 	@Override
 	public Calendar getElementPlannedEndTime(final Object element) {
-		if (element instanceof final SlotVisit visit) {
+		if (element instanceof final SlotVisit visit && visit.getSlotAllocation().getCargoAllocation().getCargoType() == CargoType.FLEET) {
+			final PortVisitLateness pvl = visit.getLateness();
+			if (pvl != null && pvl.getLatenessInHours() > 0) {
+				return GregorianCalendar.from(visit.getStart());
+			}
 			final Slot<?> slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
 				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();

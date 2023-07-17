@@ -52,4 +52,9 @@ public class ShippingRiskHighlighter extends ColourScheme {
 	public SpecialDrawModes getSpecialDrawMode(Object element) {
 		return SpecialDrawModes.NONE;
 	}
+
+	@Override
+	public boolean getIsBorderInner(Object element) {
+		return false;
+	}
 }

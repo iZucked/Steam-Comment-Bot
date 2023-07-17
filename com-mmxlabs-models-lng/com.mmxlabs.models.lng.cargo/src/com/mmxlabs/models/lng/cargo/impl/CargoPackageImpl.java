@@ -39,7 +39,9 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
+import com.mmxlabs.models.lng.cargo.InventoryFeedRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
+import com.mmxlabs.models.lng.cargo.InventoryOfftakeRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
@@ -204,6 +206,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass inventoryEventRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass inventoryOfftakeRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass inventoryFeedRowEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2408,6 +2424,36 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getInventoryOfftakeRow() {
+		return inventoryOfftakeRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getInventoryFeedRow() {
+		return inventoryFeedRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInventoryFeedRow_Cv() {
+		return (EAttribute)inventoryFeedRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getInventoryCapacityRow() {
 		return inventoryCapacityRowEClass;
 	}
@@ -2440,6 +2486,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EAttribute getInventoryCapacityRow_MaxVolume() {
 		return (EAttribute)inventoryCapacityRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInventoryCapacityRow_MinCV() {
+		return (EAttribute)inventoryCapacityRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInventoryCapacityRow_MaxCV() {
+		return (EAttribute)inventoryCapacityRowEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -3218,6 +3284,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDealSet_AllowExposure() {
+		return (EAttribute)dealSetEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDealSet_AllowHedging() {
+		return (EAttribute)dealSetEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getVesselGroupCanalParameters() {
 		return vesselGroupCanalParametersEClass;
 	}
@@ -3653,10 +3739,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(inventoryEventRowEClass, INVENTORY_EVENT_ROW__VOLUME_HIGH);
 		createEOperation(inventoryEventRowEClass, INVENTORY_EVENT_ROW___GET_RELIABLE_VOLUME);
 
+		inventoryOfftakeRowEClass = createEClass(INVENTORY_OFFTAKE_ROW);
+
+		inventoryFeedRowEClass = createEClass(INVENTORY_FEED_ROW);
+		createEAttribute(inventoryFeedRowEClass, INVENTORY_FEED_ROW__CV);
+
 		inventoryCapacityRowEClass = createEClass(INVENTORY_CAPACITY_ROW);
 		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__DATE);
 		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__MIN_VOLUME);
 		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__MAX_VOLUME);
+		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__MIN_CV);
+		createEAttribute(inventoryCapacityRowEClass, INVENTORY_CAPACITY_ROW__MAX_CV);
 
 		inventoryEClass = createEClass(INVENTORY);
 		createEReference(inventoryEClass, INVENTORY__PORT);
@@ -3750,6 +3843,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		dealSetEClass = createEClass(DEAL_SET);
 		createEReference(dealSetEClass, DEAL_SET__SLOTS);
 		createEReference(dealSetEClass, DEAL_SET__PAPER_DEALS);
+		createEAttribute(dealSetEClass, DEAL_SET__ALLOW_EXPOSURE);
+		createEAttribute(dealSetEClass, DEAL_SET__ALLOW_HEDGING);
 
 		vesselGroupCanalParametersEClass = createEClass(VESSEL_GROUP_CANAL_PARAMETERS);
 		createEReference(vesselGroupCanalParametersEClass, VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
@@ -3863,6 +3958,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g2 = createEGenericType(theFleetPackage.getVessel());
 		g1.getETypeArguments().add(g2);
 		vesselTypeGroupEClass.getEGenericSuperTypes().add(g1);
+		inventoryOfftakeRowEClass.getESuperTypes().add(this.getInventoryEventRow());
+		inventoryFeedRowEClass.getESuperTypes().add(this.getInventoryEventRow());
 		inventoryEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		canalBookingSlotEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		canalBookingsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -4172,7 +4269,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(vesselTypeGroupEClass, VesselTypeGroup.class, "VesselTypeGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVesselTypeGroup_VesselType(), this.getVesselType(), "vesselType", null, 1, 1, VesselTypeGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(inventoryEventRowEClass, InventoryEventRow.class, "InventoryEventRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(inventoryEventRowEClass, InventoryEventRow.class, "InventoryEventRow", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getInventoryEventRow_StartDate(), theDateTimePackage.getLocalDate(), "startDate", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryEventRow_EndDate(), theDateTimePackage.getLocalDate(), "endDate", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryEventRow_Period(), this.getInventoryFrequency(), "period", null, 0, 1, InventoryEventRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4185,15 +4282,22 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getInventoryEventRow__GetReliableVolume(), ecorePackage.getEInt(), "getReliableVolume", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEClass(inventoryOfftakeRowEClass, InventoryOfftakeRow.class, "InventoryOfftakeRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(inventoryFeedRowEClass, InventoryFeedRow.class, "InventoryFeedRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInventoryFeedRow_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, InventoryFeedRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(inventoryCapacityRowEClass, InventoryCapacityRow.class, "InventoryCapacityRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getInventoryCapacityRow_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryCapacityRow_MinVolume(), ecorePackage.getEInt(), "minVolume", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventoryCapacityRow_MaxVolume(), ecorePackage.getEInt(), "maxVolume", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryCapacityRow_MinCV(), ecorePackage.getEDouble(), "minCV", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInventoryCapacityRow_MaxCV(), ecorePackage.getEDouble(), "maxCV", null, 0, 1, InventoryCapacityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(inventoryEClass, Inventory.class, "Inventory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getInventory_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getInventory_Feeds(), this.getInventoryEventRow(), null, "feeds", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getInventory_Offtakes(), this.getInventoryEventRow(), null, "offtakes", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventory_Feeds(), this.getInventoryFeedRow(), null, "feeds", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getInventory_Offtakes(), this.getInventoryOfftakeRow(), null, "offtakes", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInventory_Capacities(), this.getInventoryCapacityRow(), null, "capacities", null, 0, -1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInventory_FacilityType(), this.getInventoryFacilityType(), "facilityType", null, 0, 1, Inventory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -4295,6 +4399,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getDealSet_Slots(), g1, null, "slots", null, 0, -1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDealSet_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDealSet_AllowExposure(), ecorePackage.getEBoolean(), "allowExposure", null, 0, 1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDealSet_AllowHedging(), ecorePackage.getEBoolean(), "allowHedging", null, 0, 1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselGroupCanalParametersEClass, VesselGroupCanalParameters.class, "VesselGroupCanalParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAVesselSet());
@@ -4583,6 +4689,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			   "unit", "$",
 			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getInventoryFeedRow_Cv(),
+		   source,
+		   new String[] {
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getInventoryCapacityRow_MinCV(),
+		   source,
+		   new String[] {
+			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getInventoryCapacityRow_MaxCV(),
+		   source,
+		   new String[] {
+			   "formatString", "#0.###"
 		   });
 		addAnnotation
 		  (getCanalBookings_ArrivalMarginHours(),

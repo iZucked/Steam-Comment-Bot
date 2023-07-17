@@ -95,6 +95,7 @@ import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -125,6 +126,41 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 		
 		addColumn("Earliest Date", dealSetStartDateFormatter(), null);
 		addColumn("Estimated P&L", dealSetPNLEstimateFormatter(), null);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INDIVIDUAL_EXPOSURES)) {
+			addTypicalColumn("Exposure", new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getDealSet_AllowExposure(),//
+					getCommandHandler()) {
+				@Override
+				public void doSetValue(final Object object, final Object value) {
+					if (object instanceof DealSet) {
+						super.doSetValue(object, value);
+					}
+				}
+				
+				@Override
+				public Object getValue(final Object object) {
+					if (object instanceof DealSet) {
+						return super.getValue(object);
+					}
+					return false;
+				}
+			});
+			addTypicalColumn("Hedging", new BooleanFlagAttributeManipulator(CargoPackage.eINSTANCE.getDealSet_AllowHedging(),//
+					getCommandHandler()) {
+				@Override
+				public void doSetValue(final Object object, final Object value) {
+					if (object instanceof DealSet) {
+						super.doSetValue(object, value);
+					}
+				}
+				@Override
+				public Object getValue(final Object object) {
+					if (object instanceof DealSet) {
+						return super.getValue(object);
+					}
+					return false;
+				}
+			});
+		}
 		
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -151,8 +187,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 
 			@Override
 			public @Nullable String render(Object object) {
-				if (object instanceof DealSet) {
-					final DealSet ds = (DealSet) object;
+				if (object instanceof final DealSet ds) {
 					LocalDate earliestSlot = LocalDate.MAX;
 					if (!ds.getSlots().isEmpty()) {
 						earliestSlot = ds.getSlots().stream().map(Slot::getWindowStart).min(LocalDate::compareTo).get();
@@ -208,8 +243,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (schedule != null) {
 							long totalPNL = 0;
-							if (object instanceof DealSet) {
-								final DealSet ds = (DealSet) object;
+							if (object instanceof final DealSet ds) {
 								
 								if (schedule.getSlotAllocations() != null && !ds.getSlots().isEmpty()) {
 									final List<SlotAllocation> salist = schedule.getSlotAllocations()
@@ -231,8 +265,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 									}
 								}
 								
-							} else if (object instanceof Slot) {
-								final Slot ls = (Slot) object;
+							} else if (object instanceof final Slot ls) {
 								if (schedule.getSlotAllocations() != null) {
 									final List<SlotAllocation> salist = schedule.getSlotAllocations()
 											.stream().filter(sa -> ls == sa.getSlot()).collect(Collectors.toList());
@@ -245,8 +278,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 										}
 									}
 								}
-							} else if (object instanceof PaperDeal) {
-								final PaperDeal pd = (PaperDeal) object;
+							} else if (object instanceof final PaperDeal pd) {
 								if (schedule.getPaperDealAllocations() != null) {
 									final List<PaperDealAllocation> pdalist = schedule.getPaperDealAllocations()
 											.stream().filter(pda -> pd == pda.getPaperDeal()).collect(Collectors.toList());
@@ -287,12 +319,10 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 		@Override
 		public Object[] getElements(final Object inputElement) {
 
-			if (inputElement instanceof Collection<?>) {
-				Collection<?> collection = (Collection<?>) inputElement;
+			if (inputElement instanceof final Collection<?> collection) {
 				return collection.toArray();
 			}
-			if (inputElement instanceof LNGScenarioModel) {
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
+			if (inputElement instanceof final LNGScenarioModel scenarioModel) {
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 				final List<DealSet> dealSets = cargoModel.getDealSets();
 				if (dealSets != null) {
@@ -309,14 +339,12 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof Collection<?>) {
-				Collection<?> collection = (Collection<?>) parentElement;
+			if (parentElement instanceof final Collection<?> collection) {
 				return collection.toArray();
 			}
-			if (parentElement instanceof DealSet) {
+			if (parentElement instanceof final DealSet ds) {
 				boolean goAhead = false;
 				final List<Object> objects = new ArrayList<Object>();
-				final DealSet ds = (DealSet) parentElement;
 				if (ds.getSlots() != null) {
 					objects.addAll(ds.getSlots());
 					goAhead = true;
@@ -379,12 +407,11 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						try {
 							getScenarioEditingLocation().setDisableUpdates(true);
 							
-							if (getLastSelection() instanceof TreeSelection) {
-								final TreeSelection ts = (TreeSelection) getLastSelection();
+							if (getLastSelection() instanceof final TreeSelection ts) {
 								final TreePath[] tp = ts.getPaths();
 								if (tp.length == 0) return;
 								final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-								final List<DealSet> dealsToDelete = new ArrayList<DealSet>();
+								final List<DealSet> dealsToDelete = new ArrayList<>();
 								final Map<DealSet, List<Object>> featuresToRemove = new HashMap<DealSet, List<Object>>();
 								for (final TreePath tpo :tp) {
 									final int cnt = tpo.getSegmentCount();
@@ -567,21 +594,13 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	
 	private int dateToQuarter(final LocalDate date) {
 		switch (date.getMonth()) {
-		case JANUARY:
-		case FEBRUARY:
-		case MARCH:
+		case JANUARY,FEBRUARY,MARCH:
 			return 1;
-		case APRIL:
-		case MAY:
-		case JUNE:
+		case APRIL,MAY,JUNE:
 			return 2;
-		case JULY:
-		case AUGUST:
-		case SEPTEMBER:
+		case JULY,AUGUST,SEPTEMBER:
 			return 3;
-		case OCTOBER:
-		case NOVEMBER:
-		case DECEMBER:
+		case OCTOBER,NOVEMBER,DECEMBER:
 			return 4;
 		default:
 			throw new IllegalStateException();

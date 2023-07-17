@@ -22,13 +22,13 @@ import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -41,6 +41,8 @@ import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 
+
+@Disabled("Cannot test drive the web page on build server. IE11 No longer works and embedded Edge is forbidden to run in SYSTEM user")
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
 @ExtendWith(SWTBotJunit5Extension.class)

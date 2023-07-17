@@ -26,7 +26,9 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import com.mmxlabs.models.lng.cargo.InventoryFeedRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
+import com.mmxlabs.models.lng.cargo.InventoryOfftakeRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -83,7 +85,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 				final List<InventoryChangeEvent> events = new LinkedList<>();
 
-				for (final InventoryEventRow r : facility.getFeeds()) {
+				for (final InventoryFeedRow r : facility.getFeeds()) {
 					minDate = f_minDate.apply(minDate, r.getStartDate());
 					maxDate = f_maxDate.apply(maxDate, r.getStartDate());
 
@@ -134,7 +136,7 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 				// Start of the inventory data
 //				final LocalDate startOfInventoryData = minDate;
 
-				for (final InventoryEventRow r : facility.getOfftakes()) {
+				for (final InventoryOfftakeRow r : facility.getOfftakes()) {
 
 					minDate = f_minDate.apply(minDate, r.getStartDate());
 					maxDate = f_maxDate.apply(maxDate, r.getStartDate());
@@ -268,11 +270,16 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 
 				final TreeMap<LocalDate, Integer> minLevels = new TreeMap<>();
 				final TreeMap<LocalDate, Integer> maxLevels = new TreeMap<>();
+				
+				final TreeMap<LocalDate, Double> minCVLevels = new TreeMap<>();
+				final TreeMap<LocalDate, Double> maxCVLevels = new TreeMap<>();
 
 				for (final InventoryCapacityRow r : facility.getCapacities()) {
 					if (r.getDate() == null) continue;
 					minLevels.put(r.getDate(), r.getMinVolume());
 					maxLevels.put(r.getDate(), r.getMaxVolume());
+					minCVLevels.put(r.getDate(), r.getMinCV());
+					maxCVLevels.put(r.getDate(), r.getMaxCV());
 				}
 
 				Collections.sort(events, (a, b) -> a.getDate().compareTo(b.getDate()));
@@ -296,8 +303,10 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					evt.setCurrentLevel(inventoryLevel);
 					{
 						final Entry<LocalDate, Integer> minLevel = minLevels.floorEntry(evt.getDate().toLocalDate());
+						final Entry<LocalDate, Double> minCVLevel = minCVLevels.floorEntry(evt.getDate().toLocalDate());
 						if (minLevel != null) {
 							evt.setCurrentMin(minLevel.getValue());
+							evt.setCurrentCVMin(minCVLevel.getValue());
 							if (evt.getCurrentLevel() < evt.getCurrentMin()) {
 								evt.setBreachedMin(true);
 							}
@@ -305,8 +314,10 @@ public class InventoryLevelsOutputScheduleProcessor implements IOutputSchedulePr
 					}
 					{
 						final Entry<LocalDate, Integer> maxLevel = maxLevels.floorEntry(evt.getDate().toLocalDate());
+						final Entry<LocalDate, Double> maxCVLevel = maxCVLevels.floorEntry(evt.getDate().toLocalDate());
 						if (maxLevel != null) {
 							evt.setCurrentMax(maxLevel.getValue());
+							evt.setCurrentCVMax(maxCVLevel.getValue());
 							if (evt.getCurrentLevel() > evt.getCurrentMax()) {
 								evt.setBreachedMax(true);
 							}

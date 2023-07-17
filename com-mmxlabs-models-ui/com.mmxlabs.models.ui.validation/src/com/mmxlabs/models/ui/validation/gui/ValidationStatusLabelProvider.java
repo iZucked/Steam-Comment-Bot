@@ -5,10 +5,15 @@
 package com.mmxlabs.models.ui.validation.gui;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -19,7 +24,9 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
  * @author Simon Goodall
  * 
  */
-public class ValidationStatusLabelProvider implements ILabelProvider {
+public class ValidationStatusLabelProvider implements ILabelProvider, IColorProvider {
+
+	private final Color errorColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 
 	private final Image imgError;
 	private final Image imgWarn;
@@ -34,9 +41,9 @@ public class ValidationStatusLabelProvider implements ILabelProvider {
 
 	@Override
 	public void dispose() {
-		
+
 	}
-	
+
 	@Override
 	public Image getImage(final Object element) {
 		if (element instanceof GroupedValidationStatusContentProvider.Node node) {
@@ -56,8 +63,8 @@ public class ValidationStatusLabelProvider implements ILabelProvider {
 				return imgInfo;
 			}
 		}
-		if (element instanceof IStatus) {
-			final int severity = ((IStatus) element).getSeverity();
+		if (element instanceof IStatus status) {
+			final int severity = status.getSeverity();
 
 			if (severity == IStatus.ERROR) {
 				return imgError;
@@ -72,12 +79,26 @@ public class ValidationStatusLabelProvider implements ILabelProvider {
 
 	@Override
 	public String getText(final Object element) {
-		if (element instanceof GroupedValidationStatusContentProvider.Node) {
-			return ((GroupedValidationStatusContentProvider.Node) element).desc;
+		if (element instanceof GroupedValidationStatusContentProvider.Node node) {
+			return node.desc;
 		}
-		if (element instanceof IStatus) {
-			return ((IStatus) element).getMessage();
+		if (element instanceof IStatus status) {
+			return status.getMessage();
 		}
+		return null;
+	}
+
+	@Override
+	public Color getForeground(final Object element) {
+		if (element instanceof DetailConstraintStatusDecorator dcsd && dcsd.isFlagged()) {
+			return errorColour;
+		}
+
+		return null;
+	}
+
+	@Override
+	public Color getBackground(Object element) {
 		return null;
 	}
 

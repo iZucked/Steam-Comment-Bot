@@ -104,6 +104,33 @@ public interface IPaintManager {
 	void drawPlannedDates(GanttComposite ganttComposite, ISettings settings, IColorManager colorManager, GanttEvent ge, GC gc, boolean threeDee, int x, int y, int eventWidth, Rectangle bounds);
 
 	/**
+	 * Draws the lateness bars.
+	 * 
+	 * @param ganttComposite
+	 *            GanttComposite parent
+	 * @param settings
+	 *            ISettings
+	 * @param colorManager
+	 *            IColorManager
+	 * @param ge
+	 *            GanttEvent
+	 * @param gc
+	 *            GC
+	 * @param threeDee
+	 *            Whether 3D events is on or off.
+	 * @param x
+	 *            x location
+	 * @param y
+	 *            y location
+	 * @param eventWidth
+	 *            Width of event
+	 * @param bounds
+	 *            full bounds of draw area
+	 */
+	void drawLatenessBars(GanttComposite ganttComposite, ISettings _settings, IColorManager _colorManager, GanttEvent ge, GC gc, boolean _threeDee, int xStart, int yDrawPos, int xEventWidth,
+			Rectangle bounds);
+
+	/**
 	 * Draws the little plaque showing how many number of days an event spans over.
 	 * 
 	 * @param ganttComposite

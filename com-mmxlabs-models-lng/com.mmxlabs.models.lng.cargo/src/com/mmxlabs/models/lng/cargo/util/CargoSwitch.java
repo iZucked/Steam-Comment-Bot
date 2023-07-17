@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
-import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
@@ -288,6 +287,20 @@ public class CargoSwitch<T1> extends Switch<T1> {
 			case CargoPackage.INVENTORY_EVENT_ROW: {
 				InventoryEventRow inventoryEventRow = (InventoryEventRow)theEObject;
 				T1 result = caseInventoryEventRow(inventoryEventRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.INVENTORY_OFFTAKE_ROW: {
+				InventoryOfftakeRow inventoryOfftakeRow = (InventoryOfftakeRow)theEObject;
+				T1 result = caseInventoryOfftakeRow(inventoryOfftakeRow);
+				if (result == null) result = caseInventoryEventRow(inventoryOfftakeRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.INVENTORY_FEED_ROW: {
+				InventoryFeedRow inventoryFeedRow = (InventoryFeedRow)theEObject;
+				T1 result = caseInventoryFeedRow(inventoryFeedRow);
+				if (result == null) result = caseInventoryEventRow(inventoryFeedRow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -710,6 +723,36 @@ public class CargoSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseInventoryEventRow(InventoryEventRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Inventory Offtake Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Inventory Offtake Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseInventoryOfftakeRow(InventoryOfftakeRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Inventory Feed Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Inventory Feed Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseInventoryFeedRow(InventoryFeedRow object) {
 		return null;
 	}
 

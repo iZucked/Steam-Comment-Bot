@@ -52,6 +52,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager;
 import org.eclipse.equinox.internal.p2.operations.IStatusCodes;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
@@ -426,6 +427,8 @@ public class LiNGOUpdater {
 					}
 					if (uri.getHost().contains("update.minimaxlabs.com")) {
 						withAuthHeader(url, request);
+					} else if (uri.getHost().contains("updates.minimaxlabs.com")) {
+						withAuthHeader(url, request);
 					}
 				} catch (final URISyntaxException e) {
 					throw new IOException(e);
@@ -641,45 +644,49 @@ public class LiNGOUpdater {
 			}
 			final ProvisioningSession session = new ProvisioningSession(agent);
 
-			final UpdateOperation operation = new UpdateOperation(session);
-
+			final IMetadataRepositoryManager manager = new MetadataRepositoryManager(agent);
 			final URI updateSiteURI = new URI(UPDATE_SITE_URL);
-			operation.getProvisioningContext().setArtifactRepositories(updateSiteURI);
-			operation.getProvisioningContext().setMetadataRepositories(updateSiteURI);
+			try {
+				final UpdateOperation operation = new UpdateOperation(session);
 
-			final IStatus status = operation.resolveModal(progress.split(10));
+				operation.getProvisioningContext().setArtifactRepositories(updateSiteURI);
+				operation.getProvisioningContext().setMetadataRepositories(updateSiteURI);
 
-			if (!status.isOK()) {
+				final IStatus status = operation.resolveModal(progress.split(10));
 
-				if (status.getCode() == IStatusCodes.NOTHING_TO_UPDATE) {
-					Display.getDefault().asyncExec(() -> {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "No updates found in update file");
-					});
+				if (!status.isOK()) {
+					if (status.getCode() == IStatusCodes.NOTHING_TO_UPDATE) {
+						Display.getDefault().asyncExec(() -> {
+							MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "No updates found in update file");
+						});
+					} else {
+						Display.getDefault().asyncExec(() -> {
+							MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Update was unable to complete " + status.getMessage());
+						});
+					}
+					return false;
+				}
+
+				final ProvisioningJob provisioningJob = operation.getProvisioningJob(progress.split(10));
+
+				// Skip the bundle verification step as we will assume content is validated from
+				// zip
+				if (provisioningJob instanceof final ProfileModificationJob profileModificationJob) {
+					profileModificationJob.setPhaseSet(PhaseSetFactory.createDefaultPhaseSetExcluding(new String[] { PhaseSetFactory.PHASE_CHECK_TRUST }));
+				}
+
+				final IStatus st = provisioningJob.runModal(progress.split(30));
+				if (st.isOK()) {
+					return true;
 				} else {
 					Display.getDefault().asyncExec(() -> {
-						MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Update was unable to complete " + status.getMessage());
+						MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Update was unable to complete " + st.getMessage());
 					});
 				}
-				return false;
+			} finally {
+				// Try to clean up updates urls
+				manager.removeRepository(updateSiteURI);
 			}
-
-			final ProvisioningJob provisioningJob = operation.getProvisioningJob(progress.split(10));
-
-			// Skip the bundle verification step as we will assume content is validated from
-			// zip
-			if (provisioningJob instanceof final ProfileModificationJob profileModificationJob) {
-				profileModificationJob.setPhaseSet(PhaseSetFactory.createDefaultPhaseSetExcluding(new String[] { PhaseSetFactory.PHASE_CHECK_TRUST }));
-			}
-
-			final IStatus st = provisioningJob.runModal(progress.split(30));
-			if (st.isOK()) {
-				return true;
-			} else {
-				Display.getDefault().asyncExec(() -> {
-					MessageDialog.openError(Display.getDefault().getActiveShell(), "Update failed", "Update was unable to complete " + st.getMessage());
-				});
-			}
-
 		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 			Display.getDefault().asyncExec(() -> {

@@ -25,6 +25,8 @@ import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.common.paperdeals.PaperDealsLookupData;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -122,20 +124,21 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 					if (individualExposures) {
 						cargoModel.getLoadSlots().forEach( s-> {
 							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
-								String prefix = "FP-";
-								if (s.isDESPurchase()) {
-									prefix = "DP-";
-								}
-								lookupData.slotsToInclude.add(prefix + s.getName());
+								lookupData.slotsToInclude.add(determinePrefix(s) + s.getName());
 							}
 						});
 						cargoModel.getDischargeSlots().forEach( s-> {
 							if (s.isComputeExposure() && !(s instanceof SpotSlot)) {
-								String prefix = "DS-";
-								if (s.isFOBSale()) {
-									prefix = "FS-";
+								lookupData.slotsToInclude.add(determinePrefix(s) + s.getName());
+							}
+						});
+						cargoModel.getDealSets().forEach( ds -> {
+							for (final Slot<?> s : ds.getSlots()) {
+								if (ds.isAllowExposure()) {
+									lookupData.slotsToInclude.add(determinePrefix(s) + s.getName());
+								} else {
+									lookupData.slotsToInclude.removeIf(f -> f.equalsIgnoreCase(determinePrefix(s) + s.getName()));
 								}
-								lookupData.slotsToInclude.add(prefix + s.getName());
 							}
 						});
 					}
@@ -233,5 +236,20 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 			return new BasicInstrumentData(settleStrategy.getName().toLowerCase(), settleStrategy.getDayOfTheMonth(), settleStrategy.isLastDayOfTheMonth(), 
 					pricingPeriod, hedgingPeriod);
 		}
+	}
+	
+	private String determinePrefix(final Slot<?> slot) {
+		String prefix = "FP-";
+		if (slot instanceof final LoadSlot s) {
+			if (s.isDESPurchase()) {
+				prefix = "DP-";
+			}
+		} else if (slot instanceof final DischargeSlot s) {
+			prefix = "DS-";
+			if (s.isFOBSale()) {
+				prefix = "FS-";
+			}
+		}
+		return prefix;
 	}
 }

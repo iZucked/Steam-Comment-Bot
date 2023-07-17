@@ -6,21 +6,19 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import java.time.LocalDateTime;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-
-import java.time.LocalDateTime;
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +33,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getCurrentLevel <em>Current Level</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getCurrentMin <em>Current Min</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getCurrentMax <em>Current Max</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getCurrentCVMin <em>Current CV Min</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getCurrentCVMax <em>Current CV Max</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getEvent <em>Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.InventoryChangeEventImpl#getOpenSlotAllocation <em>Open Slot Allocation</em>}</li>
@@ -144,6 +144,46 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * @ordered
 	 */
 	protected int currentMax = CURRENT_MAX_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCurrentCVMin() <em>Current CV Min</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentCVMin()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double CURRENT_CV_MIN_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getCurrentCVMin() <em>Current CV Min</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentCVMin()
+	 * @generated
+	 * @ordered
+	 */
+	protected double currentCVMin = CURRENT_CV_MIN_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCurrentCVMax() <em>Current CV Max</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentCVMax()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double CURRENT_CV_MAX_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getCurrentCVMax() <em>Current CV Max</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentCVMax()
+	 * @generated
+	 * @ordered
+	 */
+	protected double currentCVMax = CURRENT_CV_MAX_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getEvent() <em>Event</em>}' reference.
@@ -355,6 +395,52 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 	 * @generated
 	 */
 	@Override
+	public double getCurrentCVMin() {
+		return currentCVMin;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCurrentCVMin(double newCurrentCVMin) {
+		double oldCurrentCVMin = currentCVMin;
+		currentCVMin = newCurrentCVMin;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN, oldCurrentCVMin, currentCVMin));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getCurrentCVMax() {
+		return currentCVMax;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCurrentCVMax(double newCurrentCVMax) {
+		double oldCurrentCVMax = currentCVMax;
+		currentCVMax = newCurrentCVMax;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX, oldCurrentCVMax, currentCVMax));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public InventoryEventRow getEvent() {
 		if (event != null && event.eIsProxy()) {
 			InternalEObject oldEvent = (InternalEObject)event;
@@ -533,6 +619,10 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 				return getCurrentMin();
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_MAX:
 				return getCurrentMax();
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN:
+				return getCurrentCVMin();
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX:
+				return getCurrentCVMax();
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__EVENT:
 				if (resolve) return getEvent();
 				return basicGetEvent();
@@ -572,6 +662,12 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 				return;
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_MAX:
 				setCurrentMax((Integer)newValue);
+				return;
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN:
+				setCurrentCVMin((Double)newValue);
+				return;
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX:
+				setCurrentCVMax((Double)newValue);
 				return;
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__EVENT:
 				setEvent((InventoryEventRow)newValue);
@@ -615,6 +711,12 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_MAX:
 				setCurrentMax(CURRENT_MAX_EDEFAULT);
 				return;
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN:
+				setCurrentCVMin(CURRENT_CV_MIN_EDEFAULT);
+				return;
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX:
+				setCurrentCVMax(CURRENT_CV_MAX_EDEFAULT);
+				return;
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__EVENT:
 				setEvent((InventoryEventRow)null);
 				return;
@@ -652,6 +754,10 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 				return currentMin != CURRENT_MIN_EDEFAULT;
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_MAX:
 				return currentMax != CURRENT_MAX_EDEFAULT;
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MIN:
+				return currentCVMin != CURRENT_CV_MIN_EDEFAULT;
+			case SchedulePackage.INVENTORY_CHANGE_EVENT__CURRENT_CV_MAX:
+				return currentCVMax != CURRENT_CV_MAX_EDEFAULT;
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__EVENT:
 				return event != null;
 			case SchedulePackage.INVENTORY_CHANGE_EVENT__SLOT_ALLOCATION:
@@ -686,6 +792,10 @@ public class InventoryChangeEventImpl extends EObjectImpl implements InventoryCh
 		result.append(currentMin);
 		result.append(", currentMax: ");
 		result.append(currentMax);
+		result.append(", currentCVMin: ");
+		result.append(currentCVMin);
+		result.append(", currentCVMax: ");
+		result.append(currentCVMax);
 		result.append(", breachedMin: ");
 		result.append(breachedMin);
 		result.append(", breachedMax: ");
