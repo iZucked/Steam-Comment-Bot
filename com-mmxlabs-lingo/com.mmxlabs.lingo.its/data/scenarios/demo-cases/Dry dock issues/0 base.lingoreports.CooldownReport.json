@@ -3,8 +3,7 @@
   "Vessel" : "Methane Becki Anne",
   "Cause ID" : "Methane Becki Anne",
   "ID" : "load-cargo-32",
-  "Date" : "31/12/10",
-  "Time" : "07:00",
+  "Date" : "31/12/10 07:00",
   "Port" : "Punta Europa",
   "Cost" : "231,198"
 }, {
@@ -12,8 +11,7 @@
   "Vessel" : "Methane Heather Sally",
   "Cause ID" : "Dry Dock",
   "ID" : "load-cargo-78",
-  "Date" : "01/04/11",
-  "Time" : "07:00",
+  "Date" : "01/04/11 07:00",
   "Port" : "Damietta",
   "Cost" : "231,424"
 } ]
