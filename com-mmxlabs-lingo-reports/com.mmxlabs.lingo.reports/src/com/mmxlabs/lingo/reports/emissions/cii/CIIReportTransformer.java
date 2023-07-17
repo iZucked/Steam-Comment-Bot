@@ -1,6 +1,7 @@
 package com.mmxlabs.lingo.reports.emissions.cii;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.Period;
 import java.time.Year;
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 		if (pinnedPair != null) {
 			otherPairsWithMaybePinnedOneAsWell.add(pinnedPair);
 		}
+		
+		if (otherPairsWithMaybePinnedOneAsWell.isEmpty()) {
+			return new ArrayList<>();
+		}
 
 		findYearsRange(pinnedPair, otherPairs);
 
@@ -71,7 +76,7 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 					continue;
 				}
 				
-				final LocalDate newYearMidPoint = LocalDate.of(startDate.getYear(), 12, 31);
+				final LocalDate newYearMidPoint = LocalDate.of(startDate.getYear(), Month.DECEMBER.getValue(), Month.DECEMBER.maxLength());
 				final double earlyEventLinearInterpolationCoefficient = Period.between(startDate, newYearMidPoint).getDays() / (double) Period.between(startDate, endDate).getDays();
 				final double lateEventLinearInterpolationCoefficient = 1 - earlyEventLinearInterpolationCoefficient;
 
