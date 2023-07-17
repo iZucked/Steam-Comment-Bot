@@ -36,7 +36,8 @@ public class UtilsCII {
 		A(0), 
 		B(1), 
 		C(2), 
-		D(3);
+		D(3),
+		E(4);
 		
 		public final int index;
 		
@@ -69,6 +70,9 @@ public class UtilsCII {
 		final double[][] letterGradeBoundaries = new double[2][4];
 		//
 		for (final Grade grade : Grade.values()) {
+			if (grade == Grade.E) {
+				break;
+			}
 			final double lowerExponentBoundary = GRADES_EXPONENT_BOUNDARY_TABLES[DWT_LESS_THAN_100K][grade.index];
 			final double lowerGradeBoundary = Math.exp(lowerExponentBoundary) * requiredCII;
 			letterGradeBoundaries[DWT_LESS_THAN_100K][grade.index] = lowerGradeBoundary;
@@ -86,6 +90,9 @@ public class UtilsCII {
 		double prevBoundary = -1;
 		Grade result = null;
 		for (final Grade grade : Grade.values()) {
+			if (grade == Grade.E) {
+				return Grade.E.toString();
+			}
 			final double boundary = gradesTableForThatVessel[deadweightIndex][grade.index];
 			if (prevBoundary <= ciiValue && ciiValue < boundary) {
 				result = grade;
