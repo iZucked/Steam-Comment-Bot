@@ -3389,7 +3389,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			alreadyDrawn.add(ge);
 
 			// draw it
-			drawOneEvent(gc, ge, bounds, gs.isBuySell());
+			drawOneEvent(gc, ge, bounds, gs.hasFixedRowSize());
 		}
 	}
 
@@ -3508,7 +3508,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 		final int actualFixedRowHeight;
 		final int actualEventHeight;
-		if (gs.isBuySell()) {
+		if (gs.hasFixedRowSize()) {
 			actualFixedRowHeight = GanttChartParameters.buySellFixedRowHeight();
 			actualEventHeight = GanttChartParameters.buySellEventHeight();
 		} else {
@@ -3615,7 +3615,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
 			ge.setHorizontalLineTopY(yStart);
 
-			if (fixedHeight && gs.isBuySell()) {
+			if (fixedHeight && gs.hasFixedRowSize()) {
 				int extra = 0;
 
 				int halfExtra = ((fixedRowHeight / 2) - (actualEventHeight / 2));

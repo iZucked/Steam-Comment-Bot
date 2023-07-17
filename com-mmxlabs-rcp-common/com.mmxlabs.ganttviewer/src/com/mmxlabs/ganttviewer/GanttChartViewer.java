@@ -67,6 +67,8 @@ public class GanttChartViewer extends StructuredViewer {
 
 	private final IGanttEventListener ganttEventListener;
 
+	private GanttSectionSizeProvider ganttSectionSizeProvider;
+
 	public GanttChartViewer(final Composite parent) {
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 	}
@@ -111,6 +113,10 @@ public class GanttChartViewer extends StructuredViewer {
 
 		// Register listener
 		ganttChart.addGanttEventListener(ganttEventListener);
+	}
+	
+	public void setGanttSectionSizeProvider(GanttSectionSizeProvider provider) {
+		this.ganttSectionSizeProvider = provider;
 	}
 
 	@Override
@@ -278,7 +284,8 @@ public class GanttChartViewer extends StructuredViewer {
 			ganttChart.getGanttComposite().setEventSpacerOverride(GanttChartParameters.getEventSpacerSize());
 			for (final Object r : resources) {
 				final String rName = getLabelProviderText(labelProvider, r);
-				final GanttSection section = new GanttSection(ganttChart, rName);
+				final boolean hasFixedRowSize = ganttSectionSizeProvider != null && ganttSectionSizeProvider.requiresFixedRowHeight(r);
+				final GanttSection section = new GanttSection(ganttChart, rName, hasFixedRowSize);
 				final Image img = getLabelProviderImage(labelProvider, r);
 				section.setImage(img);
 				section.setData(r);

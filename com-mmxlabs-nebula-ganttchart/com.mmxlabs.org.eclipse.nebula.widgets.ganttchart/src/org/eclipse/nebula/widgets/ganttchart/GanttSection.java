@@ -61,6 +61,8 @@ public class GanttSection implements IFillBackgroundColors {
 	private boolean visible = true;
 	private Image image;
 	private Object data;
+	
+	private boolean isFixedRowSizeSection;
 
 	private GanttSection() {
 		this._ganttEvents = new ArrayList<>();
@@ -76,11 +78,7 @@ public class GanttSection implements IFillBackgroundColors {
 	 *            GanttSection name
 	 */
 	public GanttSection(final GanttChart parent, final String name) {
-		this();
-		this._name = name;
-		this._parent = parent.getGanttComposite();
-		this._parent.addSection(this);
-		this._fillColorManager = parent.getColorManager();
+		this(parent, name, false);
 	}
 
 	/**
@@ -99,6 +97,23 @@ public class GanttSection implements IFillBackgroundColors {
 		this._parent = parent.getGanttComposite();
 		this._parent.addSection(this);
 		this._fillColorManager = fillManager;
+	}
+
+	/**
+	 * Creates a new GanttSection. Specify that a section is a Buy or Sell section.
+	 * 
+	 * @param parent
+	 *            GanttChart
+	 * @param name
+	 *            GanttSection name
+	 */
+	public GanttSection(final GanttChart parent, String name, boolean isBuySell) {
+		this();
+		this._name = name;
+		this._parent = parent.getGanttComposite();
+		this._parent.addSection(this);
+		this._fillColorManager = parent.getColorManager();
+		this.isFixedRowSizeSection = isBuySell;
 	}
 
 	/**
@@ -480,7 +495,7 @@ public class GanttSection implements IFillBackgroundColors {
 		return this.data;
 	}
 
-	public boolean isBuySell() {
-		return _name.startsWith("Buy") || _name.startsWith("Sell");
+	public boolean hasFixedRowSize() {
+		return isFixedRowSizeSection;
 	}
 }

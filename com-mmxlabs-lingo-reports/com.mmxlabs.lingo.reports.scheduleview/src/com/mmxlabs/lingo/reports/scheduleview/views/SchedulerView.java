@@ -791,6 +791,7 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		}
 
 		viewer.setLabelProvider(labelProvider);
+		viewer.setGanttSectionSizeProvider(new ScheduleChartSizeProvider());
 		viewerComparator = new ScenarioViewerComparator(scenarioComparisonService);
 
 		// Legend (after label provider has been set)
