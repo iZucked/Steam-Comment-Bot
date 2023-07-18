@@ -1522,9 +1522,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
-				if (details.getIdleTime() <= hoursBeforeCooldownsNoLongerForced //
+				if ((details.getIdleTime() <= hoursBeforeCooldownsNoLongerForced 
+						&& details.getOptions().getFromPortSlot().getPortType() != PortType.CharterLength)//
 						|| details.getOptions().getToPortSlot().getPortType() == PortType.End //
-						|| details.getOptions().getFromPortSlot().getPortType() != PortType.CharterLength
 				) {
 					// TODO: Original check also looked at the should be cold requirement - not
 					// really needed?
