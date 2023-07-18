@@ -45,6 +45,6 @@ public class CIIGradeFinder {
 				}
 			}
 		}
-		return UtilsCII.getLetterGrade(vessel, cumulativeCII.findCII());
+		return UtilsCII.getLetterGrade(vessel, cumulativeCII.findCII(), year);
 	}
 }

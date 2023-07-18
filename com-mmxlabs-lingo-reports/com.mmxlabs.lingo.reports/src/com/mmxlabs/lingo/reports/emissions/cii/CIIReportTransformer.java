@@ -93,7 +93,7 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 			vesselYearCIIs.forEach((vessel, accumulatedCIIs) -> {
 				final Map<Year, String> vesselGradesMap = new HashMap<>();
 				accumulatedCIIs.forEach((year, cumulativeCII) -> {
-					final String letterGrade = UtilsCII.getLetterGrade(vessel, cumulativeCII.findCII());
+					final String letterGrade = UtilsCII.getLetterGrade(vessel, cumulativeCII.findCII(), year);
 					vesselGradesMap.put(year, letterGrade);
 				});
 				outputData.add(new CIIGradesData(vessel, vesselGradesMap, scenarioResult));

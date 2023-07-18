@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.io.File;
+import java.time.Year;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 						processFuelUsageEvent(model, fuelUsageEvent);
 					}
 					
-					model.setCII(vessel, model.totalEmission, journeyDistance);
+					model.setCII(vessel, model.totalEmission, journeyDistance, Year.from(event.getStart().toLocalDate()));
 					model.totalEmission += EmissionModelUtils.METHANE_CO2_EQUIVALENT * model.methaneSlip;
 					models.add(model);
 				}

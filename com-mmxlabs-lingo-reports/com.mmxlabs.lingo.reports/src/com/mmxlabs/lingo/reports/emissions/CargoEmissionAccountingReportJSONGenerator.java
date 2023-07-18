@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.emissions;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -175,7 +176,9 @@ public class CargoEmissionAccountingReportJSONGenerator {
 
 	private static void calculateCII(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model, final Vessel vessel) {
 		double distanceAccumulator = 0.0;
+		Year eventYear = null;
 		for (final Event event : cargoAllocation.getEvents()) {
+			eventYear = Year.from(event.getStart().toLocalDate());
 			if (event instanceof final Journey journeyEvent) {
 				distanceAccumulator += journeyEvent.getDistance();
 			}
@@ -183,7 +186,7 @@ public class CargoEmissionAccountingReportJSONGenerator {
 		final double emission = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission
 				+ model.pipelineEmission;
 		final double distance = Math.round(distanceAccumulator);
-		model.setCII(vessel, emission, distance);
+		model.setCII(vessel, emission, distance, eventYear);
 	}
 
 	private static void calculatePortEmissions(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model) {

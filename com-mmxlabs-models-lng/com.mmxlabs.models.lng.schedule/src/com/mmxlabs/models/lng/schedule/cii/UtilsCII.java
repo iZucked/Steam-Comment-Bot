@@ -43,7 +43,7 @@ public class UtilsCII {
 	private UtilsCII() {
 	}
 
-	public static double[][] getLetterGradeBoundaries(final Vessel vessel) {
+	public static double[][] getLetterGradeBoundaries(final Vessel vessel, final Year referenceYear) {
 
 		final double dwt = vessel.getVesselOrDelegateDeadWeight();
 
@@ -57,7 +57,13 @@ public class UtilsCII {
 
 		//
 		// Required CII current year
-		final double z = RELATIVE_REDUCTION_FACTOR_TABLE.get(Year.now());
+		final Year actualReferenceYear;
+		if (referenceYear != null && RELATIVE_REDUCTION_FACTOR_TABLE.containsKey(referenceYear)) {
+			actualReferenceYear = referenceYear;
+		} else {
+			actualReferenceYear = Year.now();
+		}
+		final double z = RELATIVE_REDUCTION_FACTOR_TABLE.get(actualReferenceYear);
 		final double requiredCII = (1 - z / 100) * referenceValueCII;
 
 		//
@@ -79,9 +85,9 @@ public class UtilsCII {
 		return letterGradeBoundaries;
 	}
 
-	public static String getLetterGrade(final Vessel vessel, final double ciiValue) {
+	public static String getLetterGrade(final Vessel vessel, final double ciiValue, final Year givenYear) {
 		final int deadweightIndex = vessel.getVesselOrDelegateDeadWeight() >= LARGE_DWT_THESHOLD ? 1 : 0;
-		final double[][] gradesTableForThatVessel = getLetterGradeBoundaries(vessel);
+		final double[][] gradesTableForThatVessel = getLetterGradeBoundaries(vessel, givenYear);
 		double prevBoundary = -1;
 		Grade result = null;
 		for (final Grade grade : Grade.values()) {

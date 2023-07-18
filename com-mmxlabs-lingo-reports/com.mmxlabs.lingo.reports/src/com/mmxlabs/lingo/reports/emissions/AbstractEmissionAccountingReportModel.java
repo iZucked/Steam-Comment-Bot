@@ -1,6 +1,7 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -157,13 +158,13 @@ public abstract class AbstractEmissionAccountingReportModel implements IEmission
 	/**
 	 * Sets CII column values from given vessel, total emission and total distance
 	 */
-	public void setCII(final Vessel vessel, final double emission, final double distance) {
+	public void setCII(final Vessel vessel, final double emission, final double distance, final Year givenYear) {
 		ciiValue = UtilsCII.findCII(vessel, emission, distance);
 		if (ciiValue == UtilsCII.INFINITE_CII) {
 			ciiGrade = "-";
 			ciiValueDisplayed = "-";
 		} else {
-			ciiGrade = UtilsCII.getLetterGrade(vessel, ciiValue);
+			ciiGrade = UtilsCII.getLetterGrade(vessel, ciiValue, givenYear);
 			ciiValueDisplayed = UtilsCII.formatCII(ciiValue);
 		}
 	}
