@@ -136,16 +136,16 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		
 		
 		
-		final Group _____g22 = new Group(g2, SWT.NONE);
-		toolkit.adapt(_____g22);
-		_____g22.setText("Heel");
-		_____g22.setLayout(gl);
-		_____g22.setLayoutData(layoutData.create());
-		_____g22.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		ciiStartOptions = new CIIStartOptionsDetailComposite(_____g22, SWT.NONE, toolkit);
-		ciiStartOptions.setCommandHandler(commandHandler);
-		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
+		//		final Group _____g22 = new Group(g2, SWT.NONE);
+		//		toolkit.adapt(_____g22);
+		//		_____g22.setText("Heel");
+		//		_____g22.setLayout(gl);
+		//		_____g22.setLayoutData(layoutData.create());
+		//		_____g22.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		//		
+		//		ciiStartOptions = new CIIStartOptionsDetailComposite(_____g22, SWT.NONE, toolkit);
+		//		ciiStartOptions.setCommandHandler(commandHandler);
+		//		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
 		
 		
 		
