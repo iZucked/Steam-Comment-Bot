@@ -64,6 +64,8 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
+		newDisplay(dialogContext, root, object,range, dbc);
+		
 		Composite containerComposite = toolkit.createComposite(this, SWT.NONE);
 		containerComposite.setLayout(new GridLayout(1, true));
 		
@@ -202,6 +204,10 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 
 		this.setLayout(new GridLayout(1, true));
+	}
+
+	private void newDisplay(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+		// TODO change grid layout for the top level composite
 	}
 
 	private Runnable defaultResizeAction() {
