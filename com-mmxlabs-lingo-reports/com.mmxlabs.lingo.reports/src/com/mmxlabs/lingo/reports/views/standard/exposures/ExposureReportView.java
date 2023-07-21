@@ -603,7 +603,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
 		filterAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
-		getViewSite().getActionBars().getToolBarManager().add(filterAction);
+		
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
 			final Action showGeneratedPaperDeals = new Action("Generated : No", Action.AS_PUSH_BUTTON) {
@@ -661,6 +661,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		setAggregationModeActionText(viewModeToggle);
 		getViewSite().getActionBars().getToolBarManager().add(viewModeToggle);
 
+		getViewSite().getActionBars().getToolBarManager().add(filterAction);
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
