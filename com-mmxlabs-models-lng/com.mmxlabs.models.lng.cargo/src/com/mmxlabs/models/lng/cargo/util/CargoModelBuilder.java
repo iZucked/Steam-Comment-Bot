@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.cargo.util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -51,6 +49,9 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 
 public class CargoModelBuilder {
+
+	public static final String DEFAULT_VESSEL_GROUP_CANAL_PARAMETERS_NAME = "default";
+
 	private final @NonNull CargoModel cargoModel;
 
 	public CargoModelBuilder(final @NonNull CargoModel cargoModel) {
@@ -379,17 +380,18 @@ public class CargoModelBuilder {
 	public @NonNull SlotMaker<SpotDischargeSlot> makeSpotFOBSale(String name, @NonNull YearMonth windowStart, @NonNull FOBSalesMarket market, @NonNull Port port) {
 		return new SlotMaker<SpotDischargeSlot>(this).withMarketFOBSale(name, market, windowStart, port);
 	}
-	
-	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull RouteOption routeOption, final @NonNull CanalEntry canalEntrance, final @NonNull LocalDate date, @Nullable AVesselSet<Vessel> vessel) {
+
+	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull RouteOption routeOption, final @NonNull CanalEntry canalEntrance, final @NonNull LocalDate date,
+			@Nullable AVesselSet<Vessel> vessel) {
 		final CanalBookingSlot booking = CargoFactory.eINSTANCE.createCanalBookingSlot();
 		booking.setRouteOption(routeOption);
 		booking.setCanalEntrance(canalEntrance);
 		booking.setBookingDate(date);
-		
+
 		if (vessel != null) {
 			booking.setVessel(vessel);
 		}
-		
+
 		if (cargoModel.getCanalBookings() == null) {
 			cargoModel.setCanalBookings(CargoFactory.eINSTANCE.createCanalBookings());
 		}
@@ -398,23 +400,23 @@ public class CargoModelBuilder {
 
 		return booking;
 	}
-	
+
 	/**
-	 * Initialise the Panama bookings
-	 * Create the "default" vessel group
-	 * And create a year-round seasonality entries for that vessel group
+	 * Initialise the Panama bookings Create the "default" vessel group And create a
+	 * year-round seasonality entries for that vessel group
 	 */
 	public void initCanalBookings() {
 		final CanalBookings cb = CargoFactory.eINSTANCE.createCanalBookings();
 		cargoModel.setCanalBookings(cb);
-		
-		final VesselGroupCanalParameters vgcp = createVesselGroupCanalParameters("default");
+
+		final VesselGroupCanalParameters vgcp = createVesselGroupCanalParameters(DEFAULT_VESSEL_GROUP_CANAL_PARAMETERS_NAME);
 		cb.getVesselGroupCanalParameters().add(vgcp);
 		cb.getPanamaSeasonalityRecords().add(createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 0, 0));
 	}
-	
+
 	/**
 	 * Creates and returns a vessel group with a given name
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -423,9 +425,10 @@ public class CargoModelBuilder {
 		vgcp.setName(name);
 		return vgcp;
 	}
-	
+
 	/**
 	 * Creates and returns a panama seasonality record for a given vessel group
+	 * 
 	 * @param vgcp
 	 * @param startDay
 	 * @param startMonth

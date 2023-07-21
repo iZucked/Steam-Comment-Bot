@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 public class CargoModelFinder {
@@ -146,6 +147,16 @@ public class CargoModelFinder {
 			}
 		}
 		throw new IllegalArgumentException("Unknown vessel availability");
+	}
+
+	@NonNull
+	public VesselGroupCanalParameters findVesselGroupCanalParameters(@NonNull final String groupName) {
+		for (final VesselGroupCanalParameters vgcp : getCargoModel().getCanalBookings().getVesselGroupCanalParameters()) {
+			if (vgcp.getName().equalsIgnoreCase(groupName)) {
+				return vgcp;
+			}
+		}
+		throw new IllegalArgumentException("Unknown vessel group canal parameters");
 	}
 
 	public void includeLoads(@Nullable List<LoadSlot> extra) {
