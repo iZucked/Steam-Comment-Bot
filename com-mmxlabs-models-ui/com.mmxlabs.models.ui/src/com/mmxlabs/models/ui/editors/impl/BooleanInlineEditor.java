@@ -80,6 +80,8 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	protected void setControlsVisible(final boolean visible) {
 
 		super.setControlsVisible(visible);
-		button.setVisible(visible);
+		if (button != null) {
+			button.setVisible(visible);
+		}
 	}
 }
