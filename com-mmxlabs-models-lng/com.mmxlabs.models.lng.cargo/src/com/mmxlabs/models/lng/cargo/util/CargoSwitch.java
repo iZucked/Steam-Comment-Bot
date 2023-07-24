@@ -452,6 +452,18 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.CII_START_OPTIONS: {
+				CIIStartOptions ciiStartOptions = (CIIStartOptions)theEObject;
+				T1 result = caseCIIStartOptions(ciiStartOptions);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.CII_END_OPTIONS: {
+				CIIEndOptions ciiEndOptions = (CIIEndOptions)theEObject;
+				T1 result = caseCIIEndOptions(ciiEndOptions);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1068,6 +1080,36 @@ public class CargoSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseGroupedDischargeSlotsConstraint(GroupedDischargeSlotsConstraint object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>CII Start Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>CII Start Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCIIStartOptions(CIIStartOptions object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>CII End Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>CII End Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCIIEndOptions(CIIEndOptions object) {
 		return null;
 	}
 

@@ -1,8 +1,10 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
+
+import com.mmxlabs.models.lng.types.TypesPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -12,9 +14,6 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
-import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 /**
  * <!-- begin-user-doc -->
  * The <b>Package</b> for the model.
@@ -22,6 +21,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
  * <ul>
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
+ *   <li>each operation of each class,</li>
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
@@ -62,46 +62,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	CargoPackage eINSTANCE = com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl.init();
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl <em>Cargo</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargo()
-	 * @generated
-	 */
-	int CARGO = 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.SlotImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlot()
-	 * @generated
-	 */
-	int SLOT = 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getLoadSlot()
-	 * @generated
-	 */
-	int LOAD_SLOT = 3;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDischargeSlot()
-	 * @generated
-	 */
-	int DISCHARGE_SLOT = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.
@@ -312,104 +272,14 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl <em>Cargo</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.SpotSlot
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotSlot()
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargo()
 	 * @generated
 	 */
-	int SPOT_SLOT = 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl <em>Spot Load Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotLoadSlot()
-	 * @generated
-	 */
-	int SPOT_LOAD_SLOT = 6;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl <em>Spot Discharge Slot</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotDischargeSlot()
-	 * @generated
-	 */
-	int SPOT_DISCHARGE_SLOT = 7;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl <em>Group</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoGroup()
-	 * @generated
-	 */
-	int CARGO_GROUP = 8;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl <em>Vessel Charter</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselCharter()
-	 * @generated
-	 */
-	int VESSEL_CHARTER = 9;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEvent()
-	 * @generated
-	 */
-	int VESSEL_EVENT = 10;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getMaintenanceEvent()
-	 * @generated
-	 */
-	int MAINTENANCE_EVENT = 11;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDryDockEvent()
-	 * @generated
-	 */
-	int DRY_DOCK_EVENT = 12;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterOutEvent()
-	 * @generated
-	 */
-	int CHARTER_OUT_EVENT = 14;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getAssignableElement()
-	 * @generated
-	 */
-	int ASSIGNABLE_ELEMENT = 15;
+	int CARGO = 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -554,6 +424,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl <em>Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.SlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlot()
+	 * @generated
+	 */
+	int SLOT = 2;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1274,6 +1154,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 24;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getLoadSlot()
+	 * @generated
+	 */
+	int LOAD_SLOT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2095,6 +1985,16 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 3;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDischargeSlot()
+	 * @generated
+	 */
+	int DISCHARGE_SLOT = 4;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2914,6 +2814,16 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.SpotSlot
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotSlot()
+	 * @generated
+	 */
+	int SPOT_SLOT = 5;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2975,6 +2885,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_SLOT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl <em>Spot Load Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotLoadSlot()
+	 * @generated
+	 */
+	int SPOT_LOAD_SLOT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3805,6 +3725,16 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT_OPERATION_COUNT = LOAD_SLOT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl <em>Spot Discharge Slot</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.SpotDischargeSlotImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSpotDischargeSlot()
+	 * @generated
+	 */
+	int SPOT_DISCHARGE_SLOT = 7;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4633,6 +4563,16 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT_OPERATION_COUNT = DISCHARGE_SLOT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl <em>Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoGroupImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoGroup()
+	 * @generated
+	 */
+	int CARGO_GROUP = 8;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4703,6 +4643,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_GROUP_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl <em>Vessel Charter</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselCharter()
+	 * @generated
+	 */
+	int VESSEL_CHARTER = 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5020,6 +4970,16 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_CHARTER_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEvent()
+	 * @generated
+	 */
+	int VESSEL_EVENT = 10;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5218,6 +5178,16 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getMaintenanceEvent()
+	 * @generated
+	 */
+	int MAINTENANCE_EVENT = 11;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5414,6 +5384,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAINTENANCE_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDryDockEvent()
+	 * @generated
+	 */
+	int DRY_DOCK_EVENT = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5822,6 +5802,16 @@ public interface CargoPackage extends EPackage {
 	int CHARTER_LENGTH_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterOutEvent()
+	 * @generated
+	 */
+	int CHARTER_OUT_EVENT = 14;
+
+	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6099,6 +6089,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getAssignableElement()
+	 * @generated
+	 */
+	int ASSIGNABLE_ELEMENT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
@@ -8565,6 +8565,89 @@ public interface CargoPackage extends EPackage {
 	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT_OPERATION_COUNT = GROUPED_SLOTS_CONSTRAINT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl <em>CII Start Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCIIStartOptions()
+	 * @generated
+	 */
+	int CII_START_OPTIONS = 41;
+
+	/**
+	 * The feature id for the '<em><b>Year Today Emissions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_START_OPTIONS__YEAR_TODAY_EMISSIONS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Year Today Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_START_OPTIONS__YEAR_TODAY_DISTANCE = 1;
+
+	/**
+	 * The number of structural features of the '<em>CII Start Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_START_OPTIONS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>CII Start Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_START_OPTIONS_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CIIEndOptionsImpl <em>CII End Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CIIEndOptionsImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCIIEndOptions()
+	 * @generated
+	 */
+	int CII_END_OPTIONS = 42;
+
+	/**
+	 * The feature id for the '<em><b>Desired CII Grade</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_END_OPTIONS__DESIRED_CII_GRADE = 0;
+
+	/**
+	 * The number of structural features of the '<em>CII End Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_END_OPTIONS_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>CII End Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_END_OPTIONS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8572,8 +8655,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 41;
-
+	int CARGO_TYPE = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}' enum.
@@ -8583,8 +8665,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 42;
-
+	int VESSEL_TYPE = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFacilityType <em>Inventory Facility Type</em>}' enum.
@@ -8594,7 +8675,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 43;
+	int INVENTORY_FACILITY_TYPE = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -8604,8 +8685,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 44;
-
+	int INVENTORY_FREQUENCY = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.PaperPricingType <em>Paper Pricing Type</em>}' enum.
@@ -8615,7 +8695,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 45;
+	int PAPER_PRICING_TYPE = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
@@ -8625,7 +8705,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
 	 * @generated
 	 */
-	int FUEL_CHOICE = 46;
+	int FUEL_CHOICE = 48;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -8635,7 +8715,181 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 47;
+	int SCHEDULING_TIME_WINDOW = 49;
+
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CargoModel <em>Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel
+	 * @generated
+	 */
+	EClass getCargoModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlots <em>Load Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Load Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlots()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_LoadSlots();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlots <em>Discharge Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Discharge Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlots()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_DischargeSlots();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoes <em>Cargoes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cargoes</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoes()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_Cargoes();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoGroups <em>Cargo Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cargo Groups</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoGroups()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_CargoGroups();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselCharters <em>Vessel Charters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Charters</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselCharters()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_VesselCharters();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents <em>Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_VesselEvents();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Type Groups</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_VesselTypeGroups();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Inventory Models</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_InventoryModels();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings <em>Canal Bookings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Canal Bookings</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_CanalBookings();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Charter In Market Overrides</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_CharterInMarketOverrides();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDeals <em>Paper Deals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Paper Deals</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getPaperDeals()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_PaperDeals();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getDealSets <em>Deal Sets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Deal Sets</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getDealSets()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_DealSets();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Grouped Discharge Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_GroupedDischargeSlots();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String) <em>Get Load Slot By Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Load Slot By Name</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String)
+	 * @generated
+	 */
+	EOperation getCargoModel__GetLoadSlotByName__String();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlotByName(java.lang.String) <em>Get Discharge Slot By Name</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Discharge Slot By Name</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlotByName(java.lang.String)
+	 * @generated
+	 */
+	EOperation getCargoModel__GetDischargeSlotByName__String();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -8682,6 +8936,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots() <em>Get Sorted Slots</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Sorted Slots</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots()
 	 * @generated
@@ -8740,6 +8995,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_Cn();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getPort()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_Port();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}'.
@@ -8806,28 +9072,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_WindowFlexUnits();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getPort <em>Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getPort()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EReference getSlot_Port();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Contract</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getContract()
-	 * @see #getSlot()
-	 * @generated
-	 */
-//	EReference getSlot_Contract();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getDuration <em>Duration</em>}'.
@@ -9050,28 +9294,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_RestrictedPortsOverride();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots <em>Restricted Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Restricted Slots</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EReference getSlot_RestrictedSlots();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Restricted Slots Are Permissive</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_RestrictedSlotsArePermissive();
-
-	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedVessels <em>Restricted Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9103,6 +9325,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_RestrictedVesselsOverride();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots <em>Restricted Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedSlots()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_RestrictedSlots();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive <em>Restricted Slots Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Slots Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedSlotsArePermissive()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedSlotsArePermissive();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getMiscCosts <em>Misc Costs</em>}'.
@@ -9733,179 +9977,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getDischargeSlot__GetSlotOrDelegateFOBSaleDealType();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CargoModel <em>Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Model</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel
-	 * @generated
-	 */
-	EClass getCargoModel();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlots <em>Load Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Load Slots</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlots()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_LoadSlots();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlots <em>Discharge Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Discharge Slots</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlots()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_DischargeSlots();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoes <em>Cargoes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cargoes</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoes()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_Cargoes();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoGroups <em>Cargo Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Cargo Groups</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoGroups()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_CargoGroups();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselCharters <em>Vessel Charters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Charters</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselCharters()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_VesselCharters();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents <em>Vessel Events</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_VesselEvents();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Vessel Type Groups</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_VesselTypeGroups();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels <em>Inventory Models</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Inventory Models</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getInventoryModels()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_InventoryModels();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings <em>Canal Bookings</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Canal Bookings</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCanalBookings()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_CanalBookings();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides <em>Charter In Market Overrides</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Charter In Market Overrides</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCharterInMarketOverrides()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_CharterInMarketOverrides();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDeals <em>Paper Deals</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Paper Deals</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getPaperDeals()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_PaperDeals();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getDealSets <em>Deal Sets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Deal Sets</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getDealSets()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_DealSets();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Grouped Discharge Slots</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots()
-	 * @see #getCargoModel()
-	 * @generated
-	 */
-	EReference getCargoModel_GroupedDischargeSlots();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String) <em>Get Load Slot By Name</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Load Slot By Name</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String)
-	 * @generated
-	 */
-	EOperation getCargoModel__GetLoadSlotByName__String();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlotByName(java.lang.String) <em>Get Discharge Slot By Name</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Discharge Slot By Name</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlotByName(java.lang.String)
-	 * @generated
-	 */
-	EOperation getCargoModel__GetDischargeSlotByName__String();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9978,6 +10049,17 @@ public interface CargoPackage extends EPackage {
 	EClass getVesselCharter();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselCharter#isOptional <em>Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optional</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#isOptional()
+	 * @see #getVesselCharter()
+	 * @generated
+	 */
+	EAttribute getVesselCharter_Optional();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9987,6 +10069,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselCharter_Vessel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCharterNumber <em>Charter Number</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Number</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getCharterNumber()
+	 * @see #getVesselCharter()
+	 * @generated
+	 */
+	EAttribute getVesselCharter_CharterNumber();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getEntity()
+	 * @see #getVesselCharter()
+	 * @generated
+	 */
+	EReference getVesselCharter_Entity();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getTimeCharterRate <em>Time Charter Rate</em>}'.
@@ -10110,39 +10214,6 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselCharter_ContainedCharterContract();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselCharter#isOptional <em>Optional</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Optional</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#isOptional()
-	 * @see #getVesselCharter()
-	 * @generated
-	 */
-	EAttribute getVesselCharter_Optional();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCharterNumber <em>Charter Number</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Charter Number</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getCharterNumber()
-	 * @see #getVesselCharter()
-	 * @generated
-	 */
-	EAttribute getVesselCharter_CharterNumber();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getGenericCharterContract <em>Generic Charter Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Generic Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getGenericCharterContract()
-	 * @see #getVesselCharter()
-	 * @generated
-	 */
-	EReference getVesselCharter_GenericCharterContract();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getMinDuration <em>Min Duration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10174,6 +10245,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselCharter_CharterContractOverride();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getGenericCharterContract <em>Generic Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Generic Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getGenericCharterContract()
+	 * @see #getVesselCharter()
+	 * @generated
+	 */
+	EReference getVesselCharter_GenericCharterContract();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
@@ -10264,17 +10346,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getVesselCharter__GetCharterOrDelegateCharterContract();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getEntity <em>Entity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Entity</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getEntity()
-	 * @see #getVesselCharter()
-	 * @generated
-	 */
-	EReference getVesselCharter_Entity();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselEvent <em>Vessel Event</em>}'.
@@ -10445,6 +10516,28 @@ public interface CargoPackage extends EPackage {
 	EReference getCharterOutEvent_RelocateTo();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Rate</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_HireRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus <em>Ballast Bonus</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_BallastBonus();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10489,28 +10582,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCharterOutEvent_ExtensionPeriod();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hire Rate</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate()
-	 * @see #getCharterOutEvent()
-	 * @generated
-	 */
-	EAttribute getCharterOutEvent_HireRate();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus <em>Ballast Bonus</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Ballast Bonus</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getBallastBonus()
-	 * @see #getCharterOutEvent()
-	 * @generated
-	 */
-	EAttribute getCharterOutEvent_BallastBonus();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getEndPort() <em>Get End Port</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10531,17 +10602,6 @@ public interface CargoPackage extends EPackage {
 	EClass getAssignableElement();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Spot Index</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex()
-	 * @see #getAssignableElement()
-	 * @generated
-	 */
-	EAttribute getAssignableElement_SpotIndex();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSequenceHint <em>Sequence Hint</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10553,17 +10613,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getAssignableElement_SequenceHint();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#isLocked <em>Locked</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Locked</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#isLocked()
-	 * @see #getAssignableElement()
-	 * @generated
-	 */
-	EAttribute getAssignableElement_Locked();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getVesselAssignmentType <em>Vessel Assignment Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10573,6 +10622,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAssignableElement_VesselAssignmentType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Index</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_SpotIndex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#isLocked <em>Locked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Locked</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#isLocked()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_Locked();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselTypeGroup <em>Vessel Type Group</em>}'.
@@ -10821,6 +10892,17 @@ public interface CargoPackage extends EPackage {
 	EClass getInventory();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Inventory#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Inventory#getPort()
+	 * @see #getInventory()
+	 * @generated
+	 */
+	EReference getInventory_Port();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.Inventory#getFeeds <em>Feeds</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10865,17 +10947,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getInventory_FacilityType();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Inventory#getPort <em>Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Port</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Inventory#getPort()
-	 * @see #getInventory()
-	 * @generated
-	 */
-	EReference getInventory_Port();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot <em>Canal Booking Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10897,17 +10968,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookingSlot_RouteOption();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Booking Date</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate()
-	 * @see #getCanalBookingSlot()
-	 * @generated
-	 */
-	EAttribute getCanalBookingSlot_BookingDate();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getCanalEntrance <em>Canal Entrance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10917,6 +10977,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCanalBookingSlot_CanalEntrance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate <em>Booking Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Booking Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingDate()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EAttribute getCanalBookingSlot_BookingDate();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getNotes <em>Notes</em>}'.
@@ -11421,6 +11492,50 @@ public interface CargoPackage extends EPackage {
 	EClass getPaperDeal();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPrice <em>Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPrice()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_Price();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType <em>Pricing Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_PricingType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getIndex()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EAttribute getPaperDeal_Index();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Instrument</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument()
+	 * @see #getPaperDeal()
+	 * @generated
+	 */
+	EReference getPaperDeal_Instrument();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getQuantity <em>Quantity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11540,50 +11655,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPaperDeal_TargetObject();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument <em>Instrument</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Instrument</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getInstrument()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EReference getPaperDeal_Instrument();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPrice <em>Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPrice()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EAttribute getPaperDeal_Price();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType <em>Pricing Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Pricing Type</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getPricingType()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EAttribute getPaperDeal_PricingType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PaperDeal#getIndex <em>Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Index</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.PaperDeal#getIndex()
-	 * @see #getPaperDeal()
-	 * @generated
-	 */
-	EAttribute getPaperDeal_Index();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.BuyPaperDeal <em>Buy Paper Deal</em>}'.
@@ -11799,6 +11870,59 @@ public interface CargoPackage extends EPackage {
 	EClass getGroupedDischargeSlotsConstraint();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions <em>CII Start Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>CII Start Options</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions
+	 * @generated
+	 */
+	EClass getCIIStartOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayEmissions <em>Year Today Emissions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Year Today Emissions</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayEmissions()
+	 * @see #getCIIStartOptions()
+	 * @generated
+	 */
+	EAttribute getCIIStartOptions_YearTodayEmissions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayDistance <em>Year Today Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Year Today Distance</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayDistance()
+	 * @see #getCIIStartOptions()
+	 * @generated
+	 */
+	EAttribute getCIIStartOptions_YearTodayDistance();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CIIEndOptions <em>CII End Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>CII End Options</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CIIEndOptions
+	 * @generated
+	 */
+	EClass getCIIEndOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CIIEndOptions#getDesiredCIIGrade <em>Desired CII Grade</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Desired CII Grade</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CIIEndOptions#getDesiredCIIGrade()
+	 * @see #getCIIEndOptions()
+	 * @generated
+	 */
+	EAttribute getCIIEndOptions_DesiredCIIGrade();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11884,6 +12008,7 @@ public interface CargoPackage extends EPackage {
 	 * <ul>
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
+	 *   <li>each operation of each class,</li>
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>
@@ -11891,6 +12016,136 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoModelImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoModel()
+		 * @generated
+		 */
+		EClass CARGO_MODEL = eINSTANCE.getCargoModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__LOAD_SLOTS = eINSTANCE.getCargoModel_LoadSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__DISCHARGE_SLOTS = eINSTANCE.getCargoModel_DischargeSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargoes</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CARGOES = eINSTANCE.getCargoModel_Cargoes();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CARGO_GROUPS = eINSTANCE.getCargoModel_CargoGroups();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Charters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__VESSEL_CHARTERS = eINSTANCE.getCargoModel_VesselCharters();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__VESSEL_EVENTS = eINSTANCE.getCargoModel_VesselEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Type Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__VESSEL_TYPE_GROUPS = eINSTANCE.getCargoModel_VesselTypeGroups();
+
+		/**
+		 * The meta object literal for the '<em><b>Inventory Models</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__INVENTORY_MODELS = eINSTANCE.getCargoModel_InventoryModels();
+
+		/**
+		 * The meta object literal for the '<em><b>Canal Bookings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CANAL_BOOKINGS = eINSTANCE.getCargoModel_CanalBookings();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES = eINSTANCE.getCargoModel_CharterInMarketOverrides();
+
+		/**
+		 * The meta object literal for the '<em><b>Paper Deals</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__PAPER_DEALS = eINSTANCE.getCargoModel_PaperDeals();
+
+		/**
+		 * The meta object literal for the '<em><b>Deal Sets</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__DEAL_SETS = eINSTANCE.getCargoModel_DealSets();
+
+		/**
+		 * The meta object literal for the '<em><b>Grouped Discharge Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = eINSTANCE.getCargoModel_GroupedDischargeSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Load Slot By Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING = eINSTANCE.getCargoModel__GetLoadSlotByName__String();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Discharge Slot By Name</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING = eINSTANCE.getCargoModel__GetDischargeSlotByName__String();
+
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl <em>Cargo</em>}' class.
 		 * <!-- begin-user-doc -->
@@ -11952,6 +12207,38 @@ public interface CargoPackage extends EPackage {
 		EClass SLOT = eINSTANCE.getSlot();
 
 		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__CONTRACT = eINSTANCE.getSlot_Contract();
+
+		/**
+		 * The meta object literal for the '<em><b>Counterparty</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__COUNTERPARTY = eINSTANCE.getSlot_Counterparty();
+
+		/**
+		 * The meta object literal for the '<em><b>Cn</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__CN = eINSTANCE.getSlot_Cn();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__PORT = eINSTANCE.getSlot_Port();
+
+		/**
 		 * The meta object literal for the '<em><b>Window Start</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11998,38 +12285,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__WINDOW_FLEX_UNITS = eINSTANCE.getSlot_WindowFlexUnits();
-
-		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SLOT__PORT = eINSTANCE.getSlot_Port();
-
-		/**
-		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SLOT__CONTRACT = eINSTANCE.getSlot_Contract();
-
-		/**
-		 * The meta object literal for the '<em><b>Counterparty</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__COUNTERPARTY = eINSTANCE.getSlot_Counterparty();
-
-		/**
-		 * The meta object literal for the '<em><b>Cn</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__CN = eINSTANCE.getSlot_Cn();
 
 		/**
 		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
@@ -12192,22 +12447,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__RESTRICTED_PORTS_OVERRIDE = eINSTANCE.getSlot_RestrictedPortsOverride();
 
 		/**
-		 * The meta object literal for the '<em><b>Restricted Slots</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SLOT__RESTRICTED_SLOTS = eINSTANCE.getSlot_RestrictedSlots();
-
-		/**
-		 * The meta object literal for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedSlotsArePermissive();
-
-		/**
 		 * The meta object literal for the '<em><b>Restricted Vessels</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12230,6 +12469,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__RESTRICTED_VESSELS_OVERRIDE = eINSTANCE.getSlot_RestrictedVesselsOverride();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Slots</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__RESTRICTED_SLOTS = eINSTANCE.getSlot_RestrictedSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Slots Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_SLOTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedSlotsArePermissive();
 
 		/**
 		 * The meta object literal for the '<em><b>Misc Costs</b></em>' attribute feature.
@@ -12716,136 +12971,6 @@ public interface CargoPackage extends EPackage {
 		EOperation DISCHARGE_SLOT___GET_SLOT_OR_DELEGATE_FOB_SALE_DEAL_TYPE = eINSTANCE.getDischargeSlot__GetSlotOrDelegateFOBSaleDealType();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.cargo.impl.CargoModelImpl
-		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoModel()
-		 * @generated
-		 */
-		EClass CARGO_MODEL = eINSTANCE.getCargoModel();
-
-		/**
-		 * The meta object literal for the '<em><b>Load Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__LOAD_SLOTS = eINSTANCE.getCargoModel_LoadSlots();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__DISCHARGE_SLOTS = eINSTANCE.getCargoModel_DischargeSlots();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargoes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__CARGOES = eINSTANCE.getCargoModel_Cargoes();
-
-		/**
-		 * The meta object literal for the '<em><b>Cargo Groups</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__CARGO_GROUPS = eINSTANCE.getCargoModel_CargoGroups();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Charters</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__VESSEL_CHARTERS = eINSTANCE.getCargoModel_VesselCharters();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__VESSEL_EVENTS = eINSTANCE.getCargoModel_VesselEvents();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Type Groups</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__VESSEL_TYPE_GROUPS = eINSTANCE.getCargoModel_VesselTypeGroups();
-
-		/**
-		 * The meta object literal for the '<em><b>Inventory Models</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__INVENTORY_MODELS = eINSTANCE.getCargoModel_InventoryModels();
-
-		/**
-		 * The meta object literal for the '<em><b>Canal Bookings</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__CANAL_BOOKINGS = eINSTANCE.getCargoModel_CanalBookings();
-
-		/**
-		 * The meta object literal for the '<em><b>Charter In Market Overrides</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES = eINSTANCE.getCargoModel_CharterInMarketOverrides();
-
-		/**
-		 * The meta object literal for the '<em><b>Paper Deals</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__PAPER_DEALS = eINSTANCE.getCargoModel_PaperDeals();
-
-		/**
-		 * The meta object literal for the '<em><b>Deal Sets</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__DEAL_SETS = eINSTANCE.getCargoModel_DealSets();
-
-		/**
-		 * The meta object literal for the '<em><b>Grouped Discharge Slots</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = eINSTANCE.getCargoModel_GroupedDischargeSlots();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Load Slot By Name</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING = eINSTANCE.getCargoModel__GetLoadSlotByName__String();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Discharge Slot By Name</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING = eINSTANCE.getCargoModel__GetDischargeSlotByName__String();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12912,12 +13037,36 @@ public interface CargoPackage extends EPackage {
 		EClass VESSEL_CHARTER = eINSTANCE.getVesselCharter();
 
 		/**
+		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CHARTER__OPTIONAL = eINSTANCE.getVesselCharter_Optional();
+
+		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference VESSEL_CHARTER__VESSEL = eINSTANCE.getVesselCharter_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Number</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CHARTER__CHARTER_NUMBER = eINSTANCE.getVesselCharter_CharterNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CHARTER__ENTITY = eINSTANCE.getVesselCharter_Entity();
 
 		/**
 		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
@@ -13008,30 +13157,6 @@ public interface CargoPackage extends EPackage {
 		EReference VESSEL_CHARTER__CONTAINED_CHARTER_CONTRACT = eINSTANCE.getVesselCharter_ContainedCharterContract();
 
 		/**
-		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CHARTER__OPTIONAL = eINSTANCE.getVesselCharter_Optional();
-
-		/**
-		 * The meta object literal for the '<em><b>Charter Number</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_CHARTER__CHARTER_NUMBER = eINSTANCE.getVesselCharter_CharterNumber();
-
-		/**
-		 * The meta object literal for the '<em><b>Generic Charter Contract</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT = eINSTANCE.getVesselCharter_GenericCharterContract();
-
-		/**
 		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13054,6 +13179,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CHARTER__CHARTER_CONTRACT_OVERRIDE = eINSTANCE.getVesselCharter_CharterContractOverride();
+
+		/**
+		 * The meta object literal for the '<em><b>Generic Charter Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT = eINSTANCE.getVesselCharter_GenericCharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
@@ -13126,14 +13259,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation VESSEL_CHARTER___GET_CHARTER_OR_DELEGATE_CHARTER_CONTRACT = eINSTANCE.getVesselCharter__GetCharterOrDelegateCharterContract();
-
-		/**
-		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CHARTER__ENTITY = eINSTANCE.getVesselCharter_Entity();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -13274,6 +13399,22 @@ public interface CargoPackage extends EPackage {
 		EReference CHARTER_OUT_EVENT__RELOCATE_TO = eINSTANCE.getCharterOutEvent_RelocateTo();
 
 		/**
+		 * The meta object literal for the '<em><b>Hire Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__HIRE_RATE = eINSTANCE.getCharterOutEvent_HireRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__BALLAST_BONUS = eINSTANCE.getCharterOutEvent_BallastBonus();
+
+		/**
 		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13306,22 +13447,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute CHARTER_OUT_EVENT__EXTENSION_PERIOD = eINSTANCE.getCharterOutEvent_ExtensionPeriod();
 
 		/**
-		 * The meta object literal for the '<em><b>Hire Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT_EVENT__HIRE_RATE = eINSTANCE.getCharterOutEvent_HireRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CHARTER_OUT_EVENT__BALLAST_BONUS = eINSTANCE.getCharterOutEvent_BallastBonus();
-
-		/**
 		 * The meta object literal for the '<em><b>Get End Port</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13340,14 +13465,6 @@ public interface CargoPackage extends EPackage {
 		EClass ASSIGNABLE_ELEMENT = eINSTANCE.getAssignableElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ASSIGNABLE_ELEMENT__SPOT_INDEX = eINSTANCE.getAssignableElement_SpotIndex();
-
-		/**
 		 * The meta object literal for the '<em><b>Sequence Hint</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13356,20 +13473,28 @@ public interface CargoPackage extends EPackage {
 		EAttribute ASSIGNABLE_ELEMENT__SEQUENCE_HINT = eINSTANCE.getAssignableElement_SequenceHint();
 
 		/**
-		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ASSIGNABLE_ELEMENT__LOCKED = eINSTANCE.getAssignableElement_Locked();
-
-		/**
 		 * The meta object literal for the '<em><b>Vessel Assignment Type</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE = eINSTANCE.getAssignableElement_VesselAssignmentType();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__SPOT_INDEX = eINSTANCE.getAssignableElement_SpotIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__LOCKED = eINSTANCE.getAssignableElement_Locked();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
@@ -13568,6 +13693,14 @@ public interface CargoPackage extends EPackage {
 		EClass INVENTORY = eINSTANCE.getInventory();
 
 		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INVENTORY__PORT = eINSTANCE.getInventory_Port();
+
+		/**
 		 * The meta object literal for the '<em><b>Feeds</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13600,14 +13733,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute INVENTORY__FACILITY_TYPE = eINSTANCE.getInventory_FacilityType();
 
 		/**
-		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INVENTORY__PORT = eINSTANCE.getInventory_Port();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl <em>Canal Booking Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -13626,20 +13751,20 @@ public interface CargoPackage extends EPackage {
 		EAttribute CANAL_BOOKING_SLOT__ROUTE_OPTION = eINSTANCE.getCanalBookingSlot_RouteOption();
 
 		/**
-		 * The meta object literal for the '<em><b>Booking Date</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CANAL_BOOKING_SLOT__BOOKING_DATE = eINSTANCE.getCanalBookingSlot_BookingDate();
-
-		/**
 		 * The meta object literal for the '<em><b>Canal Entrance</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKING_SLOT__CANAL_ENTRANCE = eINSTANCE.getCanalBookingSlot_CanalEntrance();
+
+		/**
+		 * The meta object literal for the '<em><b>Booking Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CANAL_BOOKING_SLOT__BOOKING_DATE = eINSTANCE.getCanalBookingSlot_BookingDate();
 
 		/**
 		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
@@ -14040,6 +14165,38 @@ public interface CargoPackage extends EPackage {
 		EClass PAPER_DEAL = eINSTANCE.getPaperDeal();
 
 		/**
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICE = eINSTANCE.getPaperDeal_Price();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__PRICING_TYPE = eINSTANCE.getPaperDeal_PricingType();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PAPER_DEAL__INDEX = eINSTANCE.getPaperDeal_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Instrument</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAPER_DEAL__INSTRUMENT = eINSTANCE.getPaperDeal_Instrument();
+
+		/**
 		 * The meta object literal for the '<em><b>Quantity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -14126,38 +14283,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PAPER_DEAL__TARGET_OBJECT = eINSTANCE.getPaperDeal_TargetObject();
-
-		/**
-		 * The meta object literal for the '<em><b>Instrument</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PAPER_DEAL__INSTRUMENT = eINSTANCE.getPaperDeal_Instrument();
-
-		/**
-		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAPER_DEAL__PRICE = eINSTANCE.getPaperDeal_Price();
-
-		/**
-		 * The meta object literal for the '<em><b>Pricing Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAPER_DEAL__PRICING_TYPE = eINSTANCE.getPaperDeal_PricingType();
-
-		/**
-		 * The meta object literal for the '<em><b>Index</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAPER_DEAL__INDEX = eINSTANCE.getPaperDeal_Index();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.BuyPaperDealImpl <em>Buy Paper Deal</em>}' class.
@@ -14332,6 +14457,50 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass GROUPED_DISCHARGE_SLOTS_CONSTRAINT = eINSTANCE.getGroupedDischargeSlotsConstraint();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl <em>CII Start Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCIIStartOptions()
+		 * @generated
+		 */
+		EClass CII_START_OPTIONS = eINSTANCE.getCIIStartOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Year Today Emissions</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_START_OPTIONS__YEAR_TODAY_EMISSIONS = eINSTANCE.getCIIStartOptions_YearTodayEmissions();
+
+		/**
+		 * The meta object literal for the '<em><b>Year Today Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_START_OPTIONS__YEAR_TODAY_DISTANCE = eINSTANCE.getCIIStartOptions_YearTodayDistance();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CIIEndOptionsImpl <em>CII End Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CIIEndOptionsImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCIIEndOptions()
+		 * @generated
+		 */
+		EClass CII_END_OPTIONS = eINSTANCE.getCIIEndOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Desired CII Grade</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_END_OPTIONS__DESIRED_CII_GRADE = eINSTANCE.getCIIEndOptions_DesiredCIIGrade();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

@@ -784,4 +784,11 @@
     <eLiterals name="NBO_FBO"/>
     <eLiterals name="NBO_BUNKERS" value="1"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CIIStartOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearTodayEmissions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearTodayDistance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CIIEndOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="desiredCIIGrade" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
 </ecore:EPackage>

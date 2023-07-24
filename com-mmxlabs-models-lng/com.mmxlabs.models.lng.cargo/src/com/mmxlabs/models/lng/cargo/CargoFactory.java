@@ -340,6 +340,24 @@ public interface CargoFactory extends EFactory {
 	GroupedDischargeSlotsConstraint createGroupedDischargeSlotsConstraint();
 
 	/**
+	 * Returns a new object of class '<em>CII Start Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>CII Start Options</em>'.
+	 * @generated
+	 */
+	CIIStartOptions createCIIStartOptions();
+
+	/**
+	 * Returns a new object of class '<em>CII End Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>CII End Options</em>'.
+	 * @generated
+	 */
+	CIIEndOptions createCIIEndOptions();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -445,5 +445,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//GroupedSlotsConstraint/minimumBound"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//GroupedDischargeSlotsConstraint"/>
+    <genClasses ecoreClass="cargo.ecore#//CIIStartOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearTodayEmissions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearTodayDistance"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//CIIEndOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIEndOptions/desiredCIIGrade"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

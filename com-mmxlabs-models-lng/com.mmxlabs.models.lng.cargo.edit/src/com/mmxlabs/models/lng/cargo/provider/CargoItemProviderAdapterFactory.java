@@ -893,6 +893,52 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CIIStartOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CIIStartOptionsItemProvider ciiStartOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CIIStartOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCIIStartOptionsAdapter() {
+		if (ciiStartOptionsItemProvider == null) {
+			ciiStartOptionsItemProvider = new CIIStartOptionsItemProvider(this);
+		}
+
+		return ciiStartOptionsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CIIEndOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CIIEndOptionsItemProvider ciiEndOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CIIEndOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCIIEndOptionsAdapter() {
+		if (ciiEndOptionsItemProvider == null) {
+			ciiEndOptionsItemProvider = new CIIEndOptionsItemProvider(this);
+		}
+
+		return ciiEndOptionsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1059,6 +1105,8 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (panamaSeasonalityRecordItemProvider != null) panamaSeasonalityRecordItemProvider.dispose();
 		if (groupedSlotsConstraintItemProvider != null) groupedSlotsConstraintItemProvider.dispose();
 		if (groupedDischargeSlotsConstraintItemProvider != null) groupedDischargeSlotsConstraintItemProvider.dispose();
+		if (ciiStartOptionsItemProvider != null) ciiStartOptionsItemProvider.dispose();
+		if (ciiEndOptionsItemProvider != null) ciiEndOptionsItemProvider.dispose();
 	}
 
 }

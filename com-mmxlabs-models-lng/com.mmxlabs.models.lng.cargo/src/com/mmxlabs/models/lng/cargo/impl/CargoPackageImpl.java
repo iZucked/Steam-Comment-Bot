@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
+import com.mmxlabs.models.lng.cargo.CIIEndOptions;
+import com.mmxlabs.models.lng.cargo.CIIStartOptions;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -367,6 +369,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass groupedDischargeSlotsConstraintEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ciiStartOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ciiEndOptionsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3434,6 +3450,56 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getCIIStartOptions() {
+		return ciiStartOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIStartOptions_YearTodayEmissions() {
+		return (EAttribute)ciiStartOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIStartOptions_YearTodayDistance() {
+		return (EAttribute)ciiStartOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCIIEndOptions() {
+		return ciiEndOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIEndOptions_DesiredCIIGrade() {
+		return (EAttribute)ciiEndOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -3862,6 +3928,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(groupedSlotsConstraintEClass, GROUPED_SLOTS_CONSTRAINT__MINIMUM_BOUND);
 
 		groupedDischargeSlotsConstraintEClass = createEClass(GROUPED_DISCHARGE_SLOTS_CONSTRAINT);
+
+		ciiStartOptionsEClass = createEClass(CII_START_OPTIONS);
+		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TODAY_EMISSIONS);
+		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TODAY_DISTANCE);
+
+		ciiEndOptionsEClass = createEClass(CII_END_OPTIONS);
+		createEAttribute(ciiEndOptionsEClass, CII_END_OPTIONS__DESIRED_CII_GRADE);
 
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
@@ -4422,6 +4495,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getGroupedSlotsConstraint_MinimumBound(), ecorePackage.getEInt(), "minimumBound", null, 1, 1, GroupedSlotsConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupedDischargeSlotsConstraintEClass, GroupedDischargeSlotsConstraint.class, "GroupedDischargeSlotsConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(ciiStartOptionsEClass, CIIStartOptions.class, "CIIStartOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCIIStartOptions_YearTodayEmissions(), ecorePackage.getEInt(), "yearTodayEmissions", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIStartOptions_YearTodayDistance(), ecorePackage.getEInt(), "yearTodayDistance", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(ciiEndOptionsEClass, CIIEndOptions.class, "CIIEndOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", null, 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
