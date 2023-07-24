@@ -72,6 +72,8 @@ public class VesselCharterItemProvider
 			addMaxDurationPropertyDescriptor(object);
 			addCharterContractOverridePropertyDescriptor(object);
 			addGenericCharterContractPropertyDescriptor(object);
+			addCiiStartOptionsPropertyDescriptor(object);
+			addCiiEndOptionsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -288,6 +290,50 @@ public class VesselCharterItemProvider
 				 getString("_UI_VesselCharter_genericCharterContract_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_VesselCharter_genericCharterContract_feature", "_UI_VesselCharter_type"),
 				 CargoPackage.Literals.VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cii Start Options feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCiiStartOptionsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselCharter_ciiStartOptions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselCharter_ciiStartOptions_feature", "_UI_VesselCharter_type"),
+				 CargoPackage.Literals.VESSEL_CHARTER__CII_START_OPTIONS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cii End Options feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCiiEndOptionsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselCharter_ciiEndOptions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselCharter_ciiEndOptions_feature", "_UI_VesselCharter_type"),
+				 CargoPackage.Literals.VESSEL_CHARTER__CII_END_OPTIONS,
 				 true,
 				 false,
 				 true,

@@ -249,6 +249,8 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/maxDuration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselCharter/charterContractOverride"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/genericCharterContract"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/ciiStartOptions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselCharter/ciiEndOptions"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselCharter/getStartByAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselCharter/getStartAfterAsDateTime"/>
       <genOperations ecoreOperation="cargo.ecore#//VesselCharter/getEndByAsDateTime"/>

@@ -1910,6 +1910,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getVesselCharter_CiiStartOptions() {
+		return (EReference)vesselCharterEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getVesselCharter_CiiEndOptions() {
+		return (EReference)vesselCharterEClass.getEStructuralFeatures().get(20);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getVesselCharter_MinDuration() {
 		return (EAttribute)vesselCharterEClass.getEStructuralFeatures().get(15);
 	}
@@ -3746,6 +3766,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(vesselCharterEClass, VESSEL_CHARTER__MAX_DURATION);
 		createEAttribute(vesselCharterEClass, VESSEL_CHARTER__CHARTER_CONTRACT_OVERRIDE);
 		createEReference(vesselCharterEClass, VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT);
+		createEReference(vesselCharterEClass, VESSEL_CHARTER__CII_START_OPTIONS);
+		createEReference(vesselCharterEClass, VESSEL_CHARTER__CII_END_OPTIONS);
 		createEOperation(vesselCharterEClass, VESSEL_CHARTER___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselCharterEClass, VESSEL_CHARTER___GET_START_AFTER_AS_DATE_TIME);
 		createEOperation(vesselCharterEClass, VESSEL_CHARTER___GET_END_BY_AS_DATE_TIME);
@@ -4279,6 +4301,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getVesselCharter_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselCharter_CharterContractOverride(), ecorePackage.getEBoolean(), "charterContractOverride", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselCharter_GenericCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "genericCharterContract", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselCharter_CiiStartOptions(), this.getCIIStartOptions(), null, "ciiStartOptions", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselCharter_CiiEndOptions(), this.getCIIEndOptions(), null, "ciiEndOptions", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselCharter__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 

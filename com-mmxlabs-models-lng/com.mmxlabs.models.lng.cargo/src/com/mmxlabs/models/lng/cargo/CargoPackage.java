@@ -4844,13 +4844,31 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
+	 * The feature id for the '<em><b>Cii Start Options</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CHARTER__CII_START_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+
+	/**
+	 * The feature id for the '<em><b>Cii End Options</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CHARTER__CII_END_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Charter</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CHARTER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int VESSEL_CHARTER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -10258,6 +10276,28 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselCharter_GenericCharterContract();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiStartOptions <em>Cii Start Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cii Start Options</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getCiiStartOptions()
+	 * @see #getVesselCharter()
+	 * @generated
+	 */
+	EReference getVesselCharter_CiiStartOptions();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiEndOptions <em>Cii End Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Cii End Options</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getCiiEndOptions()
+	 * @see #getVesselCharter()
+	 * @generated
+	 */
+	EReference getVesselCharter_CiiEndOptions();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13187,6 +13227,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT = eINSTANCE.getVesselCharter_GenericCharterContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Cii Start Options</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CHARTER__CII_START_OPTIONS = eINSTANCE.getVesselCharter_CiiStartOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Cii End Options</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CHARTER__CII_END_OPTIONS = eINSTANCE.getVesselCharter_CiiEndOptions();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.

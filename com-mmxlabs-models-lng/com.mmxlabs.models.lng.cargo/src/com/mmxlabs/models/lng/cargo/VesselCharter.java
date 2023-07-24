@@ -49,6 +49,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselCharter#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselCharter#isCharterContractOverride <em>Charter Contract Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselCharter#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiStartOptions <em>Cii Start Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiEndOptions <em>Cii End Options</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselCharter()
@@ -570,6 +572,50 @@ public interface VesselCharter extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	boolean isSetGenericCharterContract();
+
+	/**
+	 * Returns the value of the '<em><b>Cii Start Options</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cii Start Options</em>' reference.
+	 * @see #setCiiStartOptions(CIIStartOptions)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselCharter_CiiStartOptions()
+	 * @model
+	 * @generated
+	 */
+	CIIStartOptions getCiiStartOptions();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiStartOptions <em>Cii Start Options</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cii Start Options</em>' reference.
+	 * @see #getCiiStartOptions()
+	 * @generated
+	 */
+	void setCiiStartOptions(CIIStartOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Cii End Options</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cii End Options</em>' reference.
+	 * @see #setCiiEndOptions(CIIEndOptions)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselCharter_CiiEndOptions()
+	 * @model
+	 * @generated
+	 */
+	CIIEndOptions getCiiEndOptions();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiEndOptions <em>Cii End Options</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cii End Options</em>' reference.
+	 * @see #getCiiEndOptions()
+	 * @generated
+	 */
+	void setCiiEndOptions(CIIEndOptions value);
 
 	/**
 	 * Returns the value of the '<em><b>Charter Number</b></em>' attribute.
