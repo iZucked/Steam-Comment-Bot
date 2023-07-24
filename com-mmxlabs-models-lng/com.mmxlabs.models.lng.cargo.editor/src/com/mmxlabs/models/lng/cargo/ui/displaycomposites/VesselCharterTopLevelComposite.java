@@ -189,9 +189,9 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		groupForCIIEndOptionsStuff.setLayoutData(layoutDataFactory.create());
 		groupForCIIEndOptionsStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		//
-		ciiEndOptions = new CIIStartOptionsDetailComposite(groupForCIIEndOptionsStuff, SWT.NONE, toolkit);
+		ciiEndOptions = new CIIEndOptionsDetailComposite(groupForCIIEndOptionsStuff, SWT.NONE, toolkit);
 		ciiEndOptions.setCommandHandler(commandHandler);
-		ciiEndOptions.display(dialogContext, root, getEndHeel(object), range, dbc);
+		ciiEndOptions.display(dialogContext, root, getCIIEndOptions(object), range, dbc);
 		
 		//
 		// Repositioning Fee Stuff
@@ -223,6 +223,7 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 
 		this.setLayout(new GridLayout(1, true));
 	}
+
 
 	private Runnable defaultResizeAction() {
 		return () -> {
@@ -313,6 +314,13 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__CII_START_OPTIONS);
 	}
 	
+	private EObject getCIIEndOptions(EObject object) {
+		if (object instanceof VesselCharter vc && vc.getCiiEndOptions() == null) {
+			vc.setCiiEndOptions(CargoFactory.eINSTANCE.createCIIEndOptions());
+		}
+		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__CII_END_OPTIONS);
+	}
+
 	private EObject getEndHeel(final EObject object) {
 		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__END_HEEL);
 	}
