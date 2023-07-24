@@ -197,6 +197,14 @@
             name="Flows"
             restorable="true">
       </view>
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.ninetydayschedule.NinetyDayScheduleReport"
+            icon="icons:/icons/16x16/schedule_view.png"
+            id="com.mmxlabs.lingo.reports.views.ninetydayschedule.NinetyDayScheduleReport"
+            name="90 Day Schedule"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">

@@ -10,7 +10,7 @@
       label="Lingo Reports Feature"
       version="6.8.4.qualifier"
       provider-name="Minimax Labs Ltd.">
- 
+
    <plugin
          id="com.mmxlabs.lingo.reports"
          download-size="0"
@@ -27,6 +27,13 @@
 
    <plugin
          id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.widgets.schedulechart"
          download-size="0"
          install-size="0"
          version="0.0.0"
