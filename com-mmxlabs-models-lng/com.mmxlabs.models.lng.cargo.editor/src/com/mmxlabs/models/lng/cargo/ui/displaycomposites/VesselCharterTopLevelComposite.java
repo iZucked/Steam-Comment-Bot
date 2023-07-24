@@ -52,6 +52,7 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 	private BallastBonusTermsDetailComposite ballastBonusComposite;
 	private RepositioningFeeTermsDetailComposite repositioningFeeComposite;
 	private Button gccButton;
+	private IDisplayComposite ciiStartOptions;
 	
 	public VesselCharterTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
@@ -130,6 +131,20 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		startHeelComposite = new StartHeelOptionsDetailComposite(g22, SWT.NONE, toolkit);
 		startHeelComposite.setCommandHandler(commandHandler);
 		startHeelComposite.display(dialogContext, root, getStartHeel(object), range, dbc);
+		
+		
+		
+		final Group _____g22 = new Group(g2, SWT.NONE);
+		toolkit.adapt(_____g22);
+		_____g22.setText("Heel");
+		_____g22.setLayout(gl);
+		_____g22.setLayoutData(layoutData.create());
+		_____g22.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		ciiStartOptions = new CIIStartOptionsDetailComposite(_____g22, SWT.NONE, toolkit);
+		ciiStartOptions.setCommandHandler(commandHandler);
+		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
+		
 		
 		
 		final Composite g3 = new Composite(midComposite, SWT.NONE);
@@ -269,6 +284,13 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 	
 	private EObject getStartHeel(final EObject object) {
 		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__START_HEEL);
+	}
+	
+	private EObject getCIIStartOptions(final EObject object) {
+		if (object instanceof VesselCharter vc && vc.getCiiStartOptions() == null) {
+			vc.setCiiStartOptions(CargoFactory.eINSTANCE.createCIIStartOptions());
+		}
+		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__CII_START_OPTIONS);
 	}
 	
 	private EObject getEndHeel(final EObject object) {

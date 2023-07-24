@@ -73,8 +73,11 @@ public class VesselCharterDetailComposite extends DefaultDetailComposite {
 	
 			// Here the exceptions are listed for the elements which should go into the
 			// middle composite
-			if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAt() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAfter()
-					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartBy()) {
+			if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAt() //
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAfter() //
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartBy() //
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_CiiStartOptions() //
+					) {
 				cdg = VesselCharterDetailGroup.START;
 			}
 	

@@ -27,7 +27,7 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.Cargo" />
-		
+
 		<componentHelper
 			id="com.mmxlabs.models.lng.cargo.helpers.Slot"
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SlotComponentHelper"
