@@ -452,7 +452,7 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 	protected boolean genericCharterContractESet;
 
 	/**
-	 * The cached value of the '{@link #getCiiStartOptions() <em>Cii Start Options</em>}' reference.
+	 * The cached value of the '{@link #getCiiStartOptions() <em>Cii Start Options</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getCiiStartOptions()
@@ -462,7 +462,7 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 	protected CIIStartOptions ciiStartOptions;
 
 	/**
-	 * The cached value of the '{@link #getCiiEndOptions() <em>Cii End Options</em>}' reference.
+	 * The cached value of the '{@link #getCiiEndOptions() <em>Cii End Options</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getCiiEndOptions()
@@ -1183,6 +1183,12 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 			InternalEObject oldCiiStartOptions = (InternalEObject)ciiStartOptions;
 			ciiStartOptions = (CIIStartOptions)eResolveProxy(oldCiiStartOptions);
 			if (ciiStartOptions != oldCiiStartOptions) {
+				InternalEObject newCiiStartOptions = (InternalEObject)ciiStartOptions;
+				NotificationChain msgs = oldCiiStartOptions.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, null);
+				if (newCiiStartOptions.eInternalContainer() == null) {
+					msgs = newCiiStartOptions.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, oldCiiStartOptions, ciiStartOptions));
 			}
@@ -1204,12 +1210,34 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setCiiStartOptions(CIIStartOptions newCiiStartOptions) {
+	public NotificationChain basicSetCiiStartOptions(CIIStartOptions newCiiStartOptions, NotificationChain msgs) {
 		CIIStartOptions oldCiiStartOptions = ciiStartOptions;
 		ciiStartOptions = newCiiStartOptions;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, oldCiiStartOptions, ciiStartOptions));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, oldCiiStartOptions, newCiiStartOptions);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCiiStartOptions(CIIStartOptions newCiiStartOptions) {
+		if (newCiiStartOptions != ciiStartOptions) {
+			NotificationChain msgs = null;
+			if (ciiStartOptions != null)
+				msgs = ((InternalEObject)ciiStartOptions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, msgs);
+			if (newCiiStartOptions != null)
+				msgs = ((InternalEObject)newCiiStartOptions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, msgs);
+			msgs = basicSetCiiStartOptions(newCiiStartOptions, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, newCiiStartOptions, newCiiStartOptions));
 	}
 
 	/**
@@ -1223,6 +1251,12 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 			InternalEObject oldCiiEndOptions = (InternalEObject)ciiEndOptions;
 			ciiEndOptions = (CIIEndOptions)eResolveProxy(oldCiiEndOptions);
 			if (ciiEndOptions != oldCiiEndOptions) {
+				InternalEObject newCiiEndOptions = (InternalEObject)ciiEndOptions;
+				NotificationChain msgs = oldCiiEndOptions.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, null);
+				if (newCiiEndOptions.eInternalContainer() == null) {
+					msgs = newCiiEndOptions.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, oldCiiEndOptions, ciiEndOptions));
 			}
@@ -1244,12 +1278,34 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setCiiEndOptions(CIIEndOptions newCiiEndOptions) {
+	public NotificationChain basicSetCiiEndOptions(CIIEndOptions newCiiEndOptions, NotificationChain msgs) {
 		CIIEndOptions oldCiiEndOptions = ciiEndOptions;
 		ciiEndOptions = newCiiEndOptions;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, oldCiiEndOptions, ciiEndOptions));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, oldCiiEndOptions, newCiiEndOptions);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCiiEndOptions(CIIEndOptions newCiiEndOptions) {
+		if (newCiiEndOptions != ciiEndOptions) {
+			NotificationChain msgs = null;
+			if (ciiEndOptions != null)
+				msgs = ((InternalEObject)ciiEndOptions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, msgs);
+			if (newCiiEndOptions != null)
+				msgs = ((InternalEObject)newCiiEndOptions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, msgs);
+			msgs = basicSetCiiEndOptions(newCiiEndOptions, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, newCiiEndOptions, newCiiEndOptions));
 	}
 
 	/**
@@ -1575,6 +1631,10 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 				return basicSetEndHeel(null, msgs);
 			case CargoPackage.VESSEL_CHARTER__CONTAINED_CHARTER_CONTRACT:
 				return basicSetContainedCharterContract(null, msgs);
+			case CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS:
+				return basicSetCiiStartOptions(null, msgs);
+			case CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS:
+				return basicSetCiiEndOptions(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}

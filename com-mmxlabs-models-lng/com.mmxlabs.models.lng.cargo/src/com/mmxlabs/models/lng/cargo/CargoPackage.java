@@ -4844,7 +4844,7 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
-	 * The feature id for the '<em><b>Cii Start Options</b></em>' reference.
+	 * The feature id for the '<em><b>Cii Start Options</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4853,7 +4853,7 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_CHARTER__CII_START_OPTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
-	 * The feature id for the '<em><b>Cii End Options</b></em>' reference.
+	 * The feature id for the '<em><b>Cii End Options</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -10276,10 +10276,10 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselCharter_GenericCharterContract();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiStartOptions <em>Cii Start Options</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiStartOptions <em>Cii Start Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cii Start Options</em>'.
+	 * @return the meta object for the containment reference '<em>Cii Start Options</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getCiiStartOptions()
 	 * @see #getVesselCharter()
 	 * @generated
@@ -10287,10 +10287,10 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselCharter_CiiStartOptions();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiEndOptions <em>Cii End Options</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.VesselCharter#getCiiEndOptions <em>Cii End Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Cii End Options</em>'.
+	 * @return the meta object for the containment reference '<em>Cii End Options</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.VesselCharter#getCiiEndOptions()
 	 * @see #getVesselCharter()
 	 * @generated
@@ -13229,7 +13229,7 @@ public interface CargoPackage extends EPackage {
 		EReference VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT = eINSTANCE.getVesselCharter_GenericCharterContract();
 
 		/**
-		 * The meta object literal for the '<em><b>Cii Start Options</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Cii Start Options</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -13237,7 +13237,7 @@ public interface CargoPackage extends EPackage {
 		EReference VESSEL_CHARTER__CII_START_OPTIONS = eINSTANCE.getVesselCharter_CiiStartOptions();
 
 		/**
-		 * The meta object literal for the '<em><b>Cii End Options</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Cii End Options</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
