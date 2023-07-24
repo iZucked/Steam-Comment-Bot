@@ -13,8 +13,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.models.lng.cargo.CIIStartOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -145,7 +147,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		}
 
 		model.emissionsLNG = Math.round(emissionsLNGAccumulator);
-		model.totalEmission = model.baseFuelEmissions + model.pilotLightEmission + model.emissionsLNG;
+		model.totalEmission += model.baseFuelEmissions + model.pilotLightEmission + model.emissionsLNG;
 	}
 
 	private static int processEvent(final Event event, final VesselEmissionAccountingReportModelV1 model, int journeyDistance) {
@@ -219,6 +221,13 @@ public class VesselEmissionAccountingReportJSONGenerator {
 			final Slot<?> slot = slotAllocation.getSlot();
 			if (slot != null) {
 				model.eventID = slot.getName();
+			}
+		}
+		final VesselCharter vesselCharter = startEvent.getSequence().getVesselCharter();
+		if (vesselCharter != null) {
+			final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
+			if (ciiStartOptions != null) {
+				model.totalEmission += ciiStartOptions.getYearTodayEmissions();
 			}
 		}
 	}

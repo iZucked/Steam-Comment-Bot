@@ -183,8 +183,7 @@ public class CargoEmissionAccountingReportJSONGenerator {
 				distanceAccumulator += journeyEvent.getDistance();
 			}
 		}
-		final double emission = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission + model.upstreamEmission + model.liquefactionEmission
-				+ model.pipelineEmission;
+		final double emission = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission;
 		final double distance = Math.round(distanceAccumulator);
 		model.setCII(vessel, emission, distance, eventYear);
 	}
