@@ -244,18 +244,17 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		
 		//
 		// Wrappers
-		final Composite wrapperCompositeForStartAndEndGroups = new Composite(containerComposite, SWT.NONE);
+		final Composite wrapperCompositeForStartAndEndGroups = toolkit.createComposite(this, SWT.NONE);
 		wrapperCompositeForStartAndEndGroups.setLayout(twoColumnsLayout);	
-		wrapperCompositeForStartAndEndGroups.setLayoutData(layoutDataFactory.create());
+		wrapperCompositeForStartAndEndGroups.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		final Composite vesselCharterStartCompositeAkTheLeftThing = new Composite(wrapperCompositeForStartAndEndGroups, SWT.NONE);
-		wrapperCompositeForStartAndEndGroups.setLayout(twoColumnsLayout);	
-		wrapperCompositeForStartAndEndGroups.setLayoutData(layoutDataFactory.create());
+		final Composite vesselCharterStartCompositeAkTheLeftThing = toolkit.createComposite(wrapperCompositeForStartAndEndGroups, SWT.NONE);
+		vesselCharterStartCompositeAkTheLeftThing.setLayout(twoColumnsLayout);	
+		vesselCharterStartCompositeAkTheLeftThing.setLayoutData(layoutDataFactory.create());
 		//
-		final Composite vesselCharterEndCompositeAkTheRightThing = new Composite(wrapperCompositeForStartAndEndGroups, SWT.NONE);
-		wrapperCompositeForStartAndEndGroups.setLayout(twoColumnsLayout);	
-		wrapperCompositeForStartAndEndGroups.setLayoutData(layoutDataFactory.create());
-		
+		final Composite vesselCharterEndCompositeAkTheRightThing = toolkit.createComposite(wrapperCompositeForStartAndEndGroups, SWT.NONE);
+		vesselCharterEndCompositeAkTheRightThing.setLayout(twoColumnsLayout);	
+		vesselCharterEndCompositeAkTheRightThing.setLayoutData(layoutDataFactory.create());
 		
 		//
 		// Start Stuff
@@ -288,7 +287,7 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		// Start CII Stuff
 		final Group groupForCIIStartOptionsStuff = new Group(vesselCharterStartCompositeAkTheLeftThing, SWT.NONE);
 		toolkit.adapt(groupForCIIStartOptionsStuff);
-		groupForCIIStartOptionsStuff.setText("Heel");
+		groupForCIIStartOptionsStuff.setText("CII");
 		groupForCIIStartOptionsStuff.setLayout(singleColumnLayout);
 		groupForCIIStartOptionsStuff.setLayoutData(layoutDataFactory.create());
 		groupForCIIStartOptionsStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -327,8 +326,8 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		//
 		// CII End Options Stuff
 		final Group groupForCIIEndOptionsStuff = new Group(vesselCharterEndCompositeAkTheRightThing, SWT.NONE);
-		toolkit.adapt(groupForEndHeelStuff);
-		groupForCIIEndOptionsStuff.setText("Heel");
+		toolkit.adapt(groupForCIIEndOptionsStuff);
+		groupForCIIEndOptionsStuff.setText("CII");
 		groupForCIIEndOptionsStuff.setLayout(singleColumnLayout);
 		groupForCIIEndOptionsStuff.setLayoutData(layoutDataFactory.create());
 		groupForCIIEndOptionsStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
