@@ -100,7 +100,6 @@ public class UpstreamUrlProvider {
 
 	// DataHub endpoints
 	public static final String INFORMATION_ENDPOINT = "/info";
-	public static final String TOKEN_ENDPOINT = "/token";
 	public static final String URI_AFTER_SUCCESSFULL_AUTHENTICATION = "/authenticated";
 	public static final String OAUTH_LOGIN_PATH = "/oauth2/authorization/azure";
 	public static final String BASIC_LOGIN_PATH = "/api/login";
