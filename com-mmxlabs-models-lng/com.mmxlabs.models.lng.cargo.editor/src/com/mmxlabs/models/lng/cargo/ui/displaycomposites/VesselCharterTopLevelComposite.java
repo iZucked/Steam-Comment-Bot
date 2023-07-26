@@ -100,7 +100,6 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		final GridData twoColumnSpanningGridLayoutData = createSpanningLayoutData(layoutDataFactory, 2);
 		final GridData fourColumnSpanningGridLayoutData = createSpanningLayoutData(layoutDataFactory, 4);
 		
-		
 		//
 		// Wrapper
 		final Composite wrapperCompositeWithFourColumns = toolkit.createComposite(this, SWT.NONE);

@@ -94,7 +94,7 @@ public class VesselCharterDetailComposite extends DefaultDetailComposite {
 			// Rejected...
 			return null;
 		}
-
+		
 		return super.addInlineEditor(editor);
 	}
 
