@@ -10,7 +10,7 @@ import com.mmxlabs.models.ui.editors.impl.AbstractComboInlineEditor;
 
 class CIIEndOptionsInlineEditor extends AbstractComboInlineEditor {
 	
-	public CIIEndOptionsInlineEditor(EObject editorTarget) {
+	public CIIEndOptionsInlineEditor() {
 		super(CargoPackage.Literals.CII_END_OPTIONS__DESIRED_CII_GRADE);
 	}
 

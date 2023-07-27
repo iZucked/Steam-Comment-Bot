@@ -29,7 +29,7 @@ public class CIIEndOptionsDetailComposite extends DefaultDetailComposite {
 	@Override
 	public @Nullable IInlineEditor addInlineEditor(IInlineEditor editor) {
 		if (editor.getFeature().equals(CargoPackage.Literals.CII_END_OPTIONS__DESIRED_CII_GRADE)) {
-			return super.addInlineEditor(new CIIEndOptionsInlineEditor(editor.getEditorTarget()));
+			return super.addInlineEditor(new CIIEndOptionsInlineEditor());
 		}
 		return super.addInlineEditor(editor);
 	}
