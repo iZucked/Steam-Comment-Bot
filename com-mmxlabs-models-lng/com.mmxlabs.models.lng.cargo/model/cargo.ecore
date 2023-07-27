@@ -801,7 +801,6 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CIIEndOptions">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="desiredCIIGrade" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        defaultValueLiteral="A"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="desiredCIIGrade" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

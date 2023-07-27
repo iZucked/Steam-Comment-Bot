@@ -4525,7 +4525,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCIIStartOptions_YearToDateDistance(), ecorePackage.getEInt(), "yearToDateDistance", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(ciiEndOptionsEClass, CIIEndOptions.class, "CIIEndOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", "A", 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", null, 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");

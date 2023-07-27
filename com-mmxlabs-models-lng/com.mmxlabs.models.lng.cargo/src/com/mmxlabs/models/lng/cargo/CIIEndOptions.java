@@ -23,13 +23,12 @@ import org.eclipse.emf.ecore.EObject;
 public interface CIIEndOptions extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Desired CII Grade</b></em>' attribute.
-	 * The default value is <code>"A"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Desired CII Grade</em>' attribute.
 	 * @see #setDesiredCIIGrade(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCIIEndOptions_DesiredCIIGrade()
-	 * @model default="A"
+	 * @model
 	 * @generated
 	 */
 	String getDesiredCIIGrade();
