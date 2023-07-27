@@ -64,7 +64,24 @@ public class MigrateToV195 extends AbstractMigrationUnit {
 	        		vc.setRef("ciiEndOptions", defaultEndOptions);
 	        	}
 	        }
-	        
+	        final String liquefactionEmissionRate = "liquefactionEmissionRate";
+	        final String pipelineEmissionRate = "pipelineEmissionRate";
+	        final String upstreamEmissionRate = "upstreamEmissionRate";
+	        final EObjectWrapper portModel = referenceModel.getRef("portModel");
+	        final List<EObjectWrapper> ports = portModel.getRefAsList("ports");
+	        if(ports != null) {
+	        	for (var p : ports) {
+	        		if (p.isSetFeature(liquefactionEmissionRate)) {
+	        			p.setAttrib(liquefactionEmissionRate, p.getAttribAsDouble(liquefactionEmissionRate)/1000);
+	        		}
+	        		if (p.isSetFeature(pipelineEmissionRate)) {
+	        			p.setAttrib(pipelineEmissionRate, p.getAttribAsDouble(pipelineEmissionRate)/1000);
+	        		}
+	        		if (p.isSetFeature(upstreamEmissionRate)) {
+	        			p.setAttrib(upstreamEmissionRate, p.getAttribAsDouble(upstreamEmissionRate)/1000);
+	        		}
+	        	}
+	        }
 		}
 
 }
