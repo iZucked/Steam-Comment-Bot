@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
+import com.mmxlabs.models.lng.cargo.CIIEndOptions;
+import com.mmxlabs.models.lng.cargo.CIIStartOptions;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -367,6 +369,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass groupedDischargeSlotsConstraintEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ciiStartOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ciiEndOptionsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1886,6 +1902,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EReference getVesselCharter_GenericCharterContract() {
 		return (EReference)vesselCharterEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getVesselCharter_CiiStartOptions() {
+		return (EReference)vesselCharterEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getVesselCharter_CiiEndOptions() {
+		return (EReference)vesselCharterEClass.getEStructuralFeatures().get(20);
 	}
 
 	/**
@@ -3434,6 +3470,56 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getCIIStartOptions() {
+		return ciiStartOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIStartOptions_YearToDateEmissions() {
+		return (EAttribute)ciiStartOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIStartOptions_YearToDateDistance() {
+		return (EAttribute)ciiStartOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCIIEndOptions() {
+		return ciiEndOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIEndOptions_DesiredCIIGrade() {
+		return (EAttribute)ciiEndOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -3680,6 +3766,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(vesselCharterEClass, VESSEL_CHARTER__MAX_DURATION);
 		createEAttribute(vesselCharterEClass, VESSEL_CHARTER__CHARTER_CONTRACT_OVERRIDE);
 		createEReference(vesselCharterEClass, VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT);
+		createEReference(vesselCharterEClass, VESSEL_CHARTER__CII_START_OPTIONS);
+		createEReference(vesselCharterEClass, VESSEL_CHARTER__CII_END_OPTIONS);
 		createEOperation(vesselCharterEClass, VESSEL_CHARTER___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselCharterEClass, VESSEL_CHARTER___GET_START_AFTER_AS_DATE_TIME);
 		createEOperation(vesselCharterEClass, VESSEL_CHARTER___GET_END_BY_AS_DATE_TIME);
@@ -3862,6 +3950,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(groupedSlotsConstraintEClass, GROUPED_SLOTS_CONSTRAINT__MINIMUM_BOUND);
 
 		groupedDischargeSlotsConstraintEClass = createEClass(GROUPED_DISCHARGE_SLOTS_CONSTRAINT);
+
+		ciiStartOptionsEClass = createEClass(CII_START_OPTIONS);
+		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS);
+		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE);
+
+		ciiEndOptionsEClass = createEClass(CII_END_OPTIONS);
+		createEAttribute(ciiEndOptionsEClass, CII_END_OPTIONS__DESIRED_CII_GRADE);
 
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
@@ -4206,6 +4301,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getVesselCharter_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselCharter_CharterContractOverride(), ecorePackage.getEBoolean(), "charterContractOverride", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselCharter_GenericCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "genericCharterContract", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselCharter_CiiStartOptions(), this.getCIIStartOptions(), null, "ciiStartOptions", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselCharter_CiiEndOptions(), this.getCIIEndOptions(), null, "ciiEndOptions", null, 0, 1, VesselCharter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselCharter__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -4422,6 +4519,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getGroupedSlotsConstraint_MinimumBound(), ecorePackage.getEInt(), "minimumBound", null, 1, 1, GroupedSlotsConstraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupedDischargeSlotsConstraintEClass, GroupedDischargeSlotsConstraint.class, "GroupedDischargeSlotsConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(ciiStartOptionsEClass, CIIStartOptions.class, "CIIStartOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCIIStartOptions_YearToDateEmissions(), ecorePackage.getEInt(), "yearToDateEmissions", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIStartOptions_YearToDateDistance(), ecorePackage.getEInt(), "yearToDateDistance", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(ciiEndOptionsEClass, CIIEndOptions.class, "CIIEndOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", null, 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
@@ -4759,6 +4863,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "numberFormat", "#0"
+		   });
+		addAnnotation
+		  (getCIIStartOptions_YearToDateEmissions(),
+		   source,
+		   new String[] {
+			   "formatString", "#######"
+		   });
+		addAnnotation
+		  (getCIIStartOptions_YearToDateDistance(),
+		   source,
+		   new String[] {
+			   "formatString", "#####"
 		   });
 	}
 

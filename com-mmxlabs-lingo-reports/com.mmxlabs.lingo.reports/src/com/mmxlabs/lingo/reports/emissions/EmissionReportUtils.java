@@ -5,84 +5,21 @@
 package com.mmxlabs.lingo.reports.emissions;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 
 import com.mmxlabs.lingo.reports.modelbased.ColumnGenerator.ColumnInfo;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.schedule.Fuel;
-import com.mmxlabs.models.lng.schedule.FuelAmount;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 
-public class EmissionsUtils {
+public class EmissionReportUtils {
 	
-	public static double getBaseFuelEmissionRate(final @NonNull Vessel vessel) {
-		return vessel.getVesselOrDelegateBaseFuelEmissionRate();
-	}
-	
-	public static double getBOGEmissionRate(final @NonNull Vessel vessel) {
-		return vessel.getVesselOrDelegateBogEmissionRate();
-	}
-	
-	public static double getPilotLightEmissionRate(final @NonNull Vessel vessel) {
-		return vessel.getVesselOrDelegatePilotLightEmissionRate();
-	}
-	
-	public static long getBaseFuelEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
-		long result = 0L;
-		for (final FuelQuantity fq : fuelQuantity) {
-			if (fq.getFuel()==Fuel.BASE_FUEL) {
-				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
-						.findFirst();
-				if (optMtFuelAmount.isPresent()) {
-					result += (long) (optMtFuelAmount.get().getQuantity() * model.getBaseFuelEmissionRate());
-				}
-			}
-		}
-		return result;
-	}
-	
-	public static long getBOGEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
-		long result = 0L;
-		for (final FuelQuantity fq : fuelQuantity) {
-			if (fq.getFuel()==Fuel.FBO || fq.getFuel() == Fuel.NBO) {
-				final Optional<FuelAmount> optM3FuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.M3) //
-						.findFirst();
-				if (optM3FuelAmount.isPresent()) {
-					result += (long) (optM3FuelAmount.get().getQuantity() * model.getBOGEmissionRate());
-				}
-			}
-		}
-		return result;
-	}
-	
-	public static long getPilotLightEmission(final IVesselEmission model, List<FuelQuantity> fuelQuantity) {
-		long result = 0L;
-		for (final FuelQuantity fq : fuelQuantity) {
-			if (fq.getFuel()==Fuel.PILOT_LIGHT) {
-				final Optional<FuelAmount> optMtFuelAmount = fq.getAmounts().stream() //
-						.filter(fa -> fa.getUnit() == FuelUnit.MT) //
-						.findFirst();
-				if (optMtFuelAmount.isPresent()) {
-					result += (long) (optMtFuelAmount.get().getQuantity() * model.getPilotLightEmissionRate());
-				}
-			}
-		}
-		return result;
-	}
+	private EmissionReportUtils() {}
 	
 	public static void styleTheCell(final ViewerCell cell, final Field f) {
 		IEmissionReportIDData model = (IEmissionReportIDData) cell.getItem().getData();

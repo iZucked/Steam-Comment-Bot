@@ -26,11 +26,11 @@
             id="com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView">
       </view>
       <view
-            name="Total Emissions"
+            name="CII Emissions"
             icon="icons:/icons/16x16/emissions_total.png"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView"
-            id="com.mmxlabs.lingo.reports.emissions.TotalEmissionAccountingReportView">
+            class="com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView"
+            id="com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView">
       </view>
 	</extension>
 

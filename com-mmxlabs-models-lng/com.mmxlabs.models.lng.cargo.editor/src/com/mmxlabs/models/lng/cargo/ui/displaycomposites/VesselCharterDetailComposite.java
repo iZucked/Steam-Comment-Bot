@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -49,34 +51,42 @@ public class VesselCharterDetailComposite extends DefaultDetailComposite {
 
 		// By default all elements are in the main tab
 		VesselCharterDetailGroup cdg = VesselCharterDetailGroup.GENERAL;
+		
+		if (getSectionFor(editor.getFeature()) != null) {
+			cdg = getSectionFor(editor.getFeature());
+		} else {
 
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_Vessel() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_CharterNumber()
-				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_TimeCharterRate() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_MinDuration()
-				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_MaxDuration()) {
-			cdg = VesselCharterDetailGroup.TOP_LEFT;
-		}
-
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_Optional() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_Entity()
-				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_TimeCharterRate()) {
-			cdg = VesselCharterDetailGroup.TOP_RIGHT;
-		}
-
-		if (dialogContext != null && !dialogContext.isMultiEdit() && editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_GenericCharterContract()) {
-			cdg = VesselCharterDetailGroup.TOP_LEFT;
-		}
-
-		// Here the exceptions are listed for the elements which should go into the
-		// middle composite
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAt() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAfter()
-				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartBy()) {
-			cdg = VesselCharterDetailGroup.START;
-		}
-
-		// Here the exceptions are listed for the elements which should go into the
-		// bottom
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_EndAt() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_EndAfter()
-				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_EndBy()) {
-			cdg = VesselCharterDetailGroup.END;
+			if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_Vessel() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_CharterNumber()
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_TimeCharterRate() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_MinDuration()
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_MaxDuration()) {
+				cdg = VesselCharterDetailGroup.TOP_LEFT;
+			}
+	
+			if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_Optional() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_Entity()
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_TimeCharterRate()) {
+				cdg = VesselCharterDetailGroup.TOP_RIGHT;
+			}
+	
+			if (dialogContext != null && !dialogContext.isMultiEdit() && editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_GenericCharterContract()) {
+				cdg = VesselCharterDetailGroup.TOP_LEFT;
+			}
+	
+			// Here the exceptions are listed for the elements which should go into the
+			// middle composite
+			if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAt() //
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartAfter() //
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_StartBy() //
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_CiiStartOptions() //
+					) {
+				cdg = VesselCharterDetailGroup.START;
+			}
+	
+			// Here the exceptions are listed for the elements which should go into the
+			// bottom
+			if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_EndAt() || editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_EndAfter()
+					|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_EndBy()) {
+				cdg = VesselCharterDetailGroup.END;
+			}
 		}
 
 		// Do not add elements if they are for the wrong section.
@@ -84,7 +94,7 @@ public class VesselCharterDetailComposite extends DefaultDetailComposite {
 			// Rejected...
 			return null;
 		}
-
+		
 		return super.addInlineEditor(editor);
 	}
 
@@ -120,6 +130,33 @@ public class VesselCharterDetailComposite extends DefaultDetailComposite {
 				//
 				.make() //
 		;
+	}
+	
+	private VesselCharterDetailGroup getSectionFor(ETypedElement feature) {
+		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/layout/vesselCharter");
+
+		if (annotation != null) {
+			if (annotation.getDetails().containsKey("section")) {
+				final String value = annotation.getDetails().get("section");
+				switch (value) {
+				case "top-left":
+					return VesselCharterDetailGroup.TOP_LEFT;
+				case "top-left-extra":
+					return VesselCharterDetailGroup.TOP_LEFT_EXTRA;
+				case "top-right":
+					return VesselCharterDetailGroup.TOP_RIGHT;
+				case "top-right-extra":
+					return VesselCharterDetailGroup.TOP_RIGHT_EXTRA;
+				case "general":
+					return VesselCharterDetailGroup.GENERAL;
+				case "start":
+					return VesselCharterDetailGroup.START;
+				case "end":
+					return VesselCharterDetailGroup.END;
+				}
+			}
+		}
+		return null;
 	}
 
 }

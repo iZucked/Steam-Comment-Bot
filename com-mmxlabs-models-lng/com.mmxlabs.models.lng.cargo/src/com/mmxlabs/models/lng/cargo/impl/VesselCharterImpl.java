@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.CIIEndOptions;
+import com.mmxlabs.models.lng.cargo.CIIStartOptions;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -61,6 +63,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl#isCharterContractOverride <em>Charter Contract Override</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl#getCiiStartOptions <em>Cii Start Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselCharterImpl#getCiiEndOptions <em>Cii End Options</em>}</li>
  * </ul>
  *
  * @generated
@@ -446,6 +450,26 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 	 * @ordered
 	 */
 	protected boolean genericCharterContractESet;
+
+	/**
+	 * The cached value of the '{@link #getCiiStartOptions() <em>Cii Start Options</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCiiStartOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected CIIStartOptions ciiStartOptions;
+
+	/**
+	 * The cached value of the '{@link #getCiiEndOptions() <em>Cii End Options</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCiiEndOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected CIIEndOptions ciiEndOptions;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1154,6 +1178,142 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 	 * @generated
 	 */
 	@Override
+	public CIIStartOptions getCiiStartOptions() {
+		if (ciiStartOptions != null && ciiStartOptions.eIsProxy()) {
+			InternalEObject oldCiiStartOptions = (InternalEObject)ciiStartOptions;
+			ciiStartOptions = (CIIStartOptions)eResolveProxy(oldCiiStartOptions);
+			if (ciiStartOptions != oldCiiStartOptions) {
+				InternalEObject newCiiStartOptions = (InternalEObject)ciiStartOptions;
+				NotificationChain msgs = oldCiiStartOptions.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, null);
+				if (newCiiStartOptions.eInternalContainer() == null) {
+					msgs = newCiiStartOptions.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, oldCiiStartOptions, ciiStartOptions));
+			}
+		}
+		return ciiStartOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CIIStartOptions basicGetCiiStartOptions() {
+		return ciiStartOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCiiStartOptions(CIIStartOptions newCiiStartOptions, NotificationChain msgs) {
+		CIIStartOptions oldCiiStartOptions = ciiStartOptions;
+		ciiStartOptions = newCiiStartOptions;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, oldCiiStartOptions, newCiiStartOptions);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCiiStartOptions(CIIStartOptions newCiiStartOptions) {
+		if (newCiiStartOptions != ciiStartOptions) {
+			NotificationChain msgs = null;
+			if (ciiStartOptions != null)
+				msgs = ((InternalEObject)ciiStartOptions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, msgs);
+			if (newCiiStartOptions != null)
+				msgs = ((InternalEObject)newCiiStartOptions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, null, msgs);
+			msgs = basicSetCiiStartOptions(newCiiStartOptions, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS, newCiiStartOptions, newCiiStartOptions));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CIIEndOptions getCiiEndOptions() {
+		if (ciiEndOptions != null && ciiEndOptions.eIsProxy()) {
+			InternalEObject oldCiiEndOptions = (InternalEObject)ciiEndOptions;
+			ciiEndOptions = (CIIEndOptions)eResolveProxy(oldCiiEndOptions);
+			if (ciiEndOptions != oldCiiEndOptions) {
+				InternalEObject newCiiEndOptions = (InternalEObject)ciiEndOptions;
+				NotificationChain msgs = oldCiiEndOptions.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, null);
+				if (newCiiEndOptions.eInternalContainer() == null) {
+					msgs = newCiiEndOptions.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, oldCiiEndOptions, ciiEndOptions));
+			}
+		}
+		return ciiEndOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CIIEndOptions basicGetCiiEndOptions() {
+		return ciiEndOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCiiEndOptions(CIIEndOptions newCiiEndOptions, NotificationChain msgs) {
+		CIIEndOptions oldCiiEndOptions = ciiEndOptions;
+		ciiEndOptions = newCiiEndOptions;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, oldCiiEndOptions, newCiiEndOptions);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCiiEndOptions(CIIEndOptions newCiiEndOptions) {
+		if (newCiiEndOptions != ciiEndOptions) {
+			NotificationChain msgs = null;
+			if (ciiEndOptions != null)
+				msgs = ((InternalEObject)ciiEndOptions).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, msgs);
+			if (newCiiEndOptions != null)
+				msgs = ((InternalEObject)newCiiEndOptions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, null, msgs);
+			msgs = basicSetCiiEndOptions(newCiiEndOptions, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS, newCiiEndOptions, newCiiEndOptions));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getMinDuration() {
 		return minDuration;
 	}
@@ -1471,6 +1631,10 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 				return basicSetEndHeel(null, msgs);
 			case CargoPackage.VESSEL_CHARTER__CONTAINED_CHARTER_CONTRACT:
 				return basicSetContainedCharterContract(null, msgs);
+			case CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS:
+				return basicSetCiiStartOptions(null, msgs);
+			case CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS:
+				return basicSetCiiEndOptions(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -1528,6 +1692,12 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 			case CargoPackage.VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT:
 				if (resolve) return getGenericCharterContract();
 				return basicGetGenericCharterContract();
+			case CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS:
+				if (resolve) return getCiiStartOptions();
+				return basicGetCiiStartOptions();
+			case CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS:
+				if (resolve) return getCiiEndOptions();
+				return basicGetCiiEndOptions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1599,6 +1769,12 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 			case CargoPackage.VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT:
 				setGenericCharterContract((GenericCharterContract)newValue);
 				return;
+			case CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS:
+				setCiiStartOptions((CIIStartOptions)newValue);
+				return;
+			case CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS:
+				setCiiEndOptions((CIIEndOptions)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1668,6 +1844,12 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 			case CargoPackage.VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT:
 				unsetGenericCharterContract();
 				return;
+			case CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS:
+				setCiiStartOptions((CIIStartOptions)null);
+				return;
+			case CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS:
+				setCiiEndOptions((CIIEndOptions)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1718,6 +1900,10 @@ public class VesselCharterImpl extends UUIDObjectImpl implements VesselCharter {
 				return charterContractOverride != CHARTER_CONTRACT_OVERRIDE_EDEFAULT;
 			case CargoPackage.VESSEL_CHARTER__GENERIC_CHARTER_CONTRACT:
 				return isSetGenericCharterContract();
+			case CargoPackage.VESSEL_CHARTER__CII_START_OPTIONS:
+				return ciiStartOptions != null;
+			case CargoPackage.VESSEL_CHARTER__CII_END_OPTIONS:
+				return ciiEndOptions != null;
 		}
 		return super.eIsSet(featureID);
 	}

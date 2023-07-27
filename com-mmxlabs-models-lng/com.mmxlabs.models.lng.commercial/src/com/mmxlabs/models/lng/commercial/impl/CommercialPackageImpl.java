@@ -2465,14 +2465,14 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		  (getPurchaseContract_UpstreamEmissionRate(),
 		   source,
 		   new String[] {
-			   "unit", "kg/mmBtu",
+			   "unit", "t/mmBtu",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getPurchaseContract_PipelineEmissionRate(),
 		   source,
 		   new String[] {
-			   "unit", "kg/mmBtu",
+			   "unit", "t/mmBtu",
 			   "formatString", "####0.###"
 		   });
 		addAnnotation

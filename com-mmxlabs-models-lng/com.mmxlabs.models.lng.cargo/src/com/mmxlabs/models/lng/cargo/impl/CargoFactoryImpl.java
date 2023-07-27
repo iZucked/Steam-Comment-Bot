@@ -128,6 +128,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.PANAMA_SEASONALITY_RECORD: return createPanamaSeasonalityRecord();
 			case CargoPackage.GROUPED_SLOTS_CONSTRAINT: return createGroupedSlotsConstraint();
 			case CargoPackage.GROUPED_DISCHARGE_SLOTS_CONSTRAINT: return createGroupedDischargeSlotsConstraint();
+			case CargoPackage.CII_START_OPTIONS: return createCIIStartOptions();
+			case CargoPackage.CII_END_OPTIONS: return createCIIEndOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -570,6 +572,28 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public GroupedDischargeSlotsConstraint createGroupedDischargeSlotsConstraint() {
 		GroupedDischargeSlotsConstraintImpl groupedDischargeSlotsConstraint = new GroupedDischargeSlotsConstraintImpl();
 		return groupedDischargeSlotsConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CIIStartOptions createCIIStartOptions() {
+		CIIStartOptionsImpl ciiStartOptions = new CIIStartOptionsImpl();
+		return ciiStartOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CIIEndOptions createCIIEndOptions() {
+		CIIEndOptionsImpl ciiEndOptions = new CIIEndOptionsImpl();
+		return ciiEndOptions;
 	}
 
 	/**

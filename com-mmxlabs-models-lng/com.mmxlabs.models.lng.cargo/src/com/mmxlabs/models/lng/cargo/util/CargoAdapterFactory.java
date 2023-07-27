@@ -258,6 +258,14 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createGroupedDischargeSlotsConstraintAdapter();
 			}
 			@Override
+			public Adapter caseCIIStartOptions(CIIStartOptions object) {
+				return createCIIStartOptionsAdapter();
+			}
+			@Override
+			public Adapter caseCIIEndOptions(CIIEndOptions object) {
+				return createCIIEndOptionsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -918,6 +926,34 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGroupedDischargeSlotsConstraintAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions <em>CII Start Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions
+	 * @generated
+	 */
+	public Adapter createCIIStartOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CIIEndOptions <em>CII End Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CIIEndOptions
+	 * @generated
+	 */
+	public Adapter createCIIEndOptionsAdapter() {
 		return null;
 	}
 

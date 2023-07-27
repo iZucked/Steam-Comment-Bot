@@ -121,7 +121,9 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 		return ref.isContainment() && !ref.isMany() 
 				&& ref != CargoPackage.eINSTANCE.getVesselCharter_ContainedCharterContract()
 				&& ref != CargoPackage.eINSTANCE.getVesselCharter_StartHeel()//
-				&& ref != CargoPackage.eINSTANCE.getVesselCharter_EndHeel();
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_EndHeel()//
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_CiiStartOptions()//
+				&& ref != CargoPackage.eINSTANCE.getVesselCharter_CiiEndOptions();
 	}
 	
 	private GridLayout createCustomGridLayout(int numColumns, boolean makeColumnsEqualWidth) {

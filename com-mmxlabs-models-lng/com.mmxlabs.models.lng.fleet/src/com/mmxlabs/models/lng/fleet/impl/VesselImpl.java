@@ -75,9 +75,8 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isReferenceVessel <em>Reference Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMmxReference <em>Mmx Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMarker <em>Marker</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBaseFuelEmissionRate <em>Base Fuel Emission Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getBogEmissionRate <em>Bog Emission Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getPilotLightEmissionRate <em>Pilot Light Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMethaneSlipRate <em>Methane Slip Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getDeadWeight <em>Dead Weight</em>}</li>
  * </ul>
  *
  * @generated
@@ -856,91 +855,62 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	protected boolean marker = MARKER_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getBaseFuelEmissionRate() <em>Base Fuel Emission Rate</em>}' attribute.
+	 * The default value of the '{@link #getMethaneSlipRate() <em>Methane Slip Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseFuelEmissionRate()
+	 * @see #getMethaneSlipRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double BASE_FUEL_EMISSION_RATE_EDEFAULT = 0.0;
+	protected static final double METHANE_SLIP_RATE_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getBaseFuelEmissionRate() <em>Base Fuel Emission Rate</em>}' attribute.
+	 * The cached value of the '{@link #getMethaneSlipRate() <em>Methane Slip Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseFuelEmissionRate()
+	 * @see #getMethaneSlipRate()
 	 * @generated
 	 * @ordered
 	 */
-	protected double baseFuelEmissionRate = BASE_FUEL_EMISSION_RATE_EDEFAULT;
+	protected double methaneSlipRate = METHANE_SLIP_RATE_EDEFAULT;
 
 	/**
-	 * This is true if the Base Fuel Emission Rate attribute has been set.
+	 * This is true if the Methane Slip Rate attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean baseFuelEmissionRateESet;
+	protected boolean methaneSlipRateESet;
 
 	/**
-	 * The default value of the '{@link #getBogEmissionRate() <em>Bog Emission Rate</em>}' attribute.
+	 * The default value of the '{@link #getDeadWeight() <em>Dead Weight</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBogEmissionRate()
+	 * @see #getDeadWeight()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double BOG_EMISSION_RATE_EDEFAULT = 0.0;
+	protected static final int DEAD_WEIGHT_EDEFAULT = 86655;
 
 	/**
-	 * The cached value of the '{@link #getBogEmissionRate() <em>Bog Emission Rate</em>}' attribute.
+	 * The cached value of the '{@link #getDeadWeight() <em>Dead Weight</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBogEmissionRate()
+	 * @see #getDeadWeight()
 	 * @generated
 	 * @ordered
 	 */
-	protected double bogEmissionRate = BOG_EMISSION_RATE_EDEFAULT;
+	protected int deadWeight = DEAD_WEIGHT_EDEFAULT;
 
 	/**
-	 * This is true if the Bog Emission Rate attribute has been set.
+	 * This is true if the Dead Weight attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean bogEmissionRateESet;
-
-	/**
-	 * The default value of the '{@link #getPilotLightEmissionRate() <em>Pilot Light Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotLightEmissionRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double PILOT_LIGHT_EMISSION_RATE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getPilotLightEmissionRate() <em>Pilot Light Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPilotLightEmissionRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected double pilotLightEmissionRate = PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
-
-	/**
-	 * This is true if the Pilot Light Emission Rate attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean pilotLightEmissionRateESet;
+	protected boolean deadWeightESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1992,18 +1962,18 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		}
 		return getScnt();
 	}
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
-	public double getVesselOrDelegateBaseFuelEmissionRate() {
-		if (getReference() != null && !isSetBaseFuelEmissionRate()) {
-			return getReference().getBaseFuelEmissionRate();
+	public int getVesselOrDelegateDeadWeight() {
+		if (getReference() != null && !isSetDeadWeight()) {
+			return getReference().getDeadWeight();
 		}
-		return getBaseFuelEmissionRate();
+		return getDeadWeight();
 	}
 
 	/**
@@ -2012,24 +1982,11 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated NOT
 	 */
 	@Override
-	public double getVesselOrDelegateBogEmissionRate() {
-		if (getReference() != null && !isSetBogEmissionRate()) {
-			return getReference().getBogEmissionRate();
+	public double getVesselOrDelegateMethaneSlipRate() {
+		if (getReference() != null && !isSetMethaneSlipRate()) {
+			return getReference().getMethaneSlipRate();
 		}
-		return getBogEmissionRate();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public double getVesselOrDelegatePilotLightEmissionRate() {
-		if (getReference() != null && !isSetPilotLightEmissionRate()) {
-			return getReference().getPilotLightEmissionRate();
-		}
-		return getPilotLightEmissionRate();
+		return getMethaneSlipRate();
 	}
 
 	/**
@@ -2239,8 +2196,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public double getBaseFuelEmissionRate() {
-		return baseFuelEmissionRate;
+	public double getMethaneSlipRate() {
+		return methaneSlipRate;
 	}
 
 	/**
@@ -2249,13 +2206,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public void setBaseFuelEmissionRate(double newBaseFuelEmissionRate) {
-		double oldBaseFuelEmissionRate = baseFuelEmissionRate;
-		baseFuelEmissionRate = newBaseFuelEmissionRate;
-		boolean oldBaseFuelEmissionRateESet = baseFuelEmissionRateESet;
-		baseFuelEmissionRateESet = true;
+	public void setMethaneSlipRate(double newMethaneSlipRate) {
+		double oldMethaneSlipRate = methaneSlipRate;
+		methaneSlipRate = newMethaneSlipRate;
+		boolean oldMethaneSlipRateESet = methaneSlipRateESet;
+		methaneSlipRateESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE, oldBaseFuelEmissionRate, baseFuelEmissionRate, !oldBaseFuelEmissionRateESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__METHANE_SLIP_RATE, oldMethaneSlipRate, methaneSlipRate, !oldMethaneSlipRateESet));
 	}
 
 	/**
@@ -2264,13 +2221,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public void unsetBaseFuelEmissionRate() {
-		double oldBaseFuelEmissionRate = baseFuelEmissionRate;
-		boolean oldBaseFuelEmissionRateESet = baseFuelEmissionRateESet;
-		baseFuelEmissionRate = BASE_FUEL_EMISSION_RATE_EDEFAULT;
-		baseFuelEmissionRateESet = false;
+	public void unsetMethaneSlipRate() {
+		double oldMethaneSlipRate = methaneSlipRate;
+		boolean oldMethaneSlipRateESet = methaneSlipRateESet;
+		methaneSlipRate = METHANE_SLIP_RATE_EDEFAULT;
+		methaneSlipRateESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE, oldBaseFuelEmissionRate, BASE_FUEL_EMISSION_RATE_EDEFAULT, oldBaseFuelEmissionRateESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__METHANE_SLIP_RATE, oldMethaneSlipRate, METHANE_SLIP_RATE_EDEFAULT, oldMethaneSlipRateESet));
 	}
 
 	/**
@@ -2279,8 +2236,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public boolean isSetBaseFuelEmissionRate() {
-		return baseFuelEmissionRateESet;
+	public boolean isSetMethaneSlipRate() {
+		return methaneSlipRateESet;
 	}
 
 	/**
@@ -2289,8 +2246,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public double getBogEmissionRate() {
-		return bogEmissionRate;
+	public int getDeadWeight() {
+		return deadWeight;
 	}
 
 	/**
@@ -2299,13 +2256,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public void setBogEmissionRate(double newBogEmissionRate) {
-		double oldBogEmissionRate = bogEmissionRate;
-		bogEmissionRate = newBogEmissionRate;
-		boolean oldBogEmissionRateESet = bogEmissionRateESet;
-		bogEmissionRateESet = true;
+	public void setDeadWeight(int newDeadWeight) {
+		int oldDeadWeight = deadWeight;
+		deadWeight = newDeadWeight;
+		boolean oldDeadWeightESet = deadWeightESet;
+		deadWeightESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, bogEmissionRate, !oldBogEmissionRateESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__DEAD_WEIGHT, oldDeadWeight, deadWeight, !oldDeadWeightESet));
 	}
 
 	/**
@@ -2314,13 +2271,13 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public void unsetBogEmissionRate() {
-		double oldBogEmissionRate = bogEmissionRate;
-		boolean oldBogEmissionRateESet = bogEmissionRateESet;
-		bogEmissionRate = BOG_EMISSION_RATE_EDEFAULT;
-		bogEmissionRateESet = false;
+	public void unsetDeadWeight() {
+		int oldDeadWeight = deadWeight;
+		boolean oldDeadWeightESet = deadWeightESet;
+		deadWeight = DEAD_WEIGHT_EDEFAULT;
+		deadWeightESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__BOG_EMISSION_RATE, oldBogEmissionRate, BOG_EMISSION_RATE_EDEFAULT, oldBogEmissionRateESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__DEAD_WEIGHT, oldDeadWeight, DEAD_WEIGHT_EDEFAULT, oldDeadWeightESet));
 	}
 
 	/**
@@ -2329,58 +2286,8 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
-	public boolean isSetBogEmissionRate() {
-		return bogEmissionRateESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getPilotLightEmissionRate() {
-		return pilotLightEmissionRate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPilotLightEmissionRate(double newPilotLightEmissionRate) {
-		double oldPilotLightEmissionRate = pilotLightEmissionRate;
-		pilotLightEmissionRate = newPilotLightEmissionRate;
-		boolean oldPilotLightEmissionRateESet = pilotLightEmissionRateESet;
-		pilotLightEmissionRateESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, pilotLightEmissionRate, !oldPilotLightEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetPilotLightEmissionRate() {
-		double oldPilotLightEmissionRate = pilotLightEmissionRate;
-		boolean oldPilotLightEmissionRateESet = pilotLightEmissionRateESet;
-		pilotLightEmissionRate = PILOT_LIGHT_EMISSION_RATE_EDEFAULT;
-		pilotLightEmissionRateESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE, oldPilotLightEmissionRate, PILOT_LIGHT_EMISSION_RATE_EDEFAULT, oldPilotLightEmissionRateESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetPilotLightEmissionRate() {
-		return pilotLightEmissionRateESet;
+	public boolean isSetDeadWeight() {
+		return deadWeightESet;
 	}
 
 	/**
@@ -2920,12 +2827,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return isMmxReference();
 			case FleetPackage.VESSEL__MARKER:
 				return isMarker();
-			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
-				return getBaseFuelEmissionRate();
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				return getBogEmissionRate();
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				return getPilotLightEmissionRate();
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				return getMethaneSlipRate();
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				return getDeadWeight();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -3049,14 +2954,11 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MARKER:
 				setMarker((Boolean)newValue);
 				return;
-			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
-				setBaseFuelEmissionRate((Double)newValue);
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				setMethaneSlipRate((Double)newValue);
 				return;
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				setBogEmissionRate((Double)newValue);
-				return;
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				setPilotLightEmissionRate((Double)newValue);
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				setDeadWeight((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -3177,14 +3079,11 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MARKER:
 				setMarker(MARKER_EDEFAULT);
 				return;
-			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
-				unsetBaseFuelEmissionRate();
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				unsetMethaneSlipRate();
 				return;
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				unsetBogEmissionRate();
-				return;
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				unsetPilotLightEmissionRate();
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				unsetDeadWeight();
 				return;
 		}
 		super.eUnset(featureID);
@@ -3269,12 +3168,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return mmxReference != MMX_REFERENCE_EDEFAULT;
 			case FleetPackage.VESSEL__MARKER:
 				return marker != MARKER_EDEFAULT;
-			case FleetPackage.VESSEL__BASE_FUEL_EMISSION_RATE:
-				return isSetBaseFuelEmissionRate();
-			case FleetPackage.VESSEL__BOG_EMISSION_RATE:
-				return isSetBogEmissionRate();
-			case FleetPackage.VESSEL__PILOT_LIGHT_EMISSION_RATE:
-				return isSetPilotLightEmissionRate();
+			case FleetPackage.VESSEL__METHANE_SLIP_RATE:
+				return isSetMethaneSlipRate();
+			case FleetPackage.VESSEL__DEAD_WEIGHT:
+				return isSetDeadWeight();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -3342,12 +3239,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(mmxReference);
 		result.append(", marker: ");
 		result.append(marker);
-		result.append(", baseFuelEmissionRate: ");
-		if (baseFuelEmissionRateESet) result.append(baseFuelEmissionRate); else result.append("<unset>");
-		result.append(", bogEmissionRate: ");
-		if (bogEmissionRateESet) result.append(bogEmissionRate); else result.append("<unset>");
-		result.append(", pilotLightEmissionRate: ");
-		if (pilotLightEmissionRateESet) result.append(pilotLightEmissionRate); else result.append("<unset>");
+		result.append(", methaneSlipRate: ");
+		if (methaneSlipRateESet) result.append(methaneSlipRate); else result.append("<unset>");
+		result.append(", deadWeight: ");
+		if (deadWeightESet) result.append(deadWeight); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

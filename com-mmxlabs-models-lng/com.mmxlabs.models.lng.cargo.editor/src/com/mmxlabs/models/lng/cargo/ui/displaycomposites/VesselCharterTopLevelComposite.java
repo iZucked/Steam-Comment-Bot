@@ -24,9 +24,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselCharterDetailComposite.VesselCharterDetailGroup;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIEndOptionsDetailComposite;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIStartOptionsDetailComposite;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -52,6 +55,8 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 	private BallastBonusTermsDetailComposite ballastBonusComposite;
 	private RepositioningFeeTermsDetailComposite repositioningFeeComposite;
 	private Button gccButton;
+	private IDisplayComposite ciiStartOptions;
+	private IDisplayComposite ciiEndOptions;
 	
 	public VesselCharterTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
@@ -62,24 +67,23 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 	 */
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
-
 		Composite containerComposite = toolkit.createComposite(this, SWT.NONE);
 		containerComposite.setLayout(new GridLayout(1, true));
 		
-		final Group g = new Group(containerComposite, SWT.NONE);
-		toolkit.adapt(g);
+		final Group vesselCharterTopGroup = new Group(containerComposite, SWT.NONE);
+		toolkit.adapt(vesselCharterTopGroup);
 
-		g.setText(EditorUtils.unmangle(object));
-		g.setLayout(new GridLayout(2, true));
-		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		vesselCharterTopGroup.setText(EditorUtils.unmangle(object));
+		vesselCharterTopGroup.setLayout(new GridLayout(2, true));
+		vesselCharterTopGroup.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
+		vesselCharterTopGroup.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		topLevel = new VesselCharterDetailComposite(g, SWT.NONE, toolkit, VesselCharterDetailGroup.TOP_LEFT, dialogContext);
+		topLevel = new VesselCharterDetailComposite(vesselCharterTopGroup, SWT.NONE, toolkit, VesselCharterDetailGroup.TOP_LEFT, dialogContext);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 		topLevel.display(dialogContext, root, object, range, dbc);
 		
-		IDisplayComposite topRight = new VesselCharterDetailComposite(g, SWT.NONE, toolkit, VesselCharterDetailGroup.TOP_RIGHT, dialogContext);
+		IDisplayComposite topRight = new VesselCharterDetailComposite(vesselCharterTopGroup, SWT.NONE, toolkit, VesselCharterDetailGroup.TOP_RIGHT, dialogContext);
 		topRight.setCommandHandler(commandHandler);
 		topRight.setEditorWrapper(editorWrapper);
 		topRight.display(dialogContext, root, object, range, dbc);
@@ -90,104 +94,104 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 			gccButton.addMouseListener(new CharterContractMouseListener(object));
 		}
 		
-		final GridDataFactory layoutData = GridDataFactory.fillDefaults().grab(true, true);
-
-		final GridLayout gl2C = createCustomGridLayout(2, false);
+		//
+		// Layouts
+		final GridDataFactory layoutDataFactory = GridDataFactory.fillDefaults().grab(true, true);
+		final GridLayout fourColumnsLayout = createCustomGridLayout(4, false);
+		final GridLayout singleColumnLayout = createCustomGridLayout(1, false);
+		final GridData twoColumnSpanningGridLayoutData = createSpanningLayoutData(layoutDataFactory, 2);
+		final GridData fourColumnSpanningGridLayoutData = createSpanningLayoutData(layoutDataFactory, 4);
 		
-		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
-		midComposite.setLayout(gl2C);
-		midComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		// Wrapper
+		final Composite wrapperCompositeWithFourColumns = toolkit.createComposite(this, SWT.NONE);
+		wrapperCompositeWithFourColumns.setLayout(fourColumnsLayout);	
+		wrapperCompositeWithFourColumns.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		final GridLayout gl4C = createCustomGridLayout(4, false);
-		
-		final Composite g2 = new Composite(midComposite, SWT.NONE);
-		toolkit.adapt(g2);
-		g2.setLayout(gl4C);
-		g2.setLayoutData(layoutData.create());
-		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		final GridLayout gl = createCustomGridLayout(1, false);
-		
-		final Group g21 = new Group(g2, SWT.NONE);
-		toolkit.adapt(g21);
-		g21.setText("Start");
-		g21.setLayout(gl);
-		g21.setLayoutData(layoutData.create());
-		g21.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		IDisplayComposite startStuff = new VesselCharterDetailComposite(g21, SWT.NONE, toolkit, VesselCharterDetailGroup.START, dialogContext);
+		//
+		// Start Stuff
+		final Group groupForVesselStartStuff = createGroup(wrapperCompositeWithFourColumns, "Start", singleColumnLayout, layoutDataFactory.create());
+		final IDisplayComposite startStuff = new VesselCharterDetailComposite(groupForVesselStartStuff, SWT.NONE, toolkit, VesselCharterDetailGroup.START, dialogContext);
 		startStuff.setCommandHandler(commandHandler);
 		startStuff.setEditorWrapper(editorWrapper);
 		startStuff.display(dialogContext, root, object, range, dbc);
 		
-		final Group g22 = new Group(g2, SWT.NONE);
-		toolkit.adapt(g22);
-		g22.setText("Heel");
-		g22.setLayout(gl);
-		g22.setLayoutData(layoutData.create());
-		g22.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		startHeelComposite = new StartHeelOptionsDetailComposite(g22, SWT.NONE, toolkit);
+		//
+		// Start Heel Stuff
+		final Group groupForVesselStartHeelStuff = createGroup(wrapperCompositeWithFourColumns, "Heel", singleColumnLayout, layoutDataFactory.create());
+		startHeelComposite = new StartHeelOptionsDetailComposite(groupForVesselStartHeelStuff, SWT.NONE, toolkit);
 		startHeelComposite.setCommandHandler(commandHandler);
 		startHeelComposite.display(dialogContext, root, getStartHeel(object), range, dbc);
 		
-		
-		final Composite g3 = new Composite(midComposite, SWT.NONE);
-		toolkit.adapt(g3);
-		g3.setLayout(gl4C);
-		g3.setLayoutData(layoutData.create());
-		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		final Group g31 = new Group(g3, SWT.NONE);
-		toolkit.adapt(g31);
-		g31.setText("End");
-		g31.setLayout(gl);
-		g31.setLayoutData(layoutData.create());
-		g31.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		IDisplayComposite endStuff = new VesselCharterDetailComposite(g31, SWT.NONE, toolkit, VesselCharterDetailGroup.END, dialogContext);
+		//
+		// Vessel Charter End Stuff
+		final Group groupForVesselEndStuff = createGroup(wrapperCompositeWithFourColumns, "End", singleColumnLayout, layoutDataFactory.create());
+		IDisplayComposite endStuff = new VesselCharterDetailComposite(groupForVesselEndStuff, SWT.NONE, toolkit, VesselCharterDetailGroup.END, dialogContext);
 		endStuff.setCommandHandler(commandHandler);
 		endStuff.setEditorWrapper(editorWrapper);
 		endStuff.display(dialogContext, root, object, range, dbc);
 		
-		final Group g32 = new Group(g3, SWT.NONE);
-		toolkit.adapt(g32);
-		g32.setText("Heel");
-		g32.setLayout(gl);
-		g32.setLayoutData(layoutData.create());
-		g32.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		endHeelComposite = new EndHeelOptionsDetailComposite(g32, SWT.NONE, toolkit);
+		//
+		// End Heel Stuff
+		final Group groupForEndHeelStuff = createGroup(wrapperCompositeWithFourColumns, "Heel", singleColumnLayout, layoutDataFactory.create());
+		endHeelComposite = new EndHeelOptionsDetailComposite(groupForEndHeelStuff, SWT.NONE, toolkit);
 		endHeelComposite.setCommandHandler(commandHandler);
 		endHeelComposite.display(dialogContext, root, getEndHeel(object), range, dbc);
+
+		//
+		// Start CII Stuff
+		final Group groupForCIIStartOptionsStuff = createGroup(wrapperCompositeWithFourColumns, "CII", singleColumnLayout, twoColumnSpanningGridLayoutData);
+		ciiStartOptions = new CIIStartOptionsDetailComposite(groupForCIIStartOptionsStuff, SWT.NONE, toolkit);
+		ciiStartOptions.setCommandHandler(commandHandler);
+		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
 		
+		//
+		// CII End Options Stuff
+		final Group groupForCIIEndOptionsStuff = createGroup(wrapperCompositeWithFourColumns, "CII", singleColumnLayout, twoColumnSpanningGridLayoutData);
+		ciiEndOptions = new CIIEndOptionsDetailComposite(groupForCIIEndOptionsStuff, SWT.NONE, toolkit);
+		ciiEndOptions.setCommandHandler(commandHandler);
+		ciiEndOptions.display(dialogContext, root, getCIIEndOptions(object), range, dbc);
 		
-		final Group g4 = new Group(midComposite, SWT.NONE);
-		toolkit.adapt(g4);
-		g4.setLayout(gl);
-		g4.setLayoutData(layoutData.create());
-		g4.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		g4.setVisible(hasContract(object));
-		
-		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(g4, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
+		//
+		// Repositioning Fee Stuff
+		final Group groupForRepositioningFeeComposite = createGroup(wrapperCompositeWithFourColumns, null, singleColumnLayout, fourColumnSpanningGridLayoutData);
+		groupForRepositioningFeeComposite.setVisible(hasContract(object));
+		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(groupForRepositioningFeeComposite, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
 		repositioningFeeComposite.setCommandHandler(commandHandler);
 		repositioningFeeComposite.setEditorWrapper(editorWrapper);
 		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
 		
-		final Group g5 = new Group(midComposite, SWT.NONE);
-		toolkit.adapt(g5);
-		g5.setLayout(gl);
-		g5.setLayoutData(layoutData.create());
-		g5.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		g5.setVisible(hasContract(object));
-		
-		ballastBonusComposite = new BallastBonusTermsDetailComposite(g5, SWT.NONE, dialogContext, toolkit, defaultResizeAction(), object);
+		//
+		// Ballast Bonus Stuff
+		final Group groupForBallastBonusComposite = createGroup(wrapperCompositeWithFourColumns, null, singleColumnLayout, fourColumnSpanningGridLayoutData);
+		groupForBallastBonusComposite.setVisible(hasContract(object));
+		ballastBonusComposite = new BallastBonusTermsDetailComposite(groupForBallastBonusComposite, SWT.NONE, dialogContext, toolkit, defaultResizeAction(), object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.setEditorWrapper(editorWrapper);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 
 		this.setLayout(new GridLayout(1, true));
 	}
+	
+	private Group createGroup(final Composite parentComposite, final String groupTitle, final GridLayout groupGridLayout, final GridData groupGridData) {
+		final Group group = new Group(parentComposite, SWT.NONE);
+		toolkit.adapt(group);
+		if (groupTitle != null) {
+			group.setText(groupTitle);
+		}
+		group.setLayout(groupGridLayout);
+		group.setLayoutData(groupGridData);
+		group.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		return group;
+	}
+
+	private GridData createSpanningLayoutData(final GridDataFactory layoutDataFactory, final int columnSpan) {
+		final GridData spanningGridLayoutData = layoutDataFactory.create();
+		spanningGridLayoutData.horizontalAlignment = GridData.FILL;
+		spanningGridLayoutData.horizontalSpan = columnSpan;
+		return spanningGridLayoutData;
+	}
+
 
 	private Runnable defaultResizeAction() {
 		return () -> {
@@ -271,6 +275,20 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__START_HEEL);
 	}
 	
+	private EObject getCIIStartOptions(final EObject object) {
+		if (object instanceof VesselCharter vc && vc.getCiiStartOptions() == null) {
+			vc.setCiiStartOptions(CargoFactory.eINSTANCE.createCIIStartOptions());
+		}
+		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__CII_START_OPTIONS);
+	}
+	
+	private EObject getCIIEndOptions(EObject object) {
+		if (object instanceof VesselCharter vc && vc.getCiiEndOptions() == null) {
+			vc.setCiiEndOptions(CargoFactory.eINSTANCE.createCIIEndOptions());
+		}
+		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__CII_END_OPTIONS);
+	}
+
 	private EObject getEndHeel(final EObject object) {
 		return (EObject) object.eGet(CargoPackage.Literals.VESSEL_CHARTER__END_HEEL);
 	}

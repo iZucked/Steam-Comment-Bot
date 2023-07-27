@@ -4,165 +4,216 @@
  */
 package com.mmxlabs.lingo.reports.emissions;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnGroup;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrder;
+import com.mmxlabs.lingo.reports.emissions.columns.ColumnOrderLevel;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
-import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnSortOrder;
-import com.mmxlabs.lingo.reports.modelbased.annotations.HubFormat;
-import com.mmxlabs.lingo.reports.modelbased.annotations.LingoEquivalents;
-import com.mmxlabs.lingo.reports.modelbased.annotations.LingoFormat;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.lingo.reports.modelbased.annotations.SchemaVersion;
-import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.cii.CIIAccumulatableEventModel;
 
 /**
  * Emissions report data
  */
 @SchemaVersion(1)
-public class VesselEmissionAccountingReportModelV1 implements IVesselEmission, IEmissionReportIDData {
+public class VesselEmissionAccountingReportModelV1 extends AbstractEmissionAccountingReportModel implements IDeltaDerivable, CIIAccumulatableEventModel {
 
-	@JsonIgnore
-	@LingoEquivalents
-	@LingoIgnore
-	public Set<Object> equivalents = new HashSet<>();
+	private static final String BASE_FUEL_GROUP = "BASE_FUEL_GROUP";
+	private static final String BASE_FUEL_TITLE = "Base Fuel";
+	private static final String LNG_GROUP = "LNG_GROUP";
+	private static final String LNG_TITLE = "LNG";
+	private static final String PILOT_LIGHT_GROUP = "PILOT_LIGHT_GROUP";
+	private static final String PILOT_LIGHT_TITLE = "Pilot Light";
+	private static final String METHANE_SLIP_GROUP_ID = "METHANE_SLIP_GROUP_ID";
 	
-	@JsonIgnore
-	@LingoIgnore
-	public boolean isPinned = false;
-	@JsonIgnore
-	@LingoIgnore
-	public Schedule schedule;
-	@JsonIgnore
-	@LingoIgnore
-	public String otherID;
 	
-	@ColumnName("Scenario")
-	public String scenarioName;
-	
-	@ColumnName("Vessel")
-	public String vesselName;
-	
-	@ColumnName("Event ID")
-	public String eventID;
-	
-	@ColumnName("Start")
-	@HubFormat("DD/MM/YY")
-	@LingoFormat("dd/MM/yy")
+	@ColumnGroup(id = ID_COLUMN_GROUP, headerTitle = "", position = ColumnOrder.FIRST)
+	@ColumnName("Type")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
+	public String eventType;
 
-	@ColumnSortOrder(value = 1)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	public LocalDateTime eventStart;
-	
-	@ColumnName("End")
-	@HubFormat("DD/MM/YY")
-	@LingoFormat("dd/MM/yy")
+	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
+	@ColumnName("Type")
+	@ColumnOrderLevel(ColumnOrder.FIRST)
+	public String baseFuelType;
 
-	@ColumnSortOrder(value = 1)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yy")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	public LocalDateTime eventEnd;
-	
-	@ColumnName("Base Fuel")
-	public Long baseFuelEmission;
-	
-	@ColumnName("BOG")
-	public Long bogEmission;
-	
-	@ColumnName("Pilot Light")
+	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
+	@ColumnName("Consumed")
+	@ColumnOrderLevel(ColumnOrder.SECOND)
+	public Long baseFuelConsumed;
+
+	@ColumnGroup(id = BASE_FUEL_GROUP, headerTitle = BASE_FUEL_TITLE, position = ColumnOrder.THIRD)
+	@ColumnName("Emissions")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
+	public Long baseFuelEmissions;
+
+	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
+	@ColumnName("NBO")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
+	public Long consumedNBO;
+
+	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
+	@ColumnName("FBO")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
+	public Long consumedFBO;
+
+	@ColumnGroup(id = LNG_GROUP, headerTitle = LNG_TITLE, position = ColumnOrder.FOURTH)
+	@ColumnName("Emissions")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
+	public Long emissionsLNG;
+
+	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
+	@ColumnName("Type")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
+	public String pilotLightFuelType;
+
+	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
+	@ColumnName("Consumed")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
+	public Long pilotLightFuelConsumption;
+
+	@ColumnGroup(id = PILOT_LIGHT_GROUP, headerTitle = PILOT_LIGHT_TITLE, position = ColumnOrder.FIFTH)
+	@ColumnName("Emissions")
+	@ColumnOrderLevel(ColumnOrder.THIRD)
 	public Long pilotLightEmission;
+
+	@ColumnGroup(id = METHANE_SLIP_GROUP_ID, headerTitle = "", position = ColumnOrder.THIRD_FROM_END)
+	@ColumnName("Methane Slip")
+	@ColumnOrderLevel(ColumnOrder.FIRST)
+	public Long methaneSlip;
 	
-	@ColumnName("Total CO2e kg")
-	public Long totalEmission;
-	
-	@JsonIgnore
 	@LingoIgnore
-	public double baseFuelEmissionRate;
-	@JsonIgnore
+	private double totalEmissionForCII;
 	@LingoIgnore
-	public double bogEmissionRate;
-	@JsonIgnore
+	private LocalDate eventStartForCII;
 	@LingoIgnore
-	public double pilotLightEmissionRate;
-	
-	@JsonIgnore
-	@Override
-	public double getBaseFuelEmissionRate() {
-		return baseFuelEmissionRate;
-	}
-
-	@JsonIgnore
-	@Override
-	public double getBOGEmissionRate() {
-		return bogEmissionRate;
-	}
-
-	@JsonIgnore
-	@Override
-	public double getPilotLightEmissionRate() {
-		return pilotLightEmissionRate;
-	}
-
-	@JsonIgnore
-	@Override
-	public boolean isPinned() {
-		return this.isPinned;
-	}
-
-	@JsonIgnore
-	@Override
-	public Schedule getSchedule() {
-		return this.schedule;
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getScenarioName() {
-		return scenarioName;
-	}
-
-	@Override
-	public String getVesselName() {
-		return vesselName;
-	}
-
-	@Override
-	public String getEventID() {
-		return eventID;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getOtherID() {
-		return otherID;
-	}
-
-	public static void main(String args[]) throws Exception {
-
-		SchemaGenerator gen = new SchemaGenerator();
-		String json = gen.generateHubSchema(VesselEmissionAccountingReportModelV1.class, Mode.FULL);
-		System.out.println(json);
-	}
-	
-	@JsonIgnore
+	private LocalDate eventEndForCII;
 	@LingoIgnore
-	public int group = Integer.MAX_VALUE;
-	
-	@JsonIgnore
+	private Vessel vesselForCII;
+	@LingoIgnore
+	private Event eventForCII;
+
 	@Override
-	public int getGroup() {
-		return group;
+	public boolean equals(Object other) {
+		if (other instanceof final VesselEmissionAccountingReportModelV1 otherModel) {
+			return super.equals(other) && this.pilotLightEmission == otherModel.pilotLightEmission && this.methaneSlip == otherModel.methaneSlip && this.emissionsLNG == otherModel.emissionsLNG
+					&& this.consumedFBO == otherModel.consumedFBO && this.consumedNBO == otherModel.consumedNBO;
+		}
+		return false;
+	}
+
+	@Override
+	public void initZeroes() {
+		super.initZeroes();
+		pilotLightEmission = 0L;
+		methaneSlip = 0L;
+		emissionsLNG = 0L;
+		consumedFBO = 0L;
+		consumedNBO = 0L;
+		baseFuelConsumed = 0L;
+		baseFuelEmissions = 0L;
+		pilotLightFuelConsumption = 0L;
+	}
+
+	@Override
+	public void setDelta(IDeltaDerivable first, IDeltaDerivable second) {
+		if (first instanceof final VesselEmissionAccountingReportModelV1 firstModel && second instanceof final VesselEmissionAccountingReportModelV1 secondModel) {
+			super.setDelta(firstModel, secondModel);
+			this.methaneSlip = firstModel.methaneSlip - secondModel.methaneSlip;
+			this.emissionsLNG = firstModel.emissionsLNG - secondModel.emissionsLNG;
+			this.consumedFBO = firstModel.consumedFBO - secondModel.consumedFBO;
+			this.consumedNBO = firstModel.consumedNBO - secondModel.consumedNBO;
+			if (firstModel.baseFuelType.equals(secondModel.baseFuelType)) {
+				this.baseFuelType = firstModel.baseFuelType;
+				this.baseFuelConsumed = firstModel.baseFuelConsumed - secondModel.baseFuelConsumed;
+			}
+			this.baseFuelEmissions = firstModel.baseFuelEmissions - secondModel.baseFuelEmissions;
+			if (firstModel.pilotLightFuelType.equals(secondModel.pilotLightFuelType)) {
+				this.pilotLightFuelType = firstModel.baseFuelType;
+				this.pilotLightFuelConsumption = firstModel.pilotLightFuelConsumption - secondModel.pilotLightFuelConsumption;
+			}
+			this.pilotLightEmission = firstModel.pilotLightEmission - secondModel.pilotLightEmission;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	@Override
+	public void addToTotal(IDeltaDerivable summand) {
+		if (summand instanceof final VesselEmissionAccountingReportModelV1 summandModel) {
+			super.addToTotal(summand);
+			this.pilotLightEmission += summandModel.pilotLightEmission;
+			this.methaneSlip += summandModel.methaneSlip;
+			this.emissionsLNG += summandModel.emissionsLNG;
+			this.consumedFBO += summandModel.consumedFBO;
+			this.consumedNBO += summandModel.consumedNBO;
+			this.baseFuelEmissions += summandModel.baseFuelEmissions;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
+	@Override
+	public boolean isNonZero() {
+		return super.isNonZero() || pilotLightEmission != 0L || methaneSlip != 0L || emissionsLNG != 0L || consumedFBO != 0L || consumedNBO != 0L || baseFuelEmissions != 0L;
 	}
 	
-	public void setGroup(int group) {
-		this.group = group;
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public Vessel getCIIVessel() {
+		return vesselForCII;
+	}
+
+	@Override
+	public Event getCIIEvent() {
+		return eventForCII;
+	}
+
+	@Override
+	public LocalDate getCIIStartDate() {
+		return eventStart.toLocalDate();
+	}
+
+	@Override
+	public LocalDate getCIIEndDate() {
+		return eventEnd.toLocalDate();
+	}
+
+	@Override
+	public double getTotalEmissionForCII() {
+		return totalEmissionForCII;
+	}
+
+	@Override
+	public void setCIIVessel(Vessel vessel) {
+		this.vesselForCII = vessel;
+	}
+
+	@Override
+	public void setCIIEvent(Event event) {
+		this.eventForCII = event;
+	}
+
+	@Override
+	public void setCIIStartDate(LocalDate startDate) {
+		this.eventStartForCII = startDate;
+	}
+
+	@Override
+	public void setCIIEndDate(LocalDate endDate) {
+		this.eventEndForCII = endDate;
+	}
+
+	@Override
+	public void addToTotalEmissionForCII(double emission) {
+		this.totalEmissionForCII += emission;
 	}
 }
