@@ -73,11 +73,9 @@ public class VesselEmissionAccountingReportJSONGenerator {
 					model.totalEmission = 0L;
 					model.methaneSlip = 0L;
 					model.methaneSlipRate = vessel.getVesselOrDelegateMethaneSlipRate();
-					int journeyDistance = 0;
-					
 					model.eventID = vesselName;
 
-					journeyDistance = processEvent(event, model, journeyDistance);
+					final int journeyDistance = processEvent(event, model);
 					if (model.eventType == null) {
 						continue;
 					}
@@ -150,19 +148,19 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		model.totalEmission += model.baseFuelEmissions + model.pilotLightEmission + model.emissionsLNG;
 	}
 
-	private static int processEvent(final Event event, final VesselEmissionAccountingReportModelV1 model, int journeyDistance) {
+	private static int processEvent(final Event event, final VesselEmissionAccountingReportModelV1 model) {
 		if (event instanceof final SlotVisit slotVisit) {
 			processSlotVisit(model, slotVisit);
 		} else if (event instanceof final StartEvent startEvent) {
-			processStartEvent(model, startEvent);
+			return processStartEvent(model, startEvent);
 		} else if (event instanceof final EndEvent endEvent) {
 			processEndEvent(model, endEvent);
 		} else if (event instanceof final Journey journeyEvent) {
-			journeyDistance = processJourneyEvent(model, journeyEvent);
+			return processJourneyEvent(model, journeyEvent);
 		} else if (event instanceof final Idle idleEvent) {
 			processIdleEvent(model, idleEvent);
 		}
-		return journeyDistance;
+		return 0;
 	}
 
 	private static void processIdleEvent(final VesselEmissionAccountingReportModelV1 model, Idle idleEvent) {
@@ -213,7 +211,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		}
 	}
 
-	private static void processStartEvent(final VesselEmissionAccountingReportModelV1 model, StartEvent startEvent) {
+	private static int processStartEvent(final VesselEmissionAccountingReportModelV1 model, StartEvent startEvent) {
 		model.eventType = "Vessel start";
 		final SlotAllocation slotAllocation = startEvent.getSlotAllocation();
 		if (slotAllocation != null) {
@@ -228,8 +226,10 @@ public class VesselEmissionAccountingReportJSONGenerator {
 			final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
 			if (ciiStartOptions != null) {
 				model.totalEmission += ciiStartOptions.getYearTodayEmissions();
+				return ciiStartOptions.getYearTodayDistance();
 			}
 		}
+		return 0;
 	}
 
 	private static void processSlotVisit(final VesselEmissionAccountingReportModelV1 model, SlotVisit slotVisit) {
