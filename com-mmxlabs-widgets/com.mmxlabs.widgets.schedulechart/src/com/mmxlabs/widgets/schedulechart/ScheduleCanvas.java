@@ -40,9 +40,9 @@ public class ScheduleCanvas extends Canvas {
 			// TODO: change MOD1 and MOD2 to be dependent on settings object
 			if (e.stateMask == SWT.MOD1) {
 				if (e.count > 0) {
-					timeScale.zoomIn(new Point(e.x, e.y));
+					timeScale.zoomInBy(new Point(e.x, e.y), e.count * 5);
 				} else {
-					timeScale.zoomOut(new Point(e.x, e.y));
+					timeScale.zoomOutBy(new Point(e.x, e.y), e.count * 5);
 				}
 			} else if (e.stateMask == SWT.MOD2) {
 				horizontalScrollbarHandler.handle(e);
