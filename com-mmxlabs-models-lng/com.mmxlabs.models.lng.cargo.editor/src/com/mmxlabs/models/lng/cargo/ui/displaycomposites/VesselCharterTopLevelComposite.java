@@ -28,6 +28,8 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselCharterDetailComposite.VesselCharterDetailGroup;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIEndOptionsDetailComposite;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIStartOptionsDetailComposite;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;

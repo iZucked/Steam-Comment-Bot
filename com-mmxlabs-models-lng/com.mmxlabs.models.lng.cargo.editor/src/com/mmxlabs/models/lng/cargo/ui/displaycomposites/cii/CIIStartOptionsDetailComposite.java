@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
+package com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.widgets.Composite;
@@ -21,7 +21,6 @@ public class CIIStartOptionsDetailComposite extends DefaultDetailComposite {
 
 		@Override
 		protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
-
 			return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 					.withRow() //
 					.withFeature(CargoPackage.Literals.CII_START_OPTIONS__YEAR_TODAY_DISTANCE, "YTD Distance", 75) //
@@ -29,6 +28,5 @@ public class CIIStartOptionsDetailComposite extends DefaultDetailComposite {
 					.makeRow() //
 					.make() //
 			;
-
 		}
 }
