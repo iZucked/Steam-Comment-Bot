@@ -13,8 +13,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayEmissions <em>Year Today Emissions</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayDistance <em>Year Today Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateEmissions <em>Year To Date Emissions</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateDistance <em>Year To Date Distance</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCIIStartOptions()
@@ -23,47 +23,47 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface CIIStartOptions extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Year Today Emissions</b></em>' attribute.
+	 * Returns the value of the '<em><b>Year To Date Emissions</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Year Today Emissions</em>' attribute.
-	 * @see #setYearTodayEmissions(int)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCIIStartOptions_YearTodayEmissions()
-	 * @model
+	 * @return the value of the '<em>Year To Date Emissions</em>' attribute.
+	 * @see #setYearToDateEmissions(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCIIStartOptions_YearToDateEmissions()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#######'"
 	 * @generated
 	 */
-	int getYearTodayEmissions();
+	int getYearToDateEmissions();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayEmissions <em>Year Today Emissions</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateEmissions <em>Year To Date Emissions</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Year Today Emissions</em>' attribute.
-	 * @see #getYearTodayEmissions()
+	 * @param value the new value of the '<em>Year To Date Emissions</em>' attribute.
+	 * @see #getYearToDateEmissions()
 	 * @generated
 	 */
-	void setYearTodayEmissions(int value);
+	void setYearToDateEmissions(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Year Today Distance</b></em>' attribute.
+	 * Returns the value of the '<em><b>Year To Date Distance</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Year Today Distance</em>' attribute.
-	 * @see #setYearTodayDistance(int)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCIIStartOptions_YearTodayDistance()
-	 * @model
+	 * @return the value of the '<em>Year To Date Distance</em>' attribute.
+	 * @see #setYearToDateDistance(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCIIStartOptions_YearToDateDistance()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#####'"
 	 * @generated
 	 */
-	int getYearTodayDistance();
+	int getYearToDateDistance();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayDistance <em>Year Today Distance</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateDistance <em>Year To Date Distance</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Year Today Distance</em>' attribute.
-	 * @see #getYearTodayDistance()
+	 * @param value the new value of the '<em>Year To Date Distance</em>' attribute.
+	 * @see #getYearToDateDistance()
 	 * @generated
 	 */
-	void setYearTodayDistance(int value);
+	void setYearToDateDistance(int value);
 
 } // CIIStartOptions

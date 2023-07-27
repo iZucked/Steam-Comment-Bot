@@ -23,8 +23,8 @@ public class CIIStartOptionsDetailComposite extends DefaultDetailComposite {
 		protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 			return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 					.withRow() //
-					.withFeature(CargoPackage.Literals.CII_START_OPTIONS__YEAR_TODAY_DISTANCE, "YTD Distance", 75) //
-					.withFeature(CargoPackage.Literals.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS, "YTD Emissions", 130) //
+					.withFeature(CargoPackage.Literals.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE, "YTD Distance", 75) //
+					.withFeature(CargoPackage.Literals.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS, "YTD Emissions", 130) //
 					.makeRow() //
 					.make() //
 			;

@@ -21,7 +21,7 @@ public class CIIEndOptionsDetailComposite extends DefaultDetailComposite {
 	protected IDisplayCompositeLayoutProvider createLayoutProvider(final EClass eClass) {
 		return new RowGroupDisplayCompositeLayoutProviderBuilder() //
 				.withRow() //
-				.withFeature(CargoPackage.Literals.CII_END_OPTIONS__DESIRED_CII_GRADE, "Rating", 75) //
+				.withFeature(CargoPackage.Literals.CII_END_OPTIONS__DESIRED_CII_GRADE, "Rating", 150) //
 				.makeRow() //
 				.make();
 	}

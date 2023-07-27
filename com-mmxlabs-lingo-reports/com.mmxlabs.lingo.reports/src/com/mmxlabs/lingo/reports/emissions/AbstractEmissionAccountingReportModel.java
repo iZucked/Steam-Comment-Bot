@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.cii.UtilsCII;
 
-public abstract class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IVesselEmission, IDeltaDerivable {
+public abstract class AbstractEmissionAccountingReportModel implements IEmissionReportIDData, IDeltaDerivable {
 	
 	protected static final String ID_COLUMN_GROUP = "START_COLUMN_GROUP";
 	private static final String TOTAL_EMISSIONS_GROUP_ID = "TOTAL_EMISSIONS_GROUP";
@@ -89,6 +89,7 @@ public abstract class AbstractEmissionAccountingReportModel implements IEmission
 	@ColumnOrderLevel(ColumnOrder.FIRST)
 	public String ciiValueDisplayed;
 	
+	@JsonIgnore
 	public double ciiValue;
 	
 	@ColumnGroup(id = CII_GROUP_ID, headerTitle = CII_GROUP_TITLE, position = ColumnOrder.LAST)
@@ -148,12 +149,6 @@ public abstract class AbstractEmissionAccountingReportModel implements IEmission
 	@JsonIgnore
 	@LingoIgnore
 	public double methaneSlipRate;
-
-	@JsonIgnore
-	@Override
-	public double getMethaneSlipRate() {
-		return methaneSlipRate;
-	}
 	
 	/**
 	 * Sets CII column values from given vessel, total emission and total distance

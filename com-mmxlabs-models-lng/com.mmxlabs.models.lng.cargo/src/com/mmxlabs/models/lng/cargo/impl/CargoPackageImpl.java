@@ -3480,7 +3480,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCIIStartOptions_YearTodayEmissions() {
+	public EAttribute getCIIStartOptions_YearToDateEmissions() {
 		return (EAttribute)ciiStartOptionsEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -3490,7 +3490,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCIIStartOptions_YearTodayDistance() {
+	public EAttribute getCIIStartOptions_YearToDateDistance() {
 		return (EAttribute)ciiStartOptionsEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -3952,8 +3952,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		groupedDischargeSlotsConstraintEClass = createEClass(GROUPED_DISCHARGE_SLOTS_CONSTRAINT);
 
 		ciiStartOptionsEClass = createEClass(CII_START_OPTIONS);
-		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TODAY_EMISSIONS);
-		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TODAY_DISTANCE);
+		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS);
+		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE);
 
 		ciiEndOptionsEClass = createEClass(CII_END_OPTIONS);
 		createEAttribute(ciiEndOptionsEClass, CII_END_OPTIONS__DESIRED_CII_GRADE);
@@ -4521,8 +4521,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(groupedDischargeSlotsConstraintEClass, GroupedDischargeSlotsConstraint.class, "GroupedDischargeSlotsConstraint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(ciiStartOptionsEClass, CIIStartOptions.class, "CIIStartOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCIIStartOptions_YearTodayEmissions(), ecorePackage.getEInt(), "yearTodayEmissions", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCIIStartOptions_YearTodayDistance(), ecorePackage.getEInt(), "yearTodayDistance", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIStartOptions_YearToDateEmissions(), ecorePackage.getEInt(), "yearToDateEmissions", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIStartOptions_YearToDateDistance(), ecorePackage.getEInt(), "yearToDateDistance", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(ciiEndOptionsEClass, CIIEndOptions.class, "CIIEndOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", null, 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4863,6 +4863,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "numberFormat", "#0"
+		   });
+		addAnnotation
+		  (getCIIStartOptions_YearToDateEmissions(),
+		   source,
+		   new String[] {
+			   "formatString", "#######"
+		   });
+		addAnnotation
+		  (getCIIStartOptions_YearToDateDistance(),
+		   source,
+		   new String[] {
+			   "formatString", "#####"
 		   });
 	}
 

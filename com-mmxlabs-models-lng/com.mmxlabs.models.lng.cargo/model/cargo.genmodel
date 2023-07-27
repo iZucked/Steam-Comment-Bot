@@ -448,8 +448,8 @@
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//GroupedDischargeSlotsConstraint"/>
     <genClasses ecoreClass="cargo.ecore#//CIIStartOptions">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearTodayEmissions"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearTodayDistance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearToDateEmissions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearToDateDistance"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//CIIEndOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIEndOptions/desiredCIIGrade"/>

@@ -61,26 +61,26 @@ public class CIIStartOptionsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addYearTodayEmissionsPropertyDescriptor(object);
-			addYearTodayDistancePropertyDescriptor(object);
+			addYearToDateEmissionsPropertyDescriptor(object);
+			addYearToDateDistancePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Year Today Emissions feature.
+	 * This adds a property descriptor for the Year To Date Emissions feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addYearTodayEmissionsPropertyDescriptor(Object object) {
+	protected void addYearToDateEmissionsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CIIStartOptions_yearTodayEmissions_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CIIStartOptions_yearTodayEmissions_feature", "_UI_CIIStartOptions_type"),
-				 CargoPackage.Literals.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS,
+				 getString("_UI_CIIStartOptions_yearToDateEmissions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CIIStartOptions_yearToDateEmissions_feature", "_UI_CIIStartOptions_type"),
+				 CargoPackage.Literals.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS,
 				 true,
 				 false,
 				 false,
@@ -90,19 +90,19 @@ public class CIIStartOptionsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Year Today Distance feature.
+	 * This adds a property descriptor for the Year To Date Distance feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addYearTodayDistancePropertyDescriptor(Object object) {
+	protected void addYearToDateDistancePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CIIStartOptions_yearTodayDistance_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CIIStartOptions_yearTodayDistance_feature", "_UI_CIIStartOptions_type"),
-				 CargoPackage.Literals.CII_START_OPTIONS__YEAR_TODAY_DISTANCE,
+				 getString("_UI_CIIStartOptions_yearToDateDistance_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CIIStartOptions_yearToDateDistance_feature", "_UI_CIIStartOptions_type"),
+				 CargoPackage.Literals.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE,
 				 true,
 				 false,
 				 false,
@@ -131,7 +131,7 @@ public class CIIStartOptionsItemProvider
 	@Override
 	public String getText(Object object) {
 		CIIStartOptions ciiStartOptions = (CIIStartOptions)object;
-		return getString("_UI_CIIStartOptions_type") + " " + ciiStartOptions.getYearTodayEmissions();
+		return getString("_UI_CIIStartOptions_type") + " " + ciiStartOptions.getYearToDateEmissions();
 	}
 
 
@@ -147,8 +147,8 @@ public class CIIStartOptionsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CIIStartOptions.class)) {
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS:
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_DISTANCE:
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS:
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

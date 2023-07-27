@@ -33,15 +33,23 @@ public abstract class AbstractComboInlineEditor extends UnsettableInlineEditor {
 	protected Control ccombo;
 	protected boolean modifyListenerEnabled = true;
 	
+	private final int style;
+	
 	protected final List<Object> valueList = new ArrayList<>();
 
 	protected AbstractComboInlineEditor(final ETypedElement feature) {
 		super(feature);
+		this.style = SWT.FLAT | SWT.BORDER;
+	}
+	
+	protected AbstractComboInlineEditor(final ETypedElement feature, int style) {
+		super(feature);
+		this.style = style;
 	}
 	
 	@Override
 	protected Control createValueControl(Composite parent) {
-		this.combo = new ComboViewer(parent, SWT.FLAT | SWT.BORDER);
+		this.combo = new ComboViewer(parent, style);
 		combo.setContentProvider(new ArrayContentProvider());
 		combo.setLabelProvider(new LabelProvider() {
 			@Override
