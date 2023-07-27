@@ -110,13 +110,7 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		
 		//
 		// Start Stuff
-		final Group groupForVesselStartStuff = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForVesselStartStuff);
-		groupForVesselStartStuff.setText("Start");
-		groupForVesselStartStuff.setLayout(singleColumnLayout);
-		groupForVesselStartStuff.setLayoutData(layoutDataFactory.create());
-		groupForVesselStartStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		//
+		final Group groupForVesselStartStuff = createGroup(wrapperCompositeWithFourColumns, "Start", singleColumnLayout, layoutDataFactory.create());
 		final IDisplayComposite startStuff = new VesselCharterDetailComposite(groupForVesselStartStuff, SWT.NONE, toolkit, VesselCharterDetailGroup.START, dialogContext);
 		startStuff.setCommandHandler(commandHandler);
 		startStuff.setEditorWrapper(editorWrapper);
@@ -124,27 +118,14 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		
 		//
 		// Start Heel Stuff
-		final Group groupForVesselStartHeelStuff = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForVesselStartHeelStuff);
-		groupForVesselStartHeelStuff.setText("Heel");
-		groupForVesselStartHeelStuff.setLayout(singleColumnLayout);
-		groupForVesselStartHeelStuff.setLayoutData(layoutDataFactory.create());
-		groupForVesselStartHeelStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		//
+		final Group groupForVesselStartHeelStuff = createGroup(wrapperCompositeWithFourColumns, "Heel", singleColumnLayout, layoutDataFactory.create());
 		startHeelComposite = new StartHeelOptionsDetailComposite(groupForVesselStartHeelStuff, SWT.NONE, toolkit);
 		startHeelComposite.setCommandHandler(commandHandler);
 		startHeelComposite.display(dialogContext, root, getStartHeel(object), range, dbc);
 		
-		
 		//
 		// Vessel Charter End Stuff
-		final Group groupForVesselEndStuff = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForVesselEndStuff);
-		groupForVesselEndStuff.setText("End");
-		groupForVesselEndStuff.setLayout(singleColumnLayout);
-		groupForVesselEndStuff.setLayoutData(layoutDataFactory.create());
-		groupForVesselEndStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		//
+		final Group groupForVesselEndStuff = createGroup(wrapperCompositeWithFourColumns, "End", singleColumnLayout, layoutDataFactory.create());
 		IDisplayComposite endStuff = new VesselCharterDetailComposite(groupForVesselEndStuff, SWT.NONE, toolkit, VesselCharterDetailGroup.END, dialogContext);
 		endStuff.setCommandHandler(commandHandler);
 		endStuff.setEditorWrapper(editorWrapper);
@@ -152,52 +133,29 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		
 		//
 		// End Heel Stuff
-		final Group groupForEndHeelStuff = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForEndHeelStuff);
-		groupForEndHeelStuff.setText("Heel");
-		groupForEndHeelStuff.setLayout(singleColumnLayout);
-		groupForEndHeelStuff.setLayoutData(layoutDataFactory.create());
-		groupForEndHeelStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		//
+		final Group groupForEndHeelStuff = createGroup(wrapperCompositeWithFourColumns, "Heel", singleColumnLayout, layoutDataFactory.create());
 		endHeelComposite = new EndHeelOptionsDetailComposite(groupForEndHeelStuff, SWT.NONE, toolkit);
 		endHeelComposite.setCommandHandler(commandHandler);
 		endHeelComposite.display(dialogContext, root, getEndHeel(object), range, dbc);
 
 		//
 		// Start CII Stuff
-		final Group groupForCIIStartOptionsStuff = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForCIIStartOptionsStuff);
-		groupForCIIStartOptionsStuff.setText("CII");
-		groupForCIIStartOptionsStuff.setLayout(singleColumnLayout);
-		groupForCIIStartOptionsStuff.setLayoutData(twoColumnSpanningGridLayoutData);
-		groupForCIIStartOptionsStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		//
+		final Group groupForCIIStartOptionsStuff = createGroup(wrapperCompositeWithFourColumns, "CII", singleColumnLayout, twoColumnSpanningGridLayoutData);
 		ciiStartOptions = new CIIStartOptionsDetailComposite(groupForCIIStartOptionsStuff, SWT.NONE, toolkit);
 		ciiStartOptions.setCommandHandler(commandHandler);
 		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
 		
 		//
 		// CII End Options Stuff
-		final Group groupForCIIEndOptionsStuff = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForCIIEndOptionsStuff);
-		groupForCIIEndOptionsStuff.setText("CII");
-		groupForCIIEndOptionsStuff.setLayout(singleColumnLayout);
-		groupForCIIEndOptionsStuff.setLayoutData(twoColumnSpanningGridLayoutData);
-		groupForCIIEndOptionsStuff.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		//
+		final Group groupForCIIEndOptionsStuff = createGroup(wrapperCompositeWithFourColumns, "CII", singleColumnLayout, twoColumnSpanningGridLayoutData);
 		ciiEndOptions = new CIIEndOptionsDetailComposite(groupForCIIEndOptionsStuff, SWT.NONE, toolkit);
 		ciiEndOptions.setCommandHandler(commandHandler);
 		ciiEndOptions.display(dialogContext, root, getCIIEndOptions(object), range, dbc);
 		
 		//
 		// Repositioning Fee Stuff
-		final Group groupForRepositioningFeeComposite = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForRepositioningFeeComposite);
-		groupForRepositioningFeeComposite.setLayout(singleColumnLayout);
-		groupForRepositioningFeeComposite.setLayoutData(fourColumnSpanningGridLayoutData);
-		groupForRepositioningFeeComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		final Group groupForRepositioningFeeComposite = createGroup(wrapperCompositeWithFourColumns, null, singleColumnLayout, fourColumnSpanningGridLayoutData);
 		groupForRepositioningFeeComposite.setVisible(hasContract(object));
-		//
 		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(groupForRepositioningFeeComposite, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
 		repositioningFeeComposite.setCommandHandler(commandHandler);
 		repositioningFeeComposite.setEditorWrapper(editorWrapper);
@@ -205,13 +163,8 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		
 		//
 		// Ballast Bonus Stuff
-		final Group groupForBallastBonusComposite = new Group(wrapperCompositeWithFourColumns, SWT.NONE);
-		toolkit.adapt(groupForBallastBonusComposite);
-		groupForBallastBonusComposite.setLayout(singleColumnLayout);
-		groupForBallastBonusComposite.setLayoutData(fourColumnSpanningGridLayoutData);
-		groupForBallastBonusComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		final Group groupForBallastBonusComposite = createGroup(wrapperCompositeWithFourColumns, null, singleColumnLayout, fourColumnSpanningGridLayoutData);
 		groupForBallastBonusComposite.setVisible(hasContract(object));
-		//
 		ballastBonusComposite = new BallastBonusTermsDetailComposite(groupForBallastBonusComposite, SWT.NONE, dialogContext, toolkit, defaultResizeAction(), object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.setEditorWrapper(editorWrapper);
@@ -219,12 +172,24 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 
 		this.setLayout(new GridLayout(1, true));
 	}
+	
+	private Group createGroup(final Composite parentComposite, final String groupTitle, final GridLayout groupGridLayout, final GridData groupGridData) {
+		final Group group = new Group(parentComposite, SWT.NONE);
+		toolkit.adapt(group);
+		if (groupTitle != null) {
+			group.setText(groupTitle);
+		}
+		group.setLayout(groupGridLayout);
+		group.setLayoutData(groupGridData);
+		group.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		return group;
+	}
 
 	private GridData createSpanningLayoutData(final GridDataFactory layoutDataFactory, final int columnSpan) {
-		final GridData twoColumnSpanningGridLayoutData = layoutDataFactory.create();
-		twoColumnSpanningGridLayoutData.horizontalAlignment = GridData.FILL;
-		twoColumnSpanningGridLayoutData.horizontalSpan = columnSpan;
-		return twoColumnSpanningGridLayoutData;
+		final GridData spanningGridLayoutData = layoutDataFactory.create();
+		spanningGridLayoutData.horizontalAlignment = GridData.FILL;
+		spanningGridLayoutData.horizontalSpan = columnSpan;
+		return spanningGridLayoutData;
 	}
 
 
