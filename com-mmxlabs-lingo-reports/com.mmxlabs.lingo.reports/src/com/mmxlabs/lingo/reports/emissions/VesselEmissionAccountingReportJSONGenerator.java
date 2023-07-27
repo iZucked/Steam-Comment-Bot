@@ -225,8 +225,8 @@ public class VesselEmissionAccountingReportJSONGenerator {
 		if (vesselCharter != null) {
 			final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
 			if (ciiStartOptions != null) {
-				model.totalEmission += ciiStartOptions.getYearTodayEmissions();
-				return ciiStartOptions.getYearTodayDistance();
+				model.totalEmission += ciiStartOptions.getYearToDateEmissions();
+				return ciiStartOptions.getYearToDateDistance();
 			}
 		}
 		return 0;

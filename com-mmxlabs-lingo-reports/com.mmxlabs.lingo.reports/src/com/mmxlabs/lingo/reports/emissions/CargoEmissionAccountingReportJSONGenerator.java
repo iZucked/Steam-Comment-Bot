@@ -15,8 +15,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mmxlabs.models.lng.cargo.CIIStartOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -32,6 +34,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.emissions.EmissionModelUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
@@ -176,14 +179,25 @@ public class CargoEmissionAccountingReportJSONGenerator {
 
 	private static void calculateCII(final CargoAllocation cargoAllocation, final CargoEmissionAccountingReportModelV1 model, final Vessel vessel) {
 		double distanceAccumulator = 0.0;
+		double extraEmissions = 0.0;
 		Year eventYear = null;
 		for (final Event event : cargoAllocation.getEvents()) {
 			eventYear = Year.from(event.getStart().toLocalDate());
 			if (event instanceof final Journey journeyEvent) {
 				distanceAccumulator += journeyEvent.getDistance();
 			}
+			if (event instanceof final StartEvent startEvent) { 
+				final VesselCharter vesselCharter = startEvent.getSequence().getVesselCharter();
+				if (vesselCharter != null) {
+					final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
+					if (ciiStartOptions != null) {
+						extraEmissions = ciiStartOptions.getYearToDateEmissions();
+						distanceAccumulator += ciiStartOptions.getYearToDateDistance();
+					}
+				}
+			}
 		}
-		final double emission = (double) model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission;
+		final double emission = Math.round(extraEmissions + model.nbo + model.fbo + model.baseFuelEmission + model.pilotLightEmission);
 		final double distance = Math.round(distanceAccumulator);
 		model.setCII(vessel, emission, distance, eventYear);
 	}

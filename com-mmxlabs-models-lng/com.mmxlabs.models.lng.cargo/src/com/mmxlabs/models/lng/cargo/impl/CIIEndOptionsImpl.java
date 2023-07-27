@@ -34,7 +34,7 @@ public class CIIEndOptionsImpl extends EObjectImpl implements CIIEndOptions {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DESIRED_CII_GRADE_EDEFAULT = null;
+	protected static final String DESIRED_CII_GRADE_EDEFAULT = "A";
 
 	/**
 	 * The cached value of the '{@link #getDesiredCIIGrade() <em>Desired CII Grade</em>}' attribute.

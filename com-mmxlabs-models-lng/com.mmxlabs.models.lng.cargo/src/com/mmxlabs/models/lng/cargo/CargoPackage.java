@@ -8593,22 +8593,22 @@ public interface CargoPackage extends EPackage {
 	int CII_START_OPTIONS = 41;
 
 	/**
-	 * The feature id for the '<em><b>Year Today Emissions</b></em>' attribute.
+	 * The feature id for the '<em><b>Year To Date Emissions</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CII_START_OPTIONS__YEAR_TODAY_EMISSIONS = 0;
+	int CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Year Today Distance</b></em>' attribute.
+	 * The feature id for the '<em><b>Year To Date Distance</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CII_START_OPTIONS__YEAR_TODAY_DISTANCE = 1;
+	int CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE = 1;
 
 	/**
 	 * The number of structural features of the '<em>CII Start Options</em>' class.
@@ -11920,26 +11920,26 @@ public interface CargoPackage extends EPackage {
 	EClass getCIIStartOptions();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayEmissions <em>Year Today Emissions</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateEmissions <em>Year To Date Emissions</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Year Today Emissions</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayEmissions()
+	 * @return the meta object for the attribute '<em>Year To Date Emissions</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateEmissions()
 	 * @see #getCIIStartOptions()
 	 * @generated
 	 */
-	EAttribute getCIIStartOptions_YearTodayEmissions();
+	EAttribute getCIIStartOptions_YearToDateEmissions();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayDistance <em>Year Today Distance</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateDistance <em>Year To Date Distance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Year Today Distance</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearTodayDistance()
+	 * @return the meta object for the attribute '<em>Year To Date Distance</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions#getYearToDateDistance()
 	 * @see #getCIIStartOptions()
 	 * @generated
 	 */
-	EAttribute getCIIStartOptions_YearTodayDistance();
+	EAttribute getCIIStartOptions_YearToDateDistance();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CIIEndOptions <em>CII End Options</em>}'.
@@ -14525,20 +14525,20 @@ public interface CargoPackage extends EPackage {
 		EClass CII_START_OPTIONS = eINSTANCE.getCIIStartOptions();
 
 		/**
-		 * The meta object literal for the '<em><b>Year Today Emissions</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Year To Date Emissions</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CII_START_OPTIONS__YEAR_TODAY_EMISSIONS = eINSTANCE.getCIIStartOptions_YearTodayEmissions();
+		EAttribute CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS = eINSTANCE.getCIIStartOptions_YearToDateEmissions();
 
 		/**
-		 * The meta object literal for the '<em><b>Year Today Distance</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Year To Date Distance</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CII_START_OPTIONS__YEAR_TODAY_DISTANCE = eINSTANCE.getCIIStartOptions_YearTodayDistance();
+		EAttribute CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE = eINSTANCE.getCIIStartOptions_YearToDateDistance();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CIIEndOptionsImpl <em>CII End Options</em>}' class.

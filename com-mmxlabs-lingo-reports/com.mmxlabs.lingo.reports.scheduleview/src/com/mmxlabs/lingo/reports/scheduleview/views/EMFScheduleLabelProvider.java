@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -93,6 +94,7 @@ import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.MultiEvent;
 import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
@@ -254,8 +256,20 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				if (scenarioResult != null && scenarioResult.getRootObject() instanceof final LNGScenarioModel lngScenarioModel) {
 					final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 					final Year year = Year.now();
-					final Vessel vesselForGrade = sequence.getVesselCharter().getVessel();
-					grade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, vesselForGrade, year);
+					Vessel vesselForGrade = null;
+					final VesselCharter vesselCharter = sequence.getVesselCharter();
+					if (vesselCharter != null) {
+						vesselForGrade = vesselCharter.getVessel();
+						if (vesselForGrade == null) {
+							final CharterInMarket charterInMarket = sequence.getCharterInMarket();
+							if (charterInMarket != null) {
+								vesselForGrade = charterInMarket.getVessel();
+							}
+						}
+					}
+					if (vesselForGrade != null) {
+						grade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, vesselForGrade, year);
+					}
 				}
 			}
 			seqText += " " + grade;

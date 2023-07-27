@@ -20,52 +20,52 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl#getYearTodayEmissions <em>Year Today Emissions</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl#getYearTodayDistance <em>Year Today Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl#getYearToDateEmissions <em>Year To Date Emissions</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CIIStartOptionsImpl#getYearToDateDistance <em>Year To Date Distance</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions {
 	/**
-	 * The default value of the '{@link #getYearTodayEmissions() <em>Year Today Emissions</em>}' attribute.
+	 * The default value of the '{@link #getYearToDateEmissions() <em>Year To Date Emissions</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getYearTodayEmissions()
+	 * @see #getYearToDateEmissions()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int YEAR_TODAY_EMISSIONS_EDEFAULT = 0;
+	protected static final int YEAR_TO_DATE_EMISSIONS_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getYearTodayEmissions() <em>Year Today Emissions</em>}' attribute.
+	 * The cached value of the '{@link #getYearToDateEmissions() <em>Year To Date Emissions</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getYearTodayEmissions()
+	 * @see #getYearToDateEmissions()
 	 * @generated
 	 * @ordered
 	 */
-	protected int yearTodayEmissions = YEAR_TODAY_EMISSIONS_EDEFAULT;
+	protected int yearToDateEmissions = YEAR_TO_DATE_EMISSIONS_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getYearTodayDistance() <em>Year Today Distance</em>}' attribute.
+	 * The default value of the '{@link #getYearToDateDistance() <em>Year To Date Distance</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getYearTodayDistance()
+	 * @see #getYearToDateDistance()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int YEAR_TODAY_DISTANCE_EDEFAULT = 0;
+	protected static final int YEAR_TO_DATE_DISTANCE_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getYearTodayDistance() <em>Year Today Distance</em>}' attribute.
+	 * The cached value of the '{@link #getYearToDateDistance() <em>Year To Date Distance</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getYearTodayDistance()
+	 * @see #getYearToDateDistance()
 	 * @generated
 	 * @ordered
 	 */
-	protected int yearTodayDistance = YEAR_TODAY_DISTANCE_EDEFAULT;
+	protected int yearToDateDistance = YEAR_TO_DATE_DISTANCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -92,8 +92,8 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	 * @generated
 	 */
 	@Override
-	public int getYearTodayEmissions() {
-		return yearTodayEmissions;
+	public int getYearToDateEmissions() {
+		return yearToDateEmissions;
 	}
 
 	/**
@@ -102,11 +102,11 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	 * @generated
 	 */
 	@Override
-	public void setYearTodayEmissions(int newYearTodayEmissions) {
-		int oldYearTodayEmissions = yearTodayEmissions;
-		yearTodayEmissions = newYearTodayEmissions;
+	public void setYearToDateEmissions(int newYearToDateEmissions) {
+		int oldYearToDateEmissions = yearToDateEmissions;
+		yearToDateEmissions = newYearToDateEmissions;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS, oldYearTodayEmissions, yearTodayEmissions));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS, oldYearToDateEmissions, yearToDateEmissions));
 	}
 
 	/**
@@ -115,8 +115,8 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	 * @generated
 	 */
 	@Override
-	public int getYearTodayDistance() {
-		return yearTodayDistance;
+	public int getYearToDateDistance() {
+		return yearToDateDistance;
 	}
 
 	/**
@@ -125,11 +125,11 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	 * @generated
 	 */
 	@Override
-	public void setYearTodayDistance(int newYearTodayDistance) {
-		int oldYearTodayDistance = yearTodayDistance;
-		yearTodayDistance = newYearTodayDistance;
+	public void setYearToDateDistance(int newYearToDateDistance) {
+		int oldYearToDateDistance = yearToDateDistance;
+		yearToDateDistance = newYearToDateDistance;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CII_START_OPTIONS__YEAR_TODAY_DISTANCE, oldYearTodayDistance, yearTodayDistance));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE, oldYearToDateDistance, yearToDateDistance));
 	}
 
 	/**
@@ -140,10 +140,10 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS:
-				return getYearTodayEmissions();
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_DISTANCE:
-				return getYearTodayDistance();
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS:
+				return getYearToDateEmissions();
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE:
+				return getYearToDateDistance();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -156,11 +156,11 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS:
-				setYearTodayEmissions((Integer)newValue);
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS:
+				setYearToDateEmissions((Integer)newValue);
 				return;
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_DISTANCE:
-				setYearTodayDistance((Integer)newValue);
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE:
+				setYearToDateDistance((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -174,11 +174,11 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS:
-				setYearTodayEmissions(YEAR_TODAY_EMISSIONS_EDEFAULT);
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS:
+				setYearToDateEmissions(YEAR_TO_DATE_EMISSIONS_EDEFAULT);
 				return;
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_DISTANCE:
-				setYearTodayDistance(YEAR_TODAY_DISTANCE_EDEFAULT);
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE:
+				setYearToDateDistance(YEAR_TO_DATE_DISTANCE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -192,10 +192,10 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_EMISSIONS:
-				return yearTodayEmissions != YEAR_TODAY_EMISSIONS_EDEFAULT;
-			case CargoPackage.CII_START_OPTIONS__YEAR_TODAY_DISTANCE:
-				return yearTodayDistance != YEAR_TODAY_DISTANCE_EDEFAULT;
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS:
+				return yearToDateEmissions != YEAR_TO_DATE_EMISSIONS_EDEFAULT;
+			case CargoPackage.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE:
+				return yearToDateDistance != YEAR_TO_DATE_DISTANCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -210,10 +210,10 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (yearTodayEmissions: ");
-		result.append(yearTodayEmissions);
-		result.append(", yearTodayDistance: ");
-		result.append(yearTodayDistance);
+		result.append(" (yearToDateEmissions: ");
+		result.append(yearToDateEmissions);
+		result.append(", yearToDateDistance: ");
+		result.append(yearToDateDistance);
 		result.append(')');
 		return result.toString();
 	}
