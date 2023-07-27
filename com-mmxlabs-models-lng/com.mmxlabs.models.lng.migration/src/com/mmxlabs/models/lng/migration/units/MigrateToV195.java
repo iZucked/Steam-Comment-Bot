@@ -4,21 +4,12 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
@@ -43,9 +34,8 @@ public class MigrateToV195 extends AbstractMigrationUnit {
 		return 195;
 	}
 
-	// Renames CharterLengthEvent to GeneratedCharterLengthEvent
-	// Adds CharterLengthEvent to cargo model
-	// Make FuelUsage a super type of VesselEventVisit
+	// Add CII information to cargo model
+	// Moves emission rates for each vessel to emission rate per fuel
 	@Override
 		protected void doMigration(final MigrationModelRecord modelRecord) {
 			final EObjectWrapper scenarioModel = modelRecord.getModelRoot();
