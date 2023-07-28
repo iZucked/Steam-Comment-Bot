@@ -19,7 +19,7 @@ public class HorizontalScrollbarHandler {
 		this.timeScale = timeScale;
 
 		hBar.addListener(SWT.Selection, this::handle);
-		hBar.setMaximum(hBar.getMaximum() * timeScale.getUnitWidthForCurrentZoomLevel());
+		hBar.setMaximum(hBar.getMaximum() * getUnitWidthForCurrentZoomLevel());
 	}
 
 	void handle(Event e) {
@@ -28,7 +28,7 @@ public class HorizontalScrollbarHandler {
 	}
 
 	void handle(MouseEvent e) {
-		handle(e.count * 2 * timeScale.getUnitWidthForCurrentZoomLevel(), false);
+		handle(e.count * 2 * getUnitWidthForCurrentZoomLevel(), false);
 	}
 
 	void handle(KeyEvent e) {
@@ -36,7 +36,7 @@ public class HorizontalScrollbarHandler {
 			return;
 		}
 
-		int increment = timeScale.getUnitWidthForCurrentZoomLevel();
+		int increment = getUnitWidthForCurrentZoomLevel();
 		int offset = (e.keyCode == SWT.ARROW_RIGHT) ? increment : -increment;
 		int newPos = hBar.getSelection() + offset;
 		if (newPos >= hBar.getMaximum() || newPos < hBar.getMinimum()) {
@@ -55,6 +55,11 @@ public class HorizontalScrollbarHandler {
 		int actualPixelsScrolled = timeScale.scroll(pixelOffset, roundToBoundaries);
 		lastScrollPosition = lastScrollPosition + actualPixelsScrolled;
 		hBar.getParent().redraw();
+	}
+	
+	private int getUnitWidthForCurrentZoomLevel() {
+		// assumes width unit is a regular unit
+		return timeScale.getUnitWidthFromRegularUnit(timeScale.getUnitWidths().zoomLevel().getWidthUnit()).get();
 	}
 
 }

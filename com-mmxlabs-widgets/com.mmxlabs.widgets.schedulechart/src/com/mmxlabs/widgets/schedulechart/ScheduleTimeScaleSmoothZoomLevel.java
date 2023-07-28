@@ -45,14 +45,12 @@ public class ScheduleTimeScaleSmoothZoomLevel implements ITimeScaleZoomLevel {
 
 	@Override
 	public ITimeScaleZoomLevel nextIn() {
-		this.zoomLevel = (ScheduleTimeScaleZoomLevel) zoomLevel.nextIn();
-		return this;
+		return new ScheduleTimeScaleSmoothZoomLevel((ScheduleTimeScaleZoomLevel) zoomLevel.nextIn());
 	}
 
 	@Override
 	public ITimeScaleZoomLevel nextOut() {
-		this.zoomLevel = (ScheduleTimeScaleZoomLevel) zoomLevel.nextOut();
-		return this;
+		return new ScheduleTimeScaleSmoothZoomLevel((ScheduleTimeScaleZoomLevel) zoomLevel.nextOut());
 	}
 
 	@Override

@@ -17,12 +17,16 @@ public abstract class DrawableElement {
 	}
 	
 	public final List<BasicDrawableElement> getBasicDrawableElements() {
+		return getBasicDrawableElements((DrawerQueryResolver) null);
+	}
+
+	public final List<BasicDrawableElement> getBasicDrawableElements(DrawerQueryResolver queryResolver) {
 		if (bounds == null) { 
 			throw new UnsupportedOperationException("Can't get basic drawable elements without bounds"); 
 		}
 		
-		return getBasicDrawableElements(bounds);
+		return getBasicDrawableElements(bounds, queryResolver);
 	}
 
-	protected abstract List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds);
+	protected abstract List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver);
 }

@@ -1,12 +1,14 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Line;
+import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Rectangle;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Text;
 
-public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer {
+public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, DrawerQueryResolver {
 	
 	private final GC gc;
 	
@@ -39,13 +41,25 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer {
 				}
 
 			} else if (b instanceof Text t) {
-				gc.drawString(t.text(), t.x(), t.y());
+				gc.drawString(t.text(), t.x() + t.p().left(), t.y() + t.p().bottom());
 			} else {
 				throw new UnsupportedOperationException("Got a BasicDrawableElement that cannot be drawn by this ScheduleElementDrawer");
 			}
 		} finally {
 			gc.setAlpha(oldAlpha);
 		}
+	}
+
+	@Override
+	public Point findSizeOfText(String text) {
+		return gc.textExtent(text);
+	}
+
+	@Override
+	public Point findSizeOfText(Text text) {
+		Point textExtent = findSizeOfText(text.text());
+		Padding p = text.p();
+		return new Point(p.left() + textExtent.x + p.right(), p.top() + textExtent.y + p.bottom());
 	}
 
 }

@@ -16,4 +16,16 @@ public interface ScheduleElementDrawer {
 			drawOne(d);
 		}
 	}
+
+	default void drawOne(DrawableElement d, DrawerQueryResolver queryResolver) {
+		for (BasicDrawableElement b: d.getBasicDrawableElements(queryResolver)) {
+			drawOne(b);
+		}
+	}
+
+	default void draw(List<DrawableElement> ds, DrawerQueryResolver queryResolver) {
+		for (DrawableElement d: ds) {
+			drawOne(d, queryResolver);
+		}
+	}
 }

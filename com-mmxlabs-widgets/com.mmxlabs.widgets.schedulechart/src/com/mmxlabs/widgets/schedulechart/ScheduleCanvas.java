@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.ScrollBar;
 
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleTimeScale;
+import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
 
@@ -39,11 +40,7 @@ public class ScheduleCanvas extends Canvas {
 		addMouseWheelListener(e -> {
 			// TODO: change MOD1 and MOD2 to be dependent on settings object
 			if (e.stateMask == SWT.MOD1) {
-				if (e.count > 0) {
-					timeScale.zoomInBy(new Point(e.x, e.y), e.count * 5);
-				} else {
-					timeScale.zoomOutBy(new Point(e.x, e.y), e.count * 5);
-				}
+				timeScale.zoomBy(new Point(e.x, e.y), e.count * 5, e.count > 0);
 			} else if (e.stateMask == SWT.MOD2) {
 				horizontalScrollbarHandler.handle(e);
 			} else {
@@ -61,17 +58,17 @@ public class ScheduleCanvas extends Canvas {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				horizontalScrollbarHandler.handle(e);
-				
 				redraw();
 			}
 		});
 	}
 
 	private void repaint(GC gc) {
-		drawChartWithDrawer(new GCBasedScheduleElementDrawer(gc));
+		GCBasedScheduleElementDrawer gcBasedDrawer = new GCBasedScheduleElementDrawer(gc);
+		drawChartWithDrawer(gcBasedDrawer, gcBasedDrawer);
 	}
 	
-	private void drawChartWithDrawer(ScheduleElementDrawer drawer) {
+	private void drawChartWithDrawer(ScheduleElementDrawer drawer, DrawerQueryResolver resolver) {
 		// Always fill white to avoid occasional issue where we do not render over
 		// the unused area correctly.
 		drawer.drawOne(BasicDrawableElements.Rectangle.withBounds(getClientArea()).bgColour(Display.getDefault().getSystemColor(SWT.COLOR_WHITE)).create());
@@ -79,7 +76,7 @@ public class ScheduleCanvas extends Canvas {
 		mainBounds = getClientArea();
 		timeScale.setBounds(getClientArea());
 		drawableTimeScale.setBounds(getClientArea());
-		drawer.drawOne(drawableTimeScale);
+		drawer.drawOne(drawableTimeScale, resolver);
 	}
 	
 	public final ScheduleTimeScale getTimeScale() {

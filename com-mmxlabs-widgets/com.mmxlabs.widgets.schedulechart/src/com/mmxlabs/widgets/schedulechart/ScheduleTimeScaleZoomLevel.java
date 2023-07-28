@@ -13,7 +13,11 @@ public enum ScheduleTimeScaleZoomLevel implements ITimeScaleZoomLevel {
 	
 	TS_ZOOM_DAY_MAX(TimeScaleView.TS_VIEW_WEEK, ChronoUnit.DAYS, w -> w * 3),
 	TS_ZOOM_DAY_MEDIUM(TimeScaleView.TS_VIEW_WEEK, ChronoUnit.DAYS, w -> w * 2),
-	TS_ZOOM_DAY_NORMAL(TimeScaleView.TS_VIEW_WEEK, ChronoUnit.DAYS, w -> w);
+	TS_ZOOM_DAY_NORMAL(TimeScaleView.TS_VIEW_WEEK, ChronoUnit.DAYS, w -> w),
+	TS_ZOOM_MONTH_MAX(TimeScaleView.TS_VIEW_MONTH, ChronoUnit.DAYS, w -> w + 6),
+	TS_ZOOM_MONTH_MEDIUM(TimeScaleView.TS_VIEW_MONTH, ChronoUnit.DAYS, w -> w + 3),
+	TS_ZOOM_MONTH_NORMAL(TimeScaleView.TS_VIEW_MONTH, ChronoUnit.DAYS, w -> w),
+	TS_ZOOM_YEAR_MAX(TimeScaleView.TS_VIEW_YEAR, ChronoUnit.DAYS, w -> w + 2);
 	
 	private static final ITimeScaleZoomLevel[] vals = values();
 	
