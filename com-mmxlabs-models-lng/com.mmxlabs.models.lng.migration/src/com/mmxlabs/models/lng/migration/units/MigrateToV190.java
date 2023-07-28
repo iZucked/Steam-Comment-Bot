@@ -9,10 +9,12 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -47,7 +49,7 @@ public class MigrateToV190 extends AbstractMigrationUnit {
 
 		Consumer<List<EObjectWrapper>> processPaperDeals = paperDeals -> {
 			if (paperDeals != null) {
-				paperDeals.forEach( pd -> {
+				paperDeals.forEach(pd -> {
 					if (pd.getAttrib("startDate") != null)
 						pd.unsetFeature("startDate");
 					if (pd.getAttrib("endDate") != null)
@@ -83,6 +85,21 @@ public class MigrateToV190 extends AbstractMigrationUnit {
 				processPaperDeals.accept(schedule.getRefAsList("generatedPaperDeals"));
 			}
 		}
+		final EObjectWrapper analyticsModel = scenarioModel.getRef("analyticsModel");
+		final TreeIterator<EObject> itr = analyticsModel.eAllContents();
+		final EPackage schedulePackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		final EClass classScheduleModel = MetamodelUtils.getEClass(schedulePackage, "ScheduleModel");
+		while (itr.hasNext()) {
+			final EObject obj = itr.next();
+			if (classScheduleModel.isInstance(obj)) {
+				EObjectWrapper schedule = ((EObjectWrapper) obj).getRef("schedule");
+				if (schedule != null) {
+					processPaperDeals.accept(schedule.getRefAsList("generatedPaperDeals"));
+				}
+				itr.prune();
+			}
+
+		}
 
 		final EPackage lngTypesPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_LNGTypes);
 		final EEnum pricingPeriodENum = MetamodelUtils.getEEnum(lngTypesPackage, "PricingPeriod");
@@ -95,7 +112,7 @@ public class MigrateToV190 extends AbstractMigrationUnit {
 
 		final List<EObjectWrapper> settleStrategies = pricingModel.getRefAsList("settleStrategies");
 		if (settleStrategies != null) {
-			settleStrategies.forEach( ss -> {
+			settleStrategies.forEach(ss -> {
 				ss.unsetFeature("settlePeriod");
 				ss.unsetFeature("settlePeriodUnit");
 				ss.unsetFeature("settleStartMonthsPrior");
