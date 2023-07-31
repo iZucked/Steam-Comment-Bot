@@ -106,7 +106,7 @@ public class UtilsCII {
 		}
 		return result.toString();
 	}
-
+	
 	public static String formatCII(double ciiValue) {
 		return new DecimalFormat("###0.###").format(ciiValue);
 	}
