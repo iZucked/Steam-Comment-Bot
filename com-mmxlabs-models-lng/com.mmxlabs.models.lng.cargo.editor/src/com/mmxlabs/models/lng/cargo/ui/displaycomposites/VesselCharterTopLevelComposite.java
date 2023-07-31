@@ -146,7 +146,7 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		ciiStartOptions = new CIIStartOptionsDetailComposite(groupForCIIStartOptionsStuff, SWT.NONE, toolkit);
 		ciiStartOptions.setCommandHandler(commandHandler);
 		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
-		new YearToDateGradeCIIDisplayComposite(groupForCIIStartOptionsStuff, object).setVisible(true);
+		//new YearToDateGradeCIIDisplayComposite(groupForCIIStartOptionsStuff, object).setVisible(true);
 		
 		//
 		// CII End Options Stuff

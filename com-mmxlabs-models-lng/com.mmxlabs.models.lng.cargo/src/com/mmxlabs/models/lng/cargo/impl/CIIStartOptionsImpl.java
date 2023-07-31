@@ -2,15 +2,16 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
-import com.mmxlabs.models.lng.cargo.CIIStartOptions;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.cargo.CIIStartOptions;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -135,6 +136,19 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public double yearToDatePartialCII() {
+		if (getYearToDateDistance() != 0.0) {
+			return getYearToDateEmissions() / (double) getYearToDateDistance();
+		}
+		return 0.0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -198,6 +212,20 @@ public class CIIStartOptionsImpl extends EObjectImpl implements CIIStartOptions 
 				return yearToDateDistance != YEAR_TO_DATE_DISTANCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.CII_START_OPTIONS___YEAR_TO_DATE_PARTIAL_CII:
+				return yearToDatePartialCII();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

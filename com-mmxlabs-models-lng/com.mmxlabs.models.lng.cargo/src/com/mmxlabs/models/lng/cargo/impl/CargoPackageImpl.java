@@ -3500,6 +3500,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getCIIStartOptions__YearToDatePartialCII() {
+		return ciiStartOptionsEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCIIEndOptions() {
 		return ciiEndOptionsEClass;
 	}
@@ -3954,6 +3964,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		ciiStartOptionsEClass = createEClass(CII_START_OPTIONS);
 		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS);
 		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE);
+		createEOperation(ciiStartOptionsEClass, CII_START_OPTIONS___YEAR_TO_DATE_PARTIAL_CII);
 
 		ciiEndOptionsEClass = createEClass(CII_END_OPTIONS);
 		createEAttribute(ciiEndOptionsEClass, CII_END_OPTIONS__DESIRED_CII_GRADE);
@@ -4523,6 +4534,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(ciiStartOptionsEClass, CIIStartOptions.class, "CIIStartOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCIIStartOptions_YearToDateEmissions(), ecorePackage.getEInt(), "yearToDateEmissions", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCIIStartOptions_YearToDateDistance(), ecorePackage.getEInt(), "yearToDateDistance", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getCIIStartOptions__YearToDatePartialCII(), ecorePackage.getEDouble(), "yearToDatePartialCII", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(ciiEndOptionsEClass, CIIEndOptions.class, "CIIEndOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", null, 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
