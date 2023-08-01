@@ -31,23 +31,4 @@ public class CIIStartOptionsDetailComposite extends DefaultDetailComposite {
 				.make() //
 		;
 	}
-
-//	@Override
-//	public @Nullable IInlineEditor addInlineEditor(IInlineEditor editor) {
-//		if (editor.getFeature().equals(CargoPackage.Literals.CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE) 
-//			|| editor.getFeature().equals(CargoPackage.Literals.CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS)
-//		) {
-//			editor.addNotificationChangedListener(new IInlineEditorExternalNotificationListener() {
-//				@Override
-//				public void notifyChanged(Notification notification) {
-//					System.err.println("AAAAAAAAAAAAAAAAA");
-//				}
-//				@Override
-//				public void postDisplay(IInlineEditor editor, IDialogEditingContext context, MMXRootObject scenario, EObject object, Collection<EObject> range) {
-//					System.err.println("BBBBBBBBBBBBBBBBB");
-//				}
-//			});;
-//		}
-//		return super.addInlineEditor(editor);
-//	}
 }
