@@ -8,16 +8,16 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.tabular.manipulators.IdentityInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.impl.ReadOnlyInlineEditorWrapper;
 
-public class CIIYearToDateGradeInlineEditorWrapper extends IdentityInlineEditorWrapper {
+public class CIIYearToDateGradeInlineEditorWrapper extends ReadOnlyInlineEditorWrapper {
 
 	protected CIIYearToDateGradeInlineEditorWrapper(final @NonNull IInlineEditor wrapped) {
 		super(wrapped);
 	}
 	
 	@Override
-	public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+	public void display(IDialogEditingContext dialogContext, MMXRootObject scenario, EObject object, Collection<EObject> range) {
 		super.display(dialogContext, scenario, object, range);
 	}
 }
