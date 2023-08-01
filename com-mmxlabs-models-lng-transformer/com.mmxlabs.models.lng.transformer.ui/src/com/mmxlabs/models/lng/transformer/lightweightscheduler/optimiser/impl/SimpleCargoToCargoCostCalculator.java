@@ -22,10 +22,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
-import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -34,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
+import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.util.ApproximateFuelCosts;
 import com.mmxlabs.scheduler.optimiser.voyage.util.ApproximateVoyageCalculatorHelper;
@@ -56,6 +55,9 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
+
+	@Inject
+	private IPortProvider portProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -261,6 +263,28 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 				}
 				times[cargoMap.get(cargoA)][vesselMap.get(vessel)] = quickestTravelTime
 						+ elementDurationProvider.getElementDuration(portSlotProvider.getElement(startSlot), vesselProvider.getResource(vessel));
+			}
+		}
+		return times;
+	}
+
+	@Override
+	public int[][] getStartToFirstCargoTravelTimesPerVessel(final List<List<IPortSlot>> cargoes, final List<IVesselCharter> vessels) {
+		final Map<List<IPortSlot>, Integer> cargoMap = getCargoMap(cargoes);
+		final Map<IVesselCharter, Integer> vesselMap = getVesselMap(vessels);
+		final int[][] times = new int[cargoes.size()][vessels.size()];
+		for (List<IPortSlot> cargo : cargoes) {
+			final ILoadSlot load = getLoadSlot(cargo);
+			final IPortSlot vesselEvent = getVesselEvent(cargo);
+			final IPortSlot firstCargoSlot = vesselEvent != null ? vesselEvent : load;
+			for (IVesselCharter vesselCharter : vessels) {
+				IPort startRequirementSlot = vesselCharter.getStartRequirement().getLocation();
+				IPort vesselStartSlot = startRequirementSlot != null ? startRequirementSlot : portProvider.getAnywherePort();
+				// Currently doesn't use panama waiting data to calculate travel time
+				int quickestTravelTime = distanceProvider
+						.getQuickestTravelTime(vesselCharter.getVessel(), vesselStartSlot, firstCargoSlot.getPort(), vesselCharter.getVessel().getMaxSpeed(), AvailableRouteChoices.OPTIMAL)
+						.getSecond();
+				times[cargoMap.get(cargo)][vesselMap.get(vesselCharter)] = quickestTravelTime;
 			}
 		}
 		return times;
