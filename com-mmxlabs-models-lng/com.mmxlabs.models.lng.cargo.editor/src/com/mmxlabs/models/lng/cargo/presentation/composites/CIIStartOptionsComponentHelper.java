@@ -36,15 +36,15 @@ public class CIIStartOptionsComponentHelper extends DefaultComponentHelper {
 					if (text == null || text.isDisposed()) {
 						return;
 					}
-					if (value instanceof final VesselCharter vesselCharter) {
-						final Vessel vessel = vesselCharter.getVessel();
-						final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
-						if (vessel != null && ciiStartOptions != null) {
-							final double ciiValue = UtilsCII.findCII(vessel, ciiStartOptions.getYearToDateEmissions(), ciiStartOptions.getYearToDateDistance());
-							final String grade = UtilsCII.getLetterGrade(vessel, ciiValue, Year.from(vesselCharter.getStartBy()));
-							text.setText(grade);
-						}
-					}
+					//					if (value instanceof final VesselCharter vesselCharter) {
+					//						final Vessel vessel = vesselCharter.getVessel();
+					//						final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
+					//						if (vessel != null && ciiStartOptions != null) {
+					//							final double ciiValue = UtilsCII.findCII(vessel, ciiStartOptions.getYearToDateEmissions(), ciiStartOptions.getYearToDateDistance());
+					//							final String grade = UtilsCII.getLetterGrade(vessel, ciiValue, Year.from(vesselCharter.getStartBy()));
+					//							text.setText(grade);
+					//						}
+					//					}
 					text.setText(String.valueOf(value));
 				}
 				
