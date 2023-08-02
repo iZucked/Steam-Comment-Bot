@@ -69,7 +69,8 @@ public class CIIYearToDateGradeInlineEditorWrapper extends ReadOnlyInlineEditorW
 	protected boolean respondToNotification(final Notification notification) {
 		final EObject object = (EObject) notification.getNotifier();
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getCIIStartOptions_YearToDateDistance() ||
-				notification.getFeature() == CargoPackage.eINSTANCE.getCIIStartOptions_YearToDateEmissions()) {
+				notification.getFeature() == CargoPackage.eINSTANCE.getCIIStartOptions_YearToDateEmissions() ||
+				notification.getFeature() == CargoPackage.eINSTANCE.getVesselCharter_Vessel()) {
 			if (object instanceof final CIIStartOptions options && options.eContainer() instanceof final VesselCharter vesselCharter) {
 				if (wrapped instanceof CIIYearToDateGradeInlineEditor editor) {
 

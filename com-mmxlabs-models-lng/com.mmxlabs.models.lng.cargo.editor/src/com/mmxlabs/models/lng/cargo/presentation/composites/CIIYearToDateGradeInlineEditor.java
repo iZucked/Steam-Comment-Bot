@@ -21,7 +21,8 @@ public class CIIYearToDateGradeInlineEditor extends SimpleOperationInlineEditor 
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		return cp.getCIIStartOptions_YearToDateEmissions().equals(changedFeature)
-				|| cp.getCIIStartOptions_YearToDateDistance().equals(changedFeature);
+				|| cp.getCIIStartOptions_YearToDateDistance().equals(changedFeature)
+				|| cp.getVesselCharter_Vessel().equals(changedFeature);
 	}
 	
 	public void setGrade(final String grade) {
