@@ -2,10 +2,13 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.lng.cargo.CIIStartOptions;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -43,5 +46,30 @@ public class CIIYearToDateGradeInlineEditorWrapper extends ReadOnlyInlineEditorW
 			}
 		}
 		super.display(dialogContext, scenario, object, range);
+	}
+	
+	@Override
+	protected boolean respondToNotification(final Notification notification) {
+		final EObject object = (EObject) notification.getNotifier();
+		if (notification.getFeature() == CargoPackage.eINSTANCE.getCIIStartOptions_YearToDateDistance() ||
+				notification.getFeature() == CargoPackage.eINSTANCE.getCIIStartOptions_YearToDateEmissions()) {
+			if (object instanceof final CIIStartOptions options && options.eContainer() instanceof final VesselCharter vesselCharter) {
+				if (wrapped instanceof CIIYearToDateGradeInlineEditor editor) {
+					editor.setGrade("Hello Andrey! The vessel charter is now available for your disposal");
+					
+					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
+					dialogContext.getDialogController().updateEditorVisibility();
+					super.display(dialogContext, scenario, input, range);
+					Label label = getLabel();
+					if (label != null) {
+						label.pack();
+					}
+					dialogContext.getDialogController().relayout();
+					return true;
+				}
+			}
+		}
+				
+		return false;
 	}
 }
