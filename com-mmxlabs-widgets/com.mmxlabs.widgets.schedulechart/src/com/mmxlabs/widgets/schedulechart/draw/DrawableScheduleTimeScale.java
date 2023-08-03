@@ -133,7 +133,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			int width = unitWidth.orElseGet(() -> sts.getXForDateTime(nextDate) - currX);
 
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).bgColour(bg).create());
-			res.add(BasicDrawableElements.Text.from(x, y, f.getDateString(date, unit)).setPadding(2).setColour(black).create());
+			res.add(BasicDrawableElements.Text.from(x, y, f.getDateString(date, unit)).padding(2).textColour(black).create());
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).strokeColour(gray).create());
 
 			date = nextDate;

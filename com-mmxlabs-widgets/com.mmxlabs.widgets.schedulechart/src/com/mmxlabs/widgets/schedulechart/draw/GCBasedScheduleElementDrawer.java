@@ -27,6 +27,8 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 			if (b.getStrokeColor() != null) {
 				gc.setForeground(b.getStrokeColor());
 			}
+			
+			gc.setAlpha(b.getAlpha());
 
 			if (b instanceof Line l) {
 				gc.drawLine(l.x1(), l.y1(), l.x2(), l.y2());

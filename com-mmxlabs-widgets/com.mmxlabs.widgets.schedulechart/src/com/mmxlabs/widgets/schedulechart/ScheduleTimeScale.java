@@ -90,12 +90,12 @@ public class ScheduleTimeScale {
 		LocalDateTime truncatedStart = startTime.truncatedTo(widthUnit);
 
 		if (d.isBefore(truncatedStart)) {
-			return 0 - startPixelOffset;
+			return bounds.x - startPixelOffset;
 		}
 		
 		long unitsBetween = widthUnit.between(truncatedStart, d);
 		int unitWidth = getUnitWidthFromRegularUnit(widthUnit).get();
-		return (int) (unitWidth * unitsBetween) - startPixelOffset;
+		return bounds.x + (int) (unitWidth * unitsBetween) - startPixelOffset;
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class ScheduleTimeScale {
 	 * @return pair of calculated date time and remainder from the previous date boundary in pixels (not including offset).
 	 */
 	public Pair<LocalDateTime, Integer> getDateTimeAtX(int x) {
-		int offsetAdjustedX = x + startPixelOffset;
+		int offsetAdjustedX = x + startPixelOffset - bounds.x;
 		ChronoUnit widthUnit = unitWidths.zoomLevel.getWidthUnit();
 		LocalDateTime truncatedStart = startTime.truncatedTo(widthUnit);
 

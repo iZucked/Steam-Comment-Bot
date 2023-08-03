@@ -6,8 +6,10 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -16,6 +18,7 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeader;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
@@ -24,8 +27,11 @@ import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
 public class ScheduleCanvas extends Canvas {
 	
 	// TODO: change this to use a settings object
-	private static final int SCHEDULE_CHART_ROW_HEIGHT = 24;
+	public static final int SCHEDULE_CHART_ROW_HEIGHT = 24;
 
+	public static final int SCHEDULE_CHART_ROW_HEADER_WIDTH = 100;
+
+	private Rectangle originalBounds;
 	private Rectangle mainBounds;
 	
 	private final ScheduleTimeScale timeScale = new ScheduleTimeScale();
@@ -34,6 +40,9 @@ public class ScheduleCanvas extends Canvas {
 	private final HorizontalScrollbarHandler horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
 	
 	private List<ScheduleChartRow> rows = new ArrayList<>();
+
+	private final Color bg = new Color(new RGB(230, 239, 249));
+	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	public ScheduleCanvas(final Composite parent) {
 		super(parent, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -80,36 +89,40 @@ public class ScheduleCanvas extends Canvas {
 		// the unused area correctly.
 		drawer.drawOne(BasicDrawableElements.Rectangle.withBounds(getClientArea()).bgColour(Display.getDefault().getSystemColor(SWT.COLOR_WHITE)).create());
 
-		Rectangle originalBounds = getClientArea();
+		originalBounds = getClientArea();
 		
 		final boolean drawRows = !rows.isEmpty();
 		
 		final int verticalScroll = getVerticalBar().isVisible() ? getVerticalBar().getSelection() : 0;
 		Rectangle bounds = new Rectangle(originalBounds.x, originalBounds.y - verticalScroll, originalBounds.width, originalBounds.height + verticalScroll);
 		
-		mainBounds = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+		mainBounds = new Rectangle(bounds.x + SCHEDULE_CHART_ROW_HEADER_WIDTH, bounds.y, bounds.width - SCHEDULE_CHART_ROW_HEADER_WIDTH, bounds.height);
 
 		timeScale.setBounds(mainBounds);
 		drawableTimeScale.setBounds(mainBounds);
 		drawableTimeScale.setLockedHeaderY(originalBounds.y);
 
 		drawer.drawOne(drawableTimeScale.getGrid(mainBounds.y + drawableTimeScale.getTotalHeaderHeight()), resolver);
-		
 		drawer.draw(getDrawableRows(resolver), resolver);
-
 		drawer.drawOne(drawableTimeScale.getHeaders(), resolver);
+		
+		var rowHeader = new DrawableScheduleChartRowHeader(rows, drawableTimeScale.getTotalHeaderHeight());
+		rowHeader.setBounds(new Rectangle(originalBounds.x, mainBounds.y + drawableTimeScale.getTotalHeaderHeight(), SCHEDULE_CHART_ROW_HEADER_WIDTH, mainBounds.height));
+		rowHeader.setLockedHeaderY(originalBounds.y);
+		drawer.drawOne(rowHeader, resolver);
 	}
 	
 	private List<DrawableElement> getDrawableRows(DrawerQueryResolver resolver) {
 		List<DrawableElement> res = new ArrayList<>();
 		final int startY = mainBounds.y + drawableTimeScale.getTotalHeaderHeight();
-		for (int i = 0, y = startY; i < rows.size(); i++, y += SCHEDULE_CHART_ROW_HEIGHT) {
+		for (int i = 0, y = startY; i < rows.size(); i++, y += SCHEDULE_CHART_ROW_HEIGHT + 1) {
 			DrawableScheduleChartRow drawableRow = new DrawableScheduleChartRow(rows.get(i), i, timeScale);
 			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, SCHEDULE_CHART_ROW_HEIGHT));
 			res.add(drawableRow);
 		}
 		return res;
 	}
+
 
 	public final ScheduleTimeScale getTimeScale() {
 		return timeScale;

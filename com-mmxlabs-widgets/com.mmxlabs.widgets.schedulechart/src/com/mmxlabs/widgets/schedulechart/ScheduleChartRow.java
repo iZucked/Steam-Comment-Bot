@@ -12,4 +12,8 @@ public class ScheduleChartRow {
 	public List<ScheduleEvent> getEvents() {
 		return events;
 	}
+
+	public String getName() {
+		return "Row";
+	}
 }

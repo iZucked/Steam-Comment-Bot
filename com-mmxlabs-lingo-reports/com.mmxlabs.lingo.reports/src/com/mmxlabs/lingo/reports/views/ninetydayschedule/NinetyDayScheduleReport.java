@@ -1,16 +1,16 @@
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
@@ -28,12 +28,19 @@ public class NinetyDayScheduleReport extends ViewPart {
 
 		@Override
 		public List<ScheduleEvent> getEvents(Integer input) {
-			return List.of(new ScheduleEvent(LocalDateTime.now(), LocalDateTime.now().plusDays(3)));
+			List<ScheduleEvent> res = new ArrayList<>();
+			LocalDateTime curr = LocalDateTime.now();
+			for (int i = 0; i < 10; i++) {
+				LocalDateTime next = curr.plusDays(ThreadLocalRandom.current().nextInt(1, 10));
+				res.add(new ScheduleEvent(curr, next));
+				curr = next;
+			}
+			return res;
 		}
 
 		@Override
 		public String getKeyForEvent(ScheduleEvent event) {
-			return "first event";
+			return event.toString();
 		}
 	};
 	

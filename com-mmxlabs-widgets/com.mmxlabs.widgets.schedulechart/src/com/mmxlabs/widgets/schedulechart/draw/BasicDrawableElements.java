@@ -1,15 +1,14 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
-
 public interface BasicDrawableElements {
+	
+	public static int MAX_ALPHA = 255;
 
 	public record Line(int x1, int y1, int x2, int y2, Color c, int alpha) implements BasicDrawableElement {
 		public Line(int x1, int y1, int x2, int y2) { 
-			this(x1, y1, x2, y2, null, 100);
+			this(x1, y1, x2, y2, null, MAX_ALPHA);
 		}
 
 		@Override
@@ -20,6 +19,11 @@ public interface BasicDrawableElements {
 		@Override
 		public Color getStrokeColor() {
 			return c;
+		}
+		
+		@Override
+		public int getAlpha() {
+			return alpha;
 		}
 	}
 
@@ -33,6 +37,11 @@ public interface BasicDrawableElements {
 		@Override
 		public Color getStrokeColor() {
 			return strokeColour;
+		}
+		
+		@Override
+		public int getAlpha() {
+			return alpha;
 		}
 		
 		public static RectangleBuilder withBounds(int x, int y, int width, int height) {
@@ -50,7 +59,7 @@ public interface BasicDrawableElements {
 			private final int height;
 			private Color bgColour = null;
 			private Color strokeColour = null;
-			private int alpha = 100;
+			private int alpha = MAX_ALPHA;
 			
 			private RectangleBuilder(int x, int y, int width, int height) {
 				this.x = x;
@@ -80,9 +89,9 @@ public interface BasicDrawableElements {
 		}
 	}
 	
-	public record Text(int x, int y, String text, Color c, Padding p) implements BasicDrawableElement {
+	public record Text(int x, int y, String text, Color c, Padding p, int alpha) implements BasicDrawableElement {
 		public Text(int x, int y, String text) {
-			this(x, y, text, null, new Padding(0, 0, 0, 0));
+			this(x, y, text, null, new Padding(0, 0, 0, 0), MAX_ALPHA);
 		}
 
 		@Override
@@ -95,6 +104,11 @@ public interface BasicDrawableElements {
 			return c;
 		}
 		
+		@Override
+		public int getAlpha() {
+			return alpha;
+		}
+
 		public static TextBuilder from(int x, int y, String s) {
 			return new TextBuilder(x, y, s);
 		}
@@ -105,6 +119,7 @@ public interface BasicDrawableElements {
 			private final String s;
 			private Color c = null;
 			private Padding p = new Padding(0, 0, 0, 0);
+			private int alpha = MAX_ALPHA;
 			
 			private TextBuilder(int x, int y, String s) {
 				this.x = x;
@@ -112,26 +127,31 @@ public interface BasicDrawableElements {
 				this.s = s;
 			}
 			
-			public TextBuilder setPadding(int p) {
+			public TextBuilder padding(int p) {
 				this.p = new Padding(p, p, p, p);
 				return this;
 			}
 			
-			public TextBuilder setPadding(Padding p) {
+			public TextBuilder padding(Padding p) {
 				this.p = p;
 				return this;
 			}
 			
-			public TextBuilder setColour(Color c) {
+			public TextBuilder textColour(Color c) {
 				this.c = c;
+				return this;
+			}
+			
+			public TextBuilder alpha(int alpha) {
+				this.alpha = alpha;
 				return this;
 			}
 
 			public Text create() {
-				return new Text(x, y, s, c, p);
+				return new Text(x, y, s, c, p, alpha);
 			}
 		}
-		
+
 	}
 
 	public record Padding(int left, int right, int top, int bottom) {}
