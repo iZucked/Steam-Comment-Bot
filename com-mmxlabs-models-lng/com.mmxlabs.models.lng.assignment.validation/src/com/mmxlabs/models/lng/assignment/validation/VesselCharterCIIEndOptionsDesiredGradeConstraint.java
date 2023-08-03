@@ -39,12 +39,12 @@ public class VesselCharterCIIEndOptionsDesiredGradeConstraint extends AbstractMo
 				final String desiredCIIGrade = ciiEndOptions.getDesiredCIIGrade();
 				if (desiredCIIGrade == null) {
 					final String message = "The desired CII rating is set";
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.WARNING));
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message), IStatus.WARNING);
 					failure.addEObjectAndFeature(ciiEndOptions, CargoPackage.eINSTANCE.getCIIEndOptions_DesiredCIIGrade());
 					failures.add(failure);
 				} else if (CIIComparator.compareGrades(ciiGrade, ciiEndOptions.getDesiredCIIGrade()) > 0) {
 					final String message = "The desired CII rating is not achieved";
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.INFO));
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message), IStatus.WARNING);
 					failure.addEObjectAndFeature(ciiEndOptions, CargoPackage.eINSTANCE.getCIIEndOptions_DesiredCIIGrade());
 					failures.add(failure);
 				}
