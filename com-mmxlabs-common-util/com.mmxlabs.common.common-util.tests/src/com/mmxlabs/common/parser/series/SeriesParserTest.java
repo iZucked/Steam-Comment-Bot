@@ -5,15 +5,16 @@
 package com.mmxlabs.common.parser.series;
 
 import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.function.UnaryOperator;
 import java.util.Collections;
+import java.util.function.UnaryOperator;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
 
 public class SeriesParserTest {
@@ -93,6 +94,8 @@ public class SeriesParserTest {
 	double parse(String expression) {
 
 		SeriesParserData data = new SeriesParserData();
+		// Dates don't matter for SWITCH function
+		data.setEarliestAndLatestTime(Pair.of(ZonedDateTime.now(), ZonedDateTime.now()));
 		data.setShiftMapper((a, b) -> a);
 		data.setCalendarMonthMapper(new CalendarMonthMapper() {
 
