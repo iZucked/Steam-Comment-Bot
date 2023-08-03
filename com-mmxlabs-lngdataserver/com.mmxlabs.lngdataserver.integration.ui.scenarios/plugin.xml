@@ -59,6 +59,9 @@
             <DebugOptionsProvider
                   cls="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.debug.CloudOptiDebugOptionsProvider">
             </DebugOptionsProvider>
+             <DebugOptionsProvider
+                  cls="com.mmxlabs.lngdataserver.integration.ui.scenarios.debug.BaseCaseDebugOptionsProvider">
+            </DebugOptionsProvider>
          </extension>
    
    

@@ -13,6 +13,7 @@ import javax.annotation.PreDestroy;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
@@ -34,43 +35,34 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider.IBaseCaseChanged;
 
 public class BaseCaseStatusTrimContribution {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseCaseStatusTrimContribution.class);
 	protected IBaseCaseChanged listener;
 	private final Activator plugin = Activator.getDefault();
-	
-	private static class BCSVersionRecord{
+
+	private static class BCSVersionRecord {
 		public String currentUUID = "";
 		public String publisher = "";
 		public boolean isDismissed = false;
 	}
-	
+
 	BCSVersionRecord myRecord = new BCSVersionRecord();
 	private Label mainLabel = null;
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
-		
+
 		final Label myLabel = new Label(parent, SWT.NONE);
 		myLabel.setText("Base case status");
 		mainLabel = myLabel;
-		myLabel.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseUp(MouseEvent e) {
-				// No need
-			}
-			
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
-			
+		myLabel.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				dismissNotification(myLabel);
 			}
 		});
-		
+
 		final BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
 		myRecord = getSaved();
 		listener = new IBaseCaseChanged() {
@@ -91,7 +83,7 @@ public class BaseCaseStatusTrimContribution {
 		setLabelTextAndToolTip(myLabel, false);
 		return myLabel;
 	}
-	
+
 	private boolean bcChanged(ScenarioInstance si) {
 		if (si != null) {
 			boolean uuidChanged = false;
@@ -122,7 +114,7 @@ public class BaseCaseStatusTrimContribution {
 		}
 		return false;
 	}
-	
+
 	private void dismissNotification(final Label myLabel) {
 		myRecord.isDismissed = true;
 		saveRecord(myRecord);
@@ -135,7 +127,7 @@ public class BaseCaseStatusTrimContribution {
 			myLabel.setImage(dataHubStatusImage(changed));
 		}
 	}
-	
+
 	@PreDestroy
 	public void dispose() {
 		IBaseCaseChanged pListener = listener;
@@ -143,12 +135,12 @@ public class BaseCaseStatusTrimContribution {
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
 		}
- 
+
 		if (mainLabel != null && !mainLabel.isDisposed()) {
 			mainLabel.dispose();
 		}
 	}
-	
+
 	private void saveRecord(final BCSVersionRecord myRecord) {
 		final File recordsFile = getRecordFile();
 		final ObjectMapper mapper = new ObjectMapper();
@@ -158,7 +150,7 @@ public class BaseCaseStatusTrimContribution {
 			LOGGER.error(e.getMessage());
 		}
 	}
-	
+
 	private BCSVersionRecord getSaved() {
 		BCSVersionRecord result = myRecord;
 		final File recordsFile = getRecordFile();
@@ -175,10 +167,10 @@ public class BaseCaseStatusTrimContribution {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("null")
 	private File getRecordFile() {
-		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();		
+		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 		final File directory = new File(wsPath.toOSString() + IPath.SEPARATOR + "bcs");
 		boolean dirExists = directory.exists();
 		if (!dirExists) {
@@ -189,20 +181,20 @@ public class BaseCaseStatusTrimContribution {
 		}
 
 		throw new UserFeedbackException(String.format(//
-				"LiNGO is not permitted to read or write in the workspace - %s! %n Check user permissions!",//
+				"LiNGO is not permitted to read or write in the workspace - %s! %n Check user permissions!", //
 				directory.getAbsolutePath()));
 	}
-	
+
 	private String dataHubStatusToolTipText(final boolean changed) {
 		if (changed && !myRecord.isDismissed) {
 			return String.format("New base case was published by %s %n Double click to dismiss", myRecord.publisher);
 		}
 		return "You have the latest base case \nor you have dismissed the notification";
 	}
-	
+
 	private final Image baseFlagGreen = CommonImages.getImage(IconPaths.BaseFlagGreen, IconMode.Enabled);
 	private final Image baseFlagEmpty = CommonImages.getImage(IconPaths.BaseFlag, IconMode.Enabled);
-	
+
 	private Image dataHubStatusImage(final boolean changed) {
 		if (changed && !myRecord.isDismissed) {
 			return baseFlagGreen;

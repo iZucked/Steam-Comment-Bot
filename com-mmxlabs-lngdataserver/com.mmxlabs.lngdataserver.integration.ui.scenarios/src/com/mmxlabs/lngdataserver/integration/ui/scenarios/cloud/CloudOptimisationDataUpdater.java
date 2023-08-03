@@ -50,6 +50,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.Task;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.TaskStatus;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -376,7 +377,7 @@ class CloudOptimisationDataUpdater {
 						} catch (final IOException e) {
 							e.printStackTrace();
 						} finally {
-							updateThread.start();
+							WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(updateThread::start);
 						}
 					}
 
@@ -385,7 +386,7 @@ class CloudOptimisationDataUpdater {
 			};
 			tracker.open(true);
 		} else {
-			updateThread.start();
+			WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(updateThread::start);
 		}
 	}
 
