@@ -26,7 +26,7 @@
             id="com.mmxlabs.lingo.reports.emissions.CargoEmissionAccountingReportView">
       </view>
       <view
-            name="CII Emissions"
+            name="CII"
             icon="icons:/icons/16x16/emissions_total.png"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.emissions.cii.CIITabularReportView"
