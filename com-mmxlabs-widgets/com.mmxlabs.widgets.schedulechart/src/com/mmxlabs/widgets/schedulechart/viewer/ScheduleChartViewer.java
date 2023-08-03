@@ -1,32 +1,65 @@
 package com.mmxlabs.widgets.schedulechart.viewer;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
+
 public class ScheduleChartViewer<T> extends TypedViewer<T> {
+	
+	protected final ScheduleCanvas canvas;
+	protected final IScheduleEventProvider<T> eventProvider;
+	
+	private T input;
+	
+	public ScheduleChartViewer(final Composite parent, IScheduleEventProvider<T> eventProvider) {
+		this(new ScheduleCanvas(parent), eventProvider);
+	}
+	
+	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider) {
+		this.canvas = canvas;
+		this.eventProvider = eventProvider;
+		hookControl(canvas);
+	}
 
 	@Override
 	public void typedSetInput(T input) {
-		// TODO Auto-generated method stub
+		Control control = getControl();
+		if (control == null || control.isDisposed()) {
+			throw new IllegalStateException(
+					"Need an underlying widget to be able to set the input." + //$NON-NLS-1$
+							"(Has the widget been disposed?)"); //$NON-NLS-1$
+		}
 		
+		T oldInput = getInput();
+		this.input = input;
+		
+		// Call hook
+		typedInputChanged(input, oldInput);
 	}
 
 	@Override
 	public void typedInputChanged(T input, T oldInput) {
-		// TODO Auto-generated method stub
-		
+		canvas.clear();
+		var newRows = eventProvider.classifyEventsIntoRows(eventProvider.getEvents(input));
+		canvas.addAll(newRows);
 	}
 
 	@Override
 	public T getInput() {
-		// TODO Auto-generated method stub
-		return null;
+		return input;
 	}
 
 	@Override
 	public Control getControl() {
-		// TODO Auto-generated method stub
-		return null;
+		return canvas;
+	}
+	
+	public ScheduleCanvas getCanvas() {
+		return canvas;
 	}
 
 	@Override
@@ -44,6 +77,15 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	@Override
 	public void setSelection(ISelection selection, boolean reveal) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	// Reimplementation of ContentViewer hookControl
+	protected void hookControl(Control control) {
+		control.addDisposeListener(this::handleDispose);
+	}
+	
+	protected void handleDispose(DisposeEvent e) {
 		
 	}
 

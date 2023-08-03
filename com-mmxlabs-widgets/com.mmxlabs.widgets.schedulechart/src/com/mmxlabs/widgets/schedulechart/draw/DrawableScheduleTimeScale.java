@@ -28,6 +28,11 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 	private final Color bg = new Color(new RGB(230, 239, 249));
 	private final Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+	
+	private Optional<Integer> lockedHeaderY = Optional.empty();
+	
+	private static final int spacer = 3;
+	private static final int headerRowHeight = 18 + spacer;
 
 	public DrawableScheduleTimeScale(@NonNull T sts) {
 		this.sts = sts;
@@ -35,58 +40,77 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 
 	@Override
 	protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver resolver) {
-		List<BasicDrawableElement> res = new ArrayList<>();
+	List<BasicDrawableElement> res = new ArrayList<>();
 
-		final LocalDateTime startDate = sts.getStartTime();
-		final int headerRowHeight = 18;
-
-		final var view = sts.getUnitWidths().zoomLevel().getView();
-		final var unitsForViews = switch (view) {
-			case TS_VIEW_DAY -> new Pair<>(ChronoUnit.DAYS, ChronoUnit.HOURS);
-			case TS_VIEW_WEEK -> new Pair<>(ChronoUnit.WEEKS, ChronoUnit.DAYS);
-			case TS_VIEW_MONTH -> new Pair<>(ChronoUnit.MONTHS, ChronoUnit.WEEKS);
-			case TS_VIEW_YEAR -> new Pair<>(ChronoUnit.YEARS, ChronoUnit.MONTHS);
-			default -> throw new IllegalArgumentException("Unexpected value: " + view);
-		};
-		final AdjustedDateProvider adjuster = (date, unit) -> {
-			return switch (unit) {
-			case WEEKS -> (LocalDateTime) TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY).adjustInto(startDate);
-			case MONTHS -> (LocalDateTime) TemporalAdjusters.firstDayOfNextMonth().adjustInto(startDate);
-			default -> date;
-			};
-		};
-
-		int y = bounds.y;
-
-		Rectangle headerBounds = new Rectangle(bounds.x, y, bounds.width, headerRowHeight);
-		getDrawableElemsForHeader(res, headerBounds, unitsForViews.getFirst(), startDate, (date, unit) -> {
-			String format = switch (unit) {
-			case DAYS -> "";
-			case WEEKS -> "MMM d, ''yy";
-			case MONTHS -> "MMMM ''yy";
-			case YEARS -> "YYYY";
-			default -> "";
-			};
-			return format.isEmpty() ? "" : date.format(new DateTimeFormatterBuilder().appendPattern(format).toFormatter());
-		}, adjuster, resolver);
-
-		y += headerRowHeight;
-		headerBounds = new Rectangle(bounds.x, y, bounds.width, headerRowHeight);
-		getDrawableElemsForHeader(res, headerBounds, unitsForViews.getSecond(), startDate, (date, unit) -> {
-			String format = switch (unit) {
-			case DAYS -> "EEEEE";
-			case WEEKS -> "MMM d";
-			case MONTHS -> "MMMM";
-			default -> "";
-			};
-			return format.isEmpty() ? "" : date.format(new DateTimeFormatterBuilder().appendPattern(format).toFormatter());
-		}, adjuster, resolver);
-
-		y += headerRowHeight;
-		Rectangle gridBounds = new Rectangle(bounds.x, y, bounds.width, bounds.height - y);
-		getDrawableElemsForGrid(res, gridBounds, view == TimeScaleView.TS_VIEW_YEAR ? ChronoUnit.MONTHS : ChronoUnit.DAYS, startDate, adjuster);
+		res.addAll(getHeaders().getBasicDrawableElements(resolver));
+		res.addAll(getGrid(bounds.y + getTotalHeaderHeight()).getBasicDrawableElements(resolver));
 
 		return res;
+	}
+	
+	public DrawableElement getHeaders() {
+		final var grid = new DrawableElement() {
+			@Override
+			protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver resolver) {
+				List<BasicDrawableElement> res = new ArrayList<>();
+				
+				final LocalDateTime startDate = sts.getStartTime();
+				final var view = sts.getUnitWidths().zoomLevel().getView();
+				final var unitsForViews = switch (view) {
+					case TS_VIEW_DAY -> new Pair<>(ChronoUnit.DAYS, ChronoUnit.HOURS);
+					case TS_VIEW_WEEK -> new Pair<>(ChronoUnit.WEEKS, ChronoUnit.DAYS);
+					case TS_VIEW_MONTH -> new Pair<>(ChronoUnit.MONTHS, ChronoUnit.WEEKS);
+					case TS_VIEW_YEAR -> new Pair<>(ChronoUnit.YEARS, ChronoUnit.MONTHS);
+					default -> throw new IllegalArgumentException("Unexpected value: " + view);
+				};
+
+				int y = lockedHeaderY.orElse(bounds.y);
+
+				Rectangle headerBounds = new Rectangle(bounds.x, y, bounds.width, headerRowHeight);
+				getDrawableElemsForHeader(res, headerBounds, unitsForViews.getFirst(), startDate, (date, unit) -> {
+					String format = switch (unit) {
+					case DAYS -> "";
+					case WEEKS -> "MMM d, ''yy";
+					case MONTHS -> "MMMM ''yy";
+					case YEARS -> "YYYY";
+					default -> "";
+					};
+					return format.isEmpty() ? "" : date.format(new DateTimeFormatterBuilder().appendPattern(format).toFormatter());
+				}, getAdjuster(), resolver);
+
+				y += headerRowHeight;
+				headerBounds = new Rectangle(bounds.x, y, bounds.width, headerRowHeight);
+				getDrawableElemsForHeader(res, headerBounds, unitsForViews.getSecond(), startDate, (date, unit) -> {
+					String format = switch (unit) {
+					case DAYS -> "EEEEE";
+					case WEEKS -> "MMM d";
+					case MONTHS -> "MMMM";
+					default -> "";
+					};
+					return format.isEmpty() ? "" : date.format(new DateTimeFormatterBuilder().appendPattern(format).toFormatter());
+				}, getAdjuster(), resolver);
+
+				return res;
+			}
+		};
+		grid.setBounds(getBounds());
+		return grid;
+	}
+
+	
+	public DrawableElement getGrid(int startY) {
+		final var grid = new DrawableElement() {
+			@Override
+			protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver) {
+				List<BasicDrawableElement> res = new ArrayList<>();
+				final var view = sts.getUnitWidths().zoomLevel().getView();
+				Rectangle gridBounds = new Rectangle(bounds.x, startY, bounds.width, bounds.height - startY);
+				getDrawableElemsForGrid(res, gridBounds, view == TimeScaleView.TS_VIEW_YEAR ? ChronoUnit.MONTHS : ChronoUnit.DAYS, sts.getStartTime(), getAdjuster());
+				return res;
+			}
+		};
+		grid.setBounds(getBounds());
+		return grid;
 	}
 
 	private void getDrawableElemsForHeader(List<BasicDrawableElement> res, final Rectangle headerBounds, final ChronoUnit unit, final LocalDateTime startDate, FormattedDateProvider f,
@@ -130,7 +154,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			final int currX = x;
 			int width = unitWidth.orElseGet(() -> currX - sts.getXForDateTime(nextDate));
 
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).bgColour(unit == ChronoUnit.DAYS && date.getDayOfWeek().ordinal() >= 5 ? bg : white).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).bgColour(unit == ChronoUnit.DAYS && date.getDayOfWeek().ordinal() >= 5 ? bg : null).create());
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).strokeColour(gray).create());
 
 			date = nextDate;
@@ -138,6 +162,27 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 		}
 	}
 
+	public void setLockedHeaderY(int y) {
+		lockedHeaderY = Optional.of(y);
+	}
+	
+	public Optional<Integer> getLockedHeaderY() {
+		return lockedHeaderY;
+	}
+	
+	public int getTotalHeaderHeight() {
+		return headerRowHeight * 2;
+	}
+	
+	private AdjustedDateProvider getAdjuster() {
+		LocalDateTime startDate = sts.getStartTime();
+		return (date, unit) -> switch (unit) {
+			case WEEKS -> (LocalDateTime) TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY).adjustInto(startDate);
+			case MONTHS -> (LocalDateTime) TemporalAdjusters.firstDayOfNextMonth().adjustInto(startDate);
+			default -> date;
+		};
+	}
+	
 	private static interface FormattedDateProvider {
 		String getDateString(LocalDateTime date, ChronoUnit unit);
 	}
@@ -145,4 +190,5 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 	private static interface AdjustedDateProvider {
 		LocalDateTime getAdjustedDate(LocalDateTime date, ChronoUnit unit);
 	}
+
 }

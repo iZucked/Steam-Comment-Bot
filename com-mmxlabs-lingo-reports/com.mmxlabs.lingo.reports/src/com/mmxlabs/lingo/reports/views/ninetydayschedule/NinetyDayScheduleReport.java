@@ -1,26 +1,48 @@
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
+import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
+import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
 
 public class NinetyDayScheduleReport extends ViewPart {
 
 	private Action zoomInAction;
 	private Action zoomOutAction;
 	
-	private ScheduleCanvas canvas;
+	private ScheduleChartViewer<Integer> viewer;
+	private final IScheduleEventProvider<Integer> eventProvider = new IScheduleEventProvider<>() {
+
+		@Override
+		public List<ScheduleEvent> getEvents(Integer input) {
+			return List.of(new ScheduleEvent(LocalDateTime.now(), LocalDateTime.now().plusDays(3)));
+		}
+
+		@Override
+		public String getKeyForEvent(ScheduleEvent event) {
+			return "first event";
+		}
+	};
 	
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		canvas = new ScheduleCanvas(parent);
+		viewer = new ScheduleChartViewer(parent, eventProvider);
+		viewer.typedSetInput(0);
+		
 		
 		makeActions();
 		contributeToActionBars();
@@ -37,8 +59,8 @@ public class NinetyDayScheduleReport extends ViewPart {
 	}
 
 	private void makeActions() {
-		zoomInAction = new ZoomAction(true, canvas);
-		zoomOutAction = new ZoomAction(false, canvas);
+		zoomInAction = new ZoomAction(true, viewer.getCanvas());
+		zoomOutAction = new ZoomAction(false, viewer.getCanvas());
 	}
 
 	@Override
