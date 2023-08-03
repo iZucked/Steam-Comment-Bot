@@ -143,6 +143,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.VesselCharterCIIEndOptionsDesiredGradeConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.VesselCharterCIIEndOptionsDesiredGradeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Charter CII Grade Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CIIEndOptions">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.NominatedVesselConstraint"
                   id="com.mmxlabs.models.lng.assignment.validation.NominatedVesselConstraint"
                   isEnabledByDefault="true"

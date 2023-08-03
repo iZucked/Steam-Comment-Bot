@@ -43,23 +43,6 @@ public class VesselCharterConstraint extends AbstractModelMultiConstraint {
 	@Override
 	public void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-		
-		//		if (object instanceof final CIIEndOptions ciiEndOptions) {
-		//			final VesselCharter vesselCharter = (VesselCharter) ciiEndOptions.eContainer();
-		//			final Year vesselCharterEndYear = Year.from(vesselCharter.getEndBy());
-		//			final Vessel vessel = vesselCharter.getVessel();
-		//			final MMXRootObject rootObject = extraContext.getRootObject();
-		//			if (vessel != null && rootObject instanceof final LNGScenarioModel lngScenarioModel) {
-		//				final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
-		//				final String ciiGrade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, vessel, vesselCharterEndYear);
-		//				if (CIIComparator.compareGrades(ciiGrade, ciiEndOptions.getDesiredCIIGrade()) < 0) {
-		//					final String message = "The desired CII rating is not achieved";
-		//					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.WARNING));
-		//					failure.addEObjectAndFeature(ciiEndOptions, CargoPackage.eINSTANCE.getCIIEndOptions_DesiredCIIGrade());
-		//					failures.add(failure);
-		//				}
-		//			}
-		//		}
 
 		if (object instanceof final AssignableElement assignment) {
 
