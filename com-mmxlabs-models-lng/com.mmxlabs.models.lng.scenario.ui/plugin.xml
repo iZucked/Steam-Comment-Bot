@@ -65,6 +65,12 @@
         </wizard>
         <wizard
               category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              class="com.mmxlabs.models.lng.scenario.exportWizards.ExportZIPScenarioWizard"
+              id="com.mmxlabs.models./lng.scenario.exportWizards.ExportZIPScenarioWizard"
+              name="Export ZIP">
+        </wizard>
+        <wizard
+              category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
               class="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizard"
               id="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizard"
               name="Export scenario">
@@ -161,6 +167,11 @@
                   label=".lingo"
                   style="push">
             </command>
+             <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
+                  label=".zip"
+                  style="push">
+            </command>
          </menuContribution>
          <!-- Export menu -->
          <menuContribution
@@ -171,6 +182,11 @@
                   label="CSV"
                   style="push">
             </command>
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportZIPScenario"
+                  label="ZIP"
+                  style="push">
+            </command> 
             <command
                   commandId="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
                   label=".lingo"
@@ -435,6 +451,11 @@
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportAllCurves"
                name="Export all curves as CSV">
          </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportZIPWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportZIPScenario"
+               name="Export Scenario as ZIP">
+         </command> 
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
                id="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
