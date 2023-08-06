@@ -345,6 +345,14 @@ public class LNGTransformerModule extends AbstractModule {
 		return new CalendarMonthMapper() {
 
 			@Override
+			public int mapTimePoint(LocalDateTime ldt) {
+				
+				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
+				final ZonedDateTime mappedTime = ldt.atZone(ZoneId.of("Etc/UTC"));
+				
+				return Hours.between(dateTimeZero, mappedTime);
+			}
+			@Override
 			public int mapTimePoint(int point, UnaryOperator<LocalDateTime> mapFunction) {
 
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");

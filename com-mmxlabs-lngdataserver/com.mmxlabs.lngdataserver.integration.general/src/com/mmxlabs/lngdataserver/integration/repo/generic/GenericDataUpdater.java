@@ -29,6 +29,7 @@ import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 
 public class GenericDataUpdater {
 
@@ -181,7 +182,7 @@ public class GenericDataUpdater {
 			}
 
 		};
-		updateThread.start();
+		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(updateThread::start);
 	}
 
 	public void refresh() throws IOException {

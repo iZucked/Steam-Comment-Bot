@@ -16,17 +16,23 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.debug.BaseCaseDebugContants;
 import com.mmxlabs.scenario.service.model.util.encryption.DataStreamReencrypter;
 
 public class BaseCaseServiceClient {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseCaseServiceClient.class);
 
 	private static final String UNEXPECTED_CODE = "Unexpected code: ";
 	private static final String BASECASE_UPLOAD_URL = "/scenarios/v1/basecase/upload";
@@ -128,6 +134,9 @@ public class BaseCaseServiceClient {
 		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(String.format("%s%s", BASECASE_DOWNLOAD_URL, uuid), response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
+				if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_DOWNLOAD)) {
+					LOGGER.trace("Bad status code downloading base case " + responseCode);
+				}
 				throw new IOException(UNEXPECTED_CODE + responseCode);
 			}
 
@@ -136,6 +145,9 @@ public class BaseCaseServiceClient {
 				DataStreamReencrypter.reencryptScenario(w.getContent(), out);
 				return true;
 			} catch (Exception e) {
+				if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_DOWNLOAD)) {
+					LOGGER.trace("Exception saving base case " + responseCode);
+				}
 				throw new IOException(e);
 			}
 		});
@@ -180,17 +192,17 @@ public class BaseCaseServiceClient {
 
 	public BaseCaseRecord parseScenariosJSONData(final String jsonData) {
 		final JSONObject versionObject = new JSONObject(jsonData);
-		final BaseCaseRecord record = new BaseCaseRecord();
-		record.uuid = versionObject.getString("uuid");
-		record.creator = versionObject.getString("creator");
+		final BaseCaseRecord bcRecord = new BaseCaseRecord();
+		bcRecord.uuid = versionObject.getString("uuid");
+		bcRecord.creator = versionObject.getString("creator");
 		if (!versionObject.isNull("originalName")) {
-			record.originalName = versionObject.getString("originalName");
+			bcRecord.originalName = versionObject.getString("originalName");
 		} else {
-			record.originalName = record.uuid;
+			bcRecord.originalName = bcRecord.uuid;
 		}
 		final String creationDate = versionObject.getString("creationDate");
-		record.creationDate = Instant.parse(creationDate);
-		return record;
+		bcRecord.creationDate = Instant.parse(creationDate);
+		return bcRecord;
 	}
 
 	public boolean isServiceLocked() {

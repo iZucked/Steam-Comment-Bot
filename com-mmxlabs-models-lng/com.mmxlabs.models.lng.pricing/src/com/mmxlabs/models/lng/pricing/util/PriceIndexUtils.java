@@ -100,6 +100,11 @@ public class PriceIndexUtils {
 
 				return Hours.between(dateTimeZero, mappedTime);
 			}
+
+			@Override
+			public int mapTimePoint(LocalDateTime ldt) {
+				return Hours.between(dateTimeZero, ldt);
+			}
 		});
 		final SeriesParser indices = new SeriesParser(seriesParserData);
 

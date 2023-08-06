@@ -29,6 +29,7 @@ import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 
 public class CustomReportDataUpdater {
 
@@ -180,7 +181,7 @@ public class CustomReportDataUpdater {
 					updateLock.lock();
 					try {
 						refresh();
-					} catch (final IOException e1) {
+					} catch (final Exception e1) {
 						e1.printStackTrace();
 					} finally {
 						updateLock.unlock();
@@ -196,7 +197,7 @@ public class CustomReportDataUpdater {
 			}
 
 		};
-		updateThread.start();
+		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(updateThread::start);
 	}
 
 	public synchronized void refresh() throws IOException {

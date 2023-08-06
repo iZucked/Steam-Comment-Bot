@@ -25,6 +25,11 @@ public class WeightedAverageCharterCostCalculator implements ICharterCostCalcula
 			final int eventEndTime = eventStartTime + duration;
 			final NavigableSet<Integer> changePoints = charterRateCurve.getChangePoints();
 
+			
+//			we could do t -> min(nextChangePoint , endTime)
+//			t * ratePerDay.
+//			etc..
+			
 			// Otherwise have to step through the change points, from the vesselStartTime up
 			// to the vesselEndTime.
 			final Integer firstT = eventStartTime;

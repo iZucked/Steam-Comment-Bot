@@ -33,6 +33,7 @@ import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 
 public class GeneralDataUpdater {
 
@@ -195,7 +196,7 @@ public class GeneralDataUpdater {
 			}
 		};
 		updateThread.setName("DataHub Upstream listener: " + getClass().getName());
-		updateThread.start();
+		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(updateThread::start);
 
 		updateThreadMap.put(typeRecord, updateThread);
 	}

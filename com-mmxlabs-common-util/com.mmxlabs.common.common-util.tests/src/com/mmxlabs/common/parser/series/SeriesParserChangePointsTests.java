@@ -63,6 +63,11 @@ public class SeriesParserChangePointsTests {
 			public int mapChangePointToMonth(final int currentChangePoint) {
 				return currentChangePoint / 30 / 24;
 			}
+
+			@Override
+			public int mapTimePoint(LocalDateTime ldt) {
+				return 0;
+			}
 		});
 
 		final ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(2018, 1, 1, 0, 0), ZoneOffset.UTC);
