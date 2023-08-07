@@ -162,8 +162,6 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
 
 		bind(IIntegerIntervalCurve.class).annotatedWith(Names.named(SchedulerConstants.MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE)).toInstance(Mockito.mock(IIntegerIntervalCurve.class));
-
-		bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 	}
 
 	@Provides

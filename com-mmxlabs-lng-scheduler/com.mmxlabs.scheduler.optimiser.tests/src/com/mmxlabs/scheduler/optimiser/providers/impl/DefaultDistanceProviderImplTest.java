@@ -22,9 +22,11 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -279,6 +281,8 @@ public class DefaultDistanceProviderImplTest {
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(IRouteExclusionProvider.class).toInstance(routeExclusionProvider);
 				bind(IExtraIdleTimeProvider.class).toInstance(contingencyProvider);
+				bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class);
+				bind(IPanamaBookingsProvider.class).to(PanamaBookingsProviderEditor.class);
 			}
 
 		});

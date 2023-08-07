@@ -21,7 +21,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.providers.impl.PanamaBookingsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
 
@@ -116,6 +118,7 @@ public class SchedulerBuilderTest {
 				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
 				bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 				bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
+				bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 			}
 		});
 
