@@ -5,13 +5,10 @@
 package com.mmxlabs.models.lng.scenario.importWizards;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,8 +17,6 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
@@ -274,31 +269,30 @@ public class ImportCSVFilesPage extends WizardPage {
 				if (fn != null) {
 					try (ZipFile zip = new ZipFile(fn)) {
 						// Unzips to new temp directory
-						File destDir = new File(zip.getName().replace(".", "") + "temporary_directory" + Integer.toString((int)Math.floor(Math.random()*1000)));
-						if (destDir.exists()) {
-							throw new IOException();
-						}
-						destDir.mkdirs();
-						Enumeration<? extends ZipEntry> entries = zip.entries();
-						byte[] buffer = new byte[BUFFER];
-						BufferedInputStream is = null;
-						while (entries.hasMoreElements()) {
-							ZipEntry entry = entries.nextElement();
-							String fileName = entry.getName();
-							// Directories shouldn't exist, only CSVs
-							if (!fileName.substring(fileName.length()-4, fileName.length()).equals(".csv")) {
-								continue;
+						File destDir = new File(zip.getName().replace(".", "") + "_lingo_unzipped");
+						if (!destDir.exists()) {
+							destDir.mkdirs();
+							Enumeration<? extends ZipEntry> entries = zip.entries();
+							byte[] buffer = new byte[BUFFER];
+							BufferedInputStream is = null;
+							while (entries.hasMoreElements()) {
+								ZipEntry entry = entries.nextElement();
+								String fileName = entry.getName();
+								// Directories shouldn't exist, only CSVs
+								if (!fileName.substring(fileName.length()-4, fileName.length()).equals(".csv")) {
+									continue;
+								}
+								File newFile = new File(destDir + File.separator + fileName);
+								FileOutputStream fos = new FileOutputStream(newFile);
+								is = new BufferedInputStream(zip.getInputStream(entry));
+								int len;
+								while ((len = is.read(buffer)) > 0) {
+									fos.write(buffer, 0, len);
+								}
+								fos.close(); 
 							}
-			                File newFile = new File(destDir + File.separator + fileName);
-			                FileOutputStream fos = new FileOutputStream(newFile);
-			                is = new BufferedInputStream(zip.getInputStream(entry));
-			                int len;
-			                while ((len = is.read(buffer)) > 0) {
-			                	fos.write(buffer, 0, len);
-			                }
-			                fos.close(); 
 						}
-						
+	
 						// Load from newly created directory
 						directory.setText(fn);
 						for (final Chunk c : subModelChunks) {
@@ -311,6 +305,7 @@ public class ImportCSVFilesPage extends WizardPage {
 						if (section == null) {
 							section = dialogSettings.addNewSection(SECTION_NAME);
 						}
+						section.put(FILTER_KEY, destDir.toString());
 					}
 					catch (IOException e1) {
 						// TODO: Add a warning?
