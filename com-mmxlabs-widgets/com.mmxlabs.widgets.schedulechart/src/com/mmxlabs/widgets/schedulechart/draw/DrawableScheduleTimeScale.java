@@ -17,6 +17,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.ScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.TimeScaleView;
 
@@ -24,6 +25,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 
 	private final @NonNull T sts;
 
+	private final IScheduleChartColourScheme colourScheme;
 	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 	private final Color bg = new Color(new RGB(230, 239, 249));
@@ -34,8 +36,9 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 	private static final int spacer = 3;
 	private static final int headerRowHeight = 18 + spacer;
 
-	public DrawableScheduleTimeScale(@NonNull T sts) {
+	public DrawableScheduleTimeScale(@NonNull T sts, IScheduleChartColourScheme colourScheme) {
 		this.sts = sts;
+		this.colourScheme = colourScheme;
 	}
 
 	@Override
@@ -67,7 +70,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 				int y = lockedHeaderY.orElse(bounds.y);
 
 				Rectangle headerBounds = new Rectangle(bounds.x, y, bounds.width, headerRowHeight);
-				getDrawableElemsForHeader(res, headerBounds, unitsForViews.getFirst(), startDate, (date, unit) -> {
+				getDrawableElemsForHeader(0, res, headerBounds, unitsForViews.getFirst(), startDate, (date, unit) -> {
 					String format = switch (unit) {
 					case DAYS -> "";
 					case WEEKS -> "MMM d, ''yy";
@@ -80,7 +83,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 
 				y += headerRowHeight;
 				headerBounds = new Rectangle(bounds.x, y, bounds.width, headerRowHeight);
-				getDrawableElemsForHeader(res, headerBounds, unitsForViews.getSecond(), startDate, (date, unit) -> {
+				getDrawableElemsForHeader(1, res, headerBounds, unitsForViews.getSecond(), startDate, (date, unit) -> {
 					String format = switch (unit) {
 					case DAYS -> "EEEEE";
 					case WEEKS -> "MMM d";
@@ -113,7 +116,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 		return grid;
 	}
 
-	private void getDrawableElemsForHeader(List<BasicDrawableElement> res, final Rectangle headerBounds, final ChronoUnit unit, final LocalDateTime startDate, FormattedDateProvider f,
+	private void getDrawableElemsForHeader(int headerNum, List<BasicDrawableElement> res, final Rectangle headerBounds, final ChronoUnit unit, final LocalDateTime startDate, FormattedDateProvider f,
 			AdjustedDateProvider a, DrawerQueryResolver r) {
 		final int y = headerBounds.y;
 		final int maxX = headerBounds.x + headerBounds.width;
@@ -122,8 +125,8 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 		int x = sts.getXForDateTime(date);
 
 		if (x > headerBounds.x) {
-			res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, x - headerBounds.x, headerBounds.height).bgColour(bg).create());
-			res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, x - headerBounds.x, headerBounds.height).strokeColour(gray).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, x - headerBounds.x, headerBounds.height).bgColour(colourScheme.getHeaderBgColour(headerNum)).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, x - headerBounds.x, headerBounds.height).borderColour(colourScheme.getHeaderOutlineColour()).create());
 		}
 
 		final Optional<Integer> unitWidth = sts.getUnitWidthFromRegularUnit(unit);
@@ -134,7 +137,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).bgColour(bg).create());
 			res.add(BasicDrawableElements.Text.from(x, y, f.getDateString(date, unit)).padding(2).textColour(black).create());
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).strokeColour(gray).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).borderColour(gray).create());
 
 			date = nextDate;
 			x += width;
@@ -155,7 +158,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			int width = unitWidth.orElseGet(() -> currX - sts.getXForDateTime(nextDate));
 
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).bgColour(unit == ChronoUnit.DAYS && date.getDayOfWeek().ordinal() >= 5 ? bg : null).create());
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).strokeColour(gray).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).borderColour(gray).create());
 
 			date = nextDate;
 			x += width;

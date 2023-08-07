@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Rectangle;
 
+import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
+
 public abstract class DrawableElement {
 	
 	private Rectangle bounds;

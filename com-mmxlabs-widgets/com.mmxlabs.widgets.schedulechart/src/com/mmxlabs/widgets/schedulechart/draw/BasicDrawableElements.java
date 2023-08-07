@@ -1,5 +1,6 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 
 public interface BasicDrawableElements {
@@ -17,8 +18,13 @@ public interface BasicDrawableElements {
 		}
 
 		@Override
-		public Color getStrokeColor() {
+		public Color getBorderColour() {
 			return c;
+		}
+
+		@Override
+		public int getBorderThickness() {
+			return 0;
 		}
 		
 		@Override
@@ -27,7 +33,7 @@ public interface BasicDrawableElements {
 		}
 	}
 
-	public record Rectangle(int x, int y, int width, int height, Color bgColour, Color strokeColour, int alpha) implements BasicDrawableElement {
+	public record Rectangle(int x, int y, int width, int height, Color bgColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
 
 		@Override
 		public Color getBackgroundColour() {
@@ -35,8 +41,13 @@ public interface BasicDrawableElements {
 		}
 
 		@Override
-		public Color getStrokeColor() {
-			return strokeColour;
+		public Color getBorderColour() {
+			return borderColour;
+		}
+
+		@Override
+		public int getBorderThickness() {
+			return borderThickness;
 		}
 		
 		@Override
@@ -58,7 +69,8 @@ public interface BasicDrawableElements {
 			private final int width;
 			private final int height;
 			private Color bgColour = null;
-			private Color strokeColour = null;
+			private Color borderColour = null;
+			private int borderThickness = 0;
 			private int alpha = MAX_ALPHA;
 			
 			private RectangleBuilder(int x, int y, int width, int height) {
@@ -68,8 +80,14 @@ public interface BasicDrawableElements {
 				this.height = height;
 			}
 			
-			public RectangleBuilder strokeColour(Color c) {
-				this.strokeColour = c;
+			public RectangleBuilder borderColour(Color c) {
+				this.borderColour = c;
+				return this;
+			}
+			
+			public RectangleBuilder border(Color c, int thickness) {
+				this.borderColour = c;
+				this.borderThickness = thickness;
 				return this;
 			}
 
@@ -84,7 +102,7 @@ public interface BasicDrawableElements {
 			}
 			
 			public Rectangle create() {
-				return new Rectangle(x, y, width, height, bgColour, strokeColour, alpha);
+				return new Rectangle(x, y, width, height, bgColour, borderColour, borderThickness, alpha);
 			}
 		}
 	}
@@ -100,8 +118,13 @@ public interface BasicDrawableElements {
 		}
 
 		@Override
-		public Color getStrokeColor() {
+		public Color getBorderColour() {
 			return c;
+		}
+
+		@Override
+		public int getBorderThickness() {
+			return 0;
 		}
 		
 		@Override

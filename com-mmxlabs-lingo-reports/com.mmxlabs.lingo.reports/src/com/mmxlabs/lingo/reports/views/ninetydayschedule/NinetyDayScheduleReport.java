@@ -5,14 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
@@ -23,8 +32,8 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private Action zoomInAction;
 	private Action zoomOutAction;
 	
-	private ScheduleChartViewer<Integer> viewer;
-	private final IScheduleEventProvider<Integer> eventProvider = new IScheduleEventProvider<>() {
+	private ScheduleChartViewer<ScheduleModel> viewer;
+	private final IScheduleEventProvider<Integer> oldEventProvider = new IScheduleEventProvider<>() {
 
 		@Override
 		public List<ScheduleEvent> getEvents(Integer input) {
@@ -44,15 +53,44 @@ public class NinetyDayScheduleReport extends ViewPart {
 		}
 	};
 	
+	private final NinetyDayScheduleEventProvider eventProvider = new NinetyDayScheduleEventProvider();
+	private final NinetyDayScheduleEventStylingProvider eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
+	
+	private @Nullable ScenarioComparisonService scenarioComparisonService;
+	private ReentrantSelectionManager selectionManager;
+	protected final ISelectedScenariosServiceListener scenariosServiceListener = new ISelectedScenariosServiceListener() {
+		@Override
+		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+			ViewerHelper.runIfViewerValid(viewer, block, () -> {
+				if (selectedDataProvider != null) {
+					List<ScenarioResult> rs = selectedDataProvider.getAllScenarioResults();
+					if (rs.isEmpty()) return;
+					ScheduleModel sm = rs.get(0).getTypedResult(ScheduleModel.class);
+					if (sm != null) {
+						viewer.typedSetInput(sm);
+					}
+				}
+			});
+		}
+	};
+
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer(parent, eventProvider);
-		viewer.typedSetInput(0);
+		viewer = new ScheduleChartViewer<>(parent, eventProvider, eventStylingProvider);
+		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
+		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		
 		
 		makeActions();
 		contributeToActionBars();
+		
+		
+		try {
+			scenarioComparisonService.triggerListener(scenariosServiceListener, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void contributeToActionBars() {
@@ -74,6 +112,14 @@ public class NinetyDayScheduleReport extends ViewPart {
 	public void setFocus() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void dispose() {
+		if (scenarioComparisonService != null) {
+			scenarioComparisonService.removeListener(scenariosServiceListener);
+		}
+		super.dispose();
 	}
 	
 	private static class ZoomAction extends Action {

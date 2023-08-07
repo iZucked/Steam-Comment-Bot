@@ -5,8 +5,10 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
 public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	
@@ -15,13 +17,17 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	
 	private T input;
 	
-	public ScheduleChartViewer(final Composite parent, IScheduleEventProvider<T> eventProvider) {
-		this(new ScheduleCanvas(parent), eventProvider);
+	public ScheduleChartViewer(final Composite parent, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
+		this(new ScheduleCanvas(parent, eventStylingProvider), eventProvider);
+	}
+	public ScheduleChartViewer(final Composite parent, IScheduleChartColourScheme colourScheme, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
+		this(new ScheduleCanvas(parent, eventStylingProvider, colourScheme), eventProvider);
 	}
 	
 	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider) {
 		this.canvas = canvas;
 		this.eventProvider = eventProvider;
+		this.input = null;
 		hookControl(canvas);
 	}
 
@@ -46,6 +52,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 		canvas.clear();
 		var newRows = eventProvider.classifyEventsIntoRows(eventProvider.getEvents(input));
 		canvas.addAll(newRows);
+		canvas.redraw();
 	}
 
 	@Override
@@ -86,7 +93,6 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	}
 	
 	protected void handleDispose(DisposeEvent e) {
-		
 	}
 
 }

@@ -24,8 +24,9 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				gc.setBackground(b.getBackgroundColour());
 			}
 
-			if (b.getStrokeColor() != null) {
-				gc.setForeground(b.getStrokeColor());
+			if (b.getBorderColour() != null) {
+				gc.setForeground(b.getBorderColour());
+				gc.setLineWidth(b.getBorderThickness());
 			}
 			
 			gc.setAlpha(b.getAlpha());
@@ -34,7 +35,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				gc.drawLine(l.x1(), l.y1(), l.x2(), l.y2());
 			} else if (b instanceof Rectangle r) {
 
-				if (r.getStrokeColor() != null) {
+				if (r.getBorderColour() != null) {
 					gc.drawRectangle(r.x(), r.y(), r.width(), r.height());
 				}
 				

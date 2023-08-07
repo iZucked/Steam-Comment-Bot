@@ -1,16 +1,16 @@
 package com.mmxlabs.widgets.schedulechart;
 
-import com.mmxlabs.common.Pair;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Optional;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+
+import com.mmxlabs.common.Pair;
 
 public class ScheduleTimeScale {
 	
@@ -22,7 +22,7 @@ public class ScheduleTimeScale {
 	
 	
 	public ScheduleTimeScale() {
-		this.startTime = ((LocalDateTime) TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY).adjustInto(LocalDateTime.now())).minusDays(1);
+		this.startTime = ((LocalDateTime) TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY).adjustInto(LocalDateTime.now())).minusDays(1).minusYears(1);
 		// TODO: make this customisable with a settings object
 		this.unitWidths = calculateUnitWidths(new ScheduleTimeScaleSmoothZoomLevel(ScheduleTimeScaleZoomLevel.TS_ZOOM_DAY_NORMAL), 16, 6, 3);
 	}

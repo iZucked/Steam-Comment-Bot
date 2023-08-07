@@ -3,9 +3,12 @@ package com.mmxlabs.widgets.schedulechart;
 import java.util.List;
 
 public class ScheduleChartRow {
+
 	private final List<ScheduleEvent> events;
+	private final String name;
 	
-	public ScheduleChartRow(List<ScheduleEvent> events) {
+	public ScheduleChartRow(String name, List<ScheduleEvent> events) {
+		this.name = name;
 		this.events = events;
 	}
 	
@@ -14,6 +17,6 @@ public class ScheduleChartRow {
 	}
 
 	public String getName() {
-		return "Row";
+		return name;
 	}
 }
