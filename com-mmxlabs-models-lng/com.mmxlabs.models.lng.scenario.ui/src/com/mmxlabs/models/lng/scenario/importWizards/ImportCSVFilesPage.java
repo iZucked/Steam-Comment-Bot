@@ -4,13 +4,23 @@
  */
 package com.mmxlabs.models.lng.scenario.importWizards;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -35,6 +45,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -78,6 +89,8 @@ import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class ImportCSVFilesPage extends WizardPage {
 
+	private static final int BUFFER = 2048; // For unzipping
+	
 	private static final String FILTER_KEY = "lastSelection";
 	private static final String SECTION_NAME = "ImportCSVFilesPage.section";
 
@@ -152,8 +165,19 @@ public class ImportCSVFilesPage extends WizardPage {
 
 	protected ImportCSVFilesPage(final String pageName, final ScenarioServiceNewScenarioPage mainPage) {
 		super(pageName);
-		setTitle("Choose CSV Files");
+		setTitle("Choose CSV/ZIP Files");
 		this.mainPage = mainPage;
+	}
+	
+	private boolean isZip(File f) {
+		try {
+			ZipFile zip = new ZipFile(f);
+		} catch (ZipException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -181,6 +205,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 		final String lastDirectoryName = section == null ? null : section.get(FILTER_KEY);
+		final String lastZipName = null;
 
 		final Button auto = new Button(holder, SWT.NONE);
 		auto.setText("Choose &Directory...");
@@ -192,7 +217,6 @@ public class ImportCSVFilesPage extends WizardPage {
 		auto.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-
 				final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 
 				IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
@@ -224,6 +248,74 @@ public class ImportCSVFilesPage extends WizardPage {
 						section = dialogSettings.addNewSection(SECTION_NAME);
 					}
 					section.put(FILTER_KEY, dir.toString());
+				}
+			}
+		});
+		
+		final Composite holderZip = new Composite(top, SWT.NONE);
+		gl.marginLeft = 0;
+		gl.marginWidth = 0;
+		holderZip.setLayout(gl);
+		holderZip.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		final Button autoZip = new Button(holderZip, SWT.NONE);
+		autoZip.setText("Choose &Zip File...");
+		autoZip.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+
+				IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+				final String filter = section == null ? null : section.get(FILTER_KEY);
+				// display file open dialog and then fill out files if the exist.
+				final FileDialog dlg = new FileDialog(getShell());
+				dlg.setFilterExtensions(new String[] { "*.zip",});
+				final String fn = dlg.open();
+				
+				if (fn != null) {
+					try (ZipFile zip = new ZipFile(fn)) {
+						// Unzips to new temp directory
+						File destDir = new File(zip.getName().replace(".", "") + "temporary_directory" + Integer.toString((int)Math.floor(Math.random()*1000)));
+						if (destDir.exists()) {
+							throw new IOException();
+						}
+						destDir.mkdirs();
+						Enumeration<? extends ZipEntry> entries = zip.entries();
+						byte[] buffer = new byte[BUFFER];
+						BufferedInputStream is = null;
+						while (entries.hasMoreElements()) {
+							ZipEntry entry = entries.nextElement();
+							String fileName = entry.getName();
+							// Directories shouldn't exist, only CSVs
+							if (!fileName.substring(fileName.length()-4, fileName.length()).equals(".csv")) {
+								continue;
+							}
+			                File newFile = new File(destDir + File.separator + fileName);
+			                FileOutputStream fos = new FileOutputStream(newFile);
+			                is = new BufferedInputStream(zip.getInputStream(entry));
+			                int len;
+			                while ((len = is.read(buffer)) > 0) {
+			                	fos.write(buffer, 0, len);
+			                }
+			                fos.close(); 
+						}
+						
+						// Load from newly created directory
+						directory.setText(fn);
+						for (final Chunk c : subModelChunks) {
+							c.setFromDirectory(destDir);
+						}
+						for (final Chunk c : extraModelChunks) {
+							c.setFromDirectory(destDir);
+						}
+						setPageComplete(true);
+						if (section == null) {
+							section = dialogSettings.addNewSection(SECTION_NAME);
+						}
+					}
+					catch (IOException e1) {
+						// TODO: Add a warning?
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

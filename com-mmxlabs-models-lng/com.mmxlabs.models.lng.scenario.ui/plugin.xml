@@ -166,12 +166,7 @@
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
                   label=".lingo"
                   style="push">
-            </command>
-             <command
-                  commandId="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
-                  label=".zip"
-                  style="push">
-            </command>
+            </command> 
          </menuContribution>
          <!-- Export menu -->
          <menuContribution
