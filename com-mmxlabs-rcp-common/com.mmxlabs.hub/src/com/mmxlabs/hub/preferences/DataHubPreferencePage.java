@@ -34,6 +34,7 @@ import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider.StateReason;
 import com.mmxlabs.hub.auth.AuthenticationManager;
 import com.mmxlabs.hub.auth.OAuthManager;
+import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.license.features.LicenseFeatures;
 
 public class DataHubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -91,6 +92,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		loginButton.setEnabled(DataHubServiceProvider.getInstance().isHubOnline());
 	}
 
+	protected Label infoLabel;
 	protected Label noteLabel;
 
 	protected BooleanFieldEditor forceBasicAuth;
@@ -233,6 +235,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 		refreshButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent se) {
+
+				infoLabel.setText("Checking Data Hub connection");
+
 				// trigger refresh datahub service logged in state
 				final UpstreamUrlProvider.OnlineState state = UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 				final UpstreamUrlProvider.StateReason reason = state.getReason();
@@ -259,7 +264,17 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					break;
 				}
 				if (msg != null) {
+					infoLabel.setText(msg);
 					if (reason == StateReason.HUB_ONLINE) {
+
+						DatahubInformation datahubInformation = DataHubServiceProvider.getInstance().getDatahubInformation();
+						if (datahubInformation != null) {
+							if (datahubInformation.getInstanceTag() != null) {
+								infoLabel.setText(String.format("Found Data Hub version %s, Tag: %s", datahubInformation.getVersion(), datahubInformation.getInstanceTag()));
+							} else {
+								infoLabel.setText(String.format("Found Data Hub version %s", datahubInformation.getVersion()));
+							}
+						}
 
 						final boolean oAuthEnabled = authenticationManager.isOAuthEnabled() && !authenticationManager.forceBasicAuthentication.get();
 						if (oAuthEnabled) {
@@ -282,6 +297,11 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				}
 			}
 		});
+
+		infoLabel = new Label(getFieldEditorParent(),  SWT.FILL | SWT.BORDER);
+		infoLabel.setVisible(true);
+		infoLabel.setText("Connection Details: Press check connection.");
+		infoLabel.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 
 		forceBasicAuth = new BooleanFieldEditor(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, "&Force local authentication", getFieldEditorParent());
 		addField(forceBasicAuth);
