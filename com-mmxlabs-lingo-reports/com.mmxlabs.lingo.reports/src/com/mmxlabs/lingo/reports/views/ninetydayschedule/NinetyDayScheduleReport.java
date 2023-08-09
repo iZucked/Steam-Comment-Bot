@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -31,6 +32,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 
 	private Action zoomInAction;
 	private Action zoomOutAction;
+	private Action packAction;
 	
 	private ScheduleChartViewer<ScheduleModel> viewer;
 	private final IScheduleEventProvider<Integer> oldEventProvider = new IScheduleEventProvider<>() {
@@ -101,11 +103,13 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
+		manager.add(packAction);
 	}
 
 	private void makeActions() {
 		zoomInAction = new ZoomAction(true, viewer.getCanvas());
 		zoomOutAction = new ZoomAction(false, viewer.getCanvas());
+		packAction = new PackAction(viewer.getCanvas());
 	}
 
 	@Override
@@ -127,7 +131,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 		private final boolean zoomIn;
 		private final ScheduleCanvas canvas;
 		
-		public ZoomAction(boolean zoomIn, ScheduleCanvas canvas) {
+		public ZoomAction(final boolean zoomIn, final ScheduleCanvas canvas) {
 			super();
 			this.zoomIn = zoomIn;
 			this.canvas = canvas;
@@ -146,5 +150,25 @@ public class NinetyDayScheduleReport extends ViewPart {
 			canvas.redraw();
 		}
 	}
+	
+	private static class PackAction extends Action {
+		private final ScheduleCanvas canvas;
+		
+		public PackAction(final ScheduleCanvas canvas) {
+			super();
+			this.canvas = canvas;
+
+			setText("Fit");
+			CommonImages.setImageDescriptors(this, IconPaths.Pack);
+		}
+		
+		@Override
+		public void run() {
+			canvas.getTimeScale().pack();
+			canvas.redraw();
+		}
+		
+	}
+	
 
 }

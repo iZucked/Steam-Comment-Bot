@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
+import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.TimeScaleView;
 
@@ -26,19 +27,13 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 	private final @NonNull T sts;
 
 	private final IScheduleChartColourScheme colourScheme;
-	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-	private final Color bg = new Color(new RGB(230, 239, 249));
-	private final Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-	
+	private final IScheduleChartSettings settings;
 	private Optional<Integer> lockedHeaderY = Optional.empty();
 	
-	private static final int spacer = 3;
-	private static final int headerRowHeight = 18 + spacer;
-
-	public DrawableScheduleTimeScale(@NonNull T sts, IScheduleChartColourScheme colourScheme) {
+	public DrawableScheduleTimeScale(@NonNull T sts, IScheduleChartColourScheme colourScheme, IScheduleChartSettings settings) {
 		this.sts = sts;
 		this.colourScheme = colourScheme;
+		this.settings = settings;
 	}
 
 	@Override
@@ -63,10 +58,11 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 					case TS_VIEW_DAY -> new Pair<>(ChronoUnit.DAYS, ChronoUnit.HOURS);
 					case TS_VIEW_WEEK -> new Pair<>(ChronoUnit.WEEKS, ChronoUnit.DAYS);
 					case TS_VIEW_MONTH -> new Pair<>(ChronoUnit.MONTHS, ChronoUnit.WEEKS);
-					case TS_VIEW_YEAR -> new Pair<>(ChronoUnit.YEARS, ChronoUnit.MONTHS);
+					case TS_VIEW_YEAR, TS_VIEW_YEAR_SMALL -> new Pair<>(ChronoUnit.YEARS, ChronoUnit.MONTHS);
 					default -> throw new IllegalArgumentException("Unexpected value: " + view);
 				};
 
+				final int headerRowHeight = settings.getHeaderHeight();
 				int y = lockedHeaderY.orElse(bounds.y);
 
 				Rectangle headerBounds = new Rectangle(bounds.x, y, bounds.width, headerRowHeight);
@@ -75,7 +71,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 					case DAYS -> "";
 					case WEEKS -> "MMM d, ''yy";
 					case MONTHS -> "MMMM ''yy";
-					case YEARS -> "YYYY";
+					case YEARS -> "yyyy";
 					default -> "";
 					};
 					return format.isEmpty() ? "" : date.format(new DateTimeFormatterBuilder().appendPattern(format).toFormatter());
@@ -87,7 +83,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 					String format = switch (unit) {
 					case DAYS -> "EEEEE";
 					case WEEKS -> "MMM d";
-					case MONTHS -> "MMMM";
+					case MONTHS -> "MMM";
 					default -> "";
 					};
 					return format.isEmpty() ? "" : date.format(new DateTimeFormatterBuilder().appendPattern(format).toFormatter());
@@ -108,7 +104,10 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 				List<BasicDrawableElement> res = new ArrayList<>();
 				final var view = sts.getUnitWidths().zoomLevel().getView();
 				Rectangle gridBounds = new Rectangle(bounds.x, startY, bounds.width, bounds.height - startY);
-				getDrawableElemsForGrid(res, gridBounds, view == TimeScaleView.TS_VIEW_YEAR ? ChronoUnit.MONTHS : ChronoUnit.DAYS, sts.getStartTime(), getAdjuster());
+				getDrawableElemsForGrid(res, gridBounds, switch (view) {
+					case TS_VIEW_YEAR, TS_VIEW_YEAR_SMALL -> ChronoUnit.MONTHS;
+					default -> ChronoUnit.DAYS;
+				}, sts.getStartTime(), getAdjuster());
 				return res;
 			}
 		};
@@ -127,6 +126,16 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 		if (x > headerBounds.x) {
 			res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, x - headerBounds.x, headerBounds.height).bgColour(colourScheme.getHeaderBgColour(headerNum)).create());
 			res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, x - headerBounds.x, headerBounds.height).borderColour(colourScheme.getHeaderOutlineColour()).create());
+
+			// Add the current year at the start of next month
+			if (unit == ChronoUnit.YEARS) {
+				LocalDateTime currYear = (LocalDateTime) TemporalAdjusters.firstDayOfNextMonth().adjustInto(startDate);
+				if (!currYear.isEqual(date)) {
+					int currYearX = sts.getXForDateTime(currYear);
+					res.add(BasicDrawableElements.Text.from(currYearX, y, f.getDateString(currYear, unit)).padding(2).textColour(colourScheme.getHeaderTextColour(headerNum)).create());
+					res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, currYearX - headerBounds.x, headerBounds.height).borderColour(colourScheme.getHeaderOutlineColour()).create());
+				}
+			}
 		}
 
 		final Optional<Integer> unitWidth = sts.getUnitWidthFromRegularUnit(unit);
@@ -135,10 +144,9 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			final int currX = x;
 			int width = unitWidth.orElseGet(() -> sts.getXForDateTime(nextDate) - currX);
 
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).bgColour(bg).create());
-			res.add(BasicDrawableElements.Text.from(x, y, f.getDateString(date, unit)).padding(2).textColour(black).create());
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).borderColour(gray).create());
-
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).bgColour(colourScheme.getHeaderBgColour(headerNum)).create());
+			res.add(BasicDrawableElements.Text.from(x, y, f.getDateString(date, unit)).padding(2).textColour(colourScheme.getHeaderTextColour(headerNum)).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).borderColour(colourScheme.getGridStrokeColour()).create());
 			date = nextDate;
 			x += width;
 		}
@@ -155,10 +163,10 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 		while (x < maxX) {
 			LocalDateTime nextDate = date.plus(1, unit);
 			final int currX = x;
-			int width = unitWidth.orElseGet(() -> currX - sts.getXForDateTime(nextDate));
+			int width = unitWidth.orElseGet(() -> sts.getXForDateTime(nextDate) - currX);
 
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).bgColour(unit == ChronoUnit.DAYS && date.getDayOfWeek().ordinal() >= 5 ? bg : null).create());
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).borderColour(gray).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).bgColour(unit == ChronoUnit.DAYS && date.getDayOfWeek().ordinal() >= 5 ? colourScheme.getBaseBgColour() : null).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).borderColour(colourScheme.getGridStrokeColour()).create());
 
 			date = nextDate;
 			x += width;
@@ -174,7 +182,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 	}
 	
 	public int getTotalHeaderHeight() {
-		return headerRowHeight * 2;
+		return settings.getHeaderHeight() * 2;
 	}
 	
 	private AdjustedDateProvider getAdjuster() {
@@ -182,6 +190,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 		return (date, unit) -> switch (unit) {
 			case WEEKS -> (LocalDateTime) TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY).adjustInto(startDate);
 			case MONTHS -> (LocalDateTime) TemporalAdjusters.firstDayOfNextMonth().adjustInto(startDate);
+			case YEARS -> (LocalDateTime) TemporalAdjusters.firstDayOfNextYear().adjustInto(startDate);
 			default -> date;
 		};
 	}

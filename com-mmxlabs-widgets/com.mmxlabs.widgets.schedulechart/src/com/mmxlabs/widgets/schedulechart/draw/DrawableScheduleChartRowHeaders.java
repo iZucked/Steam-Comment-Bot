@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
+import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 
@@ -16,11 +17,13 @@ public class DrawableScheduleChartRowHeaders extends DrawableElement {
 	private final int totalHeaderHeight;
 
 	private final IScheduleChartColourScheme colourScheme;
+	private final IScheduleChartSettings settings;
 
-	public DrawableScheduleChartRowHeaders(List<ScheduleChartRow> rows, int totalHeaderHeight, IScheduleChartColourScheme colourScheme) {
+	public DrawableScheduleChartRowHeaders(List<ScheduleChartRow> rows, int totalHeaderHeight, IScheduleChartColourScheme colourScheme, IScheduleChartSettings settings) {
 		this.rows = rows;
 		this.totalHeaderHeight = totalHeaderHeight;
 		this.colourScheme = colourScheme;
+		this.settings = settings;
 	}
 
 	Optional<Integer> lockedHeaderY = Optional.empty();
@@ -28,12 +31,13 @@ public class DrawableScheduleChartRowHeaders extends DrawableElement {
 	@Override
 	protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver) {
 		List<BasicDrawableElement> res = new ArrayList<>();
+		final int height = settings.getRowHeight();
 		int y = bounds.y;
 		for (int i = 0; i < rows.size(); i++) {
-			res.add(BasicDrawableElements.Rectangle.withBounds(bounds.x, y, bounds.width, ScheduleCanvas.SCHEDULE_CHART_ROW_HEIGHT).bgColour(colourScheme.getRowHeaderBgColour(i))
+			res.add(BasicDrawableElements.Rectangle.withBounds(bounds.x, y, bounds.width, height).bgColour(colourScheme.getRowHeaderBgColour(i))
 					.borderColour(colourScheme.getRowOutlineColour(i)).create());
 			res.add(BasicDrawableElements.Text.from(bounds.x, y, rows.get(i).getName()).padding(2).textColour(colourScheme.getRowHeaderTextColour(i)).create());
-			y += ScheduleCanvas.SCHEDULE_CHART_ROW_HEIGHT + 1;
+			y += height + 1;
 		}
 		res.add(BasicDrawableElements.Rectangle.withBounds(bounds.x, y, bounds.width, bounds.height - y).bgColour(colourScheme.getRowHeaderBgColour(-1))
 				.borderColour(colourScheme.getRowOutlineColour(-1)).create());

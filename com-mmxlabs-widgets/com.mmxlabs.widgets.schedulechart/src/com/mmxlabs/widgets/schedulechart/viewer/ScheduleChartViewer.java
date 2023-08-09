@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
+import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
@@ -20,8 +21,8 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	public ScheduleChartViewer(final Composite parent, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
 		this(new ScheduleCanvas(parent, eventStylingProvider), eventProvider);
 	}
-	public ScheduleChartViewer(final Composite parent, IScheduleChartColourScheme colourScheme, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
-		this(new ScheduleCanvas(parent, eventStylingProvider, colourScheme), eventProvider);
+	public ScheduleChartViewer(final Composite parent, IScheduleChartSettings settings, IScheduleChartColourScheme colourScheme, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
+		this(new ScheduleCanvas(parent, eventStylingProvider, settings, colourScheme), eventProvider);
 	}
 	
 	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider) {

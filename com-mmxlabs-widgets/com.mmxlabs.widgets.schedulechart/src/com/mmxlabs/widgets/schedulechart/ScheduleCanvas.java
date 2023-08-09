@@ -6,15 +6,14 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
 import com.mmxlabs.widgets.schedulechart.draw.DefaultScheduleCanvasColourScheme;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableElement;
@@ -26,38 +25,34 @@ import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
-public class ScheduleCanvas extends Canvas {
-	
-	// TODO: change this to use a settings object
-	public static final int SCHEDULE_CHART_ROW_HEIGHT = 24;
-
-	public static final int DEFAULT_SCHEDULE_CHART_ROW_HEADER_WIDTH = 100;
-
-	private static final int SCHEDULE_CHART_ROW_HEADER_R_PADDING = 15;
-
-	private Rectangle originalBounds;
-	private Rectangle mainBounds;
+public class ScheduleCanvas extends Canvas implements IScheduleChartContentBoundsProvider {
 	
 	private final ScheduleTimeScale timeScale;
 	private final DrawableScheduleTimeScale<ScheduleTimeScale> drawableTimeScale;
 
 	private final HorizontalScrollbarHandler horizontalScrollbarHandler;
 	
-	private List<ScheduleChartRow> rows = new ArrayList<>();
-
+	private final IScheduleChartSettings settings;
 	private final IScheduleChartColourScheme colourScheme;
 	private final IScheduleEventStylingProvider eventStylingProvider;
 
+	private Rectangle mainBounds;
+	private List<ScheduleChartRow> rows = new ArrayList<>();
+
+	private ScheduleEvent leftmostEvent;
+	private ScheduleEvent rightmostEvent;
+
 	public ScheduleCanvas(Composite parent, IScheduleEventStylingProvider eventStylingProvider) {
-		this(parent, eventStylingProvider, new DefaultScheduleCanvasColourScheme());
+		this(parent, eventStylingProvider, new DefaultScheduleChartSettings(), new DefaultScheduleCanvasColourScheme());
 	}
 
-	public ScheduleCanvas(Composite parent, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartColourScheme colourScheme) {
+	public ScheduleCanvas(Composite parent, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartSettings settings, IScheduleChartColourScheme colourScheme) {
 		super(parent, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.V_SCROLL | SWT.H_SCROLL);
+		this.settings = settings;
 		this.colourScheme = colourScheme;
 
-		this.timeScale = new ScheduleTimeScale();
-		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, colourScheme);
+		this.timeScale = new ScheduleTimeScale(this, settings);
+		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, colourScheme, settings);
 		
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
 		
@@ -101,6 +96,7 @@ public class ScheduleCanvas extends Canvas {
 	}
 	
 	private void drawChartWithDrawer(ScheduleElementDrawer drawer, DrawerQueryResolver resolver) {
+  Rectangle originalBounds;
 		// Always fill white to avoid occasional issue where we do not render over
 		// the unused area correctly.
 		drawer.drawOne(BasicDrawableElements.Rectangle.withBounds(getClientArea()).bgColour(Display.getDefault().getSystemColor(SWT.COLOR_WHITE)).create());
@@ -121,23 +117,24 @@ public class ScheduleCanvas extends Canvas {
 		drawer.draw(getDrawableRows(resolver), resolver);
 		drawer.drawOne(drawableTimeScale.getHeaders(), resolver);
 		
-		var rowHeader = new DrawableScheduleChartRowHeaders(rows, drawableTimeScale.getTotalHeaderHeight(), colourScheme);
+		var rowHeader = new DrawableScheduleChartRowHeaders(rows, drawableTimeScale.getTotalHeaderHeight(), colourScheme, settings);
 		rowHeader.setBounds(new Rectangle(originalBounds.x, mainBounds.y + drawableTimeScale.getTotalHeaderHeight(), rowHeaderWidth, mainBounds.height));
 		rowHeader.setLockedHeaderY(originalBounds.y);
 		drawer.drawOne(rowHeader, resolver);
 	}
 	
 	private int calculateRowHeaderWidth(DrawerQueryResolver resolver) {
-		final int maxTextWidth = rows.stream().map(r -> r.getName() == null ? 0 : resolver.findSizeOfText(r.getName()).x).max(Integer::compare).orElse(0) + SCHEDULE_CHART_ROW_HEADER_R_PADDING;
-		return Math.max(DEFAULT_SCHEDULE_CHART_ROW_HEADER_WIDTH, maxTextWidth);
+		final int maxTextWidth = rows.stream().map(r -> r.getName() == null ? 0 : resolver.findSizeOfText(r.getName()).x).max(Integer::compare).orElse(0) + settings.getRowHeaderRightPadding();
+		return Math.max(settings.getMinimumRowHeaderWidth(), maxTextWidth);
 	}
 
 	private List<DrawableElement> getDrawableRows(DrawerQueryResolver resolver) {
 		List<DrawableElement> res = new ArrayList<>();
+		final int height = settings.getRowHeight();
 		final int startY = mainBounds.y + drawableTimeScale.getTotalHeaderHeight();
-		for (int i = 0, y = startY; i < rows.size(); i++, y += SCHEDULE_CHART_ROW_HEIGHT + 1) {
-			DrawableScheduleChartRow drawableRow = new DrawableScheduleChartRow(rows.get(i), i, timeScale, colourScheme, eventStylingProvider);
-			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, SCHEDULE_CHART_ROW_HEIGHT));
+		for (int i = 0, y = startY; i < rows.size(); i++, y += height  + 1) {
+			DrawableScheduleChartRow drawableRow = new DrawableScheduleChartRow(rows.get(i), i, timeScale, colourScheme, eventStylingProvider, settings);
+			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, height));
 			res.add(drawableRow);
 		}
 		return res;
@@ -150,14 +147,61 @@ public class ScheduleCanvas extends Canvas {
 	
 	public void addRow(ScheduleChartRow r) {
 		rows.add(r);
+		recalculateContentBounds();
 	}
 	
 	public void addAll(List<ScheduleChartRow> rs) {
 		rows.addAll(rs);
-	}
-
-	public void clear() {
-		rows.clear();
+		recalculateContentBounds();
 	}
 	
+	public void clear() {
+		rows.clear();
+		recalculateContentBounds();
+	}
+
+	@Override
+	public Pair<Integer, Integer> getContentBounds() {
+		int min = timeScale.getXBoundsFromEvent(leftmostEvent).getFirst();
+		int max = timeScale.getXBoundsFromEvent(rightmostEvent).getSecond();
+		return Pair.of(min, max);
+	}
+
+	@Override
+	public ScheduleEvent getLeftmostEvent() {
+		return leftmostEvent;
+	}
+
+	@Override
+	public ScheduleEvent getRightmostEvent() {
+		return rightmostEvent;
+	}
+	
+	
+	private void recalculateContentBounds() {
+		int min = Integer.MAX_VALUE;
+		int max = Integer.MIN_VALUE;
+		
+		ScheduleEvent minEvent = null;
+		ScheduleEvent maxEvent = null;
+
+		for (final ScheduleChartRow row: rows) {
+			for (final ScheduleEvent event: row.getEvents()) {
+				var bounds = timeScale.getXBoundsFromEvent(event);
+				if (bounds.getFirst() < min) {
+					min = bounds.getFirst();
+					minEvent = event;
+				}
+
+				if (bounds.getSecond() > max) {
+					max = bounds.getSecond();
+					maxEvent = event;
+				}
+			}
+		}
+		
+		leftmostEvent = minEvent;
+		rightmostEvent = maxEvent;
+	}
+
 }
