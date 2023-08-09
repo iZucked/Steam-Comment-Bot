@@ -165,7 +165,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			final int currX = x;
 			int width = unitWidth.orElseGet(() -> sts.getXForDateTime(nextDate) - currX);
 
-			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).bgColour(unit == ChronoUnit.DAYS && date.getDayOfWeek().ordinal() >= 5 ? colourScheme.getBaseBgColour() : null).create());
+			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).bgColour(unit == ChronoUnit.DAYS && date.getDayOfWeek().ordinal() >= 5 ? colourScheme.getSecondaryBgColor() : null).create());
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, gridBounds.height).borderColour(colourScheme.getGridStrokeColour()).create());
 
 			date = nextDate;

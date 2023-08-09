@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
-import com.mmxlabs.widgets.schedulechart.draw.DefaultScheduleCanvasColourScheme;
+import com.mmxlabs.widgets.schedulechart.draw.DefaultScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeaders;
@@ -31,6 +31,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartContentBound
 	private final DrawableScheduleTimeScale<ScheduleTimeScale> drawableTimeScale;
 
 	private final HorizontalScrollbarHandler horizontalScrollbarHandler;
+	private final DragSelectionZoomHandler dragSelectionZoomHandler;
 	
 	private final IScheduleChartSettings settings;
 	private final IScheduleChartColourScheme colourScheme;
@@ -43,7 +44,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartContentBound
 	private ScheduleEvent rightmostEvent;
 
 	public ScheduleCanvas(Composite parent, IScheduleEventStylingProvider eventStylingProvider) {
-		this(parent, eventStylingProvider, new DefaultScheduleChartSettings(), new DefaultScheduleCanvasColourScheme());
+		this(parent, eventStylingProvider, new DefaultScheduleChartSettings(), new DefaultScheduleChartColourScheme());
 	}
 
 	public ScheduleCanvas(Composite parent, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartSettings settings, IScheduleChartColourScheme colourScheme) {
@@ -55,6 +56,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartContentBound
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, colourScheme, settings);
 		
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
+		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, colourScheme);
 		
 		this.eventStylingProvider = eventStylingProvider;
 		
@@ -121,6 +123,8 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartContentBound
 		rowHeader.setBounds(new Rectangle(originalBounds.x, mainBounds.y + drawableTimeScale.getTotalHeaderHeight(), rowHeaderWidth, mainBounds.height));
 		rowHeader.setLockedHeaderY(originalBounds.y);
 		drawer.drawOne(rowHeader, resolver);
+		
+		drawer.drawOne(dragSelectionZoomHandler.getDrawableSelectionRectangle(), resolver);
 	}
 	
 	private int calculateRowHeaderWidth(DrawerQueryResolver resolver) {

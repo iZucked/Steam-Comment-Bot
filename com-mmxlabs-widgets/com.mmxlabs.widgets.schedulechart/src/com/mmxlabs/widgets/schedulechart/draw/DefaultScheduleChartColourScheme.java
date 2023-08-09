@@ -9,13 +9,18 @@ import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 
-public class DefaultScheduleCanvasColourScheme implements IScheduleChartColourScheme {
+public class DefaultScheduleChartColourScheme implements IScheduleChartColourScheme {
 	
 	private static final Color BG = new Color(new RGB(230, 239, 249));
 
 	@Override
 	public Color getBaseBgColour() {
 		return Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+	}
+
+	@Override
+	public Color getSecondaryBgColor() {
+		return BG;
 	}
 
 	@Override
@@ -61,6 +66,11 @@ public class DefaultScheduleCanvasColourScheme implements IScheduleChartColourSc
 	@Override
 	public Color getGridStrokeColour() {
 		return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+	}
+
+	@Override
+	public Color getSelectionRectangleColour() {
+		return Display.getDefault().getSystemColor(SWT.COLOR_DARK_BLUE);
 	}
 
 }

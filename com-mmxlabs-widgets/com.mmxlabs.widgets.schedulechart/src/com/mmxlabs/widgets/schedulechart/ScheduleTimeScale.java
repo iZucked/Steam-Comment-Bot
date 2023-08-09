@@ -82,6 +82,10 @@ public class ScheduleTimeScale {
 		
 		internalZoomToFitXBounds(leftmostX, rightmostX);
 	}
+
+	public void fitSelection(int startX, int endX) {
+		internalZoomToFitXBounds(startX, endX);
+	}
 	
 	public LocalDateTime getStartTime() {
 		return startTime;
