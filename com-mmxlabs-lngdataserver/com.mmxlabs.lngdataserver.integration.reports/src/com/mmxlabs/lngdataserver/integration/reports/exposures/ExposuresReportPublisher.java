@@ -27,7 +27,7 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 
 	@Override
 	public @NonNull List<@NonNull String> getVersions() {
-		return Lists.newArrayList("1");
+		return Lists.newArrayList("1","2");
 	}
 
 	@Override
@@ -35,12 +35,17 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 
 		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
-		if (versions.isEmpty() || versions.contains("1")) {
+		if (versions.contains("2")) {
+			return publishReport("2", scenarioDataProvider, scheduleModel);
+		}
+		else if (versions.isEmpty() || versions.contains("1")) {
 			return publishReport("1", scenarioDataProvider, scheduleModel);
 		}
+
 		throw new UnsupportedReportException();
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public @NonNull IReportContent publishReport(@NonNull String version, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull ScheduleModel scheduleModel) throws Exception {
 
@@ -52,6 +57,16 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 			final String content = objectMapper.writeValueAsString(models);
 			return new DefaultReportContent(getReportType(), "1", content);
 		}
+		
+		else if ("2".equals(version)) {
+
+			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider);
+
+			final ObjectMapper objectMapper = new ObjectMapper();
+			final String content = objectMapper.writeValueAsString(models);
+			return new DefaultReportContent(getReportType(), "2", content);
+		}
+
 
 		throw new UnsupportedOperationException();
 	}
