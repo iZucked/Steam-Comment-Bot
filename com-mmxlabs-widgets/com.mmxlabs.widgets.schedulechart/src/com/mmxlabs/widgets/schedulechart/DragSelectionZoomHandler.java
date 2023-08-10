@@ -3,6 +3,8 @@ package com.mmxlabs.widgets.schedulechart;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -13,7 +15,7 @@ import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 
-public class DragSelectionZoomHandler implements MouseListener, MouseMoveListener {
+public class DragSelectionZoomHandler implements MouseListener, MouseMoveListener, KeyListener {
 
 	final ScheduleCanvas canvas;
 	final IScheduleChartColourScheme colourScheme;
@@ -32,6 +34,7 @@ public class DragSelectionZoomHandler implements MouseListener, MouseMoveListene
 		
 		canvas.addMouseListener(this);
 		canvas.addMouseMoveListener(this);
+		canvas.addKeyListener(this);
 	}
 
 	@Override
@@ -54,16 +57,29 @@ public class DragSelectionZoomHandler implements MouseListener, MouseMoveListene
 
 	@Override
 	public void mouseUp(MouseEvent e) {
-		if (e.button != 3) return;
+		if (e.button != 3 || !visible) return;
 		visible = false;
 		if (Math.abs(endX - startX) > 10) {
-			canvas.getTimeScale().fitSelection(startX, endX);
+			canvas.getTimeScale().fitSelection(Math.min(startX, endX), Math.max(startX, endX));
 		}
 		canvas.redraw();
 	}
 
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
+		// Do nothing
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (visible && e.keyCode == SWT.ESC) {
+			visible = false;
+			canvas.redraw();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		// Do nothing
 	}
 
@@ -81,5 +97,6 @@ public class DragSelectionZoomHandler implements MouseListener, MouseMoveListene
 		drawableElement.setBounds(canvas.getBounds());
 		return drawableElement;
 	}
+
 
 }
