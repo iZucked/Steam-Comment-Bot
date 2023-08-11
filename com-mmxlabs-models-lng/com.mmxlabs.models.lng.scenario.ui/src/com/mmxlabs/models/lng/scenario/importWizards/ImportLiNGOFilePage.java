@@ -155,7 +155,6 @@ public class ImportLiNGOFilePage extends WizardPage {
 		final Container c = scenarioServiceSelectionGroup.getSelectedContainer();
 		if (!(c instanceof Folder || c instanceof ScenarioService)) {
 			updateStatus("A Folder must be selected");
-			System.out.println("WHAT???");
 			return;
 		}
 
