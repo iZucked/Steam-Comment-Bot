@@ -17,9 +17,9 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -116,7 +116,7 @@ public class VesselsTradesBasedFilterHandler implements ITradesBasedFilterHandle
 	}
 
 	@Override
-	public boolean isRowVisible(Row row) {
+	public boolean isRowVisible(TradesRow tradesRow) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -156,8 +156,8 @@ public class VesselsTradesBasedFilterHandler implements ITradesBasedFilterHandle
 		}
 
 		@Override
-		public boolean isRowVisible(final Row row) {
-			final Cargo cargo = row.getCargo();
+		public boolean isRowVisible(final TradesRow tradesRow) {
+			final Cargo cargo = tradesRow.getCargo();
 			if (cargo != null) {
 				final VesselAssignmentType vesselAT = cargo.getVesselAssignmentType();
 				if(vesselAT instanceof VesselCharter) {

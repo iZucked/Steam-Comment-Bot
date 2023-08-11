@@ -11,9 +11,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -28,7 +28,7 @@ public class CargoTradesBasedFilterHandler implements ITradesBasedFilterHandler 
 	
 	@Override
 	public Action activateAction(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters, final BulkTradesTablePane viewer) {
-		final DefaultMenuCreatorAction action = new DefaultMenuCreatorAction("Open/Cargo") {
+		return new DefaultMenuCreatorAction("Open/Cargo") {
 			@Override
 			protected void populate(final Menu menu) {
 
@@ -74,7 +74,6 @@ public class CargoTradesBasedFilterHandler implements ITradesBasedFilterHandler 
 			public void run() {
 			}
 		};
-		return action;
 	}
 
 	private void addCargoFilter(final Set<ITradesBasedFilterHandler> activeFilters, final BulkTradesTablePane viewer, final CargoEditorFilterUtils.CargoFilterOption option) {
@@ -106,7 +105,7 @@ public class CargoTradesBasedFilterHandler implements ITradesBasedFilterHandler 
 	}
 
 	@Override
-	public boolean isRowVisible(final Row row) {
+	public boolean isRowVisible(final TradesRow tradesRow) {
 		return true;
 	}
 
@@ -144,9 +143,9 @@ public class CargoTradesBasedFilterHandler implements ITradesBasedFilterHandler 
 		}
 
 		@Override
-		public boolean isRowVisible(final Row row) {
-			if (row != null) {
-				return CargoEditorFilterUtils.cargoTradesFilter(option, row.getCargo(), row.getLoadSlot(), row.getDischargeSlot(), filtersOpenContracts);
+		public boolean isRowVisible(final TradesRow tradesRow) {
+			if (tradesRow != null) {
+				return CargoEditorFilterUtils.cargoTradesFilter(option, tradesRow.getCargo(), tradesRow.getLoadSlot(), tradesRow.getDischargeSlot(), filtersOpenContracts);
 			} else {
 				return false;
 			}

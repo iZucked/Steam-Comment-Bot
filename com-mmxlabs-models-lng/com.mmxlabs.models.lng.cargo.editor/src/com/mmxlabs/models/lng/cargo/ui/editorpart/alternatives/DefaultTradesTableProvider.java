@@ -13,7 +13,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.mmxlabs.models.lng.cargo.ui.editorpart.TradesWiringViewer;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.TradesWiringViewerPane;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
@@ -25,7 +25,7 @@ public class DefaultTradesTableProvider implements IAlternativeEditorProvider {
 
 	@Override
 	public ScenarioTableViewerPane init(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation scenarioEditingLocation, IActionBars actionBars, Composite parent, EObject modelObject) {
-		TradesWiringViewer tradesViewer = new TradesWiringViewer(page, part, scenarioEditingLocation, actionBars);
+		TradesWiringViewerPane tradesViewer = new TradesWiringViewerPane(page, part, scenarioEditingLocation, actionBars);
 		tradesViewer.createControl(parent);
 		tradesViewer.init(Collections.<EReference> emptyList(), scenarioEditingLocation.getAdapterFactory(), scenarioEditingLocation.getModelReference());
 		tradesViewer.getViewer().setInput(modelObject);

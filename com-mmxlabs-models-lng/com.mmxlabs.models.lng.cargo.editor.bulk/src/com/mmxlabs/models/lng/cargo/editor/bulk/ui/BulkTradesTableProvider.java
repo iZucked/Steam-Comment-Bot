@@ -13,10 +13,10 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorFactory;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelFactory;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesTableRoot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.IAlternativeEditorProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -34,13 +34,13 @@ public class BulkTradesTableProvider implements IAlternativeEditorProvider {
 		BulkTradesTablePane tradesViewer = new BulkTradesTablePane(page, part, scenarioEditingLocation, actionBars);
 		tradesViewer.createControl(parent);
 
-		Table table = CargoBulkEditorFactory.eINSTANCE.createTable();
-		tradesViewer.setTable(table);
+		TradesTableRoot tradesTableRoot = CargoEditorModelFactory.eINSTANCE.createTradesTableRoot();
+		tradesViewer.setTradesTableRoot(tradesTableRoot);
 		tradesViewer.setlngScenarioModel((LNGScenarioModel) scenarioEditingLocation.getRootObject());
-		tradesViewer.init(Arrays.asList(new EReference[] { CargoBulkEditorPackage.eINSTANCE.getTable_Rows() }), null, scenarioEditingLocation.getModelReference());
-		tradesViewer.setCargoes(table, (LNGScenarioModel) scenarioEditingLocation.getRootObject());
+		tradesViewer.init(Arrays.asList(new EReference[] { CargoEditorModelPackage.eINSTANCE.getTradesTableRoot_TradesRows() }), null, scenarioEditingLocation.getModelReference());
+		tradesViewer.setCargoes(tradesTableRoot, (LNGScenarioModel) scenarioEditingLocation.getRootObject());
 		tradesViewer.setlngScenarioModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()));
-		tradesViewer.setInput(table);
+		tradesViewer.setInput(tradesTableRoot);
 		return tradesViewer;
 	}
 }

@@ -66,8 +66,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.jface,
  org.eclipse.e4.ui.workbench,
  org.eclipse.e4.ui.model.workbench;bundle-version="1.1.100",
- com.mmxlabs.models.lng.commercial
+ com.mmxlabs.models.lng.commercial,
+ com.mmxlabs.models.lng.cargo.editor.model
 Bundle-ActivationPolicy: lazy
-Import-Package: javax.inject;version="1.0.0",
+Import-Package: com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel,
+ javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-Activator: com.mmxlabs.models.lng.cargo.editor.CargoEditorPlugin

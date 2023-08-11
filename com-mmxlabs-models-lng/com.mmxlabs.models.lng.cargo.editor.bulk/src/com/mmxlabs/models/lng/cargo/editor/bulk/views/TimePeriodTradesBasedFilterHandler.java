@@ -14,9 +14,9 @@ import java.util.Set;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 
@@ -123,7 +123,7 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 	}
 
 	@Override
-	public boolean isRowVisible(Row row) {
+	public boolean isRowVisible(TradesRow tradesRow) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -175,9 +175,9 @@ public class TimePeriodTradesBasedFilterHandler implements ITradesBasedFilterHan
 		}
 
 		@Override
-		public boolean isRowVisible(Row row) {
-			if (row != null) {
-				return CargoEditorFilterUtils.timePeriodFilter(option, row.getLoadSlot(), row.getDischargeSlot(), choice, promptMonth);
+		public boolean isRowVisible(TradesRow tradesRow) {
+			if (tradesRow != null) {
+				return CargoEditorFilterUtils.timePeriodFilter(option, tradesRow.getLoadSlot(), tradesRow.getDischargeSlot(), choice, promptMonth);
 			} else {
 				return false;
 			}

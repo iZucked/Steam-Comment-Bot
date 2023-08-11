@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cargobulkeditor" nsURI="http://www.mmxlabs.com/models/lng/cargobulkeditor/1/"
-    nsPrefix="lng.cargobulkeditor">
-  <eClassifiers xsi:type="ecore:EClass" name="Row">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cargoeditormodel" nsURI="http://www.mmxlabs.com/models/lng/cargoeditormodel/1/"
+    nsPrefix="lng.cargoeditormodel">
+  <eClassifiers xsi:type="ecore:EClass" name="TradesRow">
     <eOperations name="getAssignableObject" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
@@ -15,10 +15,18 @@
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlotContractParams"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="primaryRecord" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlotContractParams"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SlotContractParams"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="marketAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//MarketAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadTerminalValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargeTerminalValid"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Table">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TradesTableRoot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tradesRows" upperBound="-1"
+        eType="#//TradesRow"/>
   </eClassifiers>
 </ecore:EPackage>

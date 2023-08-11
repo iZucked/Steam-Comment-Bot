@@ -7,8 +7,8 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 
 public class DefaultTradesBasedFilterHandler implements ITradesBasedFilterHandler {
@@ -37,7 +37,7 @@ public class DefaultTradesBasedFilterHandler implements ITradesBasedFilterHandle
 	}
 
 	@Override
-	public boolean isRowVisible(Row row) {
+	public boolean isRowVisible(TradesRow tradesRow) {
 		return true;
 	}
 

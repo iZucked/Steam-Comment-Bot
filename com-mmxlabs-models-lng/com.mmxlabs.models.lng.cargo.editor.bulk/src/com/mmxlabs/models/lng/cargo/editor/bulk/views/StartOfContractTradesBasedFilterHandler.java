@@ -8,9 +8,9 @@ import java.util.Set;
 
 import org.eclipse.jface.action.Action;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.port.Port;
 
 public class StartOfContractTradesBasedFilterHandler implements ITradesBasedFilterHandler {
@@ -48,9 +48,9 @@ public class StartOfContractTradesBasedFilterHandler implements ITradesBasedFilt
 	}
 
 	@Override
-	public boolean isRowVisible(Row row) {
-		if (row.getLoadSlot() != null) {
-			Port port = row.getLoadSlot().getPort();
+	public boolean isRowVisible(TradesRow tradesRow) {
+		if (tradesRow.getLoadSlot() != null) {
+			Port port = tradesRow.getLoadSlot().getPort();
 			if (port != null && port.getName().equals("Bonny")) {
 				return true;
 			}

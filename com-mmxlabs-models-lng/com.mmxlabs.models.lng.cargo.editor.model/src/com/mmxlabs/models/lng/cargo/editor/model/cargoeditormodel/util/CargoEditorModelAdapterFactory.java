@@ -1,12 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
  */
-/**
- */
-package com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.util;
+package com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.util;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.*;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.*;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -20,17 +16,17 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage
+ * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage
  * @generated
  */
-public class CargoBulkEditorAdapterFactory extends AdapterFactoryImpl {
+public class CargoEditorModelAdapterFactory extends AdapterFactoryImpl {
 	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static CargoBulkEditorPackage modelPackage;
+	protected static CargoEditorModelPackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -38,9 +34,9 @@ public class CargoBulkEditorAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoBulkEditorAdapterFactory() {
+	public CargoEditorModelAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = CargoBulkEditorPackage.eINSTANCE;
+			modelPackage = CargoEditorModelPackage.eINSTANCE;
 		}
 	}
 
@@ -69,15 +65,15 @@ public class CargoBulkEditorAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CargoBulkEditorSwitch<Adapter> modelSwitch =
-		new CargoBulkEditorSwitch<Adapter>() {
+	protected CargoEditorModelSwitch<Adapter> modelSwitch =
+		new CargoEditorModelSwitch<Adapter>() {
 			@Override
-			public Adapter caseRow(Row object) {
-				return createRowAdapter();
+			public Adapter caseTradesRow(TradesRow object) {
+				return createTradesRowAdapter();
 			}
 			@Override
-			public Adapter caseTable(Table object) {
-				return createTableAdapter();
+			public Adapter caseTradesTableRoot(TradesTableRoot object) {
+				return createTradesTableRootAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -100,30 +96,30 @@ public class CargoBulkEditorAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row <em>Row</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow <em>Trades Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row
+	 * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow
 	 * @generated
 	 */
-	public Adapter createRowAdapter() {
+	public Adapter createTradesRowAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table <em>Table</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesTableRoot <em>Trades Table Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table
+	 * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesTableRoot
 	 * @generated
 	 */
-	public Adapter createTableAdapter() {
+	public Adapter createTradesTableRootAdapter() {
 		return null;
 	}
 
@@ -139,4 +135,4 @@ public class CargoBulkEditorAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //CargoBulkEditorAdapterFactory
+} //CargoEditorModelAdapterFactory

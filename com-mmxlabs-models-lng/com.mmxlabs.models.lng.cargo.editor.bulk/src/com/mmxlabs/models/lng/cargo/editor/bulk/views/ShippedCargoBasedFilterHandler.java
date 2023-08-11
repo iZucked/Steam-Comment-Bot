@@ -10,9 +10,9 @@ import java.util.Set;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Menu;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -107,7 +107,7 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 	}
 
 	@Override
-	public boolean isRowVisible(final Row row) {
+	public boolean isRowVisible(final TradesRow tradesRow) {
 		return true;
 	}
 
@@ -145,9 +145,9 @@ public class ShippedCargoBasedFilterHandler implements ITradesBasedFilterHandler
 		}
 
 		@Override
-		public boolean isRowVisible(final Row row) {
-			if (row != null) {
-				return CargoEditorFilterUtils.shippedCargoFilter(this.option, row.getCargo());
+		public boolean isRowVisible(final TradesRow tradesRow) {
+			if (tradesRow != null) {
+				return CargoEditorFilterUtils.shippedCargoFilter(this.option, tradesRow.getCargo());
 			} else {
 				return false;
 			}

@@ -99,9 +99,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.editor.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.editor.PreferenceConstants;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
 import com.mmxlabs.models.lng.cargo.editor.bulk.columnfilter.extmodule.ITradeBasedBulkColumnFilterExtension;
 import com.mmxlabs.models.lng.cargo.editor.bulk.columns.extmodule.ITradeBasedBulkColumnExtension;
 import com.mmxlabs.models.lng.cargo.editor.bulk.columns.extmodule.ITradeBasedBulkColumnFactoryExtension;
@@ -123,9 +120,13 @@ import com.mmxlabs.models.lng.cargo.editor.bulk.views.ShippedCargoBasedFilterHan
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TimePeriodTradesBasedFilterHandler;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.TradesBasedColumnFactory;
 import com.mmxlabs.models.lng.cargo.editor.bulk.views.VesselsTradesBasedFilterHandler;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesTableRoot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.PromptToolbarEditor;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditorMenuHelper;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.cargo.util.SlotContractParamsHelper;
@@ -168,6 +169,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private static final String COLUMN_VISIBILITY_KEY = "BulkTradesTablePane.COLUMN_VISIBILITY_KEY";
 
+	private static final String CUSTOMISABLE_ROW_NAME = "CustomisableRow";
+
 	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
 	@Inject(optional = true)
@@ -192,14 +195,14 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private Iterable<ITradeBasedBulkColumnFilterExtension> columnFilterExtensions;
 
 	private LNGScenarioModel lngScenarioModel;
-	private Table table;
+	private TradesTableRoot tradesTableRoot;
 	private final CargoPackage cargoPkg = CargoPackage.eINSTANCE;
 	private final EMFReportColumnManager columnManager = new EMFReportColumnManager();
 
 	// todayHandler
 	private EventHandler todayHandler;
 
-	private final Map<EObject, Row> rowDataToRow = new HashMap<>();
+	private final Map<TradesRow, TradesRow> rowDataToRow = new HashMap<>();
 
 	/*
 	 * This is used to determine the order of column groups
@@ -337,9 +340,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		int pos = -1;
 		for (GridItem item : items) {
 			Object oData = item.getData();
-			if (oData instanceof Row) {
-				Row rd = (Row) oData;
-				LoadSlot ls = rd.getLoadSlot();
+			if (oData instanceof TradesRow tradesRow) {
+				LoadSlot ls = tradesRow.getLoadSlot();
 				if (ls != null) {
 					if (ls.getWindowStart().isAfter(property)) {
 						break;
@@ -347,13 +349,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					pos++;
 					continue;
 				}
-				DischargeSlot ds = rd.getDischargeSlot();
+				DischargeSlot ds = tradesRow.getDischargeSlot();
 				if (ds != null) {
 					if (ds.getWindowStart().isAfter(property)) {
 						break;
 					}
 					pos++;
-					continue;
 				}
 			}
 		}
@@ -368,8 +369,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		if (GridTreeViewer.class.isAssignableFrom(c)) {
 			return c.cast(getScenarioViewer());
 		}
-		if (Table.class.isAssignableFrom(c)) {
-			return c.cast(getTable());
+		if (TradesTableRoot.class.isAssignableFrom(c)) {
+			return c.cast(getTradesTableRoot());
 		}
 		if (EObjectTableViewer.class.isAssignableFrom(c)) {
 			return c.cast(getScenarioViewer());
@@ -482,64 +483,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private List<ITradesBasedFilterHandler> getFiltersList(final Set<ITradesBasedFilterHandler> allColumnFilterHandlers) {
 		if (allColumnFilterHandlers.isEmpty()) {
-			return Collections.<ITradesBasedFilterHandler> emptyList();
+			return Collections.<ITradesBasedFilterHandler>emptyList();
 		}
 		final List<ITradesBasedFilterHandler> filters = new LinkedList<>(allColumnFilterHandlers);
 		return filters;
 	}
 
-	private abstract class DefaultMenuCreatorAction extends LockableAction implements IMenuCreator {
-		private Menu lastMenu;
-
-		public DefaultMenuCreatorAction(final String label) {
-			super(label, IAction.AS_DROP_DOWN_MENU);
-		}
-
-		@Override
-		public void dispose() {
-			if ((lastMenu != null) && (lastMenu.isDisposed() == false)) {
-				lastMenu.dispose();
-			}
-			lastMenu = null;
-		}
-
-		@Override
-		public IMenuCreator getMenuCreator() {
-			return this;
-		}
-
-		@Override
-		public Menu getMenu(final Control parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			populate(lastMenu);
-
-			return lastMenu;
-		}
-
-		protected abstract void populate(Menu menu);
-
-		@Override
-		public Menu getMenu(final Menu parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			populate(lastMenu);
-
-			return lastMenu;
-		}
-
-		protected void addActionToMenu(final Action a, final Menu m) {
-			final ActionContributionItem aci = new ActionContributionItem(a);
-			aci.fill(m, -1);
-		}
-
-	}
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 		private final Action[] actions;
@@ -566,9 +515,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					final Object[] elements = ((TreeSelection) selection).toArray();
 					if (elements.length == 1) {
 						final Object o = elements[0];
-						if (o instanceof Row) {
-							final Row row = (Row) o;
-							if (row.getCargo() == null && row.getDischargeSlot() == null && row.getLoadSlot() != null) {
+						if (o instanceof TradesRow tradesRow) {
+							if (tradesRow.getCargo() == null && tradesRow.getDischargeSlot() == null && tradesRow.getLoadSlot() != null) {
 								return true;
 							}
 						}
@@ -583,24 +531,22 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					final Object[] elements = ((TreeSelection) selection).toArray();
 					if (elements.length == 1) {
 						final Object o = elements[0];
-						if (o instanceof Row) {
-							final Row row = (Row) o;
-							if (row.getCargo() == null && row.getDischargeSlot() == null && row.getLoadSlot() != null) {
-								final CompoundCommand cmd = new CompoundCommand("Create discharge for load");
-								final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
-								final LoadSlot loadSlot = row.getLoadSlot();
+						if (o instanceof TradesRow tradesRow && (tradesRow.getCargo() == null && tradesRow.getDischargeSlot() == null && tradesRow.getLoadSlot() != null)) {
+							final CompoundCommand cmd = new CompoundCommand("Create discharge for load");
+							final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
+							final LoadSlot loadSlot = tradesRow.getLoadSlot();
 
-								final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
-								dischargeSlot.setWindowStart(loadSlot.getWindowStart());
+							final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+							dischargeSlot.setWindowStart(loadSlot.getWindowStart());
 
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
-										CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
-								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
-										CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
-								cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
-								cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
-								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-							}
+							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
+									CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), dischargeSlot));
+							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel), CargoPackage.eINSTANCE.getCargoModel_Cargoes(),
+									newCargo));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), newCargo));
+							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+
 						}
 					}
 				}
@@ -614,13 +560,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			@Override
 			public boolean isEnabled() {
 				final ISelection selection = viewer.getSelection();
-				if (selection instanceof TreeSelection) {
-					final Object[] elements = ((TreeSelection) selection).toArray();
+				if (selection instanceof TreeSelection ts) {
+					final Object[] elements = ts.toArray();
 					if (elements.length == 1) {
 						final Object o = elements[0];
-						if (o instanceof Row) {
-							final Row row = (Row) o;
-							if (row.getCargo() == null && row.getLoadSlot() == null && row.getDischargeSlot() != null) {
+						if (o instanceof TradesRow tradesRow) {
+							if (tradesRow.getCargo() == null && tradesRow.getLoadSlot() == null && tradesRow.getDischargeSlot() != null) {
 								return true;
 							}
 						}
@@ -629,19 +574,19 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				return false;
 			}
 
+			@Override
 			public void run() {
 				final ISelection selection = viewer.getSelection();
-				if (selection instanceof TreeSelection) {
-					final Object[] elements = ((TreeSelection) selection).toArray();
+				if (selection instanceof TreeSelection ts) {
+					final Object[] elements = ts.toArray();
 					if (elements.length == 1) {
 						final Object o = elements[0];
-						if (o instanceof Row) {
-							final Row row = (Row) o;
-							if (row.getCargo() == null && row.getLoadSlot() == null && row.getDischargeSlot() != null) {
+						if (o instanceof TradesRow tradesRow) {
+							if (tradesRow.getCargo() == null && tradesRow.getLoadSlot() == null && tradesRow.getDischargeSlot() != null) {
 								final CompoundCommand cmd = new CompoundCommand("Create load for discharge");
 								final Cargo newCargo = CargoFactory.eINSTANCE.createCargo();
 								final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
-								final DischargeSlot dischargeSlot = row.getDischargeSlot();
+								final DischargeSlot dischargeSlot = tradesRow.getDischargeSlot();
 								loadSlot.setWindowStart(dischargeSlot.getWindowStart());
 								cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ScenarioModelUtil.getCargoModel(lngScenarioModel),
 										CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), loadSlot));
@@ -710,23 +655,23 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	public EPackage createCustomisedRowEcore() {
 		final EPackage ePackage = EcoreFactory.eINSTANCE.createEPackage();
 		final EClass customisableRow = EcoreFactory.eINSTANCE.createEClass();
-		customisableRow.getESuperTypes().add(CargoBulkEditorPackage.eINSTANCE.getRow());
-		customisableRow.setName("CustomisableRow");
+		customisableRow.getESuperTypes().add(CargoEditorModelPackage.eINSTANCE.getTradesRow());
+		customisableRow.setName(CUSTOMISABLE_ROW_NAME);
 		ePackage.getEClassifiers().add(customisableRow);
 		return ePackage;
 	}
 
-	public void setCargoes(final Table table, final LNGScenarioModel lngScenarioModel) {
+	public void setCargoes(final TradesTableRoot tradesTableRoot, final LNGScenarioModel lngScenarioModel) {
 		final EList<Cargo> cargoes = ScenarioModelUtil.getCargoModel(lngScenarioModel).getCargoes();
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
 		final Schedule schedule = scheduleModel.getSchedule();
-		List<SlotAllocation> slotAllocs = new ArrayList<SlotAllocation>();
+		List<SlotAllocation> slotAllocs = new ArrayList<>();
 		if (schedule != null) {
 			slotAllocs = schedule.getSlotAllocations();
 		}
-		resetTable(table); // Clear rows and cache
-		final HashSet<Slot> slotsInCargo = new HashSet<>();
-		final Map<Slot, SlotAllocation> slots = new HashMap<Slot, SlotAllocation>();
+		resetTradesTableRoot(tradesTableRoot); // Clear rows and cache
+		final HashSet<Slot<?>> slotsInCargo = new HashSet<>();
+		final Map<Slot<?>, SlotAllocation> slots = new HashMap<>();
 		for (final SlotAllocation sa : slotAllocs) {
 			if (sa.getSlot() != null) {
 				slots.put(sa.getSlot(), sa);
@@ -735,35 +680,35 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		for (final Cargo cargo : cargoes) {
 			final EPackage dataModel = customRowPackage;
 			final EFactory factory = dataModel.getEFactoryInstance();
-			final EClass customRowClass = (EClass) dataModel.getEClassifier("CustomisableRow");
-			final Row row = (Row) factory.create(customRowClass);
-			row.setCargo(cargo);
+			final EClass customRowClass = (EClass) dataModel.getEClassifier(CUSTOMISABLE_ROW_NAME);
+			final TradesRow tradesRow = (TradesRow) factory.create(customRowClass);
+			tradesRow.setCargo(cargo);
 			final LoadSlot load = getLoadSlot(cargo);
-			row.setLoadSlot(load);
+			tradesRow.setLoadSlot(load);
 			slotsInCargo.add(load);
-			row.setLoadSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(load));
+			tradesRow.setLoadSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(load));
 			final DischargeSlot discharge = getDischargeSlot(cargo);
-			row.setDischargeSlot(discharge);
+			tradesRow.setDischargeSlot(discharge);
 			slotsInCargo.add(discharge);
-			row.setDischargeSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(discharge));
-			row.setLoadAllocation(slots.get(load));
-			row.setDischargeAllocation(slots.get(discharge));
+			tradesRow.setDischargeSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(discharge));
+			tradesRow.setLoadAllocation(slots.get(load));
+			tradesRow.setDischargeAllocation(slots.get(discharge));
 
-			transformRowWithExtensions(cargo, row);
-			addRowToTable(table, row);
+			transformRowWithExtensions(cargo, tradesRow);
+			addRowToTable(tradesTableRoot, tradesRow);
 		}
 		for (final LoadSlot loadSlot : ScenarioModelUtil.getCargoModel(lngScenarioModel).getLoadSlots()) {
 			if (!slotsInCargo.contains(loadSlot)) {
 				// open load
 				final EPackage dataModel = customRowPackage;
 				final EFactory factory = dataModel.getEFactoryInstance();
-				final EClass customRowClass = (EClass) dataModel.getEClassifier("CustomisableRow");
-				final Row row = (Row) factory.create(customRowClass);
-				row.setLoadSlot(loadSlot);
-				row.setLoadSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(loadSlot));
+				final EClass customRowClass = (EClass) dataModel.getEClassifier(CUSTOMISABLE_ROW_NAME);
+				final TradesRow tradesRow = (TradesRow) factory.create(customRowClass);
+				tradesRow.setLoadSlot(loadSlot);
+				tradesRow.setLoadSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(loadSlot));
 
-				transformRowWithExtensions(null, row);
-				addRowToTable(table, row);
+				transformRowWithExtensions(null, tradesRow);
+				addRowToTable(tradesTableRoot, tradesRow);
 			}
 		}
 		for (final DischargeSlot dischargeSlot : ScenarioModelUtil.getCargoModel(lngScenarioModel).getDischargeSlots()) {
@@ -771,59 +716,55 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				// open discharge
 				final EPackage dataModel = customRowPackage;
 				final EFactory factory = dataModel.getEFactoryInstance();
-				final EClass customRowClass = (EClass) dataModel.getEClassifier("CustomisableRow");
-				final Row row = (Row) factory.create(customRowClass);
-				row.setDischargeSlot(dischargeSlot);
-				row.setDischargeSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(dischargeSlot));
-				transformRowWithExtensions(null, row);
-				addRowToTable(table, row);
+				final EClass customRowClass = (EClass) dataModel.getEClassifier(CUSTOMISABLE_ROW_NAME);
+				final TradesRow tradesRow = (TradesRow) factory.create(customRowClass);
+				tradesRow.setDischargeSlot(dischargeSlot);
+				tradesRow.setDischargeSlotContractParams(SlotContractParamsHelper.findOrCreateSlotContractParams(dischargeSlot));
+				transformRowWithExtensions(null, tradesRow);
+				addRowToTable(tradesTableRoot, tradesRow);
 			}
 		}
 	}
 
-	private void resetTable(final Table table) {
-		table.getRows().clear();
-		rowDataToRow.clear();
+	private void resetTradesTableRoot(final TradesTableRoot tradesTableRoot) {
+		tradesTableRoot.getTradesRows().clear();
 	}
 
-	private void addRowToTable(final Table table, final Row row) {
+	private void addRowToTable(final TradesTableRoot tradesTableRoot, final TradesRow tradesRow) {
 		for (final ITradesBasedFilterHandler filter : activeColumnFilterHandlers) {
-			if (!filter.isRowVisible(row)) {
+			if (!filter.isRowVisible(tradesRow)) {
 				return;
 			}
 		}
-		table.getRows().add(row);
-		for (final EReference ref : row.eClass().getEAllReferences()) {
-			final Object o = row.eGet(ref);
-			if (o instanceof EObject) {
-				final EObject obj = (EObject) o;
-				rowDataToRow.put(obj, row);
-				row.getInputEquivalents().add(obj);
-				addEObjectsToMap(obj, row);
+		tradesTableRoot.getTradesRows().add(tradesRow);
+		for (final EReference ref : tradesRow.eClass().getEAllReferences()) {
+			final Object o = tradesRow.eGet(ref);
+			if (o instanceof TradesRow obj) {
+				rowDataToRow.put(obj, tradesRow);
+				tradesRow.getInputEquivalents().add(obj);
+				addEObjectsToMap(obj, tradesRow);
 			}
 		}
 	}
 
-	private void addEObjectsToMap(final EObject parent, final Row row) {
+	private void addEObjectsToMap(final EObject parent, final TradesRow tradesRow) {
 		for (final EReference ref : parent.eClass().getEAllReferences()) {
 			if (ref.isContainment()) {
 				if (ref.isMany()) {
 					final Collection<Object> collection = (Collection<Object>) parent.eGet(ref);
 					for (final Object o : collection) {
-						if (o instanceof EObject) {
-							final EObject obj = (EObject) o;
-							rowDataToRow.put(obj, row);
-							row.getInputEquivalents().add(obj);
-							addEObjectsToMap(obj, row);
+						if (o instanceof TradesRow otherTradesRow) {
+							rowDataToRow.put(otherTradesRow, tradesRow);
+							tradesRow.getInputEquivalents().add(otherTradesRow);
+							addEObjectsToMap(otherTradesRow, tradesRow);
 						}
 					}
 				} else {
 					final Object o = parent.eGet(ref);
-					if (o instanceof EObject) {
-						final EObject obj = (EObject) o;
-						rowDataToRow.put(obj, row);
-						row.getInputEquivalents().add(obj);
-						addEObjectsToMap(obj, row);
+					if (o instanceof TradesRow otherTradesRow) {
+						rowDataToRow.put(otherTradesRow, tradesRow);
+						otherTradesRow.getInputEquivalents().add(tradesRow);
+						addEObjectsToMap(otherTradesRow, tradesRow);
 					}
 				}
 			}
@@ -842,12 +783,12 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		this.lngScenarioModel = lngScenarioModel;
 	}
 
-	public Table getTable() {
-		return table;
+	public TradesTableRoot getTradesTableRoot() {
+		return tradesTableRoot;
 	}
 
-	public void setTable(final Table table) {
-		this.table = table;
+	public void setTradesTableRoot(final TradesTableRoot tradesTableRoot) {
+		this.tradesTableRoot = tradesTableRoot;
 	}
 
 	public void createColumns() {
@@ -862,7 +803,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 		});
 		columnBlockManager.setGrid(scenarioViewer.getGrid());
-		final EClass eclass = (EClass) customRowPackage.getEClassifier("CustomisableRow");
+		final EClass eclass = (EClass) customRowPackage.getEClassifier(CUSTOMISABLE_ROW_NAME);
 		// Find any shared column factories and install.
 		final Map<String, ITradesColumnFactory> handlerMap = new HashMap<>();
 		if (columnFactoryExtensions != null) {
@@ -1034,7 +975,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 	private void extendRowModel() {
 
-		final EClass eclass = (EClass) customRowPackage.getEClassifier("CustomisableRow");
+		final EClass eclass = (EClass) customRowPackage.getEClassifier(CUSTOMISABLE_ROW_NAME);
 
 		// Find any shared column factories and install.
 		final Map<String, ITradesBasedRowModelTransformerFactory> handlerMap = new HashMap<>();
@@ -1063,8 +1004,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		}
 	}
 
-	private void transformRowWithExtensions(final Cargo cargo, final Row row) {
-		final EClass eclass = (EClass) customRowPackage.getEClassifier("CustomisableRow");
+	private void transformRowWithExtensions(final Cargo cargo, final TradesRow tradesRow) {
+		final EClass eclass = (EClass) customRowPackage.getEClassifier(CUSTOMISABLE_ROW_NAME);
 		if (rowTransformerExtensions != null) {
 
 			for (final ITradeBasedBulkRowTransformerExtension ext : rowTransformerExtensions) {
@@ -1076,7 +1017,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					factory = ext.getFactory();
 				}
 				if (factory != null) {
-					factory.transformRowData(table, lngScenarioModel, eclass, cargo, row);
+					factory.transformRowData(tradesTableRoot, lngScenarioModel, eclass, cargo, tradesRow);
 				}
 			}
 		}
@@ -1127,8 +1068,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					@Override
 					public Object[] getElements(final Object inputElement) {
 
-						setCargoes(table, lngScenarioModel);
-						return table.getRows().toArray();
+						setCargoes(tradesTableRoot, lngScenarioModel);
+						return tradesTableRoot.getTradesRows().toArray();
 					}
 
 					@Override
@@ -1175,18 +1116,21 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						if (object == null) {
 							return;
 						}
+						TradesRow tradesRow = null;
+						if (object instanceof TradesRow otherTradesRow) {
+							tradesRow = rowDataToRow.get(otherTradesRow);
+						}
 
-						final Row rd = rowDataToRow.get(object);
-
-						if (rd != null) {
-							getValidationSupport().setStatus(rd, status);
+						if (tradesRow != null) {
+							getValidationSupport().setStatus(tradesRow, status);
 						}
 					}
 				};
 			}
 
 			/**
-			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
+			 * Overridden method to convert internal RowData objects into a collection of
+			 * EMF Objects
 			 */
 			protected void updateSelection(final ISelection selection) {
 
@@ -1198,9 +1142,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					final Iterator<?> itr = originalSelection.iterator();
 					while (itr.hasNext()) {
 						final Object obj = itr.next();
-						if (obj instanceof Row) {
-							final Row rd = (Row) obj;
-							selectedObjects.addAll(rd.getInputEquivalents());
+						if (obj instanceof TradesRow tradesRow) {
+							selectedObjects.addAll(tradesRow.getInputEquivalents());
 						}
 					}
 
@@ -1316,9 +1259,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 				}
 
 				final Object data = item.getData();
-				if (data instanceof Row) {
-
-					final Row row = (Row) data;
+				if (data instanceof TradesRow tradesRow) {
 					if (menu == null) {
 						menu = mgr.createContextMenu(scenarioViewer.getGrid());
 					}
@@ -1337,20 +1278,20 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					}
 
 					if (ITradesColumnFactory.isLoadGroup(blockType)) {
-						if (row.getLoadSlot() != null) {
-							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(Collections.singletonList(row.getLoadSlot()), 0);
+						if (tradesRow.getLoadSlot() != null) {
+							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(Collections.singletonList(tradesRow.getLoadSlot()), 0);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = row.getLoadSlot();
+								final Slot slot = tradesRow.getLoadSlot();
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
 							}
 						} else {
-							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(Collections.singletonList(row.getDischargeSlot()), 0);
+							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(Collections.singletonList(tradesRow.getDischargeSlot()), 0);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = row.getDischargeSlot();
+								final Slot slot = tradesRow.getDischargeSlot();
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
@@ -1358,20 +1299,20 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						}
 					}
 					if (ITradesColumnFactory.isDischargeGroup(blockType)) {
-						if (row.getDischargeSlot() != null) {
-							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(Collections.singletonList(row.getDischargeSlot()), 0);
+						if (tradesRow.getDischargeSlot() != null) {
+							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(Collections.singletonList(tradesRow.getDischargeSlot()), 0);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = row.getDischargeSlot();
+								final Slot slot = tradesRow.getDischargeSlot();
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
 							}
-						} else if (row.getLoadSlot() != null) {
-							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(Collections.singletonList(row.getLoadSlot()), 0);
+						} else if (tradesRow.getLoadSlot() != null) {
+							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(Collections.singletonList(tradesRow.getLoadSlot()), 0);
 							listener.menuAboutToShow(mgr);
 							if (contextMenuExtensions != null) {
-								final Slot slot = row.getLoadSlot();
+								final Slot slot = tradesRow.getLoadSlot();
 								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
 									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
 								}
@@ -1412,16 +1353,16 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					boolean dischargeSide = ITradesColumnFactory.isDischargeGroup(blockType);
 					boolean vesselCol = ITradesColumnFactory.isVesselColumn(handler.block.blockID);
 					for (final Object item : selection.toList()) {
-						Row row = (Row) item;
-						final Cargo cargo = row.getCargo();
+						TradesRow tradesRow = (TradesRow) item;
+						final Cargo cargo = tradesRow.getCargo();
 						if (cargo != null) {
 							cargoes.add(cargo);
 						}
-						if (loadSide && row.getLoadSlot() != null) {
-							loads.add(row.getLoadSlot());
+						if (loadSide && tradesRow.getLoadSlot() != null) {
+							loads.add(tradesRow.getLoadSlot());
 						}
-						if (dischargeSide && row.getDischargeSlot() != null) {
-							discharges.add(row.getDischargeSlot());
+						if (dischargeSide && tradesRow.getDischargeSlot() != null) {
+							discharges.add(tradesRow.getDischargeSlot());
 						}
 					}
 
@@ -1518,8 +1459,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		super.setLocked(locked);
 	}
 
-	public void setInput(final Table table2) {
-		viewer.setInput(table2);
+	public void setInput(final TradesTableRoot tradesTableRoot2) {
+		viewer.setInput(tradesTableRoot2);
 		// Trigger sorting on the load date column to make this the initial sort column.
 		{
 			for (final GridColumn gc : scenarioViewer.getGrid().getColumns()) {
@@ -1578,7 +1519,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 
-		// final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		// final IScenarioDataProvider sdp =
+		// scenarioEditingLocation.getScenarioDataProvider();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
 		LocalDate erl = result;
@@ -1603,7 +1545,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 	private LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
 		LocalDate result = LocalDate.now();
 
-		// final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
+		// final IScenarioDataProvider sdp =
+		// scenarioEditingLocation.getScenarioDataProvider();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
 		LocalDate erl = result;
@@ -1637,8 +1580,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		/**
 		 * Subclasses should fill their menu with actions here.
 		 * 
-		 * @param menu
-		 *            the menu which is about to be displayed
+		 * @param menu the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
 			{
@@ -1651,18 +1593,17 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					final Iterator<?> itr = structuredSelection.iterator();
 					while (itr.hasNext()) {
 						final Object o = itr.next();
-						if (o instanceof Row) {
-							final Row rowData = (Row) o;
+						if (o instanceof TradesRow tradesRow) {
 							// TODO: Check logic, a row may contain two distinct items
-							if (rowData.getCargo() != null) {
-								selectedObjects.add(rowData.getCargo());
+							if (tradesRow.getCargo() != null) {
+								selectedObjects.add(tradesRow.getCargo());
 								continue;
 							}
-							if (rowData.getLoadSlot() != null) {
-								selectedObjects.add(rowData.getLoadSlot());
+							if (tradesRow.getLoadSlot() != null) {
+								selectedObjects.add(tradesRow.getLoadSlot());
 							}
-							if (rowData.getDischargeSlot() != null) {
-								selectedObjects.add(rowData.getDischargeSlot());
+							if (tradesRow.getDischargeSlot() != null) {
+								selectedObjects.add(tradesRow.getDischargeSlot());
 							}
 						}
 					}
@@ -1675,15 +1616,15 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioEditingLocation.getScenarioDataProvider());
 			final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 
-			Row discoveredRowData = null;
+			TradesRow discoveredRowData = null;
 			final ISelection selection = getScenarioViewer().getSelection();
-			if (selection instanceof IStructuredSelection) {
-				final Object firstElement = ((IStructuredSelection) selection).getFirstElement();
-				if (firstElement instanceof Row) {
-					discoveredRowData = (Row) firstElement;
+			if (selection instanceof IStructuredSelection structuredSelection) {
+				final Object firstElement = structuredSelection.getFirstElement();
+				if (firstElement instanceof TradesRow tradesRow) {
+					discoveredRowData = tradesRow;
 				}
 			}
-			final Row referenceRowData = discoveredRowData;
+			final TradesRow referenceRowData = discoveredRowData;
 			{
 				final Action newLoad = new Action("Cargo") {
 					public void run() {
@@ -1829,7 +1770,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 		}
 
-		private final void initialiseSlot(final Slot newSlot, final boolean isLoad, final Row referenceRowData) {
+		private final void initialiseSlot(final Slot newSlot, final boolean isLoad, final TradesRow referenceRowData) {
 			newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 			newSlot.setOptional(false);
 			newSlot.setName("");

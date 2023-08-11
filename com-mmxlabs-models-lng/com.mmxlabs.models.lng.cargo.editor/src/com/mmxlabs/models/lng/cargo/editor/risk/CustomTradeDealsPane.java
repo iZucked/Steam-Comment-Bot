@@ -42,9 +42,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.TradesRowGroupComparator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -195,26 +194,7 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 				// Get default comparator
 				final ViewerComparator vc = getComparator();
 				// Wrap around with group sorter
-				setComparator(new ViewerComparator() {
-					@Override
-					public int compare(final Viewer viewer, final Object e1, final Object e2) {
-						GroupData g1 = null;
-						GroupData g2 = null;
-						if (e1 instanceof RowData) {
-							g1 = ((RowData) e1).getGroup();
-						}
-						if (e2 instanceof RowData) {
-							g2 = ((RowData) e2).getGroup();
-						}
-						if (g1 == g2) {
-							return vc.compare(viewer, e1, e2);
-						} else {
-							final Object rd1 = (g1 == null || g1.getRows().isEmpty()) ? e1 : g1.getRows().get(0);
-							final Object rd2 = (g2 == null || g2.getRows().isEmpty()) ? e2 : g2.getRows().get(0);
-							return vc.compare(viewer, rd1, rd2);
-						}
-					}
-				});
+				setComparator(new TradesRowGroupComparator(vc));
 			}
 		};
 		

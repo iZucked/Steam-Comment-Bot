@@ -1,12 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
  */
-/**
- */
-package com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl;
+package com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.impl;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.*;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -22,24 +18,24 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class CargoBulkEditorFactoryImpl extends EFactoryImpl implements CargoBulkEditorFactory {
+public class CargoEditorModelFactoryImpl extends EFactoryImpl implements CargoEditorModelFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static CargoBulkEditorFactory init() {
+	public static CargoEditorModelFactory init() {
 		try {
-			CargoBulkEditorFactory theCargoBulkEditorFactory = (CargoBulkEditorFactory)EPackage.Registry.INSTANCE.getEFactory(CargoBulkEditorPackage.eNS_URI);
-			if (theCargoBulkEditorFactory != null) {
-				return theCargoBulkEditorFactory;
+			CargoEditorModelFactory theCargoEditorModelFactory = (CargoEditorModelFactory)EPackage.Registry.INSTANCE.getEFactory(CargoEditorModelPackage.eNS_URI);
+			if (theCargoEditorModelFactory != null) {
+				return theCargoEditorModelFactory;
 			}
 		}
 		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
-		return new CargoBulkEditorFactoryImpl();
+		return new CargoEditorModelFactoryImpl();
 	}
 
 	/**
@@ -48,7 +44,7 @@ public class CargoBulkEditorFactoryImpl extends EFactoryImpl implements CargoBul
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoBulkEditorFactoryImpl() {
+	public CargoEditorModelFactoryImpl() {
 		super();
 	}
 
@@ -60,8 +56,8 @@ public class CargoBulkEditorFactoryImpl extends EFactoryImpl implements CargoBul
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case CargoBulkEditorPackage.ROW: return createRow();
-			case CargoBulkEditorPackage.TABLE: return createTable();
+			case CargoEditorModelPackage.TRADES_ROW: return createTradesRow();
+			case CargoEditorModelPackage.TRADES_TABLE_ROOT: return createTradesTableRoot();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -72,9 +68,10 @@ public class CargoBulkEditorFactoryImpl extends EFactoryImpl implements CargoBul
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Row createRow() {
-		RowImpl row = new RowImpl();
-		return row;
+	@Override
+	public TradesRow createTradesRow() {
+		TradesRowImpl tradesRow = new TradesRowImpl();
+		return tradesRow;
 	}
 
 	/**
@@ -82,9 +79,10 @@ public class CargoBulkEditorFactoryImpl extends EFactoryImpl implements CargoBul
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Table createTable() {
-		TableImpl table = new TableImpl();
-		return table;
+	@Override
+	public TradesTableRoot createTradesTableRoot() {
+		TradesTableRootImpl tradesTableRoot = new TradesTableRootImpl();
+		return tradesTableRoot;
 	}
 
 	/**
@@ -92,8 +90,9 @@ public class CargoBulkEditorFactoryImpl extends EFactoryImpl implements CargoBul
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoBulkEditorPackage getCargoBulkEditorPackage() {
-		return (CargoBulkEditorPackage)getEPackage();
+	@Override
+	public CargoEditorModelPackage getCargoEditorModelPackage() {
+		return (CargoEditorModelPackage)getEPackage();
 	}
 
 	/**
@@ -103,8 +102,8 @@ public class CargoBulkEditorFactoryImpl extends EFactoryImpl implements CargoBul
 	 * @generated
 	 */
 	@Deprecated
-	public static CargoBulkEditorPackage getPackage() {
-		return CargoBulkEditorPackage.eINSTANCE;
+	public static CargoEditorModelPackage getPackage() {
+		return CargoEditorModelPackage.eINSTANCE;
 	}
 
-} //CargoBulkEditorFactoryImpl
+} //CargoEditorModelFactoryImpl

@@ -15,9 +15,9 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -91,7 +91,7 @@ public class DischargePortTradesBasedFilterHandler implements ITradesBasedFilter
 	}
 
 	@Override
-	public boolean isRowVisible(Row row) {
+	public boolean isRowVisible(TradesRow tradesRow) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -131,9 +131,9 @@ public class DischargePortTradesBasedFilterHandler implements ITradesBasedFilter
 		}
 
 		@Override
-		public boolean isRowVisible(Row row) {
-			if (row.getDischargeSlot() != null) {
-				Port port = row.getDischargeSlot().getPort();
+		public boolean isRowVisible(TradesRow tradesRow) {
+			if (tradesRow.getDischargeSlot() != null) {
+				Port port = tradesRow.getDischargeSlot().getPort();
 				if (port != null && port == referencePort) {
 					return true;
 				}

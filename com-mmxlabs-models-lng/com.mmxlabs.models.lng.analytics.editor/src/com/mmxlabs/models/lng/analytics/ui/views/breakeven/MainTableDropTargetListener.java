@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -270,7 +271,7 @@ public class MainTableDropTargetListener implements DropTargetListener {
 					event.detail = DND.DROP_LINK;
 					return;
 				}
-				if (o instanceof CargoModelRowTransformer.RowData) {
+				if (o instanceof TradesRow) {
 					event.detail = DND.DROP_LINK;
 					return;
 				}

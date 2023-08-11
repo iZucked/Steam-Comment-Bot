@@ -45,6 +45,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -81,14 +82,14 @@ public class SelectionToSandboxUtil {
 			LOOP_SELECTION: while (itr.hasNext()) {
 				Object obj = itr.next();
 
-				if (obj instanceof CargoModelRowTransformer.RowData rowData) {
+				if (obj instanceof TradesRow tradesRow) {
 					// Note - not strictly correct, row may contain independent an load and discharge
-					if (rowData.getCargo() != null) {
-						obj = rowData.getCargo();
-					} else if (rowData.getLoadSlot() != null) {
-						obj = rowData.getLoadSlot();
+					if (tradesRow.getCargo() != null) {
+						obj = tradesRow.getCargo();
+					} else if (tradesRow.getLoadSlot() != null) {
+						obj = tradesRow.getLoadSlot();
 					} else {
-						obj = rowData.getDischargeSlot();
+						obj = tradesRow.getDischargeSlot();
 					}
 
 				}
@@ -148,14 +149,14 @@ public class SelectionToSandboxUtil {
 
 					Object obj = itr.next();
 
-					if (obj instanceof CargoModelRowTransformer.RowData rowData) {
+					if (obj instanceof TradesRow tradesRow) {
 						// Note - not strictly correct, row may contain independent an load and discharge
-						if (rowData.getCargo() != null) {
-							obj = rowData.getCargo();
-						} else if (rowData.getLoadSlot() != null) {
-							obj = rowData.getLoadSlot();
+						if (tradesRow.getCargo() != null) {
+							obj = tradesRow.getCargo();
+						} else if (tradesRow.getLoadSlot() != null) {
+							obj = tradesRow.getLoadSlot();
 						} else {
-							obj = rowData.getDischargeSlot();
+							obj = tradesRow.getDischargeSlot();
 						}
 
 					}

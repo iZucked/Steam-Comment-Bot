@@ -8,9 +8,9 @@ import java.util.Set;
 
 import org.eclipse.jface.action.Action;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 
 public interface ITradesBasedFilterHandler {
 
@@ -18,7 +18,7 @@ public interface ITradesBasedFilterHandler {
 	Action deactivateAction(ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters, BulkTradesTablePane viewer);
 	void activate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters);
 	void deactivate(final ColumnFilters columnFilters, final Set<ITradesBasedFilterHandler> activeFilters);
-	boolean isRowVisible(Row row);
+	boolean isRowVisible(TradesRow tradesRow);
 	boolean isDefaultFilter();
 
 }

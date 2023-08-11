@@ -15,9 +15,9 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.ColumnFilters;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -95,7 +95,7 @@ public class SalesContractTradesBasedFilterHandler implements ITradesBasedFilter
 	}
 
 	@Override
-	public boolean isRowVisible(Row row) {
+	public boolean isRowVisible(TradesRow tradesRow) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -137,9 +137,9 @@ public class SalesContractTradesBasedFilterHandler implements ITradesBasedFilter
 		}
 
 		@Override
-		public boolean isRowVisible(Row row) {
-			if (row.getDischargeSlot() != null) {
-				Contract contract = row.getDischargeSlot().getContract();
+		public boolean isRowVisible(TradesRow tradesRow) {
+			if (tradesRow.getDischargeSlot() != null) {
+				Contract contract = tradesRow.getDischargeSlot().getContract();
 				if (contract != null && contract == referenceContract) {
 					return true;
 				}

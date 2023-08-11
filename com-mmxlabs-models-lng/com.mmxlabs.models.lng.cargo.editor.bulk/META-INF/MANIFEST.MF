@@ -7,10 +7,7 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor,
- com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.impl,
- com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.util,
- com.mmxlabs.models.lng.cargo.editor.bulk.columns.extmodule,
+Export-Package: com.mmxlabs.models.lng.cargo.editor.bulk.columns.extmodule,
  com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart,
  com.mmxlabs.models.lng.cargo.editor.bulk.views
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
@@ -47,7 +44,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.osgi.services,
  org.eclipse.e4.core.services,
  com.mmxlabs.models.lng.nominations.editor,
- com.mmxlabs.models.lng.pricing.editor
+ com.mmxlabs.models.lng.pricing.editor,
+ com.mmxlabs.models.lng.cargo.editor.model
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"

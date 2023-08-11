@@ -7,12 +7,12 @@ package com.mmxlabs.models.lng.cargo.editor.bulk.views;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesTableRoot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public interface ITradesRowTransformerFactory {
 
-	void transformRowData(Table table, LNGScenarioModel lngScenarioModel, EClass customRowEClass, Cargo cargo, Row row);
+	void transformRowData(TradesTableRoot table, LNGScenarioModel lngScenarioModel, EClass customRowEClass, Cargo cargo, TradesRow row);
 	
 }

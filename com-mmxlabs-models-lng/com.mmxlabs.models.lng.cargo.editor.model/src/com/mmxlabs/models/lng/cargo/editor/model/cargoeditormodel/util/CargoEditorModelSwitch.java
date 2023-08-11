@@ -1,12 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2023
- * All rights reserved.
  */
-/**
- */
-package com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.util;
+package com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.util;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.*;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.*;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -23,17 +19,17 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage
+ * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage
  * @generated
  */
-public class CargoBulkEditorSwitch<T> extends Switch<T> {
+public class CargoEditorModelSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static CargoBulkEditorPackage modelPackage;
+	protected static CargoEditorModelPackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -41,9 +37,9 @@ public class CargoBulkEditorSwitch<T> extends Switch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoBulkEditorSwitch() {
+	public CargoEditorModelSwitch() {
 		if (modelPackage == null) {
-			modelPackage = CargoBulkEditorPackage.eINSTANCE;
+			modelPackage = CargoEditorModelPackage.eINSTANCE;
 		}
 	}
 
@@ -70,15 +66,15 @@ public class CargoBulkEditorSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case CargoBulkEditorPackage.ROW: {
-				Row row = (Row)theEObject;
-				T result = caseRow(row);
+			case CargoEditorModelPackage.TRADES_ROW: {
+				TradesRow tradesRow = (TradesRow)theEObject;
+				T result = caseTradesRow(tradesRow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CargoBulkEditorPackage.TABLE: {
-				Table table = (Table)theEObject;
-				T result = caseTable(table);
+			case CargoEditorModelPackage.TRADES_TABLE_ROOT: {
+				TradesTableRoot tradesTableRoot = (TradesTableRoot)theEObject;
+				T result = caseTradesTableRoot(tradesTableRoot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -87,32 +83,32 @@ public class CargoBulkEditorSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Row</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Trades Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Row</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Trades Row</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRow(Row object) {
+	public T caseTradesRow(TradesRow object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Table</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Trades Table Root</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Table</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Trades Table Root</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTable(Table object) {
+	public T caseTradesTableRoot(TradesTableRoot object) {
 		return null;
 	}
 
@@ -132,4 +128,4 @@ public class CargoBulkEditorSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} //CargoBulkEditorSwitch
+} //CargoEditorModelSwitch
