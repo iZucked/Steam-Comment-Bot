@@ -163,6 +163,55 @@ public class ImportCSVFilesPage extends WizardPage {
 		setTitle("Choose CSV/ZIP Files");
 		this.mainPage = mainPage;
 	}
+	
+	private boolean isZip(File f) {
+		try {
+			ZipFile zip = new ZipFile(f);
+		} catch (ZipException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	private File unzip(String fn) {
+		try (ZipFile zip = new ZipFile(fn)) {
+			// Unzips to new temp directory
+			File destDir = new File(zip.getName().replace(".", "") + "_lingo_unzipped");
+			while (destDir.exists()) {
+				destDir = new File(destDir.getName()+"a");
+			}
+			destDir.mkdirs();
+			destDir.deleteOnExit();
+			Enumeration<? extends ZipEntry> entries = zip.entries();
+			byte[] buffer = new byte[BUFFER];
+			BufferedInputStream is = null;
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+				String fileName = entry.getName();
+				// Directories shouldn't exist, only CSVs
+				if (!fileName.substring(fileName.length()-4, fileName.length()).equals(".csv")) {
+					continue;
+				}
+				File newFile = new File(destDir + File.separator + fileName);
+				newFile.deleteOnExit();
+				FileOutputStream fos = new FileOutputStream(newFile);
+				is = new BufferedInputStream(zip.getInputStream(entry));
+				int len;
+				while ((len = is.read(buffer)) > 0) {
+					fos.write(buffer, 0, len);
+				}
+				fos.close(); 
+			}
+			return destDir;
+		}
+		catch (IOException e1) {
+			// TODO: Add a warning?
+			e1.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public void createControl(final Composite arg0) {
@@ -255,53 +304,20 @@ public class ImportCSVFilesPage extends WizardPage {
 				final String fn = dlg.open();
 				
 				if (fn != null) {
-					try (ZipFile zip = new ZipFile(fn)) {
-						// Unzips to new temp directory
-						File destDir = new File(zip.getName().replace(".", "") + "_lingo_unzipped");
-						while (destDir.exists()) {
-							destDir = new File(destDir.getName()+"a");
-						}
-						destDir.mkdirs();
-						destDir.deleteOnExit();
-						Enumeration<? extends ZipEntry> entries = zip.entries();
-						byte[] buffer = new byte[BUFFER];
-						BufferedInputStream is = null;
-						while (entries.hasMoreElements()) {
-							ZipEntry entry = entries.nextElement();
-							String fileName = entry.getName();
-							// Directories shouldn't exist, only CSVs
-							if (!fileName.substring(fileName.length()-4, fileName.length()).equals(".csv")) {
-								continue;
-							}
-							File newFile = new File(destDir + File.separator + fileName);
-							newFile.deleteOnExit();
-							FileOutputStream fos = new FileOutputStream(newFile);
-							is = new BufferedInputStream(zip.getInputStream(entry));
-							int len;
-							while ((len = is.read(buffer)) > 0) {
-								fos.write(buffer, 0, len);
-							}
-							fos.close(); 
-						}
-	
-						// Load from newly created directory
-						directory.setText(fn);
-						for (final Chunk c : subModelChunks) {
-							c.setFromDirectory(destDir);
-						}
-						for (final Chunk c : extraModelChunks) {
-							c.setFromDirectory(destDir);
-						}
-						setPageComplete(true);
-						if (section == null) {
-							section = dialogSettings.addNewSection(SECTION_NAME);
-						}
-						section.put(FILTER_KEY, fn);
+					File destDir = unzip(fn);	
+					// Load from newly created directory
+					directory.setText(fn);
+					for (final Chunk c : subModelChunks) {
+						c.setFromDirectory(destDir);
 					}
-					catch (IOException e1) {
-						// TODO: Add a warning?
-						e1.printStackTrace();
+					for (final Chunk c : extraModelChunks) {
+						c.setFromDirectory(destDir);
 					}
+					setPageComplete(true);
+					if (section == null) {
+						section = dialogSettings.addNewSection(SECTION_NAME);
+					}
+					section.put(FILTER_KEY, fn);
 				}
 			}
 		});
@@ -367,6 +383,9 @@ public class ImportCSVFilesPage extends WizardPage {
 			final File dir = new File(lastDirectoryName);
 			if (dir.exists() && dir.isDirectory()) {
 				lastDirectoryFile = dir;
+			}
+			else if (dir.exists() && isZip(dir)) {
+				lastDirectoryFile = unzip(lastDirectoryName);
 			}
 		}
 
