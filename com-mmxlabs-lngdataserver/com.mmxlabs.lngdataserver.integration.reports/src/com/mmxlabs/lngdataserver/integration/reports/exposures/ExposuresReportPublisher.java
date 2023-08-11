@@ -60,7 +60,7 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 		
 		else if ("2".equals(version)) {
 
-			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider);
+			final List<ExposuresReportModelV2> models = ExposuresReportJSONGeneratorV2.createReportData(scheduleModel, scenarioDataProvider);
 
 			final ObjectMapper objectMapper = new ObjectMapper();
 			final String content = objectMapper.writeValueAsString(models);
