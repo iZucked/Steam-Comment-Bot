@@ -163,17 +163,6 @@ public class ImportCSVFilesPage extends WizardPage {
 		setTitle("Choose CSV/ZIP Files");
 		this.mainPage = mainPage;
 	}
-	
-	private boolean isZip(File f) {
-		try {
-			ZipFile zip = new ZipFile(f);
-		} catch (ZipException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
-		}
-		return true;
-	}
 
 	@Override
 	public void createControl(final Composite arg0) {
@@ -260,7 +249,6 @@ public class ImportCSVFilesPage extends WizardPage {
 				final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 
 				IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
-				final String filter = section == null ? null : section.get(FILTER_KEY);
 				// display file open dialog and then fill out files if the exist.
 				final FileDialog dlg = new FileDialog(getShell());
 				dlg.setFilterExtensions(new String[] { "*.zip",});
@@ -270,27 +258,30 @@ public class ImportCSVFilesPage extends WizardPage {
 					try (ZipFile zip = new ZipFile(fn)) {
 						// Unzips to new temp directory
 						File destDir = new File(zip.getName().replace(".", "") + "_lingo_unzipped");
-						if (!destDir.exists()) {
-							destDir.mkdirs();
-							Enumeration<? extends ZipEntry> entries = zip.entries();
-							byte[] buffer = new byte[BUFFER];
-							BufferedInputStream is = null;
-							while (entries.hasMoreElements()) {
-								ZipEntry entry = entries.nextElement();
-								String fileName = entry.getName();
-								// Directories shouldn't exist, only CSVs
-								if (!fileName.substring(fileName.length()-4, fileName.length()).equals(".csv")) {
-									continue;
-								}
-								File newFile = new File(destDir + File.separator + fileName);
-								FileOutputStream fos = new FileOutputStream(newFile);
-								is = new BufferedInputStream(zip.getInputStream(entry));
-								int len;
-								while ((len = is.read(buffer)) > 0) {
-									fos.write(buffer, 0, len);
-								}
-								fos.close(); 
+						while (destDir.exists()) {
+							destDir = new File(destDir.getName()+"a");
+						}
+						destDir.mkdirs();
+						destDir.deleteOnExit();
+						Enumeration<? extends ZipEntry> entries = zip.entries();
+						byte[] buffer = new byte[BUFFER];
+						BufferedInputStream is = null;
+						while (entries.hasMoreElements()) {
+							ZipEntry entry = entries.nextElement();
+							String fileName = entry.getName();
+							// Directories shouldn't exist, only CSVs
+							if (!fileName.substring(fileName.length()-4, fileName.length()).equals(".csv")) {
+								continue;
 							}
+							File newFile = new File(destDir + File.separator + fileName);
+							newFile.deleteOnExit();
+							FileOutputStream fos = new FileOutputStream(newFile);
+							is = new BufferedInputStream(zip.getInputStream(entry));
+							int len;
+							while ((len = is.read(buffer)) > 0) {
+								fos.write(buffer, 0, len);
+							}
+							fos.close(); 
 						}
 	
 						// Load from newly created directory
@@ -305,7 +296,7 @@ public class ImportCSVFilesPage extends WizardPage {
 						if (section == null) {
 							section = dialogSettings.addNewSection(SECTION_NAME);
 						}
-						section.put(FILTER_KEY, destDir.toString());
+						section.put(FILTER_KEY, fn);
 					}
 					catch (IOException e1) {
 						// TODO: Add a warning?
