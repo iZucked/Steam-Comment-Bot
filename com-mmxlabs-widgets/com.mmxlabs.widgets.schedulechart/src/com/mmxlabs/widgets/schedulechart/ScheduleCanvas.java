@@ -30,7 +30,7 @@ import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
-public class ScheduleCanvas extends Canvas implements IScheduleChartContentBoundsProvider {
+public class ScheduleCanvas extends Canvas implements IScheduleChartContentBoundsProvider, IScheduleChartEventEmitter {
 	
 	private final ScheduleTimeScale timeScale;
 	private final DrawableScheduleTimeScale<ScheduleTimeScale> drawableTimeScale;
@@ -63,7 +63,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartContentBound
 		this.settings = settings;
 		this.colourScheme = colourScheme;
 
-		this.timeScale = new ScheduleTimeScale(this, settings);
+		this.timeScale = new ScheduleTimeScale(this, this, settings);
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, colourScheme, settings);
 		
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
@@ -102,6 +102,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartContentBound
 				redraw();
 			}
 		});
+		
+		// to listen for zoom events and adjust the scrollbar
+		addScheduleEventListener(horizontalScrollbarHandler.getEventListener());
 	}
 
 	private void repaint(GC gc) {
@@ -164,7 +167,8 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartContentBound
 		return listeners.remove(l);
 	}
 	
-	void fireScheduleEvent(Consumer<IScheduleChartEventListener> f) {
+	@Override
+	public void fireScheduleEvent(Consumer<IScheduleChartEventListener> f) {
 		for (final IScheduleChartEventListener l: listeners) {
 			f.accept(l);
 		}

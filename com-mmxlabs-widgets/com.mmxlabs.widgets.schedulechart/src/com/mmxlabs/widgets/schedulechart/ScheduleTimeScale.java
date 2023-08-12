@@ -21,12 +21,14 @@ public class ScheduleTimeScale {
 	private Rectangle bounds;
 	
 	private final IScheduleChartContentBoundsProvider boundsProvider;
+	private final IScheduleChartEventEmitter eventEmitter;
 	
-	public ScheduleTimeScale(IScheduleChartContentBoundsProvider boundsProvider, IScheduleChartSettings settings) {
+	public ScheduleTimeScale(IScheduleChartContentBoundsProvider boundsProvider, IScheduleChartEventEmitter eventEmitter, IScheduleChartSettings settings) {
 		this.startTime = ((LocalDateTime) TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY).adjustInto(LocalDateTime.now())).minusDays(1).minusYears(1);
 		// TODO: make this customisable with the settings object
 		this.unitWidths = calculateUnitWidths(new ScheduleTimeScaleSmoothZoomLevel(ScheduleTimeScaleZoomLevel.TS_ZOOM_DAY_NORMAL), 3);
 		this.boundsProvider = boundsProvider;
+		this.eventEmitter = eventEmitter;
 	}
 	
 	void setBounds(Rectangle bounds) {
@@ -46,25 +48,8 @@ public class ScheduleTimeScale {
 	}
 
 	public void zoomBy(Point mouseLoc, Integer count, boolean isZoomIn) {
-		if (isZoomIn && this.unitWidths.zoomLevel().isMaxZoom()) {
-			return;
-		}
-		
-		if (!isZoomIn && count == null && this.unitWidths.zoomLevel().isMinZoom()) {
-			return;
-		}
-		
-		Integer x = mouseLoc != null ? mouseLoc.x : bounds != null ? bounds.x + bounds.width / 2 : null;
-		Pair<LocalDateTime, Integer> preZoomPos = x != null ? getDateTimeAtX(x) : null;
-		int preZoomUnitWidth = getUnitWidthForCurrentZoomLevel();
-
-		var zoomLevel = unitWidths.zoomLevel();
-		var nextZoomLevel = count != null ? zoomLevel.zoomBy(count) : isZoomIn ? zoomLevel.nextIn() : zoomLevel.nextOut();
-		this.unitWidths = calculateUnitWidths((ScheduleTimeScaleSmoothZoomLevel) nextZoomLevel, 3);
-
-		if (preZoomPos != null) {
-			internalSetDateTimeAtX(x, preZoomPos, preZoomUnitWidth);
-		}
+		internalZoomBy(mouseLoc, count, isZoomIn);
+		eventEmitter.fireScheduleEvent(l -> l.timeScaleZoomLevelChanged(bounds, boundsProvider));
 	}
 	
 	// returns pixels moved
@@ -81,6 +66,7 @@ public class ScheduleTimeScale {
 		final int rightmostX = getXForDateTime(rightmost.getStart().plusDays(PADDING));
 		
 		internalZoomToFitXBounds(leftmostX, rightmostX);
+		eventEmitter.fireScheduleEvent(l -> l.timeScaleZoomLevelChanged(bounds, boundsProvider));
 	}
 
 	public void fitSelection(int startX, int endX) {
@@ -143,6 +129,14 @@ public class ScheduleTimeScale {
 		return Pair.of(getXForDateTime(event.getStart()), getXForDateTime(event.getEnd()));
 	}
 	
+	public int getTotalContentWidthInUnits() {
+		return (int) boundsProvider.getLeftmostEvent().getStart().until(boundsProvider.getRightmostEvent().getEnd(), unitWidths.zoomLevel.getWidthUnit());
+	}
+	
+	public int getScrollPositionInUnits() {
+		return (int) boundsProvider.getLeftmostEvent().getStart().until(startTime, unitWidths.zoomLevel.getWidthUnit());
+	}
+
 	private int getUnitWidthForCurrentZoomLevel() {
 		return getUnitWidthFromRegularUnit(unitWidths.zoomLevel.getWidthUnit()).get();
 	}
@@ -168,6 +162,28 @@ public class ScheduleTimeScale {
 		return actualPixelsScrolled;
 	}
 
+	private void internalZoomBy(Point mouseLoc, Integer count, boolean isZoomIn) {
+		if (isZoomIn && this.unitWidths.zoomLevel().isMaxZoom()) {
+			return;
+		}
+		
+		if (!isZoomIn && count == null && this.unitWidths.zoomLevel().isMinZoom()) {
+			return;
+		}
+		
+		Integer x = mouseLoc != null ? mouseLoc.x : bounds != null ? bounds.x + bounds.width / 2 : null;
+		Pair<LocalDateTime, Integer> preZoomPos = x != null ? getDateTimeAtX(x) : null;
+		int preZoomUnitWidth = getUnitWidthForCurrentZoomLevel();
+
+		var zoomLevel = unitWidths.zoomLevel();
+		var nextZoomLevel = count != null ? zoomLevel.zoomBy(count) : isZoomIn ? zoomLevel.nextIn() : zoomLevel.nextOut();
+		this.unitWidths = calculateUnitWidths((ScheduleTimeScaleSmoothZoomLevel) nextZoomLevel, 3);
+
+		if (preZoomPos != null) {
+			internalSetDateTimeAtX(x, preZoomPos, preZoomUnitWidth);
+		}
+	}
+	
 	private void internalSetDateTimeAtX(final int x, final Pair<LocalDateTime, Integer> dateOffset, Integer prevUnitWidth) {
 		int currUnitWidth = getUnitWidthForCurrentZoomLevel();
 		int currRemainder = (prevUnitWidth != null) ? (int) Math.round(dateOffset.getSecond() * (double) currUnitWidth / prevUnitWidth) : dateOffset.getSecond();
@@ -191,7 +207,7 @@ public class ScheduleTimeScale {
 		
 		// keep zooming until maximum x is crossed
 		do {
-			zoomBy(leftAnchor, deltaZoom, deltaZoom > 0);
+			internalZoomBy(leftAnchor, deltaZoom, deltaZoom > 0);
 			r = getXForDateTime(xEndDate);
 			
 			deltaZoom *= 2;
@@ -203,7 +219,7 @@ public class ScheduleTimeScale {
 		boolean oscillating = false;
 		int[] prev = new int[2];
 		while (Math.abs(r - maximumX) > unitWidths.dayWidth() && !(oscillating && r < maximumX)) {
-			zoomBy(leftAnchor, deltaZoom, deltaZoom > 0);
+			internalZoomBy(leftAnchor, deltaZoom, deltaZoom > 0);
 			r = getXForDateTime(xEndDate);
 			
 			// Update delta zoom
