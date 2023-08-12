@@ -2,23 +2,34 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -35,32 +46,15 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private Action packAction;
 	
 	private ScheduleChartViewer<ScheduleModel> viewer;
-	private final IScheduleEventProvider<Integer> oldEventProvider = new IScheduleEventProvider<>() {
-
-		@Override
-		public List<ScheduleEvent> getEvents(Integer input) {
-			List<ScheduleEvent> res = new ArrayList<>();
-			LocalDateTime curr = LocalDateTime.now();
-			for (int i = 0; i < 10; i++) {
-				LocalDateTime next = curr.plusDays(ThreadLocalRandom.current().nextInt(1, 10));
-				res.add(new ScheduleEvent(curr, next));
-				curr = next;
-			}
-			return res;
-		}
-
-		@Override
-		public String getKeyForEvent(ScheduleEvent event) {
-			return event.toString();
-		}
-	};
 	
-	private final NinetyDayScheduleEventProvider eventProvider = new NinetyDayScheduleEventProvider();
+	private final EquivalentsManager equivalentsManager = new EquivalentsManager();
+	private final NinetyDayScheduleEventProvider eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
 	private final NinetyDayScheduleEventStylingProvider eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
 	
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
 	private ReentrantSelectionManager selectionManager;
 	protected final ISelectedScenariosServiceListener scenariosServiceListener = new ISelectedScenariosServiceListener() {
+
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			ViewerHelper.runIfViewerValid(viewer, block, () -> {
@@ -70,10 +64,35 @@ public class NinetyDayScheduleReport extends ViewPart {
 					ScheduleModel sm = rs.get(0).getTypedResult(ScheduleModel.class);
 					if (sm != null) {
 						viewer.typedSetInput(sm);
+						viewer.getCanvas().getTimeScale().pack();
 					}
 				}
 			});
 		}
+		
+		@Override
+		public void selectedObjectChanged(@Nullable MPart source, ISelection selection) {
+			if (selection instanceof final IStructuredSelection sel) {
+				List<Object> objects = new ArrayList<>(sel.toList().size());
+				for (final Object o : sel.toList()) {
+					if (o instanceof final CargoAllocation allocation) {
+						objects.addAll(allocation.getEvents());
+						for (final SlotAllocation sa : allocation.getSlotAllocations()) {
+							objects.add(sa.getSlotVisit());
+						}
+					} else if (o instanceof final Cargo cargo) {
+						objects.add(cargo);
+						objects.addAll(cargo.getSlots());
+					} else {
+						objects.add(o);
+					}
+				}
+				objects = equivalentsManager.expandSelection(objects);
+				selection = new StructuredSelection(objects);
+			}
+			ViewerHelper.setSelection(viewer, true, selection);
+		}
+		
 	};
 
 	@Override

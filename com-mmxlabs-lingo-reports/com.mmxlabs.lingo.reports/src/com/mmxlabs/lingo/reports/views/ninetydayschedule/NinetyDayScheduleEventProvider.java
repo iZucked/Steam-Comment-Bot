@@ -3,6 +3,7 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,23 +12,30 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.common.collect.Lists;
+import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
@@ -35,6 +43,11 @@ import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<ScheduleModel> {
 	
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
+	private final EquivalentsManager equivalentsManager;
+
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager) {
+		this.equivalentsManager = equivalentsManager;
+	}
 
 	@Override
 	public List<ScheduleEvent> getEvents(ScheduleModel input) {
@@ -52,6 +65,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 			}
 		}
 		
+		events.stream().forEach(e -> equivalentsManager.collectEquivalents(e, this::generateEquivalents));
 		return events.stream().map(this::makeScheduleEvent).collect(Collectors.toList());
 	}
 
@@ -110,14 +124,12 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	
 	private void collectEvents(List<Event> res, Sequence s) {
 		final VesselCharter va = s.getVesselCharter();
-		if (va != null) {
-			if (va.getStartAfter() != null) {
+		if (va != null && va.getStartAfter() != null) {
 				final CharterAvailableFromEvent evt = ScheduleFactory.eINSTANCE.createCharterAvailableFromEvent();
 				evt.setLinkedSequence(s);
 				evt.setStart(va.getStartAfterAsDateTime());
 				evt.setEnd(evt.getStart().plusDays(1));
 				res.add(evt);
-			}
 		}
 
 		for (final Event event : s.getEvents()) {
@@ -173,6 +185,40 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 		se.setVisible(visible);
 
 		return se;
+	}
+	
+	private List<Object> generateEquivalents(Object event) {
+		if (event instanceof final SlotVisit slotVisit) {
+			return Lists.newArrayList(slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation());
+		} else if (event instanceof final CargoAllocation allocation) {
+
+			final List<Object> localEquivalents = new ArrayList<>();
+			for (final SlotAllocation sa : allocation.getSlotAllocations()) {
+				localEquivalents.add(sa.getSlotVisit());
+				localEquivalents.add(sa.getSlot());
+			}
+			localEquivalents.addAll(allocation.getEvents());
+
+			return localEquivalents;
+
+		} else if (event instanceof final VesselEventVisit vev) {
+			return Collections.singletonList(vev.getVesselEvent());
+		} else if (event instanceof final OpenSlotAllocation sa) {
+			return Collections.singletonList(sa.getSlot());
+		} else if (event instanceof StartEvent se) {
+			if (se.getSequence() != null && se.getSequence().getVesselCharter() != null) {
+				return Collections.singletonList(se.getSequence().getVesselCharter());
+			}
+		} else if (event instanceof EndEvent ee) {
+			if (ee.getSequence() != null && ee.getSequence().getVesselCharter() != null) {
+				return Collections.singletonList(ee.getSequence().getVesselCharter());
+			}
+		} else if (event instanceof final NonShippedSlotVisit slotVisit) {
+			return Collections.singletonList(slotVisit.getSlot());
+		}
+
+		return Collections.emptyList();
+		
 	}
 
 }

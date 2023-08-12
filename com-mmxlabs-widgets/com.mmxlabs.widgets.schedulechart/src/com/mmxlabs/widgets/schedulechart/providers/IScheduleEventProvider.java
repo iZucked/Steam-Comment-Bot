@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 
@@ -14,7 +12,7 @@ public interface IScheduleEventProvider<T> {
 
 	String getKeyForEvent(ScheduleEvent event);
 
-	default List<@NonNull ScheduleChartRow> classifyEventsIntoRows(List<ScheduleEvent> events) {
+	default List<ScheduleChartRow> classifyEventsIntoRows(List<ScheduleEvent> events) {
 		return events.stream().collect(Collectors.toMap(this::getKeyForEvent, e -> new ArrayList<>(List.of(e)), (existing, replacement) -> {
 			existing.addAll(replacement);
 			return existing;

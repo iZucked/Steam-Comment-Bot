@@ -12,6 +12,7 @@ public class ScheduleEvent {
 	
 	private final Object data;
 	private boolean visible;
+	private boolean selected;
 	
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, LocalDateTime plannedStartDate, LocalDateTime plannedEndDate, Object data) {
 		this.startDate = startDate;
@@ -42,5 +43,13 @@ public class ScheduleEvent {
 
 	public boolean isVisible() {
 		return visible;
+	}
+	
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	public boolean isSelected() {
+		return selected;
 	}
 }
