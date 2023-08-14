@@ -86,7 +86,10 @@ public class ImportCSVFilesPage extends WizardPage {
 
 	private static final int BUFFER = 2048; // For unzipping
 	
-	private static final String FILTER_KEY = "lastSelection";
+	private static final String FILTER_DIRECTORY_KEY = "lastFolderSelection";
+	private static final String FILTER_ZIP_KEY = "lastZipSelection";
+	private static final String FILTER_PREVIOUS_KEY = "lastSelectionOption"; // Boolean distinguishing previous selection choice
+
 	private static final String SECTION_NAME = "ImportCSVFilesPage.section";
 
 	private static final String DELIMITER_KEY = "lastDelimiter";
@@ -229,17 +232,27 @@ public class ImportCSVFilesPage extends WizardPage {
 		holder.setLayout(gl);
 		holder.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
-		// GridData gd = new GridData();
-		// gd.verticalIndent = 0;
-		// gd.horizontalIndent = 0;
-		// // gd.grabExcessHorizontalSpace = true;
-		// holder.setLayoutData(gd);
-
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
-		final String lastDirectoryName = section == null ? null : section.get(FILTER_KEY);
-		final String lastZipName = null;
+		
+		// Load previous selection
+		final String lastDirectoryName;
+		if (section != null) {
+			if (section.get(FILTER_DIRECTORY_KEY) == null) {
+				lastDirectoryName = section.get(FILTER_DIRECTORY_KEY);
+			}
+			else if (!section.getBoolean(FILTER_PREVIOUS_KEY)) {
+				lastDirectoryName = section.get(FILTER_DIRECTORY_KEY);
+			}
+			else {
+				lastDirectoryName = section.get(FILTER_ZIP_KEY);
+			}
+		}
+		else {
+			lastDirectoryName = null;
+		}
 
+		// Create selection dialogs
 		final Button auto = new Button(holder, SWT.NONE);
 		auto.setText("Choose &Directory...");
 		final Label directory = new Label(holder, SWT.NONE);
@@ -253,7 +266,7 @@ public class ImportCSVFilesPage extends WizardPage {
 				final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 
 				IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
-				final String filter = section == null ? null : section.get(FILTER_KEY);
+				final String filter = section == null ? null : section.get(FILTER_DIRECTORY_KEY);
 				// display file open dialog and then fill out files if the exist.
 				final DirectoryDialog dd = new DirectoryDialog(getShell());
 				if (filter != null) {
@@ -280,7 +293,8 @@ public class ImportCSVFilesPage extends WizardPage {
 					if (section == null) {
 						section = dialogSettings.addNewSection(SECTION_NAME);
 					}
-					section.put(FILTER_KEY, dir.toString());
+					section.put(FILTER_DIRECTORY_KEY, dir.toString());
+					section.put(FILTER_PREVIOUS_KEY, false);
 				}
 			}
 		});
@@ -301,6 +315,10 @@ public class ImportCSVFilesPage extends WizardPage {
 				// display file open dialog and then fill out files if the exist.
 				final FileDialog dlg = new FileDialog(getShell());
 				dlg.setFilterExtensions(new String[] { "*.zip",});
+				final String filter = section == null ? null : section.get(FILTER_ZIP_KEY);
+				if (filter != null) {
+					dlg.setFilterPath(filter);
+				}
 				final String fn = dlg.open();
 				
 				if (fn != null) {
@@ -317,7 +335,8 @@ public class ImportCSVFilesPage extends WizardPage {
 					if (section == null) {
 						section = dialogSettings.addNewSection(SECTION_NAME);
 					}
-					section.put(FILTER_KEY, fn);
+					section.put(FILTER_ZIP_KEY, fn);
+					section.put(FILTER_PREVIOUS_KEY, true);
 				}
 			}
 		});
