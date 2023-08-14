@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -29,24 +30,28 @@ abstract class Chunk {
 	}
 
 	void setFromDirectory(final File directory) {
-		if (directory == null) return;
-		for (final Map.Entry<String, String> entry : friendlyNames.entrySet()) {
-			final String k = entry.getKey();
-			final String v = entry.getValue();
-			final File sub = new File(directory, v + ".csv");
-			if (sub.exists()) {
-				try {
-					final String str = sub.getCanonicalPath();
-					editors.get(k).setStringValue(str);
-					keys.put(k, str); // CME?
-				} catch (final IOException e) {
+		if (isZip(directory.getAbsolutePath())) {
+			setFromZip(directory.getAbsolutePath());
+		}
+		else if (directory.isDirectory()) {
+			for (final Map.Entry<String, String> entry : friendlyNames.entrySet()) {
+				final String k = entry.getKey();
+				final String v = entry.getValue();
+				final File sub = new File(directory, v + ".csv");
+				if (sub.exists()) {
+					try {
+						final String str = sub.getCanonicalPath();
+						editors.get(k).setStringValue(str);
+						keys.put(k, str); // CME?
+					} catch (final IOException e) {
+					}
 				}
 			}
 		}
 	}
-	
-	void setFromZip(final File zipFile) {
-		setFromDirectory(unzip(zipFile.getAbsolutePath()));
+
+	void setFromZip(final String fn) {
+		setFromDirectory(unzip(fn));
 	}
 
 	private File unzip(String fn) {
@@ -84,6 +89,18 @@ abstract class Chunk {
 			e1.printStackTrace();
 		}
 		return null;
+	}
+	
+	private static boolean isZip(String fn) {
+		try {
+			ZipFile zip = new ZipFile(fn);
+			zip.close();
+		} catch (ZipException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
 	}
 }
 
