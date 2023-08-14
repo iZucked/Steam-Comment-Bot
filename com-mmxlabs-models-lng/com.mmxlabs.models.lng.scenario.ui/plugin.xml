@@ -159,7 +159,7 @@
                locationURI="menu:file_import">
   				<command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
-                  label="CSV / ZIP"
+                  label="CSV"
                   style="push">
             </command>
             <command
