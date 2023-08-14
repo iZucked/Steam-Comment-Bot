@@ -1937,7 +1937,7 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 			final ISequenceElement element = portSlotsProvider.getElement(slot);
 			final IResource resource = vesselProvider.getResource(roundTripCargoVesselCharter);
 
-			roundTripVesselPermissionProviderEditor.permitElementOnResource(element, slot, resource, roundTripCargoVesselCharter);
+			roundTripVesselPermissionProviderEditor.permitElementOnResource(element, resource, roundTripCargoVesselCharter);
 
 			if (prevElement != null) {
 				roundTripVesselPermissionProviderEditor.makeBoundPair(prevElement, element);

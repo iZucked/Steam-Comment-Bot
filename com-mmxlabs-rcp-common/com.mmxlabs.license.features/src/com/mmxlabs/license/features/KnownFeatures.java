@@ -192,6 +192,10 @@ public final class KnownFeatures {
 	
 	public static final String FEATURE_SCHEDULED_VOLUME = "features:scheduled-volume";
 
+	
+	public static final String FEATURE_WEIGHTED_AVG_CHARTER_RATES = "features:weighted-avg-charter-rate";
+
+	
 	/**
 	 *  Temporary features
 	 */

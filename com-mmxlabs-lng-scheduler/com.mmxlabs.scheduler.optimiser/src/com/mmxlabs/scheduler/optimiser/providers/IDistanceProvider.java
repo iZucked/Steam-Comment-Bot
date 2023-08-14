@@ -97,6 +97,9 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	@NonNull
 	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTimeWithContingency(@NonNull IVessel vessel, @NonNull IPortSlot from, @NonNull IPortSlot to, int speed, AvailableRouteChoices availableRouteChoices);
 	
+	@NonNull
+	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTimeWithPanamaWaiting(@NonNull IVessel vessel, @NonNull IPortSlot from, @NonNull IPortSlot to, int speed, AvailableRouteChoices availableRouteChoices);
+	
 	ERouteOption[] getRoutes();
 
 	/**

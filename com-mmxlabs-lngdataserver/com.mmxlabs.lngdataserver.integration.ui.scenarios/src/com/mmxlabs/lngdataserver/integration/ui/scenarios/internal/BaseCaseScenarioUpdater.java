@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
@@ -37,8 +38,10 @@ import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.debug.BaseCaseDebugContants;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
@@ -131,8 +134,7 @@ public class BaseCaseScenarioUpdater {
 	}
 
 	private void recursiveUUIDCollector(final Container parent, final Collection<String> uuids) {
-		if (parent instanceof ScenarioInstance) {
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
+		if (parent instanceof ScenarioInstance scenarioInstance) {
 			uuids.add(scenarioInstance.getExternalID());
 		}
 		for (final Container c : parent.getElements()) {
@@ -154,16 +156,25 @@ public class BaseCaseScenarioUpdater {
 
 		@Override
 		public void run() {
+			if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+				LOGGER.trace("Downloading new base case " + record.uuid);
+			}
 			final File f = new File(String.format("%s%s%s.lingo", basePath, File.separator, record.uuid));
 			if (!f.exists()) {
 				try {
 					if (!downloadScenario(record.uuid, f, null)) {
+						if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+							LOGGER.trace("Failed to download new base case " + record.uuid);
+						}
 						// Something went wrong - reset lastModified to trigger another refresh
 						lastUUID = "";
 						// Failed!
 						return;
 					}
-				} catch (final IOException e) {
+				} catch (final Exception e) {
+					if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+						LOGGER.trace("Exception downloading new base case " + record.uuid + " " + e.getMessage(), e);
+					}
 					// Something went wrong - reset lastModified to trigger another refresh
 					lastUUID = "";
 					e.printStackTrace();
@@ -186,6 +197,10 @@ public class BaseCaseScenarioUpdater {
 						baseCaseVersionsProviderService.setBaseCase(instance);
 					}
 				});
+			} else {
+				if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+					LOGGER.trace("Error loading new base case " + record.uuid);
+				}
 			}
 		}
 	}
@@ -199,6 +214,9 @@ public class BaseCaseScenarioUpdater {
 
 		@Override
 		public void run() {
+			if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+				LOGGER.trace("Removing old base case " + uuid);
+			}
 			final File f = new File(String.format("%s%s%s", basePath, File.separator, uuid));
 			if (f.exists()) {
 				final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
@@ -225,6 +243,9 @@ public class BaseCaseScenarioUpdater {
 				try {
 					ret[0] = client.downloadTo(uuid, f, WrappedProgressMonitor.wrapMonitor(monitor));
 				} catch (final Exception e) {
+					if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_DOWNLOAD)) {
+						LOGGER.trace("Exception downloading base case " + e.getMessage(), e);
+					}
 					// return Status.
 				} finally {
 					if (monitor != null) {
@@ -300,25 +321,27 @@ public class BaseCaseScenarioUpdater {
 		if (f.exists()) {
 			String json;
 			try {
-				json = Files.toString(f, StandardCharsets.UTF_8);
+				json = Files.asCharSource(f, StandardCharsets.UTF_8).read();
 
-				final BaseCaseRecord record = client.parseScenariosJSONData(json);
-				if (record != null) {
-					update(record);
+				final BaseCaseRecord bcRecord = client.parseScenariosJSONData(json);
+				if (bcRecord != null) {
+					update(bcRecord);
 				}
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		updateThread = new Thread() {
+		updateThread = new Thread("Base Case Updater") {
 			@Override
 			public void run() {
 
 				while (true) {
 					try {
 						refresh();
-					} catch (final IOException e1) {
+					} catch (final Exception e1) {
+						if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+							LOGGER.trace("Exception in refresh " + e1.getMessage(), e1);
+						}
 						e1.printStackTrace();
 					}
 
@@ -326,14 +349,16 @@ public class BaseCaseScenarioUpdater {
 						Thread.sleep(10_000);
 					} catch (final InterruptedException e) {
 						interrupt(); // preserve interruption status
+						if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+							LOGGER.trace("Base Case Updater thread interrupted");
+						}
 						return;
 					}
 				}
 			}
 
 		};
-		updateThread.start();
-
+		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(updateThread::start);
 	}
 
 	/**
@@ -367,8 +392,16 @@ public class BaseCaseScenarioUpdater {
 	}
 
 	public void refresh() throws IOException {
+
+		if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+			LOGGER.trace("Checking for base case updates");
+		}
+
 		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 		if (!modelRoot.isOffline() != available) {
+			if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+				LOGGER.trace("Base Case service is now " + (available ? "online" : "offline"));
+			}
 			RunnerHelper.syncExecDisplayOptional(() -> modelRoot.setOffline(!available));
 		}
 
@@ -387,10 +420,17 @@ public class BaseCaseScenarioUpdater {
 			final String currentUUID = client.getCurrentBaseCase();
 			if (currentUUID != null) {
 				if (currentUUID.isEmpty()) {
+					if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+						LOGGER.trace("No base case on Data Hub");
+					}
 					update(null);
 					lastUUID = currentUUID;
 				}
 				if (!currentUUID.equals(lastUUID)) {
+
+					if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+						LOGGER.trace("New base case on Data Hub " + currentUUID);
+					}
 					final String scenariosData = client.getBaseCaseDetails(currentUUID);
 					final BaseCaseRecord scenariosInfo = client.parseScenariosJSONData(scenariosData);
 					if (scenariosInfo != null) {
@@ -398,8 +438,16 @@ public class BaseCaseScenarioUpdater {
 						Files.write(scenariosData, new File(basePath.getAbsolutePath() + "/basecase.json"), StandardCharsets.UTF_8);
 						lastUUID = currentUUID;
 					} else {
+						if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+							LOGGER.trace("Unable to determine new base case");
+						}
 						update(null);
 						lastUUID = currentUUID;
+					}
+				} else {
+
+					if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
+						LOGGER.trace("Base case already up to date");
 					}
 				}
 			}

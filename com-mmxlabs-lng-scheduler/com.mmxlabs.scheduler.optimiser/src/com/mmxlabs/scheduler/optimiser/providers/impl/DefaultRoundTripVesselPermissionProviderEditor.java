@@ -20,20 +20,20 @@ import com.mmxlabs.scheduler.optimiser.providers.IRoundTripVesselPermissionProvi
 
 public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTripVesselPermissionProviderEditor {
 
-	private final Map<IPortSlot, Collection<@NonNull IVesselCharter>> portSlotMap = new HashMap<>();
+//	private final Map<IPortSlot, Collection<@NonNull IVesselCharter>> portSlotMap = new HashMap<>();
 	private final Map<ISequenceElement, Collection<@NonNull IResource>> elementMap = new HashMap<>();
 	private final Map<ISequenceElement, ISequenceElement> elementSequencePair = new HashMap<>();
 	private final Map<ISequenceElement, ISequenceElement> elementSequenceReversePair = new HashMap<>();
 
-	@Override
-	public boolean isPermittedOnResource(@NonNull final IPortSlot portSlot, @NonNull final IVesselCharter vesselCharter) {
-
-		final Collection<@NonNull IVesselCharter> c = portSlotMap.get(portSlot);
-		if (c != null) {
-			return c.contains(vesselCharter);
-		}
-		return false;
-	}
+//	@Override
+//	public boolean isPermittedOnResource(@NonNull final IPortSlot portSlot, @NonNull final IVesselCharter vesselCharter) {
+//
+//		final Collection<@NonNull IVesselCharter> c = portSlotMap.get(portSlot);
+//		if (c != null) {
+//			return c.contains(vesselCharter);
+//		}
+//		return false;
+//	}
 
 	@Override
 	public boolean isPermittedOnResource(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
@@ -45,17 +45,17 @@ public class DefaultRoundTripVesselPermissionProviderEditor implements IRoundTri
 	}
 
 	@Override
-	public void permitElementOnResource(@NonNull final ISequenceElement element, @NonNull final IPortSlot portSlot, @NonNull final IResource resource,
+	public void permitElementOnResource(@NonNull final ISequenceElement element,  @NonNull final IResource resource,
 			@NonNull final IVesselCharter vesselCharter) {
 
 		elementMap.merge(element, Sets.newHashSet(resource), (c, r) -> {
 			c.addAll(r);
 			return new HashSet<>(c);
 		});
-		portSlotMap.merge(portSlot, Sets.newHashSet(vesselCharter), (c, r) -> {
-			c.addAll(r);
-			return new HashSet<>(c);
-		});
+//		portSlotMap.merge(portSlot, Sets.newHashSet(vesselCharter), (c, r) -> {
+//			c.addAll(r);
+//			return new HashSet<>(c);
+//		});
 	}
 
 	@Override

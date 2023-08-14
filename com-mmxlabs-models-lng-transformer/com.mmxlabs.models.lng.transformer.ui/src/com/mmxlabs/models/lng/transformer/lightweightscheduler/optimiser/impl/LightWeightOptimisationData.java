@@ -26,6 +26,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private List<Set<Integer>> cargoVesselRestrictions;
 	private int[][][] cargoToCargoMinTravelTimes;
 	private int[][] cargoMinTravelTimes;
+	private int[][] startToFirstCargoTravelTimes;
 	private Map<ILoadOption, IDischargeOption> pairingsMap;
 	private int[] desiredVesselCargoCount;
 	private long[] desiredVesselCargoWeight;
@@ -41,7 +42,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 	private CargoWindowData[] cargoWindows;
 
 	public LightWeightOptimisationData(List<List<IPortSlot>> shippedCargoes, List<List<IPortSlot>> nonShippedCargoes, List<IVesselCharter> vessels, long[] vesselCapacities, long[] cargoPNL,
-			long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes,
+			long[][][] cargoToCargoCostsOnAvailability, List<Set<Integer>> cargoVesselRestrictions, int[][][] cargoToCargoMinTravelTimes, int[][] cargoMinTravelTimes, int[][] startToFirstCargoMinTravelTimes,
 			Map<ILoadOption, IDischargeOption> pairingsMap, int[] desiredVesselCargoCount, long[] desiredVesselCargoWeight, long[] cargoesVolumes, LightWeightCargoDetails[] cargoDetails,
 			long[][] cargoCharterCostPerAvailability, Set<Integer> cargoIndexes, Set<Integer> eventIndexes, ITimeWindow[] vesselStartWindows, ITimeWindow[] vesselEndWindows,
 			int[] cargoStartSlotDurations, int[] cargoEndSlotDurations, CargoWindowData[] cargoWindows) {
@@ -67,6 +68,7 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 		this.setDesiredVesselCargoWeight(desiredVesselCargoWeight);
 		this.cargoesVolumesInM3 = cargoesVolumes;
 		this.cargoDetails = cargoDetails;
+		this.startToFirstCargoTravelTimes = startToFirstCargoMinTravelTimes;
 	}
 
 	public CargoWindowData[] getCargoWindows() {
@@ -231,5 +233,10 @@ public class LightWeightOptimisationData implements ILightWeightOptimisationData
 
 	public List<List<IPortSlot>> getNonShippedCargoes() {
 		return nonShippedCargoes;
+	}
+
+	@Override
+	public int[][] getStartToFirstCargoMinTravelTimes() {
+		return startToFirstCargoTravelTimes;
 	}
 }

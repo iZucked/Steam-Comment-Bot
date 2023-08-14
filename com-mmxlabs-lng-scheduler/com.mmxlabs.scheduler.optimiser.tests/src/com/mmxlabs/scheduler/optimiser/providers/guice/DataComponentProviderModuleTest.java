@@ -15,6 +15,7 @@ import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
@@ -29,6 +30,7 @@ public class DataComponentProviderModuleTest {
 			@Override
 			protected void configure() {
 				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+				bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 			}
 		});
 
@@ -48,6 +50,7 @@ public class DataComponentProviderModuleTest {
 			@Override
 			protected void configure() {
 				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+				bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 			}
 		});
 
@@ -64,6 +67,7 @@ public class DataComponentProviderModuleTest {
 			@Override
 			protected void configure() {
 				bind(CalendarMonthMapper.class).toInstance(Mockito.mock(CalendarMonthMapper.class));
+				bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 			}
 		});
 

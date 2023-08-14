@@ -32,6 +32,8 @@ public interface ILightWeightOptimisationData {
 	int[][][] getCargoToCargoMinTravelTimes();
 
 	int[][] getCargoMinTravelTimes();
+	
+	int[][] getStartToFirstCargoMinTravelTimes();
 
 	List<List<IPortSlot>> getShippedCargoes();
 

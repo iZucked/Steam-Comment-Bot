@@ -25,4 +25,6 @@ public interface ICargoToCargoCostCalculator {
 	int[] getCargoStartSlotDurations(List<List<IPortSlot>> cargoes);
 	
 	int[] getCargoEndSlotDurations(List<List<IPortSlot>> cargoes);
+	
+	int[][] getStartToFirstCargoTravelTimesPerVessel(List<List<IPortSlot>> cargoes, List<IVesselCharter> vessels);
 }

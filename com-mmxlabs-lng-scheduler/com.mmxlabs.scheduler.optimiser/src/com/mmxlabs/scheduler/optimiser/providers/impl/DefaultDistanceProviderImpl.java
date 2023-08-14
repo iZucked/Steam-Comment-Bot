@@ -24,16 +24,16 @@ import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteExclusionProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
- * A {@link IDataComponentProvider} implementation combining raw distance
- * information with route availability information and offering basic travel
- * time calculation APIs
+ * A {@link IDataComponentProvider} implementation combining raw distance information with route availability information and offering basic travel time calculation APIs
  * 
  * TODO: Mixing logic and data here -> break up?
  * 
@@ -53,6 +53,12 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Inject
 	private IExtraIdleTimeProvider routeContingencyProvider;
+
+	@Inject
+	private PanamaBookingHelper panamaBookingHelper;
+
+	@Inject
+	private IPanamaBookingsProvider panamaBookingsProvider;
 
 	// Pair<North Entrance, South entrance>
 	private final Map<ERouteOption, Pair<IPort, IPort>> routeOptionEntryPoints = new HashMap<>();
@@ -213,6 +219,40 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		result.setSecond(bestTime);
 
 		return result;
+	}
+
+	@Override
+	public Pair<ERouteOption, Integer> getQuickestTravelTimeWithPanamaWaiting(@NonNull final IVessel vessel, final IPortSlot from, final IPortSlot to, int speed,
+			AvailableRouteChoices availableRouteChoices) {
+		final @NonNull Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelRouteAToB = getQuickestTravelTimeWithContingency(vessel, from, to, speed, availableRouteChoices);
+		if (quickestTravelRouteAToB.getFirst() == ERouteOption.PANAMA) {
+			int timeFromStartToCanal = panamaBookingHelper.getTravelTimeToCanal(vessel, from.getPort(), false);
+			IPort panamaEntry = getRouteOptionEntryPort(from.getPort(), ERouteOption.PANAMA);
+			IPort panamaExit = getCorrespondingRouteOptionExitPort(panamaEntry, ERouteOption.PANAMA);
+			int timeFromCanalExitToEnd = getQuickestTravelTime(vessel, panamaExit, to.getPort(), speed, AvailableRouteChoices.DIRECT_ONLY).getSecond()
+					+ routeContingencyProvider.getBufferIdleTimeInHours(to);
+			int earliestArrival = from.getTimeWindow().getInclusiveStart() + timeFromStartToCanal;
+			int latestDeparture = to.getTimeWindow().getExclusiveEnd() - timeFromCanalExitToEnd;
+
+			int quickestTravelWithPanama;
+			if (earliestArrival < latestDeparture) {
+				boolean isNorthbound = getRouteOptionDirection(from.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND;
+				int worstIdle = panamaBookingsProvider.getWorstIdleHours(vessel, earliestArrival, latestDeparture, isNorthbound);
+				quickestTravelWithPanama = timeFromStartToCanal + worstIdle + routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel) + timeFromCanalExitToEnd;
+			} else {
+				quickestTravelWithPanama = Integer.MAX_VALUE;
+			}
+			Pair<ERouteOption, Integer> travelWithoutPanama = getQuickestTravelTimeWithContingency(vessel, from, to, speed, AvailableRouteChoices.EXCLUDE_PANAMA);
+			int quickestTravelWithoutPanama = travelWithoutPanama.getSecond();
+			if (quickestTravelWithoutPanama < quickestTravelWithPanama) {
+				return travelWithoutPanama;
+			} else {
+				return Pair.of(ERouteOption.PANAMA, quickestTravelWithPanama);
+			}
+		} else {
+			return quickestTravelRouteAToB;
+		}
+
 	}
 
 	@Override

@@ -60,6 +60,7 @@ Integer = 0 | [1-9][0-9]*
 
 PARAM = @[a-zA-Z_0-9]+[a-zA-Z_][a-zA-Z_0-9]*
 VAR = \#[a-zA-Z]+[a-zA-Z_0-9]*
+DATE = [2][0][0-9][0-9]-([01][0-9]|[1-9])-([0123][0-9]|[1-9])
 
 mPositive = m[0-9][0-9]?
 mNegative = m-[1-9][0-9]?
@@ -90,6 +91,7 @@ white_space = {new_line} | [ \t\f]
 "S"           { return symbol("scurve", S); }
 "TIER"           { return symbol("tier", TIER); }
 "TIERBLEND"           { return symbol("tierblend", TIERBLEND); }
+"SWITCH"           { return symbol("switch", SWITCH); }
  
  
  "JAN" { return symbol("jan",MONTH, Month.JANUARY); }
@@ -130,6 +132,7 @@ white_space = {new_line} | [ \t\f]
 "%"               { return symbol("percent",PERCENT  ); }
 "?"               { return symbol("question",QUESTION  ); }
 {PARAM}        { return symbol("param", PARAM, yytext().replace("@","") ); }
+{DATE}        { return symbol("date", DATE, yytext()); }
 
 {VAR}        { return symbol("var", VAR, yytext().replace("#","") ); }
 m        { return symbol("m", M, Integer.valueOf(0) ); }

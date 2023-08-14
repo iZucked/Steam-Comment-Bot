@@ -42,6 +42,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspacePat
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SharedWorkspaceServiceClient;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
@@ -383,11 +384,10 @@ public class SharedScenarioUpdater {
 					update(scenariosList);
 				}
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		updateThread = new Thread() {
+		updateThread = new Thread("Team Folder Updater") {
 			@Override
 			public void run() {
 
@@ -396,12 +396,13 @@ public class SharedScenarioUpdater {
 					try {
 						refresh();
 					} catch (final IllegalStateException e1) {
+						// Hopefully we do not get here now we have the WellKnownTriggers block
 						if ("Workbench has not been created yet".equals(e1.getMessage())) {
 							// Ignore - thread started too early
 						} else {
 							e1.printStackTrace();
 						}
-					} catch (final IOException e1) {
+					} catch (final Exception e1) {
 						e1.printStackTrace();
 					} finally {
 						updateLock.unlock();
@@ -420,8 +421,7 @@ public class SharedScenarioUpdater {
 
 		// Defer the update thread start to the task executor so the task created in the
 		// #update calls at the of the method do not clash.
-		taskExecutor.submit(() -> updateThread.start());
-
+		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(() -> taskExecutor.submit(() -> updateThread.start()));
 	}
 
 	/**
