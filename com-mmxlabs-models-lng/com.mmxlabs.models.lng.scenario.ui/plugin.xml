@@ -54,6 +54,15 @@
             Import an LNG optimiser scenario from several CSV files.
          </description>
       </wizard>
+      <wizard
+            category="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
+            class="com.mmxlabs.models.lng.scenario.importWizards.ImportZIPWizard"
+            id="com.mmxlabs.models.lng.demo.importWizards.ImportZIPWizard"
+            name="Import ZIP">
+         <description>
+            Import an LNG optimiser scenario from a ZIP file.
+         </description>
+      </wizard>
    </extension>
      <extension
            point="org.eclipse.ui.exportWizards">
@@ -62,6 +71,12 @@
               class="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard"
               id="com.mmxlabs.shiplingo.platform.models.manifest.csvExportWizard"
               name="Export CSV">
+        </wizard>
+        <wizard
+              category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              class="com.mmxlabs.models.lng.scenario.exportWizards.ExportZIPScenarioWizard"
+              id="com.mmxlabs.models./lng.scenario.exportWizards.ExportZIPScenarioWizard"
+              name="Export ZIP">
         </wizard>
         <wizard
               category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
@@ -157,10 +172,15 @@
                   style="push">
             </command>
             <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportZIPScenario"
+                  label="ZIP"
+                  style="push">
+            </command>
+            <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.ImportLiNGOFileWizardHandler"
                   label=".lingo"
                   style="push">
-            </command>
+            </command> 
          </menuContribution>
          <!-- Export menu -->
          <menuContribution
@@ -171,6 +191,11 @@
                   label="CSV"
                   style="push">
             </command>
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportZIPScenario"
+                  label="ZIP"
+                  style="push">
+            </command> 
             <command
                   commandId="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
                   label=".lingo"
@@ -426,6 +451,11 @@
                name="Import Scenario from CSV">
          </command>
          <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.ImportZIPWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ImportZIPScenario"
+               name="Import Scenario from ZIP">
+         </command>
+         <command
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
                name="Export Scenario as CSV">
@@ -435,6 +465,11 @@
                id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportAllCurves"
                name="Export all curves as CSV">
          </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportZIPWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportZIPScenario"
+               name="Export Scenario as ZIP">
+         </command> 
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
                id="com.mmxlabs.models.lng.scenario.exportWizards.ExportLiNGOScenarioWizardHandler"
