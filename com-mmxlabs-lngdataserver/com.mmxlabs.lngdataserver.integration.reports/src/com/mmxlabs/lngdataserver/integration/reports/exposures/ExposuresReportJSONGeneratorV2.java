@@ -4,32 +4,12 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.exposures;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.common.exposures.ExposureEnumerations.ValueMode;
-import com.mmxlabs.lingo.reports.views.standard.exposures.ExposureReportView.AssetType;
-import com.mmxlabs.lingo.reports.views.standard.exposures.ExposureDetailReportView;
-import com.mmxlabs.lingo.reports.views.standard.exposures.ExposuresTransformer;
-import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData;
-import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.pricing.CommodityCurve;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -75,12 +55,12 @@ public class ExposuresReportJSONGeneratorV2 {
 				}
 			);
 		}
-		output.clear();
-		output.add(new ExposuresReportModelV2());
-		output.addAll(map.values());
-
+		output = new ArrayList<>();
 		// Add headers
-			// TODO
+			// TODO Address sorting in datahub
+			// ie. Sorting by a column will break the order of header rows
+			// need to add datahub support first for this feature
+
 		return output;
 	}
 }

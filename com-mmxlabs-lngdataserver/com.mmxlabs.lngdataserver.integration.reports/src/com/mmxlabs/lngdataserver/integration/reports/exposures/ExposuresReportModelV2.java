@@ -4,24 +4,11 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.exposures;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
-
-import com.google.common.io.Files;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator;
-import com.mmxlabs.lingo.reports.modelbased.SchemaGenerator.Mode;
 import com.mmxlabs.lingo.reports.modelbased.annotations.ColumnName;
-import com.mmxlabs.lingo.reports.modelbased.annotations.HubColumnStyle;
-import com.mmxlabs.lingo.reports.modelbased.annotations.HubType;
-import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData;
-import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
