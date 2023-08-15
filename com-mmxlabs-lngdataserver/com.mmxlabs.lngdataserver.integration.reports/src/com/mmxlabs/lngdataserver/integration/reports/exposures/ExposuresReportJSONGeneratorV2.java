@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,6 @@ public class ExposuresReportJSONGeneratorV2 {
 
 	public static List<ExposuresReportModelV2> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider) {		
 		List<ExposuresReportModelV2> output = new ArrayList<>();
-		output.add(new ExposuresReportModelV2());
 
 		// Raw Exposure Information
 		final List<SlotAllocation> slotAllocations = new LinkedList<>();
@@ -57,8 +57,30 @@ public class ExposuresReportJSONGeneratorV2 {
 		schedule.getPaperDealAllocations().forEach(paperDealAllocations::add);
 		output.addAll(ExposuresReportModelV2.doTransformPaper(paperDealAllocations));
 
-		// Reduce and add headers
-		// TODO
+		// Join on
+			// Deal, Index, Contract Month, Units (Expected equal)
+			// Minimise Hedge Period Start
+			// Maximise Hedge Period End
+			// Sum volume and currency value
+		HashMap<String, ExposuresReportModelV2> map = new HashMap<>();
+		for (ExposuresReportModelV2 model : output) {
+			String key = model.deal + model.marketIndex + model.contractMonth + model.currencyUnit + model.volumeUnit;
+			map.merge(key, model,
+				(v1, v2) -> {
+					v1.hedgeStart = v1.hedgeStart.compareTo(v2.hedgeStart) <= 0 ? v1.hedgeStart : v2.hedgeStart;
+					v1.hedgeEnd = v1.hedgeEnd.compareTo(v2.hedgeEnd) > 0 ? v1.hedgeEnd : v2.hedgeEnd;
+					v1.currencyValue += v2.currencyValue;
+					v1.volume += v2.volume;
+					return v1;
+				}
+			);
+		}
+		output.clear();
+		output.add(new ExposuresReportModelV2());
+		output.addAll(map.values());
+
+		// Add headers
+			// TODO
 		return output;
 	}
 }
