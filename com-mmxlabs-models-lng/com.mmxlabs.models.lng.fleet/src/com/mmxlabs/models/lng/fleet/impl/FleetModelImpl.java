@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -37,6 +38,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getMMXVesselDBVersion <em>MMX Vessel DB Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getCiiReferences <em>Cii References</em>}</li>
  * </ul>
  *
  * @generated
@@ -121,6 +123,16 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * @ordered
 	 */
 	protected String mmxVesselDBVersion = MMX_VESSEL_DB_VERSION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCiiReferences() <em>Cii References</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCiiReferences()
+	 * @generated
+	 * @ordered
+	 */
+	protected CIIReferenceData ciiReferences;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -344,6 +356,51 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * @generated
 	 */
 	@Override
+	public CIIReferenceData getCiiReferences() {
+		return ciiReferences;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCiiReferences(CIIReferenceData newCiiReferences, NotificationChain msgs) {
+		CIIReferenceData oldCiiReferences = ciiReferences;
+		ciiReferences = newCiiReferences;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__CII_REFERENCES, oldCiiReferences, newCiiReferences);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCiiReferences(CIIReferenceData newCiiReferences) {
+		if (newCiiReferences != ciiReferences) {
+			NotificationChain msgs = null;
+			if (ciiReferences != null)
+				msgs = ((InternalEObject)ciiReferences).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__CII_REFERENCES, null, msgs);
+			if (newCiiReferences != null)
+				msgs = ((InternalEObject)newCiiReferences).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - FleetPackage.FLEET_MODEL__CII_REFERENCES, null, msgs);
+			msgs = basicSetCiiReferences(newCiiReferences, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__CII_REFERENCES, newCiiReferences, newCiiReferences));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FleetPackage.FLEET_MODEL__VESSELS:
@@ -358,6 +415,8 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return basicSetVesselGroupVersionRecord(null, msgs);
 			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
 				return basicSetBunkerFuelsVersionRecord(null, msgs);
+			case FleetPackage.FLEET_MODEL__CII_REFERENCES:
+				return basicSetCiiReferences(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -384,6 +443,8 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return getBunkerFuelsVersionRecord();
 			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
 				return getMMXVesselDBVersion();
+			case FleetPackage.FLEET_MODEL__CII_REFERENCES:
+				return getCiiReferences();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -421,6 +482,9 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
 				setMMXVesselDBVersion((String)newValue);
 				return;
+			case FleetPackage.FLEET_MODEL__CII_REFERENCES:
+				setCiiReferences((CIIReferenceData)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -454,6 +518,9 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
 				setMMXVesselDBVersion(MMX_VESSEL_DB_VERSION_EDEFAULT);
 				return;
+			case FleetPackage.FLEET_MODEL__CII_REFERENCES:
+				setCiiReferences((CIIReferenceData)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -480,6 +547,8 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return bunkerFuelsVersionRecord != null;
 			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
 				return MMX_VESSEL_DB_VERSION_EDEFAULT == null ? mmxVesselDBVersion != null : !MMX_VESSEL_DB_VERSION_EDEFAULT.equals(mmxVesselDBVersion);
+			case FleetPackage.FLEET_MODEL__CII_REFERENCES:
+				return ciiReferences != null;
 		}
 		return super.eIsSet(featureID);
 	}

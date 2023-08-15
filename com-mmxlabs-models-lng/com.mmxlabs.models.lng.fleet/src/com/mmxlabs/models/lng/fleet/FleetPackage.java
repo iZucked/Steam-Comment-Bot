@@ -162,13 +162,22 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__MMX_VESSEL_DB_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Cii References</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__CII_REFERENCES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -888,6 +897,199 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_ROUTE_PARAMETERS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.CIIReferenceDataImpl <em>CII Reference Data</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.CIIReferenceDataImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCIIReferenceData()
+	 * @generated
+	 */
+	int CII_REFERENCE_DATA = 7;
+
+	/**
+	 * The feature id for the '<em><b>Cii Grade Boundaries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REFERENCE_DATA__CII_GRADE_BOUNDARIES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Emissions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REFERENCE_DATA__FUEL_EMISSIONS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Reduction Factors</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REFERENCE_DATA__REDUCTION_FACTORS = 2;
+
+	/**
+	 * The number of structural features of the '<em>CII Reference Data</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REFERENCE_DATA_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.CIIGradeBoundaryImpl <em>CII Grade Boundary</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.CIIGradeBoundaryImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCIIGradeBoundary()
+	 * @generated
+	 */
+	int CII_GRADE_BOUNDARY = 8;
+
+	/**
+	 * The feature id for the '<em><b>Dwt Upper Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__DWT_UPPER_LIMIT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Grade</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Upper Limit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__UPPER_LIMIT = 2;
+
+	/**
+	 * The number of structural features of the '<em>CII Grade Boundary</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY_FEATURE_COUNT = 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelEmissionReferenceImpl <em>Fuel Emission Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.FuelEmissionReferenceImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelEmissionReference()
+	 * @generated
+	 */
+	int FUEL_EMISSION_REFERENCE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_EMISSION_REFERENCE__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_EMISSION_REFERENCE__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Iso Reference</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_EMISSION_REFERENCE__ISO_REFERENCE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Cf</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_EMISSION_REFERENCE__CF = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Fuel Emission Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUEL_EMISSION_REFERENCE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.CIIReductionFactorImpl <em>CII Reduction Factor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.CIIReductionFactorImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCIIReductionFactor()
+	 * @generated
+	 */
+	int CII_REDUCTION_FACTOR = 10;
+
+	/**
+	 * The feature id for the '<em><b>Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REDUCTION_FACTOR__YEAR = 0;
+
+	/**
+	 * The feature id for the '<em><b>Percentage</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REDUCTION_FACTOR__PERCENTAGE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Remark</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REDUCTION_FACTOR__REMARK = 2;
+
+	/**
+	 * The number of structural features of the '<em>CII Reduction Factor</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_REDUCTION_FACTOR_FEATURE_COUNT = 3;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.Vessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1403,6 +1605,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getFleetModel_MMXVesselDBVersion();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.fleet.FleetModel#getCiiReferences <em>Cii References</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Cii References</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getCiiReferences()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_CiiReferences();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1639,6 +1852,167 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselRouteParameters_BallastNBORate();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.CIIReferenceData <em>CII Reference Data</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>CII Reference Data</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReferenceData
+	 * @generated
+	 */
+	EClass getCIIReferenceData();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.CIIReferenceData#getCiiGradeBoundaries <em>Cii Grade Boundaries</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cii Grade Boundaries</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReferenceData#getCiiGradeBoundaries()
+	 * @see #getCIIReferenceData()
+	 * @generated
+	 */
+	EReference getCIIReferenceData_CiiGradeBoundaries();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.CIIReferenceData#getFuelEmissions <em>Fuel Emissions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fuel Emissions</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReferenceData#getFuelEmissions()
+	 * @see #getCIIReferenceData()
+	 * @generated
+	 */
+	EReference getCIIReferenceData_FuelEmissions();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.CIIReferenceData#getReductionFactors <em>Reduction Factors</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Reduction Factors</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReferenceData#getReductionFactors()
+	 * @see #getCIIReferenceData()
+	 * @generated
+	 */
+	EReference getCIIReferenceData_ReductionFactors();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary <em>CII Grade Boundary</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>CII Grade Boundary</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary
+	 * @generated
+	 */
+	EClass getCIIGradeBoundary();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getDwtUpperLimit <em>Dwt Upper Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dwt Upper Limit</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getDwtUpperLimit()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_DwtUpperLimit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGrade <em>Grade</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGrade()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_Grade();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getUpperLimit <em>Upper Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Upper Limit</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getUpperLimit()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_UpperLimit();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelEmissionReference <em>Fuel Emission Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fuel Emission Reference</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FuelEmissionReference
+	 * @generated
+	 */
+	EClass getFuelEmissionReference();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.FuelEmissionReference#getIsoReference <em>Iso Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Iso Reference</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FuelEmissionReference#getIsoReference()
+	 * @see #getFuelEmissionReference()
+	 * @generated
+	 */
+	EAttribute getFuelEmissionReference_IsoReference();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.FuelEmissionReference#getCf <em>Cf</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cf</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FuelEmissionReference#getCf()
+	 * @see #getFuelEmissionReference()
+	 * @generated
+	 */
+	EAttribute getFuelEmissionReference_Cf();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.CIIReductionFactor <em>CII Reduction Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>CII Reduction Factor</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReductionFactor
+	 * @generated
+	 */
+	EClass getCIIReductionFactor();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIReductionFactor#getYear <em>Year</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Year</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReductionFactor#getYear()
+	 * @see #getCIIReductionFactor()
+	 * @generated
+	 */
+	EAttribute getCIIReductionFactor_Year();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIReductionFactor#getPercentage <em>Percentage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Percentage</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReductionFactor#getPercentage()
+	 * @see #getCIIReductionFactor()
+	 * @generated
+	 */
+	EAttribute getCIIReductionFactor_Percentage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIReductionFactor#getRemark <em>Remark</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Remark</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReductionFactor#getRemark()
+	 * @see #getCIIReductionFactor()
+	 * @generated
+	 */
+	EAttribute getCIIReductionFactor_Remark();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselGroup <em>Vessel Group</em>}'.
@@ -2064,6 +2438,14 @@ public interface FleetPackage extends EPackage {
 		EAttribute FLEET_MODEL__MMX_VESSEL_DB_VERSION = eINSTANCE.getFleetModel_MMXVesselDBVersion();
 
 		/**
+		 * The meta object literal for the '<em><b>Cii References</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__CII_REFERENCES = eINSTANCE.getFleetModel_CiiReferences();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2246,6 +2628,134 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_ROUTE_PARAMETERS__BALLAST_NBO_RATE = eINSTANCE.getVesselRouteParameters_BallastNBORate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.CIIReferenceDataImpl <em>CII Reference Data</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.CIIReferenceDataImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCIIReferenceData()
+		 * @generated
+		 */
+		EClass CII_REFERENCE_DATA = eINSTANCE.getCIIReferenceData();
+
+		/**
+		 * The meta object literal for the '<em><b>Cii Grade Boundaries</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CII_REFERENCE_DATA__CII_GRADE_BOUNDARIES = eINSTANCE.getCIIReferenceData_CiiGradeBoundaries();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Emissions</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CII_REFERENCE_DATA__FUEL_EMISSIONS = eINSTANCE.getCIIReferenceData_FuelEmissions();
+
+		/**
+		 * The meta object literal for the '<em><b>Reduction Factors</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CII_REFERENCE_DATA__REDUCTION_FACTORS = eINSTANCE.getCIIReferenceData_ReductionFactors();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.CIIGradeBoundaryImpl <em>CII Grade Boundary</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.CIIGradeBoundaryImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCIIGradeBoundary()
+		 * @generated
+		 */
+		EClass CII_GRADE_BOUNDARY = eINSTANCE.getCIIGradeBoundary();
+
+		/**
+		 * The meta object literal for the '<em><b>Dwt Upper Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__DWT_UPPER_LIMIT = eINSTANCE.getCIIGradeBoundary_DwtUpperLimit();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE = eINSTANCE.getCIIGradeBoundary_Grade();
+
+		/**
+		 * The meta object literal for the '<em><b>Upper Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__UPPER_LIMIT = eINSTANCE.getCIIGradeBoundary_UpperLimit();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelEmissionReferenceImpl <em>Fuel Emission Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.FuelEmissionReferenceImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getFuelEmissionReference()
+		 * @generated
+		 */
+		EClass FUEL_EMISSION_REFERENCE = eINSTANCE.getFuelEmissionReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Iso Reference</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_EMISSION_REFERENCE__ISO_REFERENCE = eINSTANCE.getFuelEmissionReference_IsoReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Cf</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUEL_EMISSION_REFERENCE__CF = eINSTANCE.getFuelEmissionReference_Cf();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.CIIReductionFactorImpl <em>CII Reduction Factor</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.CIIReductionFactorImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getCIIReductionFactor()
+		 * @generated
+		 */
+		EClass CII_REDUCTION_FACTOR = eINSTANCE.getCIIReductionFactor();
+
+		/**
+		 * The meta object literal for the '<em><b>Year</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_REDUCTION_FACTOR__YEAR = eINSTANCE.getCIIReductionFactor_Year();
+
+		/**
+		 * The meta object literal for the '<em><b>Percentage</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_REDUCTION_FACTOR__PERCENTAGE = eINSTANCE.getCIIReductionFactor_Percentage();
+
+		/**
+		 * The meta object literal for the '<em><b>Remark</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_REDUCTION_FACTOR__REMARK = eINSTANCE.getCIIReductionFactor_Remark();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.
