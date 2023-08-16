@@ -30,6 +30,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	protected final ScheduleCanvas canvas;
 	protected final IScheduleEventProvider<T> eventProvider;
 	private IElementComparer comparer;
+	private ISelection selection;
 	
 	private T input;
 	private Map<Object, ScheduleEvent> internalDataMap = new HashMap<>();
@@ -99,7 +100,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 
 	@Override
 	public ISelection getSelection() {
-		return new StructuredSelection(canvas.getSelectedEvents().stream().map(e -> e.getData()).toList(), null);
+		return selection;
 	}
 
 	@Override
@@ -111,22 +112,24 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	@Override
 	public void setSelection(ISelection selection, boolean reveal) {
 		Control control = getControl();
-		if (control == null || control.isDisposed()) {
+		if (control == null || control.isDisposed() || selection.equals(this.selection)) {
 			return;
 		}
-		setSelectionToWidget(selection, reveal);
+		
+		this.selection = selection;
+		setSelectionToCanvas(selection, reveal);
 		fireSelectionChanged(new SelectionChangedEvent(this, selection));
 	}
 	
-	private void setSelectionToWidget(ISelection selection, boolean reveal) {
+	private void setSelectionToCanvas(ISelection selection, boolean reveal) {
 		if (selection instanceof IStructuredSelection ss) {
-			setSelectionToWidget(ss.toList(), reveal);
+			setSelectionToCanvas(ss.toList(), reveal);
 		} else {
-			setSelectionToWidget((List<?>) null, reveal);
+			setSelectionToCanvas((List<?>) null, reveal);
 		}
 	}
 
-	private void setSelectionToWidget(List<?> l, boolean reveal) {
+	private void setSelectionToCanvas(List<?> l, boolean reveal) {
 		List<ScheduleEvent> selectedEvents = new ArrayList<>(l.size());
 
 		for (final var o: l) {
@@ -161,8 +164,8 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 			@Override
 			public void eventSelected(ScheduleEvent event, Collection<ScheduleEvent> allSelectedEvents, MouseEvent me) {
 				final List<Object> selectedObjects = allSelectedEvents.stream().map(e -> e.getData()).toList();
-				final StructuredSelection selection = new StructuredSelection(selectedObjects, null);
-				setSelection(selection);
+				final StructuredSelection s = new StructuredSelection(selectedObjects, comparer);
+				setSelection(s);
 			}
 		};
 		

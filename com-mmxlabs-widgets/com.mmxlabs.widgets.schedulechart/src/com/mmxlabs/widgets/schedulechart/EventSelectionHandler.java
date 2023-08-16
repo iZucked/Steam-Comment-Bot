@@ -1,6 +1,5 @@
 package com.mmxlabs.widgets.schedulechart;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,11 +10,13 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
 
 public class EventSelectionHandler implements MouseListener {
+	
+	private ScheduleCanvas canvas;
+	private ScheduleCanvasState canvasState;
 
-	private final ScheduleCanvas canvas;
-
-	public EventSelectionHandler(ScheduleCanvas canvas) {
+	public EventSelectionHandler(ScheduleCanvas canvas, ScheduleCanvasState canvasState) {
 		this.canvas = canvas;
+		this.canvasState = canvasState;
 		canvas.addMouseListener(this);
 	}
 
@@ -41,7 +42,7 @@ public class EventSelectionHandler implements MouseListener {
 	}
 	
 	Optional<ScheduleEvent> findClickedEvent(MouseEvent e) {
-		final List<DrawableScheduleChartRow> drawnRows = canvas.getLastDrawnContent();
+		final List<DrawableScheduleChartRow> drawnRows = canvasState.getLastDrawnContent();
 		for (final DrawableScheduleChartRow row: drawnRows) {
 			if (row.getBounds().contains(e.x, e.y)) {
 				for (final DrawableScheduleEvent evt: row.getLastDrawnEvents()) {
