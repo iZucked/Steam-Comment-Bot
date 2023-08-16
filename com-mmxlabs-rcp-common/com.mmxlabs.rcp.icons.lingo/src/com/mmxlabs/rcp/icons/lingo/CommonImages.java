@@ -47,6 +47,7 @@ public final class CommonImages {
 		SteadyArrow(8, "icons/6x8/steady_arrow.png"), //
 		RedPlus(8, "icons/6x8/red_plus.png"), //
 		GreenLine(8, "icons/6x8/green_line.png"), //
+		BlackDot(8, "icons/6x8/black_dot.png"), //
 		
 		// 8x8
 		Pin_8(8, "icons/8x8/pin.png"), //

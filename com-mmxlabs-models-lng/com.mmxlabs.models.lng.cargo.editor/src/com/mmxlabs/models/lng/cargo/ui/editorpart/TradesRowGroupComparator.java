@@ -4,7 +4,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
 import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 
 public class TradesRowGroupComparator extends ViewerComparator {
 	private final ViewerComparator superViewerComparator;
@@ -14,12 +13,12 @@ public class TradesRowGroupComparator extends ViewerComparator {
 	}
 	@Override
 	public int compare(final Viewer viewer, final Object e1, final Object e2) {
-		GroupData g1 = null;
-		GroupData g2 = null;
-		if (e1 instanceof final TradesRow tradesRow && tradesRow.getGroup() instanceof GroupData group) {
+		TradesRowGroup g1 = null;
+		TradesRowGroup g2 = null;
+		if (e1 instanceof final TradesRow tradesRow && tradesRow.getGroup() instanceof TradesRowGroup group) {
 			g1 = group;
 		}
-		if (e2 instanceof final TradesRow tradesRow && tradesRow.getGroup() instanceof GroupData group) {
+		if (e2 instanceof final TradesRow tradesRow && tradesRow.getGroup() instanceof TradesRowGroup group) {
 			g2 = group;
 		}
 		if (g1 == g2) {

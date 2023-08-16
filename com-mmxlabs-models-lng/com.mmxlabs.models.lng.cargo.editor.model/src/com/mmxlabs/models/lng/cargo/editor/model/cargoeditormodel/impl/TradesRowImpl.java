@@ -609,6 +609,29 @@ public class TradesRowImpl extends EObjectImpl implements TradesRow {
 	 * @generated
 	 */
 	@Override
+	public boolean isPrimaryRecord() {
+		return primaryRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPrimaryRecord(boolean newPrimaryRecord) {
+		boolean oldPrimaryRecord = primaryRecord;
+		primaryRecord = newPrimaryRecord;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoEditorModelPackage.TRADES_ROW__PRIMARY_RECORD, oldPrimaryRecord, primaryRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public SlotContractParams getDischargeSlotContractParams() {
 		if (dischargeSlotContractParams != null && dischargeSlotContractParams.eIsProxy()) {
 			InternalEObject oldDischargeSlotContractParams = (InternalEObject)dischargeSlotContractParams;
@@ -643,30 +666,6 @@ public class TradesRowImpl extends EObjectImpl implements TradesRow {
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoEditorModelPackage.TRADES_ROW__DISCHARGE_SLOT_CONTRACT_PARAMS, oldDischargeSlotContractParams, dischargeSlotContractParams));
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isPrimaryRecord() {
-		return primaryRecord;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setPrimaryRecord(boolean newPrimaryRecord) {
-		boolean oldPrimaryRecord = primaryRecord;
-		primaryRecord = newPrimaryRecord;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoEditorModelPackage.TRADES_ROW__PRIMARY_RECORD, oldPrimaryRecord, primaryRecord));
-	}
-	
-	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -781,6 +780,7 @@ public class TradesRowImpl extends EObjectImpl implements TradesRow {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public EObject getAssignableObject() {
 		if (this.loadSlot != null && this.loadSlot.isDESPurchase()) {
 			return this.loadSlot;
@@ -790,6 +790,7 @@ public class TradesRowImpl extends EObjectImpl implements TradesRow {
 		}
 		return this.cargo;
 	}
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

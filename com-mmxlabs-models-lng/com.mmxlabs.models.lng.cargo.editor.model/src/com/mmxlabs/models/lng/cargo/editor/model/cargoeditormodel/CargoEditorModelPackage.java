@@ -266,6 +266,7 @@ public interface CargoEditorModelPackage extends EPackage {
 	 */
 	int TRADES_TABLE_ROOT_OPERATION_COUNT = 0;
 
+
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow <em>Trades Row</em>}'.
 	 * <!-- begin-user-doc -->
@@ -376,17 +377,6 @@ public interface CargoEditorModelPackage extends EPackage {
 	EReference getTradesRow_LoadSlotContractParams();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Slot Contract Params</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#getDischargeSlotContractParams()
-	 * @see #getTradesRow()
-	 * @generated
-	 */
-	EReference getTradesRow_DischargeSlotContractParams();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#isPrimaryRecord <em>Primary Record</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -396,6 +386,17 @@ public interface CargoEditorModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTradesRow_PrimaryRecord();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Discharge Slot Contract Params</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#getDischargeSlotContractParams()
+	 * @see #getTradesRow()
+	 * @generated
+	 */
+	EReference getTradesRow_DischargeSlotContractParams();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#getMarketAllocation <em>Market Allocation</em>}'.
@@ -578,20 +579,20 @@ public interface CargoEditorModelPackage extends EPackage {
 		EReference TRADES_ROW__LOAD_SLOT_CONTRACT_PARAMS = eINSTANCE.getTradesRow_LoadSlotContractParams();
 
 		/**
-		 * The meta object literal for the '<em><b>Discharge Slot Contract Params</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TRADES_ROW__DISCHARGE_SLOT_CONTRACT_PARAMS = eINSTANCE.getTradesRow_DischargeSlotContractParams();
-
-		/**
 		 * The meta object literal for the '<em><b>Primary Record</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute TRADES_ROW__PRIMARY_RECORD = eINSTANCE.getTradesRow_PrimaryRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Slot Contract Params</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TRADES_ROW__DISCHARGE_SLOT_CONTRACT_PARAMS = eINSTANCE.getTradesRow_DischargeSlotContractParams();
 
 		/**
 		 * The meta object literal for the '<em><b>Market Allocation</b></em>' reference feature.

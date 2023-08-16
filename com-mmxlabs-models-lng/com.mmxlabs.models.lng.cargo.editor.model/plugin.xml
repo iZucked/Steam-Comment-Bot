@@ -24,4 +24,11 @@
             genModel="model/cargoeditormodel.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated cargoeditormodel -->
+      <package
+            uri="http://www.mmxlabs.com/models/lng/cargoeditormodel/1/"
+            class="com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage"
+            genModel="model/cargoeditormodel.genmodel"/>
+   </extension>
 </plugin>

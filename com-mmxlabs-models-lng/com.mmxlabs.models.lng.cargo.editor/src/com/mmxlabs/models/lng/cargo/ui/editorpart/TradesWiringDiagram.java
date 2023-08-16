@@ -20,14 +20,12 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireData;
 
@@ -46,8 +44,8 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireD
  */
 public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener, KeyListener {
 
+	private TradesWiringColourScheme colourScheme;
 
-	public static final TradesWiringColourScheme COLOUR_SCHEME = new TradesWiringColourScheme(); 
 
 	/**
 	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j. If the ith element is -1, the ith element is not connected to anywhere.
@@ -75,7 +73,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * @param parent
 	 * @param style
 	 */
-	public TradesWiringDiagram(final Canvas canvas) {
+	public TradesWiringDiagram(final Canvas canvas, TradesWiringColourScheme colourScheme) {
 		// public WiringDiagram(final Composite parent, int style) {
 		// super(parent, style);
 		this.canvas = canvas;
@@ -83,6 +81,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		canvas.addMouseListener(this);
 		canvas.addMouseMoveListener(this);
 		canvas.addKeyListener(this);
+		this.colourScheme = colourScheme;
 	}
 
 	public int getTerminalSize() {
@@ -150,7 +149,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			// Draw terminal background discs
 			final TradesRow row = root.getRows().get(i);
-			graphics.setBackground(COLOUR_SCHEME.getWhite());
+			graphics.setBackground(colourScheme.getWhite());
 			// Left
 			if (row.getLoadSlot() != null) {
 				final int extraRadius = 1;
@@ -164,20 +163,20 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				extraRadius = 1;
 				final int x = ca.x + ca.width - 2 * terminalSize - extraRadius / 2;
 				final int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
-				graphics.setBackground(COLOUR_SCHEME.getWhite());
+				graphics.setBackground(colourScheme.getWhite());
 				graphics.fillOval(x - 2, y - 2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
 			}
 			rawI++;
 		}
 
-		graphics.setBackground(COLOUR_SCHEME.getSystemWhite());
+		graphics.setBackground(colourScheme.getSystemWhite());
 		// Fill whole area - not for use in a table
 		// graphics.fillRectangle(0, 0, ca.width, ca.height);
-		graphics.setForeground(COLOUR_SCHEME.getSystemBlack());
+		graphics.setForeground(colourScheme.getSystemBlack());
 		// graphics.setLineWidth(2);
 
 		// draw paths
-		for (final GroupData groupData : root.getGroups()) {
+		for (final TradesRowGroup groupData : root.getGroups()) {
 			for (final WireData wire : groupData.getWires()) {
 				final int unsortedSource;
 				if (wire.isBracket) {
@@ -267,7 +266,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			final float startMid = terminalPositions.get(sortedSource);
 			graphics.setLineDash(null);
-			graphics.setForeground(COLOUR_SCHEME.getBlack());
+			graphics.setForeground(colourScheme.getBlack());
 			if (row.getLoadSlot() != null && row.getLoadSlot().getCargo() == null && row.getLoadSlot().isLocked()) {// && row.loadSlot.isCancelled()) {
 				// Draw wire - offset by ca.x to as x pos is relative to left hand side
 				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width / 2 - 4, startMid);
@@ -298,7 +297,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				// move to mouse, path to right point
 				path = makeConnector(e.display, dragX, dragY, ca.x + ca.width - 1.5f * terminalSize, mid);
 			}
-			graphics.setForeground(COLOUR_SCHEME.getSystemDarkRed());
+			graphics.setForeground(colourScheme.getSystemDarkRed());
 			graphics.drawPath(path);
 			path.dispose();
 		}
@@ -306,7 +305,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		graphics.setClipping(ca);
 
 		// draw terminal blobs
-		graphics.setForeground(COLOUR_SCHEME.getSystemBlack());
+		graphics.setForeground(colourScheme.getSystemBlack());
 		graphics.setLineWidth(borderWidth);
 		rawI = 0;
 		for (final float midpoint : terminalPositions) {
@@ -320,29 +319,29 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			final TradesRow row = root.getRows().get(i);
 			// Draw line for keep-open positions
 			if (row.getLoadSlot() != null && row.getLoadSlot().getCargo() == null && row.getLoadSlot().isLocked()) {// && row.loadSlot.isCancelled()) {
-				drawCross(true, COLOUR_SCHEME.getBlack(), ca, graphics, midpoint);
+				drawCross(true, colourScheme.getBlack(), ca, graphics, midpoint);
 			}
 			// Draw left hand terminal
 			if (row.getLoadSlot() != null) {
-				drawTerminal(true, row.getLoadSlot().isDESPurchase(), COLOUR_SCHEME.getLoadTerminalColour(row), row.getLoadSlot().isOptional(), row.getLoadSlot() instanceof SpotSlot, ca, graphics, midpoint);
+				drawTerminal(true, row.getLoadSlot().isDESPurchase(), colourScheme.getLoadTerminalColour(row), row.getLoadSlot().isOptional(), row.getLoadSlot() instanceof SpotSlot, ca, graphics, midpoint);
 			}
 			// Draw line for cancelled positions
 			if (row.getLoadSlot() != null && row.getLoadSlot().isCancelled()) {
-				drawDiagonalCross(true, COLOUR_SCHEME.getBlack(), ca, graphics, midpoint);
+				drawDiagonalCross(true, colourScheme.getBlack(), ca, graphics, midpoint);
 			}
 
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
 			if (row.getDischargeSlot() != null && row.getDischargeSlot().getCargo() == null && row.getDischargeSlot().isLocked()) {// && row.dischargeSlot.isCancelled()) {
-				drawCross(false, COLOUR_SCHEME.getBlack(), ca, graphics, midpoint);
+				drawCross(false, colourScheme.getBlack(), ca, graphics, midpoint);
 			}
 			// Draw line for keep-open positions
 			if (row.getDischargeSlot() != null) {
-				drawTerminal(false, !row.getDischargeSlot().isFOBSale(), COLOUR_SCHEME.getDischargeTerminalColour(row), row.getDischargeSlot().isOptional(), row.getDischargeSlot() instanceof SpotSlot, ca, graphics, midpoint);
+				drawTerminal(false, !row.getDischargeSlot().isFOBSale(), colourScheme.getDischargeTerminalColour(row), row.getDischargeSlot().isOptional(), row.getDischargeSlot() instanceof SpotSlot, ca, graphics, midpoint);
 			}
 			// Draw right hand terminal
 			if (row.getDischargeSlot() != null && row.getDischargeSlot().isCancelled()) {
-				drawDiagonalCross(false, COLOUR_SCHEME.getBlack(), ca, graphics, midpoint);
+				drawDiagonalCross(false, colourScheme.getBlack(), ca, graphics, midpoint);
 			}
 			rawI++;
 		}
@@ -350,18 +349,19 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	private void drawTerminal(final boolean isLeft, final boolean hollow, Color terminalColour, final boolean isOptional, final boolean isSpot, final Rectangle ca, final GC graphics,
 			final float midpoint) {
-		Color outlineColour = COLOUR_SCHEME.getGreen();
+		Color outlineColour = colourScheme.getGreen();
 		Color fillColour = terminalColour;
+
 		// make non-shipped a bit bigger, but hollow
 		final int extraRadius = 1;
 		if (isSpot) {
-			terminalColour = COLOUR_SCHEME.getGrey();
-			outlineColour = COLOUR_SCHEME.getGrey();
-			fillColour = COLOUR_SCHEME.getLightGrey();
+			terminalColour = colourScheme.getGrey();
+			outlineColour = colourScheme.getGrey();
+			fillColour = colourScheme.getLightGrey();
 		}
 		if (hollow) {
 			outlineColour = terminalColour;
-			fillColour = COLOUR_SCHEME.getSystemWhite();
+			fillColour = colourScheme.getSystemWhite();
 		}
 
 		graphics.setLineWidth(2);
@@ -372,13 +372,13 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			x = ca.x + ca.width - 2 * terminalSize - extraRadius / 2;
 		}
 		int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
-		graphics.setForeground(terminalColour == COLOUR_SCHEME.getInvalidTerminalColour() ? COLOUR_SCHEME.getInvalidTerminalColour() : outlineColour);
+		graphics.setForeground(terminalColour == colourScheme.getInvalidTerminalColour() ? colourScheme.getInvalidTerminalColour() : outlineColour);
 		graphics.setBackground(fillColour);
 		graphics.fillOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
 		graphics.drawOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
 		// draw internal dot for optional slots
 		if (isOptional && !isSpot) {
-			graphics.setBackground(COLOUR_SCHEME.getGreen());
+			graphics.setBackground(colourScheme.getGreen());
 			y = (int) midpoint - (terminalSize / 2) + 3;
 			if (isLeft) {
 				graphics.fillOval(ca.x + terminalSize + 4, y, 4, 4);
@@ -663,5 +663,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	public void dispose() {
 		rootData = null;
+		colourScheme = null;
 	}
 }

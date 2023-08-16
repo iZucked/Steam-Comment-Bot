@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
@@ -8,37 +9,44 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 
 public class TradesWiringColourScheme {
-	public TradesWiringColourScheme() {
-		super();
+	public TradesWiringColourScheme(LocalResourceManager lrm) {;
+		darkGrey = lrm.createColor(DARK_GREY_RGB);
+		green = lrm.createColor(GREEN_RGB);
+		lightGreen = lrm.createColor(LIGHT_GREEN_RGB);
+		lightGrey = lrm.createColor(LIGHT_GREY_RGB);
+		grey = lrm.createColor(GREY_RGB);
+		rewirableColour = getDarkGrey();
+		validTerminalColour = getLightGreen();
 	}
-
+	
+	
 	private final Color invalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 	private final Color invalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
-	private final Color darkGrey = new Color(Display.getDefault(), new RGB(64, 64, 64));
-	private final Color rewirableColour = getDarkGrey();
-	private final Color fixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-	private final Color green = new Color(Display.getCurrent(), new RGB(0, 180, 50));
-	private final Color lightGreen = new Color(Display.getCurrent(), new RGB(100, 255, 100));
-	private final Color white = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-	private final Color lightGrey = new Color(Display.getCurrent(), new RGB(240, 240, 240));
-	private final Color grey = new Color(Display.getCurrent(), new RGB(200, 200, 200));
 	private final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-	private final Color validTerminalColour = getLightGreen();
+	private final Color fixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+	private final Color white = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+	
+	private Color darkGrey;
+	private Color green;
+	private Color lightGreen;
+	private Color lightGrey;
+	private Color grey;
+	
+	private static final RGB DARK_GREY_RGB = new RGB(64, 64, 64);
+	private static final RGB GREEN_RGB = new RGB(0, 180, 50);
+	private static final RGB LIGHT_GREEN_RGB = new RGB(100, 255, 100);
+	private static final RGB LIGHT_GREY_RGB = new RGB(240, 240, 240);
+	private static final RGB GREY_RGB = new RGB(200, 200, 200);
+	
+	private Color rewirableColour = getDarkGrey();
+	private Color validTerminalColour = getLightGreen();
 
 	public Color getDischargeTerminalColour(TradesRow tradesRow) {
-		if (tradesRow.isDischargeTerminalValid()) {
-			return getValidTerminalColour();
-		} else {
-			return getInvalidTerminalColour();
-		}
+		return getTerminalColour(tradesRow.isDischargeTerminalValid());
 	}
 
 	public Color getLoadTerminalColour(TradesRow tradesRow) {
-		if (tradesRow.isLoadTerminalValid()) {
-			return getValidTerminalColour();
-		} else {
-			return getInvalidTerminalColour();
-		}
+		return getTerminalColour(tradesRow.isLoadTerminalValid());
 	}
 
 	public Color getTerminalColour(boolean valid) {

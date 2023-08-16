@@ -237,28 +237,6 @@ public interface TradesRow extends EObject {
 	void setLoadSlotContractParams(SlotContractParams value);
 
 	/**
-	 * Returns the value of the '<em><b>Discharge Slot Contract Params</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Discharge Slot Contract Params</em>' reference.
-	 * @see #setDischargeSlotContractParams(SlotContractParams)
-	 * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage#getTradesRow_DischargeSlotContractParams()
-	 * @model
-	 * @generated
-	 */
-	SlotContractParams getDischargeSlotContractParams();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discharge Slot Contract Params</em>' reference.
-	 * @see #getDischargeSlotContractParams()
-	 * @generated
-	 */
-	void setDischargeSlotContractParams(SlotContractParams value);
-
-	/**
 	 * Returns the value of the '<em><b>Primary Record</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -279,6 +257,28 @@ public interface TradesRow extends EObject {
 	 * @generated
 	 */
 	void setPrimaryRecord(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Discharge Slot Contract Params</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Discharge Slot Contract Params</em>' reference.
+	 * @see #setDischargeSlotContractParams(SlotContractParams)
+	 * @see com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage#getTradesRow_DischargeSlotContractParams()
+	 * @model
+	 * @generated
+	 */
+	SlotContractParams getDischargeSlotContractParams();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow#getDischargeSlotContractParams <em>Discharge Slot Contract Params</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Discharge Slot Contract Params</em>' reference.
+	 * @see #getDischargeSlotContractParams()
+	 * @generated
+	 */
+	void setDischargeSlotContractParams(SlotContractParams value);
 
 	/**
 	 * Returns the value of the '<em><b>Market Allocation</b></em>' reference.

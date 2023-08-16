@@ -2,10 +2,6 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;

@@ -2,28 +2,38 @@
  */
 package com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import com.mmxlabs.models.datetime.DateTimePackage;
+
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+
 import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelFactory;
 import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage;
 import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesTableRoot;
+
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+
 import com.mmxlabs.models.lng.port.PortPackage;
+
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+
 import com.mmxlabs.models.lng.types.TypesPackage;
+
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+
+import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -105,11 +115,17 @@ public class CargoEditorModelPackageImpl extends EPackageImpl implements CargoEd
 		SpotMarketsPackage.eINSTANCE.eClass();
 		CargoPackage.eINSTANCE.eClass();
 
+		// Obtain or create and register interdependencies
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(CargoEditorModelPackage.eNS_URI);
+		CargoEditorModelPackageImpl theCargoEditorModelPackage_1 = (CargoEditorModelPackageImpl)(registeredPackage instanceof CargoEditorModelPackageImpl ? registeredPackage : CargoEditorModelPackage.eINSTANCE);
+
 		// Create package meta-data objects
 		theCargoEditorModelPackage.createPackageContents();
+		theCargoEditorModelPackage_1.createPackageContents();
 
 		// Initialize created meta-data
 		theCargoEditorModelPackage.initializePackageContents();
+		theCargoEditorModelPackage_1.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theCargoEditorModelPackage.freeze();
@@ -225,8 +241,8 @@ public class CargoEditorModelPackageImpl extends EPackageImpl implements CargoEd
 	 * @generated
 	 */
 	@Override
-	public EReference getTradesRow_DischargeSlotContractParams() {
-		return (EReference)tradesRowEClass.getEStructuralFeatures().get(10);
+	public EAttribute getTradesRow_PrimaryRecord() {
+		return (EAttribute)tradesRowEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -235,8 +251,8 @@ public class CargoEditorModelPackageImpl extends EPackageImpl implements CargoEd
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTradesRow_PrimaryRecord() {
-		return (EAttribute)tradesRowEClass.getEStructuralFeatures().get(9);
+	public EReference getTradesRow_DischargeSlotContractParams() {
+		return (EReference)tradesRowEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -387,6 +403,7 @@ public class CargoEditorModelPackageImpl extends EPackageImpl implements CargoEd
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
+		CargoEditorModelPackage theCargoEditorModelPackage_1 = (CargoEditorModelPackage)EPackage.Registry.INSTANCE.getEPackage(CargoEditorModelPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -415,10 +432,7 @@ public class CargoEditorModelPackageImpl extends EPackageImpl implements CargoEd
 		initEOperation(getTradesRow__GetAssignableObject(), ecorePackage.getEObject(), "getAssignableObject", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(tradesTableRootEClass, TradesTableRoot.class, "TradesTableRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTradesTableRoot_TradesRows(), this.getTradesRow(), null, "tradesRows", null, 0, -1, TradesTableRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		// Create resource
-		createResource(eNS_URI);
+		initEReference(getTradesTableRoot_TradesRows(), theCargoEditorModelPackage_1.getTradesRow(), null, "tradesRows", null, 0, -1, TradesTableRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //CargoEditorModelPackageImpl
