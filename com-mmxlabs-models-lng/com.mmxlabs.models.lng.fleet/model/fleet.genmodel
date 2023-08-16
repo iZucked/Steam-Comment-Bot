@@ -153,6 +153,14 @@
       <genFeatures createChild="false" propertyDescription="Grade" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/grade"/>
       <genFeatures createChild="false" propertyDescription="CII upper limit for a grade"
           ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/upperLimit"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeA"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeAValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeB"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeBValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeC"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeCValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//CIIGradeBoundary/gradeDValue"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//FuelEmissionReference">
       <genFeatures createChild="false" propertyDescription="ISO reference" ecoreFeature="ecore:EAttribute fleet.ecore#//FuelEmissionReference/isoReference"/>

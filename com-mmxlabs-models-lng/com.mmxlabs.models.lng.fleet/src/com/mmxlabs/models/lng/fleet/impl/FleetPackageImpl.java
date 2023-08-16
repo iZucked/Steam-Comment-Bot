@@ -969,6 +969,86 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getCIIGradeBoundary_GradeA() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIGradeBoundary_GradeAValue() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIGradeBoundary_GradeB() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIGradeBoundary_GradeBValue() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIGradeBoundary_GradeC() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIGradeBoundary_GradeCValue() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIGradeBoundary_GradeD() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCIIGradeBoundary_GradeDValue() {
+		return (EAttribute)ciiGradeBoundaryEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getFuelEmissionReference() {
 		return fuelEmissionReferenceEClass;
 	}
@@ -1170,6 +1250,14 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__DWT_UPPER_LIMIT);
 		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE);
 		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__UPPER_LIMIT);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_A);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_AVALUE);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_B);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_BVALUE);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_C);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_CVALUE);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_D);
+		createEAttribute(ciiGradeBoundaryEClass, CII_GRADE_BOUNDARY__GRADE_DVALUE);
 
 		fuelEmissionReferenceEClass = createEClass(FUEL_EMISSION_REFERENCE);
 		createEAttribute(fuelEmissionReferenceEClass, FUEL_EMISSION_REFERENCE__ISO_REFERENCE);
@@ -1384,9 +1472,17 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getCIIReferenceData_ReductionFactors(), this.getCIIReductionFactor(), null, "reductionFactors", null, 0, -1, CIIReferenceData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(ciiGradeBoundaryEClass, CIIGradeBoundary.class, "CIIGradeBoundary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCIIGradeBoundary_DwtUpperLimit(), ecorePackage.getEDouble(), "dwtUpperLimit", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_DwtUpperLimit(), ecorePackage.getELong(), "dwtUpperLimit", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCIIGradeBoundary_Grade(), ecorePackage.getEString(), "grade", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCIIGradeBoundary_UpperLimit(), ecorePackage.getEDouble(), "upperLimit", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeA(), ecorePackage.getEString(), "gradeA", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeAValue(), ecorePackage.getEDouble(), "gradeAValue", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeB(), ecorePackage.getEString(), "gradeB", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeBValue(), ecorePackage.getEDouble(), "gradeBValue", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeC(), ecorePackage.getEString(), "gradeC", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeCValue(), ecorePackage.getEDouble(), "gradeCValue", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeD(), ecorePackage.getEString(), "gradeD", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCIIGradeBoundary_GradeDValue(), ecorePackage.getEDouble(), "gradeDValue", null, 0, 1, CIIGradeBoundary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelEmissionReferenceEClass, FuelEmissionReference.class, "FuelEmissionReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFuelEmissionReference_IsoReference(), ecorePackage.getEString(), "isoReference", null, 0, 1, FuelEmissionReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1627,6 +1723,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			   "unit", "m\u00b3/day",
 			   "formatString", "##0.###"
+		   });
+		addAnnotation
+		  (getCIIReductionFactor_Year(),
+		   source,
+		   new String[] {
+			   "formatString", "####"
 		   });
 	}
 

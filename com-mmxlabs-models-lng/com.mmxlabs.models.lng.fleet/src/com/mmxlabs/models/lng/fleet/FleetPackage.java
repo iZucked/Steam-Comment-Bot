@@ -980,13 +980,85 @@ public interface FleetPackage extends EPackage {
 	int CII_GRADE_BOUNDARY__UPPER_LIMIT = 2;
 
 	/**
+	 * The feature id for the '<em><b>Grade A</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_A = 3;
+
+	/**
+	 * The feature id for the '<em><b>Grade AValue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_AVALUE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Grade B</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_B = 5;
+
+	/**
+	 * The feature id for the '<em><b>Grade BValue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_BVALUE = 6;
+
+	/**
+	 * The feature id for the '<em><b>Grade C</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_C = 7;
+
+	/**
+	 * The feature id for the '<em><b>Grade CValue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_CVALUE = 8;
+
+	/**
+	 * The feature id for the '<em><b>Grade D</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_D = 9;
+
+	/**
+	 * The feature id for the '<em><b>Grade DValue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_GRADE_BOUNDARY__GRADE_DVALUE = 10;
+
+	/**
 	 * The number of structural features of the '<em>CII Grade Boundary</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CII_GRADE_BOUNDARY_FEATURE_COUNT = 3;
+	int CII_GRADE_BOUNDARY_FEATURE_COUNT = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelEmissionReferenceImpl <em>Fuel Emission Reference</em>}' class.
@@ -1940,6 +2012,94 @@ public interface FleetPackage extends EPackage {
 	EAttribute getCIIGradeBoundary_UpperLimit();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeA <em>Grade A</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade A</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeA()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeA();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeAValue <em>Grade AValue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade AValue</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeAValue()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeAValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeB <em>Grade B</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade B</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeB()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeB();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeBValue <em>Grade BValue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade BValue</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeBValue()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeBValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeC <em>Grade C</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade C</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeC()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeC();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeCValue <em>Grade CValue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade CValue</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeCValue()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeCValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeD <em>Grade D</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade D</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeD()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeD();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeDValue <em>Grade DValue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Grade DValue</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary#getGradeDValue()
+	 * @see #getCIIGradeBoundary()
+	 * @generated
+	 */
+	EAttribute getCIIGradeBoundary_GradeDValue();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FuelEmissionReference <em>Fuel Emission Reference</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2696,6 +2856,70 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CII_GRADE_BOUNDARY__UPPER_LIMIT = eINSTANCE.getCIIGradeBoundary_UpperLimit();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade A</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_A = eINSTANCE.getCIIGradeBoundary_GradeA();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade AValue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_AVALUE = eINSTANCE.getCIIGradeBoundary_GradeAValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade B</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_B = eINSTANCE.getCIIGradeBoundary_GradeB();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade BValue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_BVALUE = eINSTANCE.getCIIGradeBoundary_GradeBValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade C</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_C = eINSTANCE.getCIIGradeBoundary_GradeC();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade CValue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_CVALUE = eINSTANCE.getCIIGradeBoundary_GradeCValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade D</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_D = eINSTANCE.getCIIGradeBoundary_GradeD();
+
+		/**
+		 * The meta object literal for the '<em><b>Grade DValue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CII_GRADE_BOUNDARY__GRADE_DVALUE = eINSTANCE.getCIIGradeBoundary_GradeDValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FuelEmissionReferenceImpl <em>Fuel Emission Reference</em>}' class.

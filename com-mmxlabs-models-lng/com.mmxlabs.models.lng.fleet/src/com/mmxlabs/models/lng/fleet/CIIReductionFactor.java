@@ -30,7 +30,7 @@ public interface CIIReductionFactor extends EObject {
 	 * @return the value of the '<em>Year</em>' attribute.
 	 * @see #setYear(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getCIIReductionFactor_Year()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='####'"
 	 * @generated
 	 */
 	int getYear();
