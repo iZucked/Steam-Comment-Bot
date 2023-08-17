@@ -21,7 +21,7 @@
     <genClasses ecoreClass="fleet.ecore#//BaseFuel">
       <genFeatures createChild="false" propertyDescription="The ratio relating 1 MT of this base fuel to 1 m3 of LNG"
           ecoreFeature="ecore:EAttribute fleet.ecore#//BaseFuel/equivalenceFactor"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//BaseFuel/emissionRate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//BaseFuel/emissionReference"/>
     </genClasses>
     <genClasses ecoreClass="fleet.ecore#//Vessel">
       <genFeatures createChild="false" propertyDescription="A short form of the vessel name for use in reporting"

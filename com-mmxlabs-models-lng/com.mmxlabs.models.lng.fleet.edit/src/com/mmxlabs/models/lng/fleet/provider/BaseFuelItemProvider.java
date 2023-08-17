@@ -51,7 +51,7 @@ public class BaseFuelItemProvider
 
 			addNamePropertyDescriptor(object);
 			addEquivalenceFactorPropertyDescriptor(object);
-			addEmissionRatePropertyDescriptor(object);
+			addEmissionReferencePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -101,23 +101,23 @@ public class BaseFuelItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Emission Rate feature.
+	 * This adds a property descriptor for the Emission Reference feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEmissionRatePropertyDescriptor(Object object) {
+	protected void addEmissionReferencePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_BaseFuel_emissionRate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuel_emissionRate_feature", "_UI_BaseFuel_type"),
-				 FleetPackage.Literals.BASE_FUEL__EMISSION_RATE,
+				 getString("_UI_BaseFuel_emissionReference_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BaseFuel_emissionReference_feature", "_UI_BaseFuel_type"),
+				 FleetPackage.Literals.BASE_FUEL__EMISSION_REFERENCE,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -161,7 +161,6 @@ public class BaseFuelItemProvider
 		switch (notification.getFeatureID(BaseFuel.class)) {
 			case FleetPackage.BASE_FUEL__NAME:
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
-			case FleetPackage.BASE_FUEL__EMISSION_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

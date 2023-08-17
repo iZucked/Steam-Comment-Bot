@@ -689,8 +689,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getBaseFuel_EmissionRate() {
-		return (EAttribute)baseFuelEClass.getEStructuralFeatures().get(1);
+	public EReference getBaseFuel_EmissionReference() {
+		return (EReference)baseFuelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1174,7 +1174,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 		baseFuelEClass = createEClass(BASE_FUEL);
 		createEAttribute(baseFuelEClass, BASE_FUEL__EQUIVALENCE_FACTOR);
-		createEAttribute(baseFuelEClass, BASE_FUEL__EMISSION_RATE);
+		createEReference(baseFuelEClass, BASE_FUEL__EMISSION_REFERENCE);
 
 		vesselEClass = createEClass(VESSEL);
 		createEAttribute(vesselEClass, VESSEL__SHORT_NAME);
@@ -1330,7 +1330,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 
 		initEClass(baseFuelEClass, BaseFuel.class, "BaseFuel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBaseFuel_EquivalenceFactor(), ecorePackage.getEDouble(), "equivalenceFactor", null, 1, 1, BaseFuel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getBaseFuel_EmissionRate(), ecorePackage.getEDouble(), "emissionRate", null, 0, 1, BaseFuel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseFuel_EmissionReference(), this.getFuelEmissionReference(), null, "emissionReference", null, 0, 1, BaseFuel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselEClass, Vessel.class, "Vessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVessel_ShortName(), ecorePackage.getEString(), "shortName", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1525,13 +1525,6 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			   "unit", "mmBtu/mt",
 			   "formatString", "##.###"
-		   });
-		addAnnotation
-		  (getBaseFuel_EmissionRate(),
-		   source,
-		   new String[] {
-			   "unit", "mt/mt",
-			   "formatString", "####0.###"
 		   });
 		addAnnotation
 		  (getVessel_Capacity(),

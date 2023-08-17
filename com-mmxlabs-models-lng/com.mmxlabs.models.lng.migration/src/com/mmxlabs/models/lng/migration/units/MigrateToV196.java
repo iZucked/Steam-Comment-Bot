@@ -34,13 +34,20 @@ public class MigrateToV196 extends AbstractMigrationUnit {
 		return 196;
 	}
 
-	// Add CII information to cargo model
-	// Moves emission rates for each vessel to emission rate per fuel
+	// Add CII information to the fleet model
 	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 		final EObjectWrapper scenarioModel = modelRecord.getModelRoot();
 		final EObjectWrapper referenceModel = scenarioModel.getRef("referenceModel");
 		final EObjectWrapper fleetModel = referenceModel.getRef("fleetModel");
+		
+		final List<EObjectWrapper> baseFuels = fleetModel.getRefAsList("baseFuels");
+        if (baseFuels != null) {
+            for (var bf : baseFuels) {
+                bf.unsetFeature("emissionRate");
+            }
+        }
+        
 		final EPackage fleetPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_FleetModel);
 		final EFactory fleetFactory = fleetPackage.getEFactoryInstance();
 

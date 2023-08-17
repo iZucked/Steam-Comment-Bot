@@ -69,6 +69,11 @@
           referenceEClass="com.mmxlabs.models.lng.fleet.Vessel"
           ownerEClass="com.mmxlabs.models.lng.fleet.Vessel">          
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.FuelEmissionReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.FuelEmissionReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.fleet.FuelEmissionReference"/>
+
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">

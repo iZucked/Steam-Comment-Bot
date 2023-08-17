@@ -226,13 +226,13 @@ public interface FleetPackage extends EPackage {
 	int BASE_FUEL__EQUIVALENCE_FACTOR = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Emission Rate</b></em>' attribute.
+	 * The feature id for the '<em><b>Emission Reference</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL__EMISSION_RATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int BASE_FUEL__EMISSION_REFERENCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel</em>' class.
@@ -1709,15 +1709,15 @@ public interface FleetPackage extends EPackage {
 	EAttribute getBaseFuel_EquivalenceFactor();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionRate <em>Emission Rate</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionReference <em>Emission Reference</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Emission Rate</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionRate()
+	 * @return the meta object for the reference '<em>Emission Reference</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionReference()
 	 * @see #getBaseFuel()
 	 * @generated
 	 */
-	EAttribute getBaseFuel_EmissionRate();
+	EReference getBaseFuel_EmissionReference();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes <em>Vessel State Attributes</em>}'.
@@ -2624,12 +2624,12 @@ public interface FleetPackage extends EPackage {
 		EAttribute BASE_FUEL__EQUIVALENCE_FACTOR = eINSTANCE.getBaseFuel_EquivalenceFactor();
 
 		/**
-		 * The meta object literal for the '<em><b>Emission Rate</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Emission Reference</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute BASE_FUEL__EMISSION_RATE = eINSTANCE.getBaseFuel_EmissionRate();
+		EReference BASE_FUEL__EMISSION_REFERENCE = eINSTANCE.getBaseFuel_EmissionReference();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.

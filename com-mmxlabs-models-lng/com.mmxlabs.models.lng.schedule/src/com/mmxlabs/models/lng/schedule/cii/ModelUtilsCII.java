@@ -10,6 +10,7 @@ import java.util.List;
 import com.mmxlabs.models.lng.cargo.CIIStartOptions;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FuelEmissionReference;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -25,7 +26,7 @@ import com.mmxlabs.models.lng.schedule.emissions.EmissionModelUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class ModelUtilsCII {
-	
+
 	private ModelUtilsCII() {
 	}
 
@@ -58,7 +59,14 @@ public class ModelUtilsCII {
 				if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
 					throw new IllegalStateException();
 				}
-				model.addToTotalEmissionForCII(Math.round(fuelAmount.getQuantity() * baseFuel.getEmissionRate()));
+				double er = 0.0;
+				if (baseFuel != null) {
+					final FuelEmissionReference fer = baseFuel.getEmissionReference();
+					if (fer != null) {
+						er = fer.getCf();
+					}
+				}
+				model.addToTotalEmissionForCII(Math.round(fuelAmount.getQuantity() * er));
 				break;
 			case FBO, NBO:
 				model.addToTotalEmissionForCII(EmissionModelUtils.consumedCarbonEquivalentEmissionLNG(fuelQuantity));

@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FuelEmissionReference;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -112,6 +113,13 @@ public class VesselEmissionAccountingReportJSONGenerator {
 
 			final Fuel fuel = fuelQuantity.getFuel();
 			final BaseFuel baseFuel = fuelQuantity.getBaseFuel();
+			double er = 0.0;
+			if (baseFuel != null) {
+				final FuelEmissionReference fer = baseFuel.getEmissionReference();
+				if (fer != null) {
+					er = fer.getCf();
+				}
+			}
 			final FuelAmount fuelAmount = fuelQuantity.getAmounts().get(0);
 
 
@@ -122,7 +130,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 				}
 				model.baseFuelType = baseFuel.getName();
 				model.baseFuelConsumed = Math.round(fuelAmount.getQuantity());
-				model.baseFuelEmissions = Math.round(model.baseFuelConsumed * baseFuel.getEmissionRate());
+				model.baseFuelEmissions = Math.round(model.baseFuelConsumed * er);
 				break;
 			case PILOT_LIGHT:
 				if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
@@ -130,7 +138,7 @@ public class VesselEmissionAccountingReportJSONGenerator {
 				}
 				model.pilotLightFuelType = baseFuel.getName();
 				model.pilotLightFuelConsumption = Math.round(fuelAmount.getQuantity());
-				model.pilotLightEmission = Math.round(model.pilotLightFuelConsumption * baseFuel.getEmissionRate());
+				model.pilotLightEmission = Math.round(model.pilotLightFuelConsumption * er);
 				break;
 			case FBO:
 				model.consumedFBO += EmissionModelUtils.consumedQuantityLNG(fuelQuantity);
