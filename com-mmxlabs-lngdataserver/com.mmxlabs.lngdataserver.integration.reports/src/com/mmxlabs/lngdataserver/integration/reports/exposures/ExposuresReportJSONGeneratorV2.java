@@ -32,7 +32,7 @@ public class ExposuresReportJSONGeneratorV2 {
 		// Raw Exposure Information
 		final List<SlotAllocation> slotAllocations = new LinkedList<>();
 		schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
-		output.addAll(ExposuresReportModelV2.doTransform(slotAllocations));	
+		output.addAll(ExposuresReportModelV2.doTransformSlot(slotAllocations));	
 		final List<PaperDealAllocation> paperDealAllocations = new LinkedList<>();
 		schedule.getPaperDealAllocations().forEach(paperDealAllocations::add);
 		output.addAll(ExposuresReportModelV2.doTransformPaper(paperDealAllocations));
@@ -42,9 +42,9 @@ public class ExposuresReportJSONGeneratorV2 {
 			// Minimise Hedge Period Start
 			// Maximise Hedge Period End
 			// Sum volume and currency value
-		HashMap<String, ExposuresReportModelV2> map = new HashMap<>();
+		final HashMap<String, ExposuresReportModelV2> map = new HashMap<>();
 		for (ExposuresReportModelV2 model : output) {
-			String key = model.deal + model.marketIndex + model.contractMonth + model.currencyUnit + model.volumeUnit;
+			final String key = model.deal + model.marketIndex + model.contractMonth + model.currencyUnit + model.volumeUnit;
 			map.merge(key, model,
 				(v1, v2) -> {
 					v1.hedgeStart = v1.hedgeStart.compareTo(v2.hedgeStart) <= 0 ? v1.hedgeStart : v2.hedgeStart;
@@ -55,7 +55,7 @@ public class ExposuresReportJSONGeneratorV2 {
 				}
 			);
 		}
-		output = new ArrayList<>();
+		output = new ArrayList<>(map.values());
 		// Add headers
 			// TODO Address sorting in datahub
 			// ie. Sorting by a column will break the order of header rows

@@ -31,7 +31,10 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 	}
 
 	@Override
-	public IReportContent publishReport(final SupportedReportFormats supportedFormats, final IScenarioDataProvider scenarioDataProvider, final ScheduleModel scheduleModel) throws Exception {
+	public IReportContent publishReport(
+			final @NonNull SupportedReportFormats supportedFormats,
+			final @NonNull IScenarioDataProvider scenarioDataProvider,
+			final @NonNull ScheduleModel scheduleModel) throws Exception {
 
 		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
