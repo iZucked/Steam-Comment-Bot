@@ -12,7 +12,7 @@ public class ScheduleEvent {
 	
 	private final Object data;
 	private boolean visible;
-	private boolean selected;
+	private ScheduleEventSelectionState selectionState;
 	
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, LocalDateTime plannedStartDate, LocalDateTime plannedEndDate, Object data) {
 		this.startDate = startDate;
@@ -20,6 +20,7 @@ public class ScheduleEvent {
 		this.plannedStartDate = plannedStartDate;
 		this.plannedEndDate = plannedEndDate;
 		this.data = data;
+		this.selectionState = ScheduleEventSelectionState.UNSELECTED;
 	}
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate) {
 		this(startDate, endDate, null, null, null);
@@ -45,11 +46,11 @@ public class ScheduleEvent {
 		return visible;
 	}
 	
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setSelectionState(ScheduleEventSelectionState selectionState) {
+		this.selectionState = selectionState;
 	}
 
-	public boolean isSelected() {
-		return selected;
+	public ScheduleEventSelectionState getSelectionState() {
+		return selectionState;
 	}
 }

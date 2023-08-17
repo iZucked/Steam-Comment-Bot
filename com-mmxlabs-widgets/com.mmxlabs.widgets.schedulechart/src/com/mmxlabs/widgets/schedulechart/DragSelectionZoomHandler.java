@@ -27,9 +27,9 @@ public class DragSelectionZoomHandler implements MouseListener, MouseMoveListene
 	int endX;
 	int endY;
 
-	public DragSelectionZoomHandler(final ScheduleCanvas canvas, IScheduleChartColourScheme colourScheme) {
+	public DragSelectionZoomHandler(final ScheduleCanvas canvas, IScheduleChartSettings settings) {
 		this.canvas = canvas;
-		this.colourScheme = colourScheme;
+		this.colourScheme = settings.getColourScheme();
 		this.visible = false;
 		
 		canvas.addMouseListener(this);

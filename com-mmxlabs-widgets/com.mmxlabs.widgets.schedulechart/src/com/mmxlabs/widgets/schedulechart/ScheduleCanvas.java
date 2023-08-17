@@ -16,13 +16,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
-import com.mmxlabs.widgets.schedulechart.draw.DefaultScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeaders;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
+import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
 public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter {
@@ -37,30 +37,30 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final EventSelectionHandler eventSelectionHandler;
 	
 	private final IScheduleChartSettings settings;
-	private final IScheduleChartColourScheme colourScheme;
+	private final IDrawableScheduleEventProvider drawableEventProvider;
 	private final IScheduleEventStylingProvider eventStylingProvider;
 	
 	private final List<IScheduleChartEventListener> listeners = new ArrayList<>();
 	
 
-	public ScheduleCanvas(Composite parent, IScheduleEventStylingProvider eventStylingProvider) {
-		this(parent, eventStylingProvider, new DefaultScheduleChartSettings(), new DefaultScheduleChartColourScheme());
+	public ScheduleCanvas(Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider) {
+		this(parent, drawableEventProvider, eventStylingProvider, new DefaultScheduleChartSettings());
 	}
 
-	public ScheduleCanvas(Composite parent, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartSettings settings, IScheduleChartColourScheme colourScheme) {
+	public ScheduleCanvas(Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartSettings settings) {
 		super(parent, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		this.canvasState = new ScheduleCanvasState();
 
 		this.settings = settings;
-		this.colourScheme = colourScheme;
+		this.drawableEventProvider = drawableEventProvider;
 		this.eventStylingProvider = eventStylingProvider;
 
 		this.timeScale = new ScheduleTimeScale(canvasState, this, settings);
-		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, colourScheme, settings);
+		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, settings);
 		
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
-		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, colourScheme);
+		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, settings);
 		this.eventSelectionHandler = new EventSelectionHandler(this, canvasState);
 
 		initListeners();
@@ -126,7 +126,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		canvasState.getLastDrawnContent().forEach(r -> drawer.drawOne(r, resolver));
 		drawer.drawOne(drawableTimeScale.getHeaders(), resolver);
 		
-		var rowHeader = new DrawableScheduleChartRowHeaders(canvasState.getRows(), drawableTimeScale.getTotalHeaderHeight(), colourScheme, settings);
+		var rowHeader = new DrawableScheduleChartRowHeaders(canvasState.getRows(), drawableTimeScale.getTotalHeaderHeight(), settings);
 		rowHeader.setBounds(new Rectangle(originalBounds.x, mainBounds.y + drawableTimeScale.getTotalHeaderHeight(), rowHeaderWidth, mainBounds.height));
 		rowHeader.setLockedHeaderY(originalBounds.y);
 		drawer.drawOne(rowHeader, resolver);
@@ -145,7 +145,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		final int height = settings.getRowHeight();
 		final int startY = mainBounds.y + drawableTimeScale.getTotalHeaderHeight();
 		for (int i = 0, y = startY; i < canvasState.getRows().size(); i++, y += height  + 1) {
-			DrawableScheduleChartRow drawableRow = new DrawableScheduleChartRow(canvasState, i, timeScale, colourScheme, eventStylingProvider, settings);
+			DrawableScheduleChartRow drawableRow = new DrawableScheduleChartRow(canvasState, i, timeScale, drawableEventProvider, eventStylingProvider, settings);
 			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, height));
 			res.add(drawableRow);
 		}
@@ -219,13 +219,13 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		// don't reassign so it keeps the references in the drawable rows
 
 		for (final ScheduleEvent e: canvasState.getSelectedEvents()) {
-			e.setSelected(false);
+			e.setSelectionState(ScheduleEventSelectionState.UNSELECTED);
 		}
 
 		canvasState.setSelectedEvents(newSelection);
 
 		for (final ScheduleEvent e: newSelection) {
-			e.setSelected(true);
+			e.setSelectionState(ScheduleEventSelectionState.SELECTED);
 		}
 		
 		redraw();

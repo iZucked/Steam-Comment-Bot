@@ -1,6 +1,10 @@
 package com.mmxlabs.widgets.schedulechart;
 
+import com.mmxlabs.widgets.schedulechart.draw.DefaultScheduleChartColourScheme;
+
 public class DefaultScheduleChartSettings implements IScheduleChartSettings {
+	
+	private final IScheduleChartColourScheme defaultColourScheme = new DefaultScheduleChartColourScheme();
 
 	@Override
 	public int getRowEventHeight() {
@@ -25,6 +29,11 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	@Override
 	public int getHeaderHeight() {
 		return 24;
+	}
+
+	@Override
+	public IScheduleChartColourScheme getColourScheme() {
+		return defaultColourScheme;
 	}
 
 }

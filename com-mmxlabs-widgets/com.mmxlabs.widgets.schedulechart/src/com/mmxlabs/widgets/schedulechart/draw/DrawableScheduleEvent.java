@@ -2,21 +2,20 @@ package com.mmxlabs.widgets.schedulechart.draw;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
-import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
+import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
 
-public class DrawableScheduleEvent extends DrawableElement {
+public abstract class DrawableScheduleEvent extends DrawableElement {
 	
 	private final ScheduleEvent se;
-	private final IScheduleEventStylingProvider eventStylingProvider;
-	private final boolean noneSelected;
+	private ScheduleEventSelectionState selectionState;
 	
-	public DrawableScheduleEvent(ScheduleEvent se, Rectangle bounds, IScheduleEventStylingProvider eventStylingProvider, boolean noneSelected) {
+	protected DrawableScheduleEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
 		this.se = se;
-		this.eventStylingProvider = eventStylingProvider;
-		this.noneSelected = noneSelected;
+		this.selectionState = noneSelected ? ScheduleEventSelectionState.SELECTED : se.getSelectionState();
 		setBounds(bounds);
 	}
 
@@ -28,9 +27,12 @@ public class DrawableScheduleEvent extends DrawableElement {
 			return res;
 		}
 		
-		res.add(BasicDrawableElements.Rectangle.withBounds(bounds).bgColour(eventStylingProvider.getBackgroundColour(se))
-				.border(eventStylingProvider.getBorderColour(se), eventStylingProvider.getBorderThickness(se) + (se.isSelected() ? 2 : 0))
-				.alpha(noneSelected || se.isSelected() ? BasicDrawableElements.MAX_ALPHA : 100).create());
+		res.add(BasicDrawableElements.Rectangle.withBounds(bounds)
+				.bgColour(getBackgroundColour())
+				.border(getBorderColour(), getBorderThickness(selectionState))
+				.alpha(getAlpha(selectionState))
+				.create());
+
 		return res;
 	}
 
@@ -38,4 +40,8 @@ public class DrawableScheduleEvent extends DrawableElement {
 		return se;
 	}
 
+	protected abstract Color getBackgroundColour();
+	protected abstract Color getBorderColour();
+	protected abstract int getBorderThickness(ScheduleEventSelectionState s);
+	protected abstract int getAlpha(ScheduleEventSelectionState s);
 }

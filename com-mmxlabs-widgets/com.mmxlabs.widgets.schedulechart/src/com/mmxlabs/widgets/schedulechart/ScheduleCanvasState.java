@@ -1,5 +1,6 @@
 package com.mmxlabs.widgets.schedulechart;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +13,7 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider {
 	
 	private Rectangle mainBounds;
-	private List<ScheduleChartRow> rows;
+	private List<ScheduleChartRow> rows = new ArrayList<>();
 
 	private ScheduleEvent leftmostEvent;
 	private ScheduleEvent rightmostEvent;

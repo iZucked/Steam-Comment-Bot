@@ -10,6 +10,7 @@ import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvasState;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleTimeScale;
+import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
 public class DrawableScheduleChartRow extends DrawableElement {
@@ -17,20 +18,22 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	private final IScheduleChartColourScheme colourScheme;
 	private final IScheduleEventStylingProvider eventStylingProvider;
 	private final IScheduleChartSettings settings;
+	private final IDrawableScheduleEventProvider drawableEventProvider;
 
 	private final ScheduleCanvasState canvasState;
 	private final ScheduleTimeScale sts;
 	private final int rowNum;
 	private List<DrawableScheduleEvent> lastDrawnEvents = new ArrayList<>();
 
-	public DrawableScheduleChartRow(final ScheduleCanvasState canvasState, final int rowNum, ScheduleTimeScale sts, IScheduleChartColourScheme colourScheme, IScheduleEventStylingProvider eventStylingProvider,
+	public DrawableScheduleChartRow(final ScheduleCanvasState canvasState, final int rowNum, ScheduleTimeScale sts, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider,
 			IScheduleChartSettings settings) {
 		this.canvasState = canvasState;
 		this.sts = sts;
 		this.rowNum = rowNum;
-		this.colourScheme = colourScheme;
+		this.colourScheme = settings.getColourScheme();
 		this.eventStylingProvider = eventStylingProvider;
 		this.settings = settings;
+		this.drawableEventProvider = drawableEventProvider;
 	}
 
 	@Override
@@ -50,7 +53,8 @@ public class DrawableScheduleChartRow extends DrawableElement {
 			int startX = sts.getXForDateTime(se.getStart());
 			int endX = sts.getXForDateTime(se.getEnd());
 			Rectangle eventBounds = new Rectangle(startX, bounds.y + spacer, endX - startX, eventHeight);
-			DrawableScheduleEvent drawableEvent = new DrawableScheduleEvent(se, eventBounds, eventStylingProvider, canvasState.getSelectedEvents().isEmpty());
+			DrawableScheduleEvent drawableEvent = drawableEventProvider.creatDrawableScheduleEvent(se, eventBounds, canvasState);
+			if (drawableEvent == null) continue;
 			lastDrawnEvents.add(drawableEvent);
 			res.addAll(drawableEvent.getBasicDrawableElements());
 		}

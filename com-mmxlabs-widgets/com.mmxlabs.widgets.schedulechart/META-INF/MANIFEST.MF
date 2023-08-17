@@ -12,5 +12,6 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.widgets.schedulechart,
+ com.mmxlabs.widgets.schedulechart.draw,
  com.mmxlabs.widgets.schedulechart.providers,
  com.mmxlabs.widgets.schedulechart.viewer

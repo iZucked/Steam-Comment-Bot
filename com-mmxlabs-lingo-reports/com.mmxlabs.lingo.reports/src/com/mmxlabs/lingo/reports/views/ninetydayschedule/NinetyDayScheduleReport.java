@@ -1,13 +1,7 @@
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
@@ -35,8 +29,6 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
-import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
-import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
 
 public class NinetyDayScheduleReport extends ViewPart {
@@ -49,6 +41,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	
 	private final EquivalentsManager equivalentsManager = new EquivalentsManager();
 	private final NinetyDayScheduleEventProvider eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
+	private final NinetyDayDrawableEventProvider drawableEventProvider = new NinetyDayDrawableEventProvider();
 	private final NinetyDayScheduleEventStylingProvider eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
 	
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
@@ -98,7 +91,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer<>(parent, eventProvider, eventStylingProvider);
+		viewer = new ScheduleChartViewer<>(parent, drawableEventProvider, eventProvider, eventStylingProvider);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		

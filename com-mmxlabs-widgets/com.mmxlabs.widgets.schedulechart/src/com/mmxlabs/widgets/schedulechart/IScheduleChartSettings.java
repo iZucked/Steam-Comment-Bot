@@ -11,4 +11,6 @@ public interface IScheduleChartSettings {
 	default int getRowHeight() {
 		return getRowEventHeight() + 2 * getSpacerWidth();
 	}
+	
+	IScheduleChartColourScheme getColourScheme();
 }

@@ -22,6 +22,7 @@ import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
@@ -35,11 +36,11 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	private T input;
 	private Map<Object, ScheduleEvent> internalDataMap = new HashMap<>();
 	
-	public ScheduleChartViewer(final Composite parent, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
-		this(new ScheduleCanvas(parent, eventStylingProvider), eventProvider);
+	public ScheduleChartViewer(final Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
+		this(new ScheduleCanvas(parent, drawableEventProvider, eventStylingProvider), eventProvider);
 	}
-	public ScheduleChartViewer(final Composite parent, IScheduleChartSettings settings, IScheduleChartColourScheme colourScheme, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
-		this(new ScheduleCanvas(parent, eventStylingProvider, settings, colourScheme), eventProvider);
+	public ScheduleChartViewer(final Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartSettings settings) {
+		this(new ScheduleCanvas(parent, drawableEventProvider, eventStylingProvider, settings), eventProvider);
 	}
 	
 	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider) {

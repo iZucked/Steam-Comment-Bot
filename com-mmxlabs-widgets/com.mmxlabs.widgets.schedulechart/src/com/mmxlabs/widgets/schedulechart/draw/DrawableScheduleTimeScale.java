@@ -10,17 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleTimeScale;
-import com.mmxlabs.widgets.schedulechart.TimeScaleView;
 
 public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends DrawableElement {
 
@@ -30,9 +25,9 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 	private final IScheduleChartSettings settings;
 	private Optional<Integer> lockedHeaderY = Optional.empty();
 	
-	public DrawableScheduleTimeScale(@NonNull T sts, IScheduleChartColourScheme colourScheme, IScheduleChartSettings settings) {
+	public DrawableScheduleTimeScale(@NonNull T sts, IScheduleChartSettings settings) {
 		this.sts = sts;
-		this.colourScheme = colourScheme;
+		this.colourScheme = settings.getColourScheme();
 		this.settings = settings;
 	}
 

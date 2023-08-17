@@ -8,7 +8,6 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
-import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 
 public class DrawableScheduleChartRowHeaders extends DrawableElement {
@@ -19,10 +18,10 @@ public class DrawableScheduleChartRowHeaders extends DrawableElement {
 	private final IScheduleChartColourScheme colourScheme;
 	private final IScheduleChartSettings settings;
 
-	public DrawableScheduleChartRowHeaders(List<ScheduleChartRow> rows, int totalHeaderHeight, IScheduleChartColourScheme colourScheme, IScheduleChartSettings settings) {
+	public DrawableScheduleChartRowHeaders(List<ScheduleChartRow> rows, int totalHeaderHeight, IScheduleChartSettings settings) {
 		this.rows = rows;
 		this.totalHeaderHeight = totalHeaderHeight;
-		this.colourScheme = colourScheme;
+		this.colourScheme = settings.getColourScheme();
 		this.settings = settings;
 	}
 
