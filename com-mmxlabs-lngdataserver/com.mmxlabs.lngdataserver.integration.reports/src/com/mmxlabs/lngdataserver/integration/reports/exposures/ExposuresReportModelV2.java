@@ -38,7 +38,7 @@ public class ExposuresReportModelV2 {
 	public YearMonth contractMonth;
 
 	@ColumnName("Hedge Period Start")
-	@HubFormat("DD/MM/YYYY hh:mm")
+	@HubFormat("DD/MM/YYYY")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@JsonSerialize(using = LocalDateSerializer.class)
 	public LocalDate hedgeStart;
@@ -96,7 +96,7 @@ public class ExposuresReportModelV2 {
 		
 		return result;
 	}
-	
+
 	// Utility
 	private static @NonNull ExposuresReportModelV2 createModelFromExposureDetail(final String deal, final @NonNull ExposureDetail exposure) {
 		ExposuresReportModelV2 row = new ExposuresReportModelV2();
