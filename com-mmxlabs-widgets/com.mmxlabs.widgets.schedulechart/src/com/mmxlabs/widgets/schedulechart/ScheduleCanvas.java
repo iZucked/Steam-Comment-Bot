@@ -3,6 +3,7 @@ package com.mmxlabs.widgets.schedulechart;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.eclipse.swt.SWT;
@@ -18,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeaders;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
@@ -35,6 +37,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final HorizontalScrollbarHandler horizontalScrollbarHandler;
 	private final DragSelectionZoomHandler dragSelectionZoomHandler;
 	private final EventSelectionHandler eventSelectionHandler;
+	private final EventHoverHandler eventHoverHandler;
 	
 	private final IScheduleChartSettings settings;
 	private final IDrawableScheduleEventProvider drawableEventProvider;
@@ -61,7 +64,8 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
 		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, settings);
-		this.eventSelectionHandler = new EventSelectionHandler(this, canvasState);
+		this.eventSelectionHandler = new EventSelectionHandler(this);
+		this.eventHoverHandler = new EventHoverHandler(this, canvasState);
 
 		initListeners();
 	}
@@ -231,5 +235,20 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		redraw();
 	}
 
+	public Optional<ScheduleEvent> findEvent(int x, int y) {
+		final List<DrawableScheduleChartRow> drawnRows = canvasState.getLastDrawnContent();
+		for (final DrawableScheduleChartRow row: drawnRows) {
+			if (row.getBounds().contains(x, y)) {
+				for (final DrawableScheduleEvent evt: row.getLastDrawnEvents()) {
+					if (evt.getBounds().contains(x, y) && evt.getScheduleEvent().isVisible()) {
+						return Optional.of(evt.getScheduleEvent());
+					}
+				}
+				return Optional.empty();
+			}
+		}
+		
+		return Optional.empty();
+	}
 	
 }

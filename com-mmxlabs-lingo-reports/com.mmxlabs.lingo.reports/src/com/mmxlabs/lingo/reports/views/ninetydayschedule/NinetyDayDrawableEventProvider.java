@@ -9,6 +9,7 @@ import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DischargeEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenIdleEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenJourneyEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LoadEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.NinetyDayPlaceholderEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -35,7 +36,7 @@ public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventPro
 			return sv.getSlotAllocation().getSlot() instanceof LoadSlot ? new LoadEvent(s, b, noneSelected) : new DischargeEvent(s, b, noneSelected);
 		}
 		
-		return null;
+		return new NinetyDayPlaceholderEvent(s, b, noneSelected);
 	}
 
 }

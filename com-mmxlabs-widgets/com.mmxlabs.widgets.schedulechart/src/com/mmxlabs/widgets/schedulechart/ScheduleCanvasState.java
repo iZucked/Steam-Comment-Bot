@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.swt.graphics.Rectangle;
@@ -19,6 +20,7 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	private ScheduleEvent rightmostEvent;
 
 	private final Set<ScheduleEvent> selectedEvents = new HashSet<>();
+	private Optional<ScheduleEvent> hoveredEvent = Optional.empty();
 	
 	private List<DrawableScheduleChartRow> lastDrawnContent;
 
@@ -71,6 +73,14 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 
 	public void setLastDrawnContent(List<DrawableScheduleChartRow> lastDrawnContent) {
 		this.lastDrawnContent = lastDrawnContent;
+	}
+
+	public Optional<ScheduleEvent> getHoveredEvent() {
+		return hoveredEvent;
+	}
+
+	public void setHoveredEvent(Optional<ScheduleEvent> hoveredEvent) {
+		this.hoveredEvent = hoveredEvent;
 	}
 	
 }
