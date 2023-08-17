@@ -210,7 +210,8 @@ public class CIIReferenceDataComponentHelper extends DefaultComponentHelper {
 						.withWidth(100)//
 						.withRMMaker((ch, rvp) -> new NumericAttributeManipulator(fp.getCIIGradeBoundary_DwtUpperLimit(), ch))
 						.build();
-				
+				// made a flat data structure for now#
+				// might need to make a proper one instead
 				b.buildColumn("exp(d1) [A]", fp.getCIIGradeBoundary_GradeAValue()) //
 				.withWidth(120) //
 				.withRMMaker((ch, rvp) -> new NumericAttributeManipulator(fp.getCIIGradeBoundary_GradeAValue(), ch)) //
