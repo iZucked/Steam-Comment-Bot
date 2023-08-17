@@ -394,6 +394,7 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//NonShippedSlotVisit">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//NonShippedSlotVisit/slot"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//NonShippedSlotVisit/lateness"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//NonShippedJourney">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NonShippedJourney/laden"/>

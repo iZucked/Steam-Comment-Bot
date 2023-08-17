@@ -3432,6 +3432,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EReference getNonShippedSlotVisit_Lateness() {
+		return (EReference)nonShippedSlotVisitEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNonShippedJourney() {
 		return nonShippedJourneyEClass;
 	}
@@ -3938,6 +3948,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		nonShippedSlotVisitEClass = createEClass(NON_SHIPPED_SLOT_VISIT);
 		createEReference(nonShippedSlotVisitEClass, NON_SHIPPED_SLOT_VISIT__SLOT);
+		createEReference(nonShippedSlotVisitEClass, NON_SHIPPED_SLOT_VISIT__LATENESS);
 
 		nonShippedJourneyEClass = createEClass(NON_SHIPPED_JOURNEY);
 		createEAttribute(nonShippedJourneyEClass, NON_SHIPPED_JOURNEY__LADEN);
@@ -4426,6 +4437,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(nonShippedSlotVisitEClass, NonShippedSlotVisit.class, "NonShippedSlotVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNonShippedSlotVisit_Slot(), theCargoPackage.getSlot(), null, "slot", null, 0, 1, NonShippedSlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNonShippedSlotVisit_Lateness(), this.getPortVisitLateness(), null, "lateness", null, 0, 1, NonShippedSlotVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(nonShippedJourneyEClass, NonShippedJourney.class, "NonShippedJourney", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNonShippedJourney_Laden(), ecorePackage.getEBoolean(), "laden", null, 0, 1, NonShippedJourney.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

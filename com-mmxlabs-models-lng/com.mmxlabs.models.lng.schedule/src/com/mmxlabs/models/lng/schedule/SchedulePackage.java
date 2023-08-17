@@ -8202,13 +8202,22 @@ public interface SchedulePackage extends EPackage {
 	int NON_SHIPPED_SLOT_VISIT__SLOT = EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__LATENESS = EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Non Shipped Slot Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NON_SHIPPED_SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
+	int NON_SHIPPED_SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -11756,6 +11765,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getNonShippedSlotVisit_Slot();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit#getLateness <em>Lateness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Lateness</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.NonShippedSlotVisit#getLateness()
+	 * @see #getNonShippedSlotVisit()
+	 * @generated
+	 */
+	EReference getNonShippedSlotVisit_Lateness();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.NonShippedJourney <em>Non Shipped Journey</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -14262,6 +14282,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference NON_SHIPPED_SLOT_VISIT__SLOT = eINSTANCE.getNonShippedSlotVisit_Slot();
+
+		/**
+		 * The meta object literal for the '<em><b>Lateness</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NON_SHIPPED_SLOT_VISIT__LATENESS = eINSTANCE.getNonShippedSlotVisit_Lateness();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.NonShippedJourneyImpl <em>Non Shipped Journey</em>}' class.
