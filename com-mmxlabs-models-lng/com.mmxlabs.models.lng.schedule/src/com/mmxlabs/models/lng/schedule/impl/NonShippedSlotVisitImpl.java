@@ -242,4 +242,14 @@ public class NonShippedSlotVisitImpl extends EventImpl implements NonShippedSlot
 		return super.eIsSet(featureID);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public String name() {
+		final Slot<?> thisSlot = getSlot();
+		return thisSlot != null ? thisSlot.getName() : super.name();
+	}
 } //NonShippedSlotVisitImpl

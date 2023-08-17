@@ -6,17 +6,20 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.schedule.NonShippedJourney;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -230,4 +233,27 @@ public class NonShippedJourneyImpl extends EventImpl implements NonShippedJourne
 		return result.toString();
 	}
 
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String name() {
+		
+		// Work backwards through the events list to find a slot or cargo to get the name
+		final EObject container = this.eContainer();
+		if (container instanceof NonShippedSequence sequence) {
+			final List<Event> events = sequence.getEvents();
+			int idx = events.indexOf(this);
+			if (idx >= 0) {
+				while (--idx >= 0) {
+					final EObject namedObject = events.get(idx);
+					if (namedObject instanceof NonShippedSlotVisit slotVisit) {
+						return slotVisit.name();
+					}
+				}
+			}
+		}
+
+		return super.name();
+	}
 } //NonShippedJourneyImpl
