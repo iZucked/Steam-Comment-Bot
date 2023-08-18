@@ -105,8 +105,8 @@ public class MigrateToV196 extends AbstractMigrationUnit {
 				fuelEmissions.add(fer4);
 				
 				ciiReferences.setRef("fuelEmissions", fuelEmissions);
-
 			}
+			
 			{
 				final EClass ciiReductionFactor = MetamodelUtils.getEClass(fleetPackage, "CIIReductionFactor");
 				final List<EObjectWrapper> reductionFactors = new ArrayList<>(4);
