@@ -8,6 +8,6 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
 
 public interface IDrawableScheduleEventProvider {
 	
-	DrawableScheduleEvent creatDrawableScheduleEvent(ScheduleEvent se, Rectangle bounds, ScheduleCanvasState canvasState);
+	DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent se, Rectangle bounds, ScheduleCanvasState canvasState);
 
 }

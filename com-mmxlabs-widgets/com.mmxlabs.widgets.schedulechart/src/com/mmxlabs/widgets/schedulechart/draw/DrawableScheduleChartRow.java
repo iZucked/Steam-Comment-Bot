@@ -53,7 +53,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 			int startX = sts.getXForDateTime(se.getStart());
 			int endX = sts.getXForDateTime(se.getEnd());
 			Rectangle eventBounds = new Rectangle(startX, bounds.y + spacer, endX - startX, eventHeight);
-			DrawableScheduleEvent drawableEvent = drawableEventProvider.creatDrawableScheduleEvent(se, eventBounds, canvasState);
+			DrawableScheduleEvent drawableEvent = drawableEventProvider.createDrawableScheduleEvent(se, eventBounds, canvasState);
 			if (drawableEvent == null) continue;
 			lastDrawnEvents.add(drawableEvent);
 			res.addAll(drawableEvent.getBasicDrawableElements());
