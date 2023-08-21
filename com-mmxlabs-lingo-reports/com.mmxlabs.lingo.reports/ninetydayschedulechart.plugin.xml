@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
+    All rights reserved.
+
+-->
+<!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
+<?eclipse version="3.4"?>
+<plugin>
+
+  <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="com.mmxlabs.shiplingo.platform.reports"
+            class="com.mmxlabs.lingo.reports.views.ninetydayschedule.NinetyDayScheduleReport"
+            icon="icons:/icons/16x16/schedule_view.png"
+            id="com.mmxlabs.lingo.reports.views.ninetydayschedule.NinetyDayScheduleReport"
+            name="90 Day Schedule"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>

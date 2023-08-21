@@ -200,5 +200,10 @@ public final class KnownFeatures {
 	 *  Temporary features
 	 */
 	public static final String FEATURE_ADP_IMPORT_CONTRACT_DATES_FROM_CSV = "features:adp-import-contract-dates-from-csv";
+	
+	/*
+	 * 90 Day Schedule Chart (New Schedule Chart)
+	 */
+	public static final String FEATURE_90_DAY_SCHEDULE_CHART = "features:ninety-day-schedule-chart";
 
 }

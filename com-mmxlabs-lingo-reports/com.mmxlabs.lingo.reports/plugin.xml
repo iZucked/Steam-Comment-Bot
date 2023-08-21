@@ -197,14 +197,6 @@
             name="Flows"
             restorable="true">
       </view>
-      <view
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.ninetydayschedule.NinetyDayScheduleReport"
-            icon="icons:/icons/16x16/schedule_view.png"
-            id="com.mmxlabs.lingo.reports.views.ninetydayschedule.NinetyDayScheduleReport"
-            name="90 Day Schedule"
-            restorable="true">
-      </view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
@@ -923,33 +915,10 @@
             feature="optimisation-charter-out-generation"
             plugin.xml="gco.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement feature="cargo-actuals" plugin.xml="actuals.plugin.xml"> </PluginXMLEnablement> <PluginXMLEnablement feature="inventory-model" plugin.xml="inventory.plugin.xml"> </PluginXMLEnablement> <PluginXMLEnablement feature="paperdeals" plugin.xml="paperdeals.plugin.xml"> </PluginXMLEnablement> <PluginXMLEnablement feature="generated-papers" plugin.xml="generatedpaperdeals.plugin.xml"> </PluginXMLEnablement> <PluginXMLEnablement feature="fitness-view" plugin.xml="fitness.plugin.xml"> </PluginXMLEnablement> <PluginXMLEnablement feature="price-sensitivity" plugin.xml="pricesensitivity.plugin.xml"> </PluginXMLEnablement> <PluginXMLEnablement feature="scenario-data-diff" plugin.xml="scenariodiff.plugin.xml"> </PluginXMLEnablement>
       <PluginXMLEnablement
-            feature="cargo-actuals"
-            plugin.xml="actuals.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="inventory-model"
-            plugin.xml="inventory.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="paperdeals"
-            plugin.xml="paperdeals.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="generated-papers"
-            plugin.xml="generatedpaperdeals.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="fitness-view"
-            plugin.xml="fitness.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="price-sensitivity"
-            plugin.xml="pricesensitivity.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
-            feature="scenario-data-diff"
-            plugin.xml="scenariodiff.plugin.xml">
+            feature="ninety-day-schedule-chart"
+            plugin.xml="ninetydayschedulechart.plugin.xml">
       </PluginXMLEnablement>
    </extension>
    <extension
