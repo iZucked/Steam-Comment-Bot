@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.widgets.schedulechart.feature"
       label="Schedule Chart Feature"
-      version="6.7.2.qualifier"
+      version="6.8.4.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
