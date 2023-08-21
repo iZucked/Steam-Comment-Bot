@@ -77,8 +77,9 @@
          version="0.0.0"/>
 
    <includes
-         id="com.mmxlabs.lngdataserver.feature"
+         id="com.mmxlabs.widgets.feature"
          version="0.0.0"/>
+
 
    <plugin
          id="com.mmxlabs.lingo.app"

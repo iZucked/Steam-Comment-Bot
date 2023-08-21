@@ -12,10 +12,11 @@
 	</parent>
 
 	<groupId>com.mmxlabs.widgets</groupId>
-	<artifactId>com.mmxlabs.widgets.schedulechart.parent</artifactId>
+	<artifactId>com.mmxlabs.widgets.parent</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>com.mmxlabs.widgets.schedulechart</module>
+		<module>com.mmxlabs.widgets.feature</module>
 	</modules>
 </project>

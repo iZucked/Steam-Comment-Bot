@@ -34,6 +34,7 @@
 		<module>com-mmxlabs-lng-scheduler</module>
 		<module>com-mmxlabs-models-mmxcore</module>
 		<module>com-mmxlabs-nebula-ganttchart</module>
+		<module>com-mmxlabs-widgets</module>
 		<module>com-mmxlabs-rcp-common</module>
 		<module>com-mmxlabs-scenario-service</module>
 		<module>com-mmxlabs-models-migration</module>

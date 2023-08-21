@@ -5,13 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
+		<artifactId>com.mmxlabs.widgets.parent</artifactId>
 		<groupId>com.mmxlabs.widgets</groupId>
-		<artifactId>com.mmxlabs.widgets.schedulechart.parent</artifactId>
 		<version>6.8.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	
-	<artifactId>com.mmxlabs.widgets.schedulechart.feature</artifactId>
+	<artifactId>com.mmxlabs.widgets.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 
 </project>

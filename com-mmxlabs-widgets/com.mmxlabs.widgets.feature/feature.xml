@@ -6,13 +6,13 @@
 
 -->
 <feature
-      id="com.mmxlabs.widgets.schedulechart.feature"
-      label="Schedule Chart Feature"
+      id="com.mmxlabs.widgets.feature"
+      label="Minimax Labs Widgets Feature"
       version="6.8.4.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
-         id="com.mmxlabs.widgets.feature"
+         id="com.mmxlabs.widgets.schedulechart"
          download-size="0"
          install-size="0"
          version="0.0.0"
