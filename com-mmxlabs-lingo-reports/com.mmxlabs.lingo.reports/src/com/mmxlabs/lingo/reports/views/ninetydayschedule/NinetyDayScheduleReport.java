@@ -29,6 +29,7 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
+import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
 
 public class NinetyDayScheduleReport extends ViewPart {
@@ -42,6 +43,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private final EquivalentsManager equivalentsManager = new EquivalentsManager();
 	private final NinetyDayScheduleEventProvider eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
 	private final NinetyDayDrawableEventProvider drawableEventProvider = new NinetyDayDrawableEventProvider();
+	private final NinetyDayDrawableEventTooltipProvider drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
 	private final NinetyDayScheduleEventStylingProvider eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
 	
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
@@ -91,7 +93,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer<>(parent, drawableEventProvider, eventProvider, eventStylingProvider);
+		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(null, drawableEventProvider, drawableEventTooltipProvider), eventProvider);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		

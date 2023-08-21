@@ -10,6 +10,7 @@ import java.util.Set;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
 
 public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider {
 	
@@ -20,7 +21,7 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	private ScheduleEvent rightmostEvent;
 
 	private final Set<ScheduleEvent> selectedEvents = new HashSet<>();
-	private Optional<ScheduleEvent> hoveredEvent = Optional.empty();
+	private Optional<DrawableScheduleEvent> hoveredEvent = Optional.empty();
 	
 	private List<DrawableScheduleChartRow> lastDrawnContent;
 
@@ -75,11 +76,11 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 		this.lastDrawnContent = lastDrawnContent;
 	}
 
-	public Optional<ScheduleEvent> getHoveredEvent() {
+	public Optional<DrawableScheduleEvent> getHoveredEvent() {
 		return hoveredEvent;
 	}
 
-	public void setHoveredEvent(Optional<ScheduleEvent> hoveredEvent) {
+	public void setHoveredEvent(Optional<DrawableScheduleEvent> hoveredEvent) {
 		this.hoveredEvent = hoveredEvent;
 	}
 	

@@ -16,15 +16,13 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartEventListener;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
-import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
-import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
+import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 
 public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	
@@ -36,11 +34,12 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	private T input;
 	private Map<Object, ScheduleEvent> internalDataMap = new HashMap<>();
 	
-	public ScheduleChartViewer(final Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider) {
-		this(new ScheduleCanvas(parent, drawableEventProvider, eventStylingProvider), eventProvider);
+	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider) {
+		this(new ScheduleCanvas(parent, providers), eventProvider);
 	}
-	public ScheduleChartViewer(final Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventProvider<T> eventProvider, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartSettings settings) {
-		this(new ScheduleCanvas(parent, drawableEventProvider, eventStylingProvider, settings), eventProvider);
+	
+	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider, IScheduleChartSettings settings) {
+		this(new ScheduleCanvas(parent, providers, settings), eventProvider);
 	}
 	
 	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider) {

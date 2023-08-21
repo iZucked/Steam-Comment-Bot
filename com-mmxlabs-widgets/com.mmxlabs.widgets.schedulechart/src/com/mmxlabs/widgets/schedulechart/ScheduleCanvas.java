@@ -25,7 +25,9 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
+import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventTooltipProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
+import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 
 public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter {
 
@@ -40,24 +42,26 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final EventHoverHandler eventHoverHandler;
 	
 	private final IScheduleChartSettings settings;
-	private final IDrawableScheduleEventProvider drawableEventProvider;
 	private final IScheduleEventStylingProvider eventStylingProvider;
+	private final IDrawableScheduleEventProvider drawableEventProvider;
+	private final IDrawableScheduleEventTooltipProvider drawableTooltipProvider;
 	
 	private final List<IScheduleChartEventListener> listeners = new ArrayList<>();
 	
 
-	public ScheduleCanvas(Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider) {
-		this(parent, drawableEventProvider, eventStylingProvider, new DefaultScheduleChartSettings());
+	public ScheduleCanvas(Composite parent, ScheduleChartProviders providers) {
+		this(parent, providers, new DefaultScheduleChartSettings());
 	}
 
-	public ScheduleCanvas(Composite parent, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider, IScheduleChartSettings settings) {
+	public ScheduleCanvas(Composite parent, ScheduleChartProviders providers,  IScheduleChartSettings settings) {
 		super(parent, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		this.canvasState = new ScheduleCanvasState();
 
 		this.settings = settings;
-		this.drawableEventProvider = drawableEventProvider;
-		this.eventStylingProvider = eventStylingProvider;
+		this.drawableEventProvider = providers.drawableEventProvider();
+		this.eventStylingProvider = null;
+		this.drawableTooltipProvider = providers.drawableTooltipProvider();
 
 		this.timeScale = new ScheduleTimeScale(canvasState, this, settings);
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, settings);
@@ -134,6 +138,14 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		rowHeader.setBounds(new Rectangle(originalBounds.x, mainBounds.y + drawableTimeScale.getTotalHeaderHeight(), rowHeaderWidth, mainBounds.height));
 		rowHeader.setLockedHeaderY(originalBounds.y);
 		drawer.drawOne(rowHeader, resolver);
+		
+		canvasState.getHoveredEvent().flatMap(de -> drawableTooltipProvider.getDrawableTooltip(de.getScheduleEvent())).ifPresent(dt -> {
+			final Rectangle bs = canvasState.getHoveredEvent().get().getBounds();
+			final Point anchor = new Point(bs.x, bs.y);
+			dt.setBounds(mainBounds);
+			dt.setAnchor(anchor, settings.getRowEventHeight() * 5 / 4);
+			drawer.drawOne(dt, resolver);
+		});
 		
 		drawer.drawOne(dragSelectionZoomHandler.getDrawableSelectionRectangle(), resolver);
 	}
@@ -235,13 +247,13 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		redraw();
 	}
 
-	public Optional<ScheduleEvent> findEvent(int x, int y) {
+	public Optional<DrawableScheduleEvent> findEvent(int x, int y) {
 		final List<DrawableScheduleChartRow> drawnRows = canvasState.getLastDrawnContent();
 		for (final DrawableScheduleChartRow row: drawnRows) {
 			if (row.getBounds().contains(x, y)) {
 				for (final DrawableScheduleEvent evt: row.getLastDrawnEvents()) {
 					if (evt.getBounds().contains(x, y) && evt.getScheduleEvent().isVisible()) {
-						return Optional.of(evt.getScheduleEvent());
+						return Optional.of(evt);
 					}
 				}
 				return Optional.empty();

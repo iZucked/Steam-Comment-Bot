@@ -1,15 +1,14 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 
 public interface BasicDrawableElements {
 	
 	public static int MAX_ALPHA = 255;
 
-	public record Line(int x1, int y1, int x2, int y2, Color c, int alpha) implements BasicDrawableElement {
+	public record Line(int x1, int y1, int x2, int y2, Color c, int alpha, int thickness) implements BasicDrawableElement {
 		public Line(int x1, int y1, int x2, int y2) { 
-			this(x1, y1, x2, y2, null, MAX_ALPHA);
+			this(x1, y1, x2, y2, null, MAX_ALPHA, 1);
 		}
 
 		@Override
@@ -24,7 +23,7 @@ public interface BasicDrawableElements {
 
 		@Override
 		public int getBorderThickness() {
-			return 0;
+			return thickness;
 		}
 		
 		@Override
