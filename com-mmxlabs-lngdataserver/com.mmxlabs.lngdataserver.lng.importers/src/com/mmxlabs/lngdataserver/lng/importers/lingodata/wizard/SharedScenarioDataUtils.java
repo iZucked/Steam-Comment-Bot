@@ -191,6 +191,7 @@ public final class SharedScenarioDataUtils {
 					final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
 					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
 					final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
+					final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
 					for (final DataOptions option : dataOptions) {
 						switch (option) {

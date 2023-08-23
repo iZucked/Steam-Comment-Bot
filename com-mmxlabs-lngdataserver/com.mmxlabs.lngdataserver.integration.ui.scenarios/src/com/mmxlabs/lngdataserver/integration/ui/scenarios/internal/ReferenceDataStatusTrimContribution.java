@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 
 public class ReferenceDataStatusTrimContribution {
@@ -83,7 +83,7 @@ public class ReferenceDataStatusTrimContribution {
 		
 		currentRecords = getSaved();
 		versionChangeRunnable = this::versionChanged;
-		PricingRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
+		PaperRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
 		setLabelTextAndToolTip(myLabel, !currentRecords.isDismissed);
 		
 		return myLabel;
@@ -99,7 +99,7 @@ public class ReferenceDataStatusTrimContribution {
 	
 	private void versionChanged() {
 		final String cV = currentRecords.typeVersion.get(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
-		final String nV = PricingRepository.INSTANCE.getCurrentVersion();
+		final String nV = PaperRepository.INSTANCE.getCurrentVersion();
 		if (nV != null && (cV == null || !cV.equals(nV))) {
 			currentRecords.isDismissed = false;
 			currentRecords.typeVersion.remove(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
@@ -135,7 +135,7 @@ public class ReferenceDataStatusTrimContribution {
 			mainLabel.dispose();
 		}
 		if (versionChangeRunnable != null) {
-			PricingRepository.INSTANCE.deregisterLocalVersionListener(versionChangeRunnable);
+			PaperRepository.INSTANCE.deregisterLocalVersionListener(versionChangeRunnable);
 		}
 	}
 	

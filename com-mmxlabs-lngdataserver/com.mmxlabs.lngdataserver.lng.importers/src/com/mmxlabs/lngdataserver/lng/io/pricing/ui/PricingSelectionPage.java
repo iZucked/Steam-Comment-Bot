@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 
 public class PricingSelectionPage extends WizardPage {
 
@@ -41,7 +41,7 @@ public class PricingSelectionPage extends WizardPage {
 
 		final Combo combo = new Combo(container, SWT.READ_ONLY);
 
-		final PricingRepository dr = PricingRepository.INSTANCE;
+		final PaperRepository dr = PaperRepository.INSTANCE;
 		dr.getLocalVersions().forEach(v -> combo.add(v.getIdentifier()));
 
 		combo.addSelectionListener(new SelectionAdapter() {
