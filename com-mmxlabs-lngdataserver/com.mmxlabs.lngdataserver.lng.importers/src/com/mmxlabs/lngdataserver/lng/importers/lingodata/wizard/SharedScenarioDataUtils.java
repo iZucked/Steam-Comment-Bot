@@ -152,7 +152,8 @@ public final class SharedScenarioDataUtils {
 		PricingData("Price Curves"), //
 		// SettledPriceData("Settled Price Curves"), //
 		ADPData("ADP"), //
-		CargoData("Cargoes") //
+		CargoData("Cargoes"), //
+		PaperData("Paper Deals")
 		;
 
 		private DataOptions(final String name) {
@@ -216,6 +217,9 @@ public final class SharedScenarioDataUtils {
 							break;
 						case CargoData:
 							dataToUpdater.put(DataOptions.CargoData, createCargoUpdater(sdp));
+							break;
+						case PaperData:
+							dataToUpdater.put(DataOptions.PaperData, createPricingUpdater(pricingModel));
 							break;
 						default:
 							break;
@@ -1370,6 +1374,11 @@ public final class SharedScenarioDataUtils {
 
 		return marketOk && settledOK;
 	}
+	
+	public static boolean checkPaperDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
+		final boolean paperOk = checkMatch(LNGScenarioSharedModelTypes.PAPER_DEALS.getID(), provider, targetVersions);
+		return paperOk;
+	}
 
 	public static boolean checkFleetDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
 
@@ -1403,6 +1412,7 @@ public final class SharedScenarioDataUtils {
 	public static List<DataOptionGroup> createGroups(final IBaseCaseVersionsProvider p, final Map<String, String> scenarioDataVersions) {
 		final List<DataOptionGroup> groups = new LinkedList<>();
 		groups.add(new DataOptionGroup("Pricing", !SharedScenarioDataUtils.checkPricingDataMatch(p, scenarioDataVersions), true, true, DataOptions.PricingData));
+		groups.add(new DataOptionGroup("Paper", !SharedScenarioDataUtils.checkPaperDataMatch(p, scenarioDataVersions), true, true, DataOptions.PaperData));
 		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 			groups.add(new DataOptionGroup("Ports && Distances", !checkPortAndDistanceDataMatch(p, scenarioDataVersions), true, false, DataOptions.PortData));
 		}
