@@ -19,7 +19,7 @@ import com.mmxlabs.rcp.common.json.CreatedAtInstantDeserializer;
  *
  */
 @JsonIgnoreProperties({ "creator", "published", "current", "type" })
-public class PricingMixin {
+public class PaperMixin {
 
 	@JsonAlias("identifier")
 	public String uuid;

@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lngdataserver.integration.paper.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 
 public class ReferenceDataStatusTrimContribution {

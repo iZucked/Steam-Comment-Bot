@@ -281,7 +281,8 @@ public class ScenarioServicePublishAction {
 
 			final List<DataOptions> dataTypesToUpload = new LinkedList<>();
 			dataTypesToUpload.add(DataOptions.PricingData);
-
+			dataTypesToUpload.add(DataOptions.PaperData);
+			
 			if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 				dataTypesToUpload.add(DataOptions.PortData);
 			}

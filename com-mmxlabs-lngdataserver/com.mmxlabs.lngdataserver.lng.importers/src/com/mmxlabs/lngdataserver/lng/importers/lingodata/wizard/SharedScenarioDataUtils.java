@@ -70,6 +70,7 @@ import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.io.paper.PaperFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.paper.PaperToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsFromScenarioCopier;
@@ -1085,6 +1086,10 @@ public final class SharedScenarioDataUtils {
 					@Override
 					public void execute() {
 						super.execute();
+						final CargoModel cm = ScenarioModelUtil.getCargoModel(target);
+						final EditingDomain editingDomain = target.getEditingDomain();
+						final Command command = PaperToScenarioCopier.getUpdateCommand(editingDomain, cm, paperVersion);
+						command.execute();
 					}
 				});
 			};

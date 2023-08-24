@@ -55,6 +55,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/paperDeals"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dealSets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/groupedDischargeSlots"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/paperDealsVersionRecord"/>
       <genOperations ecoreOperation="cargo.ecore#//CargoModel/getLoadSlotByName">
         <genParameters ecoreParameter="cargo.ecore#//CargoModel/getLoadSlotByName/name"/>
       </genOperations>

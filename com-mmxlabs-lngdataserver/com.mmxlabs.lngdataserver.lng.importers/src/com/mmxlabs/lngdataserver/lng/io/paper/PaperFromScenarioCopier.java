@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.mmxcore.VersionRecord;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 public class PaperFromScenarioCopier {
 
@@ -33,7 +34,11 @@ public class PaperFromScenarioCopier {
 			paperVersion.getPaperDeals().add(transformPaperDeal(paper));
 		}
 		
-		VersionRecord version = null;
+		VersionRecord record = cargoModel.getPaperDealsVersionRecord();
+		if (record == null || record.getVersion() == null) {
+			record = VersionsUtil.createNewRecord();
+			cargoModel.setPaperDealsVersionRecord(record);
+		}
 		
 		return paperVersion;
 	}

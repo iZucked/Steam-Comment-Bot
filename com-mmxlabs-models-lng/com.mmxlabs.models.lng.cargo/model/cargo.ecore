@@ -42,6 +42,9 @@
         eType="#//DealSet" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupedDischargeSlots"
         upperBound="-1" eType="#//GroupedDischargeSlotsConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paperDealsVersionRecord"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>

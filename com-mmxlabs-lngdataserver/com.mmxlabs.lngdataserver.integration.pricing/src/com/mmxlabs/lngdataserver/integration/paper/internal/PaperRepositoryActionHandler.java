@@ -11,15 +11,15 @@ import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
-import com.mmxlabs.lngdataserver.integration.paper.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-public class PricingRepositoryActionHandler implements IDataBrowserActionsHandler {
+public class PaperRepositoryActionHandler implements IDataBrowserActionsHandler {
 
-	private final PricingRepository repository;
+	private final PaperRepository repository;
 	private final CompositeNode dataRoot;
 
-	public PricingRepositoryActionHandler(final PricingRepository repository, final CompositeNode dataRoot) {
+	public PaperRepositoryActionHandler(final PaperRepository repository, final CompositeNode dataRoot) {
 		this.repository = repository;
 		this.dataRoot = dataRoot;
 	}

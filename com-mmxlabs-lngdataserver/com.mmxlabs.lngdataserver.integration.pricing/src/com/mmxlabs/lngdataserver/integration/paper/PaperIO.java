@@ -19,11 +19,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lngdataserver.integration.general.ModelVersionHeader;
 import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 
-public class PricingIO {
+public class PaperIO {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
 
-	private PricingIO() {
+	private PaperIO() {
 
 	}
 

@@ -9,14 +9,13 @@ import java.io.OutputStream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lngdataserver.integration.paper.PricingTypeRecord;
 import com.mmxlabs.lngdataserver.integration.repo.general.TypeRecord;
 
-public class PricingTypeRecord implements TypeRecord {
+public class PaperTypeRecord implements TypeRecord {
 
-	public static final @NonNull TypeRecord INSTANCE = new PricingTypeRecord();
+	public static final @NonNull TypeRecord INSTANCE = new PaperTypeRecord();
 
-	private PricingTypeRecord() {
+	private PaperTypeRecord() {
 	}
 
 	@Override
@@ -50,11 +49,11 @@ public class PricingTypeRecord implements TypeRecord {
 	}
 
 	public java.lang.Class<?> getMixin() {
-		return PricingMixin.class;
+		return PaperMixin.class;
 	}
 
 	@Override
 	public void writeHeader(OutputStream os) throws IOException {
-		PricingIO.writeHeader(os);
+		PaperIO.writeHeader(os);
 	}
 }

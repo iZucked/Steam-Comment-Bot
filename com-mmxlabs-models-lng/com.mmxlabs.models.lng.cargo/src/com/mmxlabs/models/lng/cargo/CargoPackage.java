@@ -213,13 +213,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Paper Deals Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__PAPER_DEALS_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -8894,6 +8903,17 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_GroupedDischargeSlots();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDealsVersionRecord <em>Paper Deals Version Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Paper Deals Version Record</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getPaperDealsVersionRecord()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_PaperDealsVersionRecord();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String) <em>Get Load Slot By Name</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12173,6 +12193,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = eINSTANCE.getCargoModel_GroupedDischargeSlots();
+
+		/**
+		 * The meta object literal for the '<em><b>Paper Deals Version Record</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__PAPER_DEALS_VERSION_RECORD = eINSTANCE.getCargoModel_PaperDealsVersionRecord();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Load Slot By Name</b></em>' operation.
