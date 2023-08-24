@@ -5,6 +5,9 @@
 package com.mmxlabs.lngdataserver.integration.paper.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,7 +18,7 @@ import com.mmxlabs.rcp.common.json.CreatedAtInstantDeserializer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({ "published", "current", "metaInformation", "version" })
-public class PricingVersion {
+public class PaperVersion {
 
 	@JsonDeserialize(using = CreatedAtInstantDeserializer.class)
 	@JsonSerialize(using = InstantSerializer.class)
@@ -25,8 +28,10 @@ public class PricingVersion {
 	private String identifier;
 
 	private String createdBy;
+	
+	List<DatahubPaperDeal> paperDeals = new ArrayList<>();
 
-	public PricingVersion() {
+	public PaperVersion() {
 		// jackson
 	}
 
@@ -52,5 +57,13 @@ public class PricingVersion {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public List<DatahubPaperDeal> getPaperDeals() {
+		return paperDeals;
+	}
+
+	public void setPaperDeals(List<DatahubPaperDeal> paperDeals) {
+		this.paperDeals = paperDeals;
 	}
 }

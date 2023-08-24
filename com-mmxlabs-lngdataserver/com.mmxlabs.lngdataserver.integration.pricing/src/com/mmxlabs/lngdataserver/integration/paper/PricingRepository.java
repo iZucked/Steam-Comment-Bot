@@ -9,10 +9,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.lngdataserver.integration.paper.PricingIO;
 import com.mmxlabs.lngdataserver.integration.paper.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.paper.PricingTypeRecord;
-import com.mmxlabs.lngdataserver.integration.paper.model.PricingVersion;
+import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 import com.mmxlabs.lngdataserver.integration.repo.general.AbstractGeneralDataRepository;
 
-public class PricingRepository extends AbstractGeneralDataRepository<PricingVersion> {
+public class PricingRepository extends AbstractGeneralDataRepository<PaperVersion> {
 
 	public static final @NonNull PricingRepository INSTANCE = new PricingRepository();
 
@@ -22,13 +22,13 @@ public class PricingRepository extends AbstractGeneralDataRepository<PricingVers
 	}
 
 	@Override
-	public boolean publishVersion(final PricingVersion version) throws Exception {
+	public boolean publishVersion(final PaperVersion version) throws Exception {
 		final String json = PricingIO.write(version);
 		return uploadData(json);
 	}
 
 	@Override
-	public PricingVersion getLocalVersion(final String uuid) throws Exception   {
+	public PaperVersion getLocalVersion(final String uuid) throws Exception   {
 		return doGetLocalVersion(uuid, PricingIO::read);
 	}
 }

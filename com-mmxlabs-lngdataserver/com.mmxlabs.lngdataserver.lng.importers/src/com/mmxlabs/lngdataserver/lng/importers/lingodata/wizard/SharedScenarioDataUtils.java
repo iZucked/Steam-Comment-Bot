@@ -57,6 +57,7 @@ import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefiniti
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVersion;
+import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
@@ -68,6 +69,7 @@ import com.mmxlabs.lngdataserver.lng.io.distances.DistancesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesToScenarioImporter;
+import com.mmxlabs.lngdataserver.lng.io.paper.PaperFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsFromScenarioCopier;
@@ -220,7 +222,7 @@ public final class SharedScenarioDataUtils {
 							dataToUpdater.put(DataOptions.CargoData, createCargoUpdater(sdp));
 							break;
 						case PaperData:
-							dataToUpdater.put(DataOptions.PaperData, createPricingUpdater(pricingModel));
+							dataToUpdater.put(DataOptions.PaperData, createPaperUpdater(cargoModel));
 							break;
 						default:
 							break;
@@ -1063,6 +1065,26 @@ public final class SharedScenarioDataUtils {
 						appendAndExecute(command1);
 						final Command command2 = SettledPricesToScenarioImporter.getUpdateCommand(editingDomain, pm, settledPricesVersion);
 						appendAndExecute(command2);
+					}
+				});
+			};
+		}
+		
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPaperUpdater(final CargoModel cargoModel) throws JsonProcessingException {
+			final PaperVersion paperVersion = PaperFromScenarioCopier.generateVersion(cargoModel);
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						super.execute();
 					}
 				});
 			};

@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lngdataserver.integration.general.ModelVersionHeader;
-import com.mmxlabs.lngdataserver.integration.paper.model.PricingVersion;
+import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 
 public class PricingIO {
 
@@ -39,7 +39,7 @@ public class PricingIO {
 		return objectMapper;
 	}
 
-	public static PricingVersion read(final InputStream is) throws IOException {
+	public static PaperVersion read(final InputStream is) throws IOException {
 		final JsonFactory jf = new JsonFactory();
 		try (JsonParser jp = jf.createParser(is)) {
 			jp.setCodec(createObjectMapper());
@@ -49,7 +49,7 @@ public class PricingIO {
 			final ModelVersionHeader header = jp.readValueAs(ModelVersionHeader.class);
 			jp.nextToken();
 			if (header.getModelVersion() == CURRENT_MODEL_VERSION) {
-				return jp.readValueAs(PricingVersion.class);
+				return jp.readValueAs(PaperVersion.class);
 			} else {
 				switch (header.getModelVersion()) {
 				case 0: {
@@ -67,7 +67,7 @@ public class PricingIO {
 		}
 	}
 
-	public static void write(final PricingVersion version, final OutputStream os) throws IOException {
+	public static void write(final PaperVersion version, final OutputStream os) throws IOException {
 		final ObjectMapper mapper = createObjectMapper();
 		final ModelVersionHeader header = new ModelVersionHeader();
 		header.setModelVersion(CURRENT_MODEL_VERSION);
@@ -75,7 +75,7 @@ public class PricingIO {
 		mapper.writerWithDefaultPrettyPrinter().writeValue(os, version);
 	}
 
-	public static String write(final PricingVersion version) throws IOException {
+	public static String write(final PaperVersion version) throws IOException {
 		final ObjectMapper mapper = createObjectMapper();
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(version);
 	}
