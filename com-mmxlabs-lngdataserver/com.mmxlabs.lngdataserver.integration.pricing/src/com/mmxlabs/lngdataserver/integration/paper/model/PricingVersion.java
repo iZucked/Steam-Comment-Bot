@@ -2,14 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.pricing.model;
+package com.mmxlabs.lngdataserver.integration.paper.model;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,10 +23,6 @@ public class PricingVersion {
 	private Instant createdAt;
 
 	private String identifier;
-
-	private Map<String, Curve> curves = new HashMap<>();
-
-	private List<Curve> curvesList = new LinkedList<>();
 
 	private String createdBy;
 
@@ -53,22 +44,6 @@ public class PricingVersion {
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
-	}
-
-	public Map<String, Curve> getCurves() {
-		return curves;
-	}
-
-	public void setCurves(Map<String, Curve> curves) {
-		this.curves = curves;
-	}
-
-	public List<Curve> getCurvesList() {
-		return curvesList;
-	}
-
-	public void setCurvesList(List<Curve> curvesList) {
-		this.curvesList = curvesList;
 	}
 
 	public String getCreatedBy() {

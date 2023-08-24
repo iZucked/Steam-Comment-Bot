@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.pricing;
+package com.mmxlabs.lngdataserver.integration.paper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.lngdataserver.integration.general.ModelVersionHeader;
-import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
+import com.mmxlabs.lngdataserver.integration.paper.model.PricingVersion;
 
 public class PricingIO {
 

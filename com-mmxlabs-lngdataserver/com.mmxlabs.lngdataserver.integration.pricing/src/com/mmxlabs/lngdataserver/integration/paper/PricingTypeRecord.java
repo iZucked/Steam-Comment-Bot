@@ -2,13 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.pricing;
+package com.mmxlabs.lngdataserver.integration.paper;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.lngdataserver.integration.paper.PricingTypeRecord;
 import com.mmxlabs.lngdataserver.integration.repo.general.TypeRecord;
 
 public class PricingTypeRecord implements TypeRecord {

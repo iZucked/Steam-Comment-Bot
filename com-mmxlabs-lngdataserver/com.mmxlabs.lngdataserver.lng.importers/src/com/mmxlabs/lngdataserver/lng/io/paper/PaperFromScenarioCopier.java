@@ -7,14 +7,14 @@ package com.mmxlabs.lngdataserver.lng.io.paper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
+import com.mmxlabs.lngdataserver.integration.paper.model.PricingVersion;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 
 public class PaperFromScenarioCopier {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PaperFromScenarioCopier.class);
 
-	public static PaperVersion generateVersion(PricingModel pricingModel) {
+	public static PricingVersion generateVersion(PricingModel pricingModel) {
 
 		return null;
 	}

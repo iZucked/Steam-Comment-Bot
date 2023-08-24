@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.pricing.internal;
+package com.mmxlabs.lngdataserver.integration.paper.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.browser.util.DataBrowserNodeHandler;
-import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.paper.PricingRepository;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 
 /**
