@@ -51,13 +51,11 @@ public class OAuthDialog extends Window {
 	 */
 	private static boolean tryEdge = true;
 
-	private boolean preferEdgeBrowser;
 
-	public OAuthDialog(final String upstreamUrl, String path, @Nullable Shell shell, boolean preferEdgeBrowser) {
+	public OAuthDialog(final String upstreamUrl, String path, @Nullable Shell shell) {
 		super(shell);
 		this.baseUrl = upstreamUrl;
 		this.fragment = path;
-		this.preferEdgeBrowser = preferEdgeBrowser;
 
 		setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.MAX | SWT.RESIZE | getDefaultOrientation());
 		setBlockOnOpen(true);
@@ -123,7 +121,7 @@ public class OAuthDialog extends Window {
 			tryEdge = false;
 		}
 
-		if (preferEdgeBrowser && tryEdge) {
+		if (tryEdge) {
 			try {
 				browser = new Browser(oauthComposite, SWT.EDGE);
 			} catch (SWTError e) {
