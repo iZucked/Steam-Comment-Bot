@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.paper;
+package com.mmxlabs.lngdataserver.integration.pricing;
 
 import java.time.Instant;
 
@@ -19,7 +19,7 @@ import com.mmxlabs.rcp.common.json.CreatedAtInstantDeserializer;
  *
  */
 @JsonIgnoreProperties({ "creator", "published", "current", "type" })
-public class PaperMixin {
+public class PricingMixin {
 
 	@JsonAlias("identifier")
 	public String uuid;

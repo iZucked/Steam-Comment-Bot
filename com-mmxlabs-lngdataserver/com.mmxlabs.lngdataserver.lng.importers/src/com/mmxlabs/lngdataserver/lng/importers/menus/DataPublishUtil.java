@@ -17,6 +17,7 @@ import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsReposit
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsRepository;
 import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsFromScenarioCopier;
@@ -82,7 +83,7 @@ public class DataPublishUtil {
 	public static @Nullable String checkAndUploadPricingData(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final String version = pricingModel.getMarketCurvesVersionRecord().getVersion();
-		if (dataVersionUpload(PaperRepository.INSTANCE, version, () -> PricingFromScenarioCopier.generateVersion(pricingModel))) {
+		if (dataVersionUpload(PricingRepository.INSTANCE, version, () -> PricingFromScenarioCopier.generateVersion(pricingModel))) {
 			return version;
 		}
 		return null;

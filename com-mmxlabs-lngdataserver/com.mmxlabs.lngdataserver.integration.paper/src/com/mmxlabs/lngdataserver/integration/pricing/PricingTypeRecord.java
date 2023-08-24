@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.paper;
+package com.mmxlabs.lngdataserver.integration.pricing;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,11 +11,11 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.lngdataserver.integration.repo.general.TypeRecord;
 
-public class PaperTypeRecord implements TypeRecord {
+public class PricingTypeRecord implements TypeRecord {
 
-	public static final @NonNull TypeRecord INSTANCE = new PaperTypeRecord();
+	public static final @NonNull TypeRecord INSTANCE = new PricingTypeRecord();
 
-	private PaperTypeRecord() {
+	private PricingTypeRecord() {
 	}
 
 	@Override
@@ -49,11 +49,11 @@ public class PaperTypeRecord implements TypeRecord {
 	}
 
 	public java.lang.Class<?> getMixin() {
-		return PaperMixin.class;
+		return PricingMixin.class;
 	}
 
 	@Override
 	public void writeHeader(OutputStream os) throws IOException {
-		PaperIO.writeHeader(os);
+		PricingIO.writeHeader(os);
 	}
 }

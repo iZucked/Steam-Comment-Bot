@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.paper.model;
+package com.mmxlabs.lngdataserver.integration.pricing.model;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import com.mmxlabs.rcp.common.json.CreatedAtInstantDeserializer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({ "published", "current", "metaInformation", "version" })
-public class PaperVersion {
+public class PricingVersion {
 
 	@JsonDeserialize(using = CreatedAtInstantDeserializer.class)
 	@JsonSerialize(using = InstantSerializer.class)
@@ -29,9 +29,13 @@ public class PaperVersion {
 
 	private String identifier;
 
+	private Map<String, Curve> curves = new HashMap<>();
+
+	private List<Curve> curvesList = new LinkedList<>();
+
 	private String createdBy;
 
-	public PaperVersion() {
+	public PricingVersion() {
 		// jackson
 	}
 
@@ -49,6 +53,22 @@ public class PaperVersion {
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
+	}
+
+	public Map<String, Curve> getCurves() {
+		return curves;
+	}
+
+	public void setCurves(Map<String, Curve> curves) {
+		this.curves = curves;
+	}
+
+	public List<Curve> getCurvesList() {
+		return curvesList;
+	}
+
+	public void setCurvesList(List<Curve> curvesList) {
+		this.curvesList = curvesList;
 	}
 
 	public String getCreatedBy() {

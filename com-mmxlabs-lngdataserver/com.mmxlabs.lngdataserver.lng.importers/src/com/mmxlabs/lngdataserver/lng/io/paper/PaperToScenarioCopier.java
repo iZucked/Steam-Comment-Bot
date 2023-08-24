@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
@@ -44,7 +45,7 @@ public class PaperToScenarioCopier {
 
 	}
 
-	public static Command getUpdateCommand(@NonNull final EditingDomain editingDomain, @NonNull final PricingModel pricingModel, final PricingVersion version) {
+	public static Command getUpdateCommand(@NonNull final EditingDomain editingDomain, @NonNull final PricingModel pricingModel, final PaperVersion version) {
 		// TODO
 		return null;
 	}

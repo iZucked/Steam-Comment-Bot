@@ -27,6 +27,7 @@ import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.browser.ui.context.IDataBrowserContextMenuExtension;
 import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
@@ -199,7 +200,7 @@ public class DataBrowserContentMenuContribution implements IDataBrowserContextMe
 				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 				final PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
 				try {
-					PaperRepository.INSTANCE.publishVersion(version);
+					PricingRepository.INSTANCE.publishVersion(version);
 				} catch (final Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

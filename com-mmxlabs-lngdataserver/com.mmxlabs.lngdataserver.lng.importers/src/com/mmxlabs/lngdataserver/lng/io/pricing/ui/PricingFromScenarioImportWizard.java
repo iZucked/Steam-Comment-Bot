@@ -15,6 +15,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.lng.io.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -56,7 +57,7 @@ public class PricingFromScenarioImportWizard extends Wizard implements IImportWi
 								PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 								PricingVersion version = PricingFromScenarioCopier.generateVersion(pricingModel);
 								try {
-									PaperRepository.INSTANCE.publishVersion(version);
+									PricingRepository.INSTANCE.publishVersion(version);
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();

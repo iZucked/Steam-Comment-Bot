@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lngdataserver.integration.paper.internal;
+package com.mmxlabs.lngdataserver.integration.pricing.internal;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ import com.mmxlabs.lngdataserver.browser.CompositeNode;
 import com.mmxlabs.lngdataserver.browser.Node;
 import com.mmxlabs.lngdataserver.commons.DataVersion;
 import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
-import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class PricingRepositoryActionHandler implements IDataBrowserActionsHandler {
 
-	private final PaperRepository repository;
+	private final PricingRepository repository;
 	private final CompositeNode dataRoot;
 
-	public PricingRepositoryActionHandler(final PaperRepository repository, final CompositeNode dataRoot) {
+	public PricingRepositoryActionHandler(final PricingRepository repository, final CompositeNode dataRoot) {
 		this.repository = repository;
 		this.dataRoot = dataRoot;
 	}

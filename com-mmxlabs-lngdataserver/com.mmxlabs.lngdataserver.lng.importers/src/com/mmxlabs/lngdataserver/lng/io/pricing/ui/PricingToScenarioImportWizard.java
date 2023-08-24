@@ -18,6 +18,7 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
+import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.lng.io.pricing.PricingToScenarioCopier;
 import com.mmxlabs.models.lng.scenario.mergeWizards.ScenarioSelectionPage;
@@ -65,7 +66,7 @@ public class PricingToScenarioImportWizard extends Wizard implements IImportWiza
 
 						monitor.beginTask("copy into scenario", selectedScenarios.size());
 						try {
-							final PaperRepository pricingRepository = PaperRepository.INSTANCE;
+							final PricingRepository pricingRepository = PricingRepository.INSTANCE;
 							final PricingVersion version = pricingRepository.getLocalVersion(versionTag);
 
 							for (final ScenarioInstance scenarioInstance : selectedScenarios) {
