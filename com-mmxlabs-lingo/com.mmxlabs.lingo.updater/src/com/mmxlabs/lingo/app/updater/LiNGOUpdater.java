@@ -42,6 +42,7 @@ import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestWrapper;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HttpContext;
@@ -476,9 +477,12 @@ public class LiNGOUpdater {
 
 	private UpdateVersion getVersion(final URI baseUrl) throws Exception {
 		// If URL ends in .zip - then assume file.
-		final URI url = expandURL(baseUrl);
-
+		URI url = expandURL(baseUrl);
 		if (url.toString().startsWith("http")) {
+
+			// Add the meta parameter for the new DataHub updates site to return just the version metadata object rather than request the byte range.
+			// Should be ignored by the other sites
+			url = new URIBuilder(url).addParameter("meta", null).build();
 
 			final HttpClientBuilder builder = createHttpBuilder(url);
 			builder.addInterceptorFirst(new HttpRequestInterceptor() {
