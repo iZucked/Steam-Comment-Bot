@@ -1782,7 +1782,7 @@ public class InventoryReport extends ViewPart {
 									}
 								}
 							}
-							if (otherSlotAllocations == null) {
+							if (otherSlotAllocations == null || !LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CARGO_DIFF)) {
 								values = inventoryEvents.getEvents().stream() //
 										.filter(evt -> evt.getSlotAllocation() != null) //
 										.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
@@ -1861,7 +1861,7 @@ public class InventoryReport extends ViewPart {
 									}
 								}
 								if (!pinnedFullChanges.isEmpty()) {
-									final IBarSeries series = createDaySizedBarSeries(seriesSet, "Δ Cargoes", pinnedFullChanges);
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "B Cargoes", pinnedFullChanges);
 									series.setBarWidth(1);
 									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 									series.setVisible(colourSchemeAction.isShowingCargoes());
@@ -1869,7 +1869,7 @@ public class InventoryReport extends ViewPart {
 									// cargoSeries = series;
 								}
 								if (!otherFullChanges.isEmpty()) {
-									final IBarSeries series = createDaySizedBarSeries(seriesSet, "Δ Cargoes", otherFullChanges);
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "N Cargoes", otherFullChanges);
 									series.setBarWidth(1);
 									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
 									series.setVisible(colourSchemeAction.isShowingCargoes());
@@ -1877,7 +1877,7 @@ public class InventoryReport extends ViewPart {
 									cargoSeries = series;
 								}
 								if (!volumeChanges.isEmpty()) {
-									final IBarSeries series = createDaySizedBarSeries(seriesSet, "Δ Cargoes", volumeChanges);
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "V Cargoes", volumeChanges);
 									series.setBarWidth(1);
 									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 									series.setVisible(colourSchemeAction.isShowingCargoes());

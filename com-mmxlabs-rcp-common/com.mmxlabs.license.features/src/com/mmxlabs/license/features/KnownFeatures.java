@@ -155,6 +155,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_NON_SHIPPED_FOB_ROTATIONS = "features:non-shipped-fob-rotations";
 
+	public static final String FEATURE_INVENTORY_CARGO_DIFF = "features:inventory-cargo-diff";
+
 	/**
 	 * Scenario repair features
 	 */
