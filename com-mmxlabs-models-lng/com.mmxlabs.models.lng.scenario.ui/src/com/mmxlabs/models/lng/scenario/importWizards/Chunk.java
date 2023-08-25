@@ -33,21 +33,21 @@ abstract class Chunk {
 		this.keys = new HashMap<>();
 	}
 
-	void setFromDirectory(final File directory) {
-		if (isZip(directory.getAbsolutePath())) {
-			setFromZip(directory.getAbsolutePath());
-		}
-		else if (directory.isDirectory()) {
+	void setFromDirectory(final File file) {
+		if (isZip(file)) {
+			setFromZip(file.getAbsolutePath());
+		} else if (file != null){
 			for (final Map.Entry<String, String> entry : friendlyNames.entrySet()) {
 				final String k = entry.getKey();
 				final String v = entry.getValue();
-				final File sub = new File(directory, v + ".csv");
+				final File sub = new File(file, v + ".csv");
 				if (sub.exists()) {
 					try {
 						final String str = sub.getCanonicalPath();
 						editors.get(k).setStringValue(str);
 						keys.put(k, str); // CME?
 					} catch (final IOException e) {
+						
 					}
 				}
 			}
@@ -95,16 +95,19 @@ abstract class Chunk {
 		return null;
 	}
 	
-	private static boolean isZip(String fn) {
-		try {
-			ZipFile zip = new ZipFile(fn);
-			zip.close();
-		} catch (ZipException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
+	private static boolean isZip(final File directory) {
+		if (directory != null) {
+			try {
+				ZipFile zip = new ZipFile(directory.getAbsolutePath());
+				zip.close();
+			} catch (ZipException e) {
+				return false;
+			} catch (IOException e) {
+				return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 }
 

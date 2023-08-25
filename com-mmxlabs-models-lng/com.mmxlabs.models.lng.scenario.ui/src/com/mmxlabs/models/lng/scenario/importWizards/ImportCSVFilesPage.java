@@ -26,6 +26,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -77,9 +79,9 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class ImportCSVFilesPage extends WizardPage {
-	
+
 	protected static final String FILTER_DIRECTORY_KEY = "lastSelection";
-	
+
 	protected String SECTION_NAME() {
 		return "ImportCSVFilesPage.section";
 	}
@@ -88,7 +90,7 @@ public class ImportCSVFilesPage extends WizardPage {
 	private static final String DECIMAL_SEPARATOR_KEY = "lastDecimalSeparator";
 
 	private static final Logger LOG = LoggerFactory.getLogger(ImportCSVFilesPage.class);
-	
+
 	private static final IImporterRegistry importRegistry = Activator.getDefault().getImporterRegistry();
 
 	protected final List<SubModelChunk> subModelChunks = new LinkedList<>();
@@ -114,7 +116,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		setTitle("Choose CSV Files");
 		this.mainPage = mainPage;
 	}	
-	
+
 	@Override
 	public void createControl(final Composite arg0) {	
 		final ScrolledComposite c1 = new ScrolledComposite(arg0, SWT.BORDER | SWT.V_SCROLL);
@@ -132,14 +134,12 @@ public class ImportCSVFilesPage extends WizardPage {
 		final IDialogSettings section = getSection();
 		final String lastDirectoryName = section.get(FILTER_DIRECTORY_KEY);
 
-		createSelectionDialog(holder, lastDirectoryName, section);
-
-		GridData layout;
+		createSelectionDialog(holder, lastDirectoryName);
 
 		final ExpandableComposite fieldComposite = new ExpandableComposite(top, SWT.NONE);
 		fieldComposite.setText("Advanced");
 		fieldComposite.setLayout(new GridLayout(1, false));
-		layout = new GridData(SWT.FILL, SWT.FILL, true, true);
+		GridData layout = new GridData(SWT.FILL, SWT.FILL, true, true);
 		// for some reason, horizontal and vertical fill do not work without width /
 		// height hints set
 		layout.heightHint = 300;
@@ -203,15 +203,16 @@ public class ImportCSVFilesPage extends WizardPage {
 			for (final Map.Entry<String, String> entry : parts.entrySet()) {
 				final String key = entry.getKey();
 				final FileFieldEditor ffe = new FileFieldEditor(key, entry.getValue(), g);
-				ffe.getTextControl(g).addModifyListener(
-					modifyEvent -> {
+				ffe.getTextControl(g).addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(final ModifyEvent e) {
 						final String stringValue = ffe.getStringValue();
 						if (stringValue.isEmpty()) {
-							chunk.keys.remove(key);
+							chunk.keys.remove(entry.getKey());
+						} else {
+							chunk.keys.put(entry.getKey(), stringValue);
 						}
-						else {
-							chunk.keys.put(key, stringValue);
-						}
+					}
 				});
 				chunk.editors.put(key, ffe);
 			}
@@ -246,7 +247,7 @@ public class ImportCSVFilesPage extends WizardPage {
 							else {
 								chunk.keys.put(key, stringValue);
 							}
-					});
+						});
 				chunk.editors.put(key, ffe);
 			}
 			chunk.setFromDirectory(lastDirectoryFile);
@@ -263,40 +264,53 @@ public class ImportCSVFilesPage extends WizardPage {
 		setControl(c1);
 	}
 
-	protected void createSelectionDialog(Composite holder, String lastDirectoryName, IDialogSettings section) {
+	protected void createSelectionDialog(Composite holder, String lastDirectoryName) {
 		// Create selection dialogs
-		final Button auto = new Button(holder, SWT.NONE);
-		final Label directory = new Label(holder, SWT.NONE);
-		auto.setText("Choose &Directory...");
-		directory.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-		if (lastDirectoryName != null) {
-			directory.setText(lastDirectoryName);
-		}
-		auto.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				final String filter = section.get(FILTER_DIRECTORY_KEY);
-				// display file open dialog and then fill out files if the exist.
-				final DirectoryDialog dd = new DirectoryDialog(getShell());
-				if (filter != null) {
-					dd.setFilterPath(filter);
+				final Button auto = new Button(holder, SWT.NONE);
+				final Label directory = new Label(holder, SWT.NONE);
+				auto.setText("Choose &Directory...");
+				directory.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+				if (lastDirectoryName != null) {
+					directory.setText(lastDirectoryName);
 				}
+				auto.addSelectionListener(new SelectionAdapter() {
+					
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
 
-				final String d = dd.open();
-				
-				if (d != null) {
-					final File dir = new File(d);
-					if (dir.exists() && dir.isDirectory()) {
-						join(subModelChunks, extraModelChunks).forEach(c -> c.setFromDirectory(dir));
+						final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+						IDialogSettings section = dialogSettings.getSection(SECTION_NAME());
+						final String filter = section == null ? null : section.get(FILTER_DIRECTORY_KEY);
+						// display file open dialog and then fill out files if the exist.
+						final DirectoryDialog dd = new DirectoryDialog(getShell());
+						if (filter != null) {
+							dd.setFilterPath(filter);
+						}
+
+						final String d = dd.open();
+
+						if (d != null) {
+							final File dir = new File(d);
+							if (dir.exists() && dir.isDirectory()) {
+								for (final Chunk c : subModelChunks) {
+									c.setFromDirectory(dir);
+								}
+								for (final Chunk c : extraModelChunks) {
+									c.setFromDirectory(dir);
+								}
+							}
+							directory.setText(d);
+
+							// Trigger 'Next' button focus
+							setPageComplete(true);
+
+							if (section == null) {
+								section = dialogSettings.addNewSection(SECTION_NAME());
+							}
+							section.put(FILTER_DIRECTORY_KEY, dir.toString());
+						}
 					}
-					directory.setText(d);
-
-					// Trigger 'Next' button focus
-					setPageComplete(true);
-					section.put(FILTER_DIRECTORY_KEY, dir.toString());
-				}
-			}
-		});
+				});
 	}
 
 	public IScenarioDataProvider doImport(final DefaultImportContext context) {
@@ -310,7 +324,7 @@ public class ImportCSVFilesPage extends WizardPage {
 
 		context.setRootObject(scenarioModel);
 		final SimpleScenarioDataProvider scenarioDataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
-	
+
 		for (final Chunk c : join(subModelChunks, extraModelChunks)) {
 			final HashMap<String, CSVReader> readers = new HashMap<>();
 			try {
@@ -330,7 +344,7 @@ public class ImportCSVFilesPage extends WizardPage {
 					else if (c instanceof ExtraModelChunk emc) {
 						emc.importer.importModel(scenarioModel, readers, context);
 					}
-					
+
 				} catch (final Throwable th) {
 					LOG.error(th.getMessage(), th);
 				}
@@ -457,11 +471,11 @@ public class ImportCSVFilesPage extends WizardPage {
 	protected void setScenarioInstance(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 	}
-	
+
 	<T> List<T> join(List<? extends T> list1, List<? extends T> list2) {		
 		return Stream.concat(list1.stream(), list2.stream()).toList();
 	}
-	
+
 	private IDialogSettings getSection() {
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		IDialogSettings section = dialogSettings.getSection(SECTION_NAME());
