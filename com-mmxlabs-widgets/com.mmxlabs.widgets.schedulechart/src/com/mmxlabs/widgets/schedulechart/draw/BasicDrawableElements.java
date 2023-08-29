@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.widgets.schedulechart.draw;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Display;
 
 public interface BasicDrawableElements {
 	
@@ -110,9 +113,9 @@ public interface BasicDrawableElements {
 		}
 	}
 	
-	public record Text(int x, int y, String text, Color c, Padding p, int alpha) implements BasicDrawableElement {
+	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int alignment, Color c, Font font, Padding p, int alpha) implements BasicDrawableElement {
 		public Text(int x, int y, String text) {
-			this(x, y, text, null, new Padding(0, 0, 0, 0), MAX_ALPHA);
+			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, null, Display.getDefault().getSystemFont(), new Padding(0, 0, 0, 0), MAX_ALPHA);
 		}
 
 		@Override
@@ -136,20 +139,20 @@ public interface BasicDrawableElements {
 		}
 
 		public static TextBuilder from(int x, int y, String s) {
-			return new TextBuilder(x, y, s);
+			return new TextBuilder(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), s);
 		}
 		
 		public static class TextBuilder {
-			private final int x;
-			private final int y;
+			private final org.eclipse.swt.graphics.Rectangle bb;
 			private final String s;
 			private Color c = null;
 			private Padding p = new Padding(0, 0, 0, 0);
 			private int alpha = MAX_ALPHA;
+			private int alignment = SWT.LEFT;
+			private Font f = Display.getDefault().getSystemFont();
 			
-			private TextBuilder(int x, int y, String s) {
-				this.x = x;
-				this.y = y;
+			private TextBuilder(org.eclipse.swt.graphics.Rectangle boundingBox, String s) {
+				this.bb = boundingBox;
 				this.s = s;
 			}
 			
@@ -172,9 +175,19 @@ public interface BasicDrawableElements {
 				this.alpha = alpha;
 				return this;
 			}
+			
+			public TextBuilder alignment(int alignment) {
+				this.alignment = alignment;
+				return this;
+			}
+			
+			public TextBuilder font(Font f) {
+				this.f = f;
+				return this;
+			}
 
 			public Text create() {
-				return new Text(x, y, s, c, p, alpha);
+				return new Text(bb, s, alignment, c, f, p, alpha);
 			}
 		}
 

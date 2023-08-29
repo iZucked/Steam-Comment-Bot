@@ -47,18 +47,24 @@ public abstract class DrawableScheduleEventTooltip extends DrawableElement {
 		res.addAll(bg.getBasicDrawableElements(r));
 		
 		final DrawableElement header = getTooltipHeader();
-		header.setBounds(new Rectangle(anchor.x, y, width, getHeaderHeight(r)));
-		res.addAll(header.getBasicDrawableElements(r));
-		y += getHeaderHeight(r);
+		if (header != null) {
+			header.setBounds(new Rectangle(anchor.x, y, width, getHeaderHeight(r)));
+			res.addAll(header.getBasicDrawableElements(r));
+			y += getHeaderHeight(r);
+		}
 		
 		final DrawableElement body = getTooltipBody();
-		body.setBounds(new Rectangle(anchor.x, y, width, getBodyHeight(r)));
-		res.addAll(body.getBasicDrawableElements(r));
-		y += getBodyHeight(r);
+		if (body != null) {
+			body.setBounds(new Rectangle(anchor.x, y, width, getBodyHeight(r)));
+			res.addAll(body.getBasicDrawableElements(r));
+			y += getBodyHeight(r);
+		}
 		
 		final DrawableElement footer = getTooltipFooter();
-		footer.setBounds(new Rectangle(anchor.x, y, width, getFooterHeight(r)));
-		res.addAll(footer.getBasicDrawableElements(r));
+		if (footer != null) {
+			footer.setBounds(new Rectangle(anchor.x, y, width, getFooterHeight(r)));
+			res.addAll(footer.getBasicDrawableElements(r));
+		}
 		
 		return res;
 	}

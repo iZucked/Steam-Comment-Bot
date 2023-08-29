@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.widgets.schedulechart.draw;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
@@ -48,7 +50,31 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				}
 
 			} else if (b instanceof Text t) {
-				gc.drawString(t.text(), t.x() + t.p().left(), t.y() + t.p().bottom());
+				final Padding p = t.p();
+				final org.eclipse.swt.graphics.Rectangle bb = t.boundingBox();
+				String s = t.text();
+				Point extent = findSizeOfText(s, t.font());
+
+				if (p.top() + extent.y + p.bottom() > bb.height) {
+					throw new IllegalArgumentException("The given text is too tall for its bounding box.");
+				}
+				
+				if (p.left() + extent.x + p.right() > bb.width) {
+					s = "...";
+					extent = findSizeOfText(s, t.font());
+				}
+				
+				int x = switch (t.alignment()) {
+					case SWT.LEFT -> bb.x + p.left();
+					case SWT.RIGHT -> bb.x - extent.x - p.right();
+					case SWT.CENTER -> bb.x - extent.x / 2;
+					default -> throw new IllegalArgumentException("Unexpected value for alignment: " + t.alignment());
+				};
+				
+				int y = bb.y + p.top();
+				
+				gc.setFont(t.font());
+				gc.drawString(t.text(), x, y);
 			} else {
 				throw new UnsupportedOperationException("Got a BasicDrawableElement that cannot be drawn by this ScheduleElementDrawer");
 			}
@@ -58,13 +84,14 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 	}
 
 	@Override
-	public Point findSizeOfText(String text) {
+	public Point findSizeOfText(String text, Font f) {
+		gc.setFont(f);
 		return gc.textExtent(text);
 	}
 
 	@Override
 	public Point findSizeOfText(Text text) {
-		Point textExtent = findSizeOfText(text.text());
+		Point textExtent = findSizeOfText(text.text(), text.font());
 		Padding p = text.p();
 		return new Point(p.left() + textExtent.x + p.right(), p.top() + textExtent.y + p.bottom());
 	}

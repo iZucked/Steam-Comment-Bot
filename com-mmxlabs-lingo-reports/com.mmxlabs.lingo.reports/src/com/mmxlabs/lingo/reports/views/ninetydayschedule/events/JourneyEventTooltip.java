@@ -7,8 +7,10 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.ScheduleEventTooltip;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElement;
@@ -18,6 +20,7 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 
 public class JourneyEventTooltip extends AbstractNinetyDayEventTooltip {
 	
+	private static final Font SYSTEM_FONT = Display.getDefault().getSystemFont();
 	private static final int LINE_SPACING = 5;
 	private static final int TEXT_PADDING = 10;
 	private int textExtent = -1;
@@ -34,7 +37,7 @@ public class JourneyEventTooltip extends AbstractNinetyDayEventTooltip {
 
 	@Override
 	protected int getBodyHeight(DrawerQueryResolver r) {
-		textExtent = (textExtent < 0) ? r.findSizeOfText("Jg").y : textExtent;
+		textExtent = (textExtent < 0) ? r.findSizeOfText("Jg", SYSTEM_FONT).y : textExtent;
 		int numFields = tooltip.bodyFields().size();
 		return (numFields == 0) ? 0 : 2 * TEXT_PADDING + numFields * (textExtent + LINE_SPACING) - LINE_SPACING;
 	}
@@ -54,8 +57,8 @@ public class JourneyEventTooltip extends AbstractNinetyDayEventTooltip {
 				
 				final String from = tooltip.headerNames().get(0);
 				final String to = tooltip.headerNames().get(1);
-				final Point fromExtent = resolver.findSizeOfText(from);
-				final Point toExtent = resolver.findSizeOfText(to);
+				final Point fromExtent = resolver.findSizeOfText(from, SYSTEM_FONT);
+				final Point toExtent = resolver.findSizeOfText(to, SYSTEM_FONT);
 				final int toStartPos = bounds.x + bounds.width - toExtent.x - TEXT_PADDING;
 				final int textHeight = Math.max(fromExtent.y, toExtent.y);
 
@@ -95,7 +98,7 @@ public class JourneyEventTooltip extends AbstractNinetyDayEventTooltip {
 					return res;
 				}
 				
-				int maxKeyExtent = tooltip.bodyFields().keySet().stream().map(s -> r.findSizeOfText(s).x).max(Integer::compare).get();
+				int maxKeyExtent = tooltip.bodyFields().keySet().stream().map(s -> r.findSizeOfText(s, SYSTEM_FONT).x).max(Integer::compare).get();
 				final int minLineX = bounds.x + (int)(0.2 * bounds.width);
 				final int lineX = Math.max(minLineX, bounds.x + TEXT_PADDING + maxKeyExtent + TEXT_PADDING);
 				int y = bounds.y + TEXT_PADDING;
@@ -105,7 +108,7 @@ public class JourneyEventTooltip extends AbstractNinetyDayEventTooltip {
 				
 				for (var entry : tooltip.bodyFields().entrySet()) {
 					// add body field
-					res.add(BasicDrawableElements.Text.from(lineX - TEXT_PADDING - r.findSizeOfText(entry.getKey()).x, y, entry.getKey()).textColour(getTextColour()).create());
+					res.add(BasicDrawableElements.Text.from(lineX - TEXT_PADDING - r.findSizeOfText(entry.getKey(), SYSTEM_FONT).x, y, entry.getKey()).textColour(getTextColour()).create());
 					// add value
 					res.add(BasicDrawableElements.Text.from(lineX + TEXT_PADDING, y, entry.getValue()).textColour(getTextColour()).create());
 					y += textExtent + LINE_SPACING;
