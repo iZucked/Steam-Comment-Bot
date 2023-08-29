@@ -44,8 +44,12 @@ public abstract class DrawableScheduleEvent extends DrawableElement {
 		return se;
 	}
 
-	protected abstract Color getBackgroundColour();
+	public abstract Color getBackgroundColour();
 	protected abstract Color getBorderColour();
 	protected abstract int getBorderThickness(ScheduleEventSelectionState s);
 	protected abstract int getAlpha(ScheduleEventSelectionState s);
+	
+	public Color getLabelTextColour() {
+		return ScheduleChartColourUtils.calculateTextColourForBestContrast(getBackgroundColour());
+	}
 }

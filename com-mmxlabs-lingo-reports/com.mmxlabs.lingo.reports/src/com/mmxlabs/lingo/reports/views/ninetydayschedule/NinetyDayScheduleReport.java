@@ -49,6 +49,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private final NinetyDayDrawableEventProvider drawableEventProvider = new NinetyDayDrawableEventProvider();
 	private final NinetyDayDrawableEventTooltipProvider drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
 	private final NinetyDayScheduleEventStylingProvider eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
+	private final NinetyDayDrawableEventLabelProvider eventLabelProvider = new NinetyDayDrawableEventLabelProvider();
 	
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
 	private ReentrantSelectionManager selectionManager;
@@ -97,7 +98,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(null, drawableEventProvider, drawableEventTooltipProvider), eventProvider);
+		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider), eventProvider);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		

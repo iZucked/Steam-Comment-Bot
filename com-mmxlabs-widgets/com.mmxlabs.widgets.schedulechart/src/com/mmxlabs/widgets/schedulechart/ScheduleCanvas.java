@@ -21,13 +21,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeaders;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
+import com.mmxlabs.widgets.schedulechart.draw.RelativeDrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
+import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventLabelProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventTooltipProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
@@ -47,6 +50,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	
 	private final IScheduleChartSettings settings;
 	private final IScheduleEventStylingProvider eventStylingProvider;
+	private final IDrawableScheduleEventLabelProvider eventLabelProvider;
 	private final IDrawableScheduleEventProvider drawableEventProvider;
 	private final IDrawableScheduleEventTooltipProvider drawableTooltipProvider;
 	
@@ -66,6 +70,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.drawableEventProvider = providers.drawableEventProvider();
 		this.eventStylingProvider = null;
 		this.drawableTooltipProvider = providers.drawableTooltipProvider();
+		this.eventLabelProvider = providers.labelProvider();
 
 		this.timeScale = new ScheduleTimeScale(canvasState, this, settings);
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, settings);
@@ -133,11 +138,20 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		drawableTimeScale.setBounds(mainBounds);
 		drawableTimeScale.setLockedHeaderY(originalBounds.y);
 
+		// Draw grid
 		drawer.drawOne(drawableTimeScale.getGrid(mainBounds.y + drawableTimeScale.getTotalHeaderHeight()), resolver);
+
+		// Draw content
 		canvasState.setLastDrawnContent(getDrawableRows(resolver));
 		canvasState.getLastDrawnContent().forEach(r -> drawer.drawOne(r, resolver));
+		
+		// Draw labels
+		getDrawableLabels(canvasState.getLastDrawnContent(), resolver).forEach(l -> drawer.drawOne(l, resolver));
+
+		// Draw header
 		drawer.drawOne(drawableTimeScale.getHeaders(), resolver);
 		
+		// Draw row headers
 		var rowHeader = new DrawableScheduleChartRowHeaders(canvasState.getRows(), drawableTimeScale.getTotalHeaderHeight(), settings);
 		rowHeader.setBounds(new Rectangle(originalBounds.x, mainBounds.y + drawableTimeScale.getTotalHeaderHeight(), rowHeaderWidth, mainBounds.height));
 		rowHeader.setLockedHeaderY(originalBounds.y);
@@ -160,7 +174,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		return Math.max(settings.getMinimumRowHeaderWidth(), maxTextWidth);
 	}
 
-	private List<DrawableScheduleChartRow> getDrawableRows(DrawerQueryResolver resolver) {
+	private List<DrawableScheduleChartRow> getDrawableRows(DrawerQueryResolver r) {
 		List<DrawableScheduleChartRow> res = new ArrayList<>();
 		final Rectangle mainBounds = canvasState.getMainBounds();
 		final int height = settings.getRowHeight();
@@ -171,6 +185,16 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 			res.add(drawableRow);
 		}
 		return res;
+	}
+	
+	private List<DrawableElement> getDrawableLabels(List<DrawableScheduleChartRow> drawnRows, DrawerQueryResolver r) {
+		List<DrawableElement> labels = new ArrayList<>();
+		for (final var row: drawnRows) {
+			for (final var event: row.getLastDrawnEvents()) {
+				labels.addAll(eventLabelProvider.getEventLabels(event, r));
+			}
+		}
+		return labels;
 	}
 
 	@Override

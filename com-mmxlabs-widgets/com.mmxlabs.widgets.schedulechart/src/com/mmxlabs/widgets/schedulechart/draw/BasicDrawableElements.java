@@ -113,19 +113,19 @@ public interface BasicDrawableElements {
 		}
 	}
 	
-	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int alignment, Color c, Font font, Padding p, int alpha) implements BasicDrawableElement {
+	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int alignment, Color textColour, Color bgColour, Font font, Padding p, int alpha) implements BasicDrawableElement {
 		public Text(int x, int y, String text) {
-			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, null, Display.getDefault().getSystemFont(), new Padding(0, 0, 0, 0), MAX_ALPHA);
+			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, null, null, Display.getDefault().getSystemFont(), new Padding(0, 0, 0, 0), MAX_ALPHA);
 		}
 
 		@Override
 		public Color getBackgroundColour() {
-			return null;
+			return bgColour;
 		}
 
 		@Override
 		public Color getBorderColour() {
-			return c;
+			return textColour;
 		}
 
 		@Override
@@ -145,7 +145,8 @@ public interface BasicDrawableElements {
 		public static class TextBuilder {
 			private final org.eclipse.swt.graphics.Rectangle bb;
 			private final String s;
-			private Color c = null;
+			private Color tc = null;
+			private Color bgc = null;
 			private Padding p = new Padding(0, 0, 0, 0);
 			private int alpha = MAX_ALPHA;
 			private int alignment = SWT.LEFT;
@@ -167,10 +168,15 @@ public interface BasicDrawableElements {
 			}
 			
 			public TextBuilder textColour(Color c) {
-				this.c = c;
+				this.tc = c;
 				return this;
 			}
 			
+			public TextBuilder bgColour(Color c) {
+				this.bgc = c;
+				return this;
+			}
+
 			public TextBuilder alpha(int alpha) {
 				this.alpha = alpha;
 				return this;
@@ -187,7 +193,7 @@ public interface BasicDrawableElements {
 			}
 
 			public Text create() {
-				return new Text(bb, s, alignment, c, f, p, alpha);
+				return new Text(bb, s, alignment, tc, bgc, f, p, alpha);
 			}
 		}
 

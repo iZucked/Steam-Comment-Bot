@@ -67,7 +67,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				int x = switch (t.alignment()) {
 					case SWT.LEFT -> bb.x + p.left();
 					case SWT.RIGHT -> bb.x - extent.x - p.right();
-					case SWT.CENTER -> bb.x - extent.x / 2;
+					case SWT.CENTER -> bb.x + bb.width / 2 - extent.x / 2;
 					default -> throw new IllegalArgumentException("Unexpected value for alignment: " + t.alignment());
 				};
 				

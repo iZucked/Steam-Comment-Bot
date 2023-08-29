@@ -2,9 +2,12 @@ package com.mmxlabs.widgets.schedulechart.draw;
 
 import java.util.function.Function;
 
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
 public abstract class RelativeDrawableElement extends DrawableElement {
+	
+	private RelativeBounds relBounds;
 
 	@Override
 	public final void setBounds(Rectangle bounds) {
@@ -14,5 +17,15 @@ public abstract class RelativeDrawableElement extends DrawableElement {
 	public void setRelativeBounds(DrawableElement de, Function<DrawableElement, Rectangle> relativeBoundsCalculator) {
 		super.setBounds(relativeBoundsCalculator.apply(de));
 	}
+	
+	public void setRelativeBounds(RelativeBounds relBounds) {
+		this.relBounds = relBounds;
+	}
+	
+	public void setBoundsFromRelative(DrawableElement de) {
+		super.setBounds(RelativeBoundsCalculationFunctions.getBoundsFromRelative(relBounds).apply(de));
+	}
+	
+	public record RelativeBounds(Point relParentAnchor, Point relChildAnchor, int widthScale, int heightScale) {}
 
 }
