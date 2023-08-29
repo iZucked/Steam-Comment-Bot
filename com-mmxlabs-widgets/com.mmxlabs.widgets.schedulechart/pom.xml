@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.mmxlabs.widgets</groupId>
 		<artifactId>com.mmxlabs.widgets.parent</artifactId>
-		<version>6.8.6.RELEASE</version>
+		<version>6.8.7-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 

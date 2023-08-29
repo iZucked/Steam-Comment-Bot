@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.lng.transformer.its.feature"
       label="Models: LNG Types - Transformer ITS Feature"
-      version="6.8.6.RELEASE"
+      version="6.8.7.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
