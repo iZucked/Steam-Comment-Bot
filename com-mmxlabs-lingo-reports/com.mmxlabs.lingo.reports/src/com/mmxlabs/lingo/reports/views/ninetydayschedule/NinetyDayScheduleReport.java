@@ -17,6 +17,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
@@ -41,15 +45,17 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private Action zoomInAction;
 	private Action zoomOutAction;
 	private Action packAction;
+	private NinetyDayScheduleLabelMenuAction labelMenuAction;
 	
 	private ScheduleChartViewer<ScheduleModel> viewer;
+	private IMemento memento;
 	
 	private final EquivalentsManager equivalentsManager = new EquivalentsManager();
-	private final NinetyDayScheduleEventProvider eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
-	private final NinetyDayDrawableEventProvider drawableEventProvider = new NinetyDayDrawableEventProvider();
-	private final NinetyDayDrawableEventTooltipProvider drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
-	private final NinetyDayScheduleEventStylingProvider eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
-	private final NinetyDayDrawableEventLabelProvider eventLabelProvider = new NinetyDayDrawableEventLabelProvider();
+	private NinetyDayScheduleEventProvider eventProvider;
+	private NinetyDayDrawableEventProvider drawableEventProvider;
+	private NinetyDayDrawableEventTooltipProvider drawableEventTooltipProvider;
+	private NinetyDayScheduleEventStylingProvider eventStylingProvider;
+	private NinetyDayDrawableEventLabelProvider eventLabelProvider;
 	
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
 	private ReentrantSelectionManager selectionManager;
@@ -94,6 +100,22 @@ public class NinetyDayScheduleReport extends ViewPart {
 		}
 		
 	};
+	
+	@Override
+	public void init(IViewSite viewSite, IMemento memento) throws PartInitException {
+		super.init(viewSite, memento);
+
+		if (memento == null) {
+			memento = XMLMemento.createWriteRoot("workbench");
+		}
+
+		this.memento = memento;
+		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
+		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
+		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
+		this.eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
+		this.eventLabelProvider = new NinetyDayDrawableEventLabelProvider(memento);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -123,12 +145,14 @@ public class NinetyDayScheduleReport extends ViewPart {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
 		manager.add(packAction);
+		manager.add(labelMenuAction);
 	}
 
 	private void makeActions() {
 		zoomInAction = new ZoomAction(true, viewer.getCanvas());
 		zoomOutAction = new ZoomAction(false, viewer.getCanvas());
 		packAction = new PackAction(viewer.getCanvas());
+		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
 	}
 
 	@Override
@@ -143,6 +167,10 @@ public class NinetyDayScheduleReport extends ViewPart {
 			scenarioComparisonService.removeListener(scenariosServiceListener);
 		}
 		super.dispose();
+	}
+	
+	public void redraw() {
+		viewer.getCanvas().redraw();
 	}
 	
 	private static class ZoomAction extends Action {

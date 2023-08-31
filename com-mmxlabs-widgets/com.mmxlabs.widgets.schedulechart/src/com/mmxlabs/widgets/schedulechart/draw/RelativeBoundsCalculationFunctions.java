@@ -23,6 +23,8 @@ public class RelativeBoundsCalculationFunctions {
 	public static final int MAX_SCALE = 100;
 	
 	public static final RelativeBounds CENTER_100P = new RelativeBounds(MIDDLE_CENTER, MIDDLE_CENTER, MAX_SCALE, MAX_SCALE);
+	public static final RelativeBounds LEFT_100P = new RelativeBounds(MIDDLE_LEFT, MIDDLE_LEFT, MAX_SCALE, MAX_SCALE);
+	public static final RelativeBounds RIGHT_100P = new RelativeBounds(MIDDLE_RIGHT, MIDDLE_RIGHT, MAX_SCALE, MAX_SCALE);
 	
 	private RelativeBoundsCalculationFunctions() {}
 
@@ -36,20 +38,20 @@ public class RelativeBoundsCalculationFunctions {
 		};
 	}
 	
-	public static RelativeBounds pinToTopLeft(int widthScale, int heightScale) {
-		return new RelativeBounds(TOP_LEFT, TOP_LEFT, widthScale, heightScale);
+	public static RelativeBounds pinToMiddleLeft(int widthScale, int heightScale) {
+		return new RelativeBounds(MIDDLE_LEFT, MIDDLE_LEFT, widthScale, heightScale);
 	}
 
-	public static RelativeBounds pinToTopLeft(int widthScale) {
-		return new RelativeBounds(TOP_LEFT, TOP_LEFT, widthScale, MAX_SCALE);
+	public static RelativeBounds pinToMiddleLeft(int widthScale) {
+		return new RelativeBounds(MIDDLE_LEFT, MIDDLE_LEFT, widthScale, MAX_SCALE);
 	}
 	
-	public static RelativeBounds pinToTopRight(int widthScale, int heightScale) {
-		return new RelativeBounds(TOP_RIGHT, TOP_RIGHT, widthScale, heightScale);
+	public static RelativeBounds pinToMiddleRight(int widthScale, int heightScale) {
+		return new RelativeBounds(MIDDLE_RIGHT, MIDDLE_RIGHT, widthScale, heightScale);
 	}
 	
-	public static RelativeBounds pinToTopRight(int widthScale) {
-		return new RelativeBounds(TOP_RIGHT, TOP_RIGHT, widthScale, MAX_SCALE);
+	public static RelativeBounds pinToMiddleRight(int widthScale) {
+		return new RelativeBounds(MIDDLE_RIGHT, MIDDLE_RIGHT, widthScale, MAX_SCALE);
 	}
 
 	public static Function<DrawableElement, Rectangle> getBoundsFromRelative(RelativeBounds relBounds) {

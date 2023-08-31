@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Line;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
@@ -52,6 +53,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 			} else if (b instanceof Text t) {
 				final Padding p = t.p();
 				final org.eclipse.swt.graphics.Rectangle bb = t.boundingBox();
+
 				String s = t.text();
 				Point extent = findSizeOfText(s, t.font());
 
@@ -66,7 +68,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				
 				int x = switch (t.alignment()) {
 					case SWT.LEFT -> bb.x + p.left();
-					case SWT.RIGHT -> bb.x - extent.x - p.right();
+					case SWT.RIGHT -> bb.x + bb.width - extent.x - p.right();
 					case SWT.CENTER -> bb.x + bb.width / 2 - extent.x / 2;
 					default -> throw new IllegalArgumentException("Unexpected value for alignment: " + t.alignment());
 				};
@@ -74,7 +76,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				int y = bb.y + p.top();
 				
 				gc.setFont(t.font());
-				gc.drawString(t.text(), x, y);
+				gc.drawString(s, x, y, t.bgColour() == null);
 			} else {
 				throw new UnsupportedOperationException("Got a BasicDrawableElement that cannot be drawn by this ScheduleElementDrawer");
 			}

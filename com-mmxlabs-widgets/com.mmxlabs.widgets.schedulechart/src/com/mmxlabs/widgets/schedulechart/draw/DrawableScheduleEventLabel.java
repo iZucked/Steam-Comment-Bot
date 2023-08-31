@@ -7,13 +7,13 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
 
 public final class DrawableScheduleEventLabel extends RelativeDrawableElement {
-	private static final int PADDING = 0;
 	private final BasicDrawableElements.Text text;
 
-	public DrawableScheduleEventLabel(Color labelTextColour, Color labelBgColour, Function<ScheduleEvent, String> textGenerator, int textAlignment, ScheduleEvent se) {
-		this.text = BasicDrawableElements.Text.from(0, 0, textGenerator.apply(se)).padding(PADDING).alignment(textAlignment).textColour(labelTextColour).bgColour(labelBgColour).create();
+	public DrawableScheduleEventLabel(Color labelTextColour, Function<ScheduleEvent, String> textGenerator, int textAlignment, Padding p, ScheduleEvent se) {
+		this.text = BasicDrawableElements.Text.from(0, 0, textGenerator.apply(se)).padding(p).alignment(textAlignment).textColour(labelTextColour).create();
 	}
 	
 	public int getLabelWidth(DrawerQueryResolver r) {

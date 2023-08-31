@@ -6,8 +6,10 @@ package com.mmxlabs.widgets.schedulechart.draw;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
@@ -45,9 +47,9 @@ public abstract class DrawableScheduleEvent extends DrawableElement {
 	}
 
 	public abstract Color getBackgroundColour();
+	public abstract int getAlpha(ScheduleEventSelectionState s);
 	protected abstract Color getBorderColour();
 	protected abstract int getBorderThickness(ScheduleEventSelectionState s);
-	protected abstract int getAlpha(ScheduleEventSelectionState s);
 	
 	public Color getLabelTextColour() {
 		return ScheduleChartColourUtils.calculateTextColourForBestContrast(getBackgroundColour());
