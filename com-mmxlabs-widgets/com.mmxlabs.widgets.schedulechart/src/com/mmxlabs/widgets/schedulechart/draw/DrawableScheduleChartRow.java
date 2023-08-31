@@ -5,7 +5,9 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.swt.graphics.Rectangle;
 
@@ -44,8 +46,6 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver) {
 		List<BasicDrawableElement> res = new ArrayList<>();
 
-		final int spacer = settings.getSpacerWidth();
-		final int eventHeight = settings.getRowEventHeight();
 		final int rowHeight = settings.getRowHeight();
 
 		// Add background
@@ -54,18 +54,28 @@ public class DrawableScheduleChartRow extends DrawableElement {
 		
 		lastDrawnEvents.clear();
 		for (ScheduleEvent se : canvasState.getRows().get(rowNum).getEvents()) {
-			int startX = sts.getXForDateTime(se.getStart());
-			int endX = sts.getXForDateTime(se.getEnd());
-			Rectangle eventBounds = new Rectangle(startX, bounds.y + spacer, endX - startX, eventHeight);
-			DrawableScheduleEvent drawableEvent = drawableEventProvider.createDrawableScheduleEvent(se, eventBounds, canvasState);
+			DrawableScheduleEvent drawableEvent = createDrawableScheduleEvent(se, bounds);
 			if (drawableEvent == null) continue;
 			lastDrawnEvents.add(drawableEvent);
-			res.addAll(drawableEvent.getBasicDrawableElements());
 		}
+		
+		// Draw resizable events first
+		lastDrawnEvents.sort(Comparator.comparing(dse -> ((DrawableScheduleEvent) dse).getScheduleEvent().isResizable()).reversed());
 
+		res.addAll(lastDrawnEvents.stream().flatMap(dse -> dse.getBasicDrawableElements(queryResolver).stream()).toList());
 		return res;
 	}
 	
+	private DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent se, Rectangle bounds) {
+		final int spacer = settings.getSpacerWidth();
+		final int eventHeight = se.isResizable() && settings.showWindows() ? settings.getWindowedEventHeight() : settings.getEventHeight();
+
+		int startX = sts.getXForDateTime(settings.showWindows() && se.getWindowStartDate() != null ? se.getWindowStartDate() : se.getStart());
+		int endX = sts.getXForDateTime(settings.showWindows() && se.getWindowEndDate() != null ? se.getWindowEndDate() : se.getEnd());
+		int y = bounds.y + (settings.showWindows() && !se.isResizable() ? (settings.getWindowedEventHeight() - settings.getEventHeight()) / 2 : 0) + spacer;
+		Rectangle eventBounds = new Rectangle(startX, y, endX - startX, eventHeight);
+		return drawableEventProvider.createDrawableScheduleEvent(se, eventBounds, canvasState);
+	}
 
 	public List<DrawableScheduleEvent>  getLastDrawnEvents() {
 		return lastDrawnEvents;

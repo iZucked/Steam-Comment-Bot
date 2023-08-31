@@ -47,6 +47,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final DragSelectionZoomHandler dragSelectionZoomHandler;
 	private final EventSelectionHandler eventSelectionHandler;
 	private final EventHoverHandler eventHoverHandler;
+	private final EventResizingHandler eventResizingHandler;
 	
 	private final IScheduleChartSettings settings;
 	private final IScheduleEventStylingProvider eventStylingProvider;
@@ -79,6 +80,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, settings);
 		this.eventSelectionHandler = new EventSelectionHandler(this);
 		this.eventHoverHandler = new EventHoverHandler(this, canvasState);
+		this.eventResizingHandler = new EventResizingHandler(this, eventHoverHandler);
 
 		initListeners();
 	}
@@ -161,7 +163,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 			final Rectangle bs = canvasState.getHoveredEvent().get().getBounds();
 			final Point anchor = new Point(bs.x, bs.y);
 			dt.setBounds(mainBounds);
-			dt.setAnchor(anchor, settings.getRowEventHeight() * 5 / 4);
+			dt.setAnchor(anchor, settings.getEventHeight() * 5 / 4);
 			drawer.drawOne(dt, resolver);
 		});
 		
@@ -281,12 +283,13 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		final List<DrawableScheduleChartRow> drawnRows = canvasState.getLastDrawnContent();
 		for (final DrawableScheduleChartRow row: drawnRows) {
 			if (row.getBounds().contains(x, y)) {
+				DrawableScheduleEvent found = null;
 				for (final DrawableScheduleEvent evt: row.getLastDrawnEvents()) {
 					if (evt.getBounds().contains(x, y) && evt.getScheduleEvent().isVisible()) {
-						return Optional.of(evt);
+						found = evt;
 					}
 				}
-				return Optional.empty();
+				return Optional.ofNullable(found);
 			}
 		}
 		

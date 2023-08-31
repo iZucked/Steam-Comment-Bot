@@ -6,7 +6,8 @@ package com.mmxlabs.widgets.schedulechart;
 
 public interface IScheduleChartSettings {
 	int getHeaderHeight();
-	int getRowEventHeight();
+	int getEventHeight();
+	int getWindowedEventHeight();
 	int getSpacerWidth();
 
 	int getMinimumRowHeaderWidth();
@@ -14,8 +15,10 @@ public interface IScheduleChartSettings {
 	int getRowHeaderRightPadding();
 	
 	default int getRowHeight() {
-		return getRowEventHeight() + 2 * getSpacerWidth();
+		return (showWindows() ? Math.max(getEventHeight(), getWindowedEventHeight()) : getEventHeight()) + 2 * getSpacerWidth();
 	}
 	
 	IScheduleChartColourScheme getColourScheme();
+
+	boolean showWindows();
 }

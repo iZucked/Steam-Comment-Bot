@@ -187,7 +187,15 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 
 		boolean visible = !(event instanceof StartEvent || event instanceof EndEvent);
 		se.setVisible(visible);
-
+		
+		if (event instanceof final SlotVisit sv) {
+			if (sv.getSlotAllocation().getSlot() != null) {
+				se.setWindowStartDate(plannedStartDate);
+				se.setWindowEndDate(plannedEndDate);
+				se.setResizable(true);
+			}
+		}
+		
 		return se;
 	}
 	

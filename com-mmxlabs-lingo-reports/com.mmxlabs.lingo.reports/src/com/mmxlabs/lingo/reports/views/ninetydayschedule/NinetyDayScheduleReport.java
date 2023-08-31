@@ -11,6 +11,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -46,9 +47,11 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private Action zoomOutAction;
 	private Action packAction;
 	private NinetyDayScheduleLabelMenuAction labelMenuAction;
+	private Action showWindowsAction;
 	
 	private ScheduleChartViewer<ScheduleModel> viewer;
 	private IMemento memento;
+	private NinetyDayScheduleChartSettings settings;
 	
 	private final EquivalentsManager equivalentsManager = new EquivalentsManager();
 	private NinetyDayScheduleEventProvider eventProvider;
@@ -100,7 +103,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 		}
 		
 	};
-	
+
 	@Override
 	public void init(IViewSite viewSite, IMemento memento) throws PartInitException {
 		if (memento == null) {
@@ -108,6 +111,8 @@ public class NinetyDayScheduleReport extends ViewPart {
 		}
 
 		this.memento = memento;
+		this.settings = new NinetyDayScheduleChartSettings();
+
 		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
 		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
@@ -126,7 +131,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider), eventProvider);
+		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider), eventProvider, settings);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		
@@ -152,6 +157,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 		manager.add(zoomOutAction);
 		manager.add(packAction);
 		manager.add(labelMenuAction);
+		manager.add(showWindowsAction);
 	}
 
 	private void makeActions() {
@@ -159,6 +165,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 		zoomOutAction = new ZoomAction(false, viewer.getCanvas());
 		packAction = new PackAction(viewer.getCanvas());
 		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
+		showWindowsAction = new ShowWindowsAction(viewer.getCanvas(), settings);
 	}
 
 	@Override
@@ -223,5 +230,25 @@ public class NinetyDayScheduleReport extends ViewPart {
 		
 	}
 	
+	private static class ShowWindowsAction extends Action {
+		private final ScheduleCanvas canvas;
+		private final NinetyDayScheduleChartSettings settings;
+		
+		public ShowWindowsAction(final ScheduleCanvas canvas, final NinetyDayScheduleChartSettings settings) {
+			super();
+			this.canvas = canvas;
+			this.settings = settings;
+
+			setText("Show Windows");
+			CommonImages.setImageDescriptors(this, IconPaths.Lateness);
+		}
+		
+		@Override
+		public void run() {
+			settings.setShowWindows(!settings.showWindows());
+			canvas.redraw();
+		}
+		
+	}
 
 }

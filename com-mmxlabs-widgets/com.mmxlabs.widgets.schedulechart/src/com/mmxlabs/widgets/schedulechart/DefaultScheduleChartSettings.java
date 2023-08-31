@@ -11,18 +11,23 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	private final IScheduleChartColourScheme defaultColourScheme = new DefaultScheduleChartColourScheme();
 
 	@Override
-	public int getRowEventHeight() {
+	public int getEventHeight() {
 		return 20;
 	}
 
 	@Override
+	public int getWindowedEventHeight() {
+		return 30;
+	}
+
+	@Override
 	public int getSpacerWidth() {
-		return 3;
+		return 4;
 	}
 
 	@Override
 	public int getMinimumRowHeaderWidth() {
-		return 100;
+		return 0;
 	}
 
 	@Override
@@ -43,6 +48,11 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	@Override
 	public IScheduleChartColourScheme getColourScheme() {
 		return defaultColourScheme;
+	}
+
+	@Override
+	public boolean showWindows() {
+		return false;
 	}
 
 }
