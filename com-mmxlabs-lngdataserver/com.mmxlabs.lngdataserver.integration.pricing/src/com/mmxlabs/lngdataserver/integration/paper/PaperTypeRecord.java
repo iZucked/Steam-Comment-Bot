@@ -20,22 +20,22 @@ public class PaperTypeRecord implements TypeRecord {
 
 	@Override
 	public String getType() {
-		return "pricing";
+		return "paper";
 	}
 
 	@Override
 	public String getListURL() {
-		return "/pricing/versions";
+		return "/paper/versions";
 	}
 
 	@Override
 	public String getUploadURL() {
-		return "/pricing/sync/versions/";
+		return "/paper/sync/versions/";
 	}
 	
 	@Override
 	public String getCurrentURL() {
-		return "/pricing/version/current/id";
+		return "/paper/version/current/id";
 	}
 
 	@Override
