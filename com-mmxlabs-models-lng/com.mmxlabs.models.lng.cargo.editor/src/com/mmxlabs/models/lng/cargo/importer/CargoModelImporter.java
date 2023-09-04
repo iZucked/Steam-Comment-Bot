@@ -45,6 +45,7 @@ import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 
 public class CargoModelImporter implements ISubmodelImporter {
 	public static final String CARGO_KEY = "CARGO";
@@ -226,6 +227,8 @@ public class CargoModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
+		
+		cargoModel.setPaperDealsVersionRecord(VersionsUtil.createNewRecord());	
 		return cargoModel;
 	}
 

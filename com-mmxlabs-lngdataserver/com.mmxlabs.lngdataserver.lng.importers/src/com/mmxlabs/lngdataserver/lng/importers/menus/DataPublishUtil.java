@@ -48,6 +48,9 @@ public class DataPublishUtil {
 			case PricingData:
 				checkAndUploadPricingData(modelRecord, scenarioModel);
 				break;
+			case PaperData:
+				checkAndUploadPaperData(modelRecord, scenarioModel);
+				break;
 			case PortData:
 				checkAndUploadDistanceData(modelRecord, scenarioModel);
 				checkAndUploadPortData(modelRecord, scenarioModel);
