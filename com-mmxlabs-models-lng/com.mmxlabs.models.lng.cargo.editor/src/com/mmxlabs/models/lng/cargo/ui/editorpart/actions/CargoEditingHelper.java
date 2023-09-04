@@ -608,6 +608,8 @@ public class CargoEditingHelper {
 		final CompoundCommand cc = new CompoundCommand(description);
 
 		for (final var slot : slots) {
+			if (slot instanceof SpotSlot) 
+				continue;
 			final boolean allowsExposures = slot.isComputeExposure();
 			final boolean allowsHedging = slot.isComputeHedge();
 			if (add) {
@@ -637,6 +639,8 @@ public class CargoEditingHelper {
 		final CompoundCommand cc = new CompoundCommand(description);
 
 		for (final var slot : slots) {
+			if (slot instanceof SpotSlot) 
+				continue;
 			final boolean allowsExposures = slot.isComputeExposure();
 			final boolean allowsHedging = slot.isComputeHedge();
 			if (add) {
