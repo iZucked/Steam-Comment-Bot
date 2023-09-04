@@ -215,19 +215,10 @@
                   id="data_curves"
                   label="Curves">
             </menu>
-            <command
-                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
-                  label="Paper deals"
-                  style="push">
- 				<visibleWhen
-                     checkEnabled="false">
-                  <test
-                        args="features:paperdeals"
-                        forcePluginActivation="true"
-                        property="com.mmxlabs.license.features.enablement">
-                  </test>
-               </visibleWhen>                  
-            </command>
+            <menu
+                  id="paper_deals"
+                  label="Paper deals">
+            </menu>
             <command
                   commandId="com.mmxlabs.models.lng.scenario.import.wizards.nominations"
                   label="Nominations"
@@ -310,6 +301,38 @@
                         property="com.mmxlabs.license.features.enablement">
                   </test>
                </visibleWhen>             
+            </command>
+         </menuContribution>
+         
+         <!-- Paper Deals Import menu!-->
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:paper_deals">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
+                  label="Import from CSV file"
+                  style="push">
+ 				<visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>                  
+            </command>
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals.fromexcel"
+                  label="Import from Excel file"
+                  style="push">
+ 				<visibleWhen
+                     checkEnabled="false">
+                  <test
+                        args="features:paperdeals"
+                        forcePluginActivation="true"
+                        property="com.mmxlabs.license.features.enablement">
+                  </test>
+               </visibleWhen>        
             </command>
          </menuContribution>
          
@@ -504,6 +527,11 @@
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.paperdeals.ImportPaperDealsHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals"
                name="Import paper deals from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.ImportPaperDealsFromExcelHandler"
+               id="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals.fromexcel"
+               name="Import paper deals from Excel">
          </command>
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.holidaycalendars.ImportHolidayCalendarsHandler"
