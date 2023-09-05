@@ -21,4 +21,7 @@ public interface IScheduleChartSettings {
 	IScheduleChartColourScheme getColourScheme();
 
 	boolean showWindows();
+	default boolean allowWindowResizing() {
+		return showWindows();
+	};
 }

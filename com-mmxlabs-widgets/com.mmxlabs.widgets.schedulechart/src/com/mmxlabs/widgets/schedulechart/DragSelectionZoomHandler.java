@@ -21,19 +21,21 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 
 public class DragSelectionZoomHandler implements MouseListener, MouseMoveListener, KeyListener {
 
-	final ScheduleCanvas canvas;
-	final IScheduleChartColourScheme colourScheme;
+	private final ScheduleCanvas canvas;
+	private final IScheduleChartColourScheme colourScheme;
+	private final EventHoverHandler eventHoverHandler;
 	
-	boolean visible;
+	private boolean visible;
 
-	int startX;
-	int startY;
-	int endX;
-	int endY;
+	private int startX;
+	private int startY;
+	private int endX;
+	private int endY;
 
-	public DragSelectionZoomHandler(final ScheduleCanvas canvas, IScheduleChartSettings settings) {
+	public DragSelectionZoomHandler(final ScheduleCanvas canvas, final IScheduleChartSettings settings, final EventHoverHandler eventHoverHandler) {
 		this.canvas = canvas;
 		this.colourScheme = settings.getColourScheme();
+		this.eventHoverHandler = eventHoverHandler;
 		this.visible = false;
 		
 		canvas.addMouseListener(this);
@@ -56,6 +58,7 @@ public class DragSelectionZoomHandler implements MouseListener, MouseMoveListene
 		startX = endX = e.x;
 		startY = endY = e.y;
 		visible = true;
+		eventHoverHandler.disable();
 		canvas.redraw();
 	}
 
@@ -63,6 +66,7 @@ public class DragSelectionZoomHandler implements MouseListener, MouseMoveListene
 	public void mouseUp(MouseEvent e) {
 		if (e.button != 3 || !visible) return;
 		visible = false;
+		eventHoverHandler.enable();
 		if (Math.abs(endX - startX) > 10) {
 			canvas.getTimeScale().fitSelection(Math.min(startX, endX), Math.max(startX, endX));
 		}

@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
+import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 
@@ -74,12 +75,12 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	}
 
 	@Override
-	public String getKeyForEvent(ScheduleEvent event) {
+	public ScheduleChartRowKey getKeyForEvent(ScheduleEvent event) {
 		if (event.getData() instanceof Event e) {
-			var key = vesselAssignmentFormatter.render(e);
-			return key == null ? "" : key;
+			var name = vesselAssignmentFormatter.render(e);
+			return new ScheduleChartRowKey(name == null ? "" : name,  e.getSequence());
 		}
-		return "";
+		return null;
 	}
 	
 	private List<Object> getSequences(Schedule schedule) {

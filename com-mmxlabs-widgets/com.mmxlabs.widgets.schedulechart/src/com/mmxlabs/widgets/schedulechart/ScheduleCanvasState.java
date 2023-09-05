@@ -18,6 +18,7 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
 
 public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider {
 	
+	private Rectangle originalBounds;
 	private Rectangle mainBounds;
 	private List<ScheduleChartRow> rows = new ArrayList<>();
 
@@ -28,7 +29,17 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	private Optional<DrawableScheduleEvent> hoveredEvent = Optional.empty();
 	
 	private List<DrawableScheduleChartRow> lastDrawnContent;
+	
+	private Set<ScheduleChartRowKey> hiddenRowKeys = new HashSet<>();
 
+	public void setOriginalBounds(Rectangle originalBounds) {
+		this.originalBounds = originalBounds;
+	}
+
+	public Rectangle getOriginalBounds() {
+		return originalBounds;
+	}
+	
 	public Rectangle getMainBounds() {
 		return mainBounds;
 	}
@@ -39,6 +50,10 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 
 	public List<ScheduleChartRow> getRows() {
 		return rows;
+	}
+	
+	public List<ScheduleChartRow> getShownRows() {
+		return rows.stream().filter(r -> !hiddenRowKeys.contains(r.getKey())).toList();
 	}
 
 	public void setRows(List<ScheduleChartRow> rows) {
@@ -87,5 +102,9 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	public void setHoveredEvent(Optional<DrawableScheduleEvent> hoveredEvent) {
 		this.hoveredEvent = hoveredEvent;
 	}
-	
+
+	public Set<ScheduleChartRowKey> getHiddenRowKeys() {
+		return hiddenRowKeys;
+	}
+
 }

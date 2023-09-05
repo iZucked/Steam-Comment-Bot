@@ -46,15 +46,21 @@ public class EventHoverHandler implements MouseMoveListener, MouseListener {
 
 	@Override
 	public void mouseDown(MouseEvent e) {
-		// disable on right click and hold
-		if (e.button == 3) enabled = false;
-		canvasState.setHoveredEvent(Optional.empty());
+		// Do nothing
 	}
 
 	@Override
 	public void mouseUp(MouseEvent e) {
-		if (e.button == 3) enabled = true;
-		
+		// Do nothing
+	}
+
+	public void enable() {
+		enabled = true;
+	}
+
+	public void disable() {
+		enabled = false;
+		canvasState.setHoveredEvent(Optional.empty());
 	}
 
 }

@@ -9,18 +9,22 @@ import java.util.List;
 public class ScheduleChartRow {
 
 	private final List<ScheduleEvent> events;
-	private final String name;
+	private final ScheduleChartRowKey key;
 	
-	public ScheduleChartRow(String name, List<ScheduleEvent> events) {
-		this.name = name;
+	public ScheduleChartRow(final ScheduleChartRowKey key, final List<ScheduleEvent> events) {
+		this.key = key;
 		this.events = events;
 	}
 	
 	public List<ScheduleEvent> getEvents() {
 		return events;
 	}
+	
+	public ScheduleChartRowKey getKey() {
+		return key;
+	}
 
 	public String getName() {
-		return name;
+		return key.getName();
 	}
 }

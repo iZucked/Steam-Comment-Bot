@@ -7,13 +7,13 @@ package com.mmxlabs.widgets.schedulechart.draw;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvasState;
+import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
@@ -26,13 +26,15 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	private final IScheduleChartSettings settings;
 	private final IDrawableScheduleEventProvider drawableEventProvider;
 
+	private final ScheduleChartRow scr;
 	private final ScheduleCanvasState canvasState;
 	private final ScheduleTimeScale sts;
 	private final int rowNum;
 	private List<DrawableScheduleEvent> lastDrawnEvents = new ArrayList<>();
 
-	public DrawableScheduleChartRow(final ScheduleCanvasState canvasState, final int rowNum, ScheduleTimeScale sts, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider,
+	public DrawableScheduleChartRow(final ScheduleChartRow scr, final ScheduleCanvasState canvasState, final int rowNum, ScheduleTimeScale sts, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider,
 			IScheduleChartSettings settings) {
+		this.scr = scr;
 		this.canvasState = canvasState;
 		this.sts = sts;
 		this.rowNum = rowNum;
@@ -53,7 +55,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 				.borderColour(colourScheme.getGridStrokeColour()).alpha(160).create());
 		
 		lastDrawnEvents.clear();
-		for (ScheduleEvent se : canvasState.getRows().get(rowNum).getEvents()) {
+		for (ScheduleEvent se : scr.getEvents()) {
 			DrawableScheduleEvent drawableEvent = createDrawableScheduleEvent(se, bounds);
 			if (drawableEvent == null) continue;
 			lastDrawnEvents.add(drawableEvent);
@@ -79,6 +81,10 @@ public class DrawableScheduleChartRow extends DrawableElement {
 
 	public List<DrawableScheduleEvent>  getLastDrawnEvents() {
 		return lastDrawnEvents;
+	}
+	
+	public ScheduleChartRow getScheduleChartRow() {
+		return scr;
 	}
 
 
