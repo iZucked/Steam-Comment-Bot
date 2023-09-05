@@ -10,6 +10,7 @@ public interface IScheduleChartSettings {
 	int getSpacerWidth();
 
 	int getMinimumRowHeaderWidth();
+	int getRowHeaderLeftPadding();
 	int getRowHeaderRightPadding();
 	
 	default int getRowHeight() {

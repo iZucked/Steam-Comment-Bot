@@ -170,8 +170,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	
 	private int calculateRowHeaderWidth(DrawerQueryResolver resolver) {
 		final var systemFont = Display.getDefault().getSystemFont();
-		final int maxTextWidth = canvasState.getRows().stream().map(r -> r.getName() == null ? 0 : resolver.findSizeOfText(r.getName(), systemFont).x).max(Integer::compare).orElse(0) + settings.getRowHeaderRightPadding();
-		return Math.max(settings.getMinimumRowHeaderWidth(), maxTextWidth);
+		final int maxTextWidth = canvasState.getRows().stream().map(r -> r.getName() == null ? 0 : resolver.findSizeOfText(r.getName(), systemFont).x).max(Integer::compare).orElse(0);
+		final int maxTextHeaderWidth = maxTextWidth + settings.getRowHeaderLeftPadding() + settings.getRowHeaderRightPadding();
+		return Math.max(settings.getMinimumRowHeaderWidth(), maxTextHeaderWidth);
 	}
 
 	private List<DrawableScheduleChartRow> getDrawableRows(DrawerQueryResolver r) {

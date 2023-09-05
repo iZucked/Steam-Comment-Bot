@@ -1,6 +1,7 @@
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventLabelPr
 public class NinetyDayDrawableEventLabelProvider implements IDrawableScheduleEventLabelProvider {
 	
 	Map<ScheduleEvent, NavigableMap<Integer, List<RelativeDrawableElement>>> cache = new HashMap<>();
-	List<List<IScheduleEventLabelElementGenerator>> eventLabelGenerators = List.of();
+	List<List<IScheduleEventLabelElementGenerator>> eventLabelGenerators = Collections.emptyList();
 
 	private TogglableLabel showDays;
 	private TogglableLabel showDestinationLabels;
@@ -32,9 +33,9 @@ public class NinetyDayDrawableEventLabelProvider implements IDrawableScheduleEve
 	private Map<ILabellingOption, Action> applyActions = new HashMap<>();
 	
 	public NinetyDayDrawableEventLabelProvider(IMemento memento) {
-		this.showCanals = new TogglableLabel(NinetyDayScheduleViewConstants.Show_Canals, memento);
-		this.showDestinationLabels = new TogglableLabel(NinetyDayScheduleViewConstants.Show_Destination_Labels, memento);
-		this.showDays = new TogglableLabel(NinetyDayScheduleViewConstants.Show_Days, memento);
+		this.showCanals = new TogglableLabel(NinetyDayScheduleViewConstants.SHOW_CANALS, memento);
+		this.showDestinationLabels = new TogglableLabel(NinetyDayScheduleViewConstants.SHOW_DESTINATION_LABELS, memento);
+		this.showDays = new TogglableLabel(NinetyDayScheduleViewConstants.SHOW_DAYS, memento);
 		applyActions.put(showCanals, new Action() {
 			@Override
 			public void run() {
@@ -101,7 +102,7 @@ public class NinetyDayDrawableEventLabelProvider implements IDrawableScheduleEve
 			lowerEntry.getValue().forEach(rel -> rel.setBoundsFromRelative(dse));
 			return lowerEntry.getValue();
 		}
-		return List.of();
+		return Collections.emptyList();
 	}
 	
 	private void clearLabelCache() {
@@ -110,7 +111,7 @@ public class NinetyDayDrawableEventLabelProvider implements IDrawableScheduleEve
 
 	private void toggleTogglable(final @NonNull TogglableLabel togglableLabel) {
 		if (togglableLabel.isShowing()) {
-			eventLabelGenerators = List.of();
+			eventLabelGenerators = Collections.emptyList();
 		}
 		togglableLabel.toggle();
 		if (togglableLabel.isShowing()) {

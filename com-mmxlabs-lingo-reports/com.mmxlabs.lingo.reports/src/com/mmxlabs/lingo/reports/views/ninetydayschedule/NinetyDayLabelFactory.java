@@ -34,6 +34,8 @@ import com.mmxlabs.widgets.schedulechart.draw.RelativeDrawableElement.RelativeBo
 
 public class NinetyDayLabelFactory {
 	
+	private NinetyDayLabelFactory() {}
+	
 	public static List<List<IScheduleEventLabelElementGenerator>> buildShowDaysLabels() {
 		final List<List<IScheduleEventLabelElementGenerator>> alignments = new ArrayList<>();
 		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, new Padding(3, 3, 0, 0), se -> {

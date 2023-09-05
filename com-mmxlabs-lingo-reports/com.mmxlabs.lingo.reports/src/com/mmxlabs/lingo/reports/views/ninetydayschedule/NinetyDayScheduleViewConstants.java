@@ -4,9 +4,9 @@ public class NinetyDayScheduleViewConstants {
 	
 	private NinetyDayScheduleViewConstants() {}
 	
-	public static final String Show_ = "Show.";
-	public static final String Show_Days = "Show.Days";
-	public static final String Show_Destination_Labels = "Show.Destination.Labels";
-	public static final String Show_Canals = "Show.Canals";
+	public static final String SHOW_ = "Show.";
+	public static final String SHOW_DAYS = "Show.Days";
+	public static final String SHOW_DESTINATION_LABELS = "Show.Destination.Labels";
+	public static final String SHOW_CANALS = "Show.Canals";
 
 }
