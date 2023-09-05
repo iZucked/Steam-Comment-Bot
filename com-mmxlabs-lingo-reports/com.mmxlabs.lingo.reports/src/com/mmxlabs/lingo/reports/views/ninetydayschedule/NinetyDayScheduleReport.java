@@ -103,8 +103,6 @@ public class NinetyDayScheduleReport extends ViewPart {
 	
 	@Override
 	public void init(IViewSite viewSite, IMemento memento) throws PartInitException {
-		super.init(viewSite, memento);
-
 		if (memento == null) {
 			memento = XMLMemento.createWriteRoot("workbench");
 		}
@@ -115,6 +113,14 @@ public class NinetyDayScheduleReport extends ViewPart {
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
 		this.eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
 		this.eventLabelProvider = new NinetyDayDrawableEventLabelProvider(memento);
+
+		super.init(viewSite, memento);
+	}
+
+	@Override
+	public void saveState(final IMemento memento) {
+		memento.putMemento(this.memento);
+		super.saveState(memento);
 	}
 
 	@Override

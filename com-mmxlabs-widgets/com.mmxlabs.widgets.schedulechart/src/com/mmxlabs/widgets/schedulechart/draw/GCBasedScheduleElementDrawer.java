@@ -27,26 +27,26 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 	public void drawOne(BasicDrawableElement b) {
 		int oldAlpha = gc.getAlpha();
 		try {
-			if (b.getBackgroundColour() != null) {
-				gc.setBackground(b.getBackgroundColour());
+			if (b.backgroundColour() != null) {
+				gc.setBackground(b.backgroundColour());
 			}
 
-			if (b.getBorderColour() != null) {
-				gc.setForeground(b.getBorderColour());
-				gc.setLineWidth(b.getBorderThickness());
+			if (b.borderColour() != null) {
+				gc.setForeground(b.borderColour());
+				gc.setLineWidth(b.borderThickness());
 			}
 			
-			gc.setAlpha(b.getAlpha());
+			gc.setAlpha(b.alpha());
 
 			if (b instanceof Line l) {
 				gc.drawLine(l.x1(), l.y1(), l.x2(), l.y2());
 			} else if (b instanceof Rectangle r) {
 
-				if (r.getBorderColour() != null) {
+				if (r.borderColour() != null) {
 					gc.drawRectangle(r.x(), r.y(), r.width(), r.height());
 				}
 				
-				if (r.getBackgroundColour() != null) {
+				if (r.backgroundColour() != null) {
 					gc.fillRectangle(r.x(), r.y(), r.width(), r.height());
 				}
 
@@ -76,7 +76,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				int y = bb.y + p.top();
 				
 				gc.setFont(t.font());
-				gc.drawString(s, x, y, t.bgColour() == null);
+				gc.drawString(s, x, y, t.backgroundColour() == null);
 			} else {
 				throw new UnsupportedOperationException("Got a BasicDrawableElement that cannot be drawn by this ScheduleElementDrawer");
 			}

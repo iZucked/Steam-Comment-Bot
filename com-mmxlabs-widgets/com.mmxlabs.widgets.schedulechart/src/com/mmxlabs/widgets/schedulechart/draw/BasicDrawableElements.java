@@ -19,48 +19,23 @@ public interface BasicDrawableElements {
 		}
 
 		@Override
-		public Color getBackgroundColour() {
+		public Color backgroundColour() {
 			return null;
 		}
 
 		@Override
-		public Color getBorderColour() {
+		public Color borderColour() {
 			return c;
 		}
 
 		@Override
-		public int getBorderThickness() {
+		public int borderThickness() {
 			return thickness;
-		}
-		
-		@Override
-		public int getAlpha() {
-			return alpha;
 		}
 	}
 
-	public record Rectangle(int x, int y, int width, int height, Color bgColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
+	public record Rectangle(int x, int y, int width, int height, Color backgroundColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
 
-		@Override
-		public Color getBackgroundColour() {
-			return bgColour;
-		}
-
-		@Override
-		public Color getBorderColour() {
-			return borderColour;
-		}
-
-		@Override
-		public int getBorderThickness() {
-			return borderThickness;
-		}
-		
-		@Override
-		public int getAlpha() {
-			return alpha;
-		}
-		
 		public static RectangleBuilder withBounds(int x, int y, int width, int height) {
 			return new RectangleBuilder(x, y, width, height);
 		}
@@ -113,31 +88,21 @@ public interface BasicDrawableElements {
 		}
 	}
 	
-	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int alignment, Color textColour, Color bgColour, Font font, Padding p, int alpha) implements BasicDrawableElement {
+	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int alignment, Color textColour, Color backgroundColour, Font font, Padding p, int alpha) implements BasicDrawableElement {
 		public Text(int x, int y, String text) {
 			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, null, null, Display.getDefault().getSystemFont(), new Padding(0, 0, 0, 0), MAX_ALPHA);
 		}
 
 		@Override
-		public Color getBackgroundColour() {
-			return bgColour;
-		}
-
-		@Override
-		public Color getBorderColour() {
+		public Color borderColour() {
 			return textColour;
 		}
 
 		@Override
-		public int getBorderThickness() {
+		public int borderThickness() {
 			return 0;
 		}
 		
-		@Override
-		public int getAlpha() {
-			return alpha;
-		}
-
 		public static TextBuilder from(int x, int y, String s) {
 			return new TextBuilder(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), s);
 		}
