@@ -54,6 +54,23 @@ public class ExcelReader {
 		//formatter.setUseCachedValuesForFormulaCells(true);
 	} 
 	
+	public static List<String> getSheetNames(String workbookFileName) throws FileNotFoundException, IOException{
+		List<String> sheetNames = new ArrayList<>();
+		
+		FileInputStream fileIn = new FileInputStream(workbookFileName);
+		XSSFWorkbook workbook = new XSSFWorkbook(fileIn);
+		
+		for(int i = 0; i < workbook.getNumberOfSheets(); i++) {
+			sheetNames.add(workbook.getSheetAt(i).getSheetName());
+		}
+		
+		// Close streams
+		workbook.close();
+		fileIn.close();
+		
+		return sheetNames;
+	}
+	
 	/**
 	 * Get the string representation of a given row 0-based. 
 	 * <p>
