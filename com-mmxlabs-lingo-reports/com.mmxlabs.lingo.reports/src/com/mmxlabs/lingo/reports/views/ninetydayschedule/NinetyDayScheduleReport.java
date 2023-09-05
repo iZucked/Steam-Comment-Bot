@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -47,6 +48,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 	private Action zoomOutAction;
 	private Action packAction;
 	private NinetyDayScheduleLabelMenuAction labelMenuAction;
+	private NinetyDayScheduleFilterMenuAction filterMenuAction;
 	private Action showWindowsAction;
 	
 	private ScheduleChartViewer<ScheduleModel> viewer;
@@ -157,7 +159,12 @@ public class NinetyDayScheduleReport extends ViewPart {
 		manager.add(zoomOutAction);
 		manager.add(packAction);
 		manager.add(labelMenuAction);
+		manager.add(filterMenuAction);
 		manager.add(showWindowsAction);
+	}
+	
+	private void fillLocalPullDown(final IMenuManager manager) {
+		// Empty for now
 	}
 
 	private void makeActions() {
@@ -165,6 +172,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 		zoomOutAction = new ZoomAction(false, viewer.getCanvas());
 		packAction = new PackAction(viewer.getCanvas());
 		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
+		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas());
 		showWindowsAction = new ShowWindowsAction(viewer.getCanvas(), settings);
 	}
 

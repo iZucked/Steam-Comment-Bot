@@ -42,6 +42,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 	private final ScheduleTimeScale timeScale;
 	private final DrawableScheduleTimeScale<ScheduleTimeScale> drawableTimeScale;
+	private final ScheduleFilterSupport filterSupport;
 
 	private final HorizontalScrollbarHandler horizontalScrollbarHandler;
 	private final DragSelectionZoomHandler dragSelectionZoomHandler;
@@ -57,6 +58,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final IDrawableScheduleEventTooltipProvider drawableTooltipProvider;
 	
 	private final List<IScheduleChartEventListener> listeners = new ArrayList<>();
+
 
 	
 
@@ -77,13 +79,14 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 		this.timeScale = new ScheduleTimeScale(canvasState, this, settings);
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, settings);
+		this.filterSupport = new ScheduleFilterSupport(canvasState, settings);
 		
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
 		this.eventSelectionHandler = new EventSelectionHandler(this);
 		this.eventHoverHandler = new EventHoverHandler(this, canvasState);
 		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, settings, eventHoverHandler);
 		this.eventResizingHandler = new EventResizingHandler(this, timeScale, settings, eventHoverHandler);
-		this.rowHeaderMenuHandler = new RowHeaderMenuHandler(this, canvasState);
+		this.rowHeaderMenuHandler = new RowHeaderMenuHandler(this, filterSupport);
 
 		initListeners();
 	}
@@ -229,10 +232,19 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	public final ScheduleTimeScale getTimeScale() {
 		return timeScale;
 	}
+
+	public ScheduleFilterSupport getFilterSupport() {
+		return filterSupport;
+	}
 	
 	public void addRow(ScheduleChartRow r) {
 		canvasState.getRows().add(r);
 		recalculateContentBounds();
+	}
+	
+	public void showHiddenRows() {
+		canvasState.getHiddenRowKeys().clear();
+		redraw();
 	}
 	
 	public void addAll(List<ScheduleChartRow> rs) {
@@ -328,5 +340,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		
 		return Optional.empty();
 	}
-	
+
+	public boolean clickedRowHeaderRegion(int x, int y) {
+		return canvasState.getOriginalBounds().x <= x && x <= canvasState.getMainBounds().x;
+	}
+
 }

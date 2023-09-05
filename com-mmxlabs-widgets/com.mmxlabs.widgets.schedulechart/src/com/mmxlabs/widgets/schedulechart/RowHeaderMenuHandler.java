@@ -15,16 +15,16 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 public class RowHeaderMenuHandler implements MenuDetectListener {
 	
 	private final ScheduleCanvas canvas;
-	private final ScheduleCanvasState canvasState;
+	private final ScheduleFilterSupport filterSupport;
 
 	private Menu menu = null;
 	private Action hideRow = null;
 	private Action showHiddenRows = null;
 	private DrawableScheduleChartRow clickedRowHeader = null;
 
-	public RowHeaderMenuHandler(final ScheduleCanvas canvas, final ScheduleCanvasState canvasState) {
+	public RowHeaderMenuHandler(final ScheduleCanvas canvas, final ScheduleFilterSupport filterSupport) {
 		this.canvas = canvas;
-		this.canvasState = canvasState;
+		this.filterSupport = filterSupport;
 		this.menu = new Menu(canvas);
 		createMenuItems(menu);
 		canvas.setMenu(menu);
@@ -43,7 +43,7 @@ public class RowHeaderMenuHandler implements MenuDetectListener {
 		hideRow = new Action("Hide Row", IAction.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
-				canvasState.getHiddenRowKeys().add(clickedRowHeader.getScheduleChartRow().getKey());
+				filterSupport.hideRow(clickedRowHeader.getScheduleChartRow().getKey());
 				canvas.redraw();
 			}
 		};
@@ -53,7 +53,7 @@ public class RowHeaderMenuHandler implements MenuDetectListener {
 		showHiddenRows = new Action("Show Hidden Rows", IAction.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
-				canvasState.getHiddenRowKeys().clear();
+				filterSupport.showHiddenRows();
 				canvas.redraw();
 			}
 		};
@@ -61,14 +61,10 @@ public class RowHeaderMenuHandler implements MenuDetectListener {
 		showHiddenRowsACI.fill(m, -1);
 	}
 	
-	private boolean clickedHeaderRegion(int x, int y) {
-		return canvasState.getOriginalBounds().x <= x && x <= canvasState.getMainBounds().x;
-	}
-
 	@Override
 	public void menuDetected(MenuDetectEvent e) {
 		final Point p = canvas.toControl(e.x, e.y);
-		if (!clickedHeaderRegion(p.x, p.y)) {
+		if (!canvas.clickedRowHeaderRegion(p.x, p.y)) {
 			e.doit = false;
 			return;
 		}
@@ -82,7 +78,7 @@ public class RowHeaderMenuHandler implements MenuDetectListener {
 			clickedRowHeader = null;
 		}
 		
-		showHiddenRows.setEnabled(!canvasState.getHiddenRowKeys().isEmpty());
+		showHiddenRows.setEnabled(filterSupport.isFiltered());
 	}
 
 }
