@@ -25,6 +25,7 @@ public class NinetyDayScheduleFilterMenuAction extends NinetyDayScheduleAction {
 			@Override
 			public void run() {
 				canvas.getFilterSupport().showHiddenRows();
+				setEnabled(canvas.getFilterSupport().isFiltered());
 				canvas.redraw();
 			}
 		};

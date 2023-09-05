@@ -7,5 +7,6 @@ package com.mmxlabs.widgets.schedulechart.providers;
 public record ScheduleChartProviders(
 		IDrawableScheduleEventLabelProvider labelProvider,
 		IDrawableScheduleEventProvider drawableEventProvider,
-		IDrawableScheduleEventTooltipProvider drawableTooltipProvider
+		IDrawableScheduleEventTooltipProvider drawableTooltipProvider,
+		IScheduleChartSortingProvider sortingProvider
 ) {}

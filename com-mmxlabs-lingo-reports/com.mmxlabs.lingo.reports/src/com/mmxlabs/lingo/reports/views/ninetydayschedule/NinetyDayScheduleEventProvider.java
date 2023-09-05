@@ -7,11 +7,14 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
@@ -29,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -41,6 +45,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
+import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
@@ -58,7 +63,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	public List<ScheduleEvent> getEvents(ScheduleModel input) {
 		Schedule schedule = input.getSchedule();
 		
-		// contains Sequence and CombinedSequence
+		// contains Sequence, CombinedSequence and PositionsSequence
 		List<Object> sequences = getSequences(schedule);
 		List<Event> events = new ArrayList<>();
 		
@@ -67,6 +72,8 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				collectEvents(events, s);
 			} else if (o instanceof CombinedSequence cs) {
 				collectEvents(events, cs);
+			} else if (o instanceof PositionsSequence ps) {
+				collectEvents(events, ps);
 			}
 		}
 		
@@ -123,8 +130,36 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				res.add(cs);
 			}
 		}
+		
+		addPositionsSequences(res, schedule);
 
 		return res;
+	}
+	
+	private void addPositionsSequences(List<Object> res, Schedule schedule) {
+		final Collection<Slot<?>> nonShippedSlots = new HashSet<>();
+		for (final NonShippedSequence seq : schedule.getNonShippedSequences()) {
+			res.add(seq);
+			for (final Event event : seq.getEvents()) {
+				if (event instanceof NonShippedSlotVisit slotVisit) {
+					nonShippedSlots.add(slotVisit.getSlot());
+				}
+			}
+		}
+		
+		final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore;
+		if (!nonShippedSlots.isEmpty()) {
+			slotVisitsToIgnore = schedule.getCargoAllocations().stream() //
+					.map(CargoAllocation::getSlotAllocations) //
+					.flatMap(List::stream) //
+					.filter(sa -> nonShippedSlots.contains(sa.getSlot())) //
+					.map(SlotAllocation::getSlotVisit) //
+					.collect(Collectors.toSet());
+		} else {
+			slotVisitsToIgnore = Collections.emptySet();
+		}
+
+		res.addAll(PositionsSequence.makeBuySellSequences(schedule, slotVisitsToIgnore, ""));
 	}
 	
 	private void collectEvents(List<Event> res, Sequence s) {
@@ -164,6 +199,10 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 		}
 	}
 	
+	private void collectEvents(List<Event> events, PositionsSequence ps) {
+		// TODO: fill this
+	}
+
 	private ScheduleEvent makeScheduleEvent(Event event) {
 
 		// Get planned start and end dates

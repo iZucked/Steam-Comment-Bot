@@ -28,7 +28,7 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	private final Set<ScheduleEvent> selectedEvents = new HashSet<>();
 	private Optional<DrawableScheduleEvent> hoveredEvent = Optional.empty();
 	
-	private List<DrawableScheduleChartRow> lastDrawnContent;
+	private List<DrawableScheduleChartRow> lastDrawnContent = new ArrayList<>();
 	
 	private Set<ScheduleChartRowKey> hiddenRowKeys = new HashSet<>();
 

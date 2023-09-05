@@ -33,6 +33,7 @@ import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventLabelProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventTooltipProvider;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleChartSortingProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 
@@ -52,15 +53,13 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final RowHeaderMenuHandler rowHeaderMenuHandler;
 	
 	private final IScheduleChartSettings settings;
+	private final IScheduleChartSortingProvider sortingProvider;
 	private final IScheduleEventStylingProvider eventStylingProvider;
 	private final IDrawableScheduleEventLabelProvider eventLabelProvider;
 	private final IDrawableScheduleEventProvider drawableEventProvider;
 	private final IDrawableScheduleEventTooltipProvider drawableTooltipProvider;
 	
 	private final List<IScheduleChartEventListener> listeners = new ArrayList<>();
-
-
-	
 
 	public ScheduleCanvas(Composite parent, ScheduleChartProviders providers) {
 		this(parent, providers, new DefaultScheduleChartSettings());
@@ -73,6 +72,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 		this.settings = settings;
 		this.drawableEventProvider = providers.drawableEventProvider();
+		this.sortingProvider = providers.sortingProvider();
 		this.eventStylingProvider = null;
 		this.drawableTooltipProvider = providers.drawableTooltipProvider();
 		this.eventLabelProvider = providers.labelProvider();
@@ -163,7 +163,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		drawer.drawOne(drawableTimeScale.getHeaders(), resolver);
 		
 		// Draw row headers
-		var rowHeader = new DrawableScheduleChartRowHeaders(canvasState.getShownRows(), drawableTimeScale.getTotalHeaderHeight(), settings);
+		var rowHeader = new DrawableScheduleChartRowHeaders(getSortedShownRows(), drawableTimeScale.getTotalHeaderHeight(), settings);
 		rowHeader.setBounds(new Rectangle(originalBounds.x, mainBounds.y + drawableTimeScale.getTotalHeaderHeight(), rowHeaderWidth, mainBounds.height));
 		rowHeader.setLockedHeaderY(originalBounds.y);
 		drawer.drawOne(rowHeader, resolver);
@@ -191,8 +191,10 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		final Rectangle mainBounds = canvasState.getMainBounds();
 		final int height = settings.getRowHeight();
 		final int startY = mainBounds.y + drawableTimeScale.getTotalHeaderHeight();
-		int i = 0, y = startY;
-		for (final ScheduleChartRow scr : canvasState.getShownRows()) {
+
+		int i = 0;
+		int y = startY;
+		for (final ScheduleChartRow scr : getSortedShownRows()) {
 			DrawableScheduleChartRow drawableRow = new DrawableScheduleChartRow(scr, canvasState, i, timeScale, drawableEventProvider, eventStylingProvider, settings);
 			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, height));
 			res.add(drawableRow);
@@ -343,6 +345,12 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 	public boolean clickedRowHeaderRegion(int x, int y) {
 		return canvasState.getOriginalBounds().x <= x && x <= canvasState.getMainBounds().x;
+	}
+	
+	private List<ScheduleChartRow> getSortedShownRows() {
+		List<ScheduleChartRow> sortedRows = new ArrayList<>(canvasState.getShownRows());
+		sortedRows.sort(sortingProvider.getComparator());
+		return sortedRows;
 	}
 
 }
