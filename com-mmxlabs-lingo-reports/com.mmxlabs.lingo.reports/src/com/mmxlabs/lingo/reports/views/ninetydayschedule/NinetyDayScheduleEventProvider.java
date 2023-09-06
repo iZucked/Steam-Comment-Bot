@@ -243,9 +243,11 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 					final int newWindowStartHour = windowStartDate.getHour();
 					final CompoundCommand cmd = new CompoundCommand("Update start window");
 					
+					boolean changedStart = false;
 					final ICommandHandler commandHandler = commandHandlerProvider.get();
 					final LocalDate oldWindowStart = slot.getWindowStart();
 					if (!oldWindowStart.equals(newWindowStart)) {
+						changedStart = true;
 						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), newWindowStart));
 					}
 					final int oldWindowHour = slot.getWindowStartTime();
@@ -255,7 +257,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 					
 					LocalDateTime windowEndDate = getWindowEndDate();
 					final LocalDateTime oldWindowEnd = slot.getSchedulingTimeWindow().getEnd().toLocalDateTime();
-					if (!oldWindowEnd.equals(windowEndDate)) {
+					if (!oldWindowEnd.equals(windowEndDate) || changedStart) {
 						final int hoursDifference = Hours.between(windowStartDate, windowEndDate);
 						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), hoursDifference));
 						if (slot.getWindowSizeUnits() != TimePeriod.HOURS) {
