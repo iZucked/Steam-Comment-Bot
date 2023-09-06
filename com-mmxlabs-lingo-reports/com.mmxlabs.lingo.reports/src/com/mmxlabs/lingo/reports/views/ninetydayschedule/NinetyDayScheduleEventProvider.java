@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -13,15 +14,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -46,6 +51,8 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
+import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
@@ -54,9 +61,11 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 	private final EquivalentsManager equivalentsManager;
+	private final Supplier<ICommandHandler> commandHandlerProvider;
 
-	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager) {
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, Supplier<ICommandHandler> commandHandlerProvider) {
 		this.equivalentsManager = equivalentsManager;
+		this.commandHandlerProvider = commandHandlerProvider;
 	}
 
 	@Override
@@ -223,7 +232,45 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 			}
 		}
 		
-		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event);
+		ScheduleEvent se;
+		if (event instanceof SlotVisit sv) {
+			se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event) {
+				@Override
+				public void updateWindow() {
+					final LocalDateTime windowStartDate = getWindowStartDate();
+					final Slot<?> slot = sv.getSlotAllocation().getSlot();
+					final LocalDate newWindowStart = LocalDate.from(windowStartDate);
+					final int newWindowStartHour = windowStartDate.getHour();
+					final CompoundCommand cmd = new CompoundCommand("Update start window");
+					
+					final ICommandHandler commandHandler = commandHandlerProvider.get();
+					final LocalDate oldWindowStart = slot.getWindowStart();
+					if (!oldWindowStart.equals(newWindowStart)) {
+						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), newWindowStart));
+					}
+					final int oldWindowHour = slot.getWindowStartTime();
+					if (oldWindowHour != newWindowStartHour) {
+						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), newWindowStartHour));
+					}
+					
+					LocalDateTime windowEndDate = getWindowEndDate();
+					final LocalDateTime oldWindowEnd = slot.getSchedulingTimeWindow().getEnd().toLocalDateTime();
+					if (!oldWindowEnd.equals(windowEndDate)) {
+						final int hoursDifference = Hours.between(windowStartDate, windowEndDate);
+						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), hoursDifference));
+						if (slot.getWindowSizeUnits() != TimePeriod.HOURS) {
+							cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), TimePeriod.HOURS));
+						}
+					}
+					
+					if (!cmd.isEmpty()) {
+						commandHandler.handleCommand(cmd);
+					}
+				}
+			};
+		} else {
+			se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event);
+		}
 
 		boolean visible = !(event instanceof StartEvent || event instanceof EndEvent);
 		se.setVisible(visible);

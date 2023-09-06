@@ -72,6 +72,9 @@ public class ScheduleEvent {
 		this.windowStartDate = windowStartDate;
 	}
 
+	public void updateWindow() {
+	}
+
 	public LocalDateTime getWindowEndDate() {
 		return windowEndDate;
 	}

@@ -5,9 +5,11 @@
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
@@ -34,6 +36,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -42,7 +45,7 @@ import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
 
-public class NinetyDayScheduleReport extends ViewPart {
+public class NinetyDayScheduleReport extends ScenarioInstanceView {
 
 	private Action zoomInAction;
 	private Action zoomOutAction;
@@ -116,7 +119,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 		this.memento = memento;
 		this.settings = new NinetyDayScheduleChartSettings();
 
-		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
+		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager, this::getDefaultCommandHandler);
 		this.sortingProvider = new NinetyDayScheduleChartSortingProvider();
 		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
@@ -149,6 +152,7 @@ public class NinetyDayScheduleReport extends ViewPart {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		listenToScenarioSelection();
 	}
 
 	private void contributeToActionBars() {

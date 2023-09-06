@@ -52,13 +52,15 @@ public class EventResizingHandler implements MouseListener, MouseMoveListener {
 			LocalDateTime date = timeScale.getDateTimeAtX(endX).getFirst();
 			if (hoveredOnStart && date.isBefore(resizableEvent.getWindowEndDate())) {
 				resizableEvent.setWindowStartDate(date);
+				canvas.redraw();
 			} else if (date.isAfter(resizableEvent.getWindowStartDate())) {
 				resizableEvent.setWindowEndDate(date);
+				canvas.redraw();
 			} else {
-				resizing = false;
+//				resizing = false;
 			}
 
-			canvas.redraw();
+//			canvas.redraw();
 			return;
 		}
 		
@@ -101,6 +103,7 @@ public class EventResizingHandler implements MouseListener, MouseMoveListener {
 	public void mouseUp(MouseEvent e) {
 		if (!settings.allowWindowResizing() || !resizing) return;
 		canvas.fireScheduleEvent(l -> l.eventResized(hoveredResizableEvent.get().getScheduleEvent()));
+		hoveredResizableEvent.get().getScheduleEvent().updateWindow();
 		resizing = false;
 		hoveredResizableEvent = Optional.empty();
 		eventHoverHandler.enable();
