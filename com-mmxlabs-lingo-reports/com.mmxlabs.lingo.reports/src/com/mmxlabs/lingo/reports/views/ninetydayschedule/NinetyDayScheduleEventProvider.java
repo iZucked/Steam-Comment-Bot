@@ -61,11 +61,9 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 	private final EquivalentsManager equivalentsManager;
-	private final Supplier<ICommandHandler> commandHandlerProvider;
 
-	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, Supplier<ICommandHandler> commandHandlerProvider) {
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager) {
 		this.equivalentsManager = equivalentsManager;
-		this.commandHandlerProvider = commandHandlerProvider;
 	}
 
 	@Override
@@ -232,57 +230,15 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 			}
 		}
 		
-		ScheduleEvent se;
-		if (event instanceof SlotVisit sv) {
-			se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event) {
-				@Override
-				public void updateWindow() {
-					final LocalDateTime windowStartDate = getWindowStartDate();
-					final Slot<?> slot = sv.getSlotAllocation().getSlot();
-					final LocalDate newWindowStart = LocalDate.from(windowStartDate);
-					final int newWindowStartHour = windowStartDate.getHour();
-					final CompoundCommand cmd = new CompoundCommand("Update start window");
-					
-					boolean changedStart = false;
-					final ICommandHandler commandHandler = commandHandlerProvider.get();
-					final LocalDate oldWindowStart = slot.getWindowStart();
-					if (!oldWindowStart.equals(newWindowStart)) {
-						changedStart = true;
-						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), newWindowStart));
-					}
-					final int oldWindowHour = slot.getWindowStartTime();
-					if (oldWindowHour != newWindowStartHour) {
-						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), newWindowStartHour));
-					}
-					
-					LocalDateTime windowEndDate = getWindowEndDate();
-					final LocalDateTime oldWindowEnd = slot.getSchedulingTimeWindow().getEnd().toLocalDateTime();
-					if (!oldWindowEnd.equals(windowEndDate) || changedStart) {
-						final int hoursDifference = Hours.between(windowStartDate, windowEndDate);
-						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), hoursDifference));
-						if (slot.getWindowSizeUnits() != TimePeriod.HOURS) {
-							cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), TimePeriod.HOURS));
-						}
-					}
-					
-					if (!cmd.isEmpty()) {
-						commandHandler.handleCommand(cmd);
-					}
-				}
-			};
-		} else {
-			se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event);
-		}
+		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event);
 
 		boolean visible = !(event instanceof StartEvent || event instanceof EndEvent);
 		se.setVisible(visible);
 		
-		if (event instanceof final SlotVisit sv) {
-			if (sv.getSlotAllocation().getSlot() != null) {
-				se.setWindowStartDate(plannedStartDate);
-				se.setWindowEndDate(plannedEndDate);
-				se.setResizable(true);
-			}
+		if (event instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() != null) {
+			se.setWindowStartDate(plannedStartDate);
+			se.setWindowEndDate(plannedEndDate);
+			se.setResizable(true);
 		}
 		
 		return se;

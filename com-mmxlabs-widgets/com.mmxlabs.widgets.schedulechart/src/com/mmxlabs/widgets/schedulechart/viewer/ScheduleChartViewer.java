@@ -25,6 +25,7 @@ import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleChartModelUpdater;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 
@@ -32,23 +33,25 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	
 	protected final ScheduleCanvas canvas;
 	protected final IScheduleEventProvider<T> eventProvider;
+	private IScheduleChartModelUpdater modelUpdater;
 	private IElementComparer comparer;
 	private ISelection selection;
 	
 	private T input;
 	private Map<Object, ScheduleEvent> internalDataMap = new HashMap<>();
 	
-	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider) {
-		this(new ScheduleCanvas(parent, providers), eventProvider);
+	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider, IScheduleChartModelUpdater modelUpdater) {
+		this(new ScheduleCanvas(parent, providers), eventProvider, modelUpdater);
 	}
 	
-	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider, IScheduleChartSettings settings) {
-		this(new ScheduleCanvas(parent, providers, settings), eventProvider);
+	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider, IScheduleChartModelUpdater modelUpdater, IScheduleChartSettings settings) {
+		this(new ScheduleCanvas(parent, providers, settings), eventProvider, modelUpdater);
 	}
 	
-	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider) {
+	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider, IScheduleChartModelUpdater modelUpdater) {
 		this.canvas = canvas;
 		this.eventProvider = eventProvider;
+		this.modelUpdater = modelUpdater;
 		this.input = null;
 		
 		hookControl(canvas);
@@ -170,6 +173,11 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 				final List<Object> selectedObjects = allSelectedEvents.stream().map(e -> e.getData()).toList();
 				final StructuredSelection s = new StructuredSelection(selectedObjects, comparer);
 				setSelection(s);
+			}
+			
+			@Override
+			public void eventResized(ScheduleEvent se) {
+				modelUpdater.resizeEvent(se.getData(), se.getWindowStartDate(), se.getWindowEndDate());		
 			}
 		};
 		

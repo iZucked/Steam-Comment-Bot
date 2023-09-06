@@ -5,15 +5,12 @@
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -25,7 +22,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.XMLMemento;
-import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -36,7 +32,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -45,7 +41,7 @@ import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
 
-public class NinetyDayScheduleReport extends ScenarioInstanceView {
+public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport {
 
 	private Action zoomInAction;
 	private Action zoomOutAction;
@@ -65,6 +61,8 @@ public class NinetyDayScheduleReport extends ScenarioInstanceView {
 	private NinetyDayDrawableEventTooltipProvider drawableEventTooltipProvider;
 	private NinetyDayScheduleEventStylingProvider eventStylingProvider;
 	private NinetyDayDrawableEventLabelProvider eventLabelProvider;
+	
+	private NinetyDayScheduleModelUpdater modelUpdater;
 	
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
 	private ReentrantSelectionManager selectionManager;
@@ -119,12 +117,13 @@ public class NinetyDayScheduleReport extends ScenarioInstanceView {
 		this.memento = memento;
 		this.settings = new NinetyDayScheduleChartSettings();
 
-		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager, this::getDefaultCommandHandler);
+		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
 		this.sortingProvider = new NinetyDayScheduleChartSortingProvider();
 		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
 		this.eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
 		this.eventLabelProvider = new NinetyDayDrawableEventLabelProvider(memento);
+		this.modelUpdater = new NinetyDayScheduleModelUpdater(this::getDefaultCommandHandler);
 
 		super.init(viewSite, memento);
 	}
@@ -138,13 +137,14 @@ public class NinetyDayScheduleReport extends ScenarioInstanceView {
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider), eventProvider, settings);
+		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider), eventProvider, modelUpdater, settings);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		
 		
 		makeActions();
 		contributeToActionBars();
+		makeUndoActions();
 		
 		
 		try {
@@ -182,12 +182,6 @@ public class NinetyDayScheduleReport extends ScenarioInstanceView {
 		showWindowsAction = new ShowWindowsAction(viewer.getCanvas(), settings);
 	}
 
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
-
-	}
-	
 	@Override
 	public void dispose() {
 		if (scenarioComparisonService != null) {

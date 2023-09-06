@@ -107,7 +107,6 @@ public class EventResizingHandler implements MouseListener, MouseMoveListener {
 	public void mouseUp(MouseEvent e) {
 		if (!settings.allowWindowResizing() || !resizing) return;
 		canvas.fireScheduleEvent(l -> l.eventResized(hoveredResizableEvent.get().getScheduleEvent()));
-		hoveredResizableEvent.get().getScheduleEvent().updateWindow();
 		resizing = false;
 		hoveredResizableEvent = Optional.empty();
 		eventHoverHandler.enable();
