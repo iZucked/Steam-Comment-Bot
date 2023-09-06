@@ -1,7 +1,8 @@
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
 
-import java.util.List;
-
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
@@ -34,6 +35,26 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	public boolean performFinish() {
 		System.out.println("Filename: " + importPage.getImportFilename());
 		System.out.println("Worksheet: " + importPage.getSelectedWorksheetName());
+		
+		FileInputStream fileIn = null;
+		ExcelReader excelReader = null;
+		
+		try {
+			fileIn = new FileInputStream(importPage.getImportFilename());
+		} catch (FileNotFoundException e1) {
+			// TODO Handle exceptions properly
+			return false;
+		}
+		
+		try {
+			excelReader = new ExcelReader(fileIn, importPage.getSelectedWorksheetName());
+		} catch (IOException e) {
+			// TODO Handle exceptions properly
+			return false;
+		}
+		
+		// Create paper deals
+		
 
 		return true;
 	}

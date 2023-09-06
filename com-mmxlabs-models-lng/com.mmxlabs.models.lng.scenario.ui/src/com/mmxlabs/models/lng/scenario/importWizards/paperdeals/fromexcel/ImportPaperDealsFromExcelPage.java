@@ -4,34 +4,21 @@
  */
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
 
-import org.eclipse.jface.dialogs.IDialogSettings;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.preference.FileFieldEditor;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
-import com.mmxlabs.models.lng.scenario.importWizards.ImportUtils;
-import com.mmxlabs.models.lng.scenario.internal.Activator;
-import com.mmxlabs.models.lng.scenario.ui.ScenarioContentProvider;
-import com.mmxlabs.models.lng.scenario.ui.ScenarioLabelProvider;
-import com.mmxlabs.rcp.common.controls.RadioSelectionGroup;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
@@ -41,6 +28,8 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 	
 	public ImportPaperDealsFromExcelPage(final String pageName, final ScenarioInstance currentScenario) {
 		super(pageName, currentScenario);
+		setTitle("Select Excel file and worksheet");
+		setDescription("Choose Excel file and respective worksheet from Excel file to import paper deals.");
 	}
 	
 	@Override
@@ -84,6 +73,20 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				// Populate drop down menu
+				List<String> sheetNames = new ArrayList<>();
+				
+				// TODO: Handle exceptions correctly
+				try {
+					sheetNames = ExcelReader.getSheetNames(getImportFilename());
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				dropDownMenu.setItems(sheetNames.stream().toArray(String[]::new));
 				
 				// Show worksheet drop down menu
 				dropDownComposite.setVisible(true);
