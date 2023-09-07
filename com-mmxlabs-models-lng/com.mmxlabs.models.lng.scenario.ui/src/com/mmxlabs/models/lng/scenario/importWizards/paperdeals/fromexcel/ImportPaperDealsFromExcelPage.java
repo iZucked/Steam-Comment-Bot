@@ -18,7 +18,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelReader;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
@@ -105,7 +107,6 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 
         // Create the drop down menu for worksheets
         dropDownMenu = new Combo(dropDownComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-        dropDownMenu.setItems(new String[] {"A", "B", "C"});
         dropDownMenu.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         dropDownMenu.addModifyListener(new ModifyListener() {
         	@Override

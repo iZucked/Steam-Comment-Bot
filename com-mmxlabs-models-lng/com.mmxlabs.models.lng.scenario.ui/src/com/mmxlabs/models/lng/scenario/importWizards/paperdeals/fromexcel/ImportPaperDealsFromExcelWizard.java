@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
@@ -15,22 +17,28 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
-import com.mmxlabs.models.lng.cargo.util.DefaulPaperDealExcelExporter;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
-import com.mmxlabs.models.lng.cargo.util.IPaperDealExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaulPaperDealExcelExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelReader;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.ImportAction.ImportHooksProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	
 	private ImportPaperDealsFromExcelPage importPage;
+	
+	private ScenarioInstance scenarioInstance;
 	
 	@Inject
 	private Iterable<IPaperDealExporter> paperDealExporters;
@@ -38,6 +46,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	public ImportPaperDealsFromExcelWizard(ScenarioInstance scenarioInstance, String windowTitle) {
 		super(scenarioInstance, windowTitle);
 		
+		this.scenarioInstance = scenarioInstance;
 		final BundleContext bc = FrameworkUtil.getBundle(ImportPaperDealsFromExcelWizard.class).getBundleContext();
 		final Injector injector = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new ImportPaperDealsFromExcelProviderModule());
 		injector.injectMembers(this);
@@ -56,30 +65,44 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 	@Override
 	public boolean performFinish() {
-		System.out.println("Filename: " + importPage.getImportFilename());
-		System.out.println("Worksheet: " + importPage.getSelectedWorksheetName());
-		
 		ExcelReader excelReader = null;
 		
 		try(final FileInputStream fis = new FileInputStream(importPage.getImportFilename())){
-			
+			final ExcelReader reader = new ExcelReader(fis, importPage.getSelectedWorksheetName());
 			final Iterator<IPaperDealExporter> iterPaperDealExporters = paperDealExporters.iterator();
 			final IPaperDealExporter paperDealExporter = iterPaperDealExporters.hasNext() ? iterPaperDealExporters.next(): new DefaulPaperDealExcelExporter();
-			final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(fis);
-			if (paperDealExporter != null) {
-				// TODO: create a CompoundCommand and attach paper deals to the model
-			}
 			
-//			try {
-//				excelReader = new ExcelReader(fis, importPage.getSelectedWorksheetName());
-//			} catch (IOException e) {
-//				// TODO Handle exceptions properly
-//				
-//				return false;
-//			}
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+	        try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
+	        	final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider));
+				if (paperDealExporter != null) {
+					CompoundCommand command = new CompoundCommand("Paper deal");
+					command.append(
+							AddCommand.create(scenarioDataProvider.getEditingDomain(), 
+									ScenarioModelUtil.getCargoModel(scenarioDataProvider), 
+									CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
+									paperDealsPair.getFirst())
+							);
+					command.append(
+							AddCommand.create(scenarioDataProvider.getEditingDomain(), 
+									ScenarioModelUtil.getCargoModel(scenarioDataProvider),
+									CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
+									paperDealsPair.getSecond())
+							);
+					scenarioDataProvider.getCommandStack().execute(command);
+				}
+	        }
+			
+			
+			
+			
 		} catch (final Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return false;
 		}
+		
+		
 		
 
 		return true;

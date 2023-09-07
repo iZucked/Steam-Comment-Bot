@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
+package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,6 +54,12 @@ public class ExcelReader {
 		//formatter.setUseCachedValuesForFormulaCells(true);
 	} 
 	
+	/**
+	 * Get the names of all worksheets from a workbook
+	 * @param workbookFileName The path to the workbook
+	 * @return The list of worksheets found in the workbook
+	 * @throws IOException Thrown if workbook is not found
+	 */
 	public static List<String> getSheetNames(String workbookFileName) throws FileNotFoundException, IOException{
 		List<String> sheetNames = new ArrayList<>();
 		
@@ -69,6 +75,10 @@ public class ExcelReader {
 		fileIn.close();
 		
 		return sheetNames;
+	}
+	
+	public int getNumRows() {
+		return workSheet.getLastRowNum();
 	}
 	
 	/**

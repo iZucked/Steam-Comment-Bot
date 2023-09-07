@@ -9,7 +9,7 @@ import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.binder.ScopedBindingBuilder;
-import com.mmxlabs.models.lng.cargo.util.IPaperDealExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
 
 public class ImportPaperDealsFromExcelProviderModule extends AbstractModule {
 	
