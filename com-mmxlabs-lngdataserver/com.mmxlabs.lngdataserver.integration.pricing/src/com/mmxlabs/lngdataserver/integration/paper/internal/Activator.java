@@ -20,12 +20,12 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.pricing"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.lngdataserver.integration.paper"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
 
-	private DataBrowserNodeHandler pricingNodeHandler;
+	private DataBrowserNodeHandler paperNodeHandler;
 
 	/**
 	 * The constructor
@@ -43,11 +43,9 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		if (LicenseFeatures.isPermitted("features:hub-sync-pricing")) {
-			pricingNodeHandler = new DataBrowserNodeHandler("Paper", LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), PaperRepository.INSTANCE,
-					root -> new PaperRepositoryActionHandler(PaperRepository.INSTANCE, root));
-			pricingNodeHandler.start();
-		}
+		paperNodeHandler = new DataBrowserNodeHandler("Paper", LNGScenarioSharedModelTypes.PAPER_DEALS.getID(), PaperRepository.INSTANCE,
+				root -> new PaperRepositoryActionHandler(PaperRepository.INSTANCE, root));
+		paperNodeHandler.start();
 	}
 
 	/*
@@ -57,8 +55,8 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	@Override
 	public void stop(final BundleContext context) throws Exception {
-		if (pricingNodeHandler != null) {
-			pricingNodeHandler.stop();
+		if (paperNodeHandler != null) {
+			paperNodeHandler.stop();
 		}
 
 		plugin = null;

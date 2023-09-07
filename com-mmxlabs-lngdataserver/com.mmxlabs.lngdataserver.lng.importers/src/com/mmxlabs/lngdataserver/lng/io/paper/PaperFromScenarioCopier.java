@@ -40,6 +40,9 @@ public class PaperFromScenarioCopier {
 			cargoModel.setPaperDealsVersionRecord(record);
 		}
 		
+		paperVersion.setIdentifier(record.getVersion());
+		paperVersion.setCreatedAt(record.getCreatedAt());
+		paperVersion.setCreatedBy(record.getCreatedBy());
 		return paperVersion;
 	}
 	

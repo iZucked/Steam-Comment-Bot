@@ -204,6 +204,7 @@ public class ReferenceDataStatusTrimContribution {
 	public static final List<String> getBaseCaseTypesToCheck() {
 		final List<String> types = new LinkedList<>();
 		types.add(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
+		types.add(LNGScenarioSharedModelTypes.PAPER_DEALS.getID());
 		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 			types.add(LNGScenarioSharedModelTypes.DISTANCES.getID());
 			types.add(LNGScenarioSharedModelTypes.LOCATIONS.getID());

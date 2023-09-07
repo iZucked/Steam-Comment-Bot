@@ -63,7 +63,7 @@ public class DatahubPaperDeal {
 			double price,
 			double quantity,
 			int year,
-			YearMonth pricingMonth,
+			LocalDate pricingMonth,
 			LocalDate pricingPeriodStart,
 			LocalDate pricingPeriodEnd,
 			LocalDate hedgingPeriodStart,
@@ -78,7 +78,7 @@ public class DatahubPaperDeal {
 		this.price=price;
 		this.quantity=quantity;
 		this.year=year;
-		this.pricingMonth=pricingMonth.atDay(1);
+		this.pricingMonth=pricingMonth;
 		this.pricingPeriodStart=pricingPeriodStart;
 		this.pricingPeriodEnd=pricingPeriodEnd;
 		this.hedgingPeriodStart=hedgingPeriodStart;
@@ -89,6 +89,30 @@ public class DatahubPaperDeal {
 		// this.entity=entity;
 		this.pricingType=pricingType;
 		this.kind = kind;
+	}
+	
+	public DatahubPaperDeal(
+			double price,
+			double quantity,
+			int year,
+			YearMonth pricingMonth,
+			LocalDate pricingPeriodStart,
+			LocalDate pricingPeriodEnd,
+			LocalDate hedgingPeriodStart,
+			LocalDate hedgingPeriodEnd,
+			String name,
+			String index,
+			String comment,
+			// String entity,
+			PricingType pricingType,
+			Kind kind)
+	{
+		this(
+			price, quantity, year,
+			pricingMonth.atDay(1),
+			pricingPeriodStart, pricingPeriodEnd, hedgingPeriodStart, hedgingPeriodEnd,
+			name, index, comment, pricingType, kind
+		);
 	}
 
 	public enum PricingType {
@@ -144,12 +168,5 @@ public class DatahubPaperDeal {
 	        return null;
 	    }
 	}
-	
-	public YearMonth getPricingMonth() {
-		return YearMonth.from(pricingMonth);
-	}
 
-	public void setPricingMonth(YearMonth pricingMonth) {
-		this.pricingMonth = pricingMonth.atDay(1);
-	}
 }

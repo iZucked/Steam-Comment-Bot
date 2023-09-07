@@ -30,7 +30,7 @@ public class PaperTypeRecord implements TypeRecord {
 
 	@Override
 	public String getUploadURL() {
-		return "/api/paper/sync/versions/";
+		return "/api/paper/versions";
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class PaperTypeRecord implements TypeRecord {
 
 	@Override
 	public String getDownloadURL(String uuid) {
-		return String.format("%s%s", getUploadURL(), uuid);
+		return String.format("%s/%s", getUploadURL(), uuid);
 	}
 
 	@Override

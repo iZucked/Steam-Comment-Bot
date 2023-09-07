@@ -162,6 +162,7 @@ public class CopyFromBaseTests extends AbstractLegacyMicroTestCase {
 		manifest.getModelDependencies().add(createFor(LNGScenarioSharedModelTypes.VESSEL_GROUPS.getID(), ScenarioModelUtil.getFleetModel(model).getVesselGroupVersionRecord()));
 		manifest.getModelDependencies().add(createFor(LNGScenarioSharedModelTypes.FLEET.getID(), ScenarioModelUtil.getFleetModel(model).getFleetVersionRecord()));
 		manifest.getModelDependencies().add(createFor(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), ScenarioModelUtil.getPricingModel(model).getMarketCurvesVersionRecord()));
+		manifest.getModelDependencies().add(createFor(LNGScenarioSharedModelTypes.PAPER_DEALS.getID(), ScenarioModelUtil.getCargoModel(model).getPaperDealsVersionRecord()));
 		manifest.getModelDependencies().add(createFor(LNGScenarioSharedModelTypes.SETTLED_PRICES.getID(), ScenarioModelUtil.getPricingModel(model).getSettledPricesVersionRecord()));
 
 		return manifest;

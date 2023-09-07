@@ -34,6 +34,7 @@ abstract class Chunk {
 	}
 
 	void setFromDirectory(final File directory) {
+		if (directory == null) return;
 		if (isZip(directory.getAbsolutePath())) {
 			setFromZip(directory.getAbsolutePath());
 		}
