@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
@@ -35,6 +36,14 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 	private int HEADGING_PERIOD_START_COL_NUM = 13;
 	private int HEADGING_PERIOD_END_COL_NUM = 14;
 	private int INSTRUMENT_COL_NUM = 11;
+	
+	private Map<String, String> instrumentMap = Map.of(
+				"DATED_BRENT_Futures", "DATED_BRENT_SWAP",
+				"ICE_BRENT_FUTURES", "BRENT_FUTURES",
+				"JKM_LNG_Future", "JKM_SWAP",
+				"TTF_ICE_FUTURES", "TFU_SWAP",
+				"TTF_USDMM", "TTF_SWAP"
+			);
 
 	
 	@Override
@@ -44,12 +53,25 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 		List<SellPaperDeal> sellPaperDeals = new ArrayList<>();
 		
 		for(int i = 1; i < reader.getNumRows(); i++) {
-			PaperDeal paperDeal = getPaperDeal(reader, i, lngScenarioModel);
+			System.out.println(i);
+			PaperDeal paperDeal = null;
 			
-			if(paperDeal instanceof BuyPaperDeal buyPaperDeal)
-				buyPaperDeals.add(buyPaperDeal);
-			else if(paperDeal instanceof SellPaperDeal sellPaperDeal)
-				sellPaperDeals.add(sellPaperDeal);
+			try {
+				paperDeal = getPaperDeal(reader, i, lngScenarioModel);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+			
+			
+			if(paperDeal != null) {
+				if(paperDeal instanceof BuyPaperDeal buyPaperDeal)
+					buyPaperDeals.add(buyPaperDeal);
+				else if(paperDeal instanceof SellPaperDeal sellPaperDeal)
+					sellPaperDeals.add(sellPaperDeal);
+			}
+			// Perhaps store failed paper deals?
 		}
 		
 		deals.setBoth(buyPaperDeals, sellPaperDeals);
@@ -68,50 +90,72 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 		String index = reader.readName(rowId, INDEX_COL_NUM);
 		String entityName = reader.readName(rowId, ENTITY_COL_NUM);
 
-		long quantity = numericalValues.get(QUANTITY_COL_NUM).longValueExact();
-		double price = numericalValues.get(PRICE_COL_NUM).doubleValue();
+		BigDecimal quantity = numericalValues.get(QUANTITY_COL_NUM);
+		BigDecimal price = numericalValues.get(PRICE_COL_NUM);
 				
 		String contractMonthStr = reader.readName(rowId, CONTRACT_MONTH_COL_NUM);
 		LocalDate hedgingPeriodStart = dateValues.get(HEADGING_PERIOD_START_COL_NUM);
 		LocalDate hedgingPeriodEnd = dateValues.get(HEADGING_PERIOD_END_COL_NUM);
 				
-		String instrumentType = reader.readName(rowId, INSTRUMENT_COL_NUM);
+		boolean usingInstrument = !index.equals("NYMEX_NG");
 				
+		// Validate data
+		if(
+				reference.equals("") || !(buyOrSell.contains("Buy") || buyOrSell.contains("Sell")) || index.equals("") 
+				|| entityName.equals("") || quantity == null || price == null || contractMonthStr.equals("") 
+				|| hedgingPeriodStart == null || hedgingPeriodEnd == null
+		)
+			return null;
+		
+		
 		// Get Contract month as YearMonth type
-		DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM-yy", Locale.ENGLISH);
-		YearMonth contractMonth = YearMonth.parse(contractMonthStr, monthFormatter);
+		YearMonth contractMonth;
+		
+		try {
+			DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM-yy", Locale.ENGLISH);
+			contractMonth = YearMonth.parse(contractMonthStr, monthFormatter);
+		}
+		catch(Exception e) {
+			return null;
+		}
+		
 		
 		// Get Instrument SettleStratergy
 		SettleStrategy settleStrategy = null;
 				
-		// TODO: Fix no pricing models being returned
-		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
-		for (final SettleStrategy ss : pricingModel.getSettleStrategies()) {
-			if (ss.getName().equalsIgnoreCase(instrumentType)) {
-				settleStrategy = ss;
+		if(usingInstrument) {
+			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
+			String instrument = instrumentMap.get(index);
+			
+			if(instrument == null)
+				throw new IllegalStateException(String.format("No pricing instrument mapped to %s found!", index));
+			
+			for (final SettleStrategy ss : pricingModel.getSettleStrategies()) {
+				if (ss.getName().equalsIgnoreCase(instrument)) {
+					settleStrategy = ss;
+				}
+			}
+			if (settleStrategy == null) {
+				throw new IllegalStateException(String.format("No pricing instrument %s found!", instrument));
 			}
 		}
-		if (settleStrategy == null) {
-			throw new IllegalStateException(String.format("No pricing instrument %s found!", instrumentType));
-		}
+		
 				
 				
 		// Get Entity
-		
-		// TODO: Fix no "LNG CUSA - LE" entity being returned
-		CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
 		BaseLegalEntity entity = null;
+		
+		CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
+		
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
-			if(e.getName().equalsIgnoreCase(entityName))
+			if(entityName.contains(e.getName()))
 				entity = e;
 		}
 		if (entity == null) {
-			throw new IllegalStateException(String.format("No entity found with name %s!", entityName));
+			throw new IllegalStateException(String.format("No entity found with similar name %s!", entityName));
 		}
 				
-				
-		// Validate data
-				
+
 		// Check if buy or sell paper deal
 		final PaperDeal paperDeal;
 		if(buyOrSell.equals("Buy")) {
@@ -123,19 +167,32 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 				
 		// Place data in paper deal
 		paperDeal.setName(name);
-		paperDeal.setQuantity(-OptimiserUnitConvertor.convertToExternalVolume(quantity));
-		paperDeal.setPrice(price);
+		paperDeal.setQuantity(-quantity.longValueExact());
+		paperDeal.setPrice(price.doubleValue());
 		paperDeal.setPricingMonth(contractMonth);
-		paperDeal.setPricingPeriodStart(null);
-		paperDeal.setPricingPeriodEnd(null);
 		paperDeal.setHedgingPeriodStart(hedgingPeriodStart);
 		paperDeal.setHedgingPeriodEnd(hedgingPeriodEnd);
-		paperDeal.setPricingType(PaperPricingType.INSTRUMENT);
-		paperDeal.setInstrument(settleStrategy);
+		
+		
+		if(usingInstrument) {
+			paperDeal.setPricingType(PaperPricingType.INSTRUMENT);
+			
+			if(settleStrategy != null)
+				paperDeal.setInstrument(settleStrategy);
+		}
+		else { // For the case of index "NYMEX_NG"
+			paperDeal.setPricingType(PaperPricingType.PERIOD_AVG);
+		}
+			
+			
+		
 		paperDeal.setIndex(index);
 		paperDeal.setEntity(entity);
 		paperDeal.setYear(hedgingPeriodStart.getYear());
 		paperDeal.setComment(reference);
+		
+		paperDeal.setPricingPeriodStart(contractMonth.atDay(1));
+		paperDeal.setPricingPeriodEnd(contractMonth.atEndOfMonth());
 						
 				
 		return paperDeal;

@@ -168,14 +168,16 @@ public class ExcelReader {
 			} catch (Exception e){
 				// Manually parse the date
 				LocalDate date = parseDate(cell);
-				validateDate(dates, seenDates, date);
+				dates.add(date);
+				//validateDate(dates, seenDates, date);
 				continue;
 			}
 			
 			if(cell.getCellType().equals(CellType.NUMERIC)) {
 				if(DateUtil.isCellDateFormatted(cell)) {
 					LocalDateTime date = cell.getLocalDateTimeCellValue();
-					validateDate(dates, seenDates, date.toLocalDate());
+					dates.add(date.toLocalDate());
+					//validateDate(dates, seenDates, date.toLocalDate());
 				} else {
 					LOGGER.debug(String.format("Cell %s is not date-formatted.", 
 							cell.getAddress().toString()));
@@ -184,7 +186,8 @@ public class ExcelReader {
 			} else if(cell.getCellType().equals(CellType.STRING)){
 				String date = cell.getStringCellValue();
 				LocalDate localDate = parseStringDate(date, cell);
-				validateDate(dates, seenDates, localDate);
+				dates.add(localDate);
+				//validateDate(dates, seenDates, localDate);
 			} else {
 				LOGGER.debug(String.format("Cell %s does not evaluate to a date.", 
 						cell.getAddress().toString()));
