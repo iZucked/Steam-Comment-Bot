@@ -31,7 +31,7 @@ public class PaperFromScenarioCopier {
 		PaperVersion paperVersion = new PaperVersion();
 		
 		for (PaperDeal paper : paperDeals) {
-			paperVersion.getPaperDeals().add(transformPaperDeal(paper));
+			paperVersion.getPapersList().add(transformPaperDeal(paper));
 		}
 		
 		VersionRecord record = cargoModel.getPaperDealsVersionRecord();
@@ -63,7 +63,7 @@ public class PaperFromScenarioCopier {
 			paperDeal.getPrice(),
 			paperDeal.getQuantity(),
 			paperDeal.getYear(),
-			paperDeal.getPricingMonth(),
+			paperDeal.getPricingMonth().atDay(1),
 			paperDeal.getPricingPeriodStart(),
 			paperDeal.getPricingPeriodEnd(),
 			paperDeal.getHedgingPeriodStart(),

@@ -1089,7 +1089,7 @@ public final class SharedScenarioDataUtils {
 						final CargoModel cm = ScenarioModelUtil.getCargoModel(target);
 						final EditingDomain editingDomain = target.getEditingDomain();
 						final Command command = PaperToScenarioCopier.getUpdateCommand(editingDomain, cm, paperVersion);
-						command.execute();
+						appendAndExecute(command);
 					}
 				});
 			};

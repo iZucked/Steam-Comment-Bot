@@ -1,12 +1,13 @@
 package com.mmxlabs.lngdataserver.integration.paper.model;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -16,8 +17,6 @@ import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-
-// This file is a 1 to 1 mapping to the Paper representation on datahub
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@name")
@@ -55,10 +54,114 @@ public class DatahubPaperDeal {
 	@JsonDeserialize()
 	@JsonSerialize()
 	PricingType pricingType;
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Double getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Double quantity) {
+		this.quantity = quantity;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public LocalDate getPricingPeriodStart() {
+		return pricingPeriodStart;
+	}
+
+	public void setPricingPeriodStart(LocalDate pricingPeriodStart) {
+		this.pricingPeriodStart = pricingPeriodStart;
+	}
+
+	public LocalDate getPricingPeriodEnd() {
+		return pricingPeriodEnd;
+	}
+
+	public void setPricingPeriodEnd(LocalDate pricingPeriodEnd) {
+		this.pricingPeriodEnd = pricingPeriodEnd;
+	}
+
+	public LocalDate getHedgingPeriodStart() {
+		return hedgingPeriodStart;
+	}
+
+	public void setHedgingPeriodStart(LocalDate hedgingPeriodStart) {
+		this.hedgingPeriodStart = hedgingPeriodStart;
+	}
+
+	public LocalDate getHedgingPeriodEnd() {
+		return hedgingPeriodEnd;
+	}
+
+	public void setHedgingPeriodEnd(LocalDate hedgingPeriodEnd) {
+		this.hedgingPeriodEnd = hedgingPeriodEnd;
+	}
+
+	public LocalDate getPricingMonth() {
+		return pricingMonth;
+	}
+
+	public void setPricingMonth(LocalDate pricingMonth) {
+		this.pricingMonth = pricingMonth;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getIndex() {
+		return index;
+	}
+
+	public void setIndex(String index) {
+		this.index = index;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public PricingType getPricingType() {
+		return pricingType;
+	}
+
+	public void setPricingType(PricingType pricingType) {
+		this.pricingType = pricingType;
+	}
+
+	public Kind getKind() {
+		return kind;
+	}
+
+	public void setKind(Kind kind) {
+		this.kind = kind;
+	}
+
 	@JsonDeserialize()
 	@JsonSerialize()
 	Kind kind;
-	
+
 	public DatahubPaperDeal(
 			double price,
 			double quantity,
@@ -71,7 +174,7 @@ public class DatahubPaperDeal {
 			String name,
 			String index,
 			String comment,
-			// String entity,
+			//String entity,
 			PricingType pricingType,
 			Kind kind)
 	{
@@ -86,33 +189,13 @@ public class DatahubPaperDeal {
 		this.name=name;
 		this.index=index;
 		this.comment=comment;
-		// this.entity=entity;
+		//this.entity=entity;
 		this.pricingType=pricingType;
 		this.kind = kind;
 	}
 	
-	public DatahubPaperDeal(
-			double price,
-			double quantity,
-			int year,
-			YearMonth pricingMonth,
-			LocalDate pricingPeriodStart,
-			LocalDate pricingPeriodEnd,
-			LocalDate hedgingPeriodStart,
-			LocalDate hedgingPeriodEnd,
-			String name,
-			String index,
-			String comment,
-			// String entity,
-			PricingType pricingType,
-			Kind kind)
-	{
-		this(
-			price, quantity, year,
-			pricingMonth.atDay(1),
-			pricingPeriodStart, pricingPeriodEnd, hedgingPeriodStart, hedgingPeriodEnd,
-			name, index, comment, pricingType, kind
-		);
+	public DatahubPaperDeal (){
+		
 	}
 
 	public enum PricingType {
@@ -168,5 +251,4 @@ public class DatahubPaperDeal {
 	        return null;
 	    }
 	}
-
 }
