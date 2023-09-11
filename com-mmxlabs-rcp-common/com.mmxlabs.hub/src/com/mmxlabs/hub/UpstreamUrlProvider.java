@@ -122,7 +122,6 @@ public class UpstreamUrlProvider {
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
 		forceBasicAuthenticationEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
 		authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
-		OAuthManager.getInstance().setPreferEdgeBrowser(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER)));
 		
 		
 		HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK)));
@@ -170,10 +169,6 @@ public class UpstreamUrlProvider {
 		case DataHubPreferenceConstants.P_FORCE_BASIC_AUTH:
 			forceBasicAuthenticationEnabled = Boolean.TRUE.equals(event.getNewValue());
 			authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
-			fireChangedListeners();
-			break;
-		case DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER:
-			OAuthManager.getInstance().setPreferEdgeBrowser(Boolean.TRUE.equals(event.getNewValue()));
 			fireChangedListeners();
 			break;
 		case TLSPreferenceConstants.P_TLS_USE_JAVA_TRUSTSTORE:

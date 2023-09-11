@@ -369,7 +369,6 @@ public class ExposureDetailReportView extends ViewPart {
 						if (schedule != null) {
 							schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
 							schedule.getPaperDealAllocations().forEach(slotAllocations::add);
-
 						}
 					}
 				}

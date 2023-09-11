@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.widgets.schedulechart.draw;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Display;
 
 public interface BasicDrawableElements {
 	
@@ -16,48 +19,23 @@ public interface BasicDrawableElements {
 		}
 
 		@Override
-		public Color getBackgroundColour() {
+		public Color backgroundColour() {
 			return null;
 		}
 
 		@Override
-		public Color getBorderColour() {
+		public Color borderColour() {
 			return c;
 		}
 
 		@Override
-		public int getBorderThickness() {
+		public int borderThickness() {
 			return thickness;
-		}
-		
-		@Override
-		public int getAlpha() {
-			return alpha;
 		}
 	}
 
-	public record Rectangle(int x, int y, int width, int height, Color bgColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
+	public record Rectangle(int x, int y, int width, int height, Color backgroundColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
 
-		@Override
-		public Color getBackgroundColour() {
-			return bgColour;
-		}
-
-		@Override
-		public Color getBorderColour() {
-			return borderColour;
-		}
-
-		@Override
-		public int getBorderThickness() {
-			return borderThickness;
-		}
-		
-		@Override
-		public int getAlpha() {
-			return alpha;
-		}
-		
 		public static RectangleBuilder withBounds(int x, int y, int width, int height) {
 			return new RectangleBuilder(x, y, width, height);
 		}
@@ -110,46 +88,37 @@ public interface BasicDrawableElements {
 		}
 	}
 	
-	public record Text(int x, int y, String text, Color c, Padding p, int alpha) implements BasicDrawableElement {
+	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int alignment, Color textColour, Color backgroundColour, Font font, Padding p, int alpha) implements BasicDrawableElement {
 		public Text(int x, int y, String text) {
-			this(x, y, text, null, new Padding(0, 0, 0, 0), MAX_ALPHA);
+			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, null, null, Display.getDefault().getSystemFont(), new Padding(0, 0, 0, 0), MAX_ALPHA);
 		}
 
 		@Override
-		public Color getBackgroundColour() {
-			return null;
+		public Color borderColour() {
+			return textColour;
 		}
 
 		@Override
-		public Color getBorderColour() {
-			return c;
-		}
-
-		@Override
-		public int getBorderThickness() {
+		public int borderThickness() {
 			return 0;
 		}
 		
-		@Override
-		public int getAlpha() {
-			return alpha;
-		}
-
 		public static TextBuilder from(int x, int y, String s) {
-			return new TextBuilder(x, y, s);
+			return new TextBuilder(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), s);
 		}
 		
 		public static class TextBuilder {
-			private final int x;
-			private final int y;
+			private final org.eclipse.swt.graphics.Rectangle bb;
 			private final String s;
-			private Color c = null;
+			private Color tc = null;
+			private Color bgc = null;
 			private Padding p = new Padding(0, 0, 0, 0);
 			private int alpha = MAX_ALPHA;
+			private int alignment = SWT.LEFT;
+			private Font f = Display.getDefault().getSystemFont();
 			
-			private TextBuilder(int x, int y, String s) {
-				this.x = x;
-				this.y = y;
+			private TextBuilder(org.eclipse.swt.graphics.Rectangle boundingBox, String s) {
+				this.bb = boundingBox;
 				this.s = s;
 			}
 			
@@ -164,17 +133,32 @@ public interface BasicDrawableElements {
 			}
 			
 			public TextBuilder textColour(Color c) {
-				this.c = c;
+				this.tc = c;
 				return this;
 			}
 			
+			public TextBuilder bgColour(Color c) {
+				this.bgc = c;
+				return this;
+			}
+
 			public TextBuilder alpha(int alpha) {
 				this.alpha = alpha;
 				return this;
 			}
+			
+			public TextBuilder alignment(int alignment) {
+				this.alignment = alignment;
+				return this;
+			}
+			
+			public TextBuilder font(Font f) {
+				this.f = f;
+				return this;
+			}
 
 			public Text create() {
-				return new Text(x, y, s, c, p, alpha);
+				return new Text(bb, s, alignment, tc, bgc, f, p, alpha);
 			}
 		}
 

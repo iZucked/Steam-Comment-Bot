@@ -19,7 +19,7 @@ public class CharterLengthEvent extends NinetyDayDrawableScheduleEvent {
 	}
 
 	@Override
-	protected Color getBackgroundColour() {
+	public Color getBackgroundColour() {
 		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_CharterLength, ColourElements.Background);
 	}
 

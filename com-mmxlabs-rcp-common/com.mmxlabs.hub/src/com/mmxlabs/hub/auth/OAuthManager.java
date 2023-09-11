@@ -27,7 +27,6 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	public static final String COOKIE = "cookie";
 
 	private static OAuthManager instance = null;
-	private boolean preferEdgeBrowser;
 
 	private OAuthManager() {
 	}
@@ -84,7 +83,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 
 	protected void startAuthenticationShell(final String upstreamURL, final String path, @Nullable final Shell optionalShell) {
 		if (authenticationShellIsOpen.compareAndSet(false, true)) {
-			final OAuthDialog authenticationShell = new OAuthDialog(upstreamURL, path, optionalShell, preferEdgeBrowser);
+			final OAuthDialog authenticationShell = new OAuthDialog(upstreamURL, path, optionalShell);
 			// Set access token when shell is disposed
 			authenticationShell.addDisposeListener(() -> {
 				authenticationShellIsOpen.compareAndSet(true, false);
@@ -149,10 +148,5 @@ public class OAuthManager extends AbstractAuthenticationManager {
 		// doesn't work if the user clicks "stay logged in"
 		// Browser.setCookie("JSESSIONID=;", url);
 		// Browser.setCookie("authenticated=;", url + "/authenticated");
-	}
-
-	public void setPreferEdgeBrowser(final boolean preferEdgeBrowser) {
-		this.preferEdgeBrowser = preferEdgeBrowser;
-
 	}
 }

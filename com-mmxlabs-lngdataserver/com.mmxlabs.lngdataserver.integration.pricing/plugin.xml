@@ -15,7 +15,6 @@
 -->
 
 <plugin>
-	<!--
    <extension
          point="org.eclipse.ui.startup">
       <startup

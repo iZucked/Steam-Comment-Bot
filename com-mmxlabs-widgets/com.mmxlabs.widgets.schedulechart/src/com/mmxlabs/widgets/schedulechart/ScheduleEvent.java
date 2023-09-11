@@ -14,6 +14,10 @@ public class ScheduleEvent {
 	private final LocalDateTime plannedStartDate;
 	private final LocalDateTime plannedEndDate;
 	
+	private LocalDateTime windowStartDate;
+	private LocalDateTime windowEndDate;
+	private boolean resizable;
+	
 	private final Object data;
 	private boolean visible;
 	private ScheduleEventSelectionState selectionState;
@@ -25,7 +29,9 @@ public class ScheduleEvent {
 		this.plannedEndDate = plannedEndDate;
 		this.data = data;
 		this.selectionState = ScheduleEventSelectionState.UNSELECTED;
+		this.resizable = false;
 	}
+
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate) {
 		this(startDate, endDate, null, null, null);
 	}
@@ -56,5 +62,32 @@ public class ScheduleEvent {
 
 	public ScheduleEventSelectionState getSelectionState() {
 		return selectionState;
+	}
+
+	public LocalDateTime getWindowStartDate() {
+		return windowStartDate;
+	}
+
+	public void setWindowStartDate(LocalDateTime windowStartDate) {
+		this.windowStartDate = windowStartDate;
+	}
+
+	public void updateWindow() {
+	}
+
+	public LocalDateTime getWindowEndDate() {
+		return windowEndDate;
+	}
+
+	public void setWindowEndDate(LocalDateTime windowEndDate) {
+		this.windowEndDate = windowEndDate;
+	}
+
+	public boolean isResizable() {
+		return resizable;
+	}
+	
+	public void setResizable(boolean resizable) {
+		this.resizable = resizable;
 	}
 }

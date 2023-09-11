@@ -19,7 +19,7 @@ public class BalastIdleEvent extends NinetyDayDrawableScheduleEvent {
 	}
 
 	@Override
-	protected Color getBackgroundColour() {
+	public Color getBackgroundColour() {
 		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background);
 	}
 

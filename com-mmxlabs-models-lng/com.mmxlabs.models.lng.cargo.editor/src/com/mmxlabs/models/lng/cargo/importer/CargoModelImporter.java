@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
@@ -60,12 +61,14 @@ public class CargoModelImporter implements ISubmodelImporter {
 	private IClassImporter vesselCharterImporter;
 	private IClassImporter vesselEventImporter;
 	private IClassImporter paperDealsImporter;
+	private IClassImporter dealSetsImporter;
 	
 	private final CanalBookingImporter canalBookingsImporter = new CanalBookingImporter();
 	public static final @NonNull String EVENTS_KEY = "EVENTS";
 	public static final @NonNull String CANAL_BOOKINGS_KEY = "CANAL_BOOKINGS";
 	public static final @NonNull String VESSEL_CHARTERS_KEY = "VESSELSCHARTERS";
 	public static final @NonNull String PAPER_DEALS_KEY = "PAPER_DEALS";
+	public static final @NonNull String DEAL_SETS_KEY = "DEAL_SETS";
 
 	public CargoModelImporter() {
 		final Activator activator = Activator.getDefault();
@@ -88,6 +91,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 			
 			vesselEventImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselEvent());
 			paperDealsImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getPaperDeal());
+			dealSetsImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getDealSet());
 		}
 	}
 
@@ -102,6 +106,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 		inputs.put(CANAL_BOOKINGS_KEY, "Canal Bookings");
 		if (LicenseFeatures.isPermitted("features:paperdeals")) {
 			inputs.put(PAPER_DEALS_KEY, "Paper Deals");
+			inputs.put(DEAL_SETS_KEY, "Deal Sets");
 		}
 
 		return inputs;
@@ -198,6 +203,9 @@ public class CargoModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(PAPER_DEALS_KEY)) {
 			cargoModel.getPaperDeals().addAll((Collection<? extends PaperDeal>) paperDealsImporter.importObjects(CargoPackage.eINSTANCE.getPaperDeal(), inputs.get(PAPER_DEALS_KEY), context));
 		}
+		if (inputs.containsKey(DEAL_SETS_KEY)) {
+			cargoModel.getDealSets().addAll((Collection <? extends DealSet>)dealSetsImporter.importObjects(CargoPackage.eINSTANCE.getDealSet(), inputs.get(DEAL_SETS_KEY), context));
+		}
 		CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		cargoModel.setCanalBookings(canalBookings);
 		if (inputs.containsKey(CANAL_BOOKINGS_KEY)) {
@@ -240,6 +248,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 		output.put(VESSEL_CHARTERS_KEY, vesselCharterImporter.exportObjects(cargoModel.getVesselCharters(), context));
 		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(cargoModel.getVesselEvents(), context));
 		output.put(PAPER_DEALS_KEY, paperDealsImporter.exportObjects(cargoModel.getPaperDeals(), context));
+		output.put(DEAL_SETS_KEY, dealSetsImporter.exportObjects(cargoModel.getDealSets(), context));
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			final List<EObject> l = new LinkedList<>();

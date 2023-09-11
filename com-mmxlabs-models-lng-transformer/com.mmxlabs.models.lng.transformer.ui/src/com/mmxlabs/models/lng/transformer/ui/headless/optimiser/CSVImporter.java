@@ -169,6 +169,7 @@ public class CSVImporter {
 
 		dataMap.put(CargoModelImporter.CARGO_KEY, createURI(uriRoot, "Cargoes.csv"));
 		dataMap.put(CargoModelImporter.PAPER_DEALS_KEY, createURI(uriRoot, "Paper Deals.csv"));
+		dataMap.put(CargoModelImporter.DEAL_SETS_KEY, createURI(uriRoot, "Deal Sets.csv"));
 		dataMap.put(CargoModelImporter.CARGO_GROUP_KEY, createURI(uriRoot, "Cargo Groups.csv"));
 		dataMap.put(CargoModelImporter.EVENTS_KEY, createURI(uriRoot, "Events.csv"));
 		dataMap.put(CargoModelImporter.VESSEL_CHARTERS_KEY, createURI(uriRoot, "Vessel Charters.csv"));

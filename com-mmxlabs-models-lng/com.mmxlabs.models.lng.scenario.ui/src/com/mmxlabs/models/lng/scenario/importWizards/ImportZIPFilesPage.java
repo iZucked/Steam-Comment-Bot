@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 
+import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 
 public class ImportZIPFilesPage extends ImportCSVFilesPage {
@@ -31,7 +32,7 @@ public class ImportZIPFilesPage extends ImportCSVFilesPage {
 	}
 	
 	@Override
-	protected void createSelectionDialog(Composite holder, String lastDirectoryName, IDialogSettings section) {
+	protected void createSelectionDialog(Composite holder, String lastDirectoryName) {
 		// Create selection dialogs
 		final Button auto = new Button(holder, SWT.NONE);
 		final Label directory = new Label(holder, SWT.NONE);
@@ -43,6 +44,9 @@ public class ImportZIPFilesPage extends ImportCSVFilesPage {
 		auto.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
+				
+				final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+				IDialogSettings section = dialogSettings.getSection(SECTION_NAME());
 				final String filter = section.get(FILTER_DIRECTORY_KEY);
 				// display file open dialog and then fill out files if the exist.
 				final FileDialog dlg = new FileDialog(getShell());
@@ -62,6 +66,9 @@ public class ImportZIPFilesPage extends ImportCSVFilesPage {
 
 					// Trigger 'Next' button focus
 					setPageComplete(true);
+					if (section == null) {
+						section = dialogSettings.addNewSection(SECTION_NAME());
+					}
 					section.put(FILTER_DIRECTORY_KEY, fn);
 				}
 			}

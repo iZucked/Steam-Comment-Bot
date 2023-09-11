@@ -26,17 +26,11 @@ public class PaperRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsPublish() {
-		return false;// repository.hasUpstream();
+		return false;
 	}
 
 	@Override
 	public boolean publish(final String version) {
-		// try {
-		// repository.publishVersion(version);
-		// return true;
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
 		return false;
 	}
 
@@ -62,40 +56,11 @@ public class PaperRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsSyncUpstream() {
-		return false;// repository.hasUpstream();
+		return false;
 	}
 
 	@Override
 	public boolean syncUpstream() {
-		// IRunnableWithProgress r = (monitor) -> {
-		// List<DataVersion> newVersions;
-		// try {
-		// newVersions = repository.updateAvailable();
-		// } catch (Exception e1) {
-		// e1.printStackTrace();
-		// return;
-		// }
-		//
-		// monitor.beginTask("Checking for pricing updates", newVersions.size());
-		// try {
-		// for (DataVersion version : newVersions) {
-		// try {
-		// repository.syncUpstreamVersion(version.getIdentifier());
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		// monitor.worked(1);
-		// }
-		// } finally {
-		// monitor.done();
-		// }
-		// };
-		// try {
-		// PlatformUI.getWorkbench().getProgressService().run(true, false, r);
-		// return true;
-		// } catch (InvocationTargetException | InterruptedException e) {
-		// e.printStackTrace();
-		// }
 		return false;
 	}
 
@@ -111,7 +76,7 @@ public class PaperRepositoryActionHandler implements IDataBrowserActionsHandler 
 
 	@Override
 	public boolean supportsRefreshLocal() {
-		return true;// repository.isReady();
+		return true;
 	}
 
 	@Override
@@ -121,7 +86,6 @@ public class PaperRepositoryActionHandler implements IDataBrowserActionsHandler 
 		RunnerHelper.asyncExec(() -> {
 			dataRoot.getChildren().clear();
 			if (versions != null) {
-				final boolean first = true;
 				// Only display the n most recent versions.
 				versions.stream() //
 				.filter(v -> !("initial_version".equals(v.getFullIdentifier()))) //

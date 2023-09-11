@@ -463,20 +463,16 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	protected Action createAddAction(final EReference containment) {
 		final List<Action> actionList = new LinkedList<>();
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CARGOES)) {
-			final Action generateFromCargoesAction = createDealSetsFromCargoesAction();
-			actionList.add(generateFromCargoesAction);
+			actionList.add(createDealSetsFromCargoesAction());
 		}
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CONTRACTS)) {
-			final Action generateFromContractsAction = createDealSetsFromContractsAction();
-			actionList.add(generateFromContractsAction);
+			actionList.add(createDealSetsFromContractsAction());
 		}
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CURVES)) {
-			final Action generateFromCurvesMenu = createDealSetsFromCurvesMenu();
-			actionList.add(generateFromCurvesMenu);
+			actionList.add(createDealSetsFromCurvesMenu());
 		}
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_INDICES)) {
-			final Action generateFromIndicesMenu = createDealSetsFromIndicesMenu();
-			actionList.add(generateFromIndicesMenu);
+			actionList.add(createDealSetsFromIndicesMenu());
 		}
 		final Action[] extraActions = actionList.toArray(new Action[0]);
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
@@ -496,7 +492,18 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	}
 	
 	private Action createDealSetsFromCargoesAction() {
-		return new RunnableAction("From cargoes", new Runnable() {
+		return new DefaultMenuCreatorAction("From cargoes") {
+			
+			@Override
+			protected void populate(Menu menu) {
+				addActionToMenu(createDealSetsFromCargoesWithoutPapersAction(), menu);
+				addActionToMenu(createDealSetsFromCargoesAndUpdateWithPaperDealCommentsAction(), menu);
+			}
+		};
+	}
+	
+	private Action createDealSetsFromCargoesWithoutPapersAction() {
+		return new RunnableAction("Cargoes only", new Runnable() {
 			
 			@Override
 			public void run() {
@@ -512,6 +519,39 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 					for (final Slot<?> slot : cargo.getSlots()) {
 						if (slot instanceof SpotSlot) continue;
 						cmd.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
+					}
+				}
+				if(!cmd.isEmpty()) {
+					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				}
+			}
+		});
+	}
+	
+	private Action createDealSetsFromCargoesAndUpdateWithPaperDealCommentsAction() {
+		return new RunnableAction("With paper deals", new Runnable() {
+			
+			@Override
+			public void run() {
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
+				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+				final Set<Slot<?>> usedSlots = updateSlots(jointModelEditor.getScenarioDataProvider());
+				final CompoundCommand cmd = new CompoundCommand();
+				for(final Cargo cargo : cargoModel.getCargoes()) {
+					if (checkContainment(cargo, usedSlots)) continue;
+					final DealSet ds = CargoFactory.eINSTANCE.createDealSet();
+					ds.setName(String.format("%s_%s", cargo.getLoadName(), "set"));
+					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, ds));
+					for (final Slot<?> slot : cargo.getSlots()) {
+						if (slot instanceof SpotSlot) continue;
+						cmd.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
+						for (final PaperDeal pd : cargoModel.getPaperDeals()) {
+							if (slot.getName() != null && pd.getComment() != null && !pd.getComment().isBlank()) {
+								if (pd.getComment().equalsIgnoreCase(slot.getName())) {
+									cmd.append(AddCommand.create(ed,  ds, CargoPackage.Literals.DEAL_SET__PAPER_DEALS, pd));
+								}
+							}
+						}
 					}
 				}
 				if(!cmd.isEmpty()) {
@@ -869,6 +909,15 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 			usedSlots.addAll(dealSet.getSlots());
 		}
 		return usedSlots;
+	}
+	
+	private Set<PaperDeal> updatePapers(final IScenarioDataProvider sdp) {
+		final Set<PaperDeal> usedPapers = new HashSet<>();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+		for (final DealSet dealSet : cargoModel.getDealSets()) {
+			usedPapers.addAll(dealSet.getPaperDeals());
+		}
+		return usedPapers;
 	}
 	
 	private boolean checkContainment(final Cargo cargo, final Set<Slot<?>> usedSlots) {
