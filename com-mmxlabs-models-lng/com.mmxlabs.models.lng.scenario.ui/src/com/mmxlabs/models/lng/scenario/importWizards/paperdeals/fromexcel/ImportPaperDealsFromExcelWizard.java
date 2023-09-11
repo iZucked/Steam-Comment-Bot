@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
@@ -76,7 +77,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 	        try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
 	        	final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages);
-				if (paperDealExporter != null && !paperDealsPair.getFirst().isEmpty() && !paperDealsPair.getSecond().isEmpty()) {
+				if (paperDealExporter != null && !(paperDealsPair.getFirst().isEmpty() || paperDealsPair.getSecond().isEmpty())) {
 					CompoundCommand command = new CompoundCommand("Import paper deals from excel");
 					command.append(
 							AddCommand.create(scenarioDataProvider.getEditingDomain(), 
@@ -94,17 +95,27 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 				}
 	        }
 			
-			
-			
-			
 		} catch (final Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
 		
+		StringBuilder errorMessage = new StringBuilder();
+		StringBuilder infoMessage = new StringBuilder();
+		for(PaperDealExcelImportResultDescriptor message : messages) {
+			if(message.getPaperDealName().equals("END"))
+				infoMessage.append(message).append("\n");
+			else
+				errorMessage.append(message).append("\n");
+		}
 		
+		// Display any error and info messages
+		if(!errorMessage.isEmpty())
+			MessageDialog.openError(getShell(), "Import Result", errorMessage.toString());
 		
+		if(!infoMessage.isEmpty())
+			MessageDialog.openInformation(getShell(), "Import Result", infoMessage.toString());
 
 		return true;
 	}

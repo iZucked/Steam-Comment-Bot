@@ -12,4 +12,13 @@ public class PaperDealExcelImportResultDescriptor {
 	public int rowNumber;
 	public int columnNumber;
 	public String message;
+	
+	public String getPaperDealName() {
+		return paperDealName;
+	}
+	
+	@Override
+	public String toString() {
+		return message;
+	}
 }
