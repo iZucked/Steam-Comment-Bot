@@ -69,6 +69,7 @@ public class PaperFromScenarioCopier {
 			paperDeal.getHedgingPeriodStart(),
 			paperDeal.getHedgingPeriodEnd(),
 			paperDeal.getName(),
+			paperDeal.getEntity().getName(),
 			paperDeal.getIndex(),
 			paperDeal.getComment(),
 			pricingTypeMap.get(paperDeal.getPricingType()),

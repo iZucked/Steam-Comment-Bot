@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,6 +41,9 @@ public class DatahubPaperDeal {
 	@JsonDeserialize(using = StringDeserializer.class)
 	@JsonSerialize(using = StringSerializer.class)
 	String name;
+	@JsonDeserialize(using = StringDeserializer.class)
+	@JsonSerialize(using = StringSerializer.class)
+	String entity;
 	@JsonDeserialize(using = StringDeserializer.class)
 	@JsonSerialize(using = StringSerializer.class)
 	String index;
@@ -125,6 +127,14 @@ public class DatahubPaperDeal {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getEntity() {
+		return entity;
+	}
+
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
 
 	public String getIndex() {
 		return index;
@@ -172,6 +182,7 @@ public class DatahubPaperDeal {
 			LocalDate hedgingPeriodStart,
 			LocalDate hedgingPeriodEnd,
 			String name,
+			String entity,
 			String index,
 			String comment,
 			//String entity,
@@ -189,7 +200,7 @@ public class DatahubPaperDeal {
 		this.name=name;
 		this.index=index;
 		this.comment=comment;
-		//this.entity=entity;
+		this.entity=entity;
 		this.pricingType=pricingType;
 		this.kind = kind;
 	}

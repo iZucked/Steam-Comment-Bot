@@ -5,10 +5,8 @@
 package com.mmxlabs.lngdataserver.lng.io.paper;
 
 import java.time.YearMonth;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,34 +22,40 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.paper.model.DatahubPaperDeal;
 import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
-import com.mmxlabs.lngdataserver.integration.paper.model.DatahubPaperDeal.Kind;
 import com.mmxlabs.lngdataserver.integration.paper.model.DatahubPaperDeal.PricingType;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
-import com.mmxlabs.models.lng.cargo.SellPaperDeal;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.VersionRecord;
 
 public class PaperToScenarioCopier {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PaperToScenarioCopier.class);
-
 	private PaperToScenarioCopier() {
 
 	}
 
-	public static Command getUpdateCommand(@NonNull final EditingDomain editingDomain, @NonNull final CargoModel cargoModel, final PaperVersion version) {
+	public static Command getUpdateCommand(
+			@NonNull final EditingDomain editingDomain,
+			@NonNull final CargoModel cargoModel,
+			@NonNull final CommercialModel commercialModel,
+			final PaperVersion version) {
 		final CompoundCommand cmd = new CompoundCommand("Update paper deals");
 		Set<PaperDeal> existing = new HashSet<PaperDeal>();
 		cargoModel.getPaperDeals().forEach(existing::add);
 
+		// Delete existing
 		if (!existing.isEmpty()) {
 			cmd.append(DeleteCommand.create(editingDomain, existing));
 		}
-
+		
+		// Add new
+		HashMap<String, BaseLegalEntity> nameEntityMap = new HashMap<>();
+		commercialModel.getEntities().forEach(e -> nameEntityMap.put(e.getName(), e));
 		for (final DatahubPaperDeal paper : version.getPapersList()) {
 			final PaperDeal newPaper;
 			switch (paper.getKind()) {
@@ -76,7 +80,10 @@ public class PaperToScenarioCopier {
 			newPaper.setHedgingPeriodEnd(paper.getHedgingPeriodEnd());
 			newPaper.setYear(paper.getYear());
 			newPaper.setPricingType(pricingTypeMap.get(paper.getPricingType()));
-		
+			if (nameEntityMap.containsKey(paper.getEntity())) {
+				newPaper.setEntity(nameEntityMap.get(paper.getEntity()));
+			}
+
 			cmd.append(AddCommand.create(
 				editingDomain,
 				cargoModel,
@@ -84,17 +91,6 @@ public class PaperToScenarioCopier {
 				newPaper
 			));
 		}		
-		
-		/*
-		// Gather existing curves
-		final Set<PaperDeal> existing = new HashSet<>();
-		cargoModel.getPaperDeals().forEach(existing::add);;
-		
-		Collection<DatahubPaperDeal> newPapers = version.getPaperDeals();
-		for (final DatahubPaperDeal deal : newPapers) {
-			final String name = deal.getName();
-		}
-		*/
 		
 		// Update version records
 		VersionRecord record = cargoModel.getPaperDealsVersionRecord();

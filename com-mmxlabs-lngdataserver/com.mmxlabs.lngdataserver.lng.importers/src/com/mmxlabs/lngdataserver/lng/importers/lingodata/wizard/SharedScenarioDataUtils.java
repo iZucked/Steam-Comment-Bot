@@ -1086,9 +1086,10 @@ public final class SharedScenarioDataUtils {
 					@Override
 					public void execute() {
 						super.execute();
-						final CargoModel cm = ScenarioModelUtil.getCargoModel(target);
+						final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(target);
+						final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(target);
 						final EditingDomain editingDomain = target.getEditingDomain();
-						final Command command = PaperToScenarioCopier.getUpdateCommand(editingDomain, cm, paperVersion);
+						final Command command = PaperToScenarioCopier.getUpdateCommand(editingDomain, cargoModel, commercialModel, paperVersion);
 						appendAndExecute(command);
 					}
 				});

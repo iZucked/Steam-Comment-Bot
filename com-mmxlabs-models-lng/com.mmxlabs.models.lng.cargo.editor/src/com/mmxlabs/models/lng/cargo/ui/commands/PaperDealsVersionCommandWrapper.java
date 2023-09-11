@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.VersionRecord;
+import com.mmxlabs.rcp.common.versions.VersionsUtil;
 import com.mmxlabs.scenario.service.model.util.extpoint.AbstractVersionCommandWrapper;
 
 public class PaperDealsVersionCommandWrapper extends AbstractVersionCommandWrapper {
@@ -84,6 +85,10 @@ public class PaperDealsVersionCommandWrapper extends AbstractVersionCommandWrapp
 				basicSetTarget(target);
 				if (target instanceof CargoModel) {
 					CargoModel cargoModel = (CargoModel) target;
+					// Hook to migrate
+					if (cargoModel.getPaperDealsVersionRecord() == null) {
+						cargoModel.setPaperDealsVersionRecord(VersionsUtil.createNewRecord());
+					}
 					addAdapter(cargoModel.getPaperDealsVersionRecord());
 					for (final Iterator<? extends Notifier> i = resolve() ? target.eContents().iterator() : ((InternalEList<? extends Notifier>) target.eContents()).basicIterator(); i.hasNext();) {
 						final Notifier notifier = i.next();
