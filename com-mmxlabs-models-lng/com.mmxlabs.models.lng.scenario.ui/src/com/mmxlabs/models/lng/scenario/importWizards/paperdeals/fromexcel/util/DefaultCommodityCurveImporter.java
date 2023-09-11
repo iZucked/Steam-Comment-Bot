@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -15,7 +17,8 @@ import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 public class DefaultCommodityCurveImporter implements ICommodityCurveImporter {
 
 	@Override
-	public List<CommodityCurve> getCommodityCurves(ExcelReader reader) {
+	public List<CommodityCurve> getCommodityCurves(ExcelReader reader, IProgressMonitor monitor) {
+		monitor.beginTask("Import Commodity Curves", reader.getNumRows());
 		List<CommodityCurve> curves = new ArrayList<>();
 		List<CommodityCurveData> sheetData = getSheetData(reader);
 		
@@ -33,6 +36,7 @@ public class DefaultCommodityCurveImporter implements ICommodityCurveImporter {
 			}
 			
 			curves.add(curve);
+			monitor.worked(1);
 		}
 		
 		return curves;

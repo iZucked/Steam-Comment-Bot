@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
@@ -87,17 +88,38 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 			
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 	        try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
-	        	final CompoundCommand command = new CompoundCommand("Import paper deals from excel");
+	        	final CompoundCommand curveCommand = new CompoundCommand("Import commodity curves from excel");
+	        	final CompoundCommand paperDealcommand = new CompoundCommand("Import paper deals from excel");
 	        	
-	        	final IRunnableWithProgress opertaion = new IRunnableWithProgress() {
+	        	final IRunnableWithProgress createCurvesOpertaion = new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) {
+						if(curveImporter != null) {
+							final List<CommodityCurve> curves = curveImporter.getCommodityCurves(reader, monitor);
+							
+							if(curves != null) {
+								curveCommand.append(
+										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
+												ScenarioModelUtil.getPricingModel(scenarioDataProvider), 
+												PricingPackage.Literals.COMMODITY_CURVE, 
+												curves)
+										);
+							}
+						}
+					}
+	        	};
+	        	getContainer().run(true, false, createCurvesOpertaion);
+	        	scenarioDataProvider.getCommandStack().execute(curveCommand);
+	        	
+	        	final IRunnableWithProgress createPaperDealsOpertaion = new IRunnableWithProgress() {
 
 					@Override
 					public void run(IProgressMonitor monitor) {
-						final List<CommodityCurve> curves = curveImporter.getCommodityCurves(reader);
-						final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages, monitor);
 						if (paperDealExporter != null) {
+							final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages, monitor);
+							
 							if(!paperDealsPair.getFirst().isEmpty()) {
-								command.append(
+								paperDealcommand.append(
 										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
 												ScenarioModelUtil.getCargoModel(scenarioDataProvider), 
 												CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
@@ -105,7 +127,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 										);
 							}
 							if(!paperDealsPair.getSecond().isEmpty()) {
-								command.append(
+								paperDealcommand.append(
 										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
 												ScenarioModelUtil.getCargoModel(scenarioDataProvider),
 												CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
@@ -117,13 +139,14 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	        		
 	        	};
 	        	
-	        	getContainer().run(true, false, opertaion);
-	        	scenarioDataProvider.getCommandStack().execute(command);
+	        	getContainer().run(true, false, createPaperDealsOpertaion);
+	        	scenarioDataProvider.getCommandStack().execute(paperDealcommand);
 	        	
 	        }
 			
 		} catch (final Exception e) {
 			MessageDialog.openError(getShell(), "Import error", "Unable to import paper deals, reason: " + e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 		
