@@ -1,7 +1,7 @@
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
 
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,13 +19,13 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
-import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaulPaperDealExcelExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelReader;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.ImportAction.ImportHooksProvider;
@@ -35,6 +35,8 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
+	
+	private static final List<PaperDealExcelImportResultDescriptor> messages = new ArrayList<>();
 	
 	private ImportPaperDealsFromExcelPage importPage;
 	
@@ -65,6 +67,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 	@Override
 	public boolean performFinish() {
+		messages.clear();
 		try(final FileInputStream fis = new FileInputStream(importPage.getImportFilename())){
 			final ExcelReader reader = new ExcelReader(fis, importPage.getSelectedWorksheetName());
 			final Iterator<IPaperDealExporter> iterPaperDealExporters = paperDealExporters.iterator();
@@ -72,7 +75,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 			
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 	        try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
-	        	final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider));
+	        	final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages);
 				if (paperDealExporter != null && !paperDealsPair.getFirst().isEmpty() && !paperDealsPair.getSecond().isEmpty()) {
 					CompoundCommand command = new CompoundCommand("Import paper deals from excel");
 					command.append(

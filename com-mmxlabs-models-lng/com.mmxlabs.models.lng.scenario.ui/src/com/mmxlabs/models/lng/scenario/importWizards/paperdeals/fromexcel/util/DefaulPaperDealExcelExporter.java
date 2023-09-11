@@ -1,6 +1,5 @@
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util;
 
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -22,20 +21,18 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
 public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 	
-	private int REFERENCE_COL_NUM = 27;
-	private int BUY_OR_SELL_COL_NUM = 12;
-	private int INDEX_COL_NUM = 16;
-	private int ENTITY_COL_NUM = 4;
-	private int QUANTITY_COL_NUM = 20;
-	private int PRICE_COL_NUM = 17;
-	private int CONTRACT_MONTH_COL_NUM = 15;
-	private int HEADGING_PERIOD_START_COL_NUM = 13;
-	private int HEADGING_PERIOD_END_COL_NUM = 14;
-	private int INSTRUMENT_COL_NUM = 11;
+	private static final int REFERENCE_COL_NUM = 27;
+	private static final int BUY_OR_SELL_COL_NUM = 12;
+	private static final int INDEX_COL_NUM = 16;
+	private static final int QUANTITY_COL_NUM = 20;
+	private static final int PRICE_COL_NUM = 17;
+	private static final int CONTRACT_MONTH_COL_NUM = 15;
+	private static final int HEADGING_PERIOD_START_COL_NUM = 13;
+	private static final int HEADGING_PERIOD_END_COL_NUM = 14;
+	private static final String ENTITY_NAME = "cusa";
 	
 	private Map<String, String> instrumentMap = Map.of(
 				"DATED_BRENT_Futures", "DATED_BRENT_SWAP",
@@ -47,17 +44,31 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 
 	
 	@Override
-	public Pair<List<BuyPaperDeal>, List<SellPaperDeal>> getPaperDeals(ExcelReader reader, LNGScenarioModel lngScenarioModel) {
+	public Pair<List<BuyPaperDeal>, List<SellPaperDeal>> getPaperDeals(ExcelReader reader, LNGScenarioModel lngScenarioModel, final List<PaperDealExcelImportResultDescriptor> messages) {
 		Pair<List<BuyPaperDeal>, List<SellPaperDeal>> deals = new Pair<>();
 		List<BuyPaperDeal> buyPaperDeals = new ArrayList<>();
 		List<SellPaperDeal> sellPaperDeals = new ArrayList<>();
+		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
+		final List<SettleStrategy> sStrategies = pricingModel.getSettleStrategies();
+		CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
+		BaseLegalEntity entity = null;
+		for (final BaseLegalEntity e : commercialModel.getEntities()) {
+			if (ENTITY_NAME.equalsIgnoreCase(e.getName())) {
+				entity = e;
+				break;
+			}
+		}
+		if (entity == null) {
+			throw new IllegalStateException("CUSA entity is not found.");
+		}
 		
+		int sc = 0;
+		int fc = 0;
 		for(int i = 1; i < reader.getNumRows(); i++) {
-			System.out.println(i);
 			PaperDeal paperDeal = null;
 			
 			try {
-				paperDeal = getPaperDeal(reader, i, lngScenarioModel);
+				paperDeal = getPaperDeal(reader, i, sStrategies, entity, messages);
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -66,20 +77,22 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 			
 			
 			if(paperDeal != null) {
+				sc++;
 				if(paperDeal instanceof BuyPaperDeal buyPaperDeal)
 					buyPaperDeals.add(buyPaperDeal);
 				else if(paperDeal instanceof SellPaperDeal sellPaperDeal)
 					sellPaperDeals.add(sellPaperDeal);
+			} else {
+				fc++;
 			}
-			// Perhaps store failed paper deals?
 		}
+		messages.add(new PaperDealExcelImportResultDescriptor("END", -1, -1,String.format("Finished importing. Successfull: %d; Failed: %d",sc,fc)));
 		
 		deals.setBoth(buyPaperDeals, sellPaperDeals);
 		return deals;
 	}
 
-	@Override
-	public PaperDeal getPaperDeal(ExcelReader reader, int rowId, LNGScenarioModel lngScenarioModel) {
+	private PaperDeal getPaperDeal(final ExcelReader reader, int rowId, final List<SettleStrategy> sStrategies, final BaseLegalEntity entity, final List<PaperDealExcelImportResultDescriptor> fails) {
 		// Get data
 		List<BigDecimal> numericalValues = reader.readNumCells(rowId, 0);
 		List<LocalDate> dateValues = reader.readRowDates(rowId, 0);
@@ -88,7 +101,6 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 		String buyOrSell = reader.readName(rowId, BUY_OR_SELL_COL_NUM);
 		String name = buyOrSell + "_" + reference + "_" + rowId;
 		String index = reader.readName(rowId, INDEX_COL_NUM);
-		String entityName = reader.readName(rowId, ENTITY_COL_NUM);
 
 		BigDecimal quantity = numericalValues.get(QUANTITY_COL_NUM);
 		BigDecimal price = numericalValues.get(PRICE_COL_NUM);
@@ -97,68 +109,62 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 		LocalDate hedgingPeriodStart = dateValues.get(HEADGING_PERIOD_START_COL_NUM);
 		LocalDate hedgingPeriodEnd = dateValues.get(HEADGING_PERIOD_END_COL_NUM);
 				
-		boolean usingInstrument = !index.equals("NYMEX_NG");
+		boolean usingInstrument = !index.equalsIgnoreCase("NYMEX_NG");
 				
 		// Validate data
 		if(
-				reference.equals("") || !(buyOrSell.contains("Buy") || buyOrSell.contains("Sell")) || index.equals("") 
-				|| entityName.equals("") || quantity == null || price == null || contractMonthStr.equals("") 
+				reference.isBlank() || !(buyOrSell.equalsIgnoreCase("Buy") || buyOrSell.equalsIgnoreCase("Sell")) || index.isBlank() 
+				|| quantity == null || price == null || contractMonthStr.isBlank() 
 				|| hedgingPeriodStart == null || hedgingPeriodEnd == null
-		)
+		) {
+			fails.add(new PaperDealExcelImportResultDescriptor(name, rowId, 0, String.format("Please check row %d. Data is empty", rowId)));
 			return null;
-		
+		}
 		
 		// Get Contract month as YearMonth type
-		YearMonth contractMonth;
+		YearMonth contractMonth = null;
 		
 		try {
 			DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMM-yy", Locale.ENGLISH);
 			contractMonth = YearMonth.parse(contractMonthStr, monthFormatter);
 		}
 		catch(Exception e) {
+			fails.add(new PaperDealExcelImportResultDescriptor(name, rowId, CONTRACT_MONTH_COL_NUM, //
+					String.format("Could not parse %s, row %d, column %d.", contractMonthStr, rowId, CONTRACT_MONTH_COL_NUM)));
 			return null;
+		} finally {
+			if (contractMonth == null) {
+				fails.add(new PaperDealExcelImportResultDescriptor(name, rowId, CONTRACT_MONTH_COL_NUM, //
+						String.format("Could not determinte the contract month %s.",contractMonthStr)));
+				return null;
+			}
 		}
-		
 		
 		// Get Instrument SettleStratergy
 		SettleStrategy settleStrategy = null;
 				
 		if(usingInstrument) {
-			final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 			String instrument = instrumentMap.get(index);
 			
-			if(instrument == null)
-				throw new IllegalStateException(String.format("No pricing instrument mapped to %s found!", index));
+			if(instrument == null) {
+				fails.add(new PaperDealExcelImportResultDescriptor(name, rowId, INDEX_COL_NUM, //
+						String.format("On row %d for curve %s instrument is null. Enter the instrument.", rowId, index)));
+			}
 			
-			for (final SettleStrategy ss : pricingModel.getSettleStrategies()) {
+			for (final SettleStrategy ss : sStrategies) {
 				if (ss.getName().equalsIgnoreCase(instrument)) {
 					settleStrategy = ss;
 				}
 			}
 			if (settleStrategy == null) {
-				throw new IllegalStateException(String.format("No pricing instrument %s found!", instrument));
+				fails.add(new PaperDealExcelImportResultDescriptor(name, rowId, INDEX_COL_NUM, //
+						String.format("Could not find instrument with name %s for curve %s on row %d.", instrument, index, rowId)));
 			}
 		}
-		
-				
-				
-		// Get Entity
-		BaseLegalEntity entity = null;
-		
-		CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
-		
-		for (final BaseLegalEntity e : commercialModel.getEntities()) {
-			if(entityName.contains(e.getName()))
-				entity = e;
-		}
-		if (entity == null) {
-			throw new IllegalStateException(String.format("No entity found with similar name %s!", entityName));
-		}
-				
 
 		// Check if buy or sell paper deal
 		final PaperDeal paperDeal;
-		if(buyOrSell.equals("Buy")) {
+		if(buyOrSell.equalsIgnoreCase("buy")) {
 			paperDeal = CargoFactory.eINSTANCE.createBuyPaperDeal();
 		}
 		else {
@@ -182,9 +188,7 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 		}
 		else { // For the case of index "NYMEX_NG"
 			paperDeal.setPricingType(PaperPricingType.PERIOD_AVG);
-		}
-			
-			
+		}	
 		
 		paperDeal.setIndex(index);
 		paperDeal.setEntity(entity);
@@ -193,9 +197,7 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 		
 		paperDeal.setPricingPeriodStart(contractMonth.atDay(1));
 		paperDeal.setPricingPeriodEnd(contractMonth.atEndOfMonth());
-						
-				
+							
 		return paperDeal;
 	}
-
 }
