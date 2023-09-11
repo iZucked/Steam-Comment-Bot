@@ -1,13 +1,16 @@
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
 
 import java.io.FileInputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
@@ -76,28 +79,42 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 			
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 	        try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
-	        	final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages);
-				if (paperDealExporter != null && !(paperDealsPair.getFirst().isEmpty() || paperDealsPair.getSecond().isEmpty())) {
-					CompoundCommand command = new CompoundCommand("Import paper deals from excel");
-					command.append(
-							AddCommand.create(scenarioDataProvider.getEditingDomain(), 
-									ScenarioModelUtil.getCargoModel(scenarioDataProvider), 
-									CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
-									paperDealsPair.getFirst())
-							);
-					command.append(
-							AddCommand.create(scenarioDataProvider.getEditingDomain(), 
-									ScenarioModelUtil.getCargoModel(scenarioDataProvider),
-									CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
-									paperDealsPair.getSecond())
-							);
-					scenarioDataProvider.getCommandStack().execute(command);
-				}
+	        	final CompoundCommand command = new CompoundCommand("Import paper deals from excel");
+	        	
+	        	final IRunnableWithProgress opertaion = new IRunnableWithProgress() {
+
+					@Override
+					public void run(IProgressMonitor monitor) {
+						final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages, monitor);
+						if (paperDealExporter != null) {
+							if(!paperDealsPair.getFirst().isEmpty()) {
+								command.append(
+										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
+												ScenarioModelUtil.getCargoModel(scenarioDataProvider), 
+												CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
+												paperDealsPair.getFirst())
+										);
+							}
+							if(!paperDealsPair.getSecond().isEmpty()) {
+								command.append(
+										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
+												ScenarioModelUtil.getCargoModel(scenarioDataProvider),
+												CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
+												paperDealsPair.getSecond())
+										);
+							}
+						}
+					}
+	        		
+	        	};
+	        	
+	        	getContainer().run(true, false, opertaion);
+	        	scenarioDataProvider.getCommandStack().execute(command);
+	        	
 	        }
 			
 		} catch (final Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			MessageDialog.openError(getShell(), "Import error", "Unable to import paper deals, reason: " + e.getMessage());
 			return false;
 		}
 		
@@ -111,11 +128,11 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 		}
 		
 		// Display any error and info messages
-		if(!errorMessage.isEmpty())
-			MessageDialog.openError(getShell(), "Import Result", errorMessage.toString());
-		
 		if(!infoMessage.isEmpty())
 			MessageDialog.openInformation(getShell(), "Import Result", infoMessage.toString());
+		
+		if(!errorMessage.isEmpty())
+			MessageDialog.openError(getShell(), "Import Result", errorMessage.toString());
 
 		return true;
 	}
