@@ -199,6 +199,54 @@ public class ExcelReader {
 	}
 	
 	/**
+	 * Get a date in a particular row and column. 
+	 * <p>
+	 * Undefined cells or cells that don't evaluate to a date
+	 * are represented as null.
+	 * Formulas in formula cells are evaluated.
+	 * @param rowId - 0 based index of the row
+	 * @param colId - 0 based index of the column in 
+	 * which there is a date
+	 * @return The LocalDate of the specified cell 
+	 */
+	public LocalDate readDate(int rowId, int colId) {
+		Row row = workSheet.getRow(rowId);
+		
+		if(row == null)
+			return null;
+		
+		Cell cell = row.getCell(colId);
+			
+		if (cell == null) 
+			return null;
+			
+		try {
+			cell = evaluator.evaluateInCell(cell);
+		} catch (Exception e){
+			// Manually parse the date
+			return parseDate(cell);
+		}
+			
+		if(cell.getCellType().equals(CellType.NUMERIC)) {
+			if(DateUtil.isCellDateFormatted(cell)) {
+				LocalDateTime localDate = cell.getLocalDateTimeCellValue();
+					return localDate.toLocalDate();
+			} else {
+				LOGGER.debug(String.format("Cell %s is not date-formatted.", 
+							cell.getAddress().toString()));
+				return null;
+			}
+		} else if(cell.getCellType().equals(CellType.STRING)){
+			String dateStr = cell.getStringCellValue();
+			return parseStringDate(dateStr, cell);
+		} else {
+			LOGGER.debug(String.format("Cell %s does not evaluate to a date.", 
+					cell.getAddress().toString()));
+			return null;
+		}
+	}
+	
+	/**
 	 * Get a list of all numerical values in a particular row. 
 	 * <p>
 	 * Undefined cells or cells that don't evaluate to a number
@@ -249,6 +297,52 @@ public class ExcelReader {
 		}
 		
 		return evaluatedCells;
+	}
+	
+	
+	/**
+	 * Get a numerical value in a particular row and column. 
+	 * <p>
+	 * Undefined cells or cells that don't evaluate to a number
+	 * are represented as null.
+	 * Formulas in formula cells are evaluated.
+	 * @param rowId - 0 based index of the row
+	 * @param colId - 0 based index of the first column
+	 * @return BigDecimal representing the contents of 
+	 * the cell in that row and column.
+	 */
+	public BigDecimal readNum(int rowId, int colId) {
+		Row row = workSheet.getRow(rowId);
+		if(row == null)
+			return null;
+		
+		Cell cell = row.getCell(colId);
+		if (cell == null) 
+			return null;
+		
+		try {
+			cell = evaluator.evaluateInCell(cell);
+		} catch (Exception e){
+			// Manually parse the value
+			return parseValue(cell);
+		}
+		
+		if(cell.getCellType().equals(CellType.NUMERIC)) {
+			if(DateUtil.isCellDateFormatted(cell)) {
+				// Dates are ignored
+				LOGGER.debug(String.format("Cell %s does not evaluate to a number.", 
+						cell.getAddress().toString()));
+				return null;
+			} else {
+				double evaluatedCell = cell.getNumericCellValue();
+				return BigDecimal.valueOf(evaluatedCell);
+			}
+		} else {
+			// Cells that don't evaluate to a number are ignored
+			LOGGER.debug(String.format("Cell %s does not evaluate to a number.", 
+					cell.getAddress().toString()));
+			return null;
+		}
 	}
 	
 	/**
