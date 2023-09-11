@@ -9,6 +9,7 @@ import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.binder.ScopedBindingBuilder;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ICommodityCurveImporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
 
 public class ImportPaperDealsFromExcelProviderModule extends AbstractModule {
@@ -16,5 +17,6 @@ public class ImportPaperDealsFromExcelProviderModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(iterable(IPaperDealExporter.class)).toProvider(service(IPaperDealExporter.class).multiple());
+		bind(iterable(ICommodityCurveImporter.class)).toProvider(service(ICommodityCurveImporter.class).multiple());
 	}
 }

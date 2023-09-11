@@ -23,11 +23,14 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
+import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaulPaperDealExcelExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaultCommodityCurveImporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelReader;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ICommodityCurveImporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -48,6 +51,9 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	
 	@Inject
 	private Iterable<IPaperDealExporter> paperDealExporters;
+	
+	@Inject
+	private Iterable<ICommodityCurveImporter> commodityCurveImporters;
 
 	public ImportPaperDealsFromExcelWizard(ScenarioInstance scenarioInstance, String windowTitle) {
 		super(scenarioInstance, windowTitle);
@@ -75,7 +81,9 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 		try(final FileInputStream fis = new FileInputStream(importPage.getImportFilename())){
 			final ExcelReader reader = new ExcelReader(fis, importPage.getSelectedWorksheetName());
 			final Iterator<IPaperDealExporter> iterPaperDealExporters = paperDealExporters.iterator();
+			final Iterator<ICommodityCurveImporter> itercommodityCurveImporters = commodityCurveImporters.iterator();
 			final IPaperDealExporter paperDealExporter = iterPaperDealExporters.hasNext() ? iterPaperDealExporters.next(): new DefaulPaperDealExcelExporter();
+			final ICommodityCurveImporter curveImporter = itercommodityCurveImporters.hasNext() ? itercommodityCurveImporters.next(): new DefaultCommodityCurveImporter();
 			
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 	        try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
@@ -85,6 +93,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 					@Override
 					public void run(IProgressMonitor monitor) {
+						final List<CommodityCurve> curves = curveImporter.getCommodityCurves(reader);
 						final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages, monitor);
 						if (paperDealExporter != null) {
 							if(!paperDealsPair.getFirst().isEmpty()) {
