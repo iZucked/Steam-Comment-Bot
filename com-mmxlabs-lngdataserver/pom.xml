@@ -24,6 +24,7 @@
 		<module>com.mmxlabs.lngdataserver.integration.ports</module>
 		<module>com.mmxlabs.lngdataserver.integration.distances</module>
 		<module>com.mmxlabs.lngdataserver.integration.pricing</module>
+		<module>com.mmxlabs.lngdataserver.integration.paper</module>
 		<module>com.mmxlabs.lngdataserver.integration.reports</module>
 		<module>com.mmxlabs.lngdataserver.integration.ui</module>
 		<module>com.mmxlabs.lngdataserver.integration.ui.scenarios</module>

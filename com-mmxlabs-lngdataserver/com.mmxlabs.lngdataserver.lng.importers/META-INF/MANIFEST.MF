@@ -65,7 +65,9 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.optimiser.optimiser-core,
  com.mmxlabs.scenario.service.util;bundle-version="6.9.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Import-Package: com.mmxlabs.lngdataserver.integration.pricing,
+Import-Package: com.mmxlabs.lngdataserver.integration.paper,
+ com.mmxlabs.lngdataserver.integration.paper.model,
+ com.mmxlabs.lngdataserver.integration.pricing,
  com.mmxlabs.lngdataserver.integration.pricing.model,
  org.slf4j
 Bundle-ActivationPolicy: lazy
