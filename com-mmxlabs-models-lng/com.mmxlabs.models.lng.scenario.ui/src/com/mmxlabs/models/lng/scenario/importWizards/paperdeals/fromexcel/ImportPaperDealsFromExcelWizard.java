@@ -5,10 +5,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.ops4j.peaberry.Peaberry;
@@ -43,22 +45,22 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
-	
+
 	private static final List<PaperDealExcelImportResultDescriptor> messages = new ArrayList<>();
-	
+
 	private ImportPaperDealsFromExcelPage importPage;
-	
+
 	private ScenarioInstance scenarioInstance;
-	
+
 	@Inject
 	private Iterable<IPaperDealExporter> paperDealExporters;
-	
+
 	@Inject
 	private Iterable<ICommodityCurveImporter> commodityCurveImporters;
 
 	public ImportPaperDealsFromExcelWizard(ScenarioInstance scenarioInstance, String windowTitle) {
 		super(scenarioInstance, windowTitle);
-		
+
 		this.scenarioInstance = scenarioInstance;
 		final BundleContext bc = FrameworkUtil.getBundle(ImportPaperDealsFromExcelWizard.class).getBundleContext();
 		final Injector injector = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new ImportPaperDealsFromExcelProviderModule());
@@ -79,97 +81,103 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	@Override
 	public boolean performFinish() {
 		messages.clear();
-		try(final FileInputStream fis = new FileInputStream(importPage.getImportFilename())){
+		try (final FileInputStream fis = new FileInputStream(importPage.getImportFilename())) {
 			final ExcelReader reader = new ExcelReader(fis, importPage.getSelectedWorksheetName());
 			final Iterator<IPaperDealExporter> iterPaperDealExporters = paperDealExporters.iterator();
 			final Iterator<ICommodityCurveImporter> itercommodityCurveImporters = commodityCurveImporters.iterator();
-			final IPaperDealExporter paperDealExporter = iterPaperDealExporters.hasNext() ? iterPaperDealExporters.next(): new DefaulPaperDealExcelExporter();
-			final ICommodityCurveImporter curveImporter = itercommodityCurveImporters.hasNext() ? itercommodityCurveImporters.next(): new DefaultCommodityCurveImporter();
-			
+			final IPaperDealExporter paperDealExporter = iterPaperDealExporters.hasNext() ? iterPaperDealExporters.next() : new DefaulPaperDealExcelExporter();
+			final ICommodityCurveImporter curveImporter = itercommodityCurveImporters.hasNext() ? itercommodityCurveImporters.next() : new DefaultCommodityCurveImporter();
+
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-	        try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
-	        	final CompoundCommand curveCommand = new CompoundCommand("Import commodity curves from excel");
-	        	final CompoundCommand paperDealcommand = new CompoundCommand("Import paper deals from excel");
-	        	
-	        	final IRunnableWithProgress createCurvesOpertaion = new IRunnableWithProgress() {
+			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
+				final CompoundCommand curvesCommand = new CompoundCommand("Import commodity curves from excel");
+				final CompoundCommand paperDealCommand = new CompoundCommand("Import paper deals from excel");
+
+				final IRunnableWithProgress createCurvesOpertaion = new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) {
-						if(curveImporter != null) {
-							final List<CommodityCurve> curves = curveImporter.getCommodityCurves(reader, monitor);
-							
-							if(curves != null) {
-								curveCommand.append(
-										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
-												ScenarioModelUtil.getPricingModel(scenarioDataProvider), 
-												PricingPackage.Literals.COMMODITY_CURVE, 
-												curves)
-										);
+						if (curveImporter != null) {
+							final List<CommodityCurve> createdCurves = curveImporter.getCommodityCurves(reader, monitor);
+							final List<CommodityCurve> existingCurves = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getCommodityCurves();
+
+							if (createdCurves != null && !createdCurves.isEmpty()) {
+								// Check if any curves already exist
+								for (CommodityCurve curve : createdCurves) {
+									Optional<CommodityCurve> foundCurve = existingCurves.stream().filter(c -> c.getName().equals(curve.getName())).findFirst();
+									if (foundCurve.isPresent()) {
+										// Update points
+										curvesCommand.append(
+												SetCommand.create(scenarioDataProvider.getEditingDomain(), foundCurve.get(), PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, SetCommand.UNSET_VALUE));
+
+										curvesCommand.append(
+												AddCommand.create(scenarioDataProvider.getEditingDomain(), foundCurve.get(), PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, curve.getPoints()));
+									} else {
+										// Create curve
+										curvesCommand.append(AddCommand.create(scenarioDataProvider.getEditingDomain(), ScenarioModelUtil.getPricingModel(scenarioDataProvider),
+												PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, curve));
+									}
+								}
+
 							}
 						}
 					}
-	        	};
-	        	getContainer().run(true, false, createCurvesOpertaion);
-	        	scenarioDataProvider.getCommandStack().execute(curveCommand);
-	        	
-	        	final IRunnableWithProgress createPaperDealsOpertaion = new IRunnableWithProgress() {
+				};
+				getContainer().run(true, false, createCurvesOpertaion);
+				
+				if (!curvesCommand.isEmpty()) 
+					scenarioDataProvider.getCommandStack().execute(curvesCommand);
+				
 
+				final IRunnableWithProgress createPaperDealsOpertaion = new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) {
 						if (paperDealExporter != null) {
-							final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider), messages, monitor);
-							
-							if(!paperDealsPair.getFirst().isEmpty()) {
-								paperDealcommand.append(
-										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
-												ScenarioModelUtil.getCargoModel(scenarioDataProvider), 
-												CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
-												paperDealsPair.getFirst())
-										);
+							final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider),
+									messages, monitor);
+
+							if (!paperDealsPair.getFirst().isEmpty()) {
+								paperDealCommand.append(AddCommand.create(scenarioDataProvider.getEditingDomain(), ScenarioModelUtil.getCargoModel(scenarioDataProvider),
+										CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, paperDealsPair.getFirst()));
 							}
-							if(!paperDealsPair.getSecond().isEmpty()) {
-								paperDealcommand.append(
-										AddCommand.create(scenarioDataProvider.getEditingDomain(), 
-												ScenarioModelUtil.getCargoModel(scenarioDataProvider),
-												CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, 
-												paperDealsPair.getSecond())
-										);
+							if (!paperDealsPair.getSecond().isEmpty()) {
+								paperDealCommand.append(AddCommand.create(scenarioDataProvider.getEditingDomain(), ScenarioModelUtil.getCargoModel(scenarioDataProvider),
+										CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, paperDealsPair.getSecond()));
 							}
 						}
 					}
-	        		
-	        	};
-	        	
-	        	getContainer().run(true, false, createPaperDealsOpertaion);
-	        	scenarioDataProvider.getCommandStack().execute(paperDealcommand);
-	        	
-	        }
-			
+
+				};
+
+				getContainer().run(true, false, createPaperDealsOpertaion);
+
+				if (!paperDealCommand.isEmpty())
+					scenarioDataProvider.getCommandStack().execute(paperDealCommand);
+
+			}
+
 		} catch (final Exception e) {
 			MessageDialog.openError(getShell(), "Import error", "Unable to import paper deals, reason: " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		StringBuilder errorMessage = new StringBuilder();
 		StringBuilder infoMessage = new StringBuilder();
-		for(PaperDealExcelImportResultDescriptor message : messages) {
-			if(message.getPaperDealName().equals("END"))
+		for (PaperDealExcelImportResultDescriptor message : messages) {
+			if (message.getPaperDealName().equals("END"))
 				infoMessage.append(message).append("\n");
 			else
 				errorMessage.append(message).append("\n");
 		}
-		
+
 		// Display any error and info messages
-		if(!infoMessage.isEmpty())
+		if (!infoMessage.isEmpty())
 			MessageDialog.openInformation(getShell(), "Import Result", infoMessage.toString());
-		
-		if(!errorMessage.isEmpty())
+
+		if (!errorMessage.isEmpty())
 			MessageDialog.openError(getShell(), "Import Result", errorMessage.toString());
 
 		return true;
 	}
-	
-	
-	
-	
+
 }
