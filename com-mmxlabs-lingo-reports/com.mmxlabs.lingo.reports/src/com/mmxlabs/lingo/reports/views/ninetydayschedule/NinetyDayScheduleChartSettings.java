@@ -8,15 +8,15 @@ import com.mmxlabs.widgets.schedulechart.DefaultScheduleChartSettings;
 
 public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings {
 	
-	private boolean showWindows;
+	private boolean showAnnotations;
 
 	@Override
-	public boolean showWindows() {
-		return showWindows;
+	public boolean showAnnotations() {
+		return showAnnotations;
 	}
 	
-	public void setShowWindows(boolean showWindows) {
-		this.showWindows = showWindows;
+	public void setShowAnnotations(boolean showAnnotations) {
+		this.showAnnotations = showAnnotations;
 	}
 
 }

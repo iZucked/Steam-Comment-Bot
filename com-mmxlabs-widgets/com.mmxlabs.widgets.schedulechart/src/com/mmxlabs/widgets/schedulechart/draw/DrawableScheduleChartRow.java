@@ -15,6 +15,7 @@ import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvasState;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.ScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
@@ -31,6 +32,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	private final ScheduleTimeScale sts;
 	private final int rowNum;
 	private List<DrawableScheduleEvent> lastDrawnEvents = new ArrayList<>();
+	private List<DrawableScheduleEventAnnotation> lastDrawnAnnotations = new ArrayList<>();
 
 	public DrawableScheduleChartRow(final ScheduleChartRow scr, final ScheduleCanvasState canvasState, final int rowNum, ScheduleTimeScale sts, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider,
 			IScheduleChartSettings settings) {
@@ -55,32 +57,45 @@ public class DrawableScheduleChartRow extends DrawableElement {
 				.borderColour(colourScheme.getGridStrokeColour()).alpha(160).create());
 		
 		lastDrawnEvents.clear();
+		lastDrawnAnnotations.clear();
 		for (ScheduleEvent se : scr.getEvents()) {
 			DrawableScheduleEvent drawableEvent = createDrawableScheduleEvent(se, bounds);
 			if (drawableEvent == null) continue;
 			lastDrawnEvents.add(drawableEvent);
+			if (!settings.showAnnotations()) continue;
+			for (ScheduleEventAnnotation sea : se.getAnnotations()) {
+				DrawableScheduleEventAnnotation drawableAnnotation = drawableEventProvider.createDrawableScheduleEventAnnotation(sea, drawableEvent, sts::getXForDateTime, canvasState, settings);
+				if (drawableAnnotation == null) continue;
+				lastDrawnAnnotations.add(drawableAnnotation);
+			}
 		}
 		
-		// Draw resizable events first
-		lastDrawnEvents.sort(Comparator.comparing(dse -> ((DrawableScheduleEvent) dse).getScheduleEvent().isResizable()).reversed());
+		List<DrawableElement> toDraw = new ArrayList<>();
+		toDraw.addAll(lastDrawnEvents);
+		toDraw.addAll(lastDrawnAnnotations);
+		toDraw.sort(drawableEventProvider.getEventAndAnnotationRenderOrderComparator());
 
-		res.addAll(lastDrawnEvents.stream().flatMap(dse -> dse.getBasicDrawableElements(queryResolver).stream()).toList());
+		res.addAll(toDraw.stream().flatMap(dse -> dse.getBasicDrawableElements(queryResolver).stream()).toList());
 		return res;
 	}
 	
 	private DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent se, Rectangle bounds) {
 		final int spacer = settings.getSpacerWidth();
-		final int eventHeight = se.isResizable() && settings.showWindows() ? settings.getWindowedEventHeight() : settings.getEventHeight();
+		final int eventHeight = settings.getEventHeight();
 
-		int startX = sts.getXForDateTime(settings.showWindows() && se.getWindowStartDate() != null ? se.getWindowStartDate() : se.getStart());
-		int endX = sts.getXForDateTime(settings.showWindows() && se.getWindowEndDate() != null ? se.getWindowEndDate() : se.getEnd());
-		int y = bounds.y + (settings.showWindows() && !se.isResizable() ? (settings.getWindowedEventHeight() - settings.getEventHeight()) / 2 : 0) + spacer;
+		int startX = sts.getXForDateTime(se.getStart());
+		int endX = sts.getXForDateTime(se.getEnd());
+		int y = bounds.y + (settings.showAnnotations() ? settings.getTopAnnotationHeight() + spacer : 0) + spacer;
 		Rectangle eventBounds = new Rectangle(startX, y, endX - startX, eventHeight);
 		return drawableEventProvider.createDrawableScheduleEvent(se, eventBounds, canvasState);
 	}
 
 	public List<DrawableScheduleEvent>  getLastDrawnEvents() {
 		return lastDrawnEvents;
+	}
+	
+	public List<DrawableScheduleEventAnnotation> getLastDrawnAnnotations() {
+		return lastDrawnAnnotations;
 	}
 	
 	public ScheduleChartRow getScheduleChartRow() {

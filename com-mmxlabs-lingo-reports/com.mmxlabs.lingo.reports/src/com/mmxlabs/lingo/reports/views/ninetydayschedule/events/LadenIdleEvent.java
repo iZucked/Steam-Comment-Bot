@@ -25,7 +25,7 @@ public class LadenIdleEvent extends NinetyDayDrawableScheduleEvent {
 
 	@Override
 	protected Color getBorderColour() {
-		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Border);
+		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Background);
 	}
 
 }

@@ -4,9 +4,13 @@
  */
 package com.mmxlabs.widgets.schedulechart.draw;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 public interface BasicDrawableElements {
@@ -34,7 +38,7 @@ public interface BasicDrawableElements {
 		}
 	}
 
-	public record Rectangle(int x, int y, int width, int height, Color backgroundColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
+	public record Rectangle(int x, int y, int width, int height, Color backgroundColour, Color borderColour, int borderThickness, boolean isBorderInner, int alpha) implements BasicDrawableElement {
 
 		public static RectangleBuilder withBounds(int x, int y, int width, int height) {
 			return new RectangleBuilder(x, y, width, height);
@@ -53,6 +57,7 @@ public interface BasicDrawableElements {
 			private Color borderColour = null;
 			private int borderThickness = 0;
 			private int alpha = MAX_ALPHA;
+			private boolean isBorderInner = false;
 			
 			private RectangleBuilder(int x, int y, int width, int height) {
 				this.x = x;
@@ -69,6 +74,14 @@ public interface BasicDrawableElements {
 			public RectangleBuilder border(Color c, int thickness) {
 				this.borderColour = c;
 				this.borderThickness = thickness;
+				this.isBorderInner = false;
+				return this;
+			}
+
+			public RectangleBuilder border(Color c, int thickness, boolean isBorderInner) {
+				this.borderColour = c;
+				this.borderThickness = thickness;
+				this.isBorderInner = isBorderInner;
 				return this;
 			}
 
@@ -83,7 +96,7 @@ public interface BasicDrawableElements {
 			}
 			
 			public Rectangle create() {
-				return new Rectangle(x, y, width, height, bgColour, borderColour, borderThickness, alpha);
+				return new Rectangle(x, y, width, height, bgColour, borderColour, borderThickness, isBorderInner, alpha);
 			}
 		}
 	}
@@ -162,6 +175,68 @@ public interface BasicDrawableElements {
 			}
 		}
 
+	}
+
+	public record Polygon(List<Point> points, Color backgroundColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
+		
+		public static PolygonBuilder fromTriangle(Point a, Point b, Point c) {
+			return new PolygonBuilder(new ArrayList<>(List.of(a, b, c)));
+		}
+		
+		public static PolygonBuilder fromTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+			return new PolygonBuilder(new ArrayList<>(List.of(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3))));
+		}
+		
+		public static PolygonBuilder fromPoints(List<Point> points) {
+			return new PolygonBuilder(points);
+		}
+
+		public static class PolygonBuilder {
+			private final List<Point> points;
+			private Color bgColour = null;
+			private Color borderColour = null;
+			private int borderThickness = 0;
+			private int alpha = MAX_ALPHA;
+			
+			private PolygonBuilder(List<Point> points) {
+				this.points = points;
+			}
+			
+			public PolygonBuilder addVertice(Point p) {
+				points.add(p);
+				return this;
+			}
+			
+			public PolygonBuilder addVertice(int x, int y) {
+				points.add(new Point(x, y));
+				return this;
+			}
+			
+			public PolygonBuilder borderColour(Color c) {
+				this.borderColour = c;
+				return this;
+			}
+			
+			public PolygonBuilder border(Color c, int thickness) {
+				this.borderColour = c;
+				this.borderThickness = thickness;
+				return this;
+			}
+
+			public PolygonBuilder bgColour(Color c) {
+				this.bgColour = c;
+				return this;
+			}
+			
+			public PolygonBuilder alpha(int a) {
+				this.alpha = a;
+				return this;
+			}
+			
+			public Polygon create() {
+				return new Polygon(points, bgColour, borderColour, borderThickness, alpha);
+			}
+		}
 	}
 
 	public record Padding(int left, int right, int top, int bottom) {}

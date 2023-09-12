@@ -25,6 +25,7 @@ import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleChartModelUpdater;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
@@ -176,9 +177,10 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 			}
 			
 			@Override
-			public void eventResized(ScheduleEvent se) {
-				modelUpdater.resizeEvent(se.getData(), se.getWindowStartDate(), se.getWindowEndDate());		
+			public void annotationEdited(ScheduleEvent se, ScheduleEventAnnotation old, ScheduleEventAnnotation updated) {
+				modelUpdater.annotationEdited(se.getData(), updated.getData(), updated.getDates().get(0), updated.getDates().get(1));		
 			}
+			
 		};
 		
 		canvas.addScheduleEventListener(l);

@@ -35,7 +35,7 @@ public abstract class DrawableScheduleEvent extends DrawableElement {
 		
 		res.add(BasicDrawableElements.Rectangle.withBounds(bounds)
 				.bgColour(getBackgroundColour())
-				.border(getBorderColour(), getBorderThickness(selectionState))
+				.border(getBorderColour(), getBorderThickness(selectionState), getIsBorderInner())
 				.alpha(getAlpha(selectionState))
 				.create());
 
@@ -47,9 +47,18 @@ public abstract class DrawableScheduleEvent extends DrawableElement {
 	}
 
 	public abstract Color getBackgroundColour();
+
 	public abstract int getAlpha(ScheduleEventSelectionState s);
+	public int getAlpha() {
+		return getAlpha(selectionState);
+	}
+
 	protected abstract Color getBorderColour();
-	protected abstract int getBorderThickness(ScheduleEventSelectionState s);
+	protected abstract boolean getIsBorderInner();
+	public abstract int getBorderThickness(ScheduleEventSelectionState s);
+	public int getBorderThickness() {
+		return getBorderThickness(selectionState);
+	}
 	
 	public Color getLabelTextColour() {
 		return ScheduleChartColourUtils.calculateTextColourForBestContrast(getBackgroundColour());

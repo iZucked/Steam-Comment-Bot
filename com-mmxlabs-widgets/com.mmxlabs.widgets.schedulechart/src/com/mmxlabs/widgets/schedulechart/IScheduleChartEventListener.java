@@ -14,7 +14,7 @@ public interface IScheduleChartEventListener {
 	
 	void eventSelected(ScheduleEvent e, Collection<ScheduleEvent> allSelectedEvents, MouseEvent me);
 	
-	void eventResized(ScheduleEvent scheduleEvent);
+	void annotationEdited(ScheduleEvent se, ScheduleEventAnnotation old, ScheduleEventAnnotation updated);
 
 	void timeScaleZoomLevelChanged(Rectangle mainBounds, IScheduleChartContentBoundsProvider boundsProvider);
 

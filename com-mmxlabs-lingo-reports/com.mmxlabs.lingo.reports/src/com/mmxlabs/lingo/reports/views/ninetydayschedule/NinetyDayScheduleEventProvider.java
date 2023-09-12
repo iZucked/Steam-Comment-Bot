@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -14,23 +13,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -40,6 +35,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -51,19 +47,22 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
-import com.mmxlabs.models.lng.types.TimePeriod;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.widgets.schedulechart.EditableScheduleEventAnnotation;
+import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 
 public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<ScheduleModel> {
 	
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 	private final EquivalentsManager equivalentsManager;
+	private final IScheduleChartSettings settings;
 
-	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager) {
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, IScheduleChartSettings settings) {
 		this.equivalentsManager = equivalentsManager;
+		this.settings = settings;
 	}
 
 	@Override
@@ -92,6 +91,9 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	public ScheduleChartRowKey getKeyForEvent(ScheduleEvent event) {
 		if (event.getData() instanceof Event e) {
 			var name = vesselAssignmentFormatter.render(e);
+			if (name == null) {
+				int i = 0;
+			}
 			return new ScheduleChartRowKey(name == null ? "" : name,  e.getSequence());
 		}
 		return null;
@@ -181,14 +183,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 
 		for (final Event event : s.getEvents()) {
 			res.add(event);
-			if (event instanceof final Journey journey 
-					&& journey.getCanalDateTime() != null 
-					&& journey.getRouteOption() == RouteOption.PANAMA 
-					&& (s.getCharterInMarket() == null || s.getSpotIndex() != -1) 
-					&& journey.getCanalJourneyEvent() != null) {
-						journey.getCanalJourneyEvent().setLinkedSequence(s);
-						res.add(journey.getCanalJourneyEvent());
-			}
+			/* Note: We don't add CanalJourneyEvent here since it is now treated as an annotation */
 		}
 
 		if (va != null && va.getEndBy() != null) {
@@ -211,39 +206,57 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	}
 
 	private ScheduleEvent makeScheduleEvent(Event event) {
-
-		// Get planned start and end dates
-		LocalDateTime plannedStartDate = null;
-		LocalDateTime plannedEndDate = null;
-
-		if (event instanceof final SlotVisit visit) {
-			final Slot<?> slot = visit.getSlotAllocation().getSlot();
-			if (slot != null) {
-				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();
-				final ZonedDateTime windowEndWithSlotOrPortTime = slot.getSchedulingTimeWindow().getEnd();
-				if (windowStartWithSlotOrPortTime != null) {
-					plannedStartDate = windowStartWithSlotOrPortTime.toLocalDateTime();
-				}
-				if (windowEndWithSlotOrPortTime != null) {
-					plannedEndDate = windowEndWithSlotOrPortTime.toLocalDateTime();
-				}
-			}
-		}
-		
-		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event);
-
-		boolean visible = !(event instanceof StartEvent || event instanceof EndEvent);
-		se.setVisible(visible);
-		
-		if (event instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() != null) {
-			se.setWindowStartDate(plannedStartDate);
-			se.setWindowEndDate(plannedEndDate);
-			se.setResizable(true);
-		}
-		
+		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, makeEventAnnotations(event));
+		se.setVisible(true);
 		return se;
 	}
 	
+	private List<ScheduleEventAnnotation> makeEventAnnotations(Event event) {
+		List<ScheduleEventAnnotation> res = new ArrayList<>();
+		if (event instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() != null) {
+			// Get window start and end dates
+			LocalDateTime windowStart = null;
+			LocalDateTime windowEnd = null;
+
+			final Slot<?> slot = sv.getSlotAllocation().getSlot();
+			final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();
+			final ZonedDateTime windowEndWithSlotOrPortTime = slot.getSchedulingTimeWindow().getEnd();
+
+			if (windowStartWithSlotOrPortTime != null) {
+				windowStart = windowStartWithSlotOrPortTime.toLocalDateTime();
+			}
+			if (windowEndWithSlotOrPortTime != null) {
+				windowEnd = windowEndWithSlotOrPortTime.toLocalDateTime();
+			}
+
+			final var slotWindowAnnotation = new EditableScheduleEventAnnotation(List.of(windowStart, windowEnd), NinetyDayScheduleEventAnnotationType.SLOT_WINDOW);
+			slotWindowAnnotation.setVisible(true);
+			res.add(slotWindowAnnotation);
+			
+			PortVisitLateness pvl = sv.getLateness();
+			if (pvl != null && pvl.getLatenessInHours() > 0) {
+				LocalDateTime start = sv.getStart().toLocalDateTime();
+				final var latenessAnnotation = new ScheduleEventAnnotation(List.of(start.minusHours(pvl.getLatenessInHours()), start), NinetyDayScheduleEventAnnotationType.LATENESS_BAR);
+				latenessAnnotation.setVisible(true);
+				res.add(latenessAnnotation);
+			}
+		} else if (event instanceof NonShippedSlotVisit sv) {
+			PortVisitLateness pvl = sv.getLateness();
+			if (pvl != null && pvl.getLatenessInHours() > 0) {
+				LocalDateTime start = sv.getStart().toLocalDateTime();
+				final var latenessAnnotation = new ScheduleEventAnnotation(List.of(start.minusHours(pvl.getLatenessInHours()), start), NinetyDayScheduleEventAnnotationType.LATENESS_BAR);
+				latenessAnnotation.setVisible(true);
+				res.add(latenessAnnotation);
+			}
+		} else if (event instanceof Journey j && j.getCanalJourneyEvent() != null) {
+			final var canalJourneyAnnotation = new ScheduleEventAnnotation(List.of(j.getCanalDateTime()),  NinetyDayScheduleEventAnnotationType.CANAL_JOURNEY);
+			canalJourneyAnnotation.setVisible(true);
+			res.add(canalJourneyAnnotation);
+		}
+		
+		return res;
+	}
+
 	private List<Object> generateEquivalents(Object event) {
 		if (event instanceof final SlotVisit slotVisit) {
 			return Lists.newArrayList(slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation());

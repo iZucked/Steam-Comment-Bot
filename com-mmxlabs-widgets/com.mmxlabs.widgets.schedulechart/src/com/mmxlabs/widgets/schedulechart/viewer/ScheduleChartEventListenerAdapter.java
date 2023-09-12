@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartContentBoundsProvider;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartEventListener;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 
 public class ScheduleChartEventListenerAdapter implements IScheduleChartEventListener {
 
@@ -22,6 +23,6 @@ public class ScheduleChartEventListenerAdapter implements IScheduleChartEventLis
 	public void timeScaleZoomLevelChanged(Rectangle mainBounds, IScheduleChartContentBoundsProvider boundsProvider) {}
 
 	@Override
-	public void eventResized(ScheduleEvent scheduleEvent) {}
+	public void annotationEdited(ScheduleEvent se, ScheduleEventAnnotation old, ScheduleEventAnnotation updated) {}
 
 }

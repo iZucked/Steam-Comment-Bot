@@ -11,6 +11,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEventAnnotation;
 
 public class EventSelectionHandler implements MouseListener {
 	
@@ -23,10 +24,10 @@ public class EventSelectionHandler implements MouseListener {
 
 	@Override
 	public void mouseDown(MouseEvent e) {
-		Optional<DrawableScheduleEvent> optClickedEvent = canvas.findEvent(e.x, e.y);
+		Optional<ScheduleEvent> optClickedEvent = canvas.findEvent(e.x, e.y).map(DrawableScheduleEvent::getScheduleEvent).or(() -> canvas.findAnnotation(e.x, e.y).map(DrawableScheduleEventAnnotation::getScheduleEvent));
 		
 		if (optClickedEvent.isPresent()) {
-			ScheduleEvent clickedEvent = optClickedEvent.get().getScheduleEvent();
+			ScheduleEvent clickedEvent = optClickedEvent.get();
 			canvas.fireScheduleEvent(l -> l.eventSelected(clickedEvent, List.of(clickedEvent), e));
 		}
 	}

@@ -27,7 +27,7 @@ public class LadenJourneyEvent extends NinetyDayDrawableScheduleEvent {
 
 	@Override
 	protected Color getBorderColour() {
-		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Border);
+		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
 	}
 	
 	@Override

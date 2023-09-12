@@ -25,7 +25,7 @@ public class BallastJourneyEvent extends NinetyDayDrawableScheduleEvent {
 
 	@Override
 	protected Color getBorderColour() {
-		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Border);
+		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
 	}
 
 }

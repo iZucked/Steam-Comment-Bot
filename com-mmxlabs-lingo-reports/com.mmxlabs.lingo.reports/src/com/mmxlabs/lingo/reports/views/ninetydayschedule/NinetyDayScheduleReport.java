@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -48,7 +49,8 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private Action packAction;
 	private NinetyDayScheduleLabelMenuAction labelMenuAction;
 	private NinetyDayScheduleFilterMenuAction filterMenuAction;
-	private Action showWindowsAction;
+	private Action showAnnotationsAction;
+
 	
 	private ScheduleChartViewer<ScheduleModel> viewer;
 	private IMemento memento;
@@ -117,7 +119,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		this.memento = memento;
 		this.settings = new NinetyDayScheduleChartSettings();
 
-		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager);
+		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager, settings);
 		this.sortingProvider = new NinetyDayScheduleChartSortingProvider();
 		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
@@ -166,7 +168,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		manager.add(packAction);
 		manager.add(labelMenuAction);
 		manager.add(filterMenuAction);
-		manager.add(showWindowsAction);
+		manager.add(showAnnotationsAction);
 	}
 	
 	private void fillLocalPullDown(final IMenuManager manager) {
@@ -179,7 +181,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		packAction = new PackAction(viewer.getCanvas());
 		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
 		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas());
-		showWindowsAction = new ShowWindowsAction(viewer.getCanvas(), settings);
+		showAnnotationsAction = new ShowAnnotationsAction(viewer.getCanvas(), settings);
 	}
 
 	@Override
@@ -238,22 +240,22 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		
 	}
 	
-	private static class ShowWindowsAction extends Action {
+	private static class ShowAnnotationsAction extends Action {
 		private final ScheduleCanvas canvas;
 		private final NinetyDayScheduleChartSettings settings;
 		
-		public ShowWindowsAction(final ScheduleCanvas canvas, final NinetyDayScheduleChartSettings settings) {
+		public ShowAnnotationsAction(final ScheduleCanvas canvas, final NinetyDayScheduleChartSettings settings) {
 			super();
 			this.canvas = canvas;
 			this.settings = settings;
 
-			setText("Show Windows");
+			setText("Show Annotations");
 			CommonImages.setImageDescriptors(this, IconPaths.Lateness);
 		}
 		
 		@Override
 		public void run() {
-			settings.setShowWindows(!settings.showWindows());
+			settings.setShowAnnotations(!settings.showAnnotations());
 			canvas.redraw();
 		}
 		

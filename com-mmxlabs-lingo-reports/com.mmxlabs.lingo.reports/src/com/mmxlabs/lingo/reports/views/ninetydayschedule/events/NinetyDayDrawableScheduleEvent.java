@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule.events;
 
 import org.eclipse.swt.graphics.Rectangle;
 
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
@@ -18,8 +19,13 @@ public abstract class NinetyDayDrawableScheduleEvent extends DrawableScheduleEve
 	}
 
 	@Override
-	protected int getBorderThickness(ScheduleEventSelectionState s) {
-		return (s == ScheduleEventSelectionState.SELECTED) ? 2 : 1;
+	public int getBorderThickness(ScheduleEventSelectionState s) {
+		return (s == ScheduleEventSelectionState.SELECTED) ? 1 : 0;
+	}
+	
+	@Override
+	public boolean getIsBorderInner() {
+		return false;
 	}
 
 	@Override

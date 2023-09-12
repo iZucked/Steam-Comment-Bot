@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -26,6 +26,7 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeaders;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleTimeScale;
 import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
@@ -327,6 +328,32 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		
 		return found;
 	}
+
+	public Optional<DrawableScheduleEventAnnotation> findAnnotation(int x, int y) {
+		return findAnnotations(x, y, 0, 0).stream().findFirst();
+	}
+	
+	public List<DrawableScheduleEventAnnotation> findAnnotations(int x, int y, int hRadius, int vRadius) {
+		final List<DrawableScheduleChartRow> drawnRows = canvasState.getLastDrawnContent();
+		List<DrawableScheduleEventAnnotation> found = new ArrayList<>();
+		for (final DrawableScheduleChartRow row: drawnRows) {
+			if (row.getBounds().contains(x, y)) {
+				for (final DrawableScheduleEventAnnotation ann : row.getLastDrawnAnnotations()) {
+					Rectangle b = ann.getBounds();
+					Rectangle area = (hRadius == 0 && vRadius == 0) ? b : new Rectangle(b.x - hRadius, b.y - vRadius, b.width + 2 * hRadius, b.height + 2 * vRadius);
+					if (area.contains(x, y) && ann.getAnnotation().isVisible()) {
+						found.add(ann);
+					}
+				}
+				
+				if (vRadius == 0) {
+					return found;
+				}
+			}
+		}
+		
+		return found;
+	}
 	
 	public Optional<DrawableScheduleChartRow> findRowHeader(int x, int y) {
 		for (final DrawableScheduleChartRow row: canvasState.getLastDrawnContent()) {
@@ -351,6 +378,10 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		List<ScheduleChartRow> sortedRows = new ArrayList<>(canvasState.getShownRows());
 		sortedRows.sort(sortingProvider.getComparator());
 		return sortedRows;
+	}
+
+	public void adjustEventVisiblity(Predicate<ScheduleEvent> selector, boolean b) {
+		canvasState.getRows().parallelStream().forEach(r -> r.getEvents().stream().filter(selector).forEach(e -> e.setVisible(b)));
 	}
 
 }

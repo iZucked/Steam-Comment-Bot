@@ -24,8 +24,13 @@ public class NinetyDayScheduleModelUpdater implements IScheduleChartModelUpdater
 	}
 
 	@Override
-	public void resizeEvent(Object scheduleEventData, LocalDateTime windowStart, LocalDateTime windowEnd) {
-		if (scheduleEventData instanceof SlotVisit sv) {
+	public void annotationEdited(Object scheduleEventData, Object annotationData, LocalDateTime windowStart, LocalDateTime windowEnd) {
+		if (annotationData.equals(NinetyDayScheduleEventAnnotationType.SLOT_WINDOW) && scheduleEventData instanceof SlotVisit sv) {
+			slotWindowRezised(sv, windowStart, windowEnd);
+		}
+	}
+	
+	private void slotWindowRezised(SlotVisit sv, LocalDateTime windowStart, LocalDateTime windowEnd) {
 			final Slot<?> slot = sv.getSlotAllocation().getSlot();
 			final LocalDate newWindowStart = LocalDate.from(windowStart);
 			final int newWindowStartHour = windowStart.getHour();
@@ -56,7 +61,6 @@ public class NinetyDayScheduleModelUpdater implements IScheduleChartModelUpdater
 			if (!cmd.isEmpty()) {
 				commandHandler.handleCommand(cmd);
 			}
-		}
 	}
 
 }

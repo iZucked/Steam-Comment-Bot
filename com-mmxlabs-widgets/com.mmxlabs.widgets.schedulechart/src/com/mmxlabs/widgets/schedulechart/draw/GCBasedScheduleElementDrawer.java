@@ -4,14 +4,16 @@
  */
 package com.mmxlabs.widgets.schedulechart.draw;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Line;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
+import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Polygon;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Rectangle;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Text;
 
@@ -42,12 +44,33 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				gc.drawLine(l.x1(), l.y1(), l.x2(), l.y2());
 			} else if (b instanceof Rectangle r) {
 
-				if (r.borderColour() != null) {
-					gc.drawRectangle(r.x(), r.y(), r.width(), r.height());
-				}
-				
 				if (r.backgroundColour() != null) {
 					gc.fillRectangle(r.x(), r.y(), r.width(), r.height());
+				}
+
+				if (r.borderColour() != null) {
+					if (r.isBorderInner()) {
+						gc.setLineWidth(1);
+					}
+
+					gc.drawRectangle(r.x(), r.y(), r.width(), r.height());
+
+					if (r.isBorderInner()) {
+						gc.setLineWidth(r.borderThickness() - 1);
+						int innerBorderShift = r.borderThickness() / 2;
+						gc.drawRectangle(r.x() + innerBorderShift, r.y() + innerBorderShift, r.width() - 2 * innerBorderShift, r.height() - 2 * innerBorderShift);
+					}
+				}
+				
+			} else if (b instanceof Polygon p) {
+				int[] pointArray = p.points().stream().flatMapToInt(o -> List.of(o.x, o.y).stream().mapToInt(i -> i)).toArray();
+				
+				if (p.backgroundColour() != null) {
+					gc.fillPolygon(pointArray);
+				}
+
+				if (p.borderColour() != null) {
+					gc.drawPolygon(pointArray);
 				}
 
 			} else if (b instanceof Text t) {

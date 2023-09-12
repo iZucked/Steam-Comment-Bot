@@ -16,7 +16,7 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEventAnnotation;
 
 public class EventResizingHandler implements MouseListener, MouseMoveListener {
 	
@@ -33,7 +33,8 @@ public class EventResizingHandler implements MouseListener, MouseMoveListener {
 	private boolean resizing = false;
 	private int startX = 0;
 	private int endX = 0;
-	private Optional<DrawableScheduleEvent> hoveredResizableEvent;
+	private Optional<DrawableScheduleEventAnnotation> hoveredResizableAnnotation;
+	private ScheduleEventAnnotation beforeResize;
 	private boolean hoveredOnStart;
 	
 	public EventResizingHandler(ScheduleCanvas canvas, ScheduleTimeScale timeScale, IScheduleChartSettings settings, EventHoverHandler eventHoverHandler) {
@@ -47,45 +48,45 @@ public class EventResizingHandler implements MouseListener, MouseMoveListener {
 
 	@Override
 	public void mouseMove(MouseEvent e) {
-		if (!settings.allowWindowResizing()) return;
+		if (!settings.allowResizing()) return;
 		
 		if (resizing) {
 			endX = e.x;
 
-			ScheduleEvent resizableEvent = hoveredResizableEvent.get().getScheduleEvent();
+			EditableScheduleEventAnnotation resizableAnnotation = hoveredResizableAnnotation.get().getEditableAnnotation();
+			List<LocalDateTime> dates = resizableAnnotation.getDates();
 			LocalDateTime date = timeScale.getDateTimeAtX(endX).getFirst();
-			if (hoveredOnStart && date.isBefore(resizableEvent.getWindowEndDate())) {
-				resizableEvent.setWindowStartDate(date);
+			if (hoveredOnStart && date.isBefore(dates.get(1))) {
+				resizableAnnotation.setDate(0, date);
 				canvas.redraw();
-			} else if (date.isAfter(resizableEvent.getWindowStartDate())) {
-				resizableEvent.setWindowEndDate(date);
+			} else if (date.isAfter(dates.get(0))) {
+				resizableAnnotation.setDate(1, date);
 				canvas.redraw();
-			} else {
-//				resizing = false;
 			}
 
-//			canvas.redraw();
 			return;
 		}
 		
-		Optional<DrawableScheduleEvent> optResizableEvent = canvas.findEvents(e.x, e.y, RESIZE_HANDLE_RADIUS, 0).stream().filter(dse -> dse.getScheduleEvent().isResizable()).reduce((f, s) -> s);
+		Optional<DrawableScheduleEventAnnotation> optResizableAnnotation = canvas.findAnnotations(e.x, e.y, RESIZE_HANDLE_RADIUS, RESIZE_HANDLE_RADIUS).stream()
+				.filter(dse -> dse.getAnnotation() instanceof EditableScheduleEventAnnotation && dse.getScheduleEvent().getSelectionState() == ScheduleEventSelectionState.SELECTED)
+				.reduce((f, s) -> s);
 		
-		if (optResizableEvent.isPresent()) {
-			DrawableScheduleEvent resizableEvent = optResizableEvent.get();
+		if (optResizableAnnotation.isPresent()) {
+			DrawableScheduleEventAnnotation resizableEvent = optResizableAnnotation.get();
 			
 			Rectangle b = resizableEvent.getBounds();
 			int eventStartX = b.x;
 			int eventEndX = b.x + b.width;
 			
 			if (Math.abs(eventStartX - e.x) < RESIZE_HANDLE_RADIUS || Math.abs(eventEndX - e.x) < RESIZE_HANDLE_RADIUS) {
-				hoveredResizableEvent = optResizableEvent;
+				hoveredResizableAnnotation = optResizableAnnotation;
 				hoveredOnStart = Math.abs(eventStartX - e.x) < RESIZE_HANDLE_RADIUS;
 				canvas.setCursor(HAND_CURSOR);
 				return;
 			}
 		}
 		
-		hoveredResizableEvent = Optional.empty();
+		hoveredResizableAnnotation = Optional.empty();
 		canvas.setCursor(ARROW_CURSOR);
 	}
 
@@ -96,19 +97,20 @@ public class EventResizingHandler implements MouseListener, MouseMoveListener {
 
 	@Override
 	public void mouseDown(MouseEvent e) {
-		if (!settings.allowWindowResizing() || hoveredResizableEvent.isEmpty()) return;
+		if (!settings.allowResizing() || hoveredResizableAnnotation.isEmpty()) return;
 		resizing = true;
 		startX = e.x;
-		canvas.fireScheduleEvent(l -> l.eventSelected(hoveredResizableEvent.get().getScheduleEvent(), List.of(hoveredResizableEvent.get().getScheduleEvent()), e));
+		beforeResize = new ScheduleEventAnnotation(hoveredResizableAnnotation.get().getAnnotation());
+		canvas.fireScheduleEvent(l -> l.eventSelected(hoveredResizableAnnotation.get().getScheduleEvent(), List.of(hoveredResizableAnnotation.get().getScheduleEvent()), e));
 		eventHoverHandler.disable();
 	}
 
 	@Override
 	public void mouseUp(MouseEvent e) {
-		if (!settings.allowWindowResizing() || !resizing) return;
-		canvas.fireScheduleEvent(l -> l.eventResized(hoveredResizableEvent.get().getScheduleEvent()));
+		if (!settings.allowResizing() || !resizing) return;
+		canvas.fireScheduleEvent(l -> l.annotationEdited(hoveredResizableAnnotation.get().getScheduleEvent(), beforeResize, hoveredResizableAnnotation.get().getAnnotation()));
 		resizing = false;
-		hoveredResizableEvent = Optional.empty();
+		hoveredResizableAnnotation = Optional.empty();
 		eventHoverHandler.enable();
 	}
 

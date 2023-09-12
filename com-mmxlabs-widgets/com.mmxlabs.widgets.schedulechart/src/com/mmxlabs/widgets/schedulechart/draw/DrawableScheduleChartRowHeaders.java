@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
@@ -40,8 +41,10 @@ public class DrawableScheduleChartRowHeaders extends DrawableElement {
 		for (int i = 0; i < rows.size(); i++) {
 			res.add(BasicDrawableElements.Rectangle.withBounds(bounds.x, y, bounds.width, height).bgColour(colourScheme.getRowHeaderBgColour(i))
 					.borderColour(colourScheme.getRowOutlineColour(i)).create());
-			res.add(BasicDrawableElements.Text.from(bounds.x, y, rows.get(i).getName()).padding(new Padding(settings.getRowHeaderLeftPadding(), settings.getRowHeaderRightPadding(), 2, 2)).textColour(colourScheme.getRowHeaderTextColour(i)).create());
-			y += height + 1;
+			
+			String name = rows.get(i).getName();
+			res.add(BasicDrawableElements.Text.from(bounds.x, y + (height + 1) / 2 - queryResolver.findSizeOfText(name, Display.getDefault().getSystemFont()).y / 2, rows.get(i).getName()).padding(new Padding(settings.getRowHeaderLeftPadding(), settings.getRowHeaderRightPadding(), 0, 0)).textColour(colourScheme.getRowHeaderTextColour(i)).create());
+			y += height;
 		}
 		res.add(BasicDrawableElements.Rectangle.withBounds(bounds.x, y, bounds.width, bounds.height - y).bgColour(colourScheme.getRowHeaderBgColour(-1))
 				.borderColour(colourScheme.getRowOutlineColour(-1)).create());
