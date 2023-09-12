@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.E
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ICommodityCurveImporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.ImportAction.ImportHooksProvider;
@@ -50,7 +51,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 	private ImportPaperDealsFromExcelPage importPage;
 
-	private ScenarioInstance scenarioInstance;
+	private final ScenarioInstance scenarioInstance;
 
 	@Inject
 	private Iterable<IPaperDealExporter> paperDealExporters;
@@ -97,7 +98,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 					@Override
 					public void run(IProgressMonitor monitor) {
 						if (curveImporter != null) {
-							final List<CommodityCurve> createdCurves = curveImporter.getCommodityCurves(reader, monitor);
+							final List<CommodityCurve> createdCurves = curveImporter.getCommodityCurves(reader, monitor, messages);
 							final List<CommodityCurve> existingCurves = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getCommodityCurves();
 
 							if (createdCurves != null && !createdCurves.isEmpty()) {
@@ -164,7 +165,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 		StringBuilder errorMessage = new StringBuilder();
 		StringBuilder infoMessage = new StringBuilder();
 		for (PaperDealExcelImportResultDescriptor message : messages) {
-			if (message.getPaperDealName().equals("END"))
+			if (message.getType().equals(MessageType.INFO))
 				infoMessage.append(message).append("\n");
 			else
 				errorMessage.append(message).append("\n");

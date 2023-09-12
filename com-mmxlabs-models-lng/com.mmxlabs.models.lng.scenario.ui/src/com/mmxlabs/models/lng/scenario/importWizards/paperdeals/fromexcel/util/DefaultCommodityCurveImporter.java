@@ -4,9 +4,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.common.Pair;
@@ -16,14 +13,17 @@ import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 
 public class DefaultCommodityCurveImporter implements ICommodityCurveImporter {
 
+	/**
+	 * Returns the list of commodity curves 
+	 */
 	@Override
-	public List<CommodityCurve> getCommodityCurves(ExcelReader reader, IProgressMonitor monitor) {
+	public List<CommodityCurve> getCommodityCurves(ExcelReader reader, IProgressMonitor monitor, List<PaperDealExcelImportResultDescriptor> messages) {
 		monitor.beginTask("Import Commodity Curves", reader.getNumRows());
 		List<CommodityCurve> curves = new ArrayList<>();
-		List<CommodityCurveData> sheetData = getSheetData(reader);
+		final List<CommodityCurveData> sheetData = getSheetData(reader, messages);
 		
 		for(CommodityCurveData curveData : sheetData) {
-			CommodityCurve curve = PricingFactory.eINSTANCE.createCommodityCurve();
+			final CommodityCurve curve = PricingFactory.eINSTANCE.createCommodityCurve();
 			curve.setName(curveData.getName());
 			curve.setCurrencyUnit(curveData.getCurrency());
 			curve.setVolumeUnit(curveData.getUnit());
@@ -42,7 +42,7 @@ public class DefaultCommodityCurveImporter implements ICommodityCurveImporter {
 		return curves;
 	}
 
-	protected List<CommodityCurveData> getSheetData(ExcelReader reader){
+	protected List<CommodityCurveData> getSheetData(ExcelReader reader, List<PaperDealExcelImportResultDescriptor> messages){
 		return null;
 	}
 }
