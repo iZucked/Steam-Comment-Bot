@@ -17,7 +17,7 @@ public class DefaultCommodityCurveImporter implements ICommodityCurveImporter {
 	 * Returns the list of commodity curves 
 	 */
 	@Override
-	public List<CommodityCurve> getCommodityCurves(ExcelReader reader, IProgressMonitor monitor, List<PaperDealExcelImportResultDescriptor> messages) {
+	public List<CommodityCurve> getCommodityCurves(ExcelReader reader, IProgressMonitor monitor, List<ExcelImportResultDescriptor> messages) {
 		monitor.beginTask("Import Commodity Curves", reader.getNumRows());
 		List<CommodityCurve> curves = new ArrayList<>();
 		final List<CommodityCurveData> sheetData = getSheetData(reader, messages);
@@ -42,7 +42,7 @@ public class DefaultCommodityCurveImporter implements ICommodityCurveImporter {
 		return curves;
 	}
 
-	protected List<CommodityCurveData> getSheetData(ExcelReader reader, List<PaperDealExcelImportResultDescriptor> messages){
+	protected List<CommodityCurveData> getSheetData(ExcelReader reader, List<ExcelImportResultDescriptor> messages){
 		return null;
 	}
 }

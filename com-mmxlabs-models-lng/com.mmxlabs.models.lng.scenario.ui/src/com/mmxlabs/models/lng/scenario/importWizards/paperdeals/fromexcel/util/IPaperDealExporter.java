@@ -10,5 +10,5 @@ import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public interface IPaperDealExporter {
-	Pair<List<BuyPaperDeal>, List<SellPaperDeal>> getPaperDeals(ExcelReader reader, LNGScenarioModel lngScenarioModel, List<PaperDealExcelImportResultDescriptor> messages, IProgressMonitor monitor);
+	Pair<List<BuyPaperDeal>, List<SellPaperDeal>> getPaperDeals(ExcelReader reader, LNGScenarioModel lngScenarioModel, List<ExcelImportResultDescriptor> messages, IProgressMonitor monitor);
 }

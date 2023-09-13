@@ -13,14 +13,14 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor.MessageType;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 
 public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 	
 	@Override
-	public Pair<List<BuyPaperDeal>, List<SellPaperDeal>> getPaperDeals(final ExcelReader reader, final LNGScenarioModel lngScenarioModel, final List<PaperDealExcelImportResultDescriptor> messages, IProgressMonitor monitor) {
+	public Pair<List<BuyPaperDeal>, List<SellPaperDeal>> getPaperDeals(final ExcelReader reader, final LNGScenarioModel lngScenarioModel, final List<ExcelImportResultDescriptor> messages, IProgressMonitor monitor) {
 		monitor.beginTask("Importing paper deals", reader.getNumRows());
 		Pair<List<BuyPaperDeal>, List<SellPaperDeal>> deals = new Pair<>();
 		List<BuyPaperDeal> buyPaperDeals = new ArrayList<>();
@@ -55,7 +55,7 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 			}
 			monitor.worked(1);
 		}
-		messages.add(new PaperDealExcelImportResultDescriptor(MessageType.INFO, "END", -1, -1,String.format("Finished importing. Successfull: %d; Failed: %d",sc,fc)));
+		messages.add(new ExcelImportResultDescriptor(MessageType.INFO, "", -1, -1,String.format("Finished importing. Successfull: %d; Failed: %d",sc,fc)));
 		
 		deals.setBoth(buyPaperDeals, sellPaperDeals);
 		return deals;
@@ -85,7 +85,7 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 	 * @param fails
 	 * @return
 	 */
-	protected PaperDeal getPaperDeal(final ExcelReader reader, int rowId, final List<SettleStrategy> sStrategies, final BaseLegalEntity entity, final List<PaperDealExcelImportResultDescriptor> fails) {
+	protected PaperDeal getPaperDeal(final ExcelReader reader, int rowId, final List<SettleStrategy> sStrategies, final BaseLegalEntity entity, final List<ExcelImportResultDescriptor> fails) {
 		return null;
 	}
 }

@@ -1,6 +1,6 @@
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util;
 
-public class PaperDealExcelImportResultDescriptor {
+public class ExcelImportResultDescriptor {
 	
 	public enum MessageType{
 		INFO,
@@ -12,7 +12,7 @@ public class PaperDealExcelImportResultDescriptor {
 		COMMODITY_CURVE
 	}
 	
-	public PaperDealExcelImportResultDescriptor(MessageType type, String paperDealName, int rowNumber, int columnNumber, String message) {
+	public ExcelImportResultDescriptor(MessageType type, String paperDealName, int rowNumber, int columnNumber, String message) {
 		super();
 		this.type = type;
 		this.paperDealName = paperDealName;

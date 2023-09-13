@@ -35,8 +35,8 @@ import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.D
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelReader;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ICommodityCurveImporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor.MessageType;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.ImportAction.ImportHooksProvider;
@@ -47,7 +47,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
-	private static final List<PaperDealExcelImportResultDescriptor> messages = new ArrayList<>();
+	private static final List<ExcelImportResultDescriptor> messages = new ArrayList<>();
 
 	private ImportPaperDealsFromExcelPage importPage;
 
@@ -158,13 +158,12 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 		} catch (final Exception e) {
 			MessageDialog.openError(getShell(), "Import error", "Unable to import paper deals, reason: " + e.getMessage());
-			e.printStackTrace();
 			return false;
 		}
 
 		StringBuilder errorMessage = new StringBuilder();
 		StringBuilder infoMessage = new StringBuilder();
-		for (PaperDealExcelImportResultDescriptor message : messages) {
+		for (ExcelImportResultDescriptor message : messages) {
 			if (message.getType().equals(MessageType.INFO))
 				infoMessage.append(message).append("\n");
 			else
