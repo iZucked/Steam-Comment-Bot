@@ -121,4 +121,9 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 		setControl(container);
 		control = container;
 	}
+	
+	@Override
+    public boolean isPageComplete() {
+        // Return true to hide the Back button on this page
+        return getWizard() instanceof ImportPaperDealsFromExcelWizard && ((ImportPaperDealsFromExcelWizard) getWizard()).finishedImporting();    }
 }

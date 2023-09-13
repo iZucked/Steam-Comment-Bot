@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageContext;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -55,7 +56,7 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 			}
 			monitor.worked(1);
 		}
-		messages.add(new ExcelImportResultDescriptor(MessageType.INFO, "", -1, -1,String.format("Finished importing. Successfull: %d; Failed: %d",sc,fc)));
+		messages.add(new ExcelImportResultDescriptor(MessageType.INFO ,MessageContext.PAPER_DEAL, String.format("Finished importing. Successfull: %d; Failed: %d",sc,fc)));
 		
 		deals.setBoth(buyPaperDeals, sellPaperDeals);
 		return deals;

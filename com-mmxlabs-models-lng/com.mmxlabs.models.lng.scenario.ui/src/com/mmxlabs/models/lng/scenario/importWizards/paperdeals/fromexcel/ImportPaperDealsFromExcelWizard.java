@@ -13,6 +13,8 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbench;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
@@ -29,6 +31,8 @@ import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
+import com.mmxlabs.models.lng.scenario.importWizards.ImportCSVFilesPage;
+import com.mmxlabs.models.lng.scenario.importWizards.ImportWarningsPage;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaulPaperDealExcelExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaultCommodityCurveImporter;
@@ -38,6 +42,7 @@ import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.I
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.ImportAction.ImportHooksProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -47,11 +52,14 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
-	private static final List<ExcelImportResultDescriptor> messages = new ArrayList<>();
+	protected static final List<ExcelImportResultDescriptor> messages = new ArrayList<>();
 
 	private ImportPaperDealsFromExcelPage importPage;
+	private ImportPaperDealsErrorPage warnings;
 
 	private final ScenarioInstance scenarioInstance;
+	
+	private boolean finishedImport;
 
 	@Inject
 	private Iterable<IPaperDealExporter> paperDealExporters;
@@ -61,7 +69,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 	public ImportPaperDealsFromExcelWizard(ScenarioInstance scenarioInstance, String windowTitle) {
 		super(scenarioInstance, windowTitle);
-
+		finishedImport = false;
 		this.scenarioInstance = scenarioInstance;
 		final BundleContext bc = FrameworkUtil.getBundle(ImportPaperDealsFromExcelWizard.class).getBundleContext();
 		final Injector injector = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new ImportPaperDealsFromExcelProviderModule());
@@ -69,8 +77,14 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	}
 
 	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		super.init(workbench, selection);
+		warnings = new ImportPaperDealsErrorPage("Warnings");
+	}
+	
+	@Override
 	protected AbstractImportPage getImportPage(String pageName, ScenarioInstance currentScenario) {
-		importPage = new ImportPaperDealsFromExcelPage(pageName, currentScenario);
+		importPage = new ImportPaperDealsFromExcelPage("Import Page", scenarioInstance);
 		return importPage;
 	}
 
@@ -81,6 +95,9 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 	@Override
 	public boolean performFinish() {
+		if(finishedImport)
+			return true;
+		
 		messages.clear();
 		try (final FileInputStream fis = new FileInputStream(importPage.getImportFilename())) {
 			final ExcelReader reader = new ExcelReader(fis, importPage.getSelectedWorksheetName());
@@ -154,6 +171,10 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 				if (!paperDealCommand.isEmpty())
 					scenarioDataProvider.getCommandStack().execute(paperDealCommand);
 
+				finishedImport = true;
+				
+				// Make Next button visible
+				getContainer().updateButtons(); 
 			}
 
 		} catch (final Exception e) {
@@ -169,15 +190,27 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 			else
 				errorMessage.append(message).append("\n");
 		}
+		
+		if (!errorMessage.isEmpty())
+			infoMessage.append("Press the Next button to see details on errors occured.\n");
+		else
+			infoMessage.append("Press the Finish button again to close this page.\n");
 
 		// Display any error and info messages
 		if (!infoMessage.isEmpty())
 			MessageDialog.openInformation(getShell(), "Import Result", infoMessage.toString());
-
-		if (!errorMessage.isEmpty())
-			MessageDialog.openError(getShell(), "Import Result", errorMessage.toString());
-
-		return true;
+		
+		return false;
+	}
+	
+	@Override
+	public void addPages() {
+		addPage(importPage);
+		addPage(warnings);
+	}
+	
+	public boolean finishedImporting() {
+		return finishedImport;
 	}
 
 }

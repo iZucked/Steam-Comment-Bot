@@ -8,31 +8,64 @@ public class ExcelImportResultDescriptor {
 	}
 	
 	public enum MessageContext{
-		PAPER_DEAL,
-		COMMODITY_CURVE
+		PAPER_DEAL("Paper deal"),
+		COMMODITY_CURVE("Commodity curve");
+
+		private final String value;
+		
+		MessageContext(String string) {
+			value = string;
+		}
+		
+		@Override
+		public String toString() { return value; }
 	}
 	
-	public ExcelImportResultDescriptor(MessageType type, String paperDealName, int rowNumber, int columnNumber, String message) {
-		super();
+	private MessageType type;
+	private MessageContext context;
+	private String paperDealName;
+	private int rowNumber;
+	private int columnNumber;
+	private String message;
+	
+	public ExcelImportResultDescriptor(MessageType type, MessageContext context, String paperDealName, int rowNumber, int columnNumber, String message) {
 		this.type = type;
+		this.context = context;
 		this.paperDealName = paperDealName;
 		this.rowNumber = rowNumber;
 		this.columnNumber = columnNumber;
 		this.message = message;
 	}
-	public MessageType type;
-	public String paperDealName;
-	public int rowNumber;
-	public int columnNumber;
-	public String message;
 	
-	public String getPaperDealName() {
-		return paperDealName;
+	public ExcelImportResultDescriptor(MessageType type, MessageContext context, String message) {
+		this(type, context, "", -1, -1, message);
 	}
-	
+
 	public MessageType getType() {
 		return type;
 	}
+
+	public MessageContext getContext() {
+		return context;
+	}
+
+	public String getPaperDealName() {
+		return paperDealName;
+	}
+
+	public int getRowNumber() {
+		return rowNumber;
+	}
+
+	public int getColumnNumber() {
+		return columnNumber;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	
 	
 	@Override
 	public String toString() {
