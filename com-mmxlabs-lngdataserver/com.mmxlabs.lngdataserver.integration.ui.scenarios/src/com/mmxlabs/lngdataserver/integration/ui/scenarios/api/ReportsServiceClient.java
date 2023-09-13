@@ -15,8 +15,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -25,7 +23,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
-import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class ReportsServiceClient {
 
@@ -35,7 +32,7 @@ public class ReportsServiceClient {
 
 	public @Nullable String uploadReportData(String type, String version, String content, String uuid, String uploadURL, String fileExtension) throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(uploadURL + "/" + uuid + "/" + type, HttpPost::new, request -> {
+		return DataHubServiceProvider.getInstance().doPostRequest(uploadURL + "/" + uuid + "/" + type, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -72,7 +69,7 @@ public class ReportsServiceClient {
 	public boolean downloadTo(String uuid, File file, BiConsumer<File, Instant> callback) throws IOException {
 
 		final String requestURL = String.format("%s/%s", REPORT_GET_URL, uuid);
-		return DataHubServiceProvider.getInstance().doRequest(requestURL, HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(requestURL,response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);

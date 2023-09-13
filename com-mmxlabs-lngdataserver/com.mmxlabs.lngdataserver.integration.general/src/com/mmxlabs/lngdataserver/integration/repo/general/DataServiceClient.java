@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
@@ -39,7 +36,7 @@ public class DataServiceClient {
 	};
 
 	public void upload(final TypeRecord typeRecord, final String json, final IProgressListener progressListener) throws IOException {
-		DataHubServiceProvider.getInstance().doRequest(typeRecord.getUploadURL(), HttpPost::new, request -> {
+		DataHubServiceProvider.getInstance().doPostRequest(typeRecord.getUploadURL(), request -> {
 			final StringEntity requestEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
 			request.setEntity(new ProgressHttpEntityWrapper(requestEntity, progressListener));
 		}, response -> {
@@ -79,7 +76,7 @@ public class DataServiceClient {
 
 	public @Nullable Pair<String, Instant> getRecords(final TypeRecord typeRecord) throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(typeRecord.getListURL(), HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(typeRecord.getListURL(), response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + responseCode);
@@ -105,7 +102,7 @@ public class DataServiceClient {
 			return null;
 		}
 
-		return DataHubServiceProvider.getInstance().doRequest(typeRecord.getCurrentURL(), HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(typeRecord.getCurrentURL(), response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				// 404 Not found is a valid response if there is no current pricing version
