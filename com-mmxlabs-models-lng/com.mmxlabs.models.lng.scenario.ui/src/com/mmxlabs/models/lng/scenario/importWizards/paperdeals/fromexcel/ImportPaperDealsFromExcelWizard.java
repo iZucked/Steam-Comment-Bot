@@ -1,7 +1,6 @@
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
 
 import java.io.FileInputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +9,9 @@ import java.util.Optional;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.ops4j.peaberry.Peaberry;
@@ -23,7 +24,9 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -37,7 +40,9 @@ import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.I
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.PaperDealExcelImportResultDescriptor.MessageType;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.ImportAction.ImportHooksProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -91,9 +96,14 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
+				final EditingDomain ed = scenarioDataProvider.getEditingDomain();
 				final CompoundCommand curvesCommand = new CompoundCommand("Import commodity curves from excel");
 				final CompoundCommand paperDealCommand = new CompoundCommand("Import paper deals from excel");
-
+				final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
+				// Invalidate and clear the schedule/dependent sandboxes
+				curvesCommand.append(ScheduleModelInvalidateCommandProvider.createClearModelsCommand(//
+						ed, scenarioModel, ScenarioModelUtil.getAnalyticsModel(scenarioModel)));
+				
 				final IRunnableWithProgress createCurvesOpertaion = new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) {
@@ -108,13 +118,13 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 									if (foundCurve.isPresent()) {
 										// Update points
 										curvesCommand.append(
-												SetCommand.create(scenarioDataProvider.getEditingDomain(), foundCurve.get(), PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, SetCommand.UNSET_VALUE));
+												SetCommand.create(ed, foundCurve.get(), PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, SetCommand.UNSET_VALUE));
 
 										curvesCommand.append(
-												AddCommand.create(scenarioDataProvider.getEditingDomain(), foundCurve.get(), PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, curve.getPoints()));
+												AddCommand.create(ed, foundCurve.get(), PricingPackage.Literals.YEAR_MONTH_POINT_CONTAINER__POINTS, curve.getPoints()));
 									} else {
 										// Create curve
-										curvesCommand.append(AddCommand.create(scenarioDataProvider.getEditingDomain(), ScenarioModelUtil.getPricingModel(scenarioDataProvider),
+										curvesCommand.append(AddCommand.create(ed, ScenarioModelUtil.getPricingModel(scenarioDataProvider),
 												PricingPackage.Literals.PRICING_MODEL__COMMODITY_CURVES, curve));
 									}
 								}
@@ -133,15 +143,21 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 					@Override
 					public void run(IProgressMonitor monitor) {
 						if (paperDealExporter != null) {
+							final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+							final List<PaperDeal> allPaperDeals = cargoModel.getPaperDeals();
+							if (allPaperDeals != null && !allPaperDeals.isEmpty()) {
+								paperDealCommand.append(RemoveCommand.create(ed, //
+										cargoModel, CargoPackage.eINSTANCE.getCargoModel_PaperDeals(), allPaperDeals));
+							}
 							final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider),
 									messages, monitor);
 
 							if (!paperDealsPair.getFirst().isEmpty()) {
-								paperDealCommand.append(AddCommand.create(scenarioDataProvider.getEditingDomain(), ScenarioModelUtil.getCargoModel(scenarioDataProvider),
+								paperDealCommand.append(AddCommand.create(ed, ScenarioModelUtil.getCargoModel(scenarioDataProvider),
 										CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, paperDealsPair.getFirst()));
 							}
 							if (!paperDealsPair.getSecond().isEmpty()) {
-								paperDealCommand.append(AddCommand.create(scenarioDataProvider.getEditingDomain(), ScenarioModelUtil.getCargoModel(scenarioDataProvider),
+								paperDealCommand.append(AddCommand.create(ed, ScenarioModelUtil.getCargoModel(scenarioDataProvider),
 										CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS, paperDealsPair.getSecond()));
 							}
 						}

@@ -57,7 +57,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  javax.inject;bundle-version="1.0.0",
  com.google.inject,
  com.mmxlabs.scheduler.optimiser,
- com.mmxlabs.models.lng.pricing
+ com.mmxlabs.models.lng.pricing,
+ com.mmxlabs.models.lng.schedule.editor
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.scenario.internal.Activator
 Bundle-Module: com.mmxlabs.models.lng.scenario.internal.ScenarioUIActivationModule
