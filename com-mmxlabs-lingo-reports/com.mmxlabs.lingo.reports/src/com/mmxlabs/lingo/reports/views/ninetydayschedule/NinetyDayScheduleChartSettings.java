@@ -19,4 +19,8 @@ public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings
 		this.showAnnotations = showAnnotations;
 	}
 
+	public boolean showNominalsByDefault() {
+		return false;
+	}
+
 }

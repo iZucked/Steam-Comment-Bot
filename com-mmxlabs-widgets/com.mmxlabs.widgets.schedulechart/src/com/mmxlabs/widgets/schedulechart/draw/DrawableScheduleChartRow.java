@@ -101,6 +101,10 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	public ScheduleChartRow getScheduleChartRow() {
 		return scr;
 	}
+	
+	public int getRowNum() {
+		return rowNum;
+	}
 
 
 }

@@ -5,12 +5,15 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
+import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Image;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Line;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Polygon;
@@ -20,6 +23,7 @@ import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Text;
 public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, DrawerQueryResolver {
 	
 	private final GC gc;
+	private UnaryOperator<Color> colourFilter = UnaryOperator.identity();
 	
 	public GCBasedScheduleElementDrawer(GC gc) {
 		this.gc = gc;
@@ -30,11 +34,11 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 		int oldAlpha = gc.getAlpha();
 		try {
 			if (b.backgroundColour() != null) {
-				gc.setBackground(b.backgroundColour());
+				gc.setBackground(colourFilter.apply(b.backgroundColour()));
 			}
 
 			if (b.borderColour() != null) {
-				gc.setForeground(b.borderColour());
+				gc.setForeground(colourFilter.apply(b.borderColour()));
 				gc.setLineWidth(b.borderThickness());
 			}
 			
@@ -100,6 +104,9 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				
 				gc.setFont(t.font());
 				gc.drawString(s, x, y, t.backgroundColour() == null);
+			
+			} else if (b instanceof Image i) {
+				gc.drawImage(i.img(), i.x(), i.y());
 			} else {
 				throw new UnsupportedOperationException("Got a BasicDrawableElement that cannot be drawn by this ScheduleElementDrawer");
 			}
@@ -121,4 +128,19 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 		return new Point(p.left() + textExtent.x + p.right(), p.top() + textExtent.y + p.bottom());
 	}
 
+	@Override
+	public void applyColourFilter(UnaryOperator<Color> filter) {
+		this.colourFilter = filter;
+	}
+
+	@Override
+	public void removeColourFilter() {
+		this.colourFilter = UnaryOperator.identity();
+	}
+	
+	@Override
+	public UnaryOperator<Color> getColourFilter() {
+		return colourFilter;
+	}
+	
 }

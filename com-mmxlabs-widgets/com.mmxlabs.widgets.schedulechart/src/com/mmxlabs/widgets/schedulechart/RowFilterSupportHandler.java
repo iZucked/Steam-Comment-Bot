@@ -11,22 +11,26 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.widgets.schedulechart.draw.DrawableCheckboxButton;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeader;
 
-public class RowHeaderMenuHandler implements MenuDetectListener {
+public class RowFilterSupportHandler implements MenuDetectListener, MouseListener {
 	
 	private final ScheduleCanvas canvas;
 	private final ScheduleFilterSupport filterSupport;
 
 	private Menu menu = null;
-	private Action hideRow = null;
+	private Action showHideRow = null;
 	private Action showHiddenRows = null;
-	private DrawableScheduleChartRow clickedRowHeader = null;
+	private DrawableScheduleChartRowHeader clickedRowHeader = null;
 
-	public RowHeaderMenuHandler(final ScheduleCanvas canvas, final ScheduleFilterSupport filterSupport) {
+	public RowFilterSupportHandler(final ScheduleCanvas canvas, final ScheduleFilterSupport filterSupport) {
 		this.canvas = canvas;
 		this.filterSupport = filterSupport;
 		this.menu = new Menu(canvas);
@@ -34,6 +38,7 @@ public class RowHeaderMenuHandler implements MenuDetectListener {
 		canvas.setMenu(menu);
 		
 		canvas.addMenuDetectListener(this);
+		canvas.addMouseListener(this);
 	}
 
 	public void dispose() {
@@ -44,14 +49,14 @@ public class RowHeaderMenuHandler implements MenuDetectListener {
 	}
 
 	private void createMenuItems(Menu m) {
-		hideRow = new Action("Hide Row", IAction.AS_PUSH_BUTTON) {
+		showHideRow = new Action("", IAction.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
-				filterSupport.hideRow(clickedRowHeader.getScheduleChartRow().getKey());
+				filterSupport.toggleShowHide(clickedRowHeader.getScheduleChartRow().getKey());
 				canvas.redraw();
 			}
 		};
-		ActionContributionItem hideRowACI = new ActionContributionItem(hideRow);
+		ActionContributionItem hideRowACI = new ActionContributionItem(showHideRow);
 		hideRowACI.fill(m, -1);
 
 		showHiddenRows = new Action("Show Hidden Rows", IAction.AS_PUSH_BUTTON) {
@@ -73,16 +78,39 @@ public class RowHeaderMenuHandler implements MenuDetectListener {
 			return;
 		}
 		
-		Optional<DrawableScheduleChartRow> optRow = canvas.findRowHeader(p.x, p.y);
-		if (optRow.isPresent()) {
-			hideRow.setEnabled(true);
-			clickedRowHeader = optRow.get();
+		Optional<DrawableScheduleChartRowHeader> optRowHeader = canvas.findRowHeader(p.x, p.y);
+		if (optRowHeader.isPresent()) {
+			showHideRow.setEnabled(true);
+			showHideRow.setText(filterSupport.isRowHidden(optRowHeader.get().getScheduleChartRow().getKey()) ? "Show Row" : "Hide Row");
+			clickedRowHeader = optRowHeader.get();
 		} else {
-			hideRow.setEnabled(false);
+			showHideRow.setEnabled(false);
 			clickedRowHeader = null;
 		}
 		
 		showHiddenRows.setEnabled(filterSupport.isFiltered());
 	}
 
+	@Override
+	public void mouseDoubleClick(MouseEvent e) {
+		// Do nothing
+		
+	}
+
+	@Override
+	public void mouseDown(MouseEvent e) {
+		Optional<DrawableScheduleChartRowHeader> optRowHeader = canvas.findRowHeader(e.x, e.y);
+		if (optRowHeader.isPresent()) {
+			DrawableCheckboxButton btn =  optRowHeader.get().getCheckbox();
+			if (btn.getBounds().contains(e.x, e.y)) {
+				btn.setChecked(!btn.getChecked());
+			}
+		}
+	}
+
+	@Override
+	public void mouseUp(MouseEvent e) {
+		// Do nothing
+	}
+	
 }

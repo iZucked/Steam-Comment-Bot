@@ -14,6 +14,7 @@ public interface IScheduleChartSettings {
 	int getMinimumRowHeaderWidth();
 	int getRowHeaderLeftPadding();
 	int getRowHeaderRightPadding();
+	int filterModeCheckboxColumnWidth();
 	
 	boolean showAnnotations();
 	default boolean allowResizing() {

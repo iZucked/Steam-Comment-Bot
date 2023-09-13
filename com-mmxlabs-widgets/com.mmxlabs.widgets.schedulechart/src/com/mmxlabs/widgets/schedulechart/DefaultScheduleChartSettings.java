@@ -60,4 +60,9 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 		return defaultColourScheme;
 	}
 
+	@Override
+	public int filterModeCheckboxColumnWidth() {
+		return getRowHeight();
+	}
+
 }

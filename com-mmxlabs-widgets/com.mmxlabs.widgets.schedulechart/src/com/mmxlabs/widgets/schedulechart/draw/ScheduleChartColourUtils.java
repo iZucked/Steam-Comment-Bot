@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 public class ScheduleChartColourUtils {
@@ -44,4 +45,12 @@ public class ScheduleChartColourUtils {
 
         return l;
     }
+
+	public static Color getHiddenElementsFilter(Color c) {
+		int total = c.getRed() + c.getBlue() + c.getGreen();
+		int gr = total / 3;
+		gr = (gr / 2) + 255 / 2;
+		return new Color(new RGB(gr, gr, gr));
+	}
+
 }

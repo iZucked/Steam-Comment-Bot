@@ -5,14 +5,24 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
+
+import org.eclipse.swt.graphics.Color;
 
 public interface ScheduleElementDrawer {
 	void drawOne(BasicDrawableElement b);
 	
 	default void drawOne(DrawableElement d) {
+		var prev = getColourFilter();
+		if (d.getColourFilter().isPresent()) {
+			applyColourFilter(d.getColourFilter().get());
+		}
+
 		for (BasicDrawableElement b: d.getBasicDrawableElements()) {
 			drawOne(b);
 		}
+
+		applyColourFilter(prev);
 	}
 
 	default void draw(List<DrawableElement> ds) {
@@ -22,9 +32,16 @@ public interface ScheduleElementDrawer {
 	}
 
 	default void drawOne(DrawableElement d, DrawerQueryResolver queryResolver) {
+		var prev = getColourFilter();
+		if (d.getColourFilter().isPresent()) {
+			applyColourFilter(d.getColourFilter().get());
+		}
+
 		for (BasicDrawableElement b: d.getBasicDrawableElements(queryResolver)) {
 			drawOne(b);
 		}
+		
+		applyColourFilter(prev);
 	}
 
 	default void draw(List<DrawableElement> ds, DrawerQueryResolver queryResolver) {
@@ -32,4 +49,8 @@ public interface ScheduleElementDrawer {
 			drawOne(d, queryResolver);
 		}
 	}
+	
+	void applyColourFilter(UnaryOperator<Color> filter);
+	void removeColourFilter();
+	UnaryOperator<Color> getColourFilter();
 }

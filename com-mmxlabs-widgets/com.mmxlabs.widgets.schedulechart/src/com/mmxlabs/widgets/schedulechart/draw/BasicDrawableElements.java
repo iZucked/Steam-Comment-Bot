@@ -7,6 +7,7 @@ package com.mmxlabs.widgets.schedulechart.draw;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -237,6 +238,30 @@ public interface BasicDrawableElements {
 				return new Polygon(points, bgColour, borderColour, borderThickness, alpha);
 			}
 		}
+	}
+
+	public record Image(org.eclipse.swt.graphics.Image img, int x, int y) implements BasicDrawableElement {
+
+		@Override
+		public Color backgroundColour() {
+			return null;
+		}
+
+		@Override
+		public Color borderColour() {
+			return null;
+		}
+
+		@Override
+		public int borderThickness() {
+			return 0;
+		}
+
+		@Override
+		public int alpha() {
+			return MAX_ALPHA;
+		}
+
 	}
 
 	public record Padding(int left, int right, int top, int bottom) {}

@@ -148,7 +148,6 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		contributeToActionBars();
 		makeUndoActions();
 		
-		
 		try {
 			scenarioComparisonService.triggerListener(scenariosServiceListener, false);
 		} catch (Exception e) {
@@ -180,7 +179,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		zoomOutAction = new ZoomAction(false, viewer.getCanvas());
 		packAction = new PackAction(viewer.getCanvas());
 		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
-		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas());
+		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas(), settings);
 		showAnnotationsAction = new ShowAnnotationsAction(viewer.getCanvas(), settings);
 	}
 

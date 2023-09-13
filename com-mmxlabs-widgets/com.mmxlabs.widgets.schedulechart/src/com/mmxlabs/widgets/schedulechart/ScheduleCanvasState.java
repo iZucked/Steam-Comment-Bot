@@ -14,6 +14,7 @@ import java.util.Set;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeader;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
 
 public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider {
@@ -21,6 +22,8 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	private Rectangle originalBounds;
 	private Rectangle mainBounds;
 	private List<ScheduleChartRow> rows = new ArrayList<>();
+	
+	private ScheduleChartMode scm = ScheduleChartMode.NORMAL;
 
 	private ScheduleEvent leftmostEvent;
 	private ScheduleEvent rightmostEvent;
@@ -29,6 +32,7 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	private Optional<DrawableScheduleEvent> hoveredEvent = Optional.empty();
 	
 	private List<DrawableScheduleChartRow> lastDrawnContent = new ArrayList<>();
+	private List<DrawableScheduleChartRowHeader> lastDrawnRowHeaders = new ArrayList<>();
 	
 	private Set<ScheduleChartRowKey> hiddenRowKeys = new HashSet<>();
 
@@ -53,7 +57,7 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	}
 	
 	public List<ScheduleChartRow> getShownRows() {
-		return rows.stream().filter(r -> !hiddenRowKeys.contains(r.getKey())).toList();
+		return rows.stream().filter(r -> scm == ScheduleChartMode.FILTER || !hiddenRowKeys.contains(r.getKey())).toList();
 	}
 
 	public void setRows(List<ScheduleChartRow> rows) {
@@ -95,6 +99,14 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 		this.lastDrawnContent = lastDrawnContent;
 	}
 
+	public List<DrawableScheduleChartRowHeader> getLastDrawnRowHeaders() {
+		return lastDrawnRowHeaders;
+	}
+	
+	public void setLastDrawnRowHeaders(List<DrawableScheduleChartRowHeader> lastDrawnRowHeaders) {
+		this.lastDrawnRowHeaders = lastDrawnRowHeaders;
+	}
+	
 	public Optional<DrawableScheduleEvent> getHoveredEvent() {
 		return hoveredEvent;
 	}
@@ -105,6 +117,14 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 
 	public Set<ScheduleChartRowKey> getHiddenRowKeys() {
 		return hiddenRowKeys;
+	}
+	
+	public ScheduleChartMode getScheduleChartMode() {
+		return scm;
+	}
+	
+	public void setScheduleChartMode(ScheduleChartMode scm) {
+		this.scm = scm;
 	}
 
 }

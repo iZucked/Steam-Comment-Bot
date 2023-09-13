@@ -88,6 +88,10 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 
 		final List<ScheduleChartRow> newRows = eventProvider.classifyEventsIntoRows(events);
 		canvas.addAll(newRows);
+		
+		if (oldInput == null) {
+			canvas.getFilterSupport().applyDefaultFilters();
+		}
 
 		canvas.redraw();
 	}

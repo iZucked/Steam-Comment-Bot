@@ -17,5 +17,5 @@ public interface IScheduleChartEventListener {
 	void annotationEdited(ScheduleEvent se, ScheduleEventAnnotation old, ScheduleEventAnnotation updated);
 
 	void timeScaleZoomLevelChanged(Rectangle mainBounds, IScheduleChartContentBoundsProvider boundsProvider);
-
+	
 }

@@ -5,14 +5,16 @@
 package com.mmxlabs.widgets.schedulechart.draw;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.UnaryOperator;
 
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
-
-import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 
 public abstract class DrawableElement {
 	
 	private Rectangle bounds;
+	private Optional<UnaryOperator<Color>> optColourFilter = Optional.empty();
 	
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
@@ -20,6 +22,14 @@ public abstract class DrawableElement {
 	
 	public Rectangle getBounds() {
 		return bounds;
+	}
+	
+	public Optional<UnaryOperator<Color>> getColourFilter() {
+		return optColourFilter;
+	}
+	
+	public void setColourFilter(UnaryOperator<Color> colourFilter) {
+		optColourFilter = Optional.of(colourFilter);
 	}
 	
 	public final List<BasicDrawableElement> getBasicDrawableElements() {
