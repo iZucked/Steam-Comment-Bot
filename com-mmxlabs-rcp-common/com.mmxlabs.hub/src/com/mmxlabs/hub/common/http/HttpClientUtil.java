@@ -98,7 +98,7 @@ public class HttpClientUtil {
 
 	}
 
-	private static void fireInvalidationListeners() {
+	public static void fireInvalidationListeners() {
 		invalidationListeners.forEach(r -> {
 			try {
 				r.run();
