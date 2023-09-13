@@ -9,6 +9,10 @@ import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.net.http.HttpClient;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -17,24 +21,37 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import org.apache.http.Header;
+import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIUtils;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Shell;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,9 +61,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
-import com.mmxlabs.common.Triple;
+import com.google.common.collect.Lists;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.auth.AuthenticationManager;
-import com.mmxlabs.hub.auth.OAuthManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.info.DatahubInformation;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
@@ -55,14 +72,10 @@ import com.mmxlabs.hub.preferences.TLSPreferenceConstants;
 /**
  * This class manages connections to the data hub.
  * <p>
- * The base URL is loaded from the preference store, and authentication info
- * requested via the UI for the associated web domain. Call
- * UpstreamUrlProvider.INSTANCE.getBaseURL() to get the base URL for data hub
- * requests.
+ * The base URL is loaded from the preference store, and authentication info requested via the UI for the associated web domain. Call UpstreamUrlProvider.INSTANCE.getBaseURL() to get the base URL for
+ * data hub requests.
  * <p>
- * N.B. {@link #getBaseUrlIfAvailable()} will not work until the
- * UpstreamUrlProvider has finished initialising, which may not happen
- * immediately at program start, or if the connection goes down later.
+ * N.B. {@link #getBaseUrlIfAvailable()} will not work until the UpstreamUrlProvider has finished initialising, which may not happen immediately at program start, or if the connection goes down later.
  *
  */
 public class UpstreamUrlProvider {
@@ -91,8 +104,7 @@ public class UpstreamUrlProvider {
 	private boolean connectionValid = false;
 	private DatahubInformation currentInformation = null;
 	/**
-	 * If there is no reported information from the upstream hub, fallback to
-	 * "basic" auth mode.
+	 * If there is no reported information from the upstream hub, fallback to "basic" auth mode.
 	 */
 	private static final DatahubInformation fallackInformation = new DatahubInformation("legacy", "basic");
 
@@ -122,15 +134,15 @@ public class UpstreamUrlProvider {
 		teamServiceEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY));
 		forceBasicAuthenticationEnabled = Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH));
 		authenticationManager.setForceBasicAuthentication(forceBasicAuthenticationEnabled);
-		
-		
+
 		HttpClientUtil.setDisableSSLHostnameCheck(Boolean.TRUE.equals(preferenceStore.getBoolean(DataHubPreferenceConstants.P_DISABLE_SSL_HOSTNAME_CHECK)));
-		
+
 		HttpClientUtil.setUseJavaTrustStore(Boolean.TRUE.equals(preferenceStore.getBoolean(TLSPreferenceConstants.P_TLS_USE_JAVA_TRUSTSTORE)));
 		HttpClientUtil.setUseWindowsTrustStore(Boolean.TRUE.equals(preferenceStore.getBoolean(TLSPreferenceConstants.P_TLS_USE_WINDOWS_TRUSTSTORE)));
-		
+
 		// Any changes to the http client config will clear the client cache
-		HttpClientUtil.addInvalidationListener(cache::invalidateAll);
+		HttpClientUtil.addInvalidationListener(cacheWithAuth::invalidateAll);
+		HttpClientUtil.addInvalidationListener(cacheWithoutAuth::invalidateAll);
 	}
 
 	public void start() {
@@ -187,11 +199,9 @@ public class UpstreamUrlProvider {
 	};
 
 	/**
-	 * Returns the current URL for the upstream service, or an empty string if no
-	 * service is currently available.
+	 * Returns the current URL for the upstream service, or an empty string if no service is currently available.
 	 * <p>
-	 * <b>N.B. The caller of this method is responsible for guarding against
-	 * possible failure by checking the return value.</b>
+	 * <b>N.B. The caller of this method is responsible for guarding against possible failure by checking the return value.</b>
 	 * 
 	 * @return
 	 */
@@ -271,8 +281,7 @@ public class UpstreamUrlProvider {
 	}
 
 	/*
-	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This
-	 * pings the Datahub
+	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
 	 */
 	public synchronized void updateOnlineStatus() {
 
@@ -309,8 +318,7 @@ public class UpstreamUrlProvider {
 	}
 
 	/*
-	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This
-	 * pings the Datahub
+	 * Gets the Datahub URL from preferences and calls testUpstreamAvailability This pings the Datahub
 	 */
 	public synchronized OnlineState isUpstreamAvailable(@Nullable final Shell optionalShell) {
 
@@ -384,7 +392,8 @@ public class UpstreamUrlProvider {
 		}
 
 		final HttpGet pingRequest = new HttpGet(url + "/ping");
-		final CloseableHttpClient httpClient = cache.getUnchecked(URIUtils.extractHost(pingRequest.getURI()));
+		final var p = cacheWithoutAuth.getUnchecked(URIUtils.extractHost(pingRequest.getURI()));
+		final CloseableHttpClient httpClient = p.getFirst();
 		try (final var pingResponse = httpClient.execute(pingRequest)) {
 			final int reponseCode = pingResponse.getStatusLine().getStatusCode();
 			if (HttpClientUtil.isSuccessful(reponseCode)) {
@@ -479,10 +488,11 @@ public class UpstreamUrlProvider {
 		baseUrl = stripTrailingForwardSlash(baseUrl);
 		final URI url = new URI(baseUrl + INFORMATION_ENDPOINT);
 
-		final CloseableHttpClient client = cache.getUnchecked(URIUtils.extractHost(url));
-		if (client == null) {
+		final var p = cacheWithoutAuth.getUnchecked(URIUtils.extractHost(url));
+		if (p == null) {
 			return datahubInformation;
 		}
+		final var client = p.getFirst();
 		final HttpGet request = new HttpGet(url);
 		try (var response = client.execute(request)) {
 			final int statusCode = response.getStatusLine().getStatusCode();
@@ -500,28 +510,139 @@ public class UpstreamUrlProvider {
 		}
 	}
 
-	private final LoadingCache<HttpHost, CloseableHttpClient> cache = CacheBuilder.newBuilder() //
+	private final LoadingCache<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>> cacheWithoutAuth = CacheBuilder.newBuilder() //
 
-			.removalListener(new RemovalListener<HttpHost, CloseableHttpClient>() {
+			.removalListener(new RemovalListener<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>>() {
 				@Override
-				public void onRemoval(final RemovalNotification<HttpHost, CloseableHttpClient> notification) {
+				public void onRemoval(final RemovalNotification<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>> notification) {
 					try {
-						notification.getValue().close();
+						notification.getValue().getFirst().close();
 					} catch (final IOException e) {
 						e.printStackTrace();
 					}
 				}
-			}).build(new CacheLoader<HttpHost, CloseableHttpClient>() {
+			})
+			.build(new CacheLoader<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>>() {
 
 				@Override
-				public CloseableHttpClient load(final HttpHost baseUrl) throws Exception {
+				public Pair<CloseableHttpClient, BasicCookieStore> load(final HttpHost baseUrl) throws Exception {
 					final HttpClientBuilder builder = HttpClientUtil.createBasicHttpClient(baseUrl, false);
-					return builder.build();
+
+					final BasicCookieStore cookieStore = new BasicCookieStore();
+					builder.setDefaultCookieStore(cookieStore);
+
+					final CloseableHttpClient client = builder.build();
+
+					return Pair.of(client, cookieStore);
 				}
 
 			});
 
-	public <T extends HttpRequestBase> @Nullable Triple<CloseableHttpClient, T, HttpClientContext> makeRequest(@NonNull final String uriFragment, @NonNull final Function<URI, T> func) {
+	private final LoadingCache<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>> cacheWithAuth = CacheBuilder.newBuilder() //
+
+			.removalListener(new RemovalListener<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>>() {
+				@Override
+				public void onRemoval(final RemovalNotification<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>> notification) {
+					try {
+						notification.getValue().getFirst().close();
+					} catch (final IOException e) {
+						e.printStackTrace();
+					}
+				}
+			})
+			.build(new CacheLoader<HttpHost, Pair<CloseableHttpClient, BasicCookieStore>>() {
+
+				@Override
+				public Pair<CloseableHttpClient, BasicCookieStore> load(final HttpHost baseUrl) throws Exception {
+					final HttpClientBuilder builder = HttpClientUtil.createBasicHttpClient(baseUrl, false);
+
+					final BasicCookieStore cookieStore = new BasicCookieStore();
+					builder.setDefaultCookieStore(cookieStore);
+
+					// New Data Hubs may have CSRF tokens enabled.
+					// This requires mutating calls (i.e. POST or DELETE) to send the CSRF token in the header.
+					// The token could be stored in a cookie or the session state on the server.
+
+					// In either case, calling the /csrf endpoint will return a JSON object with the token to use and it may set the cookie.
+
+					final URI requestURI = new URI(baseUrl + "/csrf");
+					final HttpGet request = new HttpGet(requestURI);
+					// The endpoint may be protected, so add in auth tokens
+					authenticationManager.addAuthToRequest(request, cookieStore);
+					// If we used basic auth, then include the header for future requests.
+					builder.setDefaultHeaders(Lists.newArrayList(request.getAllHeaders()));
+
+					// Create an interceptor to add the CSRF token to all request used by the final http client.
+					final Header[] csrf = new Header[1];
+					builder.addInterceptorLast(new HttpRequestInterceptor() {
+
+						@Override
+						public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
+							// Add the CSRF token if available
+							if (csrf[0] != null) {
+								request.addHeader(csrf[0]);
+							}
+						}
+					});
+
+					// Build our client
+					final CloseableHttpClient client = builder.build();
+
+					// Issue our first request to lookup the token, if the endpoint is there.
+					// If the endpoint is not there, then this will fail and we can ignore.
+					try (var response = client.execute(request)) {
+						// We found the endpoint!
+						if (response.getStatusLine().getStatusCode() == 200) {
+							try {
+								final String value = EntityUtils.toString(response.getEntity());
+								final JSONObject jsonObject = (JSONObject) new JSONTokener(value).nextValue();
+								// This may be the XOR'd token. If the backend doesn't have the XOR'd part fully enabled, then the CSRF will fail.
+								// The alternative would be to grab the token from the cookie (if used) as this will not be XOR'd.
+								final String s = jsonObject.getString("token");
+								csrf[0] = new BasicHeader(jsonObject.getString("headerName"), s);
+							} catch (final Exception e) {
+								// Error parsing the CSRF body
+								e.printStackTrace();
+							}
+						}
+
+					}
+
+					return Pair.of(client, cookieStore);
+				}
+
+			});
+
+	/**
+	 * A small class to hold the {@link HttpClient} and the {@link BasicClientCookie} (as this cannot be accessed from the client).
+	 * 
+	 * @author Simon Goodall
+	 *
+	 * @param <T>
+	 */
+	public record HttpClientRecord<T extends HttpRequestBase> (CloseableHttpClient client, // The client
+			T request, // The constructed request object
+			BasicCookieStore cookieStore // The cookie store (e.g containing the session token or csrf tokens)
+	) {
+
+		public CloseableHttpResponse execute() throws IOException {
+			return client.execute(request);
+		}
+
+		public <U> @Nullable U execute(final ResponseHandler<U> responseHandler) throws IOException {
+			return execute(null, responseHandler);
+		}
+
+		public <U> @Nullable U execute(@Nullable final Consumer<T> requestCusomiser, final ResponseHandler<U> responseHandler) throws IOException {
+			if (requestCusomiser != null) {
+				requestCusomiser.accept(request);
+			}
+
+			return client.execute(request, responseHandler);
+		}
+	}
+
+	public <T extends HttpRequestBase> @Nullable HttpClientRecord<T> makeRequest(@NonNull final String uriFragment, @NonNull final Function<URI, T> func) {
 		final String baseUrlIfAvailable = getBaseUrlIfAvailable();
 
 		if (baseUrlIfAvailable.isEmpty()) {
@@ -529,12 +650,10 @@ public class UpstreamUrlProvider {
 		}
 		try {
 			final URI requestURI = new URI(baseUrlIfAvailable + uriFragment);
-			final CloseableHttpClient client = cache.getUnchecked(URIUtils.extractHost(requestURI));
-			if (client != null) {
+			final Pair<CloseableHttpClient, BasicCookieStore> p = cacheWithAuth.getUnchecked(URIUtils.extractHost(requestURI));
+			if (p != null) {
 				final T request = func.apply(requestURI);
-				final HttpClientContext ctx = new HttpClientContext();
-				authenticationManager.addAuthToRequest(request, ctx);
-				return Triple.of(client, request, ctx);
+				return new HttpClientRecord<>(p.getFirst(), request, p.getSecond());
 			}
 		} catch (final URISyntaxException e) {
 			return null;

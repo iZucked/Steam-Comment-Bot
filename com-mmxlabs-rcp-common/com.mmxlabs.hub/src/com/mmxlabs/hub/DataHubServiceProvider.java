@@ -142,10 +142,6 @@ public class DataHubServiceProvider {
 		return UserPermissionsService.INSTANCE;
 	}
 
-	public <T extends HttpRequestBase> @Nullable Triple<CloseableHttpClient, T, HttpClientContext> makeRequest(String urlPath, Function<URI, T> requestFactory) {
-		return UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
-	}
-
 	public <U> @Nullable U doGetRequest(String urlPath, ResponseHandler<U> responseHandler) throws IOException {
 		return doRequest(urlPath, HttpGet::new, responseHandler);
 	}
@@ -160,11 +156,8 @@ public class DataHubServiceProvider {
 		if (p == null) {
 			return null;
 		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var context = p.getThird();
 
-		return httpClient.execute(request, responseHandler, context);
+		return p.execute(responseHandler);
 	}
 
 	public void doDeleteRequest(String urlPath, CheckedConsumer<HttpResponse, IOException> responseHandler) throws IOException {
@@ -177,14 +170,10 @@ public class DataHubServiceProvider {
 		if (p == null) {
 			return;
 		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var ctx = p.getThird();
-
-		httpClient.execute(request, response -> {
+		p.execute(response -> {
 			responseHandler.accept(response);
 			return null;
-		}, ctx);
+		});
 	}
 
 	public <U> @Nullable U doPostRequest(String urlPath, Consumer<HttpPost> requestCusomiser, ResponseHandler<U> responseHandler) throws IOException {
@@ -193,14 +182,8 @@ public class DataHubServiceProvider {
 		if (p == null) {
 			return null;
 		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var ctx = p.getThird();
 
-		requestCusomiser.accept(request);
-
-		return httpClient.execute(request, responseHandler, ctx);
-
+		return p.execute(requestCusomiser, responseHandler);
 	}
 
 	public <T extends HttpRequestBase> boolean doGetRequestAsBoolean(String urlPath, ResponseHandler<Boolean> responseHandler) throws IOException {
@@ -209,11 +192,8 @@ public class DataHubServiceProvider {
 		if (p == null) {
 			return false;
 		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var ctx = p.getThird();
 
-		Boolean b = httpClient.execute(request, responseHandler, ctx);
+		Boolean b = p.execute(responseHandler);
 		if (b == null) {
 			return false;
 		}

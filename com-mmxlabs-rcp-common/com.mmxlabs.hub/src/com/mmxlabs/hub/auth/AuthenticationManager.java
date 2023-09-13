@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -77,13 +78,7 @@ public class AuthenticationManager {
 	public void logout(@Nullable final Shell shell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
 			oauthManager.logout(upstreamURL, shell);
-		} else {
-			basicAuthenticationManager.logout(upstreamURL, shell);
 		}
-	}
-
-	public void logoutAll(@Nullable final Shell shell) {
-		oauthManager.logout(upstreamURL, shell);
 		basicAuthenticationManager.logout(upstreamURL, shell);
 	}
 
@@ -108,9 +103,9 @@ public class AuthenticationManager {
 		}
 	}
 
-	public void addAuthToRequest(@NonNull final HttpRequestBase request, @NonNull final HttpClientContext ctx) {
+	public void addAuthToRequest(@NonNull final HttpRequestBase request, final @NonNull BasicCookieStore basicCookieStore) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			oauthManager.buildRequestWithToken(request, ctx);
+			oauthManager.buildRequestWithToken(request, basicCookieStore);
 		} else if (BASIC.equals(authenticationScheme) || forceBasicAuthentication.get()) {
 			basicAuthenticationManager.buildRequestWithBasicAuth(request);
 		} else {

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,17 +67,7 @@ public class UserPermissionsService implements IUserPermissionsService {
 
 	public synchronized void updateUserPermissions() throws IOException {
 
-		final var p = DataHubServiceProvider.getInstance().makeRequest(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT, HttpGet::new);
-		if (p == null) {
-			return;
-		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var ctx = p.getThird();
-
-		hubSupportsPermissions = true;
-
-		try (var response = httpClient.execute(request, ctx)) {
+		DataHubServiceProvider.getInstance().doGetRequest(UpstreamUrlProvider.USER_PERMISSIONS_ENDPOINT, response -> { 
 			int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				if (responseCode == 404) {
@@ -91,7 +80,8 @@ public class UserPermissionsService implements IUserPermissionsService {
 				userPermissions = new ObjectMapper().readValue(responseString, UserPermissions.class);
 				userPermissionsAreSet = true;
 			}
-		}
+			return null;
+		});
 	}
 
 	@Override

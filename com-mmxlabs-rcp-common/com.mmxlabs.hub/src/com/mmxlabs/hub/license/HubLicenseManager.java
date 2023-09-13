@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.IPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.hub.DataHubServiceProvider;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -50,48 +50,41 @@ public final class HubLicenseManager {
 
 		// try save response to file
 		final File licenseFile = new File(licenseFolderPath.toFile(), DATAHUB_LICENSE_KEYSTORE);
-
-		final var p = DataHubServiceProvider.getInstance().makeRequest(LICENSE_ENDPOINT, HttpGet::new);
+		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(LICENSE_ENDPOINT, HttpGet::new);
 		if (p == null) {
 			if (licenseFile.exists()) {
 				return licenseFile;
 			}
 			return null;
 		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var ctx = p.getThird();
-
-		try {
-			try (var response = httpClient.execute(request, ctx)) {
-				final int statusCode = response.getStatusLine().getStatusCode();
-				if (!HttpClientUtil.isSuccessful(statusCode)) {
-					if (statusCode == 401) {
-						LOG.error("insufficient permissions to retrieve license from DataHub");
-					} else if (statusCode == 404) {
-						LOG.error("there is currently no selected license on the DataHub");
-					} else {
-						LOG.error("unable to retrieve license from DataHub, unexpected code: " + response);
-					}
-
-					// 4xx codes generally mean the server responded properly but the user can't
-					// have a license. Maybe the license has been removed or the lingo permission
-					// has been revoked. Other error code (e.g. 5xx) may just be temporary failures
-					// such as a DataHub restart.
-					if (statusCode >= 400 && statusCode < 500) {
-						if (licenseFile.exists()) {
-							licenseFile.delete();
-						}
-					}
-
-					return null;
+		try (var response = p.execute()) {
+			final int statusCode = response.getStatusLine().getStatusCode();
+			if (!HttpClientUtil.isSuccessful(statusCode)) {
+				if (statusCode == 401) {
+					LOG.error("insufficient permissions to retrieve license from DataHub");
+				} else if (statusCode == 404) {
+					LOG.error("there is currently no selected license on the DataHub");
+				} else {
+					LOG.error("unable to retrieve license from DataHub, unexpected code: " + response);
 				}
 
-				try (FileOutputStream fos = new FileOutputStream(licenseFile)) {
-					response.getEntity().writeTo(fos);
+				// 4xx codes generally mean the server responded properly but the user can't
+				// have a license. Maybe the license has been removed or the lingo permission
+				// has been revoked. Other error code (e.g. 5xx) may just be temporary failures
+				// such as a DataHub restart.
+				if (statusCode >= 400 && statusCode < 500) {
+					if (licenseFile.exists()) {
+						licenseFile.delete();
+					}
 				}
-				return licenseFile;
+
+				return null;
 			}
+
+			try (FileOutputStream fos = new FileOutputStream(licenseFile)) {
+				response.getEntity().writeTo(fos);
+			}
+			return licenseFile;
 		} catch (final IOException e) {
 			LOG.error("Error downloading license: " + e.getMessage(), e);
 			if (licenseFile.exists()) {

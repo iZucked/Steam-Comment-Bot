@@ -62,18 +62,14 @@ public class OAuthManager extends AbstractAuthenticationManager {
 	/**
 	 * Create a request builder with Authorization header.
 	 */
-	public void buildRequestWithToken(final HttpRequestBase msg, final HttpClientContext ctx) {
+	public void buildRequestWithToken(final HttpRequestBase msg, final BasicCookieStore store) {
 		final Optional<String> token = retrieveFromSecurePreferences(COOKIE);
 		if (token.isPresent()) {
 			final String tkn = token.get();
-			final BasicCookieStore store = new BasicCookieStore();
 			final BasicClientCookie cookie = new BasicClientCookie("JSESSIONID", tkn.replace("JSESSIONID=", ""));
 			cookie.setDomain(msg.getURI().getHost());
 			cookie.setPath("/");
-
 			store.addCookie(cookie);
-			ctx.setCookieStore(store);
-			msg.addHeader("Cache-Control", "no-store, max-age=0");
 		}
 	}
 
@@ -113,8 +109,9 @@ public class OAuthManager extends AbstractAuthenticationManager {
 				return valid;
 			}
 			final HttpClientContext ctx = new HttpClientContext();
-
-			buildRequestWithToken(request, ctx);
+			final BasicCookieStore store = new BasicCookieStore();
+			buildRequestWithToken(request, store);
+			ctx.setCookieStore(store);
 
 			valid = httpClient.execute(request, response -> {
 				final int responseCode = response.getStatusLine().getStatusCode();
