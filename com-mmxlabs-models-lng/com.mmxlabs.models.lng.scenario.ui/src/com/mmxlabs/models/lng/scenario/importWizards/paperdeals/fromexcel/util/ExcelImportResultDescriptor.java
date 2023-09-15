@@ -54,7 +54,7 @@ public class ExcelImportResultDescriptor {
 	}
 
 	public int getRowNumber() {
-		return rowNumber;
+		return rowNumber + 1;
 	}
 
 	public int getColumnNumber() {
