@@ -40,8 +40,7 @@ public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
 				paperDeal = getPaperDeal(reader, i, sStrategies, entity, messages);
 			}
 			catch(Exception e) {
-				e.printStackTrace();
-				continue;
+				messages.add(new ExcelImportResultDescriptor(MessageType.ERROR, MessageContext.PAPER_DEAL, String.format("Unknown error (%s) on row %d", e.getMessage(), i)));
 			}
 			
 			

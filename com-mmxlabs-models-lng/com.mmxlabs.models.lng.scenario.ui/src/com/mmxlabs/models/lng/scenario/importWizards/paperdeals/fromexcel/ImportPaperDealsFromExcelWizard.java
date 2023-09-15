@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.importWizards.ImportCSVFilesPage;
@@ -36,6 +37,7 @@ import com.mmxlabs.models.lng.scenario.importWizards.ImportWarningsPage;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaulPaperDealExcelExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaultCommodityCurveImporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaultInstrumentCreator;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelReader;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ICommodityCurveImporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
@@ -108,16 +110,18 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1")) {
+				final CompoundCommand instrumentCommand = new CompoundCommand("Create instruments");
 				final CompoundCommand curvesCommand = new CompoundCommand("Import commodity curves from excel");
 				final CompoundCommand paperDealCommand = new CompoundCommand("Import paper deals from excel");
-
+				
+				// Create MTM Curves
 				final IRunnableWithProgress createCurvesOpertaion = new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) {
 						if (curveImporter != null) {
 							final List<CommodityCurve> createdCurves = curveImporter.getCommodityCurves(reader, monitor, messages);
 							final List<CommodityCurve> existingCurves = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getCommodityCurves();
-
+							
 							if (createdCurves != null && !createdCurves.isEmpty()) {
 								// Check if any curves already exist
 								for (CommodityCurve curve : createdCurves) {
@@ -145,7 +149,27 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 				if (!curvesCommand.isEmpty()) 
 					scenarioDataProvider.getCommandStack().execute(curvesCommand);
 				
-
+				// Create instruments if not present
+				String[] instrumentNames = {"JKM_SWAP", "BRENT_FUTURES", "DATED_BRENT_SWAP", "TFU_SWAP", "TTF_SWAP"};
+				List<SettleStrategy> newInstruments = new ArrayList<>();
+				for(String instument : instrumentNames) {
+					// Check if not present
+					if(ScenarioModelUtil.getPricingModel(scenarioDataProvider).getSettleStrategies().stream().noneMatch(ss -> ss.getName().equals(instument))) {
+						newInstruments.add(DefaultInstrumentCreator.getInstrument(instument));
+					}
+				}
+				
+				if(!newInstruments.isEmpty()) {
+					instrumentCommand.append(
+							AddCommand.create(scenarioDataProvider.getEditingDomain(), ScenarioModelUtil.getPricingModel(scenarioDataProvider), 
+									PricingPackage.Literals.PRICING_MODEL__SETTLE_STRATEGIES, newInstruments)
+							);
+					scenarioDataProvider.getCommandStack().execute(instrumentCommand);
+				}
+				
+				
+				
+				// Create paper deals
 				final IRunnableWithProgress createPaperDealsOpertaion = new IRunnableWithProgress() {
 					@Override
 					public void run(IProgressMonitor monitor) {
