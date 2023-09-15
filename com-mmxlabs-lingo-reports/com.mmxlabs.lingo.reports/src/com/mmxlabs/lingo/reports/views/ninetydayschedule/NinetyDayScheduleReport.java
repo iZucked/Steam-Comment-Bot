@@ -32,7 +32,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -63,6 +62,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private NinetyDayDrawableEventTooltipProvider drawableEventTooltipProvider;
 	private NinetyDayScheduleEventStylingProvider eventStylingProvider;
 	private NinetyDayDrawableEventLabelProvider eventLabelProvider;
+	private NinetyDayScheduleChartRowsDataProvider scheduleChartRowsDataProvider;
 	
 	private NinetyDayScheduleModelUpdater modelUpdater;
 	
@@ -119,7 +119,8 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		this.memento = memento;
 		this.settings = new NinetyDayScheduleChartSettings();
 
-		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager, settings);
+		this.scheduleChartRowsDataProvider = new NinetyDayScheduleChartRowsDataProvider();
+		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager, settings, this.scheduleChartRowsDataProvider);
 		this.sortingProvider = new NinetyDayScheduleChartSortingProvider();
 		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
@@ -139,7 +140,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider), eventProvider, modelUpdater, settings);
+		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider, scheduleChartRowsDataProvider), eventProvider, modelUpdater, settings);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		

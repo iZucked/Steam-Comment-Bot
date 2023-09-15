@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -26,9 +25,13 @@ import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharter
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterOutEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenIdleEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenJourneyEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LateDischargeEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LateLoadEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LoadEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.MaintenanceEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.NinetyDayPlaceholderEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -49,55 +52,55 @@ import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvide
 
 public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventProvider {
 	@Override
-	public @Nullable DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent s, Rectangle b, ScheduleCanvasState canvasState) {
-		if (!(s.getData() instanceof Event)) {
-			return null;
-		}
-		Event e = (Event) s.getData();
+	public @Nullable DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent scheduleEvent, Rectangle bounds, ScheduleCanvasState canvasState) {
 		boolean noneSelected = canvasState.getSelectedEvents().isEmpty();
-
-		if (e instanceof final Journey j) {
-			return j.isLaden() ? new LadenJourneyEvent(s, b, noneSelected) : new BallastJourneyEvent(s, b, noneSelected);
-		} else if (e instanceof Idle i) {
-			return i.isLaden() ? new LadenIdleEvent(s, b, noneSelected) : new BalastIdleEvent(s, b, noneSelected);
-		} else if (e instanceof SlotVisit sv) {
-			if (sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0) {
-				return sv.getSlotAllocation().getSlot() instanceof LoadSlot ? new LateLoadEvent(s, b, noneSelected) : new LateDischargeEvent(s, b, noneSelected);
-			}
-			return sv.getSlotAllocation().getSlot() instanceof LoadSlot ? new LoadEvent(s, b, noneSelected) : new DischargeEvent(s, b, noneSelected);
-		} else if (e instanceof VesselEventVisit vev) {
-			final VesselEvent ve = vev.getVesselEvent();
-			if (ve instanceof com.mmxlabs.models.lng.cargo.DryDockEvent) {
-				return new DryDockEvent(s, b, noneSelected);
-			} else if (ve instanceof com.mmxlabs.models.lng.cargo.CharterOutEvent) {
-				return new CharterOutEvent(s, b, noneSelected);
-			} else if (ve instanceof com.mmxlabs.models.lng.cargo.MaintenanceEvent) {
-				return new MaintenanceEvent(s, b, noneSelected);
-			} else if (ve instanceof com.mmxlabs.models.lng.cargo.CharterLengthEvent) {
-				return new CharterLengthEvent(s, b, noneSelected);
-			}
-		} else if (e instanceof GeneratedCharterOut) {
-			return new GeneratedCharterOutEvent(s, b, noneSelected);
-		} else if (e instanceof com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent) {
-			return new GeneratedCharterLengthEvent(s, b, noneSelected);
+		final Object data = scheduleEvent.getData();
+		
+		if (data instanceof final PositionsSequenceElement positionsSequenceElement) {
+			return PositionsSeqenceElements.createDrawableScheduleEventFromPositionSequence(scheduleEvent, bounds, noneSelected, positionsSequenceElement);
 		}
-		return new NinetyDayPlaceholderEvent(s, b, noneSelected);
+		if (data instanceof final Event event) {
+			if (event instanceof final Journey j) {
+				return j.isLaden() ? new LadenJourneyEvent(scheduleEvent, bounds, noneSelected) : new BallastJourneyEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof Idle i) {
+				return i.isLaden() ? new LadenIdleEvent(scheduleEvent, bounds, noneSelected) : new BalastIdleEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof SlotVisit sv) {
+				if (sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0) {
+					return sv.getSlotAllocation().getSlot() instanceof LoadSlot ? new LateLoadEvent(scheduleEvent, bounds, noneSelected) : new LateDischargeEvent(scheduleEvent, bounds, noneSelected);
+				}
+				return sv.getSlotAllocation().getSlot() instanceof LoadSlot ? new LoadEvent(scheduleEvent, bounds, noneSelected) : new DischargeEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof VesselEventVisit vev) {
+				final VesselEvent ve = vev.getVesselEvent();
+				if (ve instanceof com.mmxlabs.models.lng.cargo.DryDockEvent) {
+					return new DryDockEvent(scheduleEvent, bounds, noneSelected);
+				} else if (ve instanceof com.mmxlabs.models.lng.cargo.CharterOutEvent) {
+					return new CharterOutEvent(scheduleEvent, bounds, noneSelected);
+				} else if (ve instanceof com.mmxlabs.models.lng.cargo.MaintenanceEvent) {
+					return new MaintenanceEvent(scheduleEvent, bounds, noneSelected);
+				} else if (ve instanceof com.mmxlabs.models.lng.cargo.CharterLengthEvent) {
+					return new CharterLengthEvent(scheduleEvent, bounds, noneSelected);
+				}
+			} else if (event instanceof GeneratedCharterOut) {
+				return new GeneratedCharterOutEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent) {
+				return new GeneratedCharterLengthEvent(scheduleEvent, bounds, noneSelected);
+			}
+			return new NinetyDayPlaceholderEvent(scheduleEvent, bounds, noneSelected);
+		}
+		return null;
 	}
 
 	@Override
 	public DrawableScheduleEventAnnotation createDrawableScheduleEventAnnotation(ScheduleEventAnnotation sea, DrawableScheduleEvent dse, ToIntFunction<LocalDateTime> timeToXCoord, ScheduleCanvasState canvasState, IScheduleChartSettings settings) {
-		if (!(sea.getData() instanceof NinetyDayScheduleEventAnnotationType)) {
-			return null;
+		if (sea.getData() instanceof final NinetyDayScheduleEventAnnotationType type) {
+			return switch (type) {
+			case SLOT_WINDOW -> new NinetyDaySlotWindowAnnotation(sea, dse, settings, timeToXCoord);
+			case LATENESS_BAR -> new NinetyDaySlotVisitLatenessAnnotation(sea, dse, settings, timeToXCoord);
+			case CANAL_JOURNEY -> new NinetyDayCanalJourneyAnnotation(sea, dse, settings, timeToXCoord);
+			default -> throw new IllegalArgumentException("Unexpected value: " + sea.getData());
+			};
 		}
-		
-		final NinetyDayScheduleEventAnnotationType type = (NinetyDayScheduleEventAnnotationType) sea.getData();
-		return switch (type) {
-		case SLOT_WINDOW -> new NinetyDaySlotWindowAnnotation(sea, dse, settings, timeToXCoord);
-		case LATENESS_BAR -> new NinetyDaySlotVisitLatenessAnnotation(sea, dse, settings, timeToXCoord);
-		case CANAL_JOURNEY -> new NinetyDayCanalJourneyAnnotation(sea, dse, settings, timeToXCoord);
-		default ->
-			throw new IllegalArgumentException("Unexpected value: " + sea.getData());
-		};
+		return null;
 	}
 
 	@Override

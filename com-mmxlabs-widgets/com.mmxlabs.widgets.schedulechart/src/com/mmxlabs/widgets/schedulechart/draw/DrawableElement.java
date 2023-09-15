@@ -45,4 +45,17 @@ public abstract class DrawableElement {
 	}
 
 	protected abstract List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver);
+	
+	/**
+	 * Quick factory method for Empty drawable Element.
+	 * @return
+	 */
+	public static DrawableElement drawableElementWithoutAnyDrawing() {
+		return new DrawableElement() {
+			@Override
+			protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver) {
+				return List.of();
+			}
+		};
+	}
 }

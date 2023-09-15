@@ -27,15 +27,17 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	private final IScheduleChartSettings settings;
 	private final IDrawableScheduleEventProvider drawableEventProvider;
 
+	private final boolean isNoSpacer;
 	private final ScheduleChartRow scr;
 	private final ScheduleCanvasState canvasState;
 	private final ScheduleTimeScale sts;
 	private final int rowNum;
 	private List<DrawableScheduleEvent> lastDrawnEvents = new ArrayList<>();
 	private List<DrawableScheduleEventAnnotation> lastDrawnAnnotations = new ArrayList<>();
+	private int actualHeight = -1;
 
 	public DrawableScheduleChartRow(final ScheduleChartRow scr, final ScheduleCanvasState canvasState, final int rowNum, ScheduleTimeScale sts, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider,
-			IScheduleChartSettings settings) {
+			IScheduleChartSettings settings, final boolean noSpacer) {
 		this.scr = scr;
 		this.canvasState = canvasState;
 		this.sts = sts;
@@ -44,16 +46,20 @@ public class DrawableScheduleChartRow extends DrawableElement {
 		this.eventStylingProvider = eventStylingProvider;
 		this.settings = settings;
 		this.drawableEventProvider = drawableEventProvider;
+		this.isNoSpacer = noSpacer;
+		this.actualHeight = noSpacer ? settings.getRowHeight() - 2 * settings.getSpacerWidth() : settings.getRowHeight();
+	}
+	
+	public int getActualHeight() {
+		return actualHeight ;
 	}
 
 	@Override
 	protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver) {
 		List<BasicDrawableElement> res = new ArrayList<>();
 
-		final int rowHeight = settings.getRowHeight();
-
 		// Add background
-		res.add(BasicDrawableElements.Rectangle.withBounds(bounds.x, bounds.y, bounds.width, rowHeight).bgColour(rowNum % 2 == 0 ? null : colourScheme.getRowBgColour(rowNum))
+		res.add(BasicDrawableElements.Rectangle.withBounds(bounds.x, bounds.y, bounds.width, actualHeight).bgColour(rowNum % 2 == 0 ? null : colourScheme.getRowBgColour(rowNum))
 				.borderColour(colourScheme.getGridStrokeColour()).alpha(160).create());
 		
 		lastDrawnEvents.clear();
@@ -86,7 +92,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	}
 	
 	private DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent se, Rectangle bounds) {
-		final int spacer = settings.getSpacerWidth();
+		final int spacer = isNoSpacer ? 0 : settings.getSpacerWidth();
 		final int eventHeight = settings.getEventHeight();
 
 		int startX = sts.getXForDateTime(se.getStart());

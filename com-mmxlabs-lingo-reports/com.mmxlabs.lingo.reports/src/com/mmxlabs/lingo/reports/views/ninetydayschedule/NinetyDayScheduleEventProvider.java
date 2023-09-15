@@ -20,12 +20,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -48,60 +48,68 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 import com.mmxlabs.widgets.schedulechart.EditableScheduleEventAnnotation;
+import com.mmxlabs.widgets.schedulechart.IScheduleChartRowsDataProvider;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
+import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 
 public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<ScheduleModel> {
-	
+
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 	private final EquivalentsManager equivalentsManager;
 	private final IScheduleChartSettings settings;
+	private final IScheduleChartRowsDataProvider scheduleCharRowsDataProvider;
 
-	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, IScheduleChartSettings settings) {
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, IScheduleChartSettings settings, IScheduleChartRowsDataProvider scheduleCharRowsDataProvider) {
 		this.equivalentsManager = equivalentsManager;
 		this.settings = settings;
+		this.scheduleCharRowsDataProvider = scheduleCharRowsDataProvider;
 	}
 
 	@Override
 	public List<ScheduleEvent> getEvents(ScheduleModel input) {
-		Schedule schedule = input.getSchedule();
-		
+		final Schedule schedule = input.getSchedule();
+
 		// contains Sequence, CombinedSequence and PositionsSequence
-		List<Object> sequences = getSequences(schedule);
-		List<Event> events = new ArrayList<>();
-		
-		for (Object o: sequences) {
-			if (o instanceof Sequence s) {
-				collectEvents(events, s);
-			} else if (o instanceof CombinedSequence cs) {
-				collectEvents(events, cs);
-			} else if (o instanceof PositionsSequence ps) {
-				collectEvents(events, ps);
+		final List<Object> sequences = getSequences(schedule);
+		final List<Event> events = new ArrayList<>();
+		final List<ScheduleEvent> positionSequenceScheduleEvents = new ArrayList<>();
+
+		for (final Object sequenceObject : sequences) {
+			if (sequenceObject instanceof Sequence sequence) {
+				collectEvents(events, sequence);
+			} else if (sequenceObject instanceof CombinedSequence combinedSequence) {
+				collectEvents(events, combinedSequence);
+			} else if (sequenceObject instanceof PositionsSequence positionSequence) {
+				collectEvents(positionSequenceScheduleEvents, positionSequence);
 			}
 		}
-		
+
 		events.stream().forEach(e -> equivalentsManager.collectEquivalents(e, this::generateEquivalents));
-		return events.stream().map(this::makeScheduleEvent).collect(Collectors.toList());
+		final List<ScheduleEvent> scheduleEvents = events.stream().map(this::makeScheduleEvent).collect(Collectors.toList());
+		scheduleEvents.addAll(positionSequenceScheduleEvents);
+		return scheduleEvents;
 	}
 
 	@Override
 	public ScheduleChartRowKey getKeyForEvent(ScheduleEvent event) {
-		if (event.getData() instanceof Event e) {
+		if (event.getData() instanceof final PositionsSequenceElement positionsSequenceElement) {
+			return new ScheduleChartRowKey(positionsSequenceElement.isBuyRow() ? NinetyDayScheduleChartRowKeys.BUY_ROW : NinetyDayScheduleChartRowKeys.SELL_ROW,
+					positionsSequenceElement.getPositionsSequence());
+		}
+		if (event.getData() instanceof final Event e) {
 			var name = vesselAssignmentFormatter.render(e);
-			if (name == null) {
-				int i = 0;
-			}
-			return new ScheduleChartRowKey(name == null ? "" : name,  e.getSequence());
+			return new ScheduleChartRowKey(name == null ? "" : name, e.getSequence());
 		}
 		return null;
 	}
-	
+
 	private List<Object> getSequences(Schedule schedule) {
 		List<Object> res = new ArrayList<>();
-		
+
 		final EList<Sequence> sequences = schedule.getSequences();
 
 		// find multiple charters
@@ -113,7 +121,8 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				.collect(Collectors.toList());
 
 		while (!unassigned.isEmpty()) {
-			@NonNull final Sequence thisSequence = unassigned.get(0);
+			@NonNull
+			final Sequence thisSequence = unassigned.get(0);
 			final List<Sequence> matches = unassigned.stream().filter(s -> s.getVesselCharter().getVessel().equals(thisSequence.getVesselCharter().getVessel())).toList();
 			chartersMap.put(thisSequence.getVesselCharter().getVessel(), matches);
 			unassigned.removeAll(matches);
@@ -139,12 +148,12 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				res.add(cs);
 			}
 		}
-		
+
 		addPositionsSequences(res, schedule);
 
 		return res;
 	}
-	
+
 	private void addPositionsSequences(List<Object> res, Schedule schedule) {
 		final Collection<Slot<?>> nonShippedSlots = new HashSet<>();
 		for (final NonShippedSequence seq : schedule.getNonShippedSequences()) {
@@ -155,7 +164,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				}
 			}
 		}
-		
+
 		final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore;
 		if (!nonShippedSlots.isEmpty()) {
 			slotVisitsToIgnore = schedule.getCargoAllocations().stream() //
@@ -170,15 +179,15 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 
 		res.addAll(PositionsSequence.makeBuySellSequences(schedule, slotVisitsToIgnore, ""));
 	}
-	
+
 	private void collectEvents(List<Event> res, Sequence s) {
 		final VesselCharter va = s.getVesselCharter();
 		if (va != null && va.getStartAfter() != null) {
-				final CharterAvailableFromEvent evt = ScheduleFactory.eINSTANCE.createCharterAvailableFromEvent();
-				evt.setLinkedSequence(s);
-				evt.setStart(va.getStartAfterAsDateTime());
-				evt.setEnd(evt.getStart().plusDays(1));
-				res.add(evt);
+			final CharterAvailableFromEvent evt = ScheduleFactory.eINSTANCE.createCharterAvailableFromEvent();
+			evt.setLinkedSequence(s);
+			evt.setStart(va.getStartAfterAsDateTime());
+			evt.setEnd(evt.getStart().plusDays(1));
+			res.add(evt);
 		}
 
 		for (final Event event : s.getEvents()) {
@@ -194,15 +203,20 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 			res.add(evt);
 		}
 	}
-	
+
 	private void collectEvents(List<Event> res, CombinedSequence cs) {
-		for (final Sequence s: cs.getSequences()) {
+		for (final Sequence s : cs.getSequences()) {
 			collectEvents(res, s);
 		}
 	}
-	
-	private void collectEvents(List<Event> events, PositionsSequence ps) {
-		// TODO: fill this
+
+	private void collectEvents(final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence) {
+		for (final Object element : positionSequence.getElements()) {
+			final LocalDateTime startTime = PositionsSeqenceElements.getEventTime(element);
+			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), List.of());
+			scheduleEvent.forceVisible();
+			scheduleEvents.add(scheduleEvent);
+		}
 	}
 
 	private ScheduleEvent makeScheduleEvent(Event event) {
@@ -210,7 +224,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 		se.setVisible(true);
 		return se;
 	}
-	
+
 	private List<ScheduleEventAnnotation> makeEventAnnotations(Event event) {
 		List<ScheduleEventAnnotation> res = new ArrayList<>();
 		if (event instanceof final SlotVisit sv && sv.getSlotAllocation().getSlot() != null) {
@@ -232,7 +246,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 			final var slotWindowAnnotation = new EditableScheduleEventAnnotation(List.of(windowStart, windowEnd), NinetyDayScheduleEventAnnotationType.SLOT_WINDOW);
 			slotWindowAnnotation.setVisible(true);
 			res.add(slotWindowAnnotation);
-			
+
 			PortVisitLateness pvl = sv.getLateness();
 			if (pvl != null && pvl.getLatenessInHours() > 0) {
 				LocalDateTime start = sv.getStart().toLocalDateTime();
@@ -249,11 +263,11 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				res.add(latenessAnnotation);
 			}
 		} else if (event instanceof Journey j && j.getCanalJourneyEvent() != null) {
-			final var canalJourneyAnnotation = new ScheduleEventAnnotation(List.of(j.getCanalDateTime()),  NinetyDayScheduleEventAnnotationType.CANAL_JOURNEY);
+			final var canalJourneyAnnotation = new ScheduleEventAnnotation(List.of(j.getCanalDateTime()), NinetyDayScheduleEventAnnotationType.CANAL_JOURNEY);
 			canalJourneyAnnotation.setVisible(true);
 			res.add(canalJourneyAnnotation);
 		}
-		
+
 		return res;
 	}
 
@@ -288,7 +302,18 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 		}
 
 		return Collections.emptyList();
-		
+
+	}
+
+	@Override
+	public List<ScheduleChartRow> classifyEventsIntoRows(final List<ScheduleEvent> events) {
+		final List<ScheduleChartRow> classified = IScheduleEventProvider.super.classifyEventsIntoRows(events);
+		return classified;
+	}
+
+	@Override
+	public IScheduleChartRowsDataProvider getRowsDataProvider() {
+		return scheduleCharRowsDataProvider;
 	}
 
 }

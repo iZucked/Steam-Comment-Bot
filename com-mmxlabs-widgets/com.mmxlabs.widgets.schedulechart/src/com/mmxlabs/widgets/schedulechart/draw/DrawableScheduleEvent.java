@@ -19,6 +19,7 @@ public abstract class DrawableScheduleEvent extends DrawableElement {
 	private final ScheduleEvent se;
 	private ScheduleEventSelectionState selectionState;
 	
+	
 	protected DrawableScheduleEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
 		this.se = se;
 		this.selectionState = noneSelected ? ScheduleEventSelectionState.SELECTED : se.getSelectionState();
@@ -62,5 +63,9 @@ public abstract class DrawableScheduleEvent extends DrawableElement {
 	
 	public Color getLabelTextColour() {
 		return ScheduleChartColourUtils.calculateTextColourForBestContrast(getBackgroundColour());
+	}
+
+	public ScheduleEventSelectionState getSelectionState() {
+		return selectionState;
 	}
 }

@@ -20,5 +20,4 @@ public interface IScheduleChartContentBoundsProvider {
 		 int max = timeScale.getXBoundsFromEvent(getRightmostEvent()).getSecond();
 		 return Pair.of(min, max);
 	}
-	
 }

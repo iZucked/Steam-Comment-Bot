@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -61,6 +62,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final IDrawableScheduleEventLabelProvider eventLabelProvider;
 	private final IDrawableScheduleEventProvider drawableEventProvider;
 	private final IDrawableScheduleEventTooltipProvider drawableTooltipProvider;
+	private final IScheduleChartRowsDataProvider scheduleChartRowsDataProvider;
 	
 	private final List<IScheduleChartEventListener> listeners = new ArrayList<>();
 
@@ -79,6 +81,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.eventStylingProvider = null;
 		this.drawableTooltipProvider = providers.drawableTooltipProvider();
 		this.eventLabelProvider = providers.labelProvider();
+		this.scheduleChartRowsDataProvider = providers.scheduleChartSizesProvider();
 
 		this.timeScale = new ScheduleTimeScale(canvasState, this, settings);
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, settings);
@@ -196,7 +199,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	}
 	
 	private int calculateRowHeaderWidth(DrawerQueryResolver resolver) {
-		final var systemFont = Display.getDefault().getSystemFont();
+		final Font systemFont = Display.getDefault().getSystemFont();
 		final int maxTextWidth = canvasState.getRows().stream().map(r -> r.getName() == null ? 0 : resolver.findSizeOfText(r.getName(), systemFont).x).max(Integer::compare).orElse(0);
 		final int maxTextHeaderWidth = maxTextWidth + settings.getRowHeaderLeftPadding() + settings.getRowHeaderRightPadding();
 		return Math.max(settings.getMinimumRowHeaderWidth(), maxTextHeaderWidth) + (canvasState.getScheduleChartMode() == ScheduleChartMode.FILTER ? settings.filterModeCheckboxColumnWidth() : 0);
@@ -205,20 +208,21 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private List<DrawableScheduleChartRow> getDrawableRows(DrawerQueryResolver r) {
 		List<DrawableScheduleChartRow> res = new ArrayList<>();
 		final Rectangle mainBounds = canvasState.getMainBounds();
-		final int height = settings.getRowHeight();
+//		final int height = settings.getRowHeight();
 		final int startY = mainBounds.y + drawableTimeScale.getTotalHeaderHeight();
 
 		int i = 0;
 		int y = startY;
 		for (final ScheduleChartRow scr : getSortedShownRows()) {
-			DrawableScheduleChartRow drawableRow = new DrawableScheduleChartRow(scr, canvasState, i, timeScale, drawableEventProvider, eventStylingProvider, settings);
-			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, height));
+			final DrawableScheduleChartRow drawableRow =  //
+					new DrawableScheduleChartRow(scr, canvasState, i, timeScale, drawableEventProvider, eventStylingProvider, settings, scheduleChartRowsDataProvider.isNoSpacerRow(scr));
+			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, drawableRow.getActualHeight()));
 			if (canvasState.getScheduleChartMode() == ScheduleChartMode.FILTER && canvasState.getHiddenRowKeys().contains(scr.getKey())) {
 				drawableRow.setColourFilter(ScheduleChartColourUtils::getHiddenElementsFilter);
 			}
 			res.add(drawableRow);
 			i++;
-			y += height;
+			y += drawableRow.getActualHeight();
 		}
 		return res;
 	}
@@ -226,12 +230,12 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private List<DrawableScheduleChartRowHeader> getDrawableRowHeaders(List<DrawableScheduleChartRow> drawnRows, int rowHeaderWidth, DrawerQueryResolver r) {
 		List<DrawableScheduleChartRowHeader> res = new ArrayList<>();
 		int y = canvasState.getMainBounds().y + drawableTimeScale.getTotalHeaderHeight();
-		int height = settings.getRowHeight();
-		for (final DrawableScheduleChartRow dscr : drawnRows) {
-			final DrawableScheduleChartRowHeader rowHeader = new DrawableScheduleChartRowHeader(this, dscr, filterSupport, getScheduleChartMode(), settings);
-			rowHeader.setBounds(new Rectangle(canvasState.getOriginalBounds().x, y, rowHeaderWidth, height));
+		for (final DrawableScheduleChartRow drawableScheduleChartRow : drawnRows) {
+			final int currentRowHeight = drawableScheduleChartRow.getActualHeight();
+			final DrawableScheduleChartRowHeader rowHeader = new DrawableScheduleChartRowHeader(this, drawableScheduleChartRow, filterSupport, getScheduleChartMode(), settings);
+			rowHeader.setBounds(new Rectangle(canvasState.getOriginalBounds().x, y, rowHeaderWidth, currentRowHeight));
 			res.add(rowHeader);
-			y += height;
+			y += currentRowHeight;
 		}
 		return res;
 	}

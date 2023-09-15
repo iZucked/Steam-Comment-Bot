@@ -4,9 +4,12 @@
  */
 package com.mmxlabs.widgets.schedulechart.providers;
 
+import com.mmxlabs.widgets.schedulechart.IScheduleChartRowsDataProvider;
+
 public record ScheduleChartProviders(
 		IDrawableScheduleEventLabelProvider labelProvider,
 		IDrawableScheduleEventProvider drawableEventProvider,
 		IDrawableScheduleEventTooltipProvider drawableTooltipProvider,
-		IScheduleChartSortingProvider sortingProvider
+		IScheduleChartSortingProvider sortingProvider,
+		IScheduleChartRowsDataProvider scheduleChartSizesProvider
 ) {}

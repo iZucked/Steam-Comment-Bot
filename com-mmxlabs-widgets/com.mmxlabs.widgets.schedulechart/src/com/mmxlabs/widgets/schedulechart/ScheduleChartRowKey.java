@@ -26,7 +26,7 @@ public class ScheduleChartRowKey {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(data);
+		return Objects.hash(name);
 	}
 
 	@Override

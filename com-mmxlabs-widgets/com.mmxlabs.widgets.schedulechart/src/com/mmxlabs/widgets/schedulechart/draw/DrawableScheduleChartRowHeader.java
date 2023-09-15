@@ -61,7 +61,12 @@ public class DrawableScheduleChartRowHeader extends DrawableElement {
 		int textBoxStart = bounds.x + (isFilterMode ? checkBoxWidth : 0);
 		String name = dscr.getScheduleChartRow().getName();
 		int heightOfText = queryResolver.findSizeOfText(name, Display.getDefault().getSystemFont()).y;
-		res.add(BasicDrawableElements.Text.from(textBoxStart, bounds.y + (bounds.height + 1) / 2 - heightOfText / 2, name).padding(new Padding(settings.getRowHeaderLeftPadding(), settings.getRowHeaderRightPadding(), 0, 0)).textColour(colourScheme.getRowHeaderTextColour(dscr.getRowNum())).create());
+		res.add(BasicDrawableElements.Text //
+				.from(textBoxStart, bounds.y + (bounds.height + 1) / 2 - heightOfText / 2, name) //
+				.padding(new Padding(settings.getRowHeaderLeftPadding(), settings.getRowHeaderRightPadding(), 0, 0)) //
+				.textColour(colourScheme.getRowHeaderTextColour(dscr.getRowNum())) //
+				.create() //
+		);
 		return res;
 	}
 	

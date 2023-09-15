@@ -10,10 +10,12 @@ public class ScheduleChartRow {
 
 	private final List<ScheduleEvent> events;
 	private final ScheduleChartRowKey key;
+	private final ScheduleChartRowPriorityType rowType;
 	
-	public ScheduleChartRow(final ScheduleChartRowKey key, final List<ScheduleEvent> events) {
+	public ScheduleChartRow(final ScheduleChartRowKey key, final List<ScheduleEvent> events, final ScheduleChartRowPriorityType rowType) {
 		this.key = key;
 		this.events = events;
+		this.rowType = rowType;
 	}
 	
 	public List<ScheduleEvent> getEvents() {
@@ -26,5 +28,9 @@ public class ScheduleChartRow {
 
 	public String getName() {
 		return key.getName();
+	}
+
+	public ScheduleChartRowPriorityType getRowType() {
+		return rowType;
 	}
 }
