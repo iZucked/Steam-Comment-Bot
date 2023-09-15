@@ -79,10 +79,12 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressHttpEntityWrapper;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.lingo.app.updater.auth.IDataHubUpdateAuthenticationProvider;
 import com.mmxlabs.lingo.app.updater.auth.IUpdateAuthenticationProvider;
 import com.mmxlabs.lingo.app.updater.internal.LiNGOUpdaterDebugContants;
 import com.mmxlabs.lingo.app.updater.model.UpdateVersion;
@@ -153,6 +155,7 @@ public class LiNGOUpdater {
 					}
 				}
 			});
+			
 		}
 	}
 
@@ -430,6 +433,23 @@ public class LiNGOUpdater {
 						withAuthHeader(url, request);
 					} else if (uri.getHost().contains("updates.minimaxlabs.com")) {
 						withAuthHeader(url, request);
+					} else {
+						String datahubURL = UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable();
+						if (datahubURL != null && url.toString().startsWith(datahubURL)) {
+							ServiceHelper.withOptionalServiceConsumer(IDataHubUpdateAuthenticationProvider.class, p -> {
+								if (p != null) {
+									try {
+										final Pair<String, String> header = p.provideAuthenticationHeader(url);
+										if (header != null) {
+											request.addHeader(header.getFirst(), header.getSecond());
+										}
+									} catch (final Exception exception) {
+										// Error generating the token
+										exception.printStackTrace();
+									}
+								}
+							});
+						}
 					}
 				} catch (final URISyntaxException e) {
 					throw new IOException(e);
