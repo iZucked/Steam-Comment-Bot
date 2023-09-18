@@ -1,6 +1,7 @@
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -29,7 +30,13 @@ public class ImportPaperDealsErrorPage extends WizardPage {
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (visible) {
-			viewer.setInput(ImportPaperDealsFromExcelWizard.messages);
+			List<ExcelImportResultDescriptor> messages = ((ImportPaperDealsFromExcelWizard) getWizard()).getMessages();
+			Optional<ExcelImportResultDescriptor> message = messages.stream().filter(m -> m.getType().equals(MessageType.INFO)).findFirst();
+			
+			if(message.isPresent())
+				setDescription(message.get().getMessage());
+			
+			viewer.setInput(messages);
 			viewer.refresh();
 			int errors = viewer.getTable().getItemCount();
 			setMessage(errors == 0 ? null : errors + " problems during import");
