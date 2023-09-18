@@ -90,7 +90,7 @@ public class ImportPaperDealsErrorPage extends WizardPage {
 				if(message == null)
 					return "";
 				
-				return message.getRowNumber() == -1 ? "" : "" + ((ExcelImportResultDescriptor) element).getRowNumber();
+				return message.getRowNumber() == -1 ? "" : "" + message.getRowNumber();
 			}
 		});
 
@@ -102,7 +102,7 @@ public class ImportPaperDealsErrorPage extends WizardPage {
 				if(message == null)
 					return "";
 								
-				return message.getColumnNumber() == -1 ? "" : "" + ((ExcelImportResultDescriptor) element).getColumnNumber();
+				return message.getColumnNumber() == -1 ? "" : "" + message.getColumnNumber();
 			}
 		});
 
