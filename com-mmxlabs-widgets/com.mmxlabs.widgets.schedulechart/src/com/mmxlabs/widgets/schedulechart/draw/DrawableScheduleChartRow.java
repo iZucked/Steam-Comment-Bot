@@ -58,14 +58,20 @@ public class DrawableScheduleChartRow extends DrawableElement {
 		
 		lastDrawnEvents.clear();
 		lastDrawnAnnotations.clear();
-		for (ScheduleEvent se : scr.getEvents()) {
+		for (final ScheduleEvent se : scr.getEvents()) {
 			DrawableScheduleEvent drawableEvent = createDrawableScheduleEvent(se, bounds);
-			if (drawableEvent == null) continue;
+			if (drawableEvent == null) {
+				continue;
+			}
 			lastDrawnEvents.add(drawableEvent);
-			if (!settings.showAnnotations()) continue;
+			if (!settings.showAnnotations()) {
+				continue;
+			}
 			for (ScheduleEventAnnotation sea : se.getAnnotations()) {
 				DrawableScheduleEventAnnotation drawableAnnotation = drawableEventProvider.createDrawableScheduleEventAnnotation(sea, drawableEvent, sts::getXForDateTime, canvasState, settings);
-				if (drawableAnnotation == null) continue;
+				if (drawableAnnotation == null) {
+					continue;
+				}
 				lastDrawnAnnotations.add(drawableAnnotation);
 			}
 		}

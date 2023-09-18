@@ -86,7 +86,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 		internalDataMap.clear();
 		events.forEach(e -> internalDataMap.put(e.getData(), e));
 
-		final List<ScheduleChartRow> newRows = eventProvider.classifyEventsIntoRows(events);
+		final List<ScheduleChartRow> newRows = eventProvider.classifyEventsIntoRows(events).stream().filter(r -> !r.getName().isBlank()).toList();
 		canvas.addAll(newRows);
 		
 		if (oldInput == null) {

@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.views.ninetydayschedule;
+package com.mmxlabs.lingo.reports.views.ninetydayschedule.events;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
@@ -6,21 +6,20 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DischargeEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
 
-public class LateDischargeEvent extends DischargeEvent {
+public class LateLoadEvent extends LoadEvent {
 
-	public LateDischargeEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
+	public LateLoadEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
 		super(se, bounds, noneSelected);
 	}
-
+	
 	@Override
 	public int getBorderThickness(ScheduleEventSelectionState s) {
 		return super.getBorderThickness(s) + 3;
 	}
-	
+
 	@Override
 	public boolean getIsBorderInner() {
 		return true;
@@ -28,7 +27,7 @@ public class LateDischargeEvent extends DischargeEvent {
 
 	@Override
 	protected Color getBorderColour() {
-		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Discharge, ColourElements.Background);
+		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Late_Load, ColourElements.Background);
 	}
 
 }
