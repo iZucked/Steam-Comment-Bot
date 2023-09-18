@@ -2,7 +2,6 @@ package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util;
 
 import java.util.Map;
 
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.pricing.InstrumentPeriod;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
