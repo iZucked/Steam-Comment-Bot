@@ -69,8 +69,11 @@ public class ImportPaperDealsErrorPage extends WizardPage {
 		addViewerColumn("Context", new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				ExcelImportResultDescriptor message = ((ExcelImportResultDescriptor) element);
+				ExcelImportResultDescriptor message  = getElement(element);
 				
+				if(message == null)
+					return "";
+								
 				if(message.getContext().equals(MessageContext.PAPER_DEAL)){
 					return "" + MessageContext.PAPER_DEAL + " : " + message.getPaperDealName();
 				}
@@ -82,21 +85,36 @@ public class ImportPaperDealsErrorPage extends WizardPage {
 		addViewerColumn("Row", new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((ExcelImportResultDescriptor) element).getRowNumber() == -1 ? "" : "" + ((ExcelImportResultDescriptor) element).getRowNumber();
+				ExcelImportResultDescriptor message  = getElement(element);
+				
+				if(message == null)
+					return "";
+				
+				return message.getRowNumber() == -1 ? "" : "" + ((ExcelImportResultDescriptor) element).getRowNumber();
 			}
 		});
 
 		addViewerColumn("Column", new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((ExcelImportResultDescriptor) element).getColumnNumber() == -1 ? "" : "" + ((ExcelImportResultDescriptor) element).getColumnNumber();
+				ExcelImportResultDescriptor message  = getElement(element);
+				
+				if(message == null)
+					return "";
+								
+				return message.getColumnNumber() == -1 ? "" : "" + ((ExcelImportResultDescriptor) element).getColumnNumber();
 			}
 		});
 
 		addViewerColumn("Problem", new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((ExcelImportResultDescriptor) element).getMessage();
+				ExcelImportResultDescriptor message  = getElement(element);
+				
+				if(message == null)
+					return "";
+								
+				return message.getMessage();
 			}
 		});
 
@@ -111,10 +129,16 @@ public class ImportPaperDealsErrorPage extends WizardPage {
 
 			@Override
 			public Object[] getElements(Object inputElement) {
-				return ((List<ExcelImportResultDescriptor>) inputElement).stream().filter(message -> message.getType().equals(MessageType.ERROR)).toArray();
+				return (((List<ExcelImportResultDescriptor>) inputElement).stream().filter(message -> message.getType().equals(MessageType.ERROR))).toArray();
 			}
 		});
 
 		setControl(viewer.getControl());
+	}
+	
+	private ExcelImportResultDescriptor getElement(final Object element) {
+		if(element != null && element instanceof ExcelImportResultDescriptor realElement )
+			return realElement;
+		return null;
 	}
 }
