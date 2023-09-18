@@ -74,6 +74,7 @@ public final class KnownFeatures {
 	 * Paper deals and hedging
 	 */
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
+	public static final String FEATURE_PAPER_DEALS_IMPORT_WITH_EXCEL = "features:paperdeals-excel-import";
 	// Hedges
 	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
 	public static final String FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START = "features:re-hedge-cutoff-at-prompt-start";

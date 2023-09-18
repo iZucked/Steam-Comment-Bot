@@ -328,7 +328,7 @@
  				<visibleWhen
                      checkEnabled="false">
                   <test
-                        args="features:paperdeals"
+                        args="features:paperdeals,features:paperdeals-excel-import"
                         forcePluginActivation="true"
                         property="com.mmxlabs.license.features.enablement">
                   </test>
