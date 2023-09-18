@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
+package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel;
 
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.ui.IWorkbenchWindow;

@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
+package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,9 @@ import com.google.inject.Injector;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportWizard;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.PaperDealsImportAction;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ICommodityCurveImporter;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ICommodityCurveImporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.IPaperDealExporter;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.ImportAction.ImportHooksProvider;

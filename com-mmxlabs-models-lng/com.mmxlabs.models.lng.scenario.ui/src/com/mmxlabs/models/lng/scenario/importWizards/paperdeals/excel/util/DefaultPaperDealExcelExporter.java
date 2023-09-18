@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util;
+package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +13,12 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageContext;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageType;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageContext;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 
-public class DefaulPaperDealExcelExporter implements IPaperDealExporter{
+public class DefaultPaperDealExcelExporter implements IPaperDealExporter{
 	
 	@Override
 	public Pair<List<BuyPaperDeal>, List<SellPaperDeal>> getPaperDeals(final ExcelReader reader, final LNGScenarioModel lngScenarioModel, final List<ExcelImportResultDescriptor> messages, IProgressMonitor monitor) {

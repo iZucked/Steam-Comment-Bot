@@ -529,7 +529,7 @@
                name="Import paper deals from CSV">
          </command>
          <command
-               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.ImportPaperDealsFromExcelHandler"
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.ImportPaperDealsFromExcelHandler"
                id="com.mmxlabs.models.lng.scenario.import.wizards.paperdeals.fromexcel"
                name="Import paper deals from Excel">
          </command>

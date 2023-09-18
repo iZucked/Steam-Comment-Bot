@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util;
+package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

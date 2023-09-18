@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
+package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +12,9 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageContext;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageType;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageContext;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageType;
 
 public class ImportPaperDealsErrorPage extends WizardPage {
 	

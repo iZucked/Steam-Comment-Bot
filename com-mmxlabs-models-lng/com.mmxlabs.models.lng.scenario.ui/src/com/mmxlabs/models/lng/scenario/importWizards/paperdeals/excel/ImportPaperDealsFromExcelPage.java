@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel;
+package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,15 +41,15 @@ import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
 import com.mmxlabs.models.lng.scenario.importWizards.AbstractImportPage;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaulPaperDealExcelExporter;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaultCommodityCurveImporter;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.DefaultInstrumentCreator;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageContext;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelImportResultDescriptor.MessageType;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ExcelReader;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.ICommodityCurveImporter;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.fromexcel.util.IPaperDealExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.DefaultCommodityCurveImporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.DefaultInstrumentCreator;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.DefaultPaperDealExcelExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelReader;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ICommodityCurveImporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.IPaperDealExporter;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageContext;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider;
@@ -175,7 +175,7 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 			final ExcelReader reader = new ExcelReader(fis, getSelectedWorksheetName());
 			final Iterator<IPaperDealExporter> iterPaperDealExporters = wizard.paperDealExporters.iterator();
 			final Iterator<ICommodityCurveImporter> itercommodityCurveImporters = wizard.commodityCurveImporters.iterator();
-			final IPaperDealExporter paperDealExporter = iterPaperDealExporters.hasNext() ? iterPaperDealExporters.next() : new DefaulPaperDealExcelExporter();
+			final IPaperDealExporter paperDealExporter = iterPaperDealExporters.hasNext() ? iterPaperDealExporters.next() : new DefaultPaperDealExcelExporter();
 			final ICommodityCurveImporter curveImporter = itercommodityCurveImporters.hasNext() ? itercommodityCurveImporters.next() : new DefaultCommodityCurveImporter();
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(wizard.scenarioInstance);
