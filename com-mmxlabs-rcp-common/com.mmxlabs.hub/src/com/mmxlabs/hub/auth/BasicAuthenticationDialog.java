@@ -21,11 +21,7 @@ public class BasicAuthenticationDialog extends Dialog {
 
 	private Text passwordField;
 
-	private char[] password;
-
 	private Text nameField;
-
-	private String username;
 
 	private String url;
 
@@ -91,19 +87,8 @@ public class BasicAuthenticationDialog extends Dialog {
 
 			return;
 		}
-
-		username = nameField.getText();
-		password = passwordField.getTextChars();
-
+ 
 		super.okPressed();
-	}
-
-	public char[] getPassword() {
-		return password;
-	}
-
-	public String getUsername() {
-		return username;
 	}
 
 	public void addDisposeListener(Runnable hook) {
