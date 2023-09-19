@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.ui.validation.gui;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -14,6 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -29,6 +34,8 @@ public class ValidationStatusDialog extends Dialog {
 	private final IStatus status;
 
 	private final boolean showCancelButton;
+	
+	private int countdownSeconds = 5;
 
 	public IStatus getStatus() {
 		return status;
@@ -98,6 +105,8 @@ public class ValidationStatusDialog extends Dialog {
 			}
 		});
 
+		startCountdown();
+		
 		return composite;
 	}
 
@@ -108,5 +117,36 @@ public class ValidationStatusDialog extends Dialog {
 		if (showCancelButton) {
 			createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
 		}
+		
+		
 	}
+	
+	private void startCountdown() {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        Runnable countdownTask = () -> {
+            countdownSeconds--;
+
+            // Check if the dialog is still open before updating the label
+            if (!getShell().isDisposed()) {
+                // Update the countdown label
+                Display.getDefault().asyncExec(() -> {
+                    if (!getShell().isDisposed()) {
+                        getButton(IDialogConstants.OK_ID).setText("OK - " + countdownSeconds + " seconds");
+                    }
+                });
+            }
+
+            if (countdownSeconds <= 0) {
+                // Close the dialog
+                Display.getDefault().asyncExec(() -> {
+                    if (!getShell().isDisposed()) {
+                        close();
+                    }
+                });
+            }
+        };
+
+        // Schedule the task to run every second
+        executor.scheduleAtFixedRate(countdownTask, 1, 1, TimeUnit.SECONDS);
+    }
 }
