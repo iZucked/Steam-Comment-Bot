@@ -51,7 +51,6 @@ import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
@@ -63,7 +62,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -794,14 +792,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	private Composite createTreeViewer(final Composite parent, final Option option, final IStatus status) {
 		Composite area = toolkit.createComposite(parent, SWT.NONE);
 		
-		area.setLayout(new GridLayout(1, true));
+		area.setLayout(new GridLayout(1, false));
 		area.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).create());
 		
 		final TreeViewer viewer = new TreeViewer(area, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 
 		{
 			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
+			// Make text scrolling 
 			gdViewer.heightHint = 200;
+			gdViewer.widthHint = 450; 
 			viewer.getControl().setLayoutData(gdViewer);
 		}
 
@@ -810,6 +810,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		viewer.setContentProvider(new GroupedValidationStatusContentProvider());
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
+		
+		
 
 		viewer.setInput(status);
 		viewer.expandAll();
