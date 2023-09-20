@@ -105,7 +105,7 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				//
 				.withRow() //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICE_EXPRESSION) //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE, "Arrival Date") //
 				.makeRow() //
 				//
 				.withRow() //
@@ -114,7 +114,7 @@ public class TransferRecordDetailComposite extends DefaultDetailComposite implem
 				.makeRow() //
 				//
 				.withRow() //
-				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE) //
+				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__CARGO_RELEASE_DATE, "Confirmation Date") //
 				.withFeature(TransfersPackage.Literals.TRANSFER_RECORD__INCOTERM) //
 				.makeRow() //
 				//
