@@ -584,7 +584,7 @@ public class OptimisationTestRunner {
 	private static void evaluateValueMatrixWithOrder(final IScenarioDataProvider scenarioDataProvider, final @NonNull SwapValueMatrixModel valueMatrixModel,
 			final @NonNull Iterable<Pair<Integer, Integer>> order, final boolean sequential) {
 		
-		UserSettings userSettings = OptimisationHelper.getEvaluationSettings(scenarioDataProvider.getTypedScenario(LNGScenarioModel.class), false, true);
+		UserSettings userSettings = OptimisationHelper.getEvaluationSettings(scenarioDataProvider, false, true);
 		
 		if (userSettings == null) {
 			userSettings = ParametersFactory.eINSTANCE.createUserSettings();

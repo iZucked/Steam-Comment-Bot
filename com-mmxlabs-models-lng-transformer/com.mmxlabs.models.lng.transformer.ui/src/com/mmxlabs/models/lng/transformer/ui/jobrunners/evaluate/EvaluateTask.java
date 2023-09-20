@@ -53,9 +53,9 @@ public class EvaluateTask {
 
 				final UserSettings userSettings;
 				if (useDialogs) {
-					userSettings = RunnerHelper.syncExecFunc(display -> OptimisationHelper.getEvaluationSettings(sdp.getTypedScenario(LNGScenarioModel.class), useDialogs, true));
+					userSettings = RunnerHelper.syncExecFunc(display -> OptimisationHelper.getEvaluationSettings(sdp, useDialogs, true));
 				} else {
-					userSettings = OptimisationHelper.getEvaluationSettings(sdp.getTypedScenario(LNGScenarioModel.class), useDialogs, true);
+					userSettings = OptimisationHelper.getEvaluationSettings(sdp, useDialogs, true);
 				}
 
 				if (userSettings == null) {

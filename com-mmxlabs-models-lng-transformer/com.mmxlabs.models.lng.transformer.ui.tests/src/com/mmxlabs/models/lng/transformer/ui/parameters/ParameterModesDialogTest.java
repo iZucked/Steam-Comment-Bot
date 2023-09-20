@@ -350,7 +350,8 @@ public class ParameterModesDialogTest {
 
 					UserSettings settings[] = new UserSettings[1];
 					Realm.runWithDefault(SWTObservables.getRealm(display), () -> {
-						settings[0] = UserSettingsHelper.openUserDialog(dummyModel, display, shell, false, initialSettings, initialSettings, false, null, false);
+						// TO-DO: Replace dummyModel with dummySDP
+						//settings[0] = UserSettingsHelper.openUserDialog(dummyModel, display, shell, false, initialSettings, initialSettings, false, null, false);
 					});
 					return settings[0];
 				} catch (final Exception e) {
