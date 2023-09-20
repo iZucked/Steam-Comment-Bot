@@ -62,7 +62,7 @@ public class ActionablePlanTask {
 		final boolean applySettingToScenario = true;
 		return sdp -> {
 			final boolean useDialogs = System.getProperty("lingo.suppress.dialogs") == null;
-
+			
 			final ActionablePlanSettings settings;
 			{
 
@@ -75,9 +75,9 @@ public class ActionablePlanTask {
 				final NameProvider np = new NameProvider("Action Plan", existingNames);
 				final UserSettings userSettings;
 				if (useDialogs) {
-					userSettings = RunnerHelper.syncExecFunc(display -> UserSettingsHelper.promptForUserSettings(sdp.getTypedScenario(LNGScenarioModel.class), false, useDialogs, false, np, null));
+					userSettings = RunnerHelper.syncExecFunc(display -> UserSettingsHelper.promptForUserSettings(sdp, false, useDialogs, false, np, null));
 				} else {
-					userSettings = UserSettingsHelper.promptForUserSettings(sdp.getTypedScenario(LNGScenarioModel.class), false, useDialogs, false, np, null);
+					userSettings = UserSettingsHelper.promptForUserSettings(sdp, false, useDialogs, false, np, null);
 				}
 
 				if (userSettings == null) {
