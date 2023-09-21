@@ -433,7 +433,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 			break;
 		case Tree:
-			IStatus status = getStatus(option.scenarioProvider, true, null, Collections.emptySet(), true);
+			IStatus status = getStatus(option.scenarioProvider, null, true, true, Collections.emptySet());
 			option.control = createTreeViewer(parent, option, status);
 	
 			break;
@@ -789,37 +789,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	}
 	
-	private Composite createTreeViewer(final Composite parent, final Option option, final IStatus status) {
-		Composite area = toolkit.createComposite(parent, SWT.NONE);
-		
-		area.setLayout(new GridLayout(1, false));
-		area.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).create());
-		
-		final TreeViewer viewer = new TreeViewer(area, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
-
-		{
-			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
-			// Make text scrolling 
-			gdViewer.heightHint = 200;
-			gdViewer.widthHint = 450; 
-			viewer.getControl().setLayoutData(gdViewer);
-		}
-
-		viewer.getTree().setLinesVisible(true);
-
-		viewer.setContentProvider(new GroupedValidationStatusContentProvider());
-		viewer.setLabelProvider(new ValidationStatusLabelProvider());
-		viewer.setComparator(new ValidationStatusComparator());
-		
-		
-
-		viewer.setInput(status);
-		viewer.expandAll();
-		
-		return area;
-	}
-	
-	public IStatus getStatus(final IScenarioDataProvider scenarioDataProvider, final boolean relaxedValidation, @Nullable EObject extraTarget,  Set<String> extraCategories, final boolean optimising) {
+	private IStatus getStatus(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, final boolean optimising, final boolean relaxedValidation, Set<String> extraCategories) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -851,6 +821,36 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		
 		return status;
 		
+	}
+	
+	private Composite createTreeViewer(final Composite parent, final Option option, final IStatus status) {
+		Composite area = toolkit.createComposite(parent, SWT.NONE);
+		
+		area.setLayout(new GridLayout(1, false));
+		area.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).create());
+		
+		final TreeViewer viewer = new TreeViewer(area, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
+
+		{
+			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
+			// Make text scrolling 
+			gdViewer.heightHint = 100;
+			gdViewer.widthHint = 450; 
+			viewer.getControl().setLayoutData(gdViewer);
+		}
+
+		viewer.getTree().setLinesVisible(true);
+
+		viewer.setContentProvider(new GroupedValidationStatusContentProvider());
+		viewer.setLabelProvider(new ValidationStatusLabelProvider());
+		viewer.setComparator(new ValidationStatusComparator());
+		
+		
+
+		viewer.setInput(status);
+		viewer.expandAll();
+		
+		return area;
 	}
 	
 

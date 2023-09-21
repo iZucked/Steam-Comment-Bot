@@ -270,6 +270,10 @@ public final class UserSettingsHelper {
 		if (nameProvider != null) {
 			nameProvider.nameSuggestion = dialog.getNameSuggestion();
 		}
+		
+		// Stop validation errors dialog from showing up
+		System.setProperty("lingo.suppress.validation.dialog", "true");
+		
 		return copy;
 	}
 
