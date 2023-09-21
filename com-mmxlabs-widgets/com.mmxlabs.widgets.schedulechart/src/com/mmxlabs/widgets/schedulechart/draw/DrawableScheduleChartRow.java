@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.widgets.schedulechart.draw;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.swt.graphics.Rectangle;
 
@@ -65,6 +67,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 		lastDrawnEvents.clear();
 		lastDrawnAnnotations.clear();
 		for (final ScheduleEvent se : scr.getEvents()) {
+			if (!isWithinBounds(se, bounds)) continue;
 			DrawableScheduleEvent drawableEvent = createDrawableScheduleEvent(se, bounds);
 			if (drawableEvent == null) {
 				continue;
@@ -91,6 +94,22 @@ public class DrawableScheduleChartRow extends DrawableElement {
 		return res;
 	}
 	
+	private boolean isWithinBounds(ScheduleEvent se, Rectangle rowBounds) {
+		int minX = rowBounds.x;
+		int maxX = rowBounds.x + rowBounds.width;
+		boolean isEventWithinBounds = sts.getXForDateTime(se.getEnd()) >= minX || sts.getXForDateTime(se.getStart()) <= maxX;
+		return isEventWithinBounds || se.getAnnotations().stream().anyMatch(sea -> isAnnotationWithinBounds(sea, rowBounds));
+	}
+	
+	private boolean isAnnotationWithinBounds(ScheduleEventAnnotation sea, Rectangle rowBounds) {
+		int minX = rowBounds.x;
+		int maxX = rowBounds.x + rowBounds.width;
+		if (sea.getDates().isEmpty()) return true;
+		LocalDateTime minDate = sea.getDates().stream().min(Comparator.naturalOrder()).get();
+		LocalDateTime maxDate = sea.getDates().stream().min(Comparator.naturalOrder()).get();
+		return sts.getXForDateTime(maxDate) >= minX || sts.getXForDateTime(minDate) <= maxX;
+	}
+
 	private DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent se, Rectangle bounds) {
 		final int spacer = isNoSpacer ? 0 : settings.getSpacerWidth();
 		final int eventHeight = settings.getEventHeight();

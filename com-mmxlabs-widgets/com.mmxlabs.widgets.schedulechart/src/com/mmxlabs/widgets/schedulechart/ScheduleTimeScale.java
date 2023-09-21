@@ -215,14 +215,14 @@ public class ScheduleTimeScale {
 			r = getXForDateTime(xEndDate);
 			
 			deltaZoom *= 2;
-		} while (r < maximumX == startDirection && !(unitWidths.zoomLevel().isMaxZoom() || unitWidths.zoomLevel().isMinZoom()));
+		} while (r < maximumX == startDirection && !unitWidths.zoomLevel().isMinOrMax());
 		
 		// switch direction and take increasingly small jumps towards maximum x
 		deltaZoom /= -2;
 		boolean direction = !startDirection;
 		boolean oscillating = false;
 		int[] prev = new int[2];
-		while (Math.abs(r - maximumX) > unitWidths.dayWidth() && !(oscillating && r < maximumX)) {
+		while (Math.abs(r - maximumX) > unitWidths.dayWidth() && !(oscillating && r < maximumX) && !unitWidths.zoomLevel().isMinOrMax()) {
 			internalZoomBy(leftAnchor, deltaZoom, deltaZoom > 0);
 			r = getXForDateTime(xEndDate);
 			

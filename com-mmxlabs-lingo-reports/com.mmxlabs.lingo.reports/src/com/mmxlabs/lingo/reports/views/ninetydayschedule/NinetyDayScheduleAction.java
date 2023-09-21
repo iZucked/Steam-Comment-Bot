@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Menu;
 public abstract class NinetyDayScheduleAction extends Action implements IMenuCreator {
 
 	protected final NinetyDayScheduleReport parent;
-	private Menu lastMenu = null;
+	protected Menu lastMenu = null;
 
 	protected NinetyDayScheduleAction(String name, int type, NinetyDayScheduleReport parent) {
 		super(name, type);

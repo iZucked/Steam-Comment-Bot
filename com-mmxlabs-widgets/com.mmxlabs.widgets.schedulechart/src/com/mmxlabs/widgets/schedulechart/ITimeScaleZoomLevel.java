@@ -16,6 +16,10 @@ public interface ITimeScaleZoomLevel {
 	boolean isMaxZoom();
 
 	boolean isMinZoom();
+	
+	default boolean isMinOrMax() {
+		return isMinZoom() || isMaxZoom();
+	}
 
 	TimeScaleView getView();
 

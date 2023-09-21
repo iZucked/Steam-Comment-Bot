@@ -41,6 +41,9 @@ public class NinetyDayScheduleFilterMenuAction extends NinetyDayScheduleAction {
 		canvas.setScheduleChartMode(canvas.getScheduleChartMode() == ScheduleChartMode.FILTER ? preToggleMode : ScheduleChartMode.FILTER);
 		if (temp != ScheduleChartMode.FILTER) {
 			preToggleMode = temp;
+			setChecked(true);
+		} else {
+			setChecked(false);
 		}
 		canvas.redraw();
 	}
