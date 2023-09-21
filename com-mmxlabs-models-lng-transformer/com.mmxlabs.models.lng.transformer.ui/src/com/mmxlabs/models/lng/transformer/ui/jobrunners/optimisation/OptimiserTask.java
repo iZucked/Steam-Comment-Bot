@@ -46,7 +46,7 @@ public class OptimiserTask {
 			final boolean relaxedValidation = "Period Scenario".equals(scenarioName);
 			final EObject extraTarget = null;
 			final boolean optimising = true;
-			final boolean displayErrors = System.getProperty("lingo.suppress.dialogs") == null;
+			final boolean displayErrors = System.getProperty("lingo.suppress.dialogs") == null && System.getProperty("lingo.suppress.validation.dialog") == null;
 			final Set<String> extraCategories = Collections.emptySet();
 			return OptimisationHelper.validateScenario(sdp, extraTarget, optimising, displayErrors, relaxedValidation, extraCategories);
 		};
