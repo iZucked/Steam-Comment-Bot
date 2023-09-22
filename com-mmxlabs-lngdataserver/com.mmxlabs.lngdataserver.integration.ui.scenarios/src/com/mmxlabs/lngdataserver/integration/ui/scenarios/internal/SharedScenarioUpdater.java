@@ -209,6 +209,7 @@ public class SharedScenarioUpdater {
 						// Something went wrong - reset lastModified to trigger another refresh
 						lastModified = Instant.EPOCH;
 						// Failed!
+						System.out.println("Failed to download teams scenario file");
 						return;
 					}
 				} catch (final Exception e) {
@@ -421,7 +422,7 @@ public class SharedScenarioUpdater {
 
 		// Defer the update thread start to the task executor so the task created in the
 		// #update calls at the of the method do not clash.
-		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(() -> taskExecutor.submit(() -> updateThread.start()));
+		WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> taskExecutor.submit(() -> updateThread.start()));
 	}
 
 	/**
