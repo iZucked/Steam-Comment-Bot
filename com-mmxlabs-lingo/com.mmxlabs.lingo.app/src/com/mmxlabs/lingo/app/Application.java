@@ -508,10 +508,4 @@ public class Application implements IApplication {
 			}
 		});
 	}
-
-	public static void main(final String[] args) {
-		final String str = "jar:file:/D:/builds/v/LiNGO/workspace/updates/6.7.1.RELEASE.zip!/LiNGO";
-		System.out.println(str.matches("jar:.*!/LiNGO"));
-
-	}
 }
