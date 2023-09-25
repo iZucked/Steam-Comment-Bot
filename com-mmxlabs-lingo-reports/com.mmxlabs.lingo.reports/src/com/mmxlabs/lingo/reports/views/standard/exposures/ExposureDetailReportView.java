@@ -160,9 +160,12 @@ public class ExposureDetailReportView extends ViewPart {
 
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-				List<Object> selected = (selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
+				List<Object> selected = (selection == null) ? //
+						Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
 				selected = selected.stream().filter(
-						s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDealAllocation || s instanceof PaperDeal)
+						s -> s instanceof Slot || s instanceof SlotAllocation //
+						|| s instanceof Cargo || s instanceof CargoAllocation //
+						|| s instanceof PaperDealAllocation || s instanceof PaperDeal)
 						.toList();
 				//
 				if (selected.isEmpty()) {
@@ -172,12 +175,15 @@ public class ExposureDetailReportView extends ViewPart {
 					return true;
 				}
 				if (element instanceof SlotAllocation slotAllocation) {
-					return selected.contains(element) || selected.contains(slotAllocation.getSlot()) || selected.contains(slotAllocation.getCargoAllocation());
+					return selected.contains(element) //
+							|| selected.contains(slotAllocation.getSlot()) //
+							|| selected.contains(slotAllocation.getCargoAllocation());
 
 				} else if (element instanceof PaperDeal paperDeal) {
 					return selected.contains(paperDeal);
 				} else if (element instanceof PaperDealAllocation paperDealAllocation) {
-					return selected.contains(paperDealAllocation) || selected.contains(paperDealAllocation.getPaperDeal());
+					return selected.contains(paperDealAllocation) //
+							|| selected.contains(paperDealAllocation.getPaperDeal());
 				}
 				return true;
 			}
@@ -348,7 +354,7 @@ public class ExposureDetailReportView extends ViewPart {
 
 			final Runnable r = () -> {
 
-				final List<EObject> slotAllocations = new LinkedList<>();
+				final List<EObject> allocations = new LinkedList<>();
 				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 				if (pinned != null) {
 
@@ -356,8 +362,8 @@ public class ExposureDetailReportView extends ViewPart {
 					if (scheduleModel != null) {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (schedule != null) {
-							schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
-							schedule.getPaperDealAllocations().forEach(slotAllocations::add);
+							schedule.getCargoAllocations().forEach(ca -> allocations.addAll(ca.getSlotAllocations()));
+							schedule.getPaperDealAllocations().forEach(allocations::add);
 						}
 					}
 				}
@@ -367,14 +373,13 @@ public class ExposureDetailReportView extends ViewPart {
 					if (scheduleModel != null) {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (schedule != null) {
-							schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
-							schedule.getPaperDealAllocations().forEach(slotAllocations::add);
+							schedule.getCargoAllocations().forEach(ca -> allocations.addAll(ca.getSlotAllocations()));
+							schedule.getPaperDealAllocations().forEach(allocations::add);
 						}
 					}
 				}
 
-				ViewerHelper.setInput(viewer, true, slotAllocations);
-			
+				ViewerHelper.setInput(viewer, true, allocations);
 				
 			};
 
