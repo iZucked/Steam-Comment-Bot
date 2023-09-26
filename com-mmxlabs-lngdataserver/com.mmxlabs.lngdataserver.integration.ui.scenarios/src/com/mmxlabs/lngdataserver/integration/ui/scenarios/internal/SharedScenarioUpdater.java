@@ -274,7 +274,7 @@ public class SharedScenarioUpdater {
 		}
 	}
 
-	private boolean downloadScenario(final String uuid, final File f) throws Exception {
+	private boolean downloadScenario(final String uuid, final File f) {
 		final boolean[] ret = new boolean[1];
 		final Job background = new Job("Download shared team scenario") {
 
@@ -422,7 +422,7 @@ public class SharedScenarioUpdater {
 
 		// Defer the update thread start to the task executor so the task created in the
 		// #update calls at the of the method do not clash.
-		WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> taskExecutor.submit(() -> updateThread.start()));
+		WellKnownTriggers.WORKBENCH_POST_STARTUP.delayUntilTriggered(() -> taskExecutor.submit(() -> updateThread.start()));
 	}
 
 	/**

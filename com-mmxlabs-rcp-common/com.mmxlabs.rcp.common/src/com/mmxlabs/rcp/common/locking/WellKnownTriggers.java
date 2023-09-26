@@ -19,4 +19,9 @@ public final class WellKnownTriggers {
 	 * A trigger point used to delay e.g. scenario services and hub data downloaders to wait until the re-encryption process completes
 	 */
 	public static final SingleUseTrigger WORKSPACE_DATA_ENCRYPTION_CHECK = new SingleUseTrigger();
+	
+	/*
+	 * A trigger point used to schedule jobs after the job manager resumes execution of jobs
+	 */
+	public static final SingleUseTrigger WORKBENCH_POST_STARTUP = new SingleUseTrigger();
 }

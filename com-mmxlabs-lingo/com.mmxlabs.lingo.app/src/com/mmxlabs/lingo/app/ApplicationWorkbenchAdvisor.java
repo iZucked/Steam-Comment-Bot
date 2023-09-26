@@ -25,6 +25,7 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import com.mmxlabs.lingo.app.internal.Activator;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
@@ -78,9 +79,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	@Override
 	public void postStartup() {
-
+		
 		// Resume background jobs after we startup
 		Job.getJobManager().resume();
+		
+		WellKnownTriggers.WORKBENCH_POST_STARTUP.fireTrigger();
 	}
 
 	@Override

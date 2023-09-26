@@ -198,7 +198,9 @@ public class BaseCaseScenarioUpdater {
 						parent.getElements().add(instance);
 						baseCaseVersionsProviderService.setBaseCase(instance);
 					}
-					onSuccess.run();
+					if(onSuccess != null) {
+						onSuccess.run();
+					}
 				});
 			} else {
 				if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
@@ -270,7 +272,6 @@ public class BaseCaseScenarioUpdater {
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
-
 		return ret[0];
 	}
 
@@ -362,7 +363,7 @@ public class BaseCaseScenarioUpdater {
 			}
 
 		};
-		WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(updateThread::start);
+		WellKnownTriggers.WORKBENCH_POST_STARTUP.delayUntilTriggered(updateThread::start);
 	}
 
 	/**
