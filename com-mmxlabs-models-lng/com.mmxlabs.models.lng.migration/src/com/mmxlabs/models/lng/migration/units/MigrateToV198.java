@@ -84,7 +84,7 @@ public class MigrateToV198 extends AbstractMigrationUnit {
 				final EClass fuelEmissionReference = MetamodelUtils.getEClass(fleetPackage, "FuelEmissionReference");
 				final List<EObjectWrapper> fuelEmissions = new ArrayList<>(4);
 				final EObjectWrapper fer1 = (EObjectWrapper) fleetFactory.create(fuelEmissionReference);
-				fer1.setAttrib("name", "Diesel/Gas Oil");
+				fer1.setAttrib("name", "Diesel/Gas Oil (MGO/MDO/LSMGO/LSMDO)");
 				fer1.setAttrib("isoReference", "ISO 8217 Grades DMX through DMB");
 				fer1.setAttrib("cf", 3.206);
 				fuelEmissions.add(fer1);
@@ -94,7 +94,7 @@ public class MigrateToV198 extends AbstractMigrationUnit {
 				fer2.setAttrib("cf", 3.151);
 				fuelEmissions.add(fer2);
 				final EObjectWrapper fer3 = (EObjectWrapper) fleetFactory.create(fuelEmissionReference);
-				fer3.setAttrib("name", "Heavy Fuel Oil (HFO)");
+				fer3.setAttrib("name", "Heavy Fuel Oil (HFO/LSFO)");
 				fer3.setAttrib("isoReference", "ISO 8217 Grades RME through RMK");
 				fer3.setAttrib("cf", 3.114);
 				fuelEmissions.add(fer3);
