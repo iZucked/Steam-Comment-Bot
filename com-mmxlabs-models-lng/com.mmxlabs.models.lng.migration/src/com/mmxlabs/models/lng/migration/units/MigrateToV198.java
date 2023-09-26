@@ -17,7 +17,7 @@ import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
-public class MigrateToV196 extends AbstractMigrationUnit {
+public class MigrateToV198 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -26,12 +26,12 @@ public class MigrateToV196 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 195;
+		return 197;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 196;
+		return 198;
 	}
 
 	// Add CII information to the fleet model
