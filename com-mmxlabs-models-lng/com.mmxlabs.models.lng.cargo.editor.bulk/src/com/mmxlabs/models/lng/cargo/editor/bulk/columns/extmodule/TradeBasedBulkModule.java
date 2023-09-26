@@ -19,7 +19,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 
 import com.google.inject.AbstractModule;
-import com.mmxlabs.models.lng.cargo.editor.bulk.columnfilter.extmodule.ITradeBasedBulkColumnFilterExtension;
 import com.mmxlabs.models.lng.cargo.editor.bulk.rowmodel.extmodule.ITradeBasedBulkRowModelExtension;
 import com.mmxlabs.models.lng.cargo.editor.bulk.rowmodel.extmodule.ITradeBasedBulkRowModelFactoryExtension;
 import com.mmxlabs.models.lng.cargo.editor.bulk.rowtransformer.extmodule.ITradeBasedBulkRowTransformerExtension;
@@ -48,7 +47,5 @@ public class TradeBasedBulkModule extends AbstractModule {
 		
 		bind(iterable(ITradeBasedBulkRowTransformerFactoryExtension.class)).toProvider(service(ITradeBasedBulkRowTransformerFactoryExtension.class).multiple());
 		bind(iterable(ITradeBasedBulkRowTransformerExtension.class)).toProvider(service(ITradeBasedBulkRowTransformerExtension.class).multiple());
-		
-		bind(iterable(ITradeBasedBulkColumnFilterExtension.class)).toProvider(service(ITradeBasedBulkColumnFilterExtension.class).multiple());
 	}
 }

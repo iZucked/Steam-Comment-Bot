@@ -87,7 +87,7 @@ public class BaseCaseScenarioUpdater {
 		taskExecutor.shutdownNow();
 	}
 
-	public synchronized void update(final BaseCaseRecord record) {
+	public synchronized void update(final BaseCaseRecord record, final Runnable onSuccess) {
 
 		final Set<String> existingUUIDS = new HashSet<>();
 		recursiveUUIDCollector(modelRoot, existingUUIDS);
@@ -107,7 +107,7 @@ public class BaseCaseScenarioUpdater {
 
 			final Container parent = modelRoot;
 
-			taskExecutor.execute(new AddScenarioTask(parent, name, record));
+			taskExecutor.execute(new AddScenarioTask(parent, name, record, onSuccess));
 			existingUUIDS.remove(uuid);
 
 			existingFilenames.remove(uuid + ".lingo");
@@ -147,11 +147,13 @@ public class BaseCaseScenarioUpdater {
 		private final Container parent;
 		private final BaseCaseRecord record;
 		private final String name;
+		private final Runnable onSuccess;
 
-		public AddScenarioTask(final Container parent, final String name, final BaseCaseRecord record) {
+		public AddScenarioTask(final Container parent, final String name, final BaseCaseRecord record, final Runnable onSuccess) {
 			this.parent = parent;
 			this.name = name;
 			this.record = record;
+			this.onSuccess = onSuccess;
 		}
 
 		@Override
@@ -195,6 +197,9 @@ public class BaseCaseScenarioUpdater {
 						// Register this one.
 						parent.getElements().add(instance);
 						baseCaseVersionsProviderService.setBaseCase(instance);
+					}
+					if(onSuccess != null) {
+						onSuccess.run();
 					}
 				});
 			} else {
@@ -251,6 +256,7 @@ public class BaseCaseScenarioUpdater {
 					if (monitor != null) {
 						monitor.done();
 					}
+
 				}
 
 				return Status.OK_STATUS;
@@ -266,7 +272,6 @@ public class BaseCaseScenarioUpdater {
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
-
 		return ret[0];
 	}
 
@@ -325,7 +330,7 @@ public class BaseCaseScenarioUpdater {
 
 				final BaseCaseRecord bcRecord = client.parseScenariosJSONData(json);
 				if (bcRecord != null) {
-					update(bcRecord);
+					update(bcRecord, null);
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -358,7 +363,7 @@ public class BaseCaseScenarioUpdater {
 			}
 
 		};
-		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(updateThread::start);
+		WellKnownTriggers.WORKBENCH_POST_STARTUP.delayUntilTriggered(updateThread::start);
 	}
 
 	/**
@@ -423,7 +428,7 @@ public class BaseCaseScenarioUpdater {
 					if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
 						LOGGER.trace("No base case on Data Hub");
 					}
-					update(null);
+					update(null, null);
 					lastUUID = currentUUID;
 				}
 				if (!currentUUID.equals(lastUUID)) {
@@ -434,14 +439,20 @@ public class BaseCaseScenarioUpdater {
 					final String scenariosData = client.getBaseCaseDetails(currentUUID);
 					final BaseCaseRecord scenariosInfo = client.parseScenariosJSONData(scenariosData);
 					if (scenariosInfo != null) {
-						update(scenariosInfo);
-						Files.write(scenariosData, new File(basePath.getAbsolutePath() + "/basecase.json"), StandardCharsets.UTF_8);
-						lastUUID = currentUUID;
+						update(scenariosInfo, () -> {
+							try {
+								Files.write(scenariosData, new File(basePath.getAbsolutePath() + "/basecase.json"), StandardCharsets.UTF_8);
+								lastUUID = currentUUID;
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						});
+
 					} else {
 						if (Platform.getDebugBoolean(BaseCaseDebugContants.DEBUG_POLL)) {
 							LOGGER.trace("Unable to determine new base case");
 						}
-						update(null);
+						update(null, null);
 						lastUUID = currentUUID;
 					}
 				} else {

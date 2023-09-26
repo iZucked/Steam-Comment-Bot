@@ -78,11 +78,16 @@ import org.eclipse.swtchart.ISeriesSet;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.model.DateArraySeriesModel;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.event.EventHandler;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.common.util.QuadFunction;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -96,6 +101,7 @@ import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.standard.inventory.ChartColourSchemeAction;
 import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
+import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryReportConstants;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.OverliftChartModeAction;
@@ -207,6 +213,7 @@ public class InventoryReport extends ViewPart {
 	private Color colourLightGrey;
 	private Color colourRed;
 	private Color colourVol;
+	private Color colourVolBefore;
 	private Color colourCV;
 	private Color colourOpen;
 
@@ -219,9 +226,9 @@ public class InventoryReport extends ViewPart {
 	private ILineSeries<?> cvSeries;
 	private ILineSeries<?> minCVSeries;
 	private ILineSeries<?> maxCVSeries;
-	
+
 	private GridViewerColumn cvTableColumn;
-	
+
 	private boolean isCVEnabled;
 
 	@NonNull
@@ -276,7 +283,7 @@ public class InventoryReport extends ViewPart {
 			ViewerHelper.runIfViewerValid(comboViewer, block, r);
 		}
 	};
-	
+
 	public Inventory getSelectedInventory() {
 		return selectedInventory;
 	}
@@ -287,6 +294,31 @@ public class InventoryReport extends ViewPart {
 
 	private String lastFacility = null;
 
+	private IMemento memento;
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		if(memento == null) {
+			memento = XMLMemento.createWriteRoot("workbench");
+		}
+		this.memento = memento;
+		if(memento != null) {
+			if(memento.getBoolean(InventoryReportConstants.Show_CV) == null) {
+				memento.putBoolean(InventoryReportConstants.Show_CV, false);
+			}
+		}
+		super.init(site, memento);
+	}
+	
+	public IMemento getMemento() {
+		return memento;
+	}
+	
+	@Override
+	public void saveState(IMemento memento) {
+		memento.putMemento(this.memento);
+		super.saveState(memento);
+	}
+	
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
@@ -298,11 +330,12 @@ public class InventoryReport extends ViewPart {
 		this.colourRed = this.localResourceManager.createColor(new RGB(255, 36, 0));
 
 		this.colourVol = ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_Volume, ColourElements.Foreground);
+		this.colourVolBefore = ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_Volume_Before, ColourElements.Foreground);
 		this.colourCV = ColourPalette.getInstance().getColourFor(ColourPaletteItems.Inventory_CV, ColourElements.Foreground);
 		this.colourOpen = this.localResourceManager.createColor(new RGB(218, 103, 05));
-		
+
 		this.isCVEnabled = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
-		
+
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			mullMonthlyTableFilterField = new FilterField(parent);
 			mullMonthlyCumulativeFilterField = new FilterField(parent);
@@ -387,7 +420,7 @@ public class InventoryReport extends ViewPart {
 				createColumn("Change", 150, o -> String.format("%,d", o.changeInM3));
 				createColumn("Level", 150, o -> String.format("%,d", o.runningTotal));
 				cvTableColumn = createColumn("Tank CV", 150, o -> String.format("%.3f", o.tankCV));
-				if(!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL)) {
+				if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL)) {
 					cvTableColumn.getColumn().setVisible(false);
 				}
 				createColumn("Vessel", 150, o -> o.vessel);
@@ -674,18 +707,18 @@ public class InventoryReport extends ViewPart {
 	public void setCVVisibilityInInventoryChart(final boolean isVisible) {
 		if (cvSeries != null) {
 			cvSeries.setVisible(isVisible && isCVEnabled);
-			cvSeries.setVisibleInLegend(isVisible&& isCVEnabled);
+			cvSeries.setVisibleInLegend(isVisible && isCVEnabled);
 		}
 		if (minCVSeries != null) {
-			minCVSeries.setVisible(isVisible&& isCVEnabled);
+			minCVSeries.setVisible(isVisible && isCVEnabled);
 		}
 		if (maxCVSeries != null) {
-			maxCVSeries.setVisible(isVisible&& isCVEnabled);
-			maxCVSeries.setVisibleInLegend(isVisible&& isCVEnabled);
+			maxCVSeries.setVisible(isVisible && isCVEnabled);
+			maxCVSeries.setVisibleInLegend(isVisible && isCVEnabled);
 		}
 		if (cvAxis != null) {
-			cvAxis.getTitle().setVisible(isVisible&& isCVEnabled);
-			cvAxis.getTick().setVisible(isVisible&& isCVEnabled);
+			cvAxis.getTitle().setVisible(isVisible && isCVEnabled);
+			cvAxis.getTick().setVisible(isVisible && isCVEnabled);
 			if (isVisible) {
 				cvAxis.getGrid().setStyle(LineStyle.DOT);
 			} else {
@@ -718,7 +751,7 @@ public class InventoryReport extends ViewPart {
 		}
 		super.dispose();
 	}
-	
+
 	private void updateTable(boolean cvVisible) {
 		cvTableColumn.getColumn().setVisible(cvVisible && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL));
 	}
@@ -750,7 +783,7 @@ public class InventoryReport extends ViewPart {
 		final List<Pair<MullDailyInformation, MullDailyInformation>> pairedDailyMullList = new LinkedList<>();
 
 		Optional<InventoryChangeEvent> firstInventoryData = Optional.empty();
-		
+
 		colourSchemeAction.update();
 
 		if (toDisplay != null) {
@@ -1193,7 +1226,7 @@ public class InventoryReport extends ViewPart {
 														mullChartColourSequence);
 												overliftChartModeAction.setState(overliftChartState);
 												overliftChartModeAction.updateChartData();
-//												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
+												// setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
 												// int axisId = mullMonthlyOverliftChart.getAxisSet().createXAxis();
 												// final IAxis xAxis2 = mullMonthlyOverliftChart.getAxisSet().getXAxis(axisId);
 												//// xAxis2.setPosition(Position.Primary);
@@ -1276,6 +1309,7 @@ public class InventoryReport extends ViewPart {
 							};
 							if (!inventoryLevels.isEmpty()) {
 								final TreeMap<LocalDateTime, Integer> hourlyLevels = new TreeMap<>();
+								final TreeMap<LocalDateTime, Integer> otherHourlyLevels = new TreeMap<>();
 								final TreeMap<LocalDateTime, Double> hourlyCvLevels = new TreeMap<>();
 								for (final InventoryChangeEvent event : inventoryEvents.getEvents()) {
 									final InventoryEventRow eventRow = event.getEvent();
@@ -1411,10 +1445,109 @@ public class InventoryReport extends ViewPart {
 								seriesDaily.setSymbolType(PlotSymbolType.NONE);
 								seriesDaily.setLineColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
 
-								final ILineSeries seriesHourly = createSmoothLineSeries(seriesSet, "Volume", hourlyInventoryLevels);
-								// seriesHourly.setSymbolSize(1);
-								seriesHourly.setSymbolType(PlotSymbolType.NONE);
-								seriesHourly.setLineColor(colourVol);
+								List<@NonNull Pair<LocalDateTime, Double>> otherHourlyInventoryLevels = null;
+								if (toDisplay != otherResult) {
+									if (otherResult != null) {
+										final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
+										if (otherScheduleModel != null) {
+											final Schedule otherSchedule = otherScheduleModel.getSchedule();
+											if (otherSchedule != null) {
+												for (final InventoryEvents otherInventoryEvents : otherSchedule.getInventoryLevels()) {
+													final String inventoryName = otherInventoryEvents.getFacility().getName();
+													if (inventoryName == null) {
+														continue;
+													}
+													if (!inventoryName.equalsIgnoreCase(inventoryEvents.getFacility().getName())) {
+														continue;
+													}
+													for (final InventoryChangeEvent event : otherInventoryEvents.getEvents()) {
+														final InventoryEventRow eventRow = event.getEvent();
+														if (eventRow != null) {
+															int volumeDelta = event.getChangeQuantity();
+															if (eventRow.getPeriod() == InventoryFrequency.LEVEL || eventRow.getPeriod() == InventoryFrequency.CARGO
+																	|| eventRow.getPeriod() == InventoryFrequency.HOURLY) {
+																otherHourlyLevels.compute(event.getDate(), (k, v) -> v == null ? volumeDelta : v + volumeDelta);
+															} else if (eventRow.getPeriod() == InventoryFrequency.DAILY) {
+																final int delta = event.getChangeQuantity() / 24;
+																final int firstAmount = delta + (event.getChangeQuantity() % 24);
+																LocalDateTime currentDateTime = event.getDate();
+																otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
+																for (int hour = 1; hour < 24; hour++) {
+																	currentDateTime = currentDateTime.plusHours(1);
+																	otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
+																}
+															} else if (eventRow.getPeriod() == InventoryFrequency.MONTHLY) {
+																final Duration dur = Duration.between(event.getDate(), event.getDate().plusMonths(1));
+																final int numHours = (int) dur.toHours();
+																final int delta = event.getChangeQuantity() / numHours;
+																final int firstAmount = delta + (event.getChangeQuantity() % numHours);
+																LocalDateTime currentDateTime = event.getDate();
+																otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
+																for (int hour = 1; hour < numHours; ++hour) {
+																	currentDateTime = currentDateTime.plusHours(1);
+																	otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
+																}
+															}
+														} else if (event.getSlotAllocation() != null) {
+															final SlotAllocation slotAllocation = event.getSlotAllocation();
+															final int slotDuration = getSlotDuration(slotAllocation);
+															final int volumeTransferred = slotAllocation.getVolumeTransferred();
+															final int delta = volumeTransferred / slotDuration;
+															final int firstAmount = delta + (volumeTransferred % slotDuration);
+
+															LocalDateTime currentDateTime = slotAllocation.getSlotVisit().getStart().toLocalDateTime();
+															if (cargoIn) {
+																otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? firstAmount : v + firstAmount);
+																for (int hour = 1; hour < slotDuration; ++hour) {
+																	currentDateTime = currentDateTime.plusHours(1);
+																	otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? delta : v + delta);
+																}
+															} else {
+																otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -firstAmount : v - firstAmount);
+																for (int hour = 1; hour < slotDuration; ++hour) {
+																	currentDateTime = currentDateTime.plusHours(1);
+																	otherHourlyLevels.compute(currentDateTime, (k, v) -> v == null ? -delta : v - delta);
+																}
+															}
+														}
+													}
+													final LongAccumulator otherAcc = new LongAccumulator(Long::sum, 0L);
+													final TreeMap<LocalDateTime, Integer> otherCumulativeHourlyInventoryLevelsMap = otherHourlyLevels.entrySet().stream() //
+															.map(entry -> {
+																otherAcc.accumulate(entry.getValue().longValue());
+																return Pair.of(entry.getKey(), otherAcc.intValue());
+															}) //
+															.collect(Collectors.toMap(Pair::getFirst, Pair::getSecond, (x, y) -> y, TreeMap::new));
+
+													otherHourlyInventoryLevels = otherCumulativeHourlyInventoryLevelsMap.entrySet().stream()
+															.map(entry -> Pair.of(entry.getKey(), entry.getValue().doubleValue())).toList();
+
+												}
+											}
+										}
+									}
+								}
+								{
+									final Color col;
+									final String label;
+									if (otherHourlyInventoryLevels != null) {
+										label = "Volume before";
+										col = colourVolBefore;
+									} else {
+										label = "Volume";
+										col = colourVol;
+									}
+									final ILineSeries seriesHourly = createSmoothLineSeries(seriesSet, label, hourlyInventoryLevels);
+									// seriesHourly.setSymbolSize(1);
+									seriesHourly.setSymbolType(PlotSymbolType.NONE);
+									seriesHourly.setLineColor(col);
+									if (otherHourlyInventoryLevels != null) {
+										final ILineSeries otherSeriesHourly = createSmoothLineSeries(seriesSet, "Volume", otherHourlyInventoryLevels);
+										// seriesHourly.setSymbolSize(1);
+										otherSeriesHourly.setSymbolType(PlotSymbolType.NONE);
+										otherSeriesHourly.setLineColor(colourVol);
+									}
+								}
 
 								{
 
@@ -1435,6 +1568,7 @@ public class InventoryReport extends ViewPart {
 										series.setLineColor(colourVol);
 									}
 								}
+
 								{
 
 									final List<Pair<LocalDateTime, Double>> limitsLevels = inventoryEvents.getEvents().stream() //
@@ -1614,21 +1748,174 @@ public class InventoryReport extends ViewPart {
 						}
 
 						{
+							List<Pair<LocalDateTime, Integer>> values = null;
+							Map<Triple<String, String, String>, Pair<SlotAllocation, Triple<SlotAllocation, SlotAllocation, SlotAllocation>>> otherSlotAllocations = null;
+							Map<String, SlotAllocation> otherSimpleSlotAllocations = null;
+							if (toDisplay != otherResult) {
+								if (otherResult != null) {
+									final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
+									if (otherScheduleModel != null) {
+										final Schedule otherSchedule = otherScheduleModel.getSchedule();
+										if (otherSchedule != null) {
+											for (final InventoryEvents otherInventoryEvents : otherSchedule.getInventoryLevels()) {
+												final String inventoryName = otherInventoryEvents.getFacility().getName();
+												if (inventoryName == null) {
+													continue;
+												}
+												if (!inventoryName.equalsIgnoreCase(inventoryEvents.getFacility().getName())) {
+													continue;
+												}
+												otherSlotAllocations = new HashMap<>();
+												otherSimpleSlotAllocations = new HashMap<>();
+												final Map<Triple<String, String, String>, Pair<SlotAllocation, Triple<SlotAllocation, SlotAllocation, SlotAllocation>>> otherSa = otherSlotAllocations;
+												final var otherSimpleSa = otherSimpleSlotAllocations;
+												otherInventoryEvents.getEvents().stream() //
+														.filter(evt -> evt.getSlotAllocation() != null) //
+														.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
+														.map(evt -> evt.getSlotAllocation()) //
+														.forEach(sa -> {
+															final CargoAllocation ca = sa.getCargoAllocation();
+															if (ca.getSlotAllocations().size() > 3) {
+																throw new IllegalStateException("");
+															}
+															final Iterator<SlotAllocation> saIter = ca.getSlotAllocations().iterator();
+															final String firstId;
+															final String secondId;
+															final String thirdId;
+															final SlotAllocation firstSa;
+															final SlotAllocation secondSa;
+															final SlotAllocation thirdSa;
 
-							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
-									.filter(evt -> evt.getSlotAllocation() != null) //
-									.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
-									.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
-									.toList();
-							if (!values.isEmpty()) {
+															firstSa = saIter.next();
+															firstId = firstSa.getSlot().getName().toLowerCase();
 
-								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Cargoes", values);
-								series.setBarWidth(1);
-								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-								series.setVisible(colourSchemeAction.isShowingCargoes());
-								series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
-								cargoSeries = series;
+															secondSa = saIter.next();
+															secondId = secondSa.getSlot().getName().toLowerCase();
+
+															if (saIter.hasNext()) {
+																thirdSa = saIter.next();
+																thirdId = thirdSa.getSlot().getName().toLowerCase();
+															} else {
+																thirdSa = null;
+																thirdId = null;
+															}
+
+															otherSa.put(Triple.of(firstId, secondId, thirdId), Pair.of(sa, Triple.of(firstSa, secondSa, thirdSa)));
+														});
+												otherInventoryEvents.getEvents().stream() //
+														.filter(evt -> evt.getSlotAllocation() != null) //
+														.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
+														.map(evt -> evt.getSlotAllocation()) // ntoryEvents.getEvents().stream() //
+														.forEach(sa -> otherSimpleSa.put(sa.getSlot().getName().toLowerCase(), sa));
+											}
+										}
+									}
+								}
 							}
+							if (otherSlotAllocations == null || !LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CARGO_DIFF)) {
+								values = inventoryEvents.getEvents().stream() //
+										.filter(evt -> evt.getSlotAllocation() != null) //
+										.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
+										.map(e -> new Pair<>(e.getDate(), Math.abs(e.getChangeQuantity()))) //
+										.toList();
+								if (!values.isEmpty()) {
+
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "Cargoes", values);
+									series.setBarWidth(1);
+									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+									series.setVisible(colourSchemeAction.isShowingCargoes());
+									series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
+									cargoSeries = series;
+								}
+							} else {
+								final Map<Triple<String, String, String>, Pair<SlotAllocation, Triple<SlotAllocation, SlotAllocation, SlotAllocation>>> slotAllocations = new HashMap<>();
+								final Map<String, SlotAllocation> simpleSlotAllocations = new HashMap<>();
+								inventoryEvents.getEvents().stream() //
+										.filter(evt -> evt.getSlotAllocation() != null) //
+										.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
+										.map(evt -> evt.getSlotAllocation()) //
+										.forEach(sa -> {
+											final CargoAllocation ca = sa.getCargoAllocation();
+											if (ca.getSlotAllocations().size() > 3) {
+												throw new IllegalStateException("");
+											}
+											final Iterator<SlotAllocation> saIter = ca.getSlotAllocations().iterator();
+											final String firstId;
+											final String secondId;
+											final String thirdId;
+											final SlotAllocation firstSa;
+											final SlotAllocation secondSa;
+											final SlotAllocation thirdSa;
+
+											firstSa = saIter.next();
+											firstId = firstSa.getSlot().getName().toLowerCase();
+
+											secondSa = saIter.next();
+											secondId = secondSa.getSlot().getName().toLowerCase();
+
+											if (saIter.hasNext()) {
+												thirdSa = saIter.next();
+												thirdId = thirdSa.getSlot().getName().toLowerCase();
+											} else {
+												thirdSa = null;
+												thirdId = null;
+											}
+
+											slotAllocations.put(Triple.of(firstId, secondId, thirdId), Pair.of(sa, Triple.of(firstSa, secondSa, thirdSa)));
+										});
+								inventoryEvents.getEvents().stream() //
+										.filter(evt -> evt.getSlotAllocation() != null) //
+										.filter(evt -> !evt.getSlotAllocation().getSlot().getSlotOrDelegateEntity().isThirdParty()) //
+										.map(evt -> evt.getSlotAllocation()) //
+										.forEach(sa -> simpleSlotAllocations.put(sa.getSlot().getName().toLowerCase(), sa));
+								final List<Pair<LocalDateTime, Integer>> volumeChanges = new ArrayList<>();
+								final List<Pair<LocalDateTime, Integer>> pinnedFullChanges = new ArrayList<>();
+								final List<Pair<LocalDateTime, Integer>> otherFullChanges = new ArrayList<>();
+								for (final Entry<String, SlotAllocation> entry : simpleSlotAllocations.entrySet()) {
+									final SlotAllocation pinnedSa = entry.getValue();
+									final SlotAllocation otherSa = otherSimpleSlotAllocations.get(entry.getKey());
+									if (otherSa != null) {
+										if (!pinnedSa.getSlotVisit().getStart().toLocalDateTime().equals(otherSa.getSlotVisit().getStart().toLocalDateTime())) {
+											pinnedFullChanges.add(Pair.of(pinnedSa.getSlotVisit().getStart().toLocalDateTime(), -pinnedSa.getVolumeTransferred()));
+											otherFullChanges.add(Pair.of(otherSa.getSlotVisit().getStart().toLocalDateTime(), otherSa.getVolumeTransferred()));
+										} else if (pinnedSa.getVolumeTransferred() != otherSa.getVolumeTransferred()) {
+											volumeChanges.add(Pair.of(pinnedSa.getSlotVisit().getStart().toLocalDateTime(), otherSa.getVolumeTransferred() - pinnedSa.getVolumeTransferred()));
+										}
+									} else {
+										pinnedFullChanges.add(Pair.of(pinnedSa.getSlotVisit().getStart().toLocalDateTime(), -pinnedSa.getVolumeTransferred()));
+									}
+								}
+								for (final Entry<String, SlotAllocation> entry : otherSimpleSlotAllocations.entrySet()) {
+									if (!simpleSlotAllocations.containsKey(entry.getKey())) {
+										otherFullChanges.add(Pair.of(entry.getValue().getSlotVisit().getStart().toLocalDateTime(), entry.getValue().getVolumeTransferred()));
+									}
+								}
+								if (!pinnedFullChanges.isEmpty()) {
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "B Cargoes", pinnedFullChanges);
+									series.setBarWidth(1);
+									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+									series.setVisible(colourSchemeAction.isShowingCargoes());
+									series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
+									// cargoSeries = series;
+								}
+								if (!otherFullChanges.isEmpty()) {
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "N Cargoes", otherFullChanges);
+									series.setBarWidth(1);
+									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+									series.setVisible(colourSchemeAction.isShowingCargoes());
+									series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
+									cargoSeries = series;
+								}
+								if (!volumeChanges.isEmpty()) {
+									final IBarSeries series = createDaySizedBarSeries(seriesSet, "V Cargoes", volumeChanges);
+									series.setBarWidth(1);
+									series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+									series.setVisible(colourSchemeAction.isShowingCargoes());
+									series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
+									cargoSeries = series;
+								}
+							}
+
 						}
 						{
 							final List<Pair<LocalDateTime, Integer>> values = inventoryEvents.getEvents().stream() //
@@ -1763,9 +2050,7 @@ public class InventoryReport extends ViewPart {
 			total += lvl.changeInM3;
 			lvl.runningTotal = total;
 			/*
-			 * In the case, when the low/high forecast value is zero , we assume that's a
-			 * wrong data! Hence we use the feedIn (actual volume) if it's also not zero.
-			 * Maybe we need to fix that!
+			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data! Hence we use the feedIn (actual volume) if it's also not zero. Maybe we need to fix that!
 			 */
 			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
 
@@ -1791,7 +2076,7 @@ public class InventoryReport extends ViewPart {
 		if (cargoAllocation != null) {
 			final List<SlotAllocation> cargoSlotAllocations = cargoAllocation.getSlotAllocations();
 			if (cargoSlotAllocations.size() == 2) {
-				final List<Slot<?>> slots = cargoSlotAllocations.stream().<Slot<?>>map(SlotAllocation::getSlot).toList();
+				final List<Slot<?>> slots = cargoSlotAllocations.stream().<Slot<?>> map(SlotAllocation::getSlot).toList();
 				final List<Slot<?>> sortedSlots = CargoSlotSorter.sortedSlots(slots);
 				final LoadSlot loadSlot = (LoadSlot) sortedSlots.get(0);
 				final DischargeSlot dischargeSlot = (DischargeSlot) sortedSlots.get(1);
@@ -2234,11 +2519,11 @@ public class InventoryReport extends ViewPart {
 			final YearMonth ymm = ym;
 			final double totalRE = sProfile.getEntityTable().stream().mapToDouble(MullEntityRow::getRelativeEntitlement).sum();
 			sProfile.getEntityTable().stream().forEach(row -> {
-//				if (ymm.equals(adpStart)) {
-//					currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
-//				} else {
+				// if (ymm.equals(adpStart)) {
+				// currMap.put(row.getEntity(), Integer.parseInt(row.getInitialAllocation()) + (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
+				// } else {
 				currMap.put(row.getEntity(), (int) (row.getRelativeEntitlement() / totalRE * thisTotalProd));
-//				}
+				// }
 			});
 		}
 		return monthlyRE;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2023
+    All rights reserved.
+
+-->
+<feature
+      id="com.mmxlabs.widgets.feature"
+      label="Minimax Labs Widgets Feature"
+      version="6.9.4.qualifier"
+      provider-name="Minimax Labs Ltd.">
+
+   <plugin
+         id="com.mmxlabs.widgets.schedulechart"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

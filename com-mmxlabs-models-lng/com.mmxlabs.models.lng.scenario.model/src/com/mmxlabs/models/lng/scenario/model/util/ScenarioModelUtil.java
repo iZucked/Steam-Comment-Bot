@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.scenario.model.util;
 
+import java.time.LocalDate;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -12,6 +14,8 @@ import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
@@ -449,5 +453,53 @@ public final class ScenarioModelUtil {
 
 	public static @Nullable ADPModel getADPModel(@NonNull LNGScenarioModel lngScenarioModel) {
 		return lngScenarioModel.getAdpModel();
+	}
+	
+	public static LocalDate getEarliestScenarioDate(@NonNull IScenarioDataProvider sdp) {
+		LocalDate result = LocalDate.now();
+
+		final CargoModel cargoModel = getCargoModel(sdp);
+
+		LocalDate erl = result;
+
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (ls.getWindowStart() != null && erl.isAfter(ls.getWindowStart())) {
+				erl = ls.getWindowStart();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (ds.getWindowStart() != null && erl.isAfter(ds.getWindowStart())) {
+				erl = ds.getWindowStart();
+			}
+		}
+		if (erl.isBefore(result)) {
+			result = erl;
+		}
+
+		return result;
+	}
+	
+	public static LocalDate getLatestScenarioDate(@NonNull IScenarioDataProvider sdp) {
+		LocalDate result = LocalDate.now();
+
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+
+		LocalDate erl = result;
+
+		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
+			if (ls.getSchedulingTimeWindow().getEnd() != null && erl.isBefore(ls.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ls.getSchedulingTimeWindow().getEnd().toLocalDate();
+			}
+		}
+		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
+			if (ds.getSchedulingTimeWindow().getEnd() != null && erl.isBefore(ds.getSchedulingTimeWindow().getEnd().toLocalDate())) {
+				erl = ds.getSchedulingTimeWindow().getEnd().toLocalDate();
+			}
+		}
+		if (erl.isAfter(result)) {
+			result = erl;
+		}
+
+		return result;
 	}
 }

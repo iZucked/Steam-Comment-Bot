@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit#getLateness <em>Lateness</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getNonShippedSlotVisit()
@@ -46,5 +47,27 @@ public interface NonShippedSlotVisit extends Event {
 	 * @generated
 	 */
 	void setSlot(Slot value);
+
+	/**
+	 * Returns the value of the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lateness</em>' containment reference.
+	 * @see #setLateness(PortVisitLateness)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getNonShippedSlotVisit_Lateness()
+	 * @model containment="true"
+	 * @generated
+	 */
+	PortVisitLateness getLateness();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.NonShippedSlotVisit#getLateness <em>Lateness</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lateness</em>' containment reference.
+	 * @see #getLateness()
+	 * @generated
+	 */
+	void setLateness(PortVisitLateness value);
 
 } // NonShippedSlotVisit

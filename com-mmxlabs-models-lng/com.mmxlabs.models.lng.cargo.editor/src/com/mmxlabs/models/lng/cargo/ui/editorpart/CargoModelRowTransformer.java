@@ -8,49 +8,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.ETypedElement;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.layout.RowData;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelFactory;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
-import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
  * A class to transform the {@link CargoModel} lists of {@link Cargo}, {@link LoadSlot} and {@link DischargeSlot}s into a single table - complete with vessel {@link ElementAssignment}. The
- * {@link #transform(InputModel, List, List, List, Map)} method returns a {@link RootData} object which encodes a {@link RowData} for each table row, a {@link GroupData} defining related rows and the
- * wiring, colour information for terminal and wiring colouring.
+ * {@link #transform(InputModel, List, List, List, Map)} method returns a <<<<<<< HEAD {@link RootData} object which encodes a {@link TradesRow} for each table row, a {@link TradesRowGroup} defining
+ * related rows and the wiring, colour information ======= {@link RootData} object which encodes a {@link RowData} for each table row, a {@link GroupData} defining related rows and the wiring, colour
+ * information >>>>>>> origin/tradesTableFilterSelectionDeselectionChanges for terminal and wiring colouring.
  * 
- * @author Simon Goodall
+ * @author Simon Goodall, Euan Worth
  * 
  */
 public class CargoModelRowTransformer {
-	static final Color InvalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
-	private static final Color Grey = new Color(Display.getDefault(), new RGB(64, 64, 64));
-	static final Color ValidTerminalColour = TradesWiringDiagram.Light_Green;
-	private final Color RewirableColour = Grey;
-	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+	final TradesWiringColourScheme colourScheme;
+
+	public CargoModelRowTransformer(TradesWiringColourScheme colourScheme) {
+		this.colourScheme = colourScheme;
+	}
 
 	/**
 	 */
@@ -73,7 +66,7 @@ public class CargoModelRowTransformer {
 
 		final RootData root = new RootData();
 
-		final Map<Slot<?>, RowData> rowDataMap = new HashMap<>();
+		final Map<Slot<?>, TradesRow> tradesRowMap = new HashMap<>();
 
 		final Map<Slot<?>, CargoAllocation> cargoAllocationMap = new HashMap<>();
 		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
@@ -99,39 +92,38 @@ public class CargoModelRowTransformer {
 			}
 		}
 
-		final Map<LoadSlot, RowData> existingLoadSlotToRowData = new HashMap<>();
-		final Map<DischargeSlot, RowData> existingDischargeSlotToRowData = new HashMap<>();
+		final Map<LoadSlot, TradesRow> existingLoadSlotToTradesRow = new HashMap<>();
+		final Map<DischargeSlot, TradesRow> existingDischargeSlotToTradesRow = new HashMap<>();
 
 		if (existingWiring != null) {
 			// Take existing row data and clone
-			for (final RowData rowData : existingWiring.rows) {
-				if (rowData.cargo != null) {
-					if (!cargoes.contains(rowData.cargo)) {
-						// Cargo has been removed
-						rowData.cargo = null;
-						rowData.cargoAllocation = null;
-					}
+			for (final TradesRow tradesRow : existingWiring.rows) {
+				if (tradesRow.getCargo() != null && (!cargoes.contains(tradesRow.getCargo()))) {
+					// Cargo has been removed
+					tradesRow.setCargo(null);
+					tradesRow.setCargoAllocation(null);
+
 				}
 
-				if (rowData.loadSlot != null) {
-					if (allLoadSlots.contains(rowData.loadSlot)) {
+				if (tradesRow.getLoadSlot() != null) {
+					if (allLoadSlots.contains(tradesRow.getLoadSlot())) {
 						// Keep
-						existingLoadSlotToRowData.put(rowData.loadSlot, rowData);
+						existingLoadSlotToTradesRow.put(tradesRow.getLoadSlot(), tradesRow);
 					} else {
 						// Load slot has been removed
-						rowData.loadSlot = null;
-						rowData.loadAllocation = null;
+						tradesRow.setLoadSlot(null);
+						tradesRow.setLoadAllocation(null);
 					}
 				}
 
-				if (rowData.dischargeSlot != null) {
-					if (allDischargeSlots.contains(rowData.dischargeSlot)) {
+				if (tradesRow.getDischargeSlot() != null) {
+					if (allDischargeSlots.contains(tradesRow.getDischargeSlot())) {
 						// Keep
-						existingDischargeSlotToRowData.put(rowData.dischargeSlot, rowData);
+						existingDischargeSlotToTradesRow.put(tradesRow.getDischargeSlot(), tradesRow);
 					} else {
 						// Discharge slot has been removed
-						rowData.dischargeSlot = null;
-						rowData.dischargeAllocation = null;
+						tradesRow.setDischargeSlot(null);
+						tradesRow.setDischargeAllocation(null);
 					}
 				}
 			}
@@ -139,7 +131,7 @@ public class CargoModelRowTransformer {
 
 		// Loop through all cargoes first, generating full cargo row items
 		for (final Cargo cargo : cargoes) {
-			final GroupData group = new GroupData();
+			final TradesRowGroup group = new TradesRowGroup(colourScheme);
 			root.getGroups().add(group);
 			group.getObjects().add(cargo);
 
@@ -158,7 +150,8 @@ public class CargoModelRowTransformer {
 
 			}
 
-			// Generate the wiring - currently this is the full many-many mapping between loads and discharges.
+			// Generate the wiring - currently this is the full many-many mapping between
+			// loads and discharges.
 			// In future this should be better (in some way...)
 			int numDischarges = 0;
 			DischargeSlot d1 = null;
@@ -185,7 +178,8 @@ public class CargoModelRowTransformer {
 			// Set the colour for all cargo wires.
 			setWiringColour(validationInfo, group);
 
-			// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
+			// Create a row for each pair of load and discharge slots in the cargo. This may
+			// lead to a row with only one slot
 			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 
 				LoadSlot loadSlot = null;
@@ -197,69 +191,73 @@ public class CargoModelRowTransformer {
 					dischargeSlot = dischargeSlots.get(i);
 				}
 
-				RowData loadRowData = null;
-				if (existingLoadSlotToRowData.containsKey(loadSlot)) {
-					loadRowData = existingLoadSlotToRowData.get(loadSlot);
+				TradesRow loadTradesRow = null;
+				if (existingLoadSlotToTradesRow.containsKey(loadSlot)) {
+					loadTradesRow = existingLoadSlotToTradesRow.get(loadSlot);
 				}
-				RowData dischargeRowData = null;
-				if (existingDischargeSlotToRowData.containsKey(dischargeSlot)) {
-					dischargeRowData = existingDischargeSlotToRowData.get(dischargeSlot);
+				TradesRow dischargeTradesRow = null;
+				if (existingDischargeSlotToTradesRow.containsKey(dischargeSlot)) {
+					dischargeTradesRow = existingDischargeSlotToTradesRow.get(dischargeSlot);
 				}
-				if (loadRowData == null && dischargeRowData == null) {
-					loadRowData = new RowData();
-					dischargeRowData = loadRowData;
-				} else if (loadRowData == null && loadSlot != null) {
-					loadRowData = new RowData();
-				} else if (dischargeRowData == null && dischargeSlot != null) {
-					dischargeRowData = new RowData();
+				if (loadTradesRow == null && dischargeTradesRow == null) {
+					loadTradesRow = CargoEditorModelFactory.eINSTANCE.createTradesRow();
+					dischargeTradesRow = loadTradesRow;
+				} else if (loadTradesRow == null && loadSlot != null) {
+					loadTradesRow = CargoEditorModelFactory.eINSTANCE.createTradesRow();
+				} else if (dischargeTradesRow == null && dischargeSlot != null) {
+					loadTradesRow = CargoEditorModelFactory.eINSTANCE.createTradesRow();
 				}
 
-				if (loadRowData == null && dischargeRowData == null) {
+				if (loadTradesRow == null && dischargeTradesRow == null) {
 					// We shouldn't really get here
 					continue;
 				}
 
-				// In some cases where we only have one slot (e.g. as part of LDD) we can end up with a null row data object, so use the other half as the reference for the rest of the loop
-				if (loadRowData == null) {
-					loadRowData = dischargeRowData;
-				} else if (dischargeRowData == null) {
-					dischargeRowData = loadRowData;
+				// In some cases where we only have one slot (e.g. as part of LDD) we can end up
+				// with a null row data object, so use the other half as the reference for the
+				// rest of the loop
+				if (loadTradesRow == null) {
+					loadTradesRow = dischargeTradesRow;
+				} else if (dischargeTradesRow == null) {
+					dischargeTradesRow = loadTradesRow;
 				}
-				// Attempt to determine primary record. TODO: Confirm this is correct for LDD case
-				loadRowData.primaryRecord = i == 0;
-				dischargeRowData.primaryRecord = i == 0;
+				// Attempt to determine primary record. TODO: Confirm this is correct for LDD
+				// case
+				loadTradesRow.setPrimaryRecord(i == 0);
+				dischargeTradesRow.setPrimaryRecord(i == 0);
 
-				loadRowData.loadSlot = loadSlot;
-				dischargeRowData.dischargeSlot = dischargeSlot;
+				loadTradesRow.setLoadSlot(loadSlot);
+				dischargeTradesRow.setDischargeSlot(dischargeSlot);
 
-				rowDataMap.put(loadSlot, loadRowData);
-				rowDataMap.put(dischargeSlot, dischargeRowData);
+				tradesRowMap.put(loadSlot, loadTradesRow);
+				tradesRowMap.put(dischargeSlot, dischargeTradesRow);
 
-				loadRowData.setGroup(group);
-				group.getRows().add(loadRowData);
+				loadTradesRow.setGroup(group);
+				group.getRows().add(loadTradesRow);
 
-				if (!root.getRows().contains(loadRowData)) {
-					root.getRows().add(loadRowData);
+				if (!root.getRows().contains(loadTradesRow)) {
+					root.getRows().add(loadTradesRow);
 				}
-				if (!root.getRows().contains(dischargeRowData)) {
-					root.getRows().add(dischargeRowData);
+				if (!root.getRows().contains(dischargeTradesRow)) {
+					root.getRows().add(dischargeTradesRow);
 				}
-				loadRowData.cargo = cargo;
+				loadTradesRow.setCargo(cargo);
 
-				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
-				loadRowData.loadTerminalColour = ValidTerminalColour;
-				dischargeRowData.dischargeTerminalColour = ValidTerminalColour;
+				// Set terminal colours to valid - even if slot is missing, in such cases the
+				// terminal will not be rendered
+				loadTradesRow.setLoadTerminalValid(true);
+				dischargeTradesRow.setDischargeTerminalValid(true);
 
 				// patch up the WireData information with the new RowData objects
 				for (final WireData wire : group.getWires()) {
-					if (wire.loadSlot != null && wire.loadSlot == loadRowData.loadSlot) {
-						wire.loadRowData = loadRowData;
+					if (wire.loadSlot != null && wire.loadSlot == loadTradesRow.getLoadSlot()) {
+						wire.loadTradesRow = loadTradesRow;
 					}
-					if (wire.dischargeSlot != null && wire.dischargeSlot == dischargeRowData.dischargeSlot) {
-						wire.dischargeRowData = dischargeRowData;
+					if (wire.dischargeSlot != null && wire.dischargeSlot == dischargeTradesRow.getDischargeSlot()) {
+						wire.dischargeTradesRow = dischargeTradesRow;
 					}
-					if (wire.sourceDischargeSlot != null && wire.sourceDischargeSlot == dischargeRowData.dischargeSlot) {
-						wire.sourceDischargeRowData = dischargeRowData;
+					if (wire.sourceDischargeSlot != null && wire.sourceDischargeSlot == dischargeTradesRow.getDischargeSlot()) {
+						wire.sourceDischargeTradesRow = dischargeTradesRow;
 					}
 				}
 			}
@@ -270,15 +268,15 @@ public class CargoModelRowTransformer {
 		for (final LoadSlot slot : allLoadSlots) {
 			if (slot.getCargo() == null) {
 
-				final GroupData group = new GroupData();
+				final TradesRowGroup group = new TradesRowGroup(colourScheme);
 				root.getGroups().add(group);
 				group.getObjects().add(slot);
 
-				final RowData row;
-				if (existingLoadSlotToRowData.containsKey(slot)) {
-					row = existingLoadSlotToRowData.get(slot);
+				final TradesRow row;
+				if (existingLoadSlotToTradesRow.containsKey(slot)) {
+					row = existingLoadSlotToTradesRow.get(slot);
 				} else {
-					row = new RowData();
+					row = CargoEditorModelFactory.eINSTANCE.createTradesRow();
 				}
 
 				if (!root.getRows().contains(row)) {
@@ -286,17 +284,13 @@ public class CargoModelRowTransformer {
 				}
 
 				row.setGroup(group);
-				row.loadSlot = slot;
+				row.setLoadSlot(slot);
 
-				rowDataMap.put(slot, row);
+				tradesRowMap.put(slot, row);
 
-				if (slot.isOptional() || slot.isCancelled()) {
-					row.loadTerminalColour = ValidTerminalColour;
-				} else {
-					row.loadTerminalColour = InvalidTerminalColour;
-				}
-				if (row.dischargeSlot == null) {
-					row.dischargeTerminalColour = InvalidTerminalColour;
+				row.setLoadTerminalValid(slot.isOptional() || slot.isCancelled());
+				if (row.getDischargeSlot() == null) {
+					row.setDischargeTerminalValid(false);
 				}
 			}
 		}
@@ -305,56 +299,59 @@ public class CargoModelRowTransformer {
 		for (final DischargeSlot slot : allDischargeSlots) {
 			if (slot.getCargo() == null) {
 
-				final GroupData group = new GroupData();
+				final TradesRowGroup group = new TradesRowGroup(colourScheme);
 				root.getGroups().add(group);
 				group.getObjects().add(slot);
 
-				final RowData row;
-				if (existingDischargeSlotToRowData.containsKey(slot)) {
-					row = existingDischargeSlotToRowData.get(slot);
+				final TradesRow row;
+				if (existingDischargeSlotToTradesRow.containsKey(slot)) {
+					row = existingDischargeSlotToTradesRow.get(slot);
 				} else {
-					row = new RowData();
+					row = CargoEditorModelFactory.eINSTANCE.createTradesRow();
 				}
 
 				if (!root.getRows().contains(row)) {
 					root.getRows().add(row);
 				}
+				row.setDischargeSlot(slot);
 				row.setGroup(group);
-				row.dischargeSlot = slot;
-				rowDataMap.put(slot, row);
+				tradesRowMap.put(slot, row);
 
-				if (slot.isOptional() || slot.isCancelled()) {
-					row.dischargeTerminalColour = ValidTerminalColour;
-				} else {
-					row.dischargeTerminalColour = InvalidTerminalColour;
-				}
-				if (row.loadSlot == null) {
-					row.loadTerminalColour = InvalidTerminalColour;
+				row.setDischargeTerminalValid(slot.isOptional() || slot.isCancelled());
+
+				if (row.getLoadSlot() == null) {
+					row.setLoadTerminalValid(false);
 				}
 			}
 		}
 
-		// Construct arrays of data so that index X across all arrays points to the same row
-		for (final RowData rd : root.getRows()) {
-			root.getCargoes().add(rd.getCargo());
-			root.getLoadSlots().add(rd.getLoadSlot());
-			root.getDischargeSlots().add(rd.getDischargeSlot());
+		// Construct arrays of data so that index X across all arrays points to the same
+		// row
+		for (final TradesRow tradesRow : root.getRows()) {
+			root.getCargoes().add(tradesRow.getCargo());
+			root.getLoadSlots().add(tradesRow.getLoadSlot());
+			root.getDischargeSlots().add(tradesRow.getDischargeSlot());
 
 			// Hook up allocation objects
-			rd.cargoAllocation = cargoAllocationMap.get(rd.loadSlot);
-			rd.marketAllocation = marketAllocationMap.get((rd.loadSlot == null) ? rd.dischargeSlot : rd.loadSlot);
-			rd.openSlotAllocation = openAllocationMap.get((rd.loadSlot == null) ? rd.dischargeSlot : rd.loadSlot);
-			rd.loadAllocation = slotAllocationMap.get(rd.loadSlot);
-			rd.dischargeAllocation = slotAllocationMap.get(rd.dischargeSlot);
+			tradesRow.setCargoAllocation(cargoAllocationMap.get(tradesRow.getLoadSlot()));
+			tradesRow.setMarketAllocation(marketAllocationMap.get((tradesRow.getLoadSlot() == null) ? tradesRow.getDischargeSlot() : tradesRow.getLoadSlot()));
+			tradesRow.setOpenSlotAllocation(openAllocationMap.get((tradesRow.getLoadSlot() == null) ? tradesRow.getDischargeSlot() : tradesRow.getLoadSlot()));
+			tradesRow.setLoadAllocation(slotAllocationMap.get(tradesRow.getLoadSlot()));
+			tradesRow.setDischargeAllocation(slotAllocationMap.get(tradesRow.getDischargeSlot()));
 
 		}
 
-		for (final RowData rd : root.getRows()) {
-			final Slot<?> transferSlot = getLinkedSlot(rd.loadSlot);
+		for (final TradesRow tradesRow : root.getRows()) {
+			final Slot<?> transferSlot = getLinkedSlot(tradesRow.getLoadSlot());
 			if (transferSlot != null) {
-				final WireData wire = rd.getGroup().addShipToShipWire(rd.loadSlot);
-				wire.loadRowData = rd;
-				wire.dischargeRowData = rowDataMap.get(transferSlot);
+				Object groupObject = tradesRow.getGroup();
+				if (groupObject instanceof TradesRowGroup group) {
+					final WireData wire = group.addShipToShipWire(tradesRow.getLoadSlot());
+					wire.loadTradesRow = tradesRow;
+					wire.dischargeTradesRow = tradesRowMap.get(transferSlot);
+				} else {
+					throw new IllegalStateException("Internal State should be group data object");
+				}
 			}
 		}
 
@@ -366,103 +363,14 @@ public class CargoModelRowTransformer {
 	 * 
 	 * @param slot
 	 */
-	private static Slot getLinkedSlot(final Slot slot) {
-		if (slot instanceof LoadSlot) {
-			return ((LoadSlot) slot).getTransferFrom();
-		} else if (slot instanceof DischargeSlot) {
-			return ((DischargeSlot) slot).getTransferTo();
+	private static Slot<?> getLinkedSlot(final Slot<?> slot) {
+		if (slot instanceof LoadSlot loadSlot) {
+			return loadSlot.getTransferFrom();
+		} else if (slot instanceof DischargeSlot dischargeSlot) {
+			return dischargeSlot.getTransferTo();
 		}
 
 		return null;
-	}
-
-	/**
-	 * The {@link RowData} represents a single row in the trades viewer. It extends EObject for use with {@link EMFPath}, and specifically {@link RowDataEMFPath}
-	 * 
-	 */
-	public static class RowData extends EObjectImpl {
-
-		GroupData group;
-		Cargo cargo;
-		CargoAllocation cargoAllocation;
-		OpenSlotAllocation openSlotAllocation;
-		MarketAllocation marketAllocation;
-		LoadSlot loadSlot;
-		SlotAllocation loadAllocation;
-		DischargeSlot dischargeSlot;
-		SlotAllocation dischargeAllocation;
-
-		// This is the RowData with the cargo defining load slot
-		boolean primaryRecord;
-
-		// GUI STATE
-		Color loadTerminalColour;
-		Color dischargeTerminalColour;
-
-		/**
-		 * This is used in the {@link EObjectTableViewer} implementation of {@link ViewerComparator} for the fixed sort order.
-		 */
-		@Override
-		public boolean equals(final Object obj) {
-
-			if (obj instanceof final RowData other) {
-				return Objects.equals(cargo, other.cargo) && Objects.equals(loadSlot, other.loadSlot) && Objects.equals(dischargeSlot, other.dischargeSlot)
-						&& Objects.equals(marketAllocation, other.marketAllocation) && Objects.equals(openSlotAllocation, other.openSlotAllocation);
-			}
-
-			return false;
-		}
-
-		@Override
-		public int hashCode() {
-			// Implemented to "fix" findbugs warning.
-			return super.hashCode();
-		}
-
-		public void setCargo(final Cargo cargo) {
-			this.cargo = cargo;
-		}
-
-		public void setLoadSlot(final LoadSlot loadSlot) {
-			this.loadSlot = loadSlot;
-		}
-
-		public void setDischargeSlot(final DischargeSlot dischargeSlot) {
-			this.dischargeSlot = dischargeSlot;
-		}
-
-		public GroupData getGroup() {
-			return group;
-		}
-
-		public Cargo getCargo() {
-			return cargo;
-		}
-
-		public LoadSlot getLoadSlot() {
-			return loadSlot;
-		}
-
-		public DischargeSlot getDischargeSlot() {
-			return dischargeSlot;
-		}
-
-		public void setGroup(final GroupData group) {
-			this.group = group;
-		}
-
-		/**
-		 */
-		public boolean isPrimaryRecord() {
-			return primaryRecord;
-		}
-
-		/**
-		 */
-		public void setPrimaryRecord(final boolean primaryRecord) {
-			this.primaryRecord = primaryRecord;
-		}
-
 	}
 
 	/**
@@ -473,84 +381,34 @@ public class CargoModelRowTransformer {
 
 		Color colour;
 		LoadSlot loadSlot;
-		RowData loadRowData;
+		TradesRow loadTradesRow;
 		DischargeSlot dischargeSlot;
-		RowData dischargeRowData;
+		TradesRow dischargeTradesRow;
 		boolean dashed;
 		boolean isBracket; // For additional D rows in LDD case
 		// Used instead of load for additional D rows.
 		DischargeSlot sourceDischargeSlot;
-		RowData sourceDischargeRowData;
-
-	}
-
-	/**
-	 * Represents a single cargo (or a single slot). For simple L->D cargoes this will contain one slot. For complex cargoes, there may be multiple rows.
-	 * 
-	 * @author sg
-	 * 
-	 */
-	public class GroupData extends EObjectImpl {
-
-		private final List<RowData> rows = new ArrayList<>();
-		private final List<EObject> objects = new ArrayList<>();
-		private final List<WireData> wires = new ArrayList<>();
-
-		private List<EObject> getObjects() {
-			return objects;
-		}
-
-		private WireData addShipToShipWire(final Slot slot) {
-			// and add a wire to the group, showing the ship-to-ship transfer
-			final WireData wire = new WireData();
-			getWires().add(wire);
-			wire.colour = FixedWireColour;
-			wire.dashed = true;
-
-			LoadSlot loadSlot = null;
-			DischargeSlot dischargeSlot = null;
-
-			if (slot instanceof final LoadSlot s) {
-				loadSlot = s;
-				dischargeSlot = s.getTransferFrom();
-			} else if (slot instanceof final DischargeSlot s) {
-				dischargeSlot = s;
-				loadSlot = s.getTransferTo();
-			}
-
-			wire.loadSlot = loadSlot;
-			wire.dischargeSlot = dischargeSlot;
-			return wire;
-		}
-
-		public List<RowData> getRows() {
-			return rows;
-		}
-
-		public List<WireData> getWires() {
-			return wires;
-		}
-
+		TradesRow sourceDischargeTradesRow;
 	}
 
 	/**
 	 * The top node in the data structure.
 	 * 
 	 */
-	public static class RootData extends EObjectImpl {
+	public static class RootData {
 
-		private final List<RowData> rows = new ArrayList<>();
-		private final List<GroupData> groups = new ArrayList<>();
+		private final List<TradesRow> rows = new ArrayList<>();
+		private final List<TradesRowGroup> groups = new ArrayList<>();
 
 		private final ArrayList<Cargo> cargoes = new ArrayList<>();
 		private final ArrayList<LoadSlot> loadSlots = new ArrayList<>();
 		private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<>();
 
-		public List<GroupData> getGroups() {
+		public List<TradesRowGroup> getGroups() {
 			return groups;
 		}
 
-		public List<RowData> getRows() {
+		public List<TradesRow> getRows() {
 			return rows;
 		}
 
@@ -569,138 +427,6 @@ public class CargoModelRowTransformer {
 	}
 
 	/**
-	 * The {@link RowDataEMFPath} class is used to bridge our custom {@link RowData} objects with our reflective EMF based UI. This permits the step from {@link RowData} -> EObject , then on to the
-	 * normal EMF Path navigation. This can be passed into the normal {@link EObjectTableViewer} and {@link BasicAttributeManipulator} based API's.
-	 * 
-	 */
-	public static class RowDataEMFPath extends EMFPath {
-
-		private final Type type;
-
-		/**
-		 * Indicate that we want only the "primary record" - i.e. the row with the cargo defining load.
-		 */
-		private final boolean primaryRecordOnly;
-
-		/**
-		 */
-		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Iterable<ETypedElement> path) {
-			super(true, path);
-			this.type = type;
-			this.primaryRecordOnly = primaryRecordOnly;
-		}
-
-		/**
-		 */
-		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final ETypedElement... path) {
-			super(true, path);
-			this.type = type;
-			this.primaryRecordOnly = primaryRecordOnly;
-		}
-
-		public RowDataEMFPath(final boolean failSilently, final boolean primaryRecordOnly, final Type type, final ETypedElement... path) {
-			super(failSilently, path);
-			this.type = type;
-			this.primaryRecordOnly = primaryRecordOnly;
-		}
-
-		@Override
-		public Object get(final EObject root, final int depth) {
-
-			if (root instanceof RowData) {
-				final RowData rowData = (RowData) root;
-				final boolean showRecord = primaryRecordOnly ? rowData.primaryRecord : true;
-				switch (type) {
-				case CARGO:
-					return showRecord ? super.get(rowData.cargo, depth) : null;
-				case DISCHARGE:
-					return super.get(rowData.dischargeSlot, depth);
-				case LOAD:
-					return super.get(rowData.loadSlot, depth);
-				case CARGO_ALLOCATION:
-					return showRecord ? super.get(rowData.cargoAllocation, depth) : null;
-				case MARKET_ALLOCATION:
-					return super.get(rowData.marketAllocation, depth);
-				case CARGO_OR_MARKET_ALLOCATION:
-					return (rowData.cargoAllocation != null) ? (showRecord ? super.get(rowData.cargoAllocation, depth) : null) : super.get(rowData.marketAllocation, depth);
-				case CARGO_OR_MARKET_OR_OPEN_ALLOCATION:
-					if (rowData.cargoAllocation == null) {
-						if (rowData.marketAllocation != null) {
-							return super.get(rowData.marketAllocation);
-						} else {
-							return super.get(rowData.openSlotAllocation);
-						}
-					} else {
-						return showRecord ? super.get(rowData.cargoAllocation, depth) : null;
-					}
-				case DISCHARGE_ALLOCATION:
-					return super.get(rowData.dischargeAllocation, depth);
-				case LOAD_ALLOCATION:
-					return super.get(rowData.loadAllocation, depth);
-				case LOAD_OR_DISCHARGE: {
-					final Object result = get(rowData.loadSlot, depth);
-					return result != null ? result : get(rowData.dischargeSlot, depth);
-
-				}
-				case DISCHARGE_OR_LOAD: {
-					final Object result = get(rowData.dischargeSlot, depth);
-					return result != null ? result : get(rowData.loadSlot, depth);
-
-				}
-				case SLOT_OR_CARGO: {
-
-					Object result = null;
-					if (rowData.loadSlot != null && rowData.loadSlot.isDESPurchase()) {
-						result = get(rowData.loadSlot, depth);
-					}
-					if (result == null && rowData.dischargeSlot != null && rowData.dischargeSlot.isFOBSale()) {
-						result = get(rowData.dischargeSlot, depth);
-					}
-					if (result == null) {
-						result = get(rowData.cargo, depth);
-					}
-					return result;
-				}
-
-				}
-			}
-			return super.get(root, depth);
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = super.hashCode();
-			result = prime * result + (type.hashCode());
-			return result;
-		}
-	}
-
-	public enum Type {
-		CARGO, LOAD, DISCHARGE, CARGO_ALLOCATION, LOAD_ALLOCATION, DISCHARGE_ALLOCATION,
-		/**
-		 */
-		DISCHARGE_OR_LOAD,
-		/**
-		 */
-		LOAD_OR_DISCHARGE,
-
-		/**
-		 */
-		MARKET_ALLOCATION,
-		/**
-		 */
-		CARGO_OR_MARKET_ALLOCATION,
-
-		/**
-		 */
-		SLOT_OR_CARGO,
-		/**
-		 */
-		CARGO_OR_MARKET_OR_OPEN_ALLOCATION
-	}
-
-	/**
 	 * Method to update wiring colours without rebuilding the {@link RootData} object (e.g. after the validation status has changed).
 	 * 
 	 * @param rootData
@@ -708,7 +434,7 @@ public class CargoModelRowTransformer {
 	 */
 	public void updateWiringValidity(final RootData rootData, final Map<Object, IStatus> validationInformation) {
 
-		for (final GroupData g : rootData.getGroups()) {
+		for (final TradesRowGroup g : rootData.getGroups()) {
 			setWiringColour(validationInformation, g);
 		}
 	}
@@ -719,7 +445,7 @@ public class CargoModelRowTransformer {
 	 * @param validationInformation
 	 * @param g
 	 */
-	private void setWiringColour(final Map<Object, IStatus> validationInformation, final GroupData g) {
+	private void setWiringColour(final Map<Object, IStatus> validationInformation, final TradesRowGroup g) {
 		boolean validWire = true;
 		Cargo c = null;
 		for (final EObject obj : g.getObjects()) {
@@ -737,7 +463,7 @@ public class CargoModelRowTransformer {
 		}
 		if (c != null) {
 			for (final WireData wire : g.getWires()) {
-				wire.colour = validWire ? (c.isAllowRewiring() ? RewirableColour : FixedWireColour) : InvalidWireColour;
+				wire.colour = validWire ? (c.isAllowRewiring() ? colourScheme.getRewirableColour() : colourScheme.getFixedWireColour()) : colourScheme.getInvalidWireColour();
 			}
 		}
 	}

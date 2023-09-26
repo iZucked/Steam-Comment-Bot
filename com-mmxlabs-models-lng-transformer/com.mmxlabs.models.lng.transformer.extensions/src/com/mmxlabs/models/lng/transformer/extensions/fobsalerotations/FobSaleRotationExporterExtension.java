@@ -21,10 +21,13 @@ import com.mmxlabs.models.lng.schedule.NonShippedIdle;
 import com.mmxlabs.models.lng.schedule.NonShippedJourney;
 import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
+import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -95,6 +98,13 @@ public class FobSaleRotationExporterExtension implements IExporterExtension {
 						eLoadVisit.setEnd(modelEntityMap.getDateFromHours(endTime, oSlots.get(0).getPort()));
 						eLoadVisit.setPort(modelEntityMap.getModelObjectNullChecked(oSlots.get(0).getPort(), Port.class));
 						eLoadVisit.setSlot(modelEntityMap.getModelObjectNullChecked(oSlots.get(0), Slot.class));
+						final int lateness = getLateness(oSlots.get(0).getTimeWindow(), portTimesRecord.getSlotTime(oSlots.get(0)));
+						if (lateness != 0) {
+							final PortVisitLateness eLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
+							eLateness.setLatenessInHours(lateness);
+							eLateness.setType(PortVisitLatenessType.PROMPT);
+							eLoadVisit.setLateness(eLateness);
+						}
 						eSequence.getEvents().add(eLoadVisit);
 
 						if (previousEvent != null) {
@@ -188,6 +198,13 @@ public class FobSaleRotationExporterExtension implements IExporterExtension {
 				}
 			}
 		}
+	}
+
+	private int getLateness(final @Nullable ITimeWindow tw, final int time) {
+		if ((tw != null) && (time >= tw.getExclusiveEnd())) {
+			return time - tw.getExclusiveEnd() + 1;
+		}
+		return 0;
 	}
 
 }

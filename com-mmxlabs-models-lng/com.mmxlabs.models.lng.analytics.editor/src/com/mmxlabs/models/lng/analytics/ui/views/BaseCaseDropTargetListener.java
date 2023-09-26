@@ -5,10 +5,8 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -22,7 +20,6 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.ui.internal.layout.Row;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -49,7 +46,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
@@ -256,7 +253,7 @@ public class BaseCaseDropTargetListener extends AbstractDropTargetListener {
 						}
 					};
 					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(c, null, null);
-				} else if (o instanceof final CargoModelRowTransformer.RowData sourceRowData) {
+				} else if (o instanceof final TradesRow sourceTradesRow) {
 					// Lazily evaluated command to avoid adding shipping multiple times.
 					final CompoundCommand c = new CompoundCommand() {
 						@Override
@@ -279,10 +276,10 @@ public class BaseCaseDropTargetListener extends AbstractDropTargetListener {
 
 							while (itr.hasNext()) {
 								final Object o = itr.next();
-								if (o instanceof final CargoModelRowTransformer.RowData sourceRowData) {
-									cargoes.add(sourceRowData.getCargo());
-									loads.add(sourceRowData.getLoadSlot());
-									discharges.add(sourceRowData.getDischargeSlot());
+								if (o instanceof final TradesRow sourceTradesRow) {
+									cargoes.add(sourceTradesRow.getCargo());
+									loads.add(sourceTradesRow.getLoadSlot());
+									discharges.add(sourceTradesRow.getDischargeSlot());
 								}
 							}
 							loads.remove(null);
@@ -414,10 +411,10 @@ public class BaseCaseDropTargetListener extends AbstractDropTargetListener {
 
 						while (itr.hasNext()) {
 							final Object o = itr.next();
-							if (o instanceof final CargoModelRowTransformer.RowData sourceRowData) {
-								cargoes.add(sourceRowData.getCargo());
-								loads.add(sourceRowData.getLoadSlot());
-								discharges.add(sourceRowData.getDischargeSlot());
+							if (o instanceof final TradesRow sourceTradesRow) {
+								cargoes.add(sourceTradesRow.getCargo());
+								loads.add(sourceTradesRow.getLoadSlot());
+								discharges.add(sourceTradesRow.getDischargeSlot());
 							}
 						}
 						loads.remove(null);
@@ -640,7 +637,7 @@ public class BaseCaseDropTargetListener extends AbstractDropTargetListener {
 					event.detail = DND.DROP_NONE;
 					return;
 				}
-				if (o instanceof CargoModelRowTransformer.RowData) {
+				if (o instanceof TradesRow) {
 					event.operations = DND.DROP_MOVE;
 					event.detail = DND.DROP_MOVE;
 					setDragMessage("Create new row(s) from trades table");

@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.lng.feature"
       label="Models: LNG Feature"
-      version="6.8.3.qualifier"
+      version="6.9.4.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
@@ -398,6 +398,13 @@
 
    <plugin
          id="com.mmxlabs.models.lng.cargo.editor.bulk"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+   <plugin
+         id="com.mmxlabs.models.lng.cargo.editor.model"
          download-size="0"
          install-size="0"
          version="0.0.0"

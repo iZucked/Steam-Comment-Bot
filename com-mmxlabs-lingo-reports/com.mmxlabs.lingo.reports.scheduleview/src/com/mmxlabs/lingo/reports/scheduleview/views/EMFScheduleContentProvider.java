@@ -406,6 +406,12 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				final ZonedDateTime latenessStart = visit.getStart().minusHours(pvl.getLatenessInHours());
 				return GregorianCalendar.from(latenessStart);
 			}
+		} else if (element instanceof final NonShippedSlotVisit visit && visit.getSlot() instanceof LoadSlot) {
+			final PortVisitLateness pvl = visit.getLateness();
+			if (pvl != null && pvl.getLatenessInHours() > 0) {
+				final ZonedDateTime latenessStart = visit.getStart().minusHours(pvl.getLatenessInHours());
+				return GregorianCalendar.from(latenessStart);
+			}
 		}
 		return null;
 	}
@@ -418,6 +424,18 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				return GregorianCalendar.from(visit.getStart());
 			}
 			final Slot<?> slot = visit.getSlotAllocation().getSlot();
+			if (slot != null) {
+				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();
+				if (windowStartWithSlotOrPortTime != null) {
+					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
+				}
+			}
+		} else if (element instanceof final NonShippedSlotVisit visit && visit.getSlot() instanceof LoadSlot) {
+			final PortVisitLateness pvl = visit.getLateness();
+			if (pvl != null && pvl.getLatenessInHours() > 0) {
+				return GregorianCalendar.from(visit.getStart());
+			}
+			final Slot<?> slot = visit.getSlot();
 			if (slot != null) {
 				final ZonedDateTime windowStartWithSlotOrPortTime = slot.getSchedulingTimeWindow().getStart();
 				if (windowStartWithSlotOrPortTime != null) {

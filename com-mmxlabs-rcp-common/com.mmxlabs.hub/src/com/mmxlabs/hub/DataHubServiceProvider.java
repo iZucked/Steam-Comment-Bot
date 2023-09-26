@@ -150,7 +150,7 @@ public class DataHubServiceProvider {
 		return doRequest(urlPath, HttpGet::new, responseHandler);
 	}
 
-	public <T extends HttpRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, ResponseHandler<U> responseHandler) throws IOException {
+	private <T extends HttpRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, ResponseHandler<U> responseHandler) throws IOException {
 
 		if (!isOnlineAndLoggedIn()) {
 			return null;
@@ -187,22 +187,6 @@ public class DataHubServiceProvider {
 		}, ctx);
 	}
 
-	public <T extends HttpRequestBase, U> @Nullable U doRequest(String urlPath, Function<URI, T> requestFactory, Consumer<T> requestCusomiser, ResponseHandler<U> responseHandler) throws IOException {
-
-		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
-		if (p == null) {
-			return null;
-		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var ctx = p.getThird();
-
-		requestCusomiser.accept(request);
-
-		return httpClient.execute(request, responseHandler, ctx);
-
-	}
-
 	public <U> @Nullable U doPostRequest(String urlPath, Consumer<HttpPost> requestCusomiser, ResponseHandler<U> responseHandler) throws IOException {
 
 		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, HttpPost::new);
@@ -222,24 +206,6 @@ public class DataHubServiceProvider {
 	public <T extends HttpRequestBase> boolean doGetRequestAsBoolean(String urlPath, ResponseHandler<Boolean> responseHandler) throws IOException {
 
 		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, HttpGet::new);
-		if (p == null) {
-			return false;
-		}
-		final var httpClient = p.getFirst();
-		final var request = p.getSecond();
-		final var ctx = p.getThird();
-
-		Boolean b = httpClient.execute(request, responseHandler, ctx);
-		if (b == null) {
-			return false;
-		}
-		return b;
-
-	}
-
-	public <T extends HttpRequestBase> boolean doRequestAsBoolean(String urlPath, Function<URI, T> requestFactory, ResponseHandler<Boolean> responseHandler) throws IOException {
-
-		final var p = UpstreamUrlProvider.INSTANCE.makeRequest(urlPath, requestFactory);
 		if (p == null) {
 			return false;
 		}

@@ -9,6 +9,7 @@ import java.util.Comparator;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 
 import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 public class DefaultRenderOrderComparator implements Comparator<GanttEvent> {
@@ -21,6 +22,12 @@ public class DefaultRenderOrderComparator implements Comparator<GanttEvent> {
 		} else if (o1.getData() instanceof SlotVisit && !(o2.getData() instanceof SlotVisit)) {
 			return 1;
 		} else if (!(o1.getData() instanceof SlotVisit) && o2.getData() instanceof SlotVisit) {
+			return -1;
+		} else if (o1.getData() instanceof NonShippedSlotVisit && o2.getData() instanceof NonShippedSlotVisit) {
+			return 0;
+		} else if (o1.getData() instanceof NonShippedSlotVisit && !(o2.getData() instanceof NonShippedSlotVisit)) {
+			return 1;
+		} else if (!(o1.getData() instanceof NonShippedSlotVisit) && o2.getData() instanceof NonShippedSlotVisit) {
 			return -1;
 		// delay CanalJourneyEvent rendering
 		} else if (o1.getData() instanceof CanalJourneyEvent && o2.getData() instanceof CanalJourneyEvent) {

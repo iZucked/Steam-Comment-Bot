@@ -24,13 +24,6 @@
    <extension-point id="TradesBasedMenuFilter" name="TradesBasedMenuFilter" schema="schema/TradesBasedMenuFilter.exsd"/>
 
 
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated cargobulkeditor -->
-      <package
-            uri="http://www.mmxlabs.com/models/lng/cargobulkeditor/1/"
-            class="com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage"
-            genModel="model/cargobulkeditor.genmodel"/>
-   </extension>
    <extension
          id="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumnFactory"
          point="com.mmxlabs.models.lng.cargo.editor.bulk.TradesBasedColumn">

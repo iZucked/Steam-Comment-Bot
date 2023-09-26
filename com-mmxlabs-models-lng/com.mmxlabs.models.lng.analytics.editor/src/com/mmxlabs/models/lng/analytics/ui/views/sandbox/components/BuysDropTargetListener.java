@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -88,10 +89,9 @@ public class BuysDropTargetListener implements DropTargetListener {
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object o = itr.next();
-					if (o instanceof CargoModelRowTransformer.RowData) {
-						final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
+					if (o instanceof TradesRow tradesRow) {
 
-						final LoadSlot loadSlot = rowData.getLoadSlot();
+						final LoadSlot loadSlot = tradesRow.getLoadSlot();
 						final BuyOption buyRef = AnalyticsBuilder.getOrCreateBuyOption(loadSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
 					} else if (o instanceof SellOption && selection.size() == 1) {
 						// create a DES sale
@@ -131,7 +131,7 @@ public class BuysDropTargetListener implements DropTargetListener {
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object o = itr.next();
-					if (o instanceof CargoModelRowTransformer.RowData) {
+					if (o instanceof TradesRow) {
 						// Found a valid source in the selection.
 						event.operations = DND.DROP_MOVE;
 						return;

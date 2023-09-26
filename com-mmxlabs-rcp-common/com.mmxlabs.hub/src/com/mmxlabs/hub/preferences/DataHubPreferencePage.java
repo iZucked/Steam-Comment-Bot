@@ -96,7 +96,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	protected Label noteLabel;
 
 	protected BooleanFieldEditor forceBasicAuth;
-	protected BooleanFieldEditor preferEdgeBrowser;
 
 	protected StringFieldEditor editor;
 
@@ -297,6 +296,9 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 				}
 			}
 		});
+		final Label lbl2 = new Label(getFieldEditorParent(), SWT.NONE);
+		lbl2.setText("Note: This requires the Edge WebView2 runtime to be installed.");
+		lbl2.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
 
 		infoLabel = new Label(getFieldEditorParent(),  SWT.FILL | SWT.BORDER);
 		infoLabel.setVisible(true);
@@ -312,11 +314,6 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			addField(new BooleanFieldEditor(DataHubPreferenceConstants.P_ENABLE_TEAM_SERVICE_KEY, "&Team folder", getFieldEditorParent()));
 		}
 
-		final Label lbl2 = new Label(getFieldEditorParent(), SWT.NONE);
-		lbl2.setText("Check to prefer the Edge browser for web based login pages. Note: This requires the Edge WebView2 runtime to be installed.");
-		lbl2.setLayoutData(GridDataFactory.fillDefaults().span(2, 1).create());
-		preferEdgeBrowser = new BooleanFieldEditor(DataHubPreferenceConstants.P_PREFER_EDGE_BROWSER, "&Prefer Edge Browser", getFieldEditorParent());
-		addField(preferEdgeBrowser);
 
 		noteLabel = new Label(getFieldEditorParent(), SWT.FILL);
 		noteLabel.setVisible(false);

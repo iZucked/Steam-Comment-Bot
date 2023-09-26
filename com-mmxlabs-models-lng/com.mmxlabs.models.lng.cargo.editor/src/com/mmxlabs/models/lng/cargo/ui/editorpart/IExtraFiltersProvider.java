@@ -13,8 +13,6 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorActi
 
 public interface IExtraFiltersProvider {
 	
-	List<ViewerFilter> getExtraFilters();
-	
 	List<DefaultMenuCreatorAction> getExtraMenuActions(final StructuredViewer viewer);
 	
 	void clear();

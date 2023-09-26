@@ -32,8 +32,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 
 public class SlotTypePainter implements PaintListener {
 
@@ -163,13 +162,13 @@ public class SlotTypePainter implements PaintListener {
 			}
 			GridItem itm = rootItems[i];
 			Object o = itm.getData();
-			final Row row = (Row) o;
-			final boolean drawLoad = row.getLoadSlot() != null;
-			final boolean drawDischarge = row.getDischargeSlot() != null;
+			final TradesRow tradesRow = (TradesRow) o;
+			final boolean drawLoad = tradesRow.getLoadSlot() != null;
+			final boolean drawDischarge = tradesRow.getDischargeSlot() != null;
 
 			if (isLoad) {
 				if (drawLoad) {
-					final LoadSlot loadSlot = row.getLoadSlot();
+					final LoadSlot loadSlot = tradesRow.getLoadSlot();
 					final Color terminalColour = (loadSlot.getCargo() != null || (loadSlot.isOptional() || loadSlot.isCancelled())) ? ValidTerminalColour : InvalidTerminalColour;
 					drawTerminal(true, loadSlot.isDESPurchase(), terminalColour, loadSlot.isOptional(), loadSlot instanceof SpotSlot, ca, graphics, midpoint);
 					if (loadSlot.isCancelled()) {
@@ -179,7 +178,7 @@ public class SlotTypePainter implements PaintListener {
 			} else {
 				graphics.setLineWidth(linewidth);
 				if (drawDischarge) {
-					final DischargeSlot dischargeSlot = row.getDischargeSlot();
+					final DischargeSlot dischargeSlot = tradesRow.getDischargeSlot();
 					final Color terminalColour = (dischargeSlot.getCargo() != null || (dischargeSlot.isOptional() || dischargeSlot.isCancelled())) ? ValidTerminalColour : InvalidTerminalColour;
 					drawTerminal(false, !dischargeSlot.isFOBSale(), terminalColour, dischargeSlot.isOptional(), dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
 					if (dischargeSlot.isCancelled()) {
@@ -201,8 +200,8 @@ public class SlotTypePainter implements PaintListener {
 
 							for (GridItem itm2 : rootItems) {
 								Object o2 = itm2.getData();
-								final Row row2 = (Row) o2;
-								if (row2.getDischargeSlot() == d1) {
+								final TradesRow tradesRow2 = (TradesRow) o2;
+								if (tradesRow2.getDischargeSlot() == d1) {
 
 									final float startMid = terminalPositions.get(idx);
 									final float endMid = midpoint;

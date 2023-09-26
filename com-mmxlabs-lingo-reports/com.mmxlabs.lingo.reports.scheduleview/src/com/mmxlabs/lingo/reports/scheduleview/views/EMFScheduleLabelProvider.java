@@ -77,9 +77,12 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
 import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -168,14 +171,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				alignmentMaps = buildShowDaysLabelAlignmentMaps();
 			}
 		});
-		
+
 		knownLabels.add(showCanals);
 		knownLabels.add(showDestinationLabels);
 		knownLabels.add(showDays);
 
 		final List<ILabellingOption> activeLabels = knownLabels.stream() //
-			.filter(ILabellingOption::isShowing) //
-			.toList();
+				.filter(ILabellingOption::isShowing) //
+				.toList();
 		final int numActiveLabels = activeLabels.size();
 		if (numActiveLabels == 1) {
 			applyActions.get(activeLabels.get(0)).run();
@@ -190,21 +193,21 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	private List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> buildShowDaysLabelAlignmentMaps() {
 		return ServiceHelper.withOptionalService(IScheduleLabelAlignmentMapFactory.class, f -> {
-			IScheduleLabelAlignmentMapFactory factory = (f != null) ? f : new DefaultScheduleLabelAlignmentMapFactory(); 
+			IScheduleLabelAlignmentMapFactory factory = (f != null) ? f : new DefaultScheduleLabelAlignmentMapFactory();
 			return factory.buildShowDaysLabelAlignmentMaps();
 		});
 	}
 
 	private List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> buildDestinationLabelAlignmentMaps() {
 		return ServiceHelper.withOptionalService(IScheduleLabelAlignmentMapFactory.class, f -> {
-			IScheduleLabelAlignmentMapFactory factory = (f != null) ? f : new DefaultScheduleLabelAlignmentMapFactory(); 
+			IScheduleLabelAlignmentMapFactory factory = (f != null) ? f : new DefaultScheduleLabelAlignmentMapFactory();
 			return factory.buildDestinationLabelAlignmentMaps();
 		});
 	}
 
 	private List<Map<EEventLabelAlignment, IEventTextPropertiesGenerator>> buildCanalAlignmentMaps() {
 		return ServiceHelper.withOptionalService(IScheduleLabelAlignmentMapFactory.class, f -> {
-			IScheduleLabelAlignmentMapFactory factory = (f != null) ? f : new DefaultScheduleLabelAlignmentMapFactory(); 
+			IScheduleLabelAlignmentMapFactory factory = (f != null) ? f : new DefaultScheduleLabelAlignmentMapFactory();
 			return factory.buildCanalAlignmentMaps();
 		});
 	}
@@ -245,7 +248,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return sequence.toString();
 		} else if (element instanceof Sequence sequence) {
 			String seqText = vesselFormatter.render(sequence);
-			
+
 			//
 			// CII Grade appendix
 			//
@@ -368,7 +371,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof CombinedSequence combinedSequence) {
 			final Vessel vessel = combinedSequence.getVessel();
 			String seqText = vessel == null ? "<Unallocated>" : vesselFormatter.render(vessel);
-			
+
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();
 			if (input instanceof Collection<?> collection && collection.size() > 1) {
@@ -551,7 +554,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 			{
 				if (event instanceof SlotVisit slotVisit) {
-					final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+					final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 					if (slot != null) {
 						final Contract contract = slot.getContract();
 						if (contract != null) {
@@ -581,6 +584,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 								}
 							}
 						}
+					}
+				} else if (event instanceof NonShippedSlotVisit slotVisit) {
+					final Slot<?> slot = slotVisit.getSlot();
+					if (slot != null) {
+						final Contract contract = slot.getContract();
+						if (contract != null) {
+							tt.append("Contract: " + contract.getName() + " \n");
+						}
+						tt.append(" \n");
 					}
 				}
 			}
@@ -646,6 +658,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						}
 					}
 				}
+			} else if (element instanceof NonShippedJourney) {
+				eventText.append("Travel time: " + durationTime + " \n");
 			} else if (element instanceof CanalJourneyEvent canalBookingEvent) {
 				final Journey journey = canalBookingEvent.getLinkedJourney();
 
@@ -664,7 +678,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					// dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 				}
 			} else if (element instanceof SlotVisit slotVisit) {
-				final Slot<?> slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+				final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
 				if (slot != null) {
 					eventText.append("Time in port: " + durationTime + " \n");
 					eventText.append("Window End: " + dateToString(slot.getSchedulingTimeWindow().getEnd()) + "\n");
@@ -690,6 +704,19 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						}
 					}
 				}
+			} else if (element instanceof NonShippedSlotVisit slotVisit) {
+				final Slot<?> slot = slotVisit.getSlot();
+				if (slot instanceof LoadSlot) {
+					eventText.append("Window End: " + dateToString(slot.getSchedulingTimeWindow().getEnd()) + "\n");
+					eventText.append(" \n");
+				}
+				final PortVisitLateness portVisitLateness = slotVisit.getLateness();
+				if (portVisitLateness != null) {
+					final int lateHours = portVisitLateness.getLatenessInHours();
+					if (lateHours != 0) {
+						eventText.append("LATE by " + LatenessUtils.formatLatenessHours(lateHours));
+					}
+				}
 			} else if (element instanceof VesselEventVisit vev) {
 				eventText.append("Duration: " + durationTime + "\n");
 				if (LatenessUtils.isLateExcludingFlex(vev)) {
@@ -699,7 +726,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						eventText.append("LATE by " + LatenessUtils.formatLatenessHours(lateHours) + "\n");
 					}
 				}
-				if(vev.getVesselEvent() instanceof CharterLengthEvent) {
+				if (vev.getVesselEvent() instanceof CharterLengthEvent) {
 					eventText.append(getFuelsString(vev));
 				}
 			} else if (element instanceof Idle idle) {
@@ -977,12 +1004,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 		return 1;
 	}
-	
+
 	@Override
 	public boolean getIsBorderInner(final Object element) {
 		if (currentScheme != null) {
 			return currentScheme.getIsBorderInner(element);
-			
+
 		}
 		return false;
 	}

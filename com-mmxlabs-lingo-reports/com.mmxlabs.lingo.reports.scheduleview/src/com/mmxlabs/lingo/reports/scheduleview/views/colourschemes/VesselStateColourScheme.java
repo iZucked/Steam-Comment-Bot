@@ -204,12 +204,10 @@ public class VesselStateColourScheme extends ColourScheme {
 			if (event instanceof SlotVisit sv) { 
 				final PortVisitLateness pvl = sv.getLateness();
 				return Display.getDefault().getSystemColor(pvl != null && pvl.getLatenessInHours() > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GRAY);
-			} else if (event instanceof NonShippedSlotVisit) {
-
-				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
+			} else if (event instanceof NonShippedSlotVisit sv) {
+				final PortVisitLateness pvl = sv.getLateness();
+				return Display.getDefault().getSystemColor(pvl != null && pvl.getLatenessInHours() > 0? SWT.COLOR_RED : SWT.COLOR_DARK_GRAY);
 			}
-		} else if (element instanceof NonShippedSlotVisit) {
-				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
 		}
 
 		return null;
@@ -217,7 +215,8 @@ public class VesselStateColourScheme extends ColourScheme {
 
 	@Override
 	public int getBorderWidth(final Object element) {
-		if (element instanceof SlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0) {
+		if ((element instanceof SlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0) //
+				|| (element instanceof NonShippedSlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0)) {
 			return 3;
 		}
 		return 1;
@@ -225,7 +224,8 @@ public class VesselStateColourScheme extends ColourScheme {
 	
 	@Override
 	public boolean getIsBorderInner(final Object element) {
-		return element instanceof SlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0;
+		return (element instanceof SlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0)
+				|| (element instanceof NonShippedSlotVisit sv && sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0);
 	}
 
 	private static record OpenOrNonShippedType(boolean multi, boolean fob, boolean des, boolean buy, boolean optional, boolean open) {

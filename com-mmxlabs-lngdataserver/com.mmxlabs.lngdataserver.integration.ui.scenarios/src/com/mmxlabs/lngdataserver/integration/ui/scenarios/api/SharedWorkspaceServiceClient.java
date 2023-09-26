@@ -40,7 +40,7 @@ public class SharedWorkspaceServiceClient {
 
 	public String uploadScenario(final File file, final String path, final IProgressListener progressListener) throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(SCENARIO_UPLOAD_URL, HttpPost::new, request -> {
+		return DataHubServiceProvider.getInstance().doPostRequest(SCENARIO_UPLOAD_URL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -85,7 +85,7 @@ public class SharedWorkspaceServiceClient {
 
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(SCENARIO_DOWNLOAD_URL + uuid + "/details", HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_DOWNLOAD_URL + uuid + "/details", response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);
@@ -98,7 +98,7 @@ public class SharedWorkspaceServiceClient {
 
 	public Pair<String, Instant> getScenarios() throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(SCENARIO_LIST_URL, HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(SCENARIO_LIST_URL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);

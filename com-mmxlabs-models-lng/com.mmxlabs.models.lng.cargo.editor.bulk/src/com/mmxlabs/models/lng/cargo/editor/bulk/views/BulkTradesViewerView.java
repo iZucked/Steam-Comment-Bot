@@ -10,10 +10,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorFactory;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Table;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
+
 import com.mmxlabs.models.lng.cargo.editor.bulk.ui.editorpart.BulkTradesTablePane;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelFactory;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesTableRoot;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -42,13 +43,13 @@ public class BulkTradesViewerView extends ScenarioTableViewerView<BulkTradesTabl
 	protected void initViewerPane(final BulkTradesTablePane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			Table table = CargoBulkEditorFactory.eINSTANCE.createTable();
-			pane.setTable(table);
+			TradesTableRoot tradesTableRoot = CargoEditorModelFactory.eINSTANCE.createTradesTableRoot();
+			pane.setTradesTableRoot(tradesTableRoot);
 			pane.setlngScenarioModel((LNGScenarioModel) getRootObject());
-			pane.init(Arrays.asList(new EReference[] {CargoBulkEditorPackage.eINSTANCE.getTable_Rows()}), null, getModelReference());
-			pane.setCargoes(table, (LNGScenarioModel) getRootObject());
+			pane.init(Arrays.asList(new EReference[] {CargoEditorModelPackage.eINSTANCE.getTradesTableRoot_TradesRows()}), null, getModelReference());
+			pane.setCargoes(tradesTableRoot, (LNGScenarioModel) getRootObject());
 			pane.setlngScenarioModel(((LNGScenarioModel) getRootObject()));
-			pane.getViewer().setInput(table);
+			pane.getViewer().setInput(tradesTableRoot);
 		}
 	}
 
@@ -59,14 +60,11 @@ public class BulkTradesViewerView extends ScenarioTableViewerView<BulkTradesTabl
 			openStatus(status.getChildren()[0]);
 		}
 
-		if (status instanceof DetailConstraintStatusDecorator) {
-
-			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+		if (status instanceof DetailConstraintStatusDecorator dcsd) {
 			Port port = null;
 			if (dcsd.getTarget() instanceof Port) {
 				port = (Port) dcsd.getTarget();
-			} else if (dcsd.getTarget() instanceof Location) {
-				final Location location = (Location) dcsd.getTarget();
+			} else if (dcsd.getTarget() instanceof Location location) {
 				port = (Port) location.eContainer();
 			}
 			if (port != null) {

@@ -943,6 +943,10 @@
             feature="scenario-data-diff"
             plugin.xml="scenariodiff.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="ninety-day-schedule-chart"
+            plugin.xml="ninetydayschedulechart.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="com.mmxlabs.rcp.common.ReplaceableView">

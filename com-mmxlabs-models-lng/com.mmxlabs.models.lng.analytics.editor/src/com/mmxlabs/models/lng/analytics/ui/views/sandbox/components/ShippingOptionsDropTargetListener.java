@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -142,13 +143,13 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 							AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 							optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 				}
-				if (o instanceof CargoModelRowTransformer.RowData rowData) {
+				if (o instanceof TradesRow tradesRow) {
 					final CompoundCommand cmd = new CompoundCommand();
 
-					final LoadSlot loadSlot = rowData.getLoadSlot();
-					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
+					final LoadSlot loadSlot = tradesRow.getLoadSlot();
+					final DischargeSlot dischargeSlot = tradesRow.getDischargeSlot();
 
-					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(rowData.getCargo(), loadSlot, dischargeSlot, portfolioMode, optionAnalysisModel);
+					final ShippingOption shippingOption = AnalyticsBuilder.getOrCreateShippingOption(tradesRow.getCargo(), loadSlot, dischargeSlot, portfolioMode, optionAnalysisModel);
 					if (shippingOption != null && shippingOption.eContainer() == null) {
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel, AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
 								shippingOption));
@@ -176,7 +177,7 @@ public class ShippingOptionsDropTargetListener implements DropTargetListener {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}
-				if (o instanceof CargoModelRowTransformer.RowData) {
+				if (o instanceof TradesRow) {
 					event.operations = DND.DROP_MOVE;
 					return;
 				}

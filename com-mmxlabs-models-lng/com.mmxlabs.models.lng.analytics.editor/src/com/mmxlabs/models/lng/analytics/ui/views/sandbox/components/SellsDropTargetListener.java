@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.TradesRow;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -86,11 +87,9 @@ public class SellsDropTargetListener implements DropTargetListener {
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object o = itr.next();
-					if (o instanceof CargoModelRowTransformer.RowData) {
+					if (o instanceof TradesRow tradesRow) {
 
-						final CargoModelRowTransformer.RowData rowData = (CargoModelRowTransformer.RowData) o;
-
-						final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
+						final DischargeSlot dischargeSlot = tradesRow.getDischargeSlot();
 						final SellOption sellRef = AnalyticsBuilder.getOrCreateSellOption(dischargeSlot, optionAnalysisModel, scenarioEditingLocation, cmd);
 					} else if (o instanceof BuyOption) {
 						// create Fob Purchase
@@ -130,7 +129,7 @@ public class SellsDropTargetListener implements DropTargetListener {
 				final Iterator<?> itr = selection.iterator();
 				while (itr.hasNext()) {
 					final Object o = itr.next();
-					if (o instanceof CargoModelRowTransformer.RowData) {
+					if (o instanceof TradesRow) {
 						// Found a valid source in the selection.
 						event.operations = DND.DROP_MOVE;
 						return;

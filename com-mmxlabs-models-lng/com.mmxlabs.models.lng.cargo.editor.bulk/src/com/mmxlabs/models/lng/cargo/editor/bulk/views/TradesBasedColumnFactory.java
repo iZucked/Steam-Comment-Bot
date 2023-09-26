@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.CargoBulkEditorPackage;
+import com.mmxlabs.models.lng.cargo.editor.model.cargoeditormodel.CargoEditorModelPackage;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
@@ -139,7 +139,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_START_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Load ID")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 		}
 			break;
@@ -151,7 +151,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_PORT_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Load Port")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 		}
 			break;
@@ -162,7 +162,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_PORT_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Load CV")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 		}
 			break;
@@ -184,7 +184,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
 						final ColumnHandler handler = blockManager.createColumn(block, "Volume") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asSummaryOnly() //
 								.build();
 
@@ -205,7 +205,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Min") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -213,7 +213,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Max") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -222,7 +222,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((VolumeUnits) e));
 						blockManager.createColumn(block, "Units") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -231,7 +231,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Op. Tol.") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -282,9 +282,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 						blockManager.createColumn(block, "Window") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
-								.withMultiPathForSorting(new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
-										new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()))) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
+								.withMultiPathForSorting(new EMFMultiPath(true, new EMFPath(true, CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()),
+										new EMFPath(true, CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot()))) //
 								.asSummaryOnly() //
 								.withGroupExpandedLabel("Window") //
 								.build();
@@ -294,9 +294,9 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Date") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
-								.withMultiPathForSorting(new EMFMultiPath(true, new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()),
-										new EMFPath(true, CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()))) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
+								.withMultiPathForSorting(new EMFMultiPath(true, new EMFPath(true, CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()),
+										new EMFPath(true, CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot()))) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -305,7 +305,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Time") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -313,7 +313,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Size") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -322,7 +322,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
 						blockManager.createColumn(block, "Units") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -330,7 +330,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Duration") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.withTooltip("Visit duration in hours")
 								.asDetailOnly() //
 								.build();
@@ -339,7 +339,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlex(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Flex") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -348,7 +348,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
 						blockManager.createColumn(block, "Units") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -357,7 +357,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Counter Party") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -386,7 +386,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 						blockManager.createColumn(block, "Buy at") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asSummaryOnly() //
 								.withGroupExpandedLabel("Buy at") //
 								.build();
@@ -397,7 +397,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Contract") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asDetailOnly() //
 								.build();
 					}
@@ -405,7 +405,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final PriceAttributeManipulator rendMan = new PriceAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Expression") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.withTooltip("Price expression") //
 								.asDetailOnly() //
 								.build();
@@ -423,7 +423,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Purchase Entity")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 		}
 			break;
@@ -434,7 +434,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Purchase Counterparty")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 		}
 			break;
@@ -445,7 +445,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Purchase CN")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 		}
 			break;
@@ -456,7 +456,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Cancelled")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 		}
 			break;
@@ -479,7 +479,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ICellRenderer rendMan = new HasRestrictionsFormatter();
 						blockManager.createColumn(block, "Restrictions") //
 								.withCellRenderer(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asSummaryOnly() //
 								.withGroupExpandedLabel("Restrictions") //
 								.build();
@@ -488,7 +488,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Keep open") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -498,7 +498,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Vessels") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -508,7 +508,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Override") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 
@@ -529,7 +529,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -548,7 +548,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, " Ports") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 
@@ -559,7 +559,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Override") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 
@@ -580,7 +580,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -600,7 +600,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Contracts") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -610,7 +610,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Override") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 
@@ -631,7 +631,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						final ColumnHandler createColumn = blockManager.createColumn(block, "Permissive") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -650,7 +650,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withOrderKey(DISCHARGE_START_GROUP + "_1")
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Discharge ID")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 		}
 			break;
@@ -661,7 +661,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					new SingleColumnFactoryBuilder(columnID, "Port").withBlockType(DISCHARGE_PORT_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Discharge Port")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 		}
 			break;
@@ -684,7 +684,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Volume") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asSummaryOnly()
 								.withGroupExpandedLabel("Volume") //
 								.build();
@@ -693,7 +693,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Min") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -701,7 +701,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final VolumeAttributeManipulator rendMan = new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Max") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -711,7 +711,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((VolumeUnits) e));
 						blockManager.createColumn(block, "Units") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -720,7 +720,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Op. Tol.") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -770,7 +770,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						blockManager.createColumn(block, "Window") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asSummaryOnly()
 								.withGroupExpandedLabel("Window")
 								.build();
@@ -780,7 +780,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Date") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -789,7 +789,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Time") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -797,7 +797,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Size") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -806,7 +806,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
 						blockManager.createColumn(block, "Units") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -814,7 +814,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Duration") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -822,7 +822,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final NumericAttributeManipulator rendMan = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowFlex(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Flex") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -831,7 +831,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler(), e -> mapName((TimePeriod) e));
 						blockManager.createColumn(block, "Units") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -840,7 +840,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Counter Party") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -869,7 +869,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ContractManipulator rendMan = new ContractManipulator(referenceValueProvider, scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Sell at") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asSummaryOnly() //
 								.withGroupExpandedLabel("Sell at") //
 								.build();
@@ -880,7 +880,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Contract") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -888,7 +888,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final StringAttributeManipulator rendMan = new StringAttributeManipulator(CargoPackage.eINSTANCE.getSlot_PriceExpression(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Expression") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -904,7 +904,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					new SingleColumnFactoryBuilder(columnID, "Entity").withBlockType(DISCHARGE_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Sales Entity")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 		}
 			break;
@@ -914,7 +914,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					new SingleColumnFactoryBuilder(columnID, "Counterparty").withBlockType(DISCHARGE_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Sales counterparty")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 		}
 			break;
@@ -924,7 +924,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					new SingleColumnFactoryBuilder(columnID, "CN").withBlockType(DISCHARGE_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Sales CN")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 		}
 			break;
@@ -935,7 +935,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(DISCHARGE_PRICING_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Cancelled")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 			break;
 		}
@@ -957,7 +957,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ICellRenderer rendMan = new HasRestrictionsFormatter();
 						blockManager.createColumn(block, "Restrictions") //
 								.withCellRenderer(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot()) //
 								.asSummaryOnly() //
 								.withGroupExpandedLabel("Restrictions") //
 								.build();
@@ -966,7 +966,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final BooleanAttributeManipulator rendMan = new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Locked(), scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Keep open") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -976,7 +976,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 						blockManager.createColumn(block, "Vessels") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -985,7 +985,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Override") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1005,7 +1005,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						blockManager.createColumn(block, "Permissive") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1024,7 +1024,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						blockManager.createColumn(block, " Ports") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 
@@ -1034,7 +1034,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Override") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1053,7 +1053,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						blockManager.createColumn(block, "Permissive") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1072,7 +1072,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						blockManager.createColumn(block, "Contracts") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1081,7 +1081,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 								scenarioEditingLocation.getDefaultCommandHandler());
 						blockManager.createColumn(block, "Override") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1101,7 +1101,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						blockManager.createColumn(block, "Permissive") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1119,7 +1119,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 					new SingleColumnFactoryBuilder(columnID, "Assignment").withBlockType(CARGO_END_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Assignment")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow__GetAssignableObject())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow__GetAssignableObject())
 							.build());
 		}
 			break;
@@ -1150,7 +1150,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ICellRenderer rendMan = new DivertibleFormatter();
 						blockManager.createColumn(block, "Diversion") //
 								.withCellRenderer(rendMan)
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot()) //
 								.asSummaryOnly() //
 								.withGroupExpandedLabel("Diversion")
 								.build();
@@ -1180,7 +1180,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						};
 						blockManager.createColumn(block, "DES type") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 
@@ -1213,7 +1213,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 						blockManager.createColumn(block, "Ship days") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1242,7 +1242,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 						final ICellRenderer rendMan = new DivertibleFormatter();
 						blockManager.createColumn(block, "Diversion") //
 								.withCellRenderer(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot()) //
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot()) //
 								.asSummaryOnly() //
 								.withGroupExpandedLabel("Diversion") //
 								.build();
@@ -1276,7 +1276,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 						blockManager.createColumn(block, "FOB type") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1306,7 +1306,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 
 						blockManager.createColumn(block, "Ship days") //
 								.withCellEditor(rendMan) //
-								.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+								.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 								.asDetailOnly() //
 								.build();
 					}
@@ -1325,7 +1325,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_END_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Exposure")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 			break;
 		}
@@ -1336,7 +1336,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(DISCHARGE_END_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Exposure")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 			break;
 		}
@@ -1347,7 +1347,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(LOAD_END_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Hedging")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_LoadSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_LoadSlot())
 							.build());
 			break;
 		}
@@ -1358,7 +1358,7 @@ public class TradesBasedColumnFactory implements ITradesColumnFactory {
 							.withBlockType(DISCHARGE_END_GROUP)
 							.withCellEditor(rendMan)
 							.withBlockConfigurationName("Hedging")
-							.withElementPath(CargoBulkEditorPackage.eINSTANCE.getRow_DischargeSlot())
+							.withElementPath(CargoEditorModelPackage.eINSTANCE.getTradesRow_DischargeSlot())
 							.build());
 			break;
 		}

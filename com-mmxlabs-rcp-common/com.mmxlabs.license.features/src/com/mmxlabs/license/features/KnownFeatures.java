@@ -74,6 +74,7 @@ public final class KnownFeatures {
 	 * Paper deals and hedging
 	 */
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
+	public static final String FEATURE_PAPER_DEALS_IMPORT_WITH_EXCEL = "features:paperdeals-excel-import";
 	// Hedges
 	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
 	public static final String FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START = "features:re-hedge-cutoff-at-prompt-start";
@@ -155,6 +156,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_NON_SHIPPED_FOB_ROTATIONS = "features:non-shipped-fob-rotations";
 
+	public static final String FEATURE_INVENTORY_CARGO_DIFF = "features:inventory-cargo-diff";
+
 	/**
 	 * Scenario repair features
 	 */
@@ -200,5 +203,10 @@ public final class KnownFeatures {
 	 *  Temporary features
 	 */
 	public static final String FEATURE_ADP_IMPORT_CONTRACT_DATES_FROM_CSV = "features:adp-import-contract-dates-from-csv";
+	
+	/*
+	 * 90 Day Schedule Chart (New Schedule Chart)
+	 */
+	public static final String FEATURE_90_DAY_SCHEDULE_CHART = "features:ninety-day-schedule-chart";
 
 }

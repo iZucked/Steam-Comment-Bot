@@ -53,11 +53,13 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 			}
 		};
 		final Inventory inv = report.getSelectedInventory();
-		showingCV = inv != null && inv.getFacilityType() != InventoryFacilityType.UPSTREAM && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
+		boolean initialCVState = report.getMemento().getBoolean(InventoryReportConstants.Show_CV);
+		showingCV = initialCVState && inv != null && inv.getFacilityType() != InventoryFacilityType.UPSTREAM && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
 		showCVAction = new Action("CV", IAction.AS_CHECK_BOX) {
 			@Override
 			public void run() {
 				showingCV = !showingCV;
+				report.getMemento().putBoolean(InventoryReportConstants.Show_CV, showingCV);
 				setChecked(showingCV);
 				report.setCVVisibilityInInventoryChart(showingCV);
 			}
@@ -114,8 +116,10 @@ public class ChartColourSchemeAction extends Action implements IMenuCreator {
 	}
 	
 	public void update() {
+		boolean initialCVState = report.getMemento().getBoolean(InventoryReportConstants.Show_CV);
+		
 		final Inventory inv = report.getSelectedInventory();
-		showingCV = inv != null && inv.getFacilityType() != InventoryFacilityType.UPSTREAM && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
+		showingCV = initialCVState && inv != null && inv.getFacilityType() != InventoryFacilityType.UPSTREAM && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_CV_MODEL);
 	}
 
 	public boolean isShowingCargoes() {

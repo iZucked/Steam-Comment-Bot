@@ -5,18 +5,12 @@
 package com.mmxlabs.models.lng.cargo.editor.risk;
 
 import java.time.LocalDate;
-import java.time.Year;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,11 +20,9 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -62,8 +54,6 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DealSet;
@@ -71,18 +61,9 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
-import com.mmxlabs.models.lng.cargo.util.DefaultExposuresCustomiser;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
-import com.mmxlabs.models.lng.pricing.CommodityCurve;
-import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
-import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -96,7 +77,6 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
-import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
@@ -463,20 +443,16 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	protected Action createAddAction(final EReference containment) {
 		final List<Action> actionList = new LinkedList<>();
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CARGOES)) {
-			final Action generateFromCargoesAction = createDealSetsFromCargoesAction();
-			actionList.add(generateFromCargoesAction);
+			actionList.add(createDealSetsFromCargoesAction());
 		}
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CONTRACTS)) {
-			final Action generateFromContractsAction = createDealSetsFromContractsAction();
-			actionList.add(generateFromContractsAction);
+			actionList.add(createDealSetsFromContractsAction());
 		}
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_CURVES)) {
-			final Action generateFromCurvesMenu = createDealSetsFromCurvesMenu();
-			actionList.add(generateFromCurvesMenu);
+			actionList.add(createDealSetsFromCurvesMenu());
 		}
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DEAL_SETS_GENERATE_FROM_INDICES)) {
-			final Action generateFromIndicesMenu = createDealSetsFromIndicesMenu();
-			actionList.add(generateFromIndicesMenu);
+			actionList.add(createDealSetsFromIndicesMenu());
 		}
 		final Action[] extraActions = actionList.toArray(new Action[0]);
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
@@ -487,8 +463,10 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 			
 			@Override
 			protected void populate(Menu menu) {
-				final Action generateFromPurchaseContractsAction = createDealSetsFromPurchaseContractsAction();
-				final Action generateFromSalesContractsAction = createDealSetsFromSalesContractsAction();
+				final Action generateFromPurchaseContractsAction = DealSetActionUtils.createFromPurchaseContractsAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler());
+				final Action generateFromSalesContractsAction = DealSetActionUtils.createFromSalesContractsAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler());
 				addActionToMenu(generateFromPurchaseContractsAction, menu);
 				addActionToMenu(generateFromSalesContractsAction, menu);
 			}
@@ -496,29 +474,16 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	}
 	
 	private Action createDealSetsFromCargoesAction() {
-		return new RunnableAction("From cargoes", new Runnable() {
+		return new DefaultMenuCreatorAction("From cargoes") {
 			
 			@Override
-			public void run() {
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-				final Set<Slot<?>> usedSlots = updateSlots(jointModelEditor.getScenarioDataProvider());
-				final CompoundCommand cmd = new CompoundCommand();
-				for(final Cargo cargo : cargoModel.getCargoes()) {
-					if (checkContainment(cargo, usedSlots)) continue;
-					final DealSet ds = CargoFactory.eINSTANCE.createDealSet();
-					ds.setName(String.format("%s_%s", cargo.getLoadName(), "set"));
-					cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, ds));
-					for (final Slot<?> slot : cargo.getSlots()) {
-						if (slot instanceof SpotSlot) continue;
-						cmd.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
-					}
-				}
-				if(!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
-				}
+			protected void populate(Menu menu) {
+				addActionToMenu(DealSetActionUtils.createFromCargoesWithoutPapersAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler()), menu);
+				addActionToMenu(DealSetActionUtils.createFromCargoesAndUpdateWithPaperDealCommentsAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler()), menu);
 			}
-		});
+		};
 	}
 	
 	private Action createDealSetsFromCurvesMenu() {
@@ -526,144 +491,14 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 
 			@Override
 			protected void populate(Menu menu) {
-				final Action generateByMonthAction = createDealSetsFromCurvesByMonthAction();
-				final Action generateByQuarterAction = createDealSetsFromCurvesByQuarterAction();
+				final Action generateByMonthAction = DealSetActionUtils.createFromCurvesByMonthAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler(), exposuresCustomisers);
+				final Action generateByQuarterAction = DealSetActionUtils.createFromCurvesByQuarterAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler(), exposuresCustomisers);
 				addActionToMenu(generateByMonthAction, menu);
 				addActionToMenu(generateByQuarterAction, menu);
 			}
 		};
-	}
-
-	private Action createDealSetsFromCurvesByMonthAction() {
-		return new RunnableAction("By month", new Runnable() {
-			@Override
-			public void run() {
-				final IScenarioDataProvider scenarioDataProvider = jointModelEditor.getScenarioDataProvider();
-				final ModelMarketCurveProvider mmCurveProvider = getMarketCurveProvider(scenarioDataProvider);
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-
-				final Map<String, Map<YearMonth, List<Slot<?>>>> curveToDateToSlotMap = new HashMap<>();
-
-				final Iterator<IExposuresCustomiser> iterExposuresCustomisers = exposuresCustomisers.iterator();
-				final IExposuresCustomiser exposuresCustomiser = iterExposuresCustomisers.hasNext() ? iterExposuresCustomisers.next(): new DefaultExposuresCustomiser();
-				
-				cargoModel.getCargoes().stream() //
-						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
-						.forEach(slot -> {
-							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY);
-							for (final AbstractYearMonthCurve curve : curves) {
-								final String curveName = curve.getName();
-								if (curveName != null) {
-									final YearMonth ym = YearMonth.from(slot.getWindowStart());
-									Map<YearMonth, List<Slot<?>>> dateToSlotMap = curveToDateToSlotMap.get(curveName);
-									List <Slot<?>> slotList;
-									if (dateToSlotMap == null) {
-										dateToSlotMap = new HashMap<>();
-										curveToDateToSlotMap.put(curveName, dateToSlotMap);
-										slotList = new LinkedList<>();
-										dateToSlotMap.put(ym, slotList);
-									} else {
-										slotList = dateToSlotMap.get(ym);
-										if (slotList == null) {
-											slotList = new LinkedList<>();
-											dateToSlotMap.put(ym, slotList);
-										}
-									}
-									slotList.add(slot);
-								}
-							}
-						});
-				final CompoundCommand cmd = new CompoundCommand();
-				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM_yyyy");
-				curveToDateToSlotMap.forEach((curveName, dateToSlotMap) -> //
-					dateToSlotMap.forEach((ym, slots) -> {
-						final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
-						dealSet.setName(String.format("%s_%s_curve_set", curveName, ym.format(formatter)));
-						cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
-						slots.forEach(slot -> cmd.append(AddCommand.create(ed, dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot)));
-					})
-				);
-				if (!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
-				}
-			}
-		});
-	}
-	
-	private int dateToQuarter(final LocalDate date) {
-		switch (date.getMonth()) {
-		case JANUARY,FEBRUARY,MARCH:
-			return 1;
-		case APRIL,MAY,JUNE:
-			return 2;
-		case JULY,AUGUST,SEPTEMBER:
-			return 3;
-		case OCTOBER,NOVEMBER,DECEMBER:
-			return 4;
-		default:
-			throw new IllegalStateException();
-		}
-	}
-
-	private Action createDealSetsFromCurvesByQuarterAction() {
-		return new RunnableAction("By quarter", new Runnable() {
-			@Override
-			public void run() {
-				final IScenarioDataProvider scenarioDataProvider = jointModelEditor.getScenarioDataProvider();
-				final ModelMarketCurveProvider mmCurveProvider = getMarketCurveProvider(scenarioDataProvider);
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-
-				final Map<String, Map<Pair<Year, Integer>, List<Slot<?>>>> curveToQuarterToSlotMap = new HashMap<>();
-
-				final Iterator<IExposuresCustomiser> iterExposuresCustomisers = exposuresCustomisers.iterator();
-				final IExposuresCustomiser exposuresCustomiser = iterExposuresCustomisers.hasNext() ? iterExposuresCustomisers.next(): new DefaultExposuresCustomiser();
-
-				cargoModel.getCargoes().stream() //
-						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
-						.forEach(slot -> {
-							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							final Collection<AbstractYearMonthCurve> curves = mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY);
-							for (final AbstractYearMonthCurve curve : curves) {
-								final String curveName = curve.getName();
-								if (curveName != null) {
-									final LocalDate slotDate = slot.getWindowStart();
-									Pair<Year, Integer> quarter = new Pair<>(Year.from(slotDate), dateToQuarter(slotDate));
-									Map<Pair<Year, Integer>, List<Slot<?>>> quarterToSlotMap = curveToQuarterToSlotMap.get(curveName);
-									List<Slot<?>> slotList;
-									if (quarterToSlotMap == null) {
-										quarterToSlotMap = new HashMap<>();
-										curveToQuarterToSlotMap.put(curveName, quarterToSlotMap);
-										slotList = new LinkedList<>();
-										quarterToSlotMap.put(quarter, slotList);
-									} else {
-										slotList = quarterToSlotMap.get(quarter);
-										if (slotList == null) {
-											slotList = new LinkedList<>();
-											quarterToSlotMap.put(quarter, slotList);
-										}
-									}
-									slotList.add(slot);
-								}
-							}
-						});
-				final CompoundCommand cmd = new CompoundCommand();
-				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
-				curveToQuarterToSlotMap.forEach((curveName, quarterToSlotMap) -> //
-					quarterToSlotMap.forEach((quarter, slots) -> {
-						final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
-						dealSet.setName(String.format("%s_%s_Q%d_curve_set", curveName, quarter.getFirst().format(formatter), quarter.getSecond()));
-						cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
-						slots.forEach(slot -> cmd.append(AddCommand.create(ed, dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot)));
-					})
-				);
-				if (!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
-				}
-			}
-		});
 	}
 
 	private Action createDealSetsFromIndicesMenu() {
@@ -671,210 +506,13 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 
 			@Override
 			protected void populate(Menu menu) {
-				final Action generateByMonthAction = createDealSetsFromIndicesByMonthAction();
-				final Action generateByQuarterAction = createDealSetsFromIndicesByQuarterAction();
+				final Action generateByMonthAction = DealSetActionUtils.createFromIndicesByMonthAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler(), exposuresCustomisers);
+				final Action generateByQuarterAction = DealSetActionUtils.createFromIndicesByQuarterAction(jointModelEditor.getScenarioDataProvider(),
+						scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation.getDefaultCommandHandler(), exposuresCustomisers);
 				addActionToMenu(generateByMonthAction, menu);
 				addActionToMenu(generateByQuarterAction, menu);
 			}
 		};
-	}
-
-	private Action createDealSetsFromIndicesByMonthAction() {
-		return new RunnableAction("By month", new Runnable() {
-			@Override
-			public void run() {
-				final IScenarioDataProvider scenarioDataProvider = jointModelEditor.getScenarioDataProvider();
-				final ModelMarketCurveProvider mmCurveProvider = getMarketCurveProvider(scenarioDataProvider);
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-
-				final Map<String, Map<YearMonth, List<Slot<?>>>> indexToDateToSlotMap = new HashMap<>();
-
-				final Iterator<IExposuresCustomiser> iterExposuresCustomisers = exposuresCustomisers.iterator();
-				final IExposuresCustomiser exposuresCustomiser = iterExposuresCustomisers.hasNext() ? iterExposuresCustomisers.next(): new DefaultExposuresCustomiser();
-				
-				cargoModel.getCargoes().stream() //
-						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
-						.forEach(slot -> {
-							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							for (final AbstractYearMonthCurve curve : mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY)) {
-								if (curve instanceof CommodityCurve) {
-									CommodityCurve comCurve = (CommodityCurve) curve;
-									if (comCurve.isSetMarketIndex()) {
-										String marketIndexName = comCurve.getMarketIndex().getName();
-										final YearMonth ym = YearMonth.from(slot.getWindowStart());
-										Map<YearMonth, List<Slot<?>>> dateToSlotMap = indexToDateToSlotMap.get(marketIndexName);
-										List <Slot<?>> slotList;
-										if (dateToSlotMap == null) {
-											dateToSlotMap = new HashMap<>();
-											indexToDateToSlotMap.put(marketIndexName, dateToSlotMap);
-											slotList = new LinkedList<>();
-											dateToSlotMap.put(ym, slotList);
-										} else {
-											slotList = dateToSlotMap.get(ym);
-											if (slotList == null) {
-												slotList = new LinkedList<>();
-												dateToSlotMap.put(ym, slotList);
-											}
-										}
-										slotList.add(slot);
-									}
-								}
-							}
-						});
-				final CompoundCommand cmd = new CompoundCommand();
-				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM_yyyy");
-				indexToDateToSlotMap.forEach((indexName, dateToSlotMap) -> //
-					dateToSlotMap.forEach((ym, slots) -> {
-						final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
-						dealSet.setName(String.format("%s_%s_index_set", indexName, ym.format(formatter)));
-						cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
-						slots.forEach(slot -> cmd.append(AddCommand.create(ed, dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot)));
-					})
-				);
-				if (!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
-				}
-			}
-		});
-	}
-
-	private Action createDealSetsFromIndicesByQuarterAction() {
-		return new RunnableAction("By quarter", new Runnable() {
-			@Override
-			public void run() {
-				final IScenarioDataProvider scenarioDataProvider = jointModelEditor.getScenarioDataProvider();
-				final ModelMarketCurveProvider mmCurveProvider = getMarketCurveProvider(scenarioDataProvider);
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-
-				final Map<String, Map<Pair<Year, Integer>, List<Slot<?>>>> indexToQuarterToSlotMap = new HashMap<>();
-
-				final Iterator<IExposuresCustomiser> iterExposuresCustomisers = exposuresCustomisers.iterator();
-				final IExposuresCustomiser exposuresCustomiser = iterExposuresCustomisers.hasNext() ? iterExposuresCustomisers.next(): new DefaultExposuresCustomiser();
-
-				cargoModel.getCargoes().stream() //
-						.flatMap(cargo -> cargo.getSlots().stream().filter(slot -> (!(slot instanceof SpotSlot))))
-						.forEach(slot -> {
-							final String priceExpression = exposuresCustomiser.provideExposedPriceExpression(slot);
-							for (final AbstractYearMonthCurve curve : mmCurveProvider.getLinkedCurves(priceExpression, PriceIndexType.COMMODITY)) {
-								if (curve instanceof CommodityCurve) {
-									CommodityCurve comCurve = (CommodityCurve) curve;
-									if (comCurve.isSetMarketIndex()) {
-										String marketIndexName = comCurve.getMarketIndex().getName();
-										final LocalDate slotDate = slot.getWindowStart();
-										Pair<Year, Integer> quarter = new Pair<>(Year.from(slotDate), dateToQuarter(slotDate));
-										Map<Pair<Year, Integer>, List<Slot<?>>> quarterToSlotMap = indexToQuarterToSlotMap.get(marketIndexName);
-										List <Slot<?>> slotList;
-										if (quarterToSlotMap == null) {
-											quarterToSlotMap = new HashMap<>();
-											indexToQuarterToSlotMap.put(marketIndexName, quarterToSlotMap);
-											slotList = new LinkedList<>();
-											quarterToSlotMap.put(quarter, slotList);
-										} else {
-											slotList = quarterToSlotMap.get(quarter);
-											if (slotList == null) {
-												slotList = new LinkedList<>();
-												quarterToSlotMap.put(quarter, slotList);
-											}
-										}
-										slotList.add(slot);
-									}
-								}
-							}
-						});
-				final CompoundCommand cmd = new CompoundCommand();
-				final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
-				indexToQuarterToSlotMap.forEach((indexName, quarterToSlotMap) -> //
-					quarterToSlotMap.forEach((quarter, slots) -> {
-						final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
-						dealSet.setName(String.format("%s_%s_Q%d_index_set", indexName, quarter.getFirst().format(formatter), quarter.getSecond()));
-						cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
-						slots.forEach(slot -> cmd.append(AddCommand.create(ed, dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot)));
-					})
-				);
-				if (!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, null, null);
-				}
-			}
-		});
-	}
-	
-	private @NonNull ModelMarketCurveProvider getMarketCurveProvider(final @NonNull IScenarioDataProvider scenarioDataProvider) {
-		if (scenarioDataProvider != null) {
-			final ModelMarketCurveProvider provider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.MARKET_CURVES, ModelMarketCurveProvider.class);
-			if (provider != null) {
-				return provider;
-			}
-		}
-		throw new IllegalStateException("Unable to get market curve provider");
-	}
-	
-	private Action createDealSetsFromPurchaseContractsAction() {
-		return new RunnableAction("From purchase contracts", new Runnable() {
-			
-			@Override
-			public void run() {
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
-				final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(jointModelEditor.getScenarioDataProvider());
-				
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-				final CompoundCommand cmd = new CompoundCommand();
-				populateContractGeneratedDealSets(cmd, commercialModel.getPurchaseContracts(), cargoModel, ed, "purchase");
-				if (!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd,  null, null);
-				}
-			}
-		});
-	}
-	
-	private Action createDealSetsFromSalesContractsAction() {
-		return new RunnableAction("From sales contracts", new Runnable() {
-			
-			@Override
-			public void run() {
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(jointModelEditor.getScenarioDataProvider());
-				final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(jointModelEditor.getScenarioDataProvider());
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-				final CompoundCommand cmd = new CompoundCommand();
-				populateContractGeneratedDealSets(cmd, commercialModel.getSalesContracts(), cargoModel, ed, "sales");
-				if (!cmd.isEmpty()) {
-					scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd,  null, null);
-				}
-			}
-		});
-	}
-	
-	private void populateContractGeneratedDealSets(final CompoundCommand cmd, final List<? extends Contract> contracts, final CargoModel cargoModel, final EditingDomain ed, final String suffix) {
-		for (final Contract contract : contracts) {
-			final List<Slot<?>> usedSlots = cargoModel.getCargoes().stream() //
-					.flatMap(cargo -> cargo.getSlots().stream() //
-							.filter(slot -> (!(slot instanceof SpotSlot)) && slot.getContract() == contract) //
-					).collect(Collectors.toList());
-			if (!usedSlots.isEmpty()) {
-				final DealSet dealSet = CargoFactory.eINSTANCE.createDealSet();
-				dealSet.setName(String.format("%s_%s_set", contract.getName(), suffix));
-				cmd.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, dealSet));
-				for (final Slot<?> slot : usedSlots) {
-					cmd.append(AddCommand.create(ed,  dealSet, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
-				}
-			}
-		}
-	}
-	
-	private Set<Slot<?>> updateSlots(final IScenarioDataProvider sdp) {
-		final Set<Slot<?>> usedSlots = new HashSet<>();
-		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
-		for (final DealSet dealSet : cargoModel.getDealSets()) {
-			usedSlots.addAll(dealSet.getSlots());
-		}
-		return usedSlots;
-	}
-	
-	private boolean checkContainment(final Cargo cargo, final Set<Slot<?>> usedSlots) {
-		for (final Slot<?> slot : cargo.getSlots()) {
-			if (usedSlots.contains(slot)) return true;
-		}
-		return false;
 	}
 }

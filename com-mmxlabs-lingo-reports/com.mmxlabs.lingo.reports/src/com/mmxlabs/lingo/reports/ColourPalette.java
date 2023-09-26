@@ -48,7 +48,8 @@ public final class ColourPalette {
 	private static final RGB Warning_Yellow = new RGB(255, 255, 25);
 	private static final RGB Dark_Yellow = new RGB(200, 200, 0);
 	
-	private static final RGB Inventory_Volume = new RGB(110, 182, 171);
+	private static final RGB Inventory_Volume = new RGB(82, 155, 144);
+	private static final RGB Inventory_Volume_before = new RGB(174, 216, 209);
 	private static final RGB Inventory_CV = new RGB(225, 164, 84);
 
 	private static final RGB Red = new RGB(255, 0, 0);
@@ -163,6 +164,7 @@ public final class ColourPalette {
 		
 		setItemColour(ColourPaletteItems.Inventory_CV, ColourElements.Foreground, Inventory_CV);
 		setItemColour(ColourPaletteItems.Inventory_Volume, ColourElements.Foreground, Inventory_Volume);
+		setItemColour(ColourPaletteItems.Inventory_Volume_Before, ColourElements.Foreground, Inventory_Volume_before);
 
 		setItemColour(ColourPaletteItems.Source_Contract_Based_Highlight_Journey, ColourElements.Background, Dark_Yellow);
 		setItemColour(ColourPaletteItems.Source_Contract_Based_Highlight_Idle, ColourElements.Background, Warning_Yellow);
@@ -200,7 +202,7 @@ public final class ColourPalette {
 
 		Source_Contract_Based_Highlight_Journey, Source_Contract_Based_Highlight_Idle,
 
-		Inventory_CV, Inventory_Volume
+		Inventory_CV, Inventory_Volume, Inventory_Volume_Before
 	}
 	// @formatter:on	
 	private final Map<RGB, Color> colourMap = new HashMap<>();
