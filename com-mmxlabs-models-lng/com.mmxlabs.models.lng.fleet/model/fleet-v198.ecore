@@ -29,6 +29,12 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="emissionReference" eType="#//FuelEmissionReference"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="emissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mt/mt"/>
+        <details key="formatString" value="####0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Vessel">
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverride" references="#//Vessel/reference"/>
