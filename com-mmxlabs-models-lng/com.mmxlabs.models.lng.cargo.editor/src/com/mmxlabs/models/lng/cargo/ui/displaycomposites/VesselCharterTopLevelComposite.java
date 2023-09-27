@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselCharterDetailComposite.VesselCharterDetailGroup;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIEndOptionsDetailComposite;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIStartOptionsDetailComposite;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.YearToDateGradeCIIDisplayComposite;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -41,7 +42,7 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 /**
  * A display composite for the {@link VesselCharter} editor to keep the start and end heel options in one column. Note this assumes start and end heel are the only contained children.
  * 
- * @author Simon Goodall
+ * @author Simon Goodall, Andrey Popov
  * 
  */
 public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
@@ -98,6 +99,7 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		// Layouts
 		final GridDataFactory layoutDataFactory = GridDataFactory.fillDefaults().grab(true, true);
 		final GridLayout fourColumnsLayout = createCustomGridLayout(4, false);
+		final GridLayout twoColumnLayout = createCustomGridLayout(2, false);
 		final GridLayout singleColumnLayout = createCustomGridLayout(1, false);
 		final GridData twoColumnSpanningGridLayoutData = createSpanningLayoutData(layoutDataFactory, 2);
 		final GridData fourColumnSpanningGridLayoutData = createSpanningLayoutData(layoutDataFactory, 4);
@@ -140,10 +142,11 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 
 		//
 		// Start CII Stuff
-		final Group groupForCIIStartOptionsStuff = createGroup(wrapperCompositeWithFourColumns, "CII", singleColumnLayout, twoColumnSpanningGridLayoutData);
+		final Group groupForCIIStartOptionsStuff = createGroup(wrapperCompositeWithFourColumns, "CII", twoColumnLayout, twoColumnSpanningGridLayoutData);
 		ciiStartOptions = new CIIStartOptionsDetailComposite(groupForCIIStartOptionsStuff, SWT.NONE, toolkit);
 		ciiStartOptions.setCommandHandler(commandHandler);
 		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
+		//new YearToDateGradeCIIDisplayComposite(groupForCIIStartOptionsStuff, object).setVisible(true);
 		
 		//
 		// CII End Options Stuff

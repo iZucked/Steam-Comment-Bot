@@ -8624,13 +8624,22 @@ public interface CargoPackage extends EPackage {
 	int CII_START_OPTIONS_FEATURE_COUNT = 2;
 
 	/**
+	 * The operation id for the '<em>Year To Date Partial CII</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CII_START_OPTIONS___YEAR_TO_DATE_PARTIAL_CII = 0;
+
+	/**
 	 * The number of operations of the '<em>CII Start Options</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CII_START_OPTIONS_OPERATION_COUNT = 0;
+	int CII_START_OPTIONS_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CIIEndOptionsImpl <em>CII End Options</em>}' class.
@@ -11946,6 +11955,16 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCIIStartOptions_YearToDateDistance();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CIIStartOptions#yearToDatePartialCII() <em>Year To Date Partial CII</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Year To Date Partial CII</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CIIStartOptions#yearToDatePartialCII()
+	 * @generated
+	 */
+	EOperation getCIIStartOptions__YearToDatePartialCII();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CIIEndOptions <em>CII End Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -14543,6 +14562,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE = eINSTANCE.getCIIStartOptions_YearToDateDistance();
+
+		/**
+		 * The meta object literal for the '<em><b>Year To Date Partial CII</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CII_START_OPTIONS___YEAR_TO_DATE_PARTIAL_CII = eINSTANCE.getCIIStartOptions__YearToDatePartialCII();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CIIEndOptionsImpl <em>CII End Options</em>}' class.

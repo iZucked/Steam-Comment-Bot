@@ -17,6 +17,8 @@
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="MMXVesselDBVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ciiReferences" eType="#//CIIReferenceData"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"
@@ -26,12 +28,7 @@
         <details key="formatString" value="##.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="emissionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="unit" value="mt/mt"/>
-        <details key="formatString" value="####0.###"/>
-      </eAnnotations>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="emissionReference" eType="#//FuelEmissionReference"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Vessel">
     <eAnnotations source="http://www.mmxlabs.com/models/featureOverride" references="#//Vessel/reference"/>
@@ -343,5 +340,39 @@
         <details key="formatString" value="##0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CIIReferenceData">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ciiGradeBoundaries" upperBound="-1"
+        eType="#//CIIGradeBoundary" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fuelEmissions" upperBound="-1"
+        eType="#//FuelEmissionReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reductionFactors" upperBound="-1"
+        eType="#//CIIReductionFactor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CIIGradeBoundary">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dwtUpperLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="grade" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeA" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeAValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeB" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeBValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeCValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradeDValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FuelEmissionReference" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isoReference" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CIIReductionFactor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="year" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="####"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="percentage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remark" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

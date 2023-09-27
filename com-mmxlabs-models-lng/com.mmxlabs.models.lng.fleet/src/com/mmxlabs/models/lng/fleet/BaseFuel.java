@@ -16,7 +16,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEquivalenceFactor <em>Equivalence Factor</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionRate <em>Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionReference <em>Emission Reference</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getBaseFuel()
@@ -53,26 +53,26 @@ public interface BaseFuel extends UUIDObject, NamedObject {
 	void setEquivalenceFactor(double value);
 
 	/**
-	 * Returns the value of the '<em><b>Emission Rate</b></em>' attribute.
+	 * Returns the value of the '<em><b>Emission Reference</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Emission Rate</em>' attribute.
-	 * @see #setEmissionRate(double)
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getBaseFuel_EmissionRate()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mt/mt' formatString='####0.###'"
+	 * @return the value of the '<em>Emission Reference</em>' reference.
+	 * @see #setEmissionReference(FuelEmissionReference)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getBaseFuel_EmissionReference()
+	 * @model
 	 * @generated
 	 */
-	double getEmissionRate();
+	FuelEmissionReference getEmissionReference();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionRate <em>Emission Rate</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.BaseFuel#getEmissionReference <em>Emission Reference</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Emission Rate</em>' attribute.
-	 * @see #getEmissionRate()
+	 * @param value the new value of the '<em>Emission Reference</em>' reference.
+	 * @see #getEmissionReference()
 	 * @generated
 	 */
-	void setEmissionRate(double value);
+	void setEmissionReference(FuelEmissionReference value);
 } // end of  BaseFuel
 
 // finish type fixing

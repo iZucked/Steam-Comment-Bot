@@ -140,6 +140,12 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.DealSetComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.DealSet" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.CIIStartOptions"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CIIStartOptionsComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.CIIStartOptions" />
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">

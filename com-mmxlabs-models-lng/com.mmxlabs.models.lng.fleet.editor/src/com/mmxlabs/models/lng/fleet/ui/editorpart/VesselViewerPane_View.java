@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -28,7 +26,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ISelection;
@@ -54,8 +51,8 @@ import com.mmxlabs.models.lng.fleet.util.IVesselImportCommandProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
-import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;

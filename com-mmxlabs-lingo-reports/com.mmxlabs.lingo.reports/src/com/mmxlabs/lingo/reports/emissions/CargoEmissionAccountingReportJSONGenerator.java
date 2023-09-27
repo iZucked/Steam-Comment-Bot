@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FuelEmissionReference;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -128,6 +129,13 @@ public class CargoEmissionAccountingReportJSONGenerator {
 
 					final Fuel fuel = fuelQuantity.getFuel();
 					final BaseFuel baseFuel = fuelQuantity.getBaseFuel();
+					double er = 0.0;
+					if (baseFuel != null) {
+						final FuelEmissionReference fer = baseFuel.getEmissionReference();
+						if (fer != null) {
+							er = fer.getCf();
+						}
+					}
 					final FuelAmount fuelAmount = fuelQuantity.getAmounts().get(0);
 
 					switch (fuel) {
@@ -135,13 +143,13 @@ public class CargoEmissionAccountingReportJSONGenerator {
 						if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
 							throw new IllegalStateException();
 						}
-						baseFuelAccumulator += fuelAmount.getQuantity() * baseFuel.getEmissionRate();
+						baseFuelAccumulator += fuelAmount.getQuantity() * er;
 						break;
 					case PILOT_LIGHT:
 						if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
 							throw new IllegalStateException();
 						}
-						pilotLightAccumulator += fuelAmount.getQuantity() * baseFuel.getEmissionRate();
+						pilotLightAccumulator += fuelAmount.getQuantity() * er;
 						break;
 					case FBO:
 						fboAccumulator += EmissionModelUtils.consumedCarbonEquivalentEmissionLNG(fuelQuantity);

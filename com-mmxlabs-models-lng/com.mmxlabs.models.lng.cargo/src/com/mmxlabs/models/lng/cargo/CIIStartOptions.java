@@ -70,4 +70,12 @@ public interface CIIStartOptions extends EObject {
 	 */
 	void setYearToDateDistance(int value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	double yearToDatePartialCII();
+
 } // CIIStartOptions
