@@ -54,12 +54,12 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.presentation.customisation.IAdpToolbarCustomiser;
+import com.mmxlabs.models.lng.adp.presentation.customisation.IAdpToolbarCustomiserFactory;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.date.YearMonthTextFormatter;
@@ -79,6 +79,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 	private Label errorLabel;
 
 	private ADPEditorData editorData;
+	private IAdpToolbarCustomiser toolbarCustomiser = null;
 
 	private final List<ADPComposite> pages = new LinkedList<>();
 	private FormattedText startEditor;
@@ -98,7 +99,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		// Top Toolbar
 		{
 			final Composite toolbarComposite = new Composite(parent, SWT.NONE);
-			final IAdpToolbarCustomiser toolbarCustomiser = part.getSite().getService(IAdpToolbarCustomiser.class);
+			ServiceHelper.withOptionalServiceConsumer(IAdpToolbarCustomiserFactory.class, factory -> toolbarCustomiser = factory != null ? factory.construct() : null);
 
 			final int additionalColumns = toolbarCustomiser != null ? toolbarCustomiser.columnsRequired() : 0;
 			final int numColumns = additionalColumns + 7;
@@ -372,6 +373,11 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		}
 		if (editorData.scenarioModel != null) {
 			editorData.scenarioModel = null;
+		}
+
+		if (toolbarCustomiser != null) {
+			toolbarCustomiser.dispose();
+			toolbarCustomiser = null;
 		}
 
 		super.dispose();
