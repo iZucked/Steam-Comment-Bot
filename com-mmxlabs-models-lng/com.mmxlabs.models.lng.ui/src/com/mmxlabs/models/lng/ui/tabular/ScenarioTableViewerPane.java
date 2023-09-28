@@ -95,10 +95,10 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 					try {
 						getScenarioEditingLocation().setDisableUpdates(true);
 						final ISelection sel = getLastSelection();
-						if (sel instanceof IStructuredSelection) {
+						if (sel instanceof IStructuredSelection ss) {
 							final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
 							// Copy selection
-							final List<?> objects = new ArrayList<>(((IStructuredSelection) sel).toList());
+							final List<?> objects = new ArrayList<>(ss.toList());
 
 							// Ensure a unique collection of objects - no duplicates
 							final Set<Object> uniqueObjects = new HashSet<>(objects);
@@ -112,6 +112,14 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 							// Clear current selection
 							selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
 
+							var itr = uniqueObjects.iterator();
+							while (itr.hasNext()) {
+								var o = itr.next();
+								if (o instanceof EObject eo &&eo.eContainer() == null) {
+									itr.remove();
+								}
+							}
+							
 							if (!uniqueObjects.isEmpty()) {
 								// Execute command
 								final Command deleteCommand = DeleteCommand.create(ed, uniqueObjects);

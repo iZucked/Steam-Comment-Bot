@@ -1462,11 +1462,11 @@ public class TradesWiringViewerPane extends ScenarioTableViewerPane {
 
 	/**
 	 */
-	protected void doWiringChanged(final Map<TradesRow, TradesRow> newWiring, final boolean ctrlPressed, final boolean shiftPressed, final boolean altPressed) {
+	protected void doWiringChanged(final Map<TradesRow, TradesRow> newWiring, final boolean _ctrlPressed, final boolean _shiftPressed, final boolean altPressed) {
 
-		final boolean swapDischarges = ctrlPressed;
+		final boolean swapDischarges = _ctrlPressed;
 		// Complex cargoes no longer supported in wiring DND
-		final boolean createComplexCargo = !swapDischarges && shiftPressed && allowLDD;
+		final boolean createComplexCargo = !swapDischarges && _shiftPressed && allowLDD;
 
 		final List<Command> setCommands = new LinkedList<>();
 
@@ -1644,7 +1644,8 @@ public class TradesWiringViewerPane extends ScenarioTableViewerPane {
 		}
 
 		executeCurrentWiringCommand(currentWiringCommand);
-
+		// Clear selection in case we keep stale references to deleted or re-arranged objects
+		scenarioViewer.setSelection(StructuredSelection.EMPTY);
 		// SANITTY CHECKING!
 		{
 			cec.verifyCargoModel(cargoModel);

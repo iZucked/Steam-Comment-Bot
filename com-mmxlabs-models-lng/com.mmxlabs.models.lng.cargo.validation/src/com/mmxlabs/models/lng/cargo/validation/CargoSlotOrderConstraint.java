@@ -86,7 +86,7 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 				final String cargoType = sb.toString();
 				if (!(cargoType.equals("LD") || cargoType.equals("LDD") || cargoType.equals("LDDD"))) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "' - Cargo should be LD or LDD."));
+							(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "' - Cargo should be LD, LDD or LDDD."));
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 					failures.add(dsd);
 				}
