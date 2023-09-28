@@ -266,27 +266,34 @@ public class SelectionToSandboxUtil {
 							}
 						}
 						// Create a new row
-						final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+						final BaseCaseRow firstRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+						BaseCaseRow row = firstRow;
 						final BaseCaseRowGroup grp = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
 						row.setGroup(grp);
 						baseCase.getBaseCase().add(row);
 						baseCase.getGroups().add(grp);
-						for (final Slot<?> s : cargo.getSlots()) {
+						for (final Slot<?> s : cargo.getSortedSlots()) {
 							if (s instanceof LoadSlot loadSlot) {
 								final BuyOption option = loadSlotToOption(loadSlot, buyMap);
 								row.setBuyOption(option);
 							} else {
 								final DischargeSlot dischargeSlot = (DischargeSlot) s;
 								final SellOption option = dischargeSlotToOption(dischargeSlot, sellMap);
+								if (row.getSellOption() != null) {
+									row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+									;
+									row.setGroup(grp);
+									baseCase.getBaseCase().add(row);
+								}
 								row.setSellOption(option);
 							}
 						}
 						// Get vessel allocation
 						final VesselAssignmentType sequence = cargo.getVesselAssignmentType();
 						if (sequence instanceof VesselCharter vesselCharter) {
-							setVesselCharter(portfolioMode, vaMap, row, vesselCharter);
+							setVesselCharter(portfolioMode, vaMap, firstRow, vesselCharter);
 						} else if (sequence instanceof CharterInMarket charterInMarket) {
-							setCharterInMarket(portfolioMode, cimMap, row, charterInMarket, cargo.getSpotIndex());
+							setCharterInMarket(portfolioMode, cimMap, firstRow, charterInMarket, cargo.getSpotIndex());
 						}
 
 					} else if (slot != null) {

@@ -575,7 +575,7 @@ public class BaseCaseDropTargetListener extends AbstractDropTargetListener {
 							} else {
 								event.operations = DND.DROP_MOVE;
 								boolean canAddDischarge = false;
-								if (allowLDD && o instanceof SellOption && row.getGroup().getRows().size() == 1 && row.getSellOption() != null) {
+								if (allowLDD && o instanceof SellOption && (row.getGroup().getRows().size() == 1 || row.getGroup().getRows().size() == 2) && row.getSellOption() != null) {
 									// Create LDD cargo if only a LD
 									canAddDischarge = true;
 									event.operations |= DND.DROP_COPY;

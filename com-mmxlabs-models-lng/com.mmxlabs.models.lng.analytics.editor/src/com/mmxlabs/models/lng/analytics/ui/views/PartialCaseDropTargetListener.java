@@ -519,7 +519,7 @@ public class PartialCaseDropTargetListener extends AbstractDropTargetListener {
 							} else {
 								event.operations = DND.DROP_MOVE | DND.DROP_LINK;
 								boolean canAddDischarge = false;
-								if (allowLDD && o instanceof SellOption && row.getGroup().getRows().size() == 1 && !row.getSellOptions().isEmpty()) {
+								if (allowLDD && o instanceof SellOption && (row.getGroup().getRows().size() == 1 || row.getGroup().getRows().size() == 2) && !row.getSellOptions().isEmpty()) {
 									// Create LDD cargo if only a LD
 									canAddDischarge = true;
 									event.operations |= DND.DROP_COPY;

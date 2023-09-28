@@ -22,8 +22,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Check that the end of any cargo's discharge window is not before the start of
- * its load window.
+ * Check that the end of any cargo's discharge window is not before the start of its load window.
  * 
  * @author Tom Hinton
  * 
@@ -85,7 +84,7 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 			if (cargo.getCargoType().equals(CargoType.FLEET)) {
 				// Examine string for valid slot combinations
 				final String cargoType = sb.toString();
-				if (!(cargoType.equals("LD") || cargoType.equals("LDD"))) {
+				if (!(cargoType.equals("LD") || cargoType.equals("LDD") || cargoType.equals("LDDD"))) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "' - Cargo should be LD or LDD."));
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
