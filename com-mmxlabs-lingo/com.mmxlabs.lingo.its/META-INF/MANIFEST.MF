@@ -90,13 +90,13 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.nominations.editor,
  com.mmxlabs.models.lng.spotmarkets.validation,
  com.mmxlabs.models.lng.commercial.validation,
+ wrapped.software.amazon.awssdk.apache-client;bundle-version="2.17.233",
+ wrapped.software.amazon.awssdk.http-client-spi;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.secretsmanager;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.regions;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.aws-core;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.utils;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.sdk-core;bundle-version="2.17.233",
- wrapped.software.amazon.awssdk.apache-client;bundle-version="2.17.233",
- wrapped.software.amazon.awssdk.http-client-spi;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.auth;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.profiles;bundle-version="2.17.233",
  wrapped.software.amazon.awssdk.protocol-core;bundle-version="2.17.233",
@@ -108,7 +108,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  wrapped.software.amazon.awssdk.dynamodb;bundle-version="2.17.233",
  com.mmxlabs.lingo.updater;bundle-version="6.9.5",
  org.eclipse.swtbot.junit5_x,
- com.mmxlabs.models.lng.schedule.validation
+ com.mmxlabs.models.lng.schedule.validation,
+ wrapped.software.amazon.awssdk.sso;bundle-version="2.17.233",
+ org.apache.httpcomponents.httpclient.win;bundle-version="4.5.13",
+ wrapped.software.amazon.awssdk.endpoints-spi;bundle-version="2.20.156"
 Bundle-ClassPath: data/,
  .
 Import-Package: com.sun.jna;version="4.5.1",
@@ -149,4 +152,4 @@ Export-Package: com.mmxlabs.lingo.its,
  com.mmxlabs.lingo.its.uat.suite.utils,
  com.mmxlabs.lingo.its.verifier
 Automatic-Module-Name: com.mmxlabs.lingo.its
-Eclipse-RegisterBuddy: org.apache.log4j
+Eclipse-RegisterBuddy: org.apache.log4j, wrapped.software.amazon.awssdk.sdk-core
