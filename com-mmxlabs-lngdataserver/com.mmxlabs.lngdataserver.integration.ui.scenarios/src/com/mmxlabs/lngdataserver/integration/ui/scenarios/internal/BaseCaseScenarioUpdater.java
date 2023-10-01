@@ -301,7 +301,7 @@ public class BaseCaseScenarioUpdater {
 			meta.setContentType(manifest.getScenarioType());
 			// Probably better pass in from service
 			ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, true, false, false, scenarioCipherProvider);
+				final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(archiveURI, true, false, true, scenarioCipherProvider);
 				if (modelRecord != null) {
 					modelRecord.setName(scenarioInstance.getName());
 					modelRecord.setScenarioInstance(scenarioInstance);

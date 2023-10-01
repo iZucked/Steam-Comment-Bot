@@ -313,7 +313,7 @@ public class AdpSyncWithBasecaseHandler extends AbstractHandler {
 									newVesselEventsToAdd.add(newVesselEvent);
 								}
 							} catch (JsonProcessingException e) {
-								
+
 							}
 						}
 						ctx.runDeferredActions();
