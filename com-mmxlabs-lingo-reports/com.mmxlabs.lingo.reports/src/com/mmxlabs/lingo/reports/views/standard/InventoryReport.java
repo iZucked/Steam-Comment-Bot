@@ -677,10 +677,22 @@ public class InventoryReport extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 		folder.addListener(SWT.Dispose, e -> {
-			inventoryInsAndOutChart.dispose();
-			inventoryDailyChartViewer.dispose();
-			mullMonthlyOverliftChart.dispose();
-			mullMonthlyCargoCountChart.dispose();
+			if (inventoryInsAndOutChart != null) {
+				inventoryInsAndOutChart.dispose();
+				inventoryInsAndOutChart = null;
+			}
+			if (inventoryDailyChartViewer != null) {
+				inventoryDailyChartViewer.dispose();
+				inventoryDailyChartViewer = null;
+			}
+			if (mullMonthlyOverliftChart != null) {
+				mullMonthlyOverliftChart.dispose();
+				mullMonthlyOverliftChart = null;
+			}
+			if (mullMonthlyCargoCountChart != null) {
+				mullMonthlyCargoCountChart.dispose();
+				mullMonthlyCargoCountChart = null;
+			}
 		});
 	}
 
