@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
@@ -44,6 +46,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.osgi.framework.BundleContext;
@@ -74,14 +77,16 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
-public class DealSetsPane extends ScenarioTableViewerPane {
+public class DealSetsPane extends ScenarioTableViewerPane implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	private final IScenarioEditingLocation jointModelEditor;
 	
@@ -155,6 +160,9 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 		if (getScenarioViewer() != null) {
 			getScenarioViewer().setContentProvider(new SimpleTabularReportContentProvider<DealSet>());
 		}
+		
+		final ESelectionService service = part.getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(this);
 	}
 	
 	private ICellRenderer dealSetStartDateFormatter() {
@@ -303,7 +311,9 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				return collection.toArray();
 			}
 			if (inputElement instanceof final LNGScenarioModel scenarioModel) {
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+				return getElements(ScenarioModelUtil.getCargoModel(scenarioModel));
+			}
+			if (inputElement instanceof final CargoModel cargoModel) {
 				final List<DealSet> dealSets = cargoModel.getDealSets();
 				if (dealSets != null) {
 					return dealSets.toArray();
@@ -514,5 +524,30 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				addActionToMenu(generateByQuarterAction, menu);
 			}
 		};
+	}
+	
+	@Override
+	public void dispose() {
+		final ESelectionService service = part.getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(this);
+
+		super.dispose();
+	}
+
+	@Override
+	public void selectionChanged(MPart part, Object selection) {
+		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
+		if (e3Part != null) {
+			if (e3Part == this) {
+				return;
+			}
+			if (e3Part instanceof PropertySheet) {
+				return;
+			}
+			if (e3Part instanceof JointModelEditorPart) {
+				return;
+			}
+		}
+		SelectionHelper.adaptSelection(selection);
 	}
 }

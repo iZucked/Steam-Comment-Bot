@@ -355,6 +355,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		packColumnsAction = new PackGridTreeColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
+		getViewSite().getActionBars().updateActionBars();
 	}
 
 	protected void setCopyPasteMode(boolean copyPasteMode) {

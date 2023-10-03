@@ -78,12 +78,10 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 
 		addNameManipulator("Name");
 		addColumn("Type", createPaperDealTypeFormatter(), null);
-		//addTypicalColumn("Pricing start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), getCommandHandler()));
-		//addTypicalColumn("Pricing end", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), getCommandHandler()));
-		addTypicalColumn("Month", new YearMonthAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingMonth(), getCommandHandler())).setEditingSupport(null);;
-		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler())).setEditingSupport(null);;
-		addTypicalColumn("MtM curve", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler())).setEditingSupport(null);;
-		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler())).setEditingSupport(null);;
+		addTypicalColumn("Month", new YearMonthAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingMonth(), getCommandHandler())).setEditingSupport(null);
+		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler())).setEditingSupport(null);
+		addTypicalColumn("MtM curve", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler())).setEditingSupport(null);
+		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler())).setEditingSupport(null);
 		addTypicalColumn("Pricing", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingType(), getCommandHandler()) {
 			//@Override
 			@Override
@@ -203,12 +201,11 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 					scenarioEditingLocation.setDisableUpdates(true);
 
 					final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-					if (rootObject instanceof LNGScenarioModel) {
+					if (rootObject instanceof final LNGScenarioModel scenarioModel) {
 
 						PaperDeal selectedDeal = null;
 						final ISelection selection = PaperDealsPane.this.getScenarioViewer().getSelection();
-						if (selection instanceof IStructuredSelection) {
-							final IStructuredSelection ss = (IStructuredSelection) selection;
+						if (selection instanceof final IStructuredSelection ss) {
 
 							final Iterator<?> itr = ss.iterator();
 							while (itr.hasNext()) {
@@ -220,7 +217,6 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 							}
 						}
 
-						final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 						final CreatePaperStripDialog d = new CreatePaperStripDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation, stripType, selectedDeal) {
 							@Override
 							protected void configureShell(final Shell newShell) {

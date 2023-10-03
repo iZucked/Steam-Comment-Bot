@@ -58,7 +58,7 @@ public class CIIYearToDateGradeInlineEditorWrapper extends ReadOnlyInlineEditorW
 		
 		final Vessel vessel = vesselCharter.getVessel();
 		final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
-		if (vessel != null && ciiStartOptions != null) {
+		if (vessel != null && ciiStartOptions != null && vesselCharter.getStartBy() != null) {
 			final double ciiValue = UtilsCII.findCII(vessel, ciiStartOptions.getYearToDateEmissions(), ciiStartOptions.getYearToDateDistance());
 			resultingCIIGradeLabelTest = UtilsCII.getLetterGrade(vessel, ciiValue, Year.from(vesselCharter.getStartBy()));
 		}

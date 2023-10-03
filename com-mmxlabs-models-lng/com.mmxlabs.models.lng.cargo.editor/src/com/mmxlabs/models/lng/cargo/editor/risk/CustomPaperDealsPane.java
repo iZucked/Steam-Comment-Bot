@@ -15,6 +15,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -45,10 +46,11 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.YearMonthAttributeManipulator;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -91,26 +93,23 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
 		addNameManipulator("Name");
 		addColumn("Side", createPaperDealTypeFormatter(), null);
-		addTypicalColumn("Pricing start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodStart(), getCommandHandler()));
-		addTypicalColumn("Pricing end", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingPeriodEnd(), getCommandHandler()));
-		addTypicalColumn("Hedging start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodStart(), getCommandHandler()));
-		addTypicalColumn("Hedging end", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_HedgingPeriodEnd(), getCommandHandler()));
-		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler()));
-		addTypicalColumn("Index", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler()));
-		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler()));
+		addReadOnlyColumn("Month", new YearMonthAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingMonth(), getCommandHandler()));
+		addReadOnlyColumn("MTM curve", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler()));
 
 		setTitle("Paper", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		final DragSource source = new DragSource(getScenarioViewer().getControl(), DND.DROP_MOVE);
 		final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
-		source.setTransfer(types);
-
-		source.addDragListener(new BasicDragSource(viewer) {
-			@Override
-			public void dragStart(final DragSourceEvent event) {
-				super.dragStart(event);
-			}
-		});
+		if (source != null) {
+			source.setTransfer(types);
+	
+			source.addDragListener(new BasicDragSource(viewer) {
+				@Override
+				public void dragStart(final DragSourceEvent event) {
+					super.dragStart(event);
+				}
+			});
+		}
 	}
 
 	protected LNGScenarioModel getScenarioModel() {
@@ -136,25 +135,32 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
 					@Override
 					public Object[] getElements(final Object inputElement) {
-
-						final CargoModel cargoModel = getScenarioModel().getCargoModel();
-
+						if (inputElement instanceof final LNGScenarioModel scenarioModel) {
+							return getElements(scenarioModel.getCargoModel());
+						}
+						if (inputElement instanceof final CargoModel cargoModel) {
 						return cargoModel.getPaperDeals()//
 								.stream()//
 								.filter(pd -> !usedPaperDeals.contains(pd))//
 								.collect(Collectors.toList())//
 								.toArray();
+						}
+						return new Object[0];
 					}
 
 					@Override
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+						
 						if (oldInput instanceof LNGScenarioModel) {
-							final CargoModel cargoModel = ((LNGScenarioModel) oldInput).getCargoModel();
-							cargoModel.eAdapters().remove(dealSetsContentAdapter);
+							inputChanged(viewer, ((LNGScenarioModel)oldInput).getCargoModel(), newInput);
 						}
 						if (newInput instanceof LNGScenarioModel) {
-							final CargoModel cargoModel = ((LNGScenarioModel) newInput).getCargoModel();
+							inputChanged(viewer, oldInput, ((LNGScenarioModel)newInput).getCargoModel());
+						}
+						if (oldInput instanceof final CargoModel cargoModel) {
+							cargoModel.eAdapters().remove(dealSetsContentAdapter);
+						}
+						if (newInput instanceof final CargoModel cargoModel) {
 							cargoModel.eAdapters().add(dealSetsContentAdapter);
 						}
 					}
@@ -179,6 +185,10 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 		};
 
 		return scenarioViewer;
+	}
+	
+	private <T extends ICellManipulator & ICellRenderer> void addReadOnlyColumn(final String columnName, final T manipulatorAndRenderer, final ETypedElement... path) {
+		addTypicalColumn(columnName, new ReadOnlyManipulatorWrapper(manipulatorAndRenderer));
 	}
 
 	private ICellRenderer createPaperDealTypeFormatter() {

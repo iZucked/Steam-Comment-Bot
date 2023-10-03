@@ -29,7 +29,8 @@ public class VesselCharterCIIEndOptionsDesiredGradeConstraint extends AbstractMo
 	}
 
 	private void doValidateCIIEndOptionsDesiredGrade(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
-		if (ctx.getTarget() instanceof final CIIEndOptions ciiEndOptions && ciiEndOptions.eContainer() instanceof VesselCharter vesselCharter) {
+		if (ctx.getTarget() instanceof final CIIEndOptions ciiEndOptions && ciiEndOptions.eContainer() instanceof VesselCharter vesselCharter //
+				&& vesselCharter.getEndBy() != null) {
 			final Year vesselCharterEndYear = Year.from(vesselCharter.getEndBy());
 			final Vessel vessel = vesselCharter.getVessel();
 			final MMXRootObject rootObject = extraContext.getRootObject();
