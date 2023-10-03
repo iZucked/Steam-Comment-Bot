@@ -110,8 +110,8 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 				if (!checkPairwiseConstraint(prevElement, element, resource, messages)) {
 					return true;
 				}
-				prevElement = element;
 			}
+			prevElement = element;
 		}
 
 		return false;
