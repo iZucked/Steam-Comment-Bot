@@ -158,7 +158,7 @@ public final class UserSettingsHelper {
 		// Permit the user to override the settings object. Use the previous settings as
 		// the initial value
 		if (promptUser) {
-			previousSettings = openUserDialog(sdp, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, false);
+			previousSettings = openUserDialog(sdp, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, false, true);
 		}
 
 		if (previousSettings == null) {
@@ -176,13 +176,13 @@ public final class UserSettingsHelper {
 	}
 
 	public static UserSettings openUserDialog(final IScenarioDataProvider sdp, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP) {
+			final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP, final boolean displayValidation) {
 		return openUserDialog(sdp, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
-				displayOnlyIfOptionsEnabled, nameProvider, forADP);
+				displayOnlyIfOptionsEnabled, nameProvider, forADP, displayValidation);
 	}
 
 	public static UserSettings openUserDialog(final IScenarioDataProvider sdp, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP) {
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP, final boolean displayValidation) {
 
 		final LNGScenarioModel scenario = sdp.getTypedScenario(LNGScenarioModel.class);
 		final boolean[] optionsAdded = new boolean[2];
@@ -245,7 +245,7 @@ public final class UserSettingsHelper {
 			}
 			
 			// Validation output
-			{
+			if (displayValidation){
 				createValidationOutput(sdp, defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
 		}
