@@ -4,7 +4,7 @@
 <product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.app.product" application="com.mmxlabs.lingo.app.application" version="6.10.5.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="icons/logo-square-16.png"/>
+      <image path="icons/minimax_logo.png"/>
       <text>
          LiNGO
 Copyright 2010 - 2023
@@ -24,7 +24,7 @@ Build: {1}
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="icons/logo-square-16.png" i32="icons/logo-square-32.png" i48="icons/logo-square-48.png" i64="icons/logo-square-64.png" i128="icons/logo-square-128.png"/>
+   <windowImages i16="icons/logo-square-16.png" i32="icons/logo-square-32.png" i64="icons/logo-square-64.png" i128="icons/logo-square-128.png" i256="icons/logo-square-256.png"/>
 
    <splash
       location="com.mmxlabs.lingo.app"
@@ -37,6 +37,7 @@ Build: {1}
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
       <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17</linux>
@@ -72,10 +73,10 @@ Build: {1}
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.ops4j.peaberry.activation" autoStart="true" startLevel="1" />
-      <property name="applicationXMI" value="org.eclipse.platform/LegacyIDE.e4xmi" />
-      <property name="applicationCSSResources" value="platform:/plugin/org.eclipse.ui.themes/images/" />
       <property name="org.eclipse.update.reconcile" value="false" />
+      <property name="applicationXMI" value="org.eclipse.platform/LegacyIDE.e4xmi" />
       <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_default" />
+      <property name="applicationCSSResources" value="platform:/plugin/org.eclipse.ui.themes/images/" />
    </configurations>
 
    <preferencesInfo>

@@ -123,7 +123,7 @@
          </property>
          <property
                name="aboutImage"
-               value="icons/logo-square-16.png">
+               value="icons/minimax_logo.png">
          </property>
 	 <property
         name="aboutText"
