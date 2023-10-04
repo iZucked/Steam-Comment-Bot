@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.ui.ParameterModesDialog;
@@ -40,6 +41,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
 public class ParameterModesDialogTest {
 
@@ -347,11 +350,13 @@ public class ParameterModesDialogTest {
 					dummyModel.setCargoModel(dummyCargoModel);
 					dummyModel.setReferenceModel(dummyReferenceModel);
 					dummyReferenceModel.setSpotMarketsModel(dummySpotMarketsModel);
+					
+					// Create dummy scenario data provider
+					IScenarioDataProvider sdp = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), dummyModel);
 
 					UserSettings settings[] = new UserSettings[1];
 					Realm.runWithDefault(SWTObservables.getRealm(display), () -> {
-						// TO-DO: Replace dummyModel with dummySDP
-						//settings[0] = UserSettingsHelper.openUserDialog(dummyModel, display, shell, false, initialSettings, initialSettings, false, null, false);
+						settings[0] = UserSettingsHelper.openUserDialog(sdp, display, shell, false, initialSettings, initialSettings, false, null, false, false);
 					});
 					return settings[0];
 				} catch (final Exception e) {

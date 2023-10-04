@@ -109,7 +109,7 @@ public final class OptimisationHelper {
 				return null;
 			}
 
-			previousSettings = UserSettingsHelper.openUserDialog(sdp, false, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
+			previousSettings = UserSettingsHelper.openUserDialog(sdp, false, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP, true);
 		}
 
 		if (previousSettings == null) {
@@ -170,7 +170,7 @@ public final class OptimisationHelper {
 				return null;
 			}
 
-			previousSettings = UserSettingsHelper.openUserDialog(sdp, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
+			previousSettings = UserSettingsHelper.openUserDialog(sdp, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP, true);
 		}
 
 		if (previousSettings == null) {
@@ -219,7 +219,7 @@ public final class OptimisationHelper {
 		if (promptUser) {
 			final boolean forADP = scenario.getAdpModel() != null;
 
-			previousSettings = UserSettingsHelper.openUserDialog(sdp, true, previousSettings, userSettings, promptOnlyIfOptionsEnabled, null, forADP);
+			previousSettings = UserSettingsHelper.openUserDialog(sdp, true, previousSettings, userSettings, promptOnlyIfOptionsEnabled, null, forADP, true);
 		}
 
 		if (previousSettings == null) {
