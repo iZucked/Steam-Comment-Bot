@@ -21,7 +21,6 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EAnnotation;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
@@ -281,7 +280,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				final EObject originalOne = rangeIterator.next();
 				final EObject duplicateOne = duplicateRangeIterator.next();
 				
-				// Set name of duplicate the same a Copy of + original name
+				// Set name of duplicate objects Copy of + original name
 				// Check if original contains name attribute
 				if (originalOne.eClass().getEAllAttributes().contains(MMXCorePackage.eINSTANCE.getNamedObject_Name())){
 					String originalName = originalOne.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()).toString();
