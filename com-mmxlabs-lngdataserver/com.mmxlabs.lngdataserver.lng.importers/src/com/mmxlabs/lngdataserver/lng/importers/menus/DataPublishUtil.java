@@ -15,17 +15,20 @@ import com.mmxlabs.lngdataserver.integration.distances.DistanceRepository;
 import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsRepository;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsRepository;
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsRepository;
-import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
+import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
+import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;
 import com.mmxlabs.lngdataserver.integration.vessels.VesselsRepository;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.SharedScenarioDataUtils.DataOptions;
 import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.distances.DistancesFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.paper.PaperFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.pricing.PricingFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.vesselgroups.VesselGroupsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.vessels.VesselsFromScenarioCopier;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -44,6 +47,9 @@ public class DataPublishUtil {
 			switch (option) {
 			case PricingData:
 				checkAndUploadPricingData(modelRecord, scenarioModel);
+				break;
+			case PaperData:
+				checkAndUploadPaperData(modelRecord, scenarioModel);
 				break;
 			case PortData:
 				checkAndUploadDistanceData(modelRecord, scenarioModel);
@@ -83,6 +89,15 @@ public class DataPublishUtil {
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioModel);
 		final String version = pricingModel.getMarketCurvesVersionRecord().getVersion();
 		if (dataVersionUpload(PricingRepository.INSTANCE, version, () -> PricingFromScenarioCopier.generateVersion(pricingModel))) {
+			return version;
+		}
+		return null;
+	}
+
+	public static @Nullable String checkAndUploadPaperData(final ScenarioModelRecord modelRecord, final LNGScenarioModel scenarioModel) throws IOException {
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+		final String version = cargoModel.getPaperDealsVersionRecord().getVersion();
+		if (dataVersionUpload(PaperRepository.INSTANCE, version, () -> PaperFromScenarioCopier.generateVersion(cargoModel))) {
 			return version;
 		}
 		return null;

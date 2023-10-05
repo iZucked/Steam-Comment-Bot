@@ -111,7 +111,8 @@ public final class ScenarioModelBuilder {
 		referenceModel.getFleetModel().setVesselGroupVersionRecord(VersionsUtil.createNewRecord());
 		referenceModel.getPricingModel().setMarketCurvesVersionRecord(VersionsUtil.createNewRecord());
 		referenceModel.getPricingModel().setSettledPricesVersionRecord(VersionsUtil.createNewRecord());
-
+		rootObject.getCargoModel().setPaperDealsVersionRecord(VersionsUtil.createNewRecord());
+		
 		return new ScenarioModelBuilder(rootObject);
 
 	}

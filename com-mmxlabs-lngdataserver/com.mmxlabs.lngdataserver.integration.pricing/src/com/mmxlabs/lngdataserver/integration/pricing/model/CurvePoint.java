@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.lngdataserver.integration.pricing.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class CurvePoint {
 
