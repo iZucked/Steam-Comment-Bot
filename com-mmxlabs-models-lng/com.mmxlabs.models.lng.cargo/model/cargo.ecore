@@ -792,6 +792,7 @@
     <eLiterals name="NBO_BUNKERS" value="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CIIStartOptions">
+    <eOperations name="yearToDatePartialCII" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearToDateEmissions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="formatString" value="#######"/>

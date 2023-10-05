@@ -7,11 +7,8 @@ package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.SetCommand;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;

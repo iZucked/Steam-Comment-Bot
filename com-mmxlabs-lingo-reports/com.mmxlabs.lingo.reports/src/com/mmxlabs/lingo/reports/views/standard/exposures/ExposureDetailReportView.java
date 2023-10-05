@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.exposures;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,6 +47,7 @@ import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
@@ -82,7 +85,7 @@ public class ExposureDetailReportView extends ViewPart {
 
 		createDealColumn("Deal");
 
-		createColumn("Index", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
+		createColumn("MTM Curve", SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME);
 		createColumn("Contract Month", SchedulePackage.Literals.EXPOSURE_DETAIL__DATE);
 		createColumn("Pricing Date", SchedulePackage.Literals.EXPOSURE_DETAIL__LOCAL_DATE);
 		
@@ -160,9 +163,13 @@ public class ExposureDetailReportView extends ViewPart {
 
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-				List<Object> selected = (selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
+				
+				List<Object> selected = (selection == null) ? //
+						Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
 				selected = selected.stream().filter(
-						s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDealAllocation || s instanceof PaperDeal)
+						s -> s instanceof Slot || s instanceof SlotAllocation //
+						|| s instanceof Cargo || s instanceof CargoAllocation //
+						|| s instanceof PaperDealAllocation || s instanceof PaperDeal)
 						.toList();
 				//
 				if (selected.isEmpty()) {
@@ -172,12 +179,15 @@ public class ExposureDetailReportView extends ViewPart {
 					return true;
 				}
 				if (element instanceof SlotAllocation slotAllocation) {
-					return selected.contains(element) || selected.contains(slotAllocation.getSlot()) || selected.contains(slotAllocation.getCargoAllocation());
+					return selected.contains(element) //
+							|| selected.contains(slotAllocation.getSlot()) //
+							|| selected.contains(slotAllocation.getCargoAllocation());
 
 				} else if (element instanceof PaperDeal paperDeal) {
 					return selected.contains(paperDeal);
 				} else if (element instanceof PaperDealAllocation paperDealAllocation) {
-					return selected.contains(paperDealAllocation) || selected.contains(paperDealAllocation.getPaperDeal());
+					return selected.contains(paperDealAllocation) //
+							|| selected.contains(paperDealAllocation.getPaperDeal());
 				}
 				return true;
 			}
@@ -348,7 +358,7 @@ public class ExposureDetailReportView extends ViewPart {
 
 			final Runnable r = () -> {
 
-				final List<EObject> slotAllocations = new LinkedList<>();
+				final List<EObject> allocations = new LinkedList<>();
 				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 				if (pinned != null) {
 
@@ -356,8 +366,8 @@ public class ExposureDetailReportView extends ViewPart {
 					if (scheduleModel != null) {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (schedule != null) {
-							schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
-							schedule.getPaperDealAllocations().forEach(slotAllocations::add);
+							schedule.getCargoAllocations().forEach(ca -> allocations.addAll(ca.getSlotAllocations()));
+							schedule.getPaperDealAllocations().forEach(allocations::add);
 						}
 					}
 				}
@@ -367,14 +377,13 @@ public class ExposureDetailReportView extends ViewPart {
 					if (scheduleModel != null) {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (schedule != null) {
-							schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
-							schedule.getPaperDealAllocations().forEach(slotAllocations::add);
+							schedule.getCargoAllocations().forEach(ca -> allocations.addAll(ca.getSlotAllocations()));
+							schedule.getPaperDealAllocations().forEach(allocations::add);
 						}
 					}
 				}
 
-				ViewerHelper.setInput(viewer, true, slotAllocations);
-			
+				ViewerHelper.setInput(viewer, true, allocations);
 				
 			};
 
@@ -385,9 +394,36 @@ public class ExposureDetailReportView extends ViewPart {
 		public void selectedObjectChanged(MPart source, ISelection selection) {
 			if (SelectionServiceUtils.isSelectionValid(source, selection)) {
 				// Update selection before view refresh
-				ExposureDetailReportView.this.selection = SelectionHelper.adaptSelection(selection);
+				ExposureDetailReportView.this.selection = adaptSelection(selection);
 				ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 			}
+		}
+		
+		private ISelection adaptSelection(final ISelection selection) {
+			final ISelection adapted = SelectionHelper.adaptSelection(selection);
+			final List<Object> interestingObjects = new ArrayList();
+			if (adapted instanceof final StructuredSelection ss) {
+				final Iterator<Object> iter = ss.toList().iterator();
+				while(iter.hasNext()) {
+					final Object o = iter.next();
+					if (o instanceof final DealSet dealSet) {
+						dealSet.getSlots().forEach( s-> {
+							final Cargo cargo = s.getCargo();
+							if (cargo != null && !interestingObjects.contains(cargo)) {
+								interestingObjects.add(cargo);
+							}
+						});
+						interestingObjects.addAll(dealSet.getSlots());
+						interestingObjects.addAll(dealSet.getPaperDeals());
+					} else if (o != null) {
+						interestingObjects.add(o);
+					}
+				}
+				if (!interestingObjects.isEmpty())
+					return new StructuredSelection(interestingObjects);
+			}
+			
+			return adapted;
 		}
 
 	};

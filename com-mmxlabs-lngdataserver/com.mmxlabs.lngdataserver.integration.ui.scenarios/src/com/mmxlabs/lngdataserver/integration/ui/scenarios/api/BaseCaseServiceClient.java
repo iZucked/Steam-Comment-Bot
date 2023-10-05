@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.time.Instant;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -64,7 +62,7 @@ public class BaseCaseServiceClient {
 			final String pricingVersion, final String paperVersion,
 			final IProgressListener progressListener) throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(BASECASE_UPLOAD_URL, HttpPost::new, request -> {
+		return DataHubServiceProvider.getInstance().doPostRequest(BASECASE_UPLOAD_URL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -158,7 +156,7 @@ public class BaseCaseServiceClient {
 
 	public String getCurrentBaseCase() throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(BASECASE_CURRENT_URL, HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(BASECASE_CURRENT_URL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				// 404 Not found is a valid response if there is no current basecase
@@ -173,7 +171,7 @@ public class BaseCaseServiceClient {
 
 	public String setCurrentBaseCase(final String uuid) throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(BASECASE_CURRENT_URL + "/" + uuid, HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(BASECASE_CURRENT_URL + "/" + uuid, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException(UNEXPECTED_CODE + response);
@@ -184,7 +182,7 @@ public class BaseCaseServiceClient {
 
 	public String getBaseCaseDetails(final String uuid) throws IOException {
 
-		return DataHubServiceProvider.getInstance().doRequest(BASECASE_DOWNLOAD_URL + uuid + "/details", HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequest(BASECASE_DOWNLOAD_URL + uuid + "/details", response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException(UNEXPECTED_CODE + responseCode);

@@ -15,5 +15,7 @@ public interface IAdpToolbarCustomiser {
 
 	void customiseToolbar(Composite toolbarComposite, ADPEditorData editorData, IWorkbenchPage page);
 
+	void dispose();
+
 	int columnsRequired();
 }

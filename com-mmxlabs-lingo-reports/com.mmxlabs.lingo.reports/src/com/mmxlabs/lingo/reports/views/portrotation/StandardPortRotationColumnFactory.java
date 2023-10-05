@@ -21,6 +21,9 @@ import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
@@ -28,6 +31,7 @@ import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Purge;
@@ -35,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
@@ -128,6 +133,43 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.id":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID,
 					new SingleColumnFactoryBuilder(columnID, "ID").withCellRenderer(Formatters.objectFormatter).withElementPath(sp.getEvent__Name()).build());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.side":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "L/B").withCellRenderer(new BaseFormatter() {
+
+				@Override
+				public String render(final Object object) {
+					final Event se = (Event) object;
+					if (se instanceof Journey || se instanceof Idle) {
+						return cRender(se.getNextEvent());
+					}
+					return null;
+				}
+				
+				private String cRender(final Event e) {
+					if (e instanceof final SlotVisit sv) {
+						final Slot s = sv.getSlotAllocation().getSlot();
+						if (s instanceof LoadSlot) {
+							return "Ballast";
+						} else {
+							return "Laden";
+						}
+					} else if (e != null){
+						return cRender(e.getNextEvent());
+					}
+					return null;
+				}
+
+				@Override
+				public Comparable getComparable(final Object object) {
+					final String str = render(object);
+					if (str == null) {
+						return "";
+					}
+					return str;
+				}
+
+			}).build());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.contract":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new SingleColumnFactoryBuilder(columnID, "Contract").withCellRenderer(new BaseFormatter() {

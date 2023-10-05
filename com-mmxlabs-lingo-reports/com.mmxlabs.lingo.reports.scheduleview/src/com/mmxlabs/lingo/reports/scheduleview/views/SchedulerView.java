@@ -260,7 +260,6 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 		memento.putMemento(this.memento);
 
 		// Set anything that hasn't been updated in the shared memento
-		memento.putBoolean(SchedulerViewConstants.Show_Days, viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
 		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
 		memento.putString(SchedulerViewConstants.SortMode, viewerComparator.getMode().toString());
 		memento.putString(SchedulerViewConstants.SortCategory, viewerComparator.getCategory().toString());
@@ -621,13 +620,6 @@ public class SchedulerView extends ViewPart implements IPreferenceChangeListener
 
 		viewer.getGanttChart().getGanttComposite().setLegendProvider(() -> legendItems);
 
-		// Restore show days setting
-		{
-			final Boolean v = memento.getBoolean(SchedulerViewConstants.Show_Days);
-			if (v != null) {
-				viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(v);
-			}
-		}
 		// make sure this viewer is listening to preference changes
 		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.addPreferenceChangeListener(this);

@@ -57,6 +57,12 @@ public class HubTestHelper {
 	private static final int READ_TIMEOUT_IN_SECONDS = 1;
 	private static final int WRITE_TIMEOUT_IN_SECONDS = 1;
 	// private final static OkHttpClient httpClient = HttpClientUtil.basicBuilder(CONNECTION_TIMEOUT_IN_SECONDS, READ_TIMEOUT_IN_SECONDS, WRITE_TIMEOUT_IN_SECONDS).build();
+	
+	static {
+		// Some of the AWS SDK doesn't pick up the http client from the service client, so set the property here.
+		// Specifically the reading of credentials for SSO / Default Profile 
+		System.setProperty("software.amazon.awssdk.http.service.impl", "software.amazon.awssdk.http.apache.ApacheSdkHttpService");
+	}
 
 	public static void configureHub(final String url, final boolean enableBaseCase, final boolean enableTeam) {
 		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, url);
@@ -316,7 +322,7 @@ public class HubTestHelper {
 		String key = getenv.get("AWS_SECRET_ACCESS_KEY");
 		if (key != null) {
 			System.setProperty("aws.secretAccessKey", key);
-		}	
+		}
 
 		final String secretName = "lingo/hub-test";
 		final Region region = Region.of("eu-west-2");
@@ -431,7 +437,7 @@ public class HubTestHelper {
 				.withEnv("AZURE_TENANT_ID", secrets.tenant_id)
 				.withEnv("AZURE_CLIENT_SECRET", secrets.secret_id)
 				.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase, MinimaxAdmin")
-				.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
+				.waitingFor(Wait.forLogMessage(".*Started DataHubApplication.*", 1));
 		// @formatter:on
 	}
 }

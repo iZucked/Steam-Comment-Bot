@@ -2137,7 +2137,7 @@ public class LNGScenarioTransformer {
 								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								desSlot.setDESPurchase(true);
 
-								desSlot.setArriveCold(false);
+//								desSlot.setArriveCold(false);
 								desSlot.setWindowStart(LocalDate.of(startTime.getYear(), startTime.getMonthValue(), startTime.getDayOfMonth()));
 								desSlot.setWindowStartTime(0);
 								desSlot.setOptional(true);
@@ -2647,13 +2647,14 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowStartTime(0);
 								fobSlot.setOptional(true);
 								fobSlot.setPort(notionalAPort);
-								fobSlot.setArriveCold(fobSlot.getPort() == null ? true : !fobSlot.getPort().isAllowCooldown());
+//								fobSlot.setArriveCold(fobSlot.getPort() == null ? true : !fobSlot.getPort().isAllowCooldown());
 								fobSlot.setWindowSize(1);
 								fobSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
+								boolean arriveCold = !notionalAPort.isAllowCooldown();
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSchedulingTimeWindow().getDuration(),
-										fobSlot.isArriveCold(), true, false, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
+										arriveCold, true, false, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3, false);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);

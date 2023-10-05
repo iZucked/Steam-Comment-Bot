@@ -51,6 +51,7 @@ public class EditingPerspective implements IPerspectiveFactory {
 
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.port.editor.views.PortView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView");
+		layout.addShowViewShortcut("com.mmxlabs.models.lng.fleet.editor.views.CIIReferenceDataEditorView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.SettledPricesView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.CanalCostsView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.pricing.editor.PortCostsView");

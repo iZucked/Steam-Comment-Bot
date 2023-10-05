@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.exposures;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -43,6 +45,7 @@ import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.ColumnManager;
+import com.mmxlabs.lingo.reports.components.DatesToolbarEditor;
 import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
@@ -92,6 +95,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected AssetType selectedAssetType = AssetType.NET;
 
 	protected boolean showGenerated = false;
+	protected boolean showPeriod = false;
+	
+	private DatesToolbarEditor dates;
 
 	// -------------------------------------Transformer class
 	// starts-------------------------------------
@@ -506,8 +512,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			@Override
 			public Object[] getElements(final Object inputElement) {
 
-				if (inputElement instanceof Collection<?>) {
-					final Collection<?> collection = (Collection<?>) inputElement;
+				if (inputElement instanceof final Collection<?> collection) {
 					return collection.toArray();
 				}
 				return new Object[0];
@@ -515,12 +520,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof Collection<?>) {
-					final Collection<?> collection = (Collection<?>) parentElement;
+				if (parentElement instanceof final Collection<?> collection) {
 					return collection.toArray();
 				}
-				if (parentElement instanceof IndexExposureData) {
-					final IndexExposureData indexExposureData = (IndexExposureData) parentElement;
+				if (parentElement instanceof final IndexExposureData indexExposureData) {
 					if (indexExposureData.children != null) {
 						return indexExposureData.children.toArray();
 					}
@@ -536,7 +539,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			@Override
 			public boolean hasChildren(final Object element) {
 				return element instanceof Collection<?>
-						|| (element instanceof IndexExposureData && ((IndexExposureData) element).children != null && ((IndexExposureData) element).type == IndexExposureType.MONTHLY);
+						|| (element instanceof final IndexExposureData indexExposureData //
+								&& indexExposureData.children != null //
+								&& indexExposureData.type == IndexExposureType.MONTHLY);
 			}
 		};
 	}
@@ -597,14 +602,37 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		return ied1;
 	}
 
+	private Action period = null;
+	
 	@Override
 	protected void makeActions() {
-		super.makeActions();
-
-		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
-		filterAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 		
-
+		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("dates"));
+		
+		dates = new DatesToolbarEditor("exposures_dates_toolbar", e -> {
+			getViewSite().getActionBars().updateActionBars();
+			ExposureReportView.this.refresh();
+		});
+		
+		period = new Action("Period : All", Action.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+				showPeriod = !showPeriod;
+				setText(showPeriod ? "Period : Set" : "Period : All");
+				if (showPeriod) {
+					getViewSite().getActionBars().getToolBarManager().prependToGroup("dates", dates);
+				} else {
+					getViewSite().getActionBars().getToolBarManager().remove(dates);
+				}
+				getViewSite().getActionBars().updateActionBars();
+				ExposureReportView.this.refresh();
+			}
+		};
+		
+		getViewSite().getActionBars().getToolBarManager().prependToGroup("dates", period);
+		
+		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
+		
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
 			final Action showGeneratedPaperDeals = new Action("Generated : No", Action.AS_PUSH_BUTTON) {
 				@Override
@@ -615,7 +643,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					ExposureReportView.this.refresh();
 				}
 			};
-			getViewSite().getActionBars().getToolBarManager().add(showGeneratedPaperDeals);
+			getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", showGeneratedPaperDeals);
 		}
 
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
@@ -627,11 +655,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				setUnitsActionText(this);
 				getViewSite().getActionBars().updateActionBars();
 				ExposureReportView.this.refresh();
-
 			}
 		};
 		setUnitsActionText(modeToggle);
-		getViewSite().getActionBars().getToolBarManager().add(modeToggle);
+		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", modeToggle);
 
 		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_PUSH_BUTTON) {
 			@Override
@@ -644,7 +671,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			}
 		};
-		getViewSite().getActionBars().getToolBarManager().add(selectionToggle);
+		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", selectionToggle);
 
 		final Action viewModeToggle = new Action("Group: Month", Action.AS_PUSH_BUTTON) {
 			@Override
@@ -655,14 +682,16 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				setAggregationModeActionText(this);
 				getViewSite().getActionBars().updateActionBars();
 				ExposureReportView.this.refresh();
-
 			}
 		};
 		setAggregationModeActionText(viewModeToggle);
-		getViewSite().getActionBars().getToolBarManager().add(viewModeToggle);
-
-		getViewSite().getActionBars().getToolBarManager().add(filterAction);
-		getViewSite().getActionBars().getToolBarManager().update(true);
+		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", viewModeToggle);
+		
+		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
+		filterAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
+		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", filterAction);
+		
+		super.makeActions();
 	}
 
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
@@ -838,6 +867,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	protected YearMonth getEarliestExposureDate(final Schedule schedule) {
 		YearMonth result = null;
+		
+		if (dates!= null && showPeriod) {
+			final LocalDate date = dates.getStartDate();
+			if (date != null) {
+				return YearMonth.from(date);
+			}
+		}
 
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
@@ -883,6 +919,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	protected YearMonth getLatestExposureDate(final Schedule schedule) {
 		YearMonth result = null;
+		
+		if (dates!= null && showPeriod) {
+			final LocalDate date = dates.getEndDate();
+			if (date != null) {
+				return YearMonth.from(date);
+			}
+		}
 
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
@@ -970,5 +1013,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		if (!newToExpand.isEmpty()) {
 			viewer.setExpandedElements(newToExpand.toArray());
 		}
+	}
+	
+	@Override
+	protected synchronized void refresh() {
+		if (viewer != null) {
+			viewer.refresh();
+		}
+		super.refresh();
 	}
 }

@@ -12,9 +12,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -46,7 +43,7 @@ public class GenericDataServiceClient {
 	public String upload(final String type, final String uuid, final String contentType, final File file, final IProgressListener progressListener) throws IOException {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_UPLOAD_URL, type, uuid);
-		return DataHubServiceProvider.getInstance().doRequest(requestURL, HttpPost::new, request -> {
+		return DataHubServiceProvider.getInstance().doPostRequest(requestURL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
@@ -75,7 +72,7 @@ public class GenericDataServiceClient {
 	public boolean downloadTo(final String type, final String uuid, final File file, final IProgressListener progressListener) throws Exception {
 
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_DOWNLOAD_URL, type, uuid);
-		return DataHubServiceProvider.getInstance().doRequestAsBoolean(requestURL, HttpGet::new, response -> {
+		return DataHubServiceProvider.getInstance().doGetRequestAsBoolean(requestURL, response -> {
 			final int responseCode = response.getStatusLine().getStatusCode();
 			if (!HttpClientUtil.isSuccessful(responseCode)) {
 				throw new IOException("Unexpected code: " + response);

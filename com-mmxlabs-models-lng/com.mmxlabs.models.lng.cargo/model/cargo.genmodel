@@ -451,6 +451,7 @@
     <genClasses ecoreClass="cargo.ecore#//CIIStartOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearToDateEmissions"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIStartOptions/yearToDateDistance"/>
+      <genOperations ecoreOperation="cargo.ecore#//CIIStartOptions/yearToDatePartialCII"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//CIIEndOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIEndOptions/desiredCIIGrade"/>

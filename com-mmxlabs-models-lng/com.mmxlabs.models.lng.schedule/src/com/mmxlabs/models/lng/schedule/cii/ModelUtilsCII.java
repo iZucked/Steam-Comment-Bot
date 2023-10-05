@@ -7,7 +7,10 @@ package com.mmxlabs.models.lng.schedule.cii;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mmxlabs.models.lng.cargo.CIIStartOptions;
+import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FuelEmissionReference;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -18,11 +21,12 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.emissions.EmissionModelUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 public class ModelUtilsCII {
-	
+
 	private ModelUtilsCII() {
 	}
 
@@ -31,8 +35,17 @@ public class ModelUtilsCII {
 		model.setCIIEvent(event);
 		model.setCIIStartDate(event.getStart().toLocalDate());
 		model.setCIIEndDate(event.getEnd().toLocalDate());
-		if (event instanceof FuelUsage fuelUsageEvent) {
+		if (event instanceof final FuelUsage fuelUsageEvent) {
 			processFuelUsageEvent(model, fuelUsageEvent);
+		}
+		if (event instanceof final StartEvent startEvent) {
+			final VesselCharter vesselCharter = startEvent.getSequence().getVesselCharter();
+			if (vesselCharter != null) {
+				final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
+				if (ciiStartOptions != null) {
+					model.addToTotalEmissionForCII(ciiStartOptions.getYearToDateEmissions());
+				}
+			}
 		}
 	}
 
@@ -46,7 +59,14 @@ public class ModelUtilsCII {
 				if (fuelQuantity.getAmounts().get(0).getUnit() != FuelUnit.MT) {
 					throw new IllegalStateException();
 				}
-				model.addToTotalEmissionForCII(Math.round(fuelAmount.getQuantity() * baseFuel.getEmissionRate()));
+				double er = 0.0;
+				if (baseFuel != null) {
+					final FuelEmissionReference fer = baseFuel.getEmissionReference();
+					if (fer != null) {
+						er = fer.getCf();
+					}
+				}
+				model.addToTotalEmissionForCII(Math.round(fuelAmount.getQuantity() * er));
 				break;
 			case FBO, NBO:
 				model.addToTotalEmissionForCII(EmissionModelUtils.consumedCarbonEquivalentEmissionLNG(fuelQuantity));
