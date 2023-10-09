@@ -38,7 +38,6 @@ public class ReferenceDataStatusTrimContribution {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceDataStatusTrimContribution.class);
 
-	private Runnable versionChangeRunnable;
 	private final Image circleOrange = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_orange.png"));
 	private final Image circleGreen = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_green.png"));
 	
@@ -60,7 +59,7 @@ public class ReferenceDataStatusTrimContribution {
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
-
+		
 		final Label myLabel = new Label(parent, SWT.NONE);
 		myLabel.setText("Version status");
 		mainLabel = myLabel;
@@ -82,10 +81,21 @@ public class ReferenceDataStatusTrimContribution {
 			}
 		});
 		
+		final Runnable pricingVersionChangeRunnable = this::pricingVersionChanged;
+
+		final Runnable paperVersionChangeRunnable = this::paperVersionChanged;
+		
 		currentRecords = getSaved();
-		versionChangeRunnable = this::versionChanged;
-		PricingRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
-		PaperRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
+		PricingRepository.INSTANCE.registerLocalVersionListener(pricingVersionChangeRunnable);
+		PaperRepository.INSTANCE.registerLocalVersionListener(paperVersionChangeRunnable);
+
+		myLabel.addDisposeListener(e -> 
+		PricingRepository.INSTANCE.deregisterLocalVersionListener(pricingVersionChangeRunnable)
+				);
+		myLabel.addDisposeListener(e -> 
+		PaperRepository.INSTANCE.deregisterLocalVersionListener(paperVersionChangeRunnable)
+				);
+
 		setLabelTextAndToolTip(myLabel, !currentRecords.isDismissed);
 		
 		return myLabel;
@@ -99,13 +109,25 @@ public class ReferenceDataStatusTrimContribution {
 		});
 	}
 	
-	private void versionChanged() {
+	private void pricingVersionChanged() {
 		final String cV = currentRecords.typeVersion.get(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
 		final String nV = PricingRepository.INSTANCE.getCurrentVersion();
 		if (nV != null && (cV == null || !cV.equals(nV))) {
 			currentRecords.isDismissed = false;
 			currentRecords.typeVersion.remove(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
 			currentRecords.typeVersion.put(LNGScenarioSharedModelTypes.MARKET_CURVES.getID(), nV);
+			saveRecord(currentRecords);
+			changed();
+		}
+	}
+	
+	private void paperVersionChanged() {
+		final String cV = currentRecords.typeVersion.get(LNGScenarioSharedModelTypes.PAPER_DEALS.getID());
+		final String nV = PaperRepository.INSTANCE.getCurrentVersion();
+		if (nV != null && (cV == null || !cV.equals(nV))) {
+			currentRecords.isDismissed = false;
+			currentRecords.typeVersion.remove(LNGScenarioSharedModelTypes.PAPER_DEALS.getID());
+			currentRecords.typeVersion.put(LNGScenarioSharedModelTypes.PAPER_DEALS.getID(), nV);
 			saveRecord(currentRecords);
 			changed();
 		}
@@ -135,9 +157,6 @@ public class ReferenceDataStatusTrimContribution {
 		}
 		if (mainLabel != null && !mainLabel.isDisposed()) {
 			mainLabel.dispose();
-		}
-		if (versionChangeRunnable != null) {
-			PricingRepository.INSTANCE.deregisterLocalVersionListener(versionChangeRunnable);
 		}
 	}
 	
