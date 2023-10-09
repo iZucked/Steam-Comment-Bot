@@ -9,6 +9,6 @@
 		<version>6.10.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mmxlabs.lngdataserver.integration.pricing</artifactId>
+	<artifactId>com.mmxlabs.lngdataserver.integration.paper</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>
