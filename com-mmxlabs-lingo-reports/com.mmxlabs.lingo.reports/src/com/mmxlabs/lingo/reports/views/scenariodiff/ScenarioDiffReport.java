@@ -14,7 +14,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 public class ScenarioDiffReport extends AbstractScenarioDiff<String> {
 
 	public ScenarioDiffReport() {
-		super("com.mmxlabs.lingo.reports.Reports_IncomeStatementByContract");
+		super("com.mmxlabs.lingo.reports.views.multi.MultiView");
 	}
 	
 	private Set<String> seenContracts = new HashSet<>();
