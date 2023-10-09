@@ -11,8 +11,8 @@ import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Rectangle;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Text;
 
 public sealed interface BasicDrawableElement permits Line, Rectangle, Text {
-	Color getBackgroundColour();
-	Color getBorderColour();
-	int getBorderThickness();
-	int getAlpha();
+	Color backgroundColour();
+	Color borderColour();
+	int borderThickness();
+	int alpha();
 }

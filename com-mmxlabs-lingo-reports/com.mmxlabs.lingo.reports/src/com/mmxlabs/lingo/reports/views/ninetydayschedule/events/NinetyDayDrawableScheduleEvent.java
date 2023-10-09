@@ -23,7 +23,7 @@ public abstract class NinetyDayDrawableScheduleEvent extends DrawableScheduleEve
 	}
 
 	@Override
-	protected int getAlpha(ScheduleEventSelectionState s) {
+	public int getAlpha(ScheduleEventSelectionState s) {
 		return switch (s) {
 		case UNSELECTED -> 100;
 		case HOVER -> 200;

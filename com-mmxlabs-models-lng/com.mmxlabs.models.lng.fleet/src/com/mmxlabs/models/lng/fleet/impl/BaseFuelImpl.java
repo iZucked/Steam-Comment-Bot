@@ -5,10 +5,12 @@
 package com.mmxlabs.models.lng.fleet.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelEmissionReference;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -23,7 +25,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl#getEquivalenceFactor <em>Equivalence Factor</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl#getEmissionRate <em>Emission Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl#getEmissionReference <em>Emission Reference</em>}</li>
  * </ul>
  *
  * @generated
@@ -67,23 +69,14 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	protected double equivalenceFactor = EQUIVALENCE_FACTOR_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getEmissionRate() <em>Emission Rate</em>}' attribute.
+	 * The cached value of the '{@link #getEmissionReference() <em>Emission Reference</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEmissionRate()
+	 * @see #getEmissionReference()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double EMISSION_RATE_EDEFAULT = 0.0;
-	/**
-	 * The cached value of the '{@link #getEmissionRate() <em>Emission Rate</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEmissionRate()
-	 * @generated
-	 * @ordered
-	 */
-	protected double emissionRate = EMISSION_RATE_EDEFAULT;
+	protected FuelEmissionReference emissionReference;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -155,8 +148,25 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 * @generated
 	 */
 	@Override
-	public double getEmissionRate() {
-		return emissionRate;
+	public FuelEmissionReference getEmissionReference() {
+		if (emissionReference != null && emissionReference.eIsProxy()) {
+			InternalEObject oldEmissionReference = (InternalEObject)emissionReference;
+			emissionReference = (FuelEmissionReference)eResolveProxy(oldEmissionReference);
+			if (emissionReference != oldEmissionReference) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FleetPackage.BASE_FUEL__EMISSION_REFERENCE, oldEmissionReference, emissionReference));
+			}
+		}
+		return emissionReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FuelEmissionReference basicGetEmissionReference() {
+		return emissionReference;
 	}
 
 	/**
@@ -165,11 +175,11 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	 * @generated
 	 */
 	@Override
-	public void setEmissionRate(double newEmissionRate) {
-		double oldEmissionRate = emissionRate;
-		emissionRate = newEmissionRate;
+	public void setEmissionReference(FuelEmissionReference newEmissionReference) {
+		FuelEmissionReference oldEmissionReference = emissionReference;
+		emissionReference = newEmissionReference;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.BASE_FUEL__EMISSION_RATE, oldEmissionRate, emissionRate));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.BASE_FUEL__EMISSION_REFERENCE, oldEmissionReference, emissionReference));
 	}
 
 	/**
@@ -184,8 +194,9 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 				return getName();
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				return getEquivalenceFactor();
-			case FleetPackage.BASE_FUEL__EMISSION_RATE:
-				return getEmissionRate();
+			case FleetPackage.BASE_FUEL__EMISSION_REFERENCE:
+				if (resolve) return getEmissionReference();
+				return basicGetEmissionReference();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -205,8 +216,8 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				setEquivalenceFactor((Double)newValue);
 				return;
-			case FleetPackage.BASE_FUEL__EMISSION_RATE:
-				setEmissionRate((Double)newValue);
+			case FleetPackage.BASE_FUEL__EMISSION_REFERENCE:
+				setEmissionReference((FuelEmissionReference)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -226,8 +237,8 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				setEquivalenceFactor(EQUIVALENCE_FACTOR_EDEFAULT);
 				return;
-			case FleetPackage.BASE_FUEL__EMISSION_RATE:
-				setEmissionRate(EMISSION_RATE_EDEFAULT);
+			case FleetPackage.BASE_FUEL__EMISSION_REFERENCE:
+				setEmissionReference((FuelEmissionReference)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -245,8 +256,8 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case FleetPackage.BASE_FUEL__EQUIVALENCE_FACTOR:
 				return equivalenceFactor != EQUIVALENCE_FACTOR_EDEFAULT;
-			case FleetPackage.BASE_FUEL__EMISSION_RATE:
-				return emissionRate != EMISSION_RATE_EDEFAULT;
+			case FleetPackage.BASE_FUEL__EMISSION_REFERENCE:
+				return emissionReference != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -297,8 +308,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 		result.append(name);
 		result.append(", equivalenceFactor: ");
 		result.append(equivalenceFactor);
-		result.append(", emissionRate: ");
-		result.append(emissionRate);
 		result.append(')');
 		return result.toString();
 	}

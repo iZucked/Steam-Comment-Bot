@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.common.http.HttpClientUtil;
 
 public class OAuthDialog extends Window {
 
@@ -178,7 +179,7 @@ public class OAuthDialog extends Window {
 
 					// store sso cookie in secure preferences for later use
 					AuthenticationManager.getInstance().storeInSecurePreferences(OAuthManager.COOKIE, "JSESSIONID=" + cookie);
-
+					HttpClientUtil.fireInvalidationListeners();
 					OAuthDialog.this.close();
 				}
 			}

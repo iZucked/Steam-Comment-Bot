@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -57,6 +58,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getPaperDeals <em>Paper Deals</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDealSets <em>Deal Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getPaperDealsVersionRecord <em>Paper Deals Version Record</em>}</li>
  * </ul>
  *
  * @generated
@@ -192,6 +194,16 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<GroupedDischargeSlotsConstraint> groupedDischargeSlots;
+
+	/**
+	 * The cached value of the '{@link #getPaperDealsVersionRecord() <em>Paper Deals Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPaperDealsVersionRecord()
+	 * @generated
+	 * @ordered
+	 */
+	protected VersionRecord paperDealsVersionRecord;
 
 	private Map< String, LoadSlot> lookupLoadSlotCache;
 	private Map< String, DischargeSlot> lookupDischargeSlotCache;
@@ -458,6 +470,74 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VersionRecord getPaperDealsVersionRecord() {
+		if (paperDealsVersionRecord != null && paperDealsVersionRecord.eIsProxy()) {
+			InternalEObject oldPaperDealsVersionRecord = (InternalEObject)paperDealsVersionRecord;
+			paperDealsVersionRecord = (VersionRecord)eResolveProxy(oldPaperDealsVersionRecord);
+			if (paperDealsVersionRecord != oldPaperDealsVersionRecord) {
+				InternalEObject newPaperDealsVersionRecord = (InternalEObject)paperDealsVersionRecord;
+				NotificationChain msgs = oldPaperDealsVersionRecord.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD, null, null);
+				if (newPaperDealsVersionRecord.eInternalContainer() == null) {
+					msgs = newPaperDealsVersionRecord.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD, oldPaperDealsVersionRecord, paperDealsVersionRecord));
+			}
+		}
+		return paperDealsVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VersionRecord basicGetPaperDealsVersionRecord() {
+		return paperDealsVersionRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPaperDealsVersionRecord(VersionRecord newPaperDealsVersionRecord, NotificationChain msgs) {
+		VersionRecord oldPaperDealsVersionRecord = paperDealsVersionRecord;
+		paperDealsVersionRecord = newPaperDealsVersionRecord;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD, oldPaperDealsVersionRecord, newPaperDealsVersionRecord);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPaperDealsVersionRecord(VersionRecord newPaperDealsVersionRecord) {
+		if (newPaperDealsVersionRecord != paperDealsVersionRecord) {
+			NotificationChain msgs = null;
+			if (paperDealsVersionRecord != null)
+				msgs = ((InternalEObject)paperDealsVersionRecord).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD, null, msgs);
+			if (newPaperDealsVersionRecord != null)
+				msgs = ((InternalEObject)newPaperDealsVersionRecord).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD, null, msgs);
+			msgs = basicSetPaperDealsVersionRecord(newPaperDealsVersionRecord, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD, newPaperDealsVersionRecord, newPaperDealsVersionRecord));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -533,6 +613,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getDealSets()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				return ((InternalEList<?>)getGroupedDischargeSlots()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
+				return basicSetPaperDealsVersionRecord(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -572,6 +654,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getDealSets();
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				return getGroupedDischargeSlots();
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
+				if (resolve) return getPaperDealsVersionRecord();
+				return basicGetPaperDealsVersionRecord();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -636,6 +721,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getGroupedDischargeSlots().clear();
 				getGroupedDischargeSlots().addAll((Collection<? extends GroupedDischargeSlotsConstraint>)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
+				setPaperDealsVersionRecord((VersionRecord)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -687,6 +775,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				getGroupedDischargeSlots().clear();
 				return;
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
+				setPaperDealsVersionRecord((VersionRecord)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -725,6 +816,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return dealSets != null && !dealSets.isEmpty();
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				return groupedDischargeSlots != null && !groupedDischargeSlots.isEmpty();
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
+				return paperDealsVersionRecord != null;
 		}
 		return super.eIsSet(featureID);
 	}

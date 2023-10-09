@@ -78,7 +78,11 @@ import org.eclipse.swtchart.ISeriesSet;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.model.DateArraySeriesModel;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.event.EventHandler;
 
@@ -97,6 +101,7 @@ import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.standard.inventory.ChartColourSchemeAction;
 import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
+import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryReportConstants;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.OverliftChartModeAction;
@@ -289,6 +294,31 @@ public class InventoryReport extends ViewPart {
 
 	private String lastFacility = null;
 
+	private IMemento memento;
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		if(memento == null) {
+			memento = XMLMemento.createWriteRoot("workbench");
+		}
+		this.memento = memento;
+		if(memento != null) {
+			if(memento.getBoolean(InventoryReportConstants.Show_CV) == null) {
+				memento.putBoolean(InventoryReportConstants.Show_CV, false);
+			}
+		}
+		super.init(site, memento);
+	}
+	
+	public IMemento getMemento() {
+		return memento;
+	}
+	
+	@Override
+	public void saveState(IMemento memento) {
+		memento.putMemento(this.memento);
+		super.saveState(memento);
+	}
+	
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
@@ -647,10 +677,22 @@ public class InventoryReport extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 		folder.addListener(SWT.Dispose, e -> {
-			inventoryInsAndOutChart.dispose();
-			inventoryDailyChartViewer.dispose();
-			mullMonthlyOverliftChart.dispose();
-			mullMonthlyCargoCountChart.dispose();
+			if (inventoryInsAndOutChart != null) {
+				inventoryInsAndOutChart.dispose();
+				inventoryInsAndOutChart = null;
+			}
+			if (inventoryDailyChartViewer != null) {
+				inventoryDailyChartViewer.dispose();
+				inventoryDailyChartViewer = null;
+			}
+			if (mullMonthlyOverliftChart != null) {
+				mullMonthlyOverliftChart.dispose();
+				mullMonthlyOverliftChart = null;
+			}
+			if (mullMonthlyCargoCountChart != null) {
+				mullMonthlyCargoCountChart.dispose();
+				mullMonthlyCargoCountChart = null;
+			}
 		});
 	}
 

@@ -78,6 +78,42 @@ public interface FleetFactory extends EFactory {
 	VesselRouteParameters createVesselRouteParameters();
 
 	/**
+	 * Returns a new object of class '<em>CII Reference Data</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>CII Reference Data</em>'.
+	 * @generated
+	 */
+	CIIReferenceData createCIIReferenceData();
+
+	/**
+	 * Returns a new object of class '<em>CII Grade Boundary</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>CII Grade Boundary</em>'.
+	 * @generated
+	 */
+	CIIGradeBoundary createCIIGradeBoundary();
+
+	/**
+	 * Returns a new object of class '<em>Fuel Emission Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fuel Emission Reference</em>'.
+	 * @generated
+	 */
+	FuelEmissionReference createFuelEmissionReference();
+
+	/**
+	 * Returns a new object of class '<em>CII Reduction Factor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>CII Reduction Factor</em>'.
+	 * @generated
+	 */
+	CIIReductionFactor createCIIReductionFactor();
+
+	/**
 	 * Returns a new object of class '<em>Vessel Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

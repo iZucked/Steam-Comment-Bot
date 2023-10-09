@@ -140,6 +140,32 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FleetPackage.CII_REFERENCE_DATA: {
+				CIIReferenceData ciiReferenceData = (CIIReferenceData)theEObject;
+				T1 result = caseCIIReferenceData(ciiReferenceData);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.CII_GRADE_BOUNDARY: {
+				CIIGradeBoundary ciiGradeBoundary = (CIIGradeBoundary)theEObject;
+				T1 result = caseCIIGradeBoundary(ciiGradeBoundary);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.FUEL_EMISSION_REFERENCE: {
+				FuelEmissionReference fuelEmissionReference = (FuelEmissionReference)theEObject;
+				T1 result = caseFuelEmissionReference(fuelEmissionReference);
+				if (result == null) result = caseNamedObject(fuelEmissionReference);
+				if (result == null) result = caseMMXObject(fuelEmissionReference);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FleetPackage.CII_REDUCTION_FACTOR: {
+				CIIReductionFactor ciiReductionFactor = (CIIReductionFactor)theEObject;
+				T1 result = caseCIIReductionFactor(ciiReductionFactor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -231,6 +257,66 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseVesselRouteParameters(VesselRouteParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>CII Reference Data</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>CII Reference Data</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCIIReferenceData(CIIReferenceData object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>CII Grade Boundary</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>CII Grade Boundary</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCIIGradeBoundary(CIIGradeBoundary object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fuel Emission Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fuel Emission Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseFuelEmissionReference(FuelEmissionReference object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>CII Reduction Factor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>CII Reduction Factor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCIIReductionFactor(CIIReductionFactor object) {
 		return null;
 	}
 

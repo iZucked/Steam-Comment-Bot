@@ -18,6 +18,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
@@ -101,6 +102,7 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__DEAL_SETS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD);
 		}
 		return childrenFeatures;
 	}
@@ -168,6 +170,7 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
 			case CargoPackage.CARGO_MODEL__DEAL_SETS:
 			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
+			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -279,6 +282,11 @@ public class CargoModelItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS,
 				 CargoFactory.eINSTANCE.createGroupedDischargeSlotsConstraint()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD,
+				 MMXCoreFactory.eINSTANCE.createVersionRecord()));
 	}
 
 }

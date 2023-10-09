@@ -29,7 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -48,12 +47,16 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.risk.CustomPaperDealsPane;
+import com.mmxlabs.models.lng.cargo.editor.risk.CustomTradeDealsPane;
+import com.mmxlabs.models.lng.cargo.editor.risk.DealSetsPane;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.IAlternativeEditorProvider;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.TradesTableEditorExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.alternatives.TradesTableEditorProviderModule;
@@ -84,6 +87,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private VesselCharterViewerPane_Editor vesselViewerPane;
 	private VesselEventViewerPane eventViewerPane;
 	private PaperDealsPane paperDealsPane;
+	// Deal sets
+	private DealSetsPane dealSetsPane;
+	private CustomPaperDealsPane papersPane;
+	private CustomTradeDealsPane tradesPane;
+	private int dealSetsPage;
 
 	private int eventPage;
 	private int paperDealsPage;
@@ -139,6 +147,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		initialiseCharterMaketOverridesPage(parent);
 		initialiseInventoryViewer(parent);
 		initialisePaperDealsPage(parent);
+		initialiseDealSetsPage(parent);
 		initialiseCargoModelEditorHelpPages();
 	}
 
@@ -159,6 +168,32 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			paperDealsPage = editorPart.addPage(paperDealsPane.getControl());
 			editorPart.setPageText(paperDealsPage, "Paper");
 
+		}
+	}
+	
+	private void initialiseDealSetsPage(final Composite parent) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS)) {
+			final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
+			
+			dealSetsPane = new DealSetsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			papersPane = new CustomPaperDealsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			tradesPane = new CustomTradeDealsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			
+			dealSetsPane.createControl(sash);
+			final SashForm rhs = new SashForm(sash, SWT.VERTICAL);
+			papersPane.createControl(rhs);
+			tradesPane.createControl(rhs);
+			
+			dealSetsPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_DealSets()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			papersPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_PaperDeals()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+			tradesPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+
+			dealSetsPane.getViewer().setInput(modelObject);
+			papersPane.getViewer().setInput(modelObject);
+			tradesPane.getViewer().setInput(modelObject);
+
+			dealSetsPage = editorPart.addPage(sash);
+			editorPart.setPageText(dealSetsPage, "Deal Sets");
 		}
 	}
 
@@ -555,6 +590,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				paperDealsPane.getScenarioViewer().setSelection(new StructuredSelection(paperDeal), true);
 				return;
 			}
+			if (target instanceof final DealSet dealSet && dealSetsPane != null) {
+				editorPart.setActivePage(dealSetsPage);
+				dealSetsPane.getScenarioViewer().setSelection(new StructuredSelection(dealSet), true);
+			}
 			editorPart.setActivePage(eventPage);
 
 			// extract viewable target from a faulty HeelOptions object
@@ -572,7 +611,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				} else if (container instanceof CharterOutEvent) {
 					target = container;
 				}
-			}
+			} 
 
 			if (target instanceof Vessel) {
 				final Vessel vessel = (Vessel) target;

@@ -101,13 +101,12 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 		final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 
 		addNameManipulator("Name");
-		
 		addColumn("Side", createSlotTypeFormatter(), null);
 		addReadOnlyColumn("Window", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), getCommandHandler()));
 		addReadOnlyColumn("Volume", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), getCommandHandler()));
 		addReadOnlyColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), provider, getCommandHandler()));
 		addReadOnlyColumn("Contract", new ContractManipulator(provider, getCommandHandler()));
-		addReadOnlyColumn("Conterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Counterparty(), getCommandHandler()));
+		addReadOnlyColumn("Counterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Counterparty(), getCommandHandler()));
 
 		setTitle("Physical", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 		
@@ -145,7 +144,10 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 					@Override
 					public Object[] getElements(final Object inputElement) {
 
-						final CargoModel cargoModel = getScenarioModel().getCargoModel();
+						if (inputElement instanceof final LNGScenarioModel scenarioModel) {
+							return getElements(scenarioModel.getCargoModel());
+						}
+						if (inputElement instanceof final CargoModel cargoModel) {
 
 						final List<Slot> slots = new ArrayList<>();
 						slots.addAll(cargoModel.getLoadSlots()//);
@@ -160,17 +162,23 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 								.collect(Collectors.toList()));
 
 						return slots.toArray();
+						}
+						return new Object[0];
 					}
 
 					@Override
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 						
 						if (oldInput instanceof LNGScenarioModel) {
-							final CargoModel cargoModel = ((LNGScenarioModel)oldInput).getCargoModel();
-							cargoModel.eAdapters().remove(dealSetsContentAdapter);
+							inputChanged(viewer, ((LNGScenarioModel)oldInput).getCargoModel(), newInput);
 						}
 						if (newInput instanceof LNGScenarioModel) {
-							final CargoModel cargoModel = ((LNGScenarioModel)newInput).getCargoModel();
+							inputChanged(viewer, oldInput, ((LNGScenarioModel)newInput).getCargoModel());
+						}
+						if (oldInput instanceof final CargoModel cargoModel) {
+							cargoModel.eAdapters().remove(dealSetsContentAdapter);
+						}
+						if (newInput instanceof final CargoModel cargoModel) {
 							cargoModel.eAdapters().add(dealSetsContentAdapter);
 						}
 					}

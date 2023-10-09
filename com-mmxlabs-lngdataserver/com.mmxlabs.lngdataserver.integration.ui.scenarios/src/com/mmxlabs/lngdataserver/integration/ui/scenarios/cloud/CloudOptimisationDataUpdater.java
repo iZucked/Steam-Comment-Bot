@@ -558,7 +558,17 @@ class CloudOptimisationDataUpdater {
 	}
 
 	private synchronized void deleteRecord(final CloudOptimisationDataResultRecord cRecord) {
-
+		// Call both abort and delete for good measure.
+		try {
+			client.abort(cRecord.getJobid());
+		} catch (final Exception e) {
+			LOG.error("Error requesting clean up in the cloud." + e.getMessage(), e);
+		}
+		try {
+			client.deleteTask(cRecord.getJobid());
+		} catch (final Exception e) {
+			LOG.error("Error requesting clean up in the cloud." + e.getMessage(), e);
+		}
 		if (currentRecords.contains(cRecord)) {
 			final List<CloudOptimisationDataResultRecord> l = new LinkedList<>(currentRecords);
 			while (l.remove(cRecord))

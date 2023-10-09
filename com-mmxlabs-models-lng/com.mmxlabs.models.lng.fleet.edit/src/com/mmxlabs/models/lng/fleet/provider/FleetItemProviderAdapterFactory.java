@@ -226,6 +226,98 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.CIIReferenceData} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CIIReferenceDataItemProvider ciiReferenceDataItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.CIIReferenceData}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCIIReferenceDataAdapter() {
+		if (ciiReferenceDataItemProvider == null) {
+			ciiReferenceDataItemProvider = new CIIReferenceDataItemProvider(this);
+		}
+
+		return ciiReferenceDataItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CIIGradeBoundaryItemProvider ciiGradeBoundaryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCIIGradeBoundaryAdapter() {
+		if (ciiGradeBoundaryItemProvider == null) {
+			ciiGradeBoundaryItemProvider = new CIIGradeBoundaryItemProvider(this);
+		}
+
+		return ciiGradeBoundaryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.FuelEmissionReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FuelEmissionReferenceItemProvider fuelEmissionReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.FuelEmissionReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFuelEmissionReferenceAdapter() {
+		if (fuelEmissionReferenceItemProvider == null) {
+			fuelEmissionReferenceItemProvider = new FuelEmissionReferenceItemProvider(this);
+		}
+
+		return fuelEmissionReferenceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.CIIReductionFactor} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CIIReductionFactorItemProvider ciiReductionFactorItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.CIIReductionFactor}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCIIReductionFactorAdapter() {
+		if (ciiReductionFactorItemProvider == null) {
+			ciiReductionFactorItemProvider = new CIIReductionFactorItemProvider(this);
+		}
+
+		return ciiReductionFactorItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselGroup} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -387,6 +479,10 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
 		if (vesselRouteParametersItemProvider != null) vesselRouteParametersItemProvider.dispose();
+		if (ciiReferenceDataItemProvider != null) ciiReferenceDataItemProvider.dispose();
+		if (ciiGradeBoundaryItemProvider != null) ciiGradeBoundaryItemProvider.dispose();
+		if (fuelEmissionReferenceItemProvider != null) fuelEmissionReferenceItemProvider.dispose();
+		if (ciiReductionFactorItemProvider != null) ciiReductionFactorItemProvider.dispose();
 	}
 
 }

@@ -59,7 +59,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.ssl.SSLContexts;
-import org.apache.http.ssl.TrustStrategy;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.jdt.annotation.NonNull;
@@ -99,7 +98,7 @@ public class HttpClientUtil {
 
 	}
 
-	private static void fireInvalidationListeners() {
+	public static void fireInvalidationListeners() {
 		invalidationListeners.forEach(r -> {
 			try {
 				r.run();

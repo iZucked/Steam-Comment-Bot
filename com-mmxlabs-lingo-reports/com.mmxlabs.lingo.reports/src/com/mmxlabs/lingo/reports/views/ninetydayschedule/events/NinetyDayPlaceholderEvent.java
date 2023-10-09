@@ -18,7 +18,7 @@ public class NinetyDayPlaceholderEvent extends NinetyDayDrawableScheduleEvent {
 	}
 
 	@Override
-	protected Color getBackgroundColour() {
+	public Color getBackgroundColour() {
 		return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 	}
 

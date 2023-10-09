@@ -140,6 +140,12 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.DealSetComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.DealSet" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.CIIStartOptions"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CIIStartOptionsComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.CIIStartOptions" />
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -737,6 +743,13 @@
             feature="risk"
             plugin.xml="risk.plugin.xml">
       </PluginXMLEnablement>
+   </extension>
+   
+     <extension
+         point="com.mmxlabs.scenario.service.model.WrappedCommandExtension">
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealsVersionCommandWrapper">
+      </WrappedCommandExtension>
    </extension>
 
 </plugin>

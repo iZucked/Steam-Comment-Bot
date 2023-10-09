@@ -31,6 +31,8 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -85,6 +87,30 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Deal", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Lhs(), //
 				getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Load Id", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Lhs(), getCommandHandler()) {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof final TransferRecord transferRecord) {
+					final Slot<?> slot = getLoadSlot(transferRecord);
+					if (slot != null) {
+						return slot.getName();
+					}
+				}
+				return null;
+			}
+		}).setEditingSupport(null);;
+		addTypicalColumn("Discharge Id", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Lhs(), getCommandHandler()) {
+			@Override
+			public String render(final Object object) {
+				if (object instanceof final TransferRecord transferRecord) {
+					final Slot<?> slot = getDischargeSlot(transferRecord);
+					if (slot != null) {
+						return slot.getName();
+					}
+				}
+				return null;
+			}
+		}).setEditingSupport(null);
 		addTypicalColumn("Next transfer", new SingleReferenceManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Rhs(), //
 				getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Price", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_PriceExpression(), //
@@ -131,6 +157,36 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 			DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), tr, commandStack.getMostRecentCommand());
 		});
 		return addAction;
+	}
+	
+	private DischargeSlot getDischargeSlot(final TransferRecord transferRecord) {
+		if (transferRecord.getLhs() instanceof final LoadSlot ls) {
+			if (ls.getCargo() != null) {
+				for (final Slot<?> s : ls.getCargo().getSlots()) {
+					if (s instanceof final DischargeSlot ds) {
+						return ds;
+					}
+				}
+			}
+		} else if (transferRecord.getLhs() instanceof final DischargeSlot ds) {
+			return ds;
+		}
+		return null;
+	}
+	
+	private LoadSlot getLoadSlot(final TransferRecord transferRecord) {
+		if (transferRecord.getLhs() instanceof final LoadSlot ls) {
+			return ls;
+		} else if (transferRecord.getLhs() instanceof final DischargeSlot ds) {
+			if (ds.getCargo() != null) {
+				for (final Slot<?> s : ds.getCargo().getSlots()) {
+					if (s instanceof final LoadSlot ls) {
+						return ls;
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	@Override

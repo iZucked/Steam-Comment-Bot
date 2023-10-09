@@ -35,6 +35,11 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
   </componentHelper>
+  <componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.CIIReferenceData"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.CIIReferenceDataComponentHelper"
+			inheritable="true"
+			modelClass="com.mmxlabs.models.lng.fleet.CIIReferenceData" />
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -64,6 +69,11 @@
           referenceEClass="com.mmxlabs.models.lng.fleet.Vessel"
           ownerEClass="com.mmxlabs.models.lng.fleet.Vessel">          
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.FuelEmissionReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.FuelEmissionReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.fleet.FuelEmissionReference"/>
+
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -85,6 +95,12 @@
           eClass="com.mmxlabs.models.lng.fleet.Vessel"
           factory="com.mmxlabs.models.lng.fleet.ui.displaycomposites.FillCapacityDisplayCompositeFactory"
           id="com.mmxlabs.models.lng.fleet.editor.FillCapacityCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.fleet.CIIReferenceData"
+          factory="com.mmxlabs.models.lng.fleet.ui.displaycomposites.CIIReferenceDataCompositeFactory"
+          id="com.mmxlabs.models.lng.fleet.ui.displaycomposites.CIIReferenceDataCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>
@@ -153,6 +169,14 @@
           name="Vessels"
           restorable="true">
     </view>
+      <view
+            category="com.mmxlabs.lngdataserver.views.dataserver"
+            class="com.mmxlabs.models.lng.fleet.editor.views.CIIReferenceDataEditorView"
+            icon="icons:/16/report"
+            id="com.mmxlabs.models.lng.fleet.editor.views.CIIReferenceDataEditorView"
+            name="CII Reference Data"
+            restorable="true">
+      </view>
  </extension>
    <extension
          point="com.mmxlabs.models.ui.jointmodeleditors">

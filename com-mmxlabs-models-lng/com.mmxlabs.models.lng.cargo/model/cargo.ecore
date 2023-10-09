@@ -42,6 +42,9 @@
         eType="#//DealSet" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupedDischargeSlots"
         upperBound="-1" eType="#//GroupedDischargeSlotsConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paperDealsVersionRecord"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//VersionRecord"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>
@@ -789,6 +792,7 @@
     <eLiterals name="NBO_BUNKERS" value="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CIIStartOptions">
+    <eOperations name="yearToDatePartialCII" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="yearToDateEmissions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="formatString" value="#######"/>

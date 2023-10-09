@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel;
 
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 
 	private ImportPaperDealsFromExcelPage importPage;
 	private ImportPaperDealsErrorPage warnings;
+	private Injector injector;
 
 	protected final ScenarioInstance scenarioInstance;
 	
@@ -44,7 +49,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 		super(scenarioInstance, windowTitle);
 		this.scenarioInstance = scenarioInstance;
 		final BundleContext bc = FrameworkUtil.getBundle(ImportPaperDealsFromExcelWizard.class).getBundleContext();
-		final Injector injector = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new ImportPaperDealsFromExcelProviderModule());
+		injector = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new ImportPaperDealsFromExcelProviderModule());
 		injector.injectMembers(this);
 	}
 
@@ -57,6 +62,7 @@ public class ImportPaperDealsFromExcelWizard extends AbstractImportWizard {
 	@Override
 	protected AbstractImportPage getImportPage(String pageName, ScenarioInstance currentScenario) {
 		importPage = new ImportPaperDealsFromExcelPage("Import Page", scenarioInstance);
+		injector.injectMembers(importPage);
 		return importPage;
 	}
 

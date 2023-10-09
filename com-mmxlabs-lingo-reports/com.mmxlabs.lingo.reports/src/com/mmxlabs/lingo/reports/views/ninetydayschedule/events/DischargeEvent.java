@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.ninetydayschedule.events;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
@@ -19,13 +21,14 @@ public class DischargeEvent extends NinetyDayDrawableScheduleEvent {
 	}
 
 	@Override
-	protected Color getBackgroundColour() {
+	public Color getBackgroundColour() {
 		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, ColourElements.Background);
 	}
 
 	@Override
 	protected Color getBorderColour() {
-		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, ColourElements.Border);
+		return Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW);
+//		return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Discharge, ColourElements.Border);
 	}
 
 }

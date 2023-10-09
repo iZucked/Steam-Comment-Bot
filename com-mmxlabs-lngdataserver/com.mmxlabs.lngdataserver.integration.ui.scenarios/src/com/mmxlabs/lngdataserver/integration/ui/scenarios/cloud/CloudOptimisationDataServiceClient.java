@@ -25,6 +25,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestWrapper;
@@ -77,6 +78,7 @@ public class CloudOptimisationDataServiceClient {
 	private static final String PUBLIC_KEY_URL = "/publickey";
 	private static final String INFO_URL = "/info";
 	private static final String ABORT_URL = "/abort";
+	private static final String DELETE_URL = "/delete";
 
 	private String userid;
 
@@ -333,7 +335,7 @@ public class CloudOptimisationDataServiceClient {
 		final URI url = new URI(String.format("%s%s/%s/%s", getGateway(), ABORT_URL, jobid, getUserId()));
 		final var httpClient = getHttpClient(url);
 		{
-			final HttpGet request = new HttpGet(url);
+			final HttpDelete request = new HttpDelete(url);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
 				final int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode != 200) {
@@ -380,6 +382,29 @@ public class CloudOptimisationDataServiceClient {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public boolean deleteTask(String jobid) throws IOException, URISyntaxException {
+		final String gateway = getGateway();
+		if (gateway == null) {
+			return false;
+		}
+		final URI url = new URI(String.format("%s%s/%s/%s", getGateway(), DELETE_URL, jobid, getUserId()));
+		final var httpClient = getHttpClient(url);
+		{
+			final HttpDelete request = new HttpDelete(url);
+			try (CloseableHttpResponse response = httpClient.execute(request)) {
+				final int statusCode = response.getStatusLine().getStatusCode();
+				// Could return 200 OK or 204 no content
+				if (statusCode != 200 && statusCode != 204) {
+					if (statusCode == 500) {
+						LOG.error("failed to delete remote optimisation job");
+					}
+					return false;
+				}
+				return true;
+			}
+		}
 	}
 
 }

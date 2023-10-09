@@ -370,7 +370,7 @@ public class DistancesLinesToScenarioCopier {
 						continue;
 					}
 
-					if (distance >= 20000) {
+					if (distance >= 20_000) {
 						// Distance is silly
 						continue;
 					}

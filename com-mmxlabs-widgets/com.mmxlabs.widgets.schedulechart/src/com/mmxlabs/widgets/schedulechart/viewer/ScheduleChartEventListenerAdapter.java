@@ -21,4 +21,7 @@ public class ScheduleChartEventListenerAdapter implements IScheduleChartEventLis
 	@Override
 	public void timeScaleZoomLevelChanged(Rectangle mainBounds, IScheduleChartContentBoundsProvider boundsProvider) {}
 
+	@Override
+	public void eventResized(ScheduleEvent scheduleEvent) {}
+
 }

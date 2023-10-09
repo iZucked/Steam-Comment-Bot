@@ -175,6 +175,9 @@ public class ScenarioBuilder {
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 		pricingModel.setMarketCurvesVersionRecord(VersionsUtil.createNewRecord());
 		pricingModel.setSettledPricesVersionRecord(VersionsUtil.createNewRecord());
+	
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+		cargoModel.setPaperDealsVersionRecord(VersionsUtil.createNewRecord());
 
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 		portModel.setDistanceVersionRecord(VersionsUtil.createNewRecord());

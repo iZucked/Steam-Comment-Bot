@@ -72,6 +72,10 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES: return createVesselStateAttributes();
 			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
 			case FleetPackage.VESSEL_ROUTE_PARAMETERS: return createVesselRouteParameters();
+			case FleetPackage.CII_REFERENCE_DATA: return createCIIReferenceData();
+			case FleetPackage.CII_GRADE_BOUNDARY: return createCIIGradeBoundary();
+			case FleetPackage.FUEL_EMISSION_REFERENCE: return createFuelEmissionReference();
+			case FleetPackage.CII_REDUCTION_FACTOR: return createCIIReductionFactor();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -141,6 +145,50 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public VesselRouteParameters createVesselRouteParameters() {
 		VesselRouteParametersImpl vesselRouteParameters = new VesselRouteParametersImpl();
 		return vesselRouteParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CIIReferenceData createCIIReferenceData() {
+		CIIReferenceDataImpl ciiReferenceData = new CIIReferenceDataImpl();
+		return ciiReferenceData;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CIIGradeBoundary createCIIGradeBoundary() {
+		CIIGradeBoundaryImpl ciiGradeBoundary = new CIIGradeBoundaryImpl();
+		return ciiGradeBoundary;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FuelEmissionReference createFuelEmissionReference() {
+		FuelEmissionReferenceImpl fuelEmissionReference = new FuelEmissionReferenceImpl();
+		return fuelEmissionReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CIIReductionFactor createCIIReductionFactor() {
+		CIIReductionFactorImpl ciiReductionFactor = new CIIReductionFactorImpl();
+		return ciiReductionFactor;
 	}
 
 	/**

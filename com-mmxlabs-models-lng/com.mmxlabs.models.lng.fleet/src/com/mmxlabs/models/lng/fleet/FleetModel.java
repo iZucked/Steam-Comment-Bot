@@ -24,6 +24,7 @@ import com.mmxlabs.models.mmxcore.VersionRecord;
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getMMXVesselDBVersion <em>MMX Vessel DB Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getCiiReferences <em>Cii References</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel()
@@ -178,6 +179,28 @@ public interface FleetModel extends UUIDObject {
 	 * @generated
 	 */
 	void setMMXVesselDBVersion(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Cii References</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cii References</em>' containment reference.
+	 * @see #setCiiReferences(CIIReferenceData)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_CiiReferences()
+	 * @model containment="true"
+	 * @generated
+	 */
+	CIIReferenceData getCiiReferences();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FleetModel#getCiiReferences <em>Cii References</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cii References</em>' containment reference.
+	 * @see #getCiiReferences()
+	 * @generated
+	 */
+	void setCiiReferences(CIIReferenceData value);
 
 } // end of  FleetModel
 

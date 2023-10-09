@@ -1670,6 +1670,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getCargoModel_PaperDealsVersionRecord() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getCargoModel__GetLoadSlotByName__String() {
 		return cargoModelEClass.getEOperations().get(0);
 	}
@@ -3500,6 +3510,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getCIIStartOptions__YearToDatePartialCII() {
+		return ciiStartOptionsEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCIIEndOptions() {
 		return ciiEndOptionsEClass;
 	}
@@ -3627,6 +3647,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__PAPER_DEALS);
 		createEReference(cargoModelEClass, CARGO_MODEL__DEAL_SETS);
 		createEReference(cargoModelEClass, CARGO_MODEL__GROUPED_DISCHARGE_SLOTS);
+		createEReference(cargoModelEClass, CARGO_MODEL__PAPER_DEALS_VERSION_RECORD);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING);
 
@@ -3954,6 +3975,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		ciiStartOptionsEClass = createEClass(CII_START_OPTIONS);
 		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_EMISSIONS);
 		createEAttribute(ciiStartOptionsEClass, CII_START_OPTIONS__YEAR_TO_DATE_DISTANCE);
+		createEOperation(ciiStartOptionsEClass, CII_START_OPTIONS___YEAR_TO_DATE_PARTIAL_CII);
 
 		ciiEndOptionsEClass = createEClass(CII_END_OPTIONS);
 		createEAttribute(ciiEndOptionsEClass, CII_END_OPTIONS__DESIRED_CII_GRADE);
@@ -4090,6 +4112,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_DealSets(), this.getDealSet(), null, "dealSets", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_GroupedDischargeSlots(), this.getGroupedDischargeSlotsConstraint(), null, "groupedDischargeSlots", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_PaperDealsVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "paperDealsVersionRecord", null, 0, 1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getCargoModel__GetLoadSlotByName__String(), this.getLoadSlot(), "getLoadSlotByName", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -4523,6 +4546,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(ciiStartOptionsEClass, CIIStartOptions.class, "CIIStartOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCIIStartOptions_YearToDateEmissions(), ecorePackage.getEInt(), "yearToDateEmissions", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCIIStartOptions_YearToDateDistance(), ecorePackage.getEInt(), "yearToDateDistance", null, 0, 1, CIIStartOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getCIIStartOptions__YearToDatePartialCII(), ecorePackage.getEDouble(), "yearToDatePartialCII", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(ciiEndOptionsEClass, CIIEndOptions.class, "CIIEndOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", null, 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

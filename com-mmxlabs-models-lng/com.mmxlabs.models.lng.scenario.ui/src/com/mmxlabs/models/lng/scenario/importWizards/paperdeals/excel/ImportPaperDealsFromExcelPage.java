@@ -9,9 +9,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -33,10 +37,15 @@ import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SellPaperDeal;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
@@ -45,16 +54,17 @@ import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.Defau
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.DefaultInstrumentCreator;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.DefaultPaperDealExcelExporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageContext;
+import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelReader;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ICommodityCurveImporter;
 import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.IPaperDealExporter;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageContext;
-import com.mmxlabs.models.lng.scenario.importWizards.paperdeals.excel.util.ExcelImportResultDescriptor.MessageType;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.IScenarioInstanceEvaluator;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
@@ -63,6 +73,9 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 	private Combo dropDownMenu;
 	private Composite dropDownComposite;
 	private boolean finishedImporting;
+	
+	@Inject
+	private IScenarioInstanceEvaluator evaluator;
 	
 	public ImportPaperDealsFromExcelPage(final String pageName, final ScenarioInstance currentScenario) {
 		super(pageName, currentScenario);
@@ -184,6 +197,7 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 				final CompoundCommand instrumentCommand = new CompoundCommand("Create instruments");
 				final CompoundCommand curvesCommand = new CompoundCommand("Import commodity curves from excel");
 				final CompoundCommand paperDealCommand = new CompoundCommand("Import paper deals from excel");
+				final CompoundCommand dealSetsCommand = new CompoundCommand("Create deal sets from cargoes with paper deals");
 				final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
 				
 				// Invalidate and clear the schedule/dependent sandboxes
@@ -242,8 +256,6 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 					scenarioDataProvider.getCommandStack().execute(instrumentCommand);
 				}
 				
-				
-				
 				// Create paper deals
 				final IRunnableWithProgress createPaperDealsOpertaion = new IRunnableWithProgress() {
 					@Override
@@ -251,9 +263,15 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 						if (paperDealExporter != null) {
 							final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 							final List<PaperDeal> allPaperDeals = cargoModel.getPaperDeals();
+							
 							if (allPaperDeals != null && !allPaperDeals.isEmpty()) {
 								paperDealCommand.append(RemoveCommand.create(ed, //
 										cargoModel, CargoPackage.eINSTANCE.getCargoModel_PaperDeals(), allPaperDeals));
+							}
+							final List<DealSet> dealSets = cargoModel.getDealSets();
+							if (dealSets != null && !dealSets.isEmpty()) {
+								paperDealCommand.append(RemoveCommand.create(ed, //
+										cargoModel, CargoPackage.eINSTANCE.getCargoModel_DealSets(), dealSets));
 							}
 							final Pair<List<BuyPaperDeal>, List<SellPaperDeal>> paperDealsPair = paperDealExporter.getPaperDeals(reader, ScenarioModelUtil.getScenarioModel(scenarioDataProvider),
 									wizard.messages, monitor);
@@ -276,7 +294,42 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 				if (!paperDealCommand.isEmpty())
 					scenarioDataProvider.getCommandStack().execute(paperDealCommand);
 
+				
+				// Create paper deals
+				final IRunnableWithProgress createDealSetsOpertaion = new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) {
+						final Set<Slot<?>> usedSlots = updateSlots(scenarioDataProvider);
+						final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
+						for(final Cargo cargo : cargoModel.getCargoes()) {
+							if (checkContainment(cargo, usedSlots)) continue;
+							final DealSet ds = CargoFactory.eINSTANCE.createDealSet();
+							ds.setName(String.format("%s_%s", cargo.getLoadName(), "set"));
+							ds.setAllowExposure(true);
+							dealSetsCommand.append(AddCommand.create(ed, cargoModel, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS, ds));
+							for (final Slot<?> slot : cargo.getSlots()) {
+								if (slot instanceof SpotSlot) continue;
+								dealSetsCommand.append(AddCommand.create(ed, ds, CargoPackage.Literals.DEAL_SET__SLOTS, slot));
+								for (final PaperDeal pd : cargoModel.getPaperDeals()) {
+									if (slot.getName() != null && pd.getComment() != null && !pd.getComment().isBlank()) {
+										if (pd.getComment().equalsIgnoreCase(slot.getName())) {
+											dealSetsCommand.append(AddCommand.create(ed,  ds, CargoPackage.Literals.DEAL_SET__PAPER_DEALS, pd));
+										}
+									}
+								}
+							}
+						}
+					}
+				};
+
+				getContainer().run(true, false, createDealSetsOpertaion);
+
+				if (!dealSetsCommand.isEmpty())
+					scenarioDataProvider.getCommandStack().execute(dealSetsCommand);
+				
 				finishedImporting = true;
+				
+				evaluator.evaluate(modelRecord);
 				
 				// Make Next button visible
 				getContainer().updateButtons(); 
@@ -292,6 +345,22 @@ public class ImportPaperDealsFromExcelPage extends AbstractImportPage {
 	
 	public boolean isFinishedImporting() {
 		return finishedImporting;
+	}
+	
+	private Set<Slot<?>> updateSlots(final IScenarioDataProvider sdp) {
+		final Set<Slot<?>> usedSlots = new HashSet<>();
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+		for (final DealSet dealSet : cargoModel.getDealSets()) {
+			usedSlots.addAll(dealSet.getSlots());
+		}
+		return usedSlots;
+	}
+	
+	private boolean checkContainment(final Cargo cargo, final Set<Slot<?>> usedSlots) {
+		for (final Slot<?> slot : cargo.getSlots()) {
+			if (usedSlots.contains(slot)) return true;
+		}
+		return false;
 	}
 	
 }

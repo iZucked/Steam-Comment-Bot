@@ -110,6 +110,22 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createVesselRouteParametersAdapter();
 			}
 			@Override
+			public Adapter caseCIIReferenceData(CIIReferenceData object) {
+				return createCIIReferenceDataAdapter();
+			}
+			@Override
+			public Adapter caseCIIGradeBoundary(CIIGradeBoundary object) {
+				return createCIIGradeBoundaryAdapter();
+			}
+			@Override
+			public Adapter caseFuelEmissionReference(FuelEmissionReference object) {
+				return createFuelEmissionReferenceAdapter();
+			}
+			@Override
+			public Adapter caseCIIReductionFactor(CIIReductionFactor object) {
+				return createCIIReductionFactorAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -230,6 +246,62 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselRouteParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.CIIReferenceData <em>CII Reference Data</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReferenceData
+	 * @generated
+	 */
+	public Adapter createCIIReferenceDataAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.CIIGradeBoundary <em>CII Grade Boundary</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.CIIGradeBoundary
+	 * @generated
+	 */
+	public Adapter createCIIGradeBoundaryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.FuelEmissionReference <em>Fuel Emission Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.FuelEmissionReference
+	 * @generated
+	 */
+	public Adapter createFuelEmissionReferenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.CIIReductionFactor <em>CII Reduction Factor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.CIIReductionFactor
+	 * @generated
+	 */
+	public Adapter createCIIReductionFactorAdapter() {
 		return null;
 	}
 

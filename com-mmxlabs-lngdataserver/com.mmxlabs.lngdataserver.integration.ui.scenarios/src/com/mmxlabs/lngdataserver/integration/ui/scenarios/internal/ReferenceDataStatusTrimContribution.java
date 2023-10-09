@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 import com.mmxlabs.lngdataserver.integration.pricing.PricingRepository;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 
@@ -61,7 +62,7 @@ public class ReferenceDataStatusTrimContribution {
 	protected Control createControl(Composite parent) {
 
 		final Label myLabel = new Label(parent, SWT.NONE);
-		myLabel.setText("Pricing version status");
+		myLabel.setText("Version status");
 		mainLabel = myLabel;
 		myLabel.addMouseListener(new MouseListener() {
 			
@@ -84,6 +85,7 @@ public class ReferenceDataStatusTrimContribution {
 		currentRecords = getSaved();
 		versionChangeRunnable = this::versionChanged;
 		PricingRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
+		PaperRepository.INSTANCE.registerLocalVersionListener(versionChangeRunnable);
 		setLabelTextAndToolTip(myLabel, !currentRecords.isDismissed);
 		
 		return myLabel;
@@ -202,6 +204,7 @@ public class ReferenceDataStatusTrimContribution {
 	public static final List<String> getBaseCaseTypesToCheck() {
 		final List<String> types = new LinkedList<>();
 		types.add(LNGScenarioSharedModelTypes.MARKET_CURVES.getID());
+		types.add(LNGScenarioSharedModelTypes.PAPER_DEALS.getID());
 		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 			types.add(LNGScenarioSharedModelTypes.DISTANCES.getID());
 			types.add(LNGScenarioSharedModelTypes.LOCATIONS.getID());

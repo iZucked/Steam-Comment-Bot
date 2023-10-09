@@ -158,6 +158,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_INVENTORY_CARGO_DIFF = "features:inventory-cargo-diff";
 
+	public static final String FEATURE_ADP_BASECASE_INITIALISATION = "features:adp-basecase-initialisation";
+
 	/**
 	 * Scenario repair features
 	 */

@@ -4,21 +4,29 @@
  */
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -29,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -41,6 +50,10 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
+import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
+import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 
@@ -48,16 +61,18 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 	private final EquivalentsManager equivalentsManager;
+	private final Supplier<ICommandHandler> commandHandlerProvider;
 
-	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager) {
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, Supplier<ICommandHandler> commandHandlerProvider) {
 		this.equivalentsManager = equivalentsManager;
+		this.commandHandlerProvider = commandHandlerProvider;
 	}
 
 	@Override
 	public List<ScheduleEvent> getEvents(ScheduleModel input) {
 		Schedule schedule = input.getSchedule();
 		
-		// contains Sequence and CombinedSequence
+		// contains Sequence, CombinedSequence and PositionsSequence
 		List<Object> sequences = getSequences(schedule);
 		List<Event> events = new ArrayList<>();
 		
@@ -66,6 +81,8 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				collectEvents(events, s);
 			} else if (o instanceof CombinedSequence cs) {
 				collectEvents(events, cs);
+			} else if (o instanceof PositionsSequence ps) {
+				collectEvents(events, ps);
 			}
 		}
 		
@@ -74,12 +91,12 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	}
 
 	@Override
-	public String getKeyForEvent(ScheduleEvent event) {
+	public ScheduleChartRowKey getKeyForEvent(ScheduleEvent event) {
 		if (event.getData() instanceof Event e) {
-			var key = vesselAssignmentFormatter.render(e);
-			return key == null ? "" : key;
+			var name = vesselAssignmentFormatter.render(e);
+			return new ScheduleChartRowKey(name == null ? "" : name,  e.getSequence());
 		}
-		return "";
+		return null;
 	}
 	
 	private List<Object> getSequences(Schedule schedule) {
@@ -122,8 +139,36 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 				res.add(cs);
 			}
 		}
+		
+		addPositionsSequences(res, schedule);
 
 		return res;
+	}
+	
+	private void addPositionsSequences(List<Object> res, Schedule schedule) {
+		final Collection<Slot<?>> nonShippedSlots = new HashSet<>();
+		for (final NonShippedSequence seq : schedule.getNonShippedSequences()) {
+			res.add(seq);
+			for (final Event event : seq.getEvents()) {
+				if (event instanceof NonShippedSlotVisit slotVisit) {
+					nonShippedSlots.add(slotVisit.getSlot());
+				}
+			}
+		}
+		
+		final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore;
+		if (!nonShippedSlots.isEmpty()) {
+			slotVisitsToIgnore = schedule.getCargoAllocations().stream() //
+					.map(CargoAllocation::getSlotAllocations) //
+					.flatMap(List::stream) //
+					.filter(sa -> nonShippedSlots.contains(sa.getSlot())) //
+					.map(SlotAllocation::getSlotVisit) //
+					.collect(Collectors.toSet());
+		} else {
+			slotVisitsToIgnore = Collections.emptySet();
+		}
+
+		res.addAll(PositionsSequence.makeBuySellSequences(schedule, slotVisitsToIgnore, ""));
 	}
 	
 	private void collectEvents(List<Event> res, Sequence s) {
@@ -163,6 +208,10 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 		}
 	}
 	
+	private void collectEvents(List<Event> events, PositionsSequence ps) {
+		// TODO: fill this
+	}
+
 	private ScheduleEvent makeScheduleEvent(Event event) {
 
 		// Get planned start and end dates
@@ -183,11 +232,59 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 			}
 		}
 		
-		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event);
+		ScheduleEvent se;
+		if (event instanceof SlotVisit sv) {
+			se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event) {
+				@Override
+				public void updateWindow() {
+					final LocalDateTime windowStartDate = getWindowStartDate();
+					final Slot<?> slot = sv.getSlotAllocation().getSlot();
+					final LocalDate newWindowStart = LocalDate.from(windowStartDate);
+					final int newWindowStartHour = windowStartDate.getHour();
+					final CompoundCommand cmd = new CompoundCommand("Update start window");
+					
+					boolean changedStart = false;
+					final ICommandHandler commandHandler = commandHandlerProvider.get();
+					final LocalDate oldWindowStart = slot.getWindowStart();
+					if (!oldWindowStart.equals(newWindowStart)) {
+						changedStart = true;
+						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), newWindowStart));
+					}
+					final int oldWindowHour = slot.getWindowStartTime();
+					if (oldWindowHour != newWindowStartHour) {
+						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), newWindowStartHour));
+					}
+					
+					LocalDateTime windowEndDate = getWindowEndDate();
+					final LocalDateTime oldWindowEnd = slot.getSchedulingTimeWindow().getEnd().toLocalDateTime();
+					if (!oldWindowEnd.equals(windowEndDate) || changedStart) {
+						final int hoursDifference = Hours.between(windowStartDate, windowEndDate);
+						cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), hoursDifference));
+						if (slot.getWindowSizeUnits() != TimePeriod.HOURS) {
+							cmd.append(SetCommand.create(commandHandler.getEditingDomain(), slot, CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), TimePeriod.HOURS));
+						}
+					}
+					
+					if (!cmd.isEmpty()) {
+						commandHandler.handleCommand(cmd);
+					}
+				}
+			};
+		} else {
+			se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), plannedStartDate, plannedEndDate, event);
+		}
 
 		boolean visible = !(event instanceof StartEvent || event instanceof EndEvent);
 		se.setVisible(visible);
-
+		
+		if (event instanceof final SlotVisit sv) {
+			if (sv.getSlotAllocation().getSlot() != null) {
+				se.setWindowStartDate(plannedStartDate);
+				se.setWindowEndDate(plannedEndDate);
+				se.setResizable(true);
+			}
+		}
+		
 		return se;
 	}
 	
