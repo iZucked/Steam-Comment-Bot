@@ -73,6 +73,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
@@ -823,7 +824,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		
 	}
 	
-	private Composite createTreeViewer(final Composite parent, final Option option, final IStatus status) {
+	private Composite createTreeViewer(final Composite parent, final Option option, IStatus status) {
 		Composite area = toolkit.createComposite(parent, SWT.NONE);
 		
 		area.setLayout(new GridLayout(1, false));
@@ -831,10 +832,18 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		
 		final TreeViewer viewer = new TreeViewer(area, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 
+		// Change status message if OK and num == 1
+		int count = UserSettingsHelper.countStatusMessages(status) + UserSettingsHelper.countStatusSeverities(status).size();
+		if(status.getSeverity() == IStatus.OK && count == 1){
+			status = new Status(status.getSeverity(), status.getPlugin(), "No errors or warnings found.");
+		}
+		
+		
 		{
 			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
 			// Make text scrolling 
-			gdViewer.heightHint = 200;
+			// Make height variable to number of status messages
+			gdViewer.heightHint = (int) Math.min(200, 16.6666 * count);
 			gdViewer.widthHint = 450; 
 			viewer.getControl().setLayoutData(gdViewer);
 		}

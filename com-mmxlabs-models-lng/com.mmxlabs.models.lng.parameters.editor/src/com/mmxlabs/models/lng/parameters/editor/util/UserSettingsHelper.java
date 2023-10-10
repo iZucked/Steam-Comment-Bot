@@ -9,6 +9,8 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -1063,17 +1065,54 @@ public final class UserSettingsHelper {
 	}
 	
 	public static boolean statusHasErrors(IStatus status) {
-		if(status.getSeverity() == IStatus.ERROR) {
-			return true;
-		}
-		
-		if(status.isMultiStatus()) {
-			for(IStatus child : status.getChildren()) {
-				if(statusHasErrors(child))
-					return true;
+		if(status != null) {
+			if(status.getSeverity() == IStatus.ERROR) {
+				return true;
+			}
+			
+			if(status.isMultiStatus()) {
+				for(IStatus child : status.getChildren()) {
+					if(statusHasErrors(child))
+						return true;
+				}
 			}
 		}
 		
 		return false;
 	}
+	
+	public static int countStatusMessages(IStatus status) {
+        int count = 0;
+
+        if (status != null) {
+            if (status.getMessage() != null) {
+                count++;
+            }
+
+            if (status.isMultiStatus()) {
+                IStatus[] children = status.getChildren();
+                for (IStatus child : children) {
+                    count += countStatusMessages(child);
+                }
+            }
+        }
+
+        return count;
+    }
+	
+	public static Set<Integer> countStatusSeverities(IStatus status) {
+		Set<Integer> severitySet = new HashSet<>();
+        if (status != null) {
+        	if(status.getSeverity() != IStatus.OK)
+        		severitySet.add(status.getSeverity());
+
+            if (status.isMultiStatus()) {
+                for (IStatus child : status.getChildren()) {
+                	severitySet.addAll(countStatusSeverities(child));
+                }
+            }
+        }
+
+        return severitySet;
+    }
 }
