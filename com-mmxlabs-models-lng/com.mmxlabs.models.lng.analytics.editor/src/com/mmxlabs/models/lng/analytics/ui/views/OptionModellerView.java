@@ -1243,9 +1243,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
 		final Label l = new Label(matching, SWT.NONE);
-		l.setText("Starting point P&&L B/E");
+		l.setText("Portfolio B/E");
 		l.setToolTipText(
-				"When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
+				"When checked, B/E on starting point portfolio P&&L otherwise B/E on cargo P&&L");
 		final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		matchingButton.setSelection(false);
 		matchingButton.addSelectionListener(new SelectionAdapter() {
