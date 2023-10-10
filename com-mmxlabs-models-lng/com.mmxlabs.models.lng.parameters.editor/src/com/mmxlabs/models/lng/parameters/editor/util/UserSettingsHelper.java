@@ -9,7 +9,6 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -214,9 +213,7 @@ public final class UserSettingsHelper {
 		        final Button okButton = getButton(IDialogConstants.OK_ID);
 		        if (okButton != null) {
 		        	final IStatus status = this.getStatus(sdp, null, true, true, Collections.emptySet());
-		            if (UserSettingsHelper.statusHasErrors(status)) {
-		                okButton.setEnabled(false);
-		            }
+		            okButton.setEnabled(!UserSettingsHelper.statusHasErrors(status));
 		        }
 		    }
 		};
