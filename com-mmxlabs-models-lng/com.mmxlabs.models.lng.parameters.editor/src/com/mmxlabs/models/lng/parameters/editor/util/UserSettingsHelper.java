@@ -18,16 +18,18 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -201,6 +203,20 @@ public final class UserSettingsHelper {
 				super.configureShell(newShell);
 				newShell.setText(forEvaluation ? "Evaluation Settings" : "Optimisation Settings");
 			}
+			
+			@Override
+		    protected void createButtonsForButtonBar(Composite parent) {
+		        super.createButtonsForButtonBar(parent);
+
+		        // Access the OK button and set it to disabled if the condition is met
+		        final Button okButton = getButton(IDialogConstants.OK_ID);
+		        if (okButton != null) {
+		        	final IStatus status = this.getStatus(sdp, null, true, true, Collections.emptySet());
+		            if (UserSettingsHelper.statusHasErrors(status)) {
+		                okButton.setEnabled(false);
+		            }
+		        }
+		    }
 		};
 
 		final UserSettings copy = EMFCopier.copy(previousSettings);
@@ -1044,5 +1060,20 @@ public final class UserSettingsHelper {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 		userSettings.setFloatingDaysLimit(15);
 		return userSettings;
+	}
+	
+	public static boolean statusHasErrors(IStatus status) {
+		if(status.getSeverity() == IStatus.ERROR) {
+			return true;
+		}
+		
+		if(status.isMultiStatus()) {
+			for(IStatus child : status.getChildren()) {
+				if(statusHasErrors(child))
+					return true;
+			}
+		}
+		
+		return false;
 	}
 }

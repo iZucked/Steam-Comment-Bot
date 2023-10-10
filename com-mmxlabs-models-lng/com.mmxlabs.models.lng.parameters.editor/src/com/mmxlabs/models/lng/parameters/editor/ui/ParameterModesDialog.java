@@ -789,7 +789,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	}
 	
-	private IStatus getStatus(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, final boolean optimising, final boolean relaxedValidation, Set<String> extraCategories) {
+	protected IStatus getStatus(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, final boolean optimising, final boolean relaxedValidation, Set<String> extraCategories) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -834,7 +834,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		{
 			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
 			// Make text scrolling 
-			gdViewer.heightHint = 100;
+			gdViewer.heightHint = 200;
 			gdViewer.widthHint = 450; 
 			viewer.getControl().setLayoutData(gdViewer);
 		}
@@ -845,8 +845,6 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
 		
-		
-
 		viewer.setInput(status);
 		viewer.expandAll();
 		
