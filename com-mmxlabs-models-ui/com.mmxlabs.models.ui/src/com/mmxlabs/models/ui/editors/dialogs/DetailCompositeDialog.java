@@ -279,6 +279,14 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			while (rangeIterator.hasNext() && duplicateRangeIterator.hasNext()) {
 				final EObject originalOne = rangeIterator.next();
 				final EObject duplicateOne = duplicateRangeIterator.next();
+				
+				// Set name of duplicate objects Copy of + original name
+				// Check if original contains name attribute
+				if (originalOne.eClass().getEAllAttributes().contains(MMXCorePackage.eINSTANCE.getNamedObject_Name())){
+					String originalName = originalOne.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()).toString();
+					duplicateOne.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "Copy of " + originalName);
+				}
+				
 				duplicateToOriginal.put(duplicateOne, originalOne);
 				originalToDuplicate.put(originalOne, duplicateOne);
 				if (returnDuplicates) {
@@ -980,6 +988,9 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 						final EObject original = entry.getKey();
 						final EObject duplicate = entry.getValue();
 
+						
+						
+						
 						if (duplicate instanceof UUIDObject uuidObject) {
 							uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						}
