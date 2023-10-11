@@ -122,6 +122,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_PURGE = "features:purge";
 
+	public static final String FEATURE_MIN_LADEN_TIME = "features:min-laden-time";
+
 	public static final String FEATURE_DATAHUB_BASECASE_ARCHIVE = "features:datahub-basecase-archive";
 
 	public static final String FEATURE_DATAHUB_BASECASE_NOTES = "features:datahub-basecase-notes";

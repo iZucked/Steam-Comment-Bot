@@ -47,6 +47,16 @@ public class LoadSlotComponentHelper extends DefaultComponentHelper {
 			return null;
 		});
 
+		addEditor(CargoPackage.Literals.LOAD_SLOT__MIN_LADEN_TIME, topClass -> {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MIN_LADEN_TIME)) {
+				// Hide for spot loads
+				if (!CargoPackage.Literals.SPOT_LOAD_SLOT.equals(topClass)) {
+					return ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__MIN_LADEN_TIME);
+				}
+			}
+			return null;
+		});
+
 		addEditor(CargoPackage.Literals.LOAD_SLOT__VOLUME_COUNTER_PARTY, topClass -> {
 			if (!CargoPackage.Literals.SPOT_LOAD_SLOT.equals(topClass)) {
 				final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__VOLUME_COUNTER_PARTY);

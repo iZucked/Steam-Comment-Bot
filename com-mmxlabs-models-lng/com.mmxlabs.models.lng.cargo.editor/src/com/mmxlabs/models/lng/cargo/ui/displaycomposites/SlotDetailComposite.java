@@ -165,6 +165,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_NominatedVessel() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_ShippingDaysRestriction() });
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_MinLadenTime()});
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
 		dischargeTermsFeatures = new ArrayList<ETypedElement[]>();
@@ -349,6 +350,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					}
 					return gd;
 				}
+				
 				if (feature == CargoPackage.Literals.SLOT__WINDOW_FLEX || feature == CargoPackage.Literals.SLOT__WINDOW_FLEX_UNITS) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog

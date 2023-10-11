@@ -576,6 +576,22 @@
                </target>
             </constraint>            
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.LoadSlotMinLadenTravelTimeConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.LoadSlotMinLadenTravelTimeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Load Slot Min Laden Travel Time Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="LoadSlot">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.KeepOpenSlotConstraint"
                   isEnabledByDefault="true"
