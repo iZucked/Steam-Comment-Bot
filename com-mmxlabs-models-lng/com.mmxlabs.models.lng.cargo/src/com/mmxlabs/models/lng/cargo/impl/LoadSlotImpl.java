@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isVolumeCounterParty <em>Volume Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getMinLadenTime <em>Min Laden Time</em>}</li>
  * </ul>
  *
  * @generated
@@ -230,6 +232,35 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	 * @ordered
 	 */
 	protected boolean volumeCounterParty = VOLUME_COUNTER_PARTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMinLadenTime() <em>Min Laden Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinLadenTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_LADEN_TIME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinLadenTime() <em>Min Laden Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinLadenTime()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minLadenTime = MIN_LADEN_TIME_EDEFAULT;
+
+	/**
+	 * This is true if the Min Laden Time attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minLadenTimeESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -595,6 +626,56 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getMinLadenTime() {
+		return minLadenTime;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMinLadenTime(int newMinLadenTime) {
+		int oldMinLadenTime = minLadenTime;
+		minLadenTime = newMinLadenTime;
+		boolean oldMinLadenTimeESet = minLadenTimeESet;
+		minLadenTimeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__MIN_LADEN_TIME, oldMinLadenTime, minLadenTime, !oldMinLadenTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetMinLadenTime() {
+		int oldMinLadenTime = minLadenTime;
+		boolean oldMinLadenTimeESet = minLadenTimeESet;
+		minLadenTime = MIN_LADEN_TIME_EDEFAULT;
+		minLadenTimeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.LOAD_SLOT__MIN_LADEN_TIME, oldMinLadenTime, MIN_LADEN_TIME_EDEFAULT, oldMinLadenTimeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetMinLadenTime() {
+		return minLadenTimeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrDelegateCV() {
@@ -675,6 +756,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return getDesPurchaseDealType();
 			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
 				return isVolumeCounterParty();
+			case CargoPackage.LOAD_SLOT__MIN_LADEN_TIME:
+				return getMinLadenTime();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -710,6 +793,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return;
 			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
 				setVolumeCounterParty((Boolean)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__MIN_LADEN_TIME:
+				setMinLadenTime((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -747,6 +833,9 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
 				setVolumeCounterParty(VOLUME_COUNTER_PARTY_EDEFAULT);
 				return;
+			case CargoPackage.LOAD_SLOT__MIN_LADEN_TIME:
+				unsetMinLadenTime();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -775,6 +864,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 				return isSetDesPurchaseDealType();
 			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
 				return volumeCounterParty != VOLUME_COUNTER_PARTY_EDEFAULT;
+			case CargoPackage.LOAD_SLOT__MIN_LADEN_TIME:
+				return isSetMinLadenTime();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -821,6 +912,8 @@ public class LoadSlotImpl extends SlotImpl<PurchaseContract> implements LoadSlot
 		if (desPurchaseDealTypeESet) result.append(desPurchaseDealType); else result.append("<unset>");
 		result.append(", volumeCounterParty: ");
 		result.append(volumeCounterParty);
+		result.append(", minLadenTime: ");
+		if (minLadenTimeESet) result.append(minLadenTime); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

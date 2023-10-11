@@ -55,6 +55,7 @@ public class LoadSlotItemProvider
 			addSalesDeliveryTypePropertyDescriptor(object);
 			addDesPurchaseDealTypePropertyDescriptor(object);
 			addVolumeCounterPartyPropertyDescriptor(object);
+			addMinLadenTimePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -236,6 +237,28 @@ public class LoadSlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Laden Time feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinLadenTimePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadSlot_minLadenTime_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_minLadenTime_feature", "_UI_LoadSlot_type"),
+				 CargoPackage.Literals.LOAD_SLOT__MIN_LADEN_TIME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns LoadSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -279,6 +302,7 @@ public class LoadSlotItemProvider
 			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
 			case CargoPackage.LOAD_SLOT__DES_PURCHASE_DEAL_TYPE:
 			case CargoPackage.LOAD_SLOT__VOLUME_COUNTER_PARTY:
+			case CargoPackage.LOAD_SLOT__MIN_LADEN_TIME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

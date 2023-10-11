@@ -1710,13 +1710,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__VOLUME_COUNTER_PARTY = SLOT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Min Laden Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__MIN_LADEN_TIME = SLOT_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 8;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3439,6 +3448,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__VOLUME_COUNTER_PARTY = LOAD_SLOT__VOLUME_COUNTER_PARTY;
+
+	/**
+	 * The feature id for the '<em><b>Min Laden Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__MIN_LADEN_TIME = LOAD_SLOT__MIN_LADEN_TIME;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -9871,6 +9889,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getLoadSlot_VolumeCounterParty();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getMinLadenTime <em>Min Laden Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Laden Time</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getMinLadenTime()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_MinLadenTime();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegateCV() <em>Get Slot Or Delegate CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12938,6 +12967,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOAD_SLOT__VOLUME_COUNTER_PARTY = eINSTANCE.getLoadSlot_VolumeCounterParty();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Laden Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__MIN_LADEN_TIME = eINSTANCE.getLoadSlot_MinLadenTime();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegate CV</b></em>' operation.

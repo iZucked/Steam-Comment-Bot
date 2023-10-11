@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
+import com.mmxlabs.models.lng.types.TimePeriod;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.types.DESPurchaseDealType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getDesPurchaseDealType <em>Des Purchase Deal Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isVolumeCounterParty <em>Volume Counter Party</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getMinLadenTime <em>Min Laden Time</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot()
@@ -354,6 +356,56 @@ public interface LoadSlot extends Slot<PurchaseContract> {
 	 * @generated
 	 */
 	void setVolumeCounterParty(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Min Laden Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Laden Time</em>' attribute.
+	 * @see #isSetMinLadenTime()
+	 * @see #unsetMinLadenTime()
+	 * @see #setMinLadenTime(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_MinLadenTime()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##' unit='days'"
+	 * @generated
+	 */
+	int getMinLadenTime();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getMinLadenTime <em>Min Laden Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Laden Time</em>' attribute.
+	 * @see #isSetMinLadenTime()
+	 * @see #unsetMinLadenTime()
+	 * @see #getMinLadenTime()
+	 * @generated
+	 */
+	void setMinLadenTime(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getMinLadenTime <em>Min Laden Time</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetMinLadenTime()
+	 * @see #getMinLadenTime()
+	 * @see #setMinLadenTime(int)
+	 * @generated
+	 */
+	void unsetMinLadenTime();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getMinLadenTime <em>Min Laden Time</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Min Laden Time</em>' attribute is set.
+	 * @see #unsetMinLadenTime()
+	 * @see #getMinLadenTime()
+	 * @see #setMinLadenTime(int)
+	 * @generated
+	 */
+	boolean isSetMinLadenTime();
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -1380,6 +1380,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getLoadSlot_MinLadenTime() {
+		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getLoadSlot__GetSlotOrDelegateCV() {
 		return loadSlotEClass.getEOperations().get(0);
 	}
@@ -3740,6 +3750,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(loadSlotEClass, LOAD_SLOT__SALES_DELIVERY_TYPE);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__DES_PURCHASE_DEAL_TYPE);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__VOLUME_COUNTER_PARTY);
+		createEAttribute(loadSlotEClass, LOAD_SLOT__MIN_LADEN_TIME);
 		createEOperation(loadSlotEClass, LOAD_SLOT___GET_SLOT_OR_DELEGATE_CV);
 		createEOperation(loadSlotEClass, LOAD_SLOT___GET_SLOT_OR_DELEGATE_DELIVERY_TYPE);
 		createEOperation(loadSlotEClass, LOAD_SLOT___GET_SLOT_OR_DELEGATE_DES_PURCHASE_DEAL_TYPE);
@@ -4267,6 +4278,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getLoadSlot_SalesDeliveryType(), theTypesPackage.getCargoDeliveryType(), "salesDeliveryType", "Any", 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_DesPurchaseDealType(), theTypesPackage.getDESPurchaseDealType(), "desPurchaseDealType", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_VolumeCounterParty(), ecorePackage.getEBoolean(), "volumeCounterParty", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadSlot_MinLadenTime(), ecorePackage.getEInt(), "minLadenTime", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getLoadSlot__GetSlotOrDelegateCV(), ecorePackage.getEDouble(), "getSlotOrDelegateCV", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -4752,6 +4764,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "formatString", "#0.###"
+		   });
+		addAnnotation
+		  (getLoadSlot_MinLadenTime(),
+		   source,
+		   new String[] {
+			   "formatString", "##",
+			   "unit", "days"
 		   });
 		addAnnotation
 		  (getDischargeSlot_MinCvValue(),

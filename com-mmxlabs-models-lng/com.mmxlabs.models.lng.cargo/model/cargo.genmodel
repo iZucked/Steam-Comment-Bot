@@ -192,6 +192,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/desPurchaseDealType"/>
       <genFeatures createChild="false" propertyDescription="Counterparty's volume option"
           ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/volumeCounterParty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//LoadSlot/minLadenTime"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateCV"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDeliveryType"/>
       <genOperations ecoreOperation="cargo.ecore#//LoadSlot/getSlotOrDelegateDESPurchaseDealType"/>
