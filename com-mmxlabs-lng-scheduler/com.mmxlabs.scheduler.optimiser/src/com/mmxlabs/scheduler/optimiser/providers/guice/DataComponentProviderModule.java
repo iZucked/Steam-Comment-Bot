@@ -41,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLazyExpressionManag
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMinTravelTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPaperDealDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
@@ -398,5 +399,9 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IGroupedSlotsConstraintDataProvider.class).to(DefaultGroupedSlotsConstraintDataProviderEditor.class);
 		bind(IGroupedSlotsConstraintDataProviderEditor.class).to(DefaultGroupedSlotsConstraintDataProviderEditor.class);
 
+		// Min travel time provider
+		bind(DefaultMinTravelTimeProviderEditor.class).in(Singleton.class);
+		bind(IMinTravelTimeProvider.class).to(DefaultMinTravelTimeProviderEditor.class);
+		bind(IMinTravelTimeProviderEditor.class).to(DefaultMinTravelTimeProviderEditor.class);
 	}
 }

@@ -16,7 +16,8 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * Implementation of {@link IModifiableSequence} which uses a {@link List} as the backing implementation.
+ * Implementation of {@link IModifiableSequence} which uses a {@link List} as
+ * the backing implementation.
  * 
  * @author Simon Goodall
  * 
@@ -101,6 +102,11 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	@Override
 	public int size() {
 		return list.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return list.isEmpty();
 	}
 
 	@Override

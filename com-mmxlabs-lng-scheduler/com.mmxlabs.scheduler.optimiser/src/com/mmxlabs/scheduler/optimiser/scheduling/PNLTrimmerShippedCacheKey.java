@@ -135,6 +135,9 @@ public final class PNLTrimmerShippedCacheKey {
 				for (final IPortSlot s : ptwr.getSlots()) {
 
 					final int idx = ptwr.getIndex(s);
+					if (minTimeData.getRequiredTravelTime(idx) != other.minTimeData.getRequiredTravelTime(idx)) {
+						return false;
+					}
 					if (minTimeData.getMinTravelTime(idx) != other.minTimeData.getMinTravelTime(idx)) {
 						return false;
 					}

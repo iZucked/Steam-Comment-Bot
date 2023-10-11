@@ -349,7 +349,7 @@ public class PNLBasedWindowTrimmer {
 						trimmedWindowRecords.get(idx - 1).setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
 					}
 
-					expectedMinTime = t + travelTimeData.getMinTravelTime(ptwr.getIndex(slot));
+					expectedMinTime = t + travelTimeData.getRequiredTravelTime(ptwr.getIndex(slot));
 				}
 				++idx;
 			}
@@ -406,6 +406,7 @@ public class PNLBasedWindowTrimmer {
 
 	public ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> doComputeVoyagePlanResults(final PNLTrimmerShippedCacheKey key) {
 
+		System.out.println(key.hashCode());
 		final IPortTimeWindowsRecord portTimeWindowsRecord = key.ptwr;
 
 		final IResource resource = key.resource;
@@ -462,6 +463,11 @@ public class PNLBasedWindowTrimmer {
 		// As we normally cache this output, we can do some pre-filtering of equivalent
 		// results before returning.
 		Collections.sort(evaluatorResults, (a, b) -> ScheduledVoyagePlanResult.compareTo(a.getSecond(), b.getSecond()));
+
+		if (evaluatorResults.isEmpty()) {
+			int i = 0;
+		}
+//		System.out.println(evaluatorResults.size());
 
 		// This should be out "best" result, so we can throw away anything with a worse
 		// set of violations

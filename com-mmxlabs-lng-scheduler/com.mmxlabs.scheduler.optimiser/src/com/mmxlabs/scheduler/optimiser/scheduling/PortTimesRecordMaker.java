@@ -277,7 +277,7 @@ public class PortTimesRecordMaker {
 					portTimesRecord.setSlotExtraIdleTime(slot, type, record.getSlotExtraIdleTime(slot, type));
 				}
 				// What is the next travel time?
-				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getMinTravelTime(record.getIndex(slot));
+				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getRequiredTravelTime(record.getIndex(slot));
 
 				// These parts update records from the previous iteration on the first slot
 				// only.
@@ -403,7 +403,7 @@ public class PortTimesRecordMaker {
 		final IPortSlot to = firstRecord.getSlots().size() > 1 ? firstRecord.getSlots().get(1) : firstRecord.getReturnSlot();
 		if (to != null) {
 			final int time = firstRecord.getSlotTime(to);
-			final int minTravelTime = travelTimeData.getMinTravelTime(0);
+			final int minTravelTime = travelTimeData.getRequiredTravelTime(0);
 			final int ideal = time - minTravelTime;
 
 			final ITimeWindow window = portTimeWindowsRecord.getSlotFeasibleTimeWindow(from);

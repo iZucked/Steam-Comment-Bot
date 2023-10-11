@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.pricing.YearMonthPoint;
 import com.mmxlabs.models.lng.pricing.YearMonthPointContainer;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
@@ -230,6 +231,50 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 	public int convertTime(@NonNull final ZonedDateTime startTime) {
 		assert earliestTime != null;
 		return convertTime(earliestTime, startTime);
+	}
+
+	public int convertToHours(LocalDate localStart, int windowSize, TimePeriod p) {
+		ZonedDateTime start = localStart.atStartOfDay(ZoneId.of("UTC"));
+		ZonedDateTime end = start;
+		
+		if (windowSize == 0) {
+			return 0;
+		}
+
+		switch (p) {
+		case DAYS:
+			end = end.plusDays(windowSize).minusHours(1);
+			break;
+		case HOURS:
+			end = end.plusHours(windowSize) ;
+			break;
+		case MONTHS:
+			end = end.plusMonths(windowSize).minusHours(1);
+			break;
+		default:
+			break;
+		}
+
+		return Hours.between(start, end);
+	}
+
+	public int convertToHours(final int travelTime, final TimePeriod p) {
+		if (travelTime < 0) {
+			throw new IllegalStateException("Travel times must be nonnegative");
+		}
+		if (travelTime == 0) {
+			return 0;
+		}
+		switch (p) {
+		case DAYS:
+			return travelTime*24;
+		case HOURS:
+			return travelTime;
+		case MONTHS:
+			throw new IllegalStateException("Cannot convert months to hours.");
+		default:
+			throw new IllegalStateException("Unknown time period");
+		}
 	}
 
 	@NonNull

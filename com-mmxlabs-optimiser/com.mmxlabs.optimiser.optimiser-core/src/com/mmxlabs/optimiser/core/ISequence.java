@@ -22,6 +22,11 @@ public interface ISequence extends Iterable<@NonNull ISequenceElement> {
 	 */
 	int size();
 
+	/*
+	 * Returns whether the sequence is empty.
+	 */
+	boolean isEmpty();
+
 	/**
 	 * Return the element at the specified index. Throws IndexOutOfBoundsException if the index does not point to a member.
 	 * 

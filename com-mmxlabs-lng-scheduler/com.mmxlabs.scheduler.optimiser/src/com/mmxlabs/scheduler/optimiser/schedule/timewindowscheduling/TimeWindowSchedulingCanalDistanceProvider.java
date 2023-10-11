@@ -6,12 +6,12 @@ package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -21,7 +21,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
@@ -49,7 +48,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 	@Override
 	public @NonNull TravelRouteData @NonNull [] getMinimumTravelTimes(@NonNull final IPort from, @NonNull final IPort to, @NonNull final IVessel vessel, int voyageStartTime,
-			final AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, boolean isLaden) {
+			final AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, boolean isLaden, @Nullable Integer minimumRequiredTravelTime) {
 
 		if (from == to) {
 			// shortcut for same port
@@ -57,7 +56,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		}
 
 		final int finalAdditionalPanamaIdleHours = additionalPanamaIdleHours;
-		// get distances for this pairing (assumes that getAllDistanceValues() returns a copy of the data)
+		// get distances for this pairing (assumes that getAllDistanceValues() returns a
+		// copy of the data)
 		VesselState vesselState;
 		IRouteCostProvider.CostType costType;
 		int calculationCV;
@@ -73,20 +73,17 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 		List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(from, to, vessel, availableRouteChoice);
 		// sort by cost then distance
-		Collections.sort(allDistanceValues, new Comparator<DistanceMatrixEntry>() {
-			@Override
-			public int compare(final DistanceMatrixEntry o1, final DistanceMatrixEntry o2) {
-				if (routeCostProvider.getRouteCost(o1.getRoute(), from, to, vessel, voyageStartTime, costType) == routeCostProvider.getRouteCost(o2.getRoute(), from, to, vessel, voyageStartTime,
-						costType)) {
-					return Integer.compare(
-							Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o1.getDistance())
-									+ getProcessedRouteTransitTime(o1.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours),
-							Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o2.getDistance())
-									+ getProcessedRouteTransitTime(o2.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours));
-				} else {
-					return Long.compare(routeCostProvider.getRouteCost(o1.getRoute(), from, to, vessel, voyageStartTime, costType),
-							routeCostProvider.getRouteCost(o2.getRoute(), from, to, vessel, voyageStartTime, costType));
-				}
+		Collections.sort(allDistanceValues, (o1, o2) -> {
+			if (routeCostProvider.getRouteCost(o1.getRoute(), from, to, vessel, voyageStartTime, costType) == routeCostProvider.getRouteCost(o2.getRoute(), from, to, vessel, voyageStartTime,
+					costType)) {
+				return Integer.compare(
+						Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o1.getDistance())
+								+ getProcessedRouteTransitTime(o1.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours),
+						Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o2.getDistance())
+								+ getProcessedRouteTransitTime(o2.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours));
+			} else {
+				return Long.compare(routeCostProvider.getRouteCost(o1.getRoute(), from, to, vessel, voyageStartTime, costType),
+						routeCostProvider.getRouteCost(o2.getRoute(), from, to, vessel, voyageStartTime, costType));
 			}
 		});
 
@@ -109,7 +106,17 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
 			final int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getDistance());
 			final int transitTime = getProcessedRouteTransitTime(d.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours);
-			times[i] = new TravelRouteData(mintravelTime + transitTime, nbotravelTime + transitTime,
+
+			final int requiredMinTravelTime;
+			final int requiredNboTravelTime;
+			if (minimumRequiredTravelTime == null) {
+				requiredMinTravelTime = mintravelTime + transitTime;
+				requiredNboTravelTime = nbotravelTime + transitTime;
+			} else {
+				requiredMinTravelTime = Math.max(mintravelTime + transitTime, minimumRequiredTravelTime);
+				requiredNboTravelTime = Math.max(nbotravelTime + transitTime, minimumRequiredTravelTime);
+			}
+			times[i] = new TravelRouteData(requiredMinTravelTime, requiredNboTravelTime,
 					routeCostProvider.getRouteCost(d.getRoute(), d.getFrom(), d.getTo(), vessel, voyageStartTime, costType), d.getDistance(), transitTime);
 			i++;
 		}
@@ -156,7 +163,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	}
 
 	/**
-	 * Return a list of potential end times based on different speeds a vessel can travel and routes it can take
+	 * Return a list of potential end times based on different speeds a vessel can
+	 * travel and routes it can take
 	 * 
 	 * @param load
 	 * @param discharge
@@ -167,7 +175,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	@Override
 	@NonNull
 	public List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int cv, final int startTime,
-			final boolean isLaden, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours) {
+			final boolean isLaden, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, @Nullable Integer minimumRequiredTravelTime) {
 		int minSpeed;
 		if (isLaden) {
 			minSpeed = getNBOSpeed(vessel, VesselState.Laden, cv);
@@ -184,7 +192,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		// loop through speeds and canals
 		int speed = minSpeed;
 		@NonNull
-		TravelRouteData @NonNull [] ladenRouteTimes = getMinimumTravelTimes(load, discharge, vessel, startTime, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours, isLaden);
+		TravelRouteData @NonNull [] ladenRouteTimes = getMinimumTravelTimes(load, discharge, vessel, startTime, availableRouteChoice, isConstrainedPanamaVoyage, additionalPanamaIdleHours, isLaden, minimumRequiredTravelTime);
 
 		List<Integer> times = new ArrayList<>();
 

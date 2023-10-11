@@ -131,4 +131,9 @@ public final class ListSequence implements ISequence {
 		}
 		return hashCode;
 	}
+
+	@Override
+	public boolean isEmpty() {
+		return list.isEmpty();
+	}
 }

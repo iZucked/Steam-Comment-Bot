@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -34,7 +35,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	TravelRouteData @NonNull [] getMinimumTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, boolean isLaden);
+	TravelRouteData @NonNull [] getMinimumTravelTimes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int ladenStartTime, AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, boolean isLaden, @Nullable Integer minimumRequiredTravelTime);
 
 	/**
 	 * Get feasible routes for min and max times
@@ -69,5 +70,5 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 */
 	@NonNull
 	List<Integer> getTimeDataForDifferentSpeedsAndRoutes(@NonNull IPort load, @NonNull IPort discharge, @NonNull IVessel vessel, int cv, int startTime, boolean isLaden,
-			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours);
+			AvailableRouteChoices availableRouteChoice, boolean isConstrainedPanamaVoyage, int additionalPanamaIdleHours, @Nullable Integer minimumRequiredTravelTime);
 }

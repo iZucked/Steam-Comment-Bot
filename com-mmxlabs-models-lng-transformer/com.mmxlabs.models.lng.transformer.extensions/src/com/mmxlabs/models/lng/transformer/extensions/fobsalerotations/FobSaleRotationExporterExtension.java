@@ -116,7 +116,7 @@ public class FobSaleRotationExporterExtension implements IExporterExtension {
 						final int dischargeStart = portTimesRecord.getSlotTime(oSlots.get(1));
 						final int dischargeDuration = portTimesRecord.getSlotDuration(oSlots.get(1));
 						final int dischargeEnd = dischargeStart + dischargeDuration;
-						final int minLadentTravelTime = travelTimeData.getMinTravelTime(i++) - loadDuration;
+						final int minLadentTravelTime = travelTimeData.getRequiredTravelTime(i++) - loadDuration;
 						final int earliestLadenEnd = endTime + minLadentTravelTime;
 						final NonShippedJourney ladenJourney = ScheduleFactory.eINSTANCE.createNonShippedJourney();
 						ladenJourney.setLaden(true);
@@ -165,7 +165,7 @@ public class FobSaleRotationExporterExtension implements IExporterExtension {
 						final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
 						if (returnSlot != null) {
 							final int nextLoadStart = portTimesRecord.getSlotTime(returnSlot);
-							final int minBallastTravelTime = travelTimeData.getMinTravelTime(i++) - dischargeDuration;
+							final int minBallastTravelTime = travelTimeData.getRequiredTravelTime(i++) - dischargeDuration;
 							final int earliestBallastEnd = dischargeEnd + minBallastTravelTime;
 							final NonShippedJourney ballastJourney = ScheduleFactory.eINSTANCE.createNonShippedJourney();
 							ballastJourney.setLaden(false);

@@ -81,4 +81,9 @@ public final class UnmodifiableSequenceWrapper implements ISequence {
 	public final ISequenceElement first() {
 		return wrapped.first();
 	}
+
+	@Override
+	public boolean isEmpty() {
+		return wrapped.isEmpty();
+	}
 }

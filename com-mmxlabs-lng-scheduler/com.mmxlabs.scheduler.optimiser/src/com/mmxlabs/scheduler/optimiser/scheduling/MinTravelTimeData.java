@@ -28,6 +28,7 @@ public final class MinTravelTimeData extends AbstractWriteLockable {
 	 * The minimum time this vessel can take to get from the indexed element to its successor. i.e. min travel time + visit time at indexed element.
 	 */
 	private final int[] minTimeToNextElement;
+	private final int[] requiredTimeToNextElement;
 	private final int[][] timeToNextElement;
 	private final IResource resource;
 
@@ -41,6 +42,7 @@ public final class MinTravelTimeData extends AbstractWriteLockable {
 		final int seqSize = sequence.size();
 
 		// Do we need plus one?
+		requiredTimeToNextElement = new int[seqSize + 1];
 		minTimeToNextElement = new int[seqSize + 1];
 		timeToNextElement = new int[ERouteOption.values().length][seqSize + 1];
 	}
@@ -48,10 +50,24 @@ public final class MinTravelTimeData extends AbstractWriteLockable {
 	public void setMinTravelTime(final int fromElementIndex, final int travelTime) {
 		checkWritable();
 		minTimeToNextElement[fromElementIndex] = travelTime;
+		setRequiredTravelTime(fromElementIndex, travelTime);
 	}
 
 	public int getMinTravelTime(final int fromElementIndex) {
 		return minTimeToNextElement[fromElementIndex];
+	}
+
+	public void setRequiredTravelTime(final int fromElementIndex, final int travelTime) {
+		checkWritable();
+		requiredTimeToNextElement[fromElementIndex] = Math.max(requiredTimeToNextElement[fromElementIndex], travelTime);
+	}
+
+	public int getRequiredTravelTime(final int fromElementIndex) {
+		return requiredTimeToNextElement[fromElementIndex];
+	}
+
+	public int getRequiredTravelTime(final ERouteOption routeOption, final int fromElementIndex) {
+		return Math.max(getTravelTime(routeOption, fromElementIndex), requiredTimeToNextElement[fromElementIndex]);
 	}
 
 	public IResource getResource() {
@@ -109,10 +125,9 @@ public final class MinTravelTimeData extends AbstractWriteLockable {
 			return true;
 		}
 
-		if (obj instanceof MinTravelTimeData) {
-			final MinTravelTimeData other = (MinTravelTimeData) obj;
-
-			if (!Arrays.equals(minTimeToNextElement, other.minTimeToNextElement)) {
+		if (obj instanceof MinTravelTimeData other) {
+			if (!Arrays.equals(minTimeToNextElement, other.minTimeToNextElement) //
+					|| !Arrays.equals(requiredTimeToNextElement, other.requiredTimeToNextElement)) {
 				return false;
 			}
 

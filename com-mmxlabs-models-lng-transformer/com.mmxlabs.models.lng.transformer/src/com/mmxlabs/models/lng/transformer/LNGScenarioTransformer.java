@@ -214,6 +214,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILockedCargoProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IMinTravelTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMiscCostsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
@@ -431,6 +432,9 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IThirdPartyCargoProviderEditor thirdPartyCargoProviderEditor;
+
+	@Inject
+	private IMinTravelTimeProviderEditor minTravelTimeProviderEditor;
 
 	@Inject
 	@Named(LIMIT_SPOT_SLOT_CREATION)
@@ -1902,6 +1906,10 @@ public class LNGScenarioTransformer {
 					isVolumeLimitInM3, slotCancelled);
 			if (loadSlot.isWindowCounterParty()) {
 				counterPartyWindowProviderEditor.setCounterPartyWindow(load);
+			}
+			if (loadSlot.isSetMinLadenTime()) {
+				final int minLadenTimeInHours = dateHelper.convertToHours(loadSlot.getMinLadenTime(), TimePeriod.DAYS);
+				minTravelTimeProviderEditor.setMinTravelTime(load, minLadenTimeInHours);
 			}
 		}
 		// Store market slots for lookup when building spot markets.

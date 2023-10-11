@@ -418,10 +418,10 @@ public class PNLBasedWindowTrimmerUtils {
 
 						final int t = lastSlotArrivalTime;
 						{
-							final int fastestTime = t + minTimeData.getMinTravelTime(fromElementIndexInSequence);
+							final int fastestTime = t + minTimeData.getRequiredTravelTime(fromElementIndexInSequence);
 							times.add(TimeChoice.forNormal(Math.max(twStart, fastestTime)));
 
-							final int nboTime = t + Math.max(nbotravelTime, minTimeData.getTravelTime(dme.getRoute(), fromElementIndexInSequence));
+							final int nboTime = t + Math.max(nbotravelTime, minTimeData.getRequiredTravelTime(dme.getRoute(), fromElementIndexInSequence));
 							if (nboTime < slotFeasibleTimeWindow.getExclusiveEnd()) {
 								times.add(TimeChoice.forNormal(Math.max(twStart, nboTime)));
 							}
@@ -506,7 +506,7 @@ public class PNLBasedWindowTrimmerUtils {
 		}
 		// Ensure the quickest time is added and remove anything too early
 		{
-			int time = lastSlotArrivalTime + minTimeData.getMinTravelTime(fromElementIndexInSequence);
+			int time = lastSlotArrivalTime + minTimeData.getRequiredTravelTime(fromElementIndexInSequence);
 			time = Math.max(time, pTWStart);
 			times.add(TimeChoice.forImportant(time));
 			final int pTime = time;
@@ -616,10 +616,10 @@ public class PNLBasedWindowTrimmerUtils {
 								final int nboTravelTime = (dme.getDistance() == 0) ? 0
 										: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
 
-								final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotTotalExtraIdleTime(lastSlot);
+								final int totalTravelTime = Math.max(record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotTotalExtraIdleTime(lastSlot), travelTimeData.getRequiredTravelTime(elementIndex - 1));
 
 								for (final TimeChoice lastSlotArrivalTime : lastIntervals) {
-									final int fastestArrivalTime = lastSlotArrivalTime.time + travelTimeData.getTravelTime(dme.getRoute(), elementIndex - 1);
+									final int fastestArrivalTime = lastSlotArrivalTime.time + travelTimeData.getRequiredTravelTime(dme.getRoute(), elementIndex - 1);
 									if (fastestArrivalTime < tw.getExclusiveEnd()) {
 										intervals.add(TimeChoice.forNormal(Math.max(tw.getInclusiveStart(), fastestArrivalTime)));
 									}
@@ -638,7 +638,7 @@ public class PNLBasedWindowTrimmerUtils {
 							}
 
 							for (final TimeChoice lastSlotArrivalTime : lastIntervals) {
-								final int fastestArrivalTime = lastSlotArrivalTime.time + travelTimeData.getTravelTime(dme.getRoute(), elementIndex - 1);
+								final int fastestArrivalTime = lastSlotArrivalTime.time + travelTimeData.getRequiredTravelTime(dme.getRoute(), elementIndex - 1);
 								if (fastestArrivalTime < tw.getExclusiveEnd()) {
 									intervals.add(TimeChoice.forNormal(Math.max(tw.getInclusiveStart(), fastestArrivalTime)));
 								}
