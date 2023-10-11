@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -45,6 +46,9 @@ public class VesselUsageSlotGroupConstraintChecker implements IPairwiseConstrain
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	private final @NonNull String name;
 

@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -38,6 +38,9 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 
 	@Inject
 	private IPortTypeProvider portTypeProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	public RestrictedElementsConstraintChecker(final String name) {
 		this.name = name;
@@ -62,21 +65,14 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 			final ISequence sequence = sequences.getSequence(resource);
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
-				if (prev != null) {
-					if (!checkPairwiseConstraint(prev, current, resource, messages)) {
-						return false;
-					}
+				if (prev != null && !checkPairwiseConstraint(prev, current, resource, messages)) {
+					return false;
 				}
 				prev = current;
 			}
 		}
 
 		return true;
-	}
-
-	@Override
-	public void setOptimisationData(final IPhaseOptimisationData optimisationData) {
-
 	}
 
 	@Override
@@ -93,14 +89,20 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 			}
 		}
 
-		final boolean result = !restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second) && !restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first);
-		if (!result && messages != null)
-			messages.add(String.format("%s: Sequence element %s is restricted to follow/preceed the sequence element %s!", this.name, first.getName(), second.getName()));
-		return result;
-	}
+		boolean result = true;
+		String msgFmt = "'%s' cannot go to '%s'. See port and contract restrictions.";
+		if (restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second)) {
+			result = false;
+			if (messages != null) {
+				messages.add(String.format(msgFmt, internalNameMapper.generateString(first), internalNameMapper.generateString(second)));
+			}
+		} else if (restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first)) {
+			result = false;
+			if (messages != null) {
+				messages.add(String.format(msgFmt, internalNameMapper.generateString(first), internalNameMapper.generateString(second)));
+			}
+		}
 
-	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return null;
+		return result;
 	}
 }

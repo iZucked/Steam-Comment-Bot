@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -72,6 +73,9 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	public LadenIdleTimeConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -138,7 +142,8 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 		return checkPairwiseConstraint(first, second, resource, vesselCharter.getVessel().getMaxSpeed(), messages);
 	}
 
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, final List<String> messages) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed,
+			final List<String> messages) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -166,8 +171,9 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot1.getPort(), slot2.getPort(), MAX_SPEED,
 					AvailableRouteChoices.OPTIMAL);
 			if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
-				if (messages != null)
+				if (messages != null) {
 					messages.add(explain(first, second, resource));
+				}
 				return false;
 			}
 
@@ -183,8 +189,7 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 		return true;
 	}
 
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	private String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
@@ -199,8 +204,8 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 			return "No edge connecting ports";
 		}
 
-		return "Excessive idle time : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getInclusiveStart()
-				+ " and end of second = " + tw2.getExclusiveEnd();
+		return "Excessive idle time : " + internalNameMapper.generateString(slot1.getPort()) + " to " + internalNameMapper.generateString(slot2.getPort()) + " = " + distance + ", but "
+				+ " start of first tw = " + tw1.getInclusiveStart() + " and end of second = " + tw2.getExclusiveEnd();
 	}
 
 	public void setMaxIdleTimeInHours(int hours) {

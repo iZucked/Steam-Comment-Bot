@@ -89,13 +89,8 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 					return false;
 				}
 			}
-
 		}
-
-		if (messages != null) {
-			final String message = String.format("%s: %s", this.name, "All STS slots are on different routes");
-			messages.add(message);
-		}
+ 
 		return true;
 	}
 }

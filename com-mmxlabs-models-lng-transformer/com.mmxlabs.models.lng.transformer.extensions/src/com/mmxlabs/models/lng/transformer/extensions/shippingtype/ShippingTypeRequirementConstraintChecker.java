@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AbstractPairwiseConstraintChecker;
@@ -32,7 +33,10 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
+
 	public ShippingTypeRequirementConstraintChecker(@NonNull final String name) {
 		super(name);
 	}
@@ -63,18 +67,15 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 
 	private CargoDeliveryType getCargoDeliveryType(final IResource resource) {
 		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
-		boolean notShipped = vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || 
-				vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+		boolean notShipped = vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
 		if (notShipped) {
 			return CargoDeliveryType.NOT_SHIPPED;
-		}
-		else {
+		} else {
 			return CargoDeliveryType.SHIPPED;
 		}
 	}
-	
-	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+
+	private String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		CargoDeliveryType shippingType = getCargoDeliveryType(resource);
 		final CargoDeliveryType requiredSalesSlotShippingType = shippingTypeRequirementProvider.getSalesSlotRequiredDeliveryType(second);
 		if (requiredSalesSlotShippingType != null && requiredSalesSlotShippingType != shippingType) {

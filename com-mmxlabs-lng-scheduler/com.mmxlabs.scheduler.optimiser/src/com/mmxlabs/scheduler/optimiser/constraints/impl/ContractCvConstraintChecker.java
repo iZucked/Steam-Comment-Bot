@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -30,6 +31,9 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	public ContractCvConstraintChecker(@NonNull String name) {
 		super(name);
@@ -63,8 +67,7 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 		return true;
 	}
 
-	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	private String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 
@@ -80,9 +83,9 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 			final long minCv = dischargeSlot.getMinCvValue();
 			final long maxCv = dischargeSlot.getMaxCvValue();
 			if (cv < minCv) {
-				return String.format(format, cv, loadSlot.getId(), "less", "minimum", minCv, dischargeSlot.getId());
+				return String.format(format, cv, internalNameMapper.generateString(loadSlot), "less", "minimum", minCv, internalNameMapper.generateString(dischargeSlot));
 			} else if (cv > maxCv) {
-				return String.format(format, cv, loadSlot.getId(), "more", "maximum", maxCv, dischargeSlot.getId());
+				return String.format(format, cv, internalNameMapper.generateString(loadSlot), "more", "maximum", maxCv, internalNameMapper.generateString(dischargeSlot));
 			}
 		}
 

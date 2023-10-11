@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
@@ -42,6 +43,9 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 
 	@Inject
 	private IPortTypeProvider portTypeProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	@NonNull
 	private final String name;
@@ -109,8 +113,9 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 			return true;
 		}
 		final boolean result = fobDesCompatibilityProvider.isPermittedOnResource(element, resource);
-		if (!result && messages != null)
-			messages.add(String.format("%s: Element %s is not permitted on resource %s", this.name, element.getName(), resource.getName()));
+		if (!result && messages != null) {
+			messages.add(String.format("Element %s is not permitted on non-shipped resource %s", internalNameMapper.generateString(element), internalNameMapper.generateString(resource)));
+		}
 		return result;
 	}
 }

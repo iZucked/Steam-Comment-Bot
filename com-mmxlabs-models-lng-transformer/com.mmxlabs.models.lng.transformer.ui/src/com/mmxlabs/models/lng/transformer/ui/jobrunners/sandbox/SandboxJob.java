@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 
@@ -14,5 +15,5 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 public interface SandboxJob {
 	LNGScenarioToOptimiserBridge getScenarioRunner();
 
-	IMultiStateResult run(IProgressMonitor monitor);
+	IMultiStateResult run(ScheduleSpecification startingPoint, IProgressMonitor monitor);
 }

@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -44,6 +45,9 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 	@NonNull
 	private final String name;
 
+	@Inject
+	private InternalNameMapper internalNameMapper;
+
 	public RoundTripVesselPermissionConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -69,7 +73,8 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 			if (prevElement != null) {
 				if (!roundTripVesselPermissionProvider.isBoundPair(prevElement, element)) {
 					if (messages != null)
-						messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, prevElement.getName(), element.getName()));
+						messages.add(
+								String.format("Slot pair '%s' -> '%s' is not valid on a nominal vessel!", internalNameMapper.generateString(prevElement), internalNameMapper.generateString(element)));
 					return false;
 				}
 			}
@@ -110,7 +115,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 			final boolean result = roundTripVesselPermissionProvider.isBoundPair(first, second);
 			if (!result)
 				if (messages != null)
-					messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, first.getName(), second.getName()));
+					messages.add(String.format("Slot pair '%s' -> '%s' is not valid on a nominal vessel!", internalNameMapper.generateString(first), internalNameMapper.generateString(second)));
 			return result;
 		}
 		return false;
@@ -129,7 +134,7 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		final boolean permitted = roundTripVesselPermissionProvider.isPermittedOnResource(element, resource);
 		if (!permitted) {
 			if (messages != null)
-				messages.add(String.format("%s: Element %s is not permitted on the resource %s!", this.name, element.getName(), resource.getName()));
+				messages.add(String.format("'%s' is not permitted on nominal vessel '%s'", this.name, internalNameMapper.generateString(element), internalNameMapper.generateString(resource)));
 			return false;
 		}
 

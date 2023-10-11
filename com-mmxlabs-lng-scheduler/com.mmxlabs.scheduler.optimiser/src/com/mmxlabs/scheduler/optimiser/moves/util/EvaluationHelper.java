@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.moves.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -98,8 +99,7 @@ public class EvaluationHelper {
 	}
 
 	/**
-	 * Instruct the constraint checkers to accept the given sequence as the valid
-	 * starting state.
+	 * Instruct the constraint checkers to accept the given sequence as the valid starting state.
 	 * 
 	 * @param currentRawSequences
 	 * @param currentFullSequences
@@ -147,22 +147,16 @@ public class EvaluationHelper {
 	}
 
 	/**
-	 * To be used only for Manual Sandbox, when user expects results similar to
-	 * manual rewiring
+	 * To be used only for Manual Sandbox, when user expects results similar to manual rewiring
 	 * 
 	 * @param currentFullSequences
 	 * @param currentChangedResources
 	 * @return
 	 */
-	public boolean checkConstraintsForRelaxedConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
-		final List<@NonNull String> messages;
-		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
-			messages = new ArrayList<>();
-			messages.add(String.format("%s: checkConstraintsForRelaxedConstraints", this.getClass().getName()));
-		} else {
-			messages = null;
-		}
+	public boolean checkConstraintsForRelaxedConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources,
+			@Nullable List<@NonNull String> messages) {
 		// Apply hard constraint checkers
+		boolean valid = true;
 		for (final IConstraintChecker checker : constraintCheckers) {
 
 			if (checker instanceof RoundTripVesselPermissionConstraintChecker) {
@@ -172,14 +166,23 @@ public class EvaluationHelper {
 				continue;
 			}
 
-			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
-				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
-					messages.stream().forEach(LOG::debug);
-				// Break out
-				return false;
+			List<@NonNull String> tmpMessages = messages == null ? null : new LinkedList<>();
+			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, tmpMessages)) {
+				if (messages != null) {
+					if (tmpMessages.isEmpty()) {
+						// The constraint did not report any specific messages, so add a catch all case here
+						messages.add(String.format("%s rejected the solution", checker.getName()));
+					} else {
+						messages.addAll(tmpMessages);
+					}
+					valid = false;
+				} else {
+					// Break out
+					return false;
+				}
 			}
 		}
-		return true;
+		return valid;
 	}
 
 	public boolean doesMovePassConstraints(final @NonNull ISequences rawSequences) {

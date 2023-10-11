@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
@@ -45,6 +46,8 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	@NonNull
 	private final String name;
@@ -90,9 +93,6 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 			}
 		}
 
-		if (valid && messages != null) {
-			messages.add(String.format("%s : all sequences satisfied the constraint!", this.name));
-		}
 		return valid;
 	}
 
@@ -130,7 +130,8 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 					|| type == PortType.CharterOut //
 			) {
 				if (messages != null)
-					messages.add(String.format("%s : Vessel %s is a spot charter and should not have %s in the schedule!", this.name, vessel != null ? vessel.getName() : "unknown vessel", type.toString()));
+					messages.add(String.format("Vessel %s is a spot charter and should not have %s events in the schedule!", vessel != null ? internalNameMapper.generateString(vessel) : "unknown vessel",
+							type.toString()));
 				return false;
 			}
 		} else if (vesselCharter.getVesselInstanceType().isNonShipped()) {
@@ -138,7 +139,8 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 		}
 		final boolean result = allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);
 		if (!result && messages != null) {
-			messages.add(String.format("%s: Slot %s is not allowed on vessel %s!", this.name, portSlot.getId(), vessel != null ? vessel.getName() : "unknown vessel"));
+			messages.add(
+					String.format("Slot %s is not allowed on vessel %s!", internalNameMapper.generateString(portSlot), vessel != null ? internalNameMapper.generateString(vessel) : "unknown vessel"));
 		}
 		return result;
 	}

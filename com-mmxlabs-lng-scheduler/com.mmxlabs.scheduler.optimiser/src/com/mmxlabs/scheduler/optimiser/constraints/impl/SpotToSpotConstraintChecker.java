@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -35,6 +36,9 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 	@Inject
 	private ISpotMarketSlotsProvider spotMarketSlots;
 
+	@Inject
+	private InternalNameMapper internalNameMapper;
+
 	public SpotToSpotConstraintChecker(@NonNull final String name) {
 		super(name);
 	}
@@ -50,8 +54,9 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 				return true;
 			}
 			if (spotMarketSlots.isSpotMarketSlot(first) && spotMarketSlots.isSpotMarketSlot(second)) {
-				if (messages != null)
-					messages.add(explain(first, second, resource));
+				if (messages != null) {
+					messages.add(explain(first, second));
+				}
 				return false;
 			} else {
 				return true;
@@ -60,20 +65,19 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 		return true;
 	}
 
-	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	private String explain(final ISequenceElement first, final ISequenceElement second) {
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 
 		if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeOption) {
 			// If data is actualised (i.e. the event has occurred), we do not care
 			if (actualsDataProvider.hasActuals(firstSlot) && actualsDataProvider.hasActuals(secondSlot)) {
-				return String.format("%s: load slot %s and discharge slot %s are actualised.", this.name, firstSlot.getId(), secondSlot.getId());
+				return String.format("load slot %s and discharge slot %s are actualised.", internalNameMapper.generateString(firstSlot), internalNameMapper.generateString(secondSlot));
 			}
 			if (spotMarketSlots.isSpotMarketSlot(first) && spotMarketSlots.isSpotMarketSlot(second)) {
-				return String.format("%s: load slot %s and discharge slot %s are both spot markets.", this.name, firstSlot.getId(), secondSlot.getId());
+				return String.format("load slot %s and discharge slot %s are both spot markets.", internalNameMapper.generateString(firstSlot), internalNameMapper.generateString(secondSlot));
 			} else {
-				return String.format("%s: load slot %s and discharge slot %s are not both spot markets.", this.name, firstSlot.getId(), secondSlot.getId());
+				return String.format("load slot %s and discharge slot %s are not both spot markets.", internalNameMapper.generateString(firstSlot), internalNameMapper.generateString(secondSlot));
 			}
 		}
 

@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -34,6 +35,7 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSONTran
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;
@@ -125,7 +127,7 @@ public class SandboxOptioniserRunner {
 				}
 
 				@Override
-				public IMultiStateResult run(final IProgressMonitor monitor) {
+				public IMultiStateResult run(final ScheduleSpecification startingPointSequences, final IProgressMonitor monitor) {
 					final long startTime = System.currentTimeMillis();
 					final OptioniserLogger logger = new OptioniserLogger();
 					try {

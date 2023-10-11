@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -33,6 +34,9 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 
 	@Inject
 	private IPortTypeProvider portTypeProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	@NonNull
 	private final String name;
@@ -88,13 +92,13 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 	}
 
 	protected boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final List<String> messages) {
-		if (portTypeProvider.getPortType(element) == PortType.DryDock || portTypeProvider.getPortType(element) == PortType.Maintenance
-				|| portTypeProvider.getPortType(element) == PortType.CharterOut || portTypeProvider.getPortType(element) == PortType.CharterLength) {
+		if (portTypeProvider.getPortType(element) == PortType.DryDock || portTypeProvider.getPortType(element) == PortType.Maintenance || portTypeProvider.getPortType(element) == PortType.CharterOut
+				|| portTypeProvider.getPortType(element) == PortType.CharterLength) {
 
 			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
 			final boolean result = (vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET || vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);
 			if (!result && messages != null)
-				messages.add(String.format("%s : For element %s vessel availability is fleet or time charter!", this.name, element.getName()));
+				messages.add(String.format("For element %s vessel availability is fleet or time charter!", internalNameMapper.generateString(element)));
 			return result;
 		}
 		return true;

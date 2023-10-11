@@ -24,6 +24,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -55,6 +56,9 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	private int maxLadenDuration = 60 * 24;
 
@@ -134,7 +138,8 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 		return checkPairwiseConstraint(first, second, resource, vesselCharter.getVessel().getMaxSpeed(), Mode.APPLY, messages);
 	}
 
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, Mode mode, final List<String> messages) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, Mode mode,
+			final List<String> messages) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -160,9 +165,11 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			if (tw2.getInclusiveStart() - tw1.getExclusiveEnd() > maxLadenDuration) {
 				// Violation! Check whitelist to see if we can ignore it.
 				if (mode == Mode.APPLY && !whitelistedSlots.contains(slot1)) {
-					if (messages != null)
-						messages.add(String.format("%s: Travel time from last discharge port %s (slot %s) to the next load port %s (slot %s) is longer than allowed %d hours.", 
-							this.name, slot1.getPort().getName(), slot1.getId(), slot2.getPort().getName(), slot2.getId(), maxLadenDuration));
+					if (messages != null) {
+						messages.add(String.format("Travel time from last discharge port %s (slot %s) to the next load port %s (slot %s) is longer than allowed %d hours.",
+								internalNameMapper.generateString(slot1.getPort()), internalNameMapper.generateString(slot1), internalNameMapper.generateString(slot2.getPort()),
+								internalNameMapper.generateString(slot2), maxLadenDuration));
+					}
 					return false;
 				} else if (mode == Mode.RECORD) {
 					whitelistedSlots.add(slot1);

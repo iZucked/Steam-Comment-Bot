@@ -77,9 +77,10 @@ public class SandboxRunnerUtil {
 
 			final SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
 			SubMonitor subMonitor = SubMonitor.convert(parentMonitor);
-			subMonitor.beginTask("Optionise", 100);
+			subMonitor.beginTask("Run sandbox", 100);
 			try {
-				final IMultiStateResult results = sandboxJob.run(subMonitor.split(90));
+
+				final IMultiStateResult results = sandboxJob.run(baseScheduleSpecification, subMonitor.split(90));
 
 				if (results == null || subMonitor.isCanceled()) {
 					sandboxResult.setName("SandboxResult");

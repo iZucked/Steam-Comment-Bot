@@ -18,19 +18,22 @@ import java.util.function.Function;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import com.google.common.base.Joiner;
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.anon.AnonNameLookup;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BaseCaseRowGroup;
@@ -66,8 +69,9 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON.Scenar
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSONTransformer;
 import com.mmxlabs.models.lng.transformer.ui.headless.common.ScenarioMetaUtils;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.errordialog.SandboxDefineErrorDialog;
+import com.mmxlabs.models.lng.transformer.ui.jobrunners.sandbox.errordialog.SolutionErrorSet;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -77,6 +81,7 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -291,11 +296,31 @@ public class SandboxDefineRunner {
 
 			final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
 
-			return evaluationHelper.checkConstraintsForRelaxedConstraints(fullSequences, null);
+			return evaluationHelper.checkConstraintsForRelaxedConstraints(fullSequences, null, null);
 		}
 	}
 
-	public IMultiStateResult runSandbox(final IProgressMonitor progressMonitor) {
+	private List<@NonNull String> checkSequenceSatifiesConstraintsWithMessages(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
+		// Currently (at least) there is no need to use the rawSequence provider data
+		final ModifiableSequences emptySequences = new ModifiableSequences(new LinkedList<>(), new SequencesAttributesProviderImpl());
+
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, emptySequences, emptySequences, dataTransformer.getHints());
+
+		final Injector injector = evaluationTransformerUnit.getInjector();
+
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
+			scope.enter();
+			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
+			final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
+
+			final IModifiableSequences fullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
+			final List<@NonNull String> messages = new LinkedList<>();
+			evaluationHelper.checkConstraintsForRelaxedConstraints(fullSequences, null, messages);
+			return messages;
+		}
+	}
+
+	public IMultiStateResult runSandbox(final ScheduleSpecification startingPoint, final IProgressMonitor progressMonitor) {
 
 		final List<String> hints = new LinkedList<>();
 		if (model.isUseTargetPNL()) {
@@ -318,8 +343,42 @@ public class SandboxDefineRunner {
 			// evaluated here.
 			///////
 			final List<ISequences> results = new LinkedList<>();
+			final List<SolutionErrorSet> errorInformation = new LinkedList<>();
+			final Function<String, String> messageDecoder = input -> {
+				try {
+					final String jsonStr = AnonNameLookup.decodeStr(input);
+					final JSONObject obj = (JSONObject) new JSONParser().parse(jsonStr);
+					// TODO: Add API to enable de-anonymisation
+					return obj.get("name").toString();
+				} catch (final ParseException e) {
+					// Give up and return the original string
+					return input;
+				}
+			};
+			final ISequences[] startingPointSequences = new ISequences[1];
 			helper.withRunner(scenarioInstance, userSettings, originalEditingDomain, hints, (bridge, injector, cores) -> {
 				this.scenarioToOptimiserBridge = bridge;
+				{
+					final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
+					startingPointSequences[0] = transformer.createSequences(startingPoint, bridge.getDataTransformer(), false);
+
+					// Check hard constraints are fine
+					try {
+						if (checkSequenceSatifiesConstraints(bridge.getDataTransformer(), startingPointSequences[0])) {
+							// results.add(base);
+						} else {
+							// Solution failed, so collect error messages for display to the user
+							final List<String> messages = checkSequenceSatifiesConstraintsWithMessages(bridge.getDataTransformer(), startingPointSequences[0]);
+							if (!messages.isEmpty()) {
+								errorInformation.add(new SolutionErrorSet("Fix scenario/starting point", messages.stream().map(s -> AnonNameLookup.decode(s, messageDecoder)).toList()));
+							}
+							// violationCount.incrementAndGet();
+						}
+					} catch (final InfeasibleSolutionException e) {
+						// Ignore and continue.
+						// infeasibleCount.incrementAndGet();
+					}
+				}
 				for (final Pair<BaseCase, ScheduleSpecification> p : specifications) {
 					final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 					final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer(), false);
@@ -329,6 +388,11 @@ public class SandboxDefineRunner {
 						if (checkSequenceSatifiesConstraints(bridge.getDataTransformer(), base)) {
 							results.add(base);
 						} else {
+							// Solution failed, so collect error messages for display to the user
+							final List<String> messages = checkSequenceSatifiesConstraintsWithMessages(bridge.getDataTransformer(), base);
+							if (!messages.isEmpty()) {
+								errorInformation.add(new SolutionErrorSet("Rejected solution", messages.stream().map(s -> AnonNameLookup.decode(s, messageDecoder)).toList()));
+							}
 							violationCount.incrementAndGet();
 						}
 					} catch (final InfeasibleSolutionException e) {
@@ -349,10 +413,22 @@ public class SandboxDefineRunner {
 							// Infeasible exceptions currently only for missing distance when a route is
 							// specified.
 							msg = String.format("Sandbox \"%s\": No solutions found - most likely due to missing distances for routes specified.", model.getName());
+							display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No solutions found", msg));
+
 						} else {
-							msg = String.format("Sandbox \"%s\": No solutions found - most likely due to constraint violations. Please check validation messages.", model.getName());
+
+							// Combine the solution errors
+							if (errorInformation.isEmpty()) {
+								msg = String.format("Sandbox \"%s\": No solutions found - most likely due to constraint violations. Please check validation messages.", model.getName());
+								display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No solutions found", msg));
+							} else {
+								@SuppressWarnings("unused")
+								final boolean ignoredResultNeededToCompile = RunnerHelper.syncExec(d -> {
+									final SandboxDefineErrorDialog dialog = new SandboxDefineErrorDialog(d.getActiveShell(), errorInformation);
+									dialog.open();
+								});
+							}
 						}
-						display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No solutions found", msg));
 					}
 				}
 
@@ -363,7 +439,7 @@ public class SandboxDefineRunner {
 
 			// We need a non-null solution for the base, but it will be ignored and is not
 			// really treated as the base. The base is handled separately during the export
-			final ISequences base = results.get(0);
+			final ISequences base = startingPointSequences[0];
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream()//
 					.map(s -> new NonNullPair<ISequences, Map<String, Object>>(s, new HashMap<>())) //
 					.toList();
@@ -377,15 +453,15 @@ public class SandboxDefineRunner {
 		removeAllSpotBuySpotSellCargoes(tasks);
 
 		{
-			Iterator<BaseCase> itr = tasks.iterator();
+			final Iterator<BaseCase> itr = tasks.iterator();
 			TASK_LOOP: while (itr.hasNext()) {
-				BaseCase baseCase = itr.next();
-				for (var group : baseCase.getGroups()) {
+				final BaseCase baseCase = itr.next();
+				for (final var group : baseCase.getGroups()) {
 					int numDischargesWithVolRange = 0;
-					for (BaseCaseRow r : group.getRows()) {
+					for (final BaseCaseRow r : group.getRows()) {
 						if (r.getSellOption() != null) {
 							// We don't care what the CV is here.
-							int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(1.0, r.getSellOption());
+							final int[] sellVolumeInMMBTU = AnalyticsBuilder.getSellVolumeInMMBTU(1.0, r.getSellOption());
 							if (sellVolumeInMMBTU == null || sellVolumeInMMBTU[0] != sellVolumeInMMBTU[1]) {
 								numDischargesWithVolRange++;
 							}
@@ -444,9 +520,9 @@ public class SandboxDefineRunner {
 	}
 
 	private static void removeAllSpotBuySpotSellCargoes(final List<BaseCase> tasks) {
-		List<BaseCase> tasksToRemove = new LinkedList<>();
+		final List<BaseCase> tasksToRemove = new LinkedList<>();
 		for (final BaseCase bc : tasks) {
-			for (BaseCaseRowGroup grp : bc.getGroups()) {
+			for (final BaseCaseRowGroup grp : bc.getGroups()) {
 				boolean hasBuyMarket = false;
 
 				for (final BaseCaseRow bcRow : grp.getRows()) {
@@ -491,7 +567,7 @@ public class SandboxDefineRunner {
 				final BaseCaseRowGroup grp = data.remove(0);
 				boolean forceRowToOpen = false;
 				// Copy of list as we can modify it
-				for (BaseCaseRow row : new LinkedList<>(grp.getRows())) {
+				for (final BaseCaseRow row : new LinkedList<>(grp.getRows())) {
 					if (row.getVesselEventOption() != null && !seenItems.add(row.getVesselEventOption())) {
 						return;
 					}
@@ -541,7 +617,7 @@ public class SandboxDefineRunner {
 			}
 
 			// Check options removed from event rows and see whether they have been used, or need to be marked as open
-			for (var buyOption : openBuys) {
+			for (final var buyOption : openBuys) {
 				if (!seenItems.contains(buyOption)) {
 					final BaseCaseRow extraOpenRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 					final BaseCaseRowGroup extraGroup = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
@@ -552,7 +628,7 @@ public class SandboxDefineRunner {
 					data.add(extraGroup); // Add to list to avoid using the buy again
 				}
 			}
-			for (var sellOption : openSells) {
+			for (final var sellOption : openSells) {
 				if (!seenItems.contains(sellOption)) {
 					final BaseCaseRow extraOpenRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 					final BaseCaseRowGroup extraGroup = AnalyticsFactory.eINSTANCE.createBaseCaseRowGroup();
@@ -598,8 +674,8 @@ public class SandboxDefineRunner {
 	}
 
 	public static Function<IProgressMonitor, AbstractSolutionSet> createSandboxJobFunction(final int threadsAvailable, final IScenarioDataProvider sdp,
-			final @Nullable ScenarioInstance scenarioInstance, final SandboxSettings sandboxSettings, final OptionAnalysisModel model, @Nullable Meta meta,
-			@Nullable Consumer<Object> registerLogging) {
+			final @Nullable ScenarioInstance scenarioInstance, final SandboxSettings sandboxSettings, final OptionAnalysisModel model, @Nullable final Meta meta,
+			@Nullable final Consumer<Object> registerLogging) {
 
 		final HeadlessSandboxJSON json;
 		if (registerLogging != null) {
@@ -620,8 +696,8 @@ public class SandboxDefineRunner {
 		final SandboxResult sandboxResult = AnalyticsFactory.eINSTANCE.createSandboxResult();
 		sandboxResult.setUseScenarioBase(false);
 
-		boolean allowCaching = false;
-		UserSettings userSettings = sandboxSettings.getUserSettings();
+		final boolean allowCaching = false;
+		final UserSettings userSettings = sandboxSettings.getUserSettings();
 		return SandboxRunnerUtil.createSandboxFunction(sdp, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
 			final SandboxDefineRunner defineRunner = new SandboxDefineRunner(scenarioInstance, sdp, userSettings, mapper, model);
@@ -633,10 +709,10 @@ public class SandboxDefineRunner {
 				}
 
 				@Override
-				public IMultiStateResult run(final IProgressMonitor monitor) {
+				public IMultiStateResult run(final ScheduleSpecification startingPoint, final IProgressMonitor monitor) {
 					final long startTime = System.currentTimeMillis();
 					try {
-						return defineRunner.runSandbox(monitor);
+						return defineRunner.runSandbox(startingPoint, monitor);
 					} finally {
 						final long runTime = System.currentTimeMillis() - startTime;
 

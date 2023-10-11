@@ -187,7 +187,7 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 				}
 
 				@Override
-				public IMultiStateResult run(final IProgressMonitor monitor) {
+				public IMultiStateResult run(final ScheduleSpecification startingPointSequences, final IProgressMonitor monitor) {
 					return priceSensitivityRunner.run();
 				}
 			};
@@ -204,7 +204,13 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 			final ScheduleSpecification baseScheduleSpecification = createBaseScheduleSpecification(sdp, model, mapper);
 
 			final SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
-			final IMultiStateResult results = sandboxJob.run(monitor);
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
+			
+			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings, AnalyticsFactory.eINSTANCE::createSolutionOption,
+					dualPNLModel, true);
+			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
+			ISequences startingPointSequences = exporter.specificationToSequences(baseScheduleSpecification);
+			final IMultiStateResult results = sandboxJob.run(baseScheduleSpecification, monitor);
 
 			if (results == null) {
 				sensitivityResult.setName("SensitivityResult");
@@ -213,13 +219,8 @@ public class PriceSensitivityJobRunner extends AbstractJobRunner {
 				return sensitivityResult;
 			}
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
+			sensitivityResult.setBaseOption(exporter.useAsBaseSolution(startingPointSequences));
 			final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
-
-			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings, AnalyticsFactory.eINSTANCE::createSolutionOption,
-					dualPNLModel, true);
-			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
-			sensitivityResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
 
 			final Map<Cargo, List<Long>> cargoPnls = new HashMap<>();
 			final List<Long> portfolioPnls = new ArrayList<>();

@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -47,6 +48,9 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	public MinMaxVolumeChecker(@NonNull final String name) {
 		this.name = name;
@@ -109,19 +113,22 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		if (slot1 instanceof ILoadOption && slot2 instanceof IDischargeOption) {
-			ILoadOption load = (ILoadOption) slot1;
-			IDischargeOption discharge = (IDischargeOption) slot2;
-			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselCharter.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
+		if (slot1 instanceof ILoadOption load && slot2 instanceof IDischargeOption discharge) {
+			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselCharter.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge
+					.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
 				// min > max
-				if (messages != null)
-					messages.add(String.format("%s: Load %s min load volume is greater than discharge %s max discharge volume", this.name, load.getId(), discharge.getId()));
+				if (messages != null) {
+					messages.add(String.format("Load %s min load volume is greater than discharge %s max discharge volume", internalNameMapper.generateString(load),
+							internalNameMapper.generateString(discharge)));
+				}
 				return false;
 			}
 			if (load.getMaxLoadVolumeMMBTU() < discharge.getMinDischargeVolumeMMBTU(load.getCargoCVValue())) {
 				// max < min
-				if (messages != null)
-					messages.add(String.format("%s: Load %s max load volume is less than discharge %s min discharge volume", this.name, load.getId(), discharge.getId()));
+				if (messages != null) {
+					messages.add(String.format("Load %s max load volume is less than discharge %s min discharge volume", internalNameMapper.generateString(load),
+							internalNameMapper.generateString(discharge)));
+				}
 				return false;
 			}
 		}

@@ -24,7 +24,7 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 
 	protected final @NonNull String name;
 
-	public AbstractPairwiseConstraintChecker(@NonNull final String name) {
+	protected AbstractPairwiseConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
@@ -68,11 +68,6 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 			}
 		}
 		
-		if (valid && messages != null) {
-			final String message = String.format("%s: %s", this.name, "all sequences have passed the constraint.");
-			messages.add(message);
-		}
-
 		return valid;
 	}
 }

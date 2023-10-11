@@ -272,7 +272,7 @@ public class SolutionSetExporterUnit {
 			return useAsBaseSolution(base, scheduleSpecification);
 		}
 
-		private @NonNull ISequences specificationToSequences(final @NonNull ScheduleSpecification scheduleSpecification) {
+		public @NonNull ISequences specificationToSequences(final @NonNull ScheduleSpecification scheduleSpecification) {
 			final Injector injector = bridge.getFullDataTransformer().getInjector();
 			final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 			final ISequences base = transformer.createSequences(scheduleSpecification, bridge.getFullDataTransformer(), false);

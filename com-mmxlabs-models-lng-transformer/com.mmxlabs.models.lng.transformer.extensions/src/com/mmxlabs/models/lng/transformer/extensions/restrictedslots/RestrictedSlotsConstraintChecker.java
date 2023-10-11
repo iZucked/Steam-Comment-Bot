@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
-import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 
 /**
  * An implementation of {@link IPairwiseConstraintChecker} to forbid certain {@link ISequenceElement} pairings
@@ -25,9 +25,12 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChecker {
 
 	private final String name;
-	
+
 	@Inject
 	private IRestrictedSlotsProvider restrictedSlotsProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	public RestrictedSlotsConstraintChecker(final String name) {
 		this.name = name;
@@ -65,23 +68,12 @@ public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChec
 	}
 
 	@Override
-	public void setOptimisationData(final IPhaseOptimisationData optimisationData) {
-
-	}
-
-	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final List<String> messages) {
 
-		final boolean result = !restrictedSlotsProvider.getRestrictedFollowerElements(first).contains(second)
-				&& !restrictedSlotsProvider.getRestrictedPrecedingElements(second).contains(first);
+		final boolean result = !restrictedSlotsProvider.getRestrictedFollowerElements(first).contains(second) && !restrictedSlotsProvider.getRestrictedPrecedingElements(second).contains(first);
 		if (!result && messages != null)
-			messages.add(String.format("%s: Slot on sequence element %s is not allowed to be wired to the slot on the sequence element %s!", 
-					this.name, first.getName(), second.getName()));
+			messages.add(String.format("Position %s is not allowed to be wired to position %s!", internalNameMapper.generateString(first), internalNameMapper.generateString(second)));
 		return result;
 	}
 
-	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		return null;
-	}
 }

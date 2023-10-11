@@ -23,6 +23,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -61,6 +62,9 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	@Inject
 	private ICounterPartyVolumeProvider counterPartyVolumeProvider;
 
+	@Inject
+	private InternalNameMapper internalNameMapper;
+	
 	public CounterPartyVolumeChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -71,7 +75,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 		return name;
 	}
 
-	private Set<Pair<IPortSlot, IPortSlot>> pairing = new HashSet();
+	private Set<Pair<IPortSlot, IPortSlot>> pairing = new HashSet<>();
 
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
@@ -93,10 +97,10 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	}
 
 	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
-		final Iterator<ISequenceElement> iter = sequence.iterator();
 		ISequenceElement prev = null;
 		ISequenceElement cur = null;
 
+		final Iterator<ISequenceElement> iter = sequence.iterator();
 		while (iter.hasNext()) {
 			prev = cur;
 			cur = iter.next();
@@ -127,9 +131,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 		final long vesselCapacityInM3 = nominatedVessel == null ? 0 : nominatedVessel.getCargoCapacity();
 
-		if (slot1 instanceof ILoadOption && slot2 instanceof IDischargeOption) {
-			ILoadOption load = (ILoadOption) slot1;
-			IDischargeOption discharge = (IDischargeOption) slot2;
+		if (slot1 instanceof ILoadOption load && slot2 instanceof IDischargeOption discharge) {
 			final Pair<IPortSlot, IPortSlot> thisPair = Pair.of(slot1, slot2);
 			if (!pairing.contains(thisPair)) {
 				boolean counterPartyVolume = counterPartyVolumeProvider.isCounterPartyVolume(slot1);
@@ -147,8 +149,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 								messages.add(String.format(
 									"%s: Counterparty volume nomination for buy %s and sell %s. Min load volume (%d) "
 									+ "is less than min discharge volume (%d). Nominated vessel (%s) capacity is %d"
-									, this.name, load.getId(), discharge.getId(), minLoadVolume, minDischargeVolume, 
-									nominatedVessel == null? "N/A" : nominatedVessel.getName(), vesselCapacityInM3));
+									, this.name, internalNameMapper.generateString(load), internalNameMapper.generateString(discharge), minLoadVolume, minDischargeVolume, 
+									nominatedVessel == null? "N/A" : internalNameMapper.generateString(nominatedVessel), vesselCapacityInM3));
 							return false;
 						}
 					}
@@ -164,8 +166,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 								messages.add(String.format(
 									"%s: Counterparty volume nomination for buy %s and sell %s. Max load volume (%d) "
 									+ "is greater than max discharge volume (%d). Nominated vessel (%s) capacity is %d"
-									, this.name, load.getId(), discharge.getId(), maxLoadVolume, maxDischargeVolume, 
-									nominatedVessel == null? "N/A" : nominatedVessel.getName(), vesselCapacityInM3));
+									, this.name, internalNameMapper.generateString(load), internalNameMapper.generateString(discharge), maxLoadVolume, maxDischargeVolume, 
+									nominatedVessel == null? "N/A" : internalNameMapper.generateString(nominatedVessel), vesselCapacityInM3));
 							return false;
 						}
 					}

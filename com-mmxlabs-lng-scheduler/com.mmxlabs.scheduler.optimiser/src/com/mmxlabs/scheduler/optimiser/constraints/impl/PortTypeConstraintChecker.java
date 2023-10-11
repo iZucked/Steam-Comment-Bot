@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -52,6 +53,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	@Inject
 	private IOrderedSequenceElementsDataComponentProvider orderedSequenceProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	public PortTypeConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -335,8 +339,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		return true;
 	}
 
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	private String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 		final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
@@ -345,35 +348,35 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		// check the legality of this sequencing decision
 		// End can't come before anything and Start can't come after anything
 		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start)) {
-			return this.name + ": Vessel " + vessel.getName() + ": End can't come before anything and Start can't come after anything";
+			return this.name + ": Vessel " + internalNameMapper.generateString(vessel) + ": End can't come before anything and Start can't come after anything";
 		}
 
 		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) {
 			// first port should be a load slot (TODO is this true?)
-			return this.name + ": Vessel " + vessel.getName() + ": Need a discharge after a Start";
+			return this.name + ": Vessel " + internalNameMapper.generateString(vessel) + ": Need a discharge after a Start";
 		}
 
 		// load must precede discharge or waypoint, but nothing else
 		if (firstType.equals(PortType.Load)) {
 
 			if (!(secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint))) {
-				return this.name + ": Vessel " + vessel.getName() + ": Discharge or Waypoint must follow a Load";
+				return this.name + ": Vessel " + internalNameMapper.generateString(vessel) + ": Discharge or Waypoint must follow a Load";
 			}
 		}
 
 		// discharge may precede anything but Discharge (and start, but we
 		// already did that)
 		if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Discharge)) {
-			return this.name + ": Vessel " + vessel.getName() + ": Discharge cannot follow a discharge";
+			return this.name + ": Vessel " + internalNameMapper.generateString(vessel) + ": Discharge cannot follow a discharge";
 		}
 
 		// Check Virtual Routes
 		if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselCharter.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			if (firstType.equals(PortType.Discharge)) {
-				return this.name + ": Vessel " + vessel.getName() + ": Nothing can come after a discharge on a virtual vessel";
+				return this.name + ": Vessel " + internalNameMapper.generateString(vessel) + ": Nothing can come after a discharge on a virtual vessel";
 			}
 			if (secondType.equals(PortType.Load)) {
-				return this.name + ": Vessel " + vessel.getName() + ": Nothing can come before a load on a virtual vessel";
+				return this.name + ": Vessel " + internalNameMapper.generateString(vessel) + ": Nothing can come before a load on a virtual vessel";
 			}
 		}
 

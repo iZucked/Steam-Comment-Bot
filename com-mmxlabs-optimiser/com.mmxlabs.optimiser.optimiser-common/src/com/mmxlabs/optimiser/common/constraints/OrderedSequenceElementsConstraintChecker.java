@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.common.components.InternalElementNameMapper;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -21,9 +22,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 
 /**
- * Implementation of {@link IConstraintChecker} to enforce a specific ordering
- * of sequence elements. This uses a
- * {@link IOrderedSequenceElementsDataComponentProvider} instance to provide the
+ * Implementation of {@link IConstraintChecker} to enforce a specific ordering of sequence elements. This uses a {@link IOrderedSequenceElementsDataComponentProvider} instance to provide the
  * constraint data.
  * 
  * @author Simon Goodall
@@ -36,6 +35,9 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 
 	@NonNull
 	private final String name;
+
+	@Inject
+	private InternalElementNameMapper internalNameMapper;
 
 	public OrderedSequenceElementsConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -67,8 +69,7 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	}
 
 	/**
-	 * Check the given {@link ISequence} ensuring that the expected element follows
-	 * the preceding element.
+	 * Check the given {@link ISequence} ensuring that the expected element follows the preceding element.
 	 * 
 	 * @param sequence
 	 * @param messages
@@ -83,7 +84,8 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 					// If null, any element is allowed to follow.
 					if (expected != null && expected != element) {
 						if (messages != null)
-							messages.add(String.format("%s: current element %s is not the expected one %s!", this.name, element.getName(), expected.getName()));
+							messages.add(String.format("%s: current element %s is not the expected one %s!", this.name, internalNameMapper.generateString(element),
+									internalNameMapper.generateString(expected)));
 						return false;
 					}
 				}
@@ -92,7 +94,8 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 					// If null, any element is allowed to follow.
 					if (expected != null && expected != prevElement) {
 						if (messages != null)
-							messages.add(String.format("%s: previous element %s is not the expected one %s!", this.name, prevElement.getName(), expected.getName()));
+							messages.add(String.format("%s: previous element %s is not the expected one %s!", this.name, internalNameMapper.generateString(prevElement),
+									internalNameMapper.generateString(expected)));
 						return false;
 					}
 				}
@@ -106,7 +109,8 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 			// If not null, we expected another element, but there is none.
 			if (expected != null) {
 				if (messages != null)
-					messages.add(String.format("%s: last element %s is unexpectedly followed by element %s!", this.name, prevElement.getName(), expected.getName()));
+					messages.add(String.format("%s: last element %s is unexpectedly followed by element %s!", this.name, internalNameMapper.generateString(prevElement),
+							internalNameMapper.generateString(expected)));
 				return false;
 			}
 		}
@@ -119,14 +123,16 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 		final ISequenceElement afterFirst = provider.getNextElement(first);
 		if (afterFirst != null && afterFirst != second) {
 			if (messages != null)
-				messages.add(String.format("%s: element %s must follow %s, but is followed by %s!", this.name, second.getName(), first.getName(), afterFirst.getName()));
+				messages.add(String.format("%s: element %s must follow %s, but is followed by %s!", this.name, internalNameMapper.generateString(second), internalNameMapper.generateString(first),
+						internalNameMapper.generateString(afterFirst)));
 			return false;
 		}
 
 		final ISequenceElement beforeSecond = provider.getPreviousElement(second);
 		if (beforeSecond != null && first != beforeSecond) {
 			if (messages != null)
-				messages.add(String.format("%s: element %s must follow %s, but is follows %s!", this.name, first.getName(), second.getName(), beforeSecond.getName()));
+				messages.add(String.format("%s: element %s must follow %s, but is follows %s!", this.name, internalNameMapper.generateString(first), internalNameMapper.generateString(second),
+						internalNameMapper.generateString(beforeSecond)));
 			return false;
 		}
 		return true;

@@ -17,6 +17,8 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -50,8 +52,9 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
-	/**
-	 */
+	@Inject
+	private InternalNameMapper internalNameMapper;
+
 	public VirtualVesselConstraintChecker(@NonNull final String name) {
 		super();
 		this.name = name;
@@ -121,11 +124,11 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		if (vesselCharter.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 
 			if (virtualVesselSlotProvider.getVesselCharterForElement(first) != null) {
-				addMessage(messages, "%s: Sequence element %s has no vessel availability!", first);
+				addMessage(messages, "Sequence element %s has no vessel availability!", first);
 				return false;
 			}
 			if (virtualVesselSlotProvider.getVesselCharterForElement(second) != null) {
-				addMessage(messages, "%s: Sequence element %s has no vessel availability!", second);
+				addMessage(messages, "Sequence element %s has no vessel availability!", second);
 				return false;
 			}
 
@@ -145,7 +148,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		final ISequenceElement elementForVessel = virtualVesselSlotProvider.getElementForVesselCharter(vesselCharter);
 
 		final PortType elementForVesselType = portTypeProvider.getPortType(elementForVessel);
-		final String message = "%s: Sequence element %s has wrong event order!";
+		final String message = "Sequence element %s has wrong event order!";
 		if (elementForVesselType == PortType.Load) {
 			// DES Purchase
 			if (firstType == PortType.Start) {
@@ -205,13 +208,13 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 				return true;
 			}
 		}
-		addMessage(messages, "%s: Sequence element %s has failed the constraint check!", first);
+		addMessage(messages, "Sequence element %s has failed the constraint check!", first);
 		return false;
 	}
 
 	private void addMessage(final List<String> messages, final String pattern, final ISequenceElement sequenceElement) {
 		if (messages != null) {
-			messages.add(String.format(pattern, this.name, sequenceElement.getName()));
+			messages.add(String.format(pattern, internalNameMapper.generateString(sequenceElement)));
 		}
 	}
 }

@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.common.components.InternalElementNameMapper;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -34,6 +35,9 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 
 	@Inject
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
+
+	@Inject
+	private InternalElementNameMapper internalNameMapper;
 
 	public ResourceAllocationConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -100,15 +104,14 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		final boolean result = ((resources == null) || resources.contains(resource));
 		if (!result && messages != null)
-			messages.add(String.format("%s: Element (%s) is not permitted to be allocated to resource (%s)", this.name, element, resource));
+			messages.add(String.format("Element (%s) is not permitted to be allocated to resource (%s)", internalNameMapper.generateString(element), internalNameMapper.generateString(resource)));
 		return result;
 	}
 
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	private String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(first);
 		String resourcesName = resources != null ? resources.toString() : "no allowed resources for this sequence element";
-		return String.format("%s: for sequnce element [%s] resource [%s] first in [%s] second in [%s]", this.name, first.getName(), resource.getName(), resourcesName, 
+		return String.format("%s: for sequnce element [%s] resource [%s] first in [%s] second in [%s]", this.name,internalNameMapper.generateString( first),internalNameMapper.generateString( resource), resourcesName,
 				resourceAllocationConstraintDataComponentProvider.getAllowedResources(second));
 	}
 }

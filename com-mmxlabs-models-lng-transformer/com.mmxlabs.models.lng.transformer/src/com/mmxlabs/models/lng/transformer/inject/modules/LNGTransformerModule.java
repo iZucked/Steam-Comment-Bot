@@ -21,6 +21,7 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.anon.AnonNameLookup;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
@@ -32,10 +33,12 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.DefaultExposuresCustomiser;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -46,9 +49,13 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
+import com.mmxlabs.optimiser.common.components.InternalElementNameMapper;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
@@ -58,6 +65,12 @@ import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCa
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertibleFOBShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
@@ -80,6 +93,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
@@ -265,6 +280,8 @@ public class LNGTransformerModule extends AbstractModule {
 			bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 			bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 		}
+
+		bind(InternalElementNameMapper.class).to(InternalNameMapper.class).in(Singleton.class);
 	}
 
 	@Provides
@@ -291,7 +308,7 @@ public class LNGTransformerModule extends AbstractModule {
 			final @Named(ExtraDataProvider.EXTRA_DISCHARGE_SLOTS) List<DischargeSlot> extraDischargeSlots, //
 			final @Named(ExtraDataProvider.EXTRA_VESSEL_EVENTS) List<VesselEvent> extraVesselEvents, //
 			final @Named(ExtraDataProvider.EXTRA_VESSEL_CHARTERS) List<VesselCharter> extraVesselCharters, //
-		final @Named(ExtraDataProvider.EXTRA_DATES) List<ZonedDateTime> extraDates) {
+			final @Named(ExtraDataProvider.EXTRA_DATES) List<ZonedDateTime> extraDates) {
 		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario, extraLoadSlots, extraDischargeSlots, extraVesselEvents, extraVesselCharters, extraDates);
 	}
 
@@ -345,15 +362,16 @@ public class LNGTransformerModule extends AbstractModule {
 		return new CalendarMonthMapper() {
 
 			@Override
-			public int mapTimePoint(LocalDateTime ldt) {
-				
+			public int mapTimePoint(final LocalDateTime ldt) {
+
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
 				final ZonedDateTime mappedTime = ldt.atZone(ZoneId.of("Etc/UTC"));
-				
+
 				return Hours.between(dateTimeZero, mappedTime);
 			}
+
 			@Override
-			public int mapTimePoint(int point, UnaryOperator<LocalDateTime> mapFunction) {
+			public int mapTimePoint(final int point, final UnaryOperator<LocalDateTime> mapFunction) {
 
 				final ZonedDateTime dateTimeZero = map.getDateFromHours(0, "Etc/UTC");
 
@@ -390,6 +408,51 @@ public class LNGTransformerModule extends AbstractModule {
 				final int m = Months.between(startOfYear, plusMonths);
 
 				return m;
+			}
+		};
+	}
+
+	@Provides
+	@Singleton
+	private InternalNameMapper provideNameMapper(final ModelEntityMap map, final IPortSlotProvider portSlotProvider, IVesselProvider vesselProvider) {
+		return new InternalNameMapper() {
+			@Override
+			public String generateString(final ISequenceElement e) {
+
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(e);
+				return generateString(portSlot);
+			}
+
+			@Override
+			public String generateString(final IPortSlot portSlot) {
+				if (portSlot instanceof ILoadOption) {
+					final Slot<?> modelObject = map.getModelObject(portSlot, LoadSlot.class);
+					return AnonNameLookup.generateFor("load-slot", modelObject.getName());
+				} else if (portSlot instanceof IDischargeOption) {
+					final Slot<?> modelObject = map.getModelObject(portSlot, DischargeSlot.class);
+					return AnonNameLookup.generateFor("discharge-slot", modelObject.getName());
+				}
+
+				return portSlot.getId();
+			}
+
+			@Override
+			public String generateString(final IVessel vessel) {
+				final Vessel modelObject = map.getModelObject(vessel, Vessel.class);
+				return AnonNameLookup.generateFor("vessel", modelObject.getName());
+			}
+
+			@Override
+			public String generateString(final IResource resource) {
+				IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
+				if (vesselCharter.getVesselInstanceType() == VesselInstanceType.FLEET //
+						|| vesselCharter.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER //
+						|| vesselCharter.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
+						|| vesselCharter.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP //
+				) {
+					return generateString(vesselCharter.getVessel());
+				}
+				return resource.getName();
 			}
 		};
 	}

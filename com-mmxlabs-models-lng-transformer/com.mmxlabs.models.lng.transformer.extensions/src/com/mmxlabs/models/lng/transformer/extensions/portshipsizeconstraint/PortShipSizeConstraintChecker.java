@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IResourceElementConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -32,7 +33,7 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 	 * The name of this constraint checker.
 	 */
 	private final String name;
-	
+
 	@Inject
 	private IPortShipSizeProvider portShipSizeProvider;
 
@@ -41,7 +42,10 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
+
 	public PortShipSizeConstraintChecker(final String name) {
 		this.name = name;
 	}
@@ -54,7 +58,7 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 	@Override
 	public boolean checkConstraints(final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Collection<@NonNull IResource> loopResources;
-		
+
 		if (changedResources == null) {
 			loopResources = sequences.getResources();
 		} else {
@@ -63,10 +67,11 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 
 		for (final IResource resource : loopResources) {
 			IVessel vessel = getVessel(resource);
-			
-			//IS it a FOB or DES resource.
-			if (vessel == null) continue;
-			
+
+			// IS it a FOB or DES resource.
+			if (vessel == null)
+				continue;
+
 			final ISequence sequence = sequences.getSequence(resource);
 			for (final ISequenceElement current : sequence) {
 				if (!checkVesselElementConstraint(vessel, current, messages)) {
@@ -80,6 +85,7 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 
 	/**
 	 * Get the vessel associated with a particular resource, if there is one.
+	 * 
 	 * @param resource
 	 * @return a vessel, or null, if it is a DES_PURCHASE or FOB_SALE with a dummy vessel.
 	 */
@@ -88,40 +94,36 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (vessel == null) {
 			final IVesselCharter vesselCharter = vesselProvider.getVesselCharter(resource);
-			if (vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE && 
-				vesselCharter.getVesselInstanceType() != VesselInstanceType.FOB_SALE) { 
+			if (vesselCharter.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE && vesselCharter.getVesselInstanceType() != VesselInstanceType.FOB_SALE) {
 				vessel = vesselCharter.getVessel();
 			}
 		}
 		return vessel;
 	}
-	
+
 	private boolean checkResourceElementConstraint(@NonNull final IResource resource, @NonNull final ISequenceElement sequenceElement, List<String> messages) {
 		final IVessel vessel = getVessel(resource);
 		if (vessel != null) {
 			return checkVesselElementConstraint(vessel, sequenceElement, messages);
-		}
-		else {
-			//If it a FOB or DES sequence, return true.
+		} else {
+			// If it a FOB or DES sequence, return true.
 			return true;
 		}
 	}
-	
+
 	private boolean checkVesselElementConstraint(@NonNull final IVessel vessel, @NonNull final ISequenceElement sequenceElement, List<String> messages) {
 		final boolean result = this.portShipSizeProvider.isCompatible(vessel, sequenceElement);
-		if (!result && messages != null)
-			messages.add(String.format("%s: Sequence element %s port cannot accept vessel %s due to size restriction!", this.name, sequenceElement.getName(), vessel.getName()));
+		if (!result && messages != null) {
+			messages.add(String.format("Sequence element %s port cannot accept vessel %s due to size restriction!",
+					internalNameMapper.generateString(sequenceElement),
+					internalNameMapper.generateString(vessel)));
+		}
 		return result;
 	}
 
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource, List<String> messages) {
 		return checkResourceElementConstraint(resource, first, messages) && checkResourceElementConstraint(resource, second, messages);
-	}
-
-	@Override
-	public @Nullable String explain(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource) {
-		return null;
 	}
 
 	@Override

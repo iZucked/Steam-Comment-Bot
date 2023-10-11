@@ -10,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,39 +95,21 @@ public class LegalSequencingChecker {
 			messages = null;
 		}
 		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
-			if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+			if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty()) {
 				messages.stream().forEach(LOG::debug);
+			}
 			return false;
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
-				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty()) {
 					messages.stream().forEach(LOG::debug);
+				}
 				return false;
 			}
 		}
 
 		return true;
-	}
-
-	public List<String> getSequencingProblems(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
-		final List<String> result = new ArrayList<>();
-		final List<@NonNull String> messages;
-		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
-			messages = new ArrayList<>();
-			messages.add(String.format("%s: getSequencingProblems", this.getClass().getName()));
-		} else {
-			messages = null;
-		}
-		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
-			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
-				result.add(pairwiseChecker.getName() + " says " + pairwiseChecker.explain(e1, e2, resource));
-			}
-		}
-		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
-			messages.stream().forEach(LOG::debug);
-
-		return result;
 	}
 
 	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2) {

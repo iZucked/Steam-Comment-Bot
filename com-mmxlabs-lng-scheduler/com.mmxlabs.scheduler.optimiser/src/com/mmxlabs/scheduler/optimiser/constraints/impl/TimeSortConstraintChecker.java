@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -52,6 +53,9 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
+
+	@Inject
+	private InternalNameMapper internalNameMapper;
 
 	public TimeSortConstraintChecker(final String name) {
 		this.name = name;
@@ -99,7 +103,9 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 		ITimeWindow lastTimeWindow = null;
 		PortType lastType = null;
+		IPortSlot lastSlot = null;
 
+		boolean valid = true;
 		for (final ISequenceElement t : sequence) {
 			final PortType currentType = portTypeProvider.getPortType(t);
 
@@ -117,19 +123,23 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 				if (lastTimeWindow != null && tw != null) {
 					if (tw.getExclusiveEnd() <= lastTimeWindow.getInclusiveStart()) {
-						if (messages != null) {
-							messages.add(this.name + ": Current time window is before previous time window");
+						valid = false;
+						if (messages != null && lastSlot != null) {
+							messages.add(String.format("Events are out of order '%s' is before the window for '%s'", internalNameMapper.generateString(currentSlot),
+									internalNameMapper.generateString(lastSlot)));
+						} else {
+							return false;
 						}
-						return false;
 					}
 				}
 			}
 			lastTimeWindow = tw;
 			lastType = currentType;
+			lastSlot = currentSlot;
 
 		}
 
-		return true;
+		return valid;
 	}
 
 	@Override
@@ -171,15 +181,14 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		return true;
 	}
 
-	@Override
-	public @Nullable String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	private @Nullable String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
 			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
-				return this.name + ": Current time window is before previous time window";
+				return String.format("Events are out of order '%s' is before the window for '%s'", internalNameMapper.generateString(secondSlot), internalNameMapper.generateString(firstSlot));
 			}
 		}
 

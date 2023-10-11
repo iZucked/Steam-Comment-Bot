@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.optimiser.common.components.InternalElementNameMapper;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -42,6 +43,9 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	@Nullable
 	private ISequences initialSequences;
 
+	@Inject
+	private InternalElementNameMapper internalNameMapper;
+	
 	public LockedUnusedElementsConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -96,7 +100,7 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	private boolean checkElementUnusedInitially(final ISequenceElement element, final List<String> messages) {
 		final boolean result = getInitialSequences().getUnusedElements().contains(element);
 		if (!result && messages != null) {
-			messages.add(String.format("%s: Element %s is not in the list of unused elements in the Initial Sequence!", this.name, element.getName()));
+			messages.add(String.format("Element %s is not in the list of unused elements in the Initial Sequence!", internalNameMapper.generateString(element)));
 		}
 		return getInitialSequences().getUnusedElements().contains(element);
 	}

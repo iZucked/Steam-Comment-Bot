@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -74,6 +75,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
+	@Inject
+	private InternalNameMapper internalNameMapper;
+
 	public TravelTimeConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -122,7 +126,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		}
 		return true;
 	}
- 
+
 	@Override
 	/**
 	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances, if using the given resource to service them
@@ -139,7 +143,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		return checkPairwiseConstraint(first, second, resource, vesselCharter.getVessel().getMaxSpeed(), messages);
 	}
 
-	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed, final List<String> messages) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed,
+			final List<String> messages) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -221,8 +226,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselCharter.getVessel(), slot1.getPort(), slot2.getPort(), resourceMaxSpeed,
 				AvailableRouteChoices.OPTIMAL);
 		if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
-			if (messages != null)
+			if (messages != null) {
 				messages.add(explain(first, second, resource));
+			}
 			return false;
 		}
 
@@ -232,14 +238,13 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final int latestAllowableTime = (tw2.getExclusiveEnd() == Integer.MAX_VALUE) ? Integer.MAX_VALUE : tw2.getExclusiveEnd() - 1 + maxLateness;
 
 		boolean result = earliestArrivalTime <= latestAllowableTime;
-		if (!result)
-			if (messages != null)
-				messages.add(String.format("%s: Earliest arrival time %d is less or equal than latest allowed time %d!", this.name, earliestArrivalTime, latestAllowableTime));
+		if (!result && messages != null) {
+			messages.add(String.format("Earliest arrival time %d is less or equal than latest allowed time %d!", earliestArrivalTime, latestAllowableTime));
+		}
 		return result;
 	}
 
-	@Override
-	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
+	private String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
@@ -251,10 +256,10 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), vesselProvider.getVesselCharter(resource).getVessel());
 
 		if (distance == Integer.MAX_VALUE) {
-			return String.format("%s: No edge connecting ports!", this.name);
+			return String.format("No distance between ports %s -> %s", internalNameMapper.generateString(slot1.getPort()), internalNameMapper.generateString(slot2.getPort()));
 		}
-		return String.format("%s: Excessive lateness : distance from %s to %s equals to %d, but start of first tw is %d and end of second tw is %d!",
-				this.name, slot1.getPort().getName(), slot2.getPort().getName(), distance, tw1.getInclusiveStart(), tw2.getExclusiveEnd());
+		return String.format("Excessive lateness : distance from %s to %s equals to %d, but start of first tw is %d and end of second tw is %d!", internalNameMapper.generateString(slot1.getPort()),
+				internalNameMapper.generateString(slot2.getPort()), distance, tw1.getInclusiveStart(), tw2.getExclusiveEnd());
 	}
 
 	public int getMaxLateness() {

@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
@@ -48,6 +49,9 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	@Inject
 	private INominatedVesselProvider nominatedVesselProvider;
 
+	@Inject
+	private InternalNameMapper internalNameMapper;
+
 	private final @NonNull String name;
 
 	public PortExclusionConstraintChecker(@NonNull final String name) {
@@ -77,13 +81,14 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		if (excludedPorts.isEmpty()) {
 			return true;
 		}
-		boolean valid = true;
+		final boolean valid = true;
 		for (int j = 0; j < sequence.size(); j++) {
-			IPort portForElement = portProvider.getPortForElement(sequence.get(j));
+			final IPort portForElement = portProvider.getPortForElement(sequence.get(j));
 			if (excludedPorts.contains(portForElement)) {
-				if (messages != null)
-					messages.add(this.name + ": Vessel " + vesselProvider.getVesselCharter(resource).getVessel().getName() + " is excluded from port "
-						+ (portForElement == null ? "(unknown port)" : portForElement.getName()));
+				if (messages != null) {
+					messages.add("Vessel " + internalNameMapper.generateString(vesselProvider.getVesselCharter(resource).getVessel()) + " is excluded from port "
+							+ (portForElement == null ? "(unknown port)" : internalNameMapper.generateString(portForElement)));
+				}
 				return false;
 			}
 		}
@@ -101,7 +106,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		} else {
 			loopResources = changedResources;
 		}
-		boolean valid = true;
+		final boolean valid = true;
 		for (final IResource resource : loopResources) {
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource, messages)) {
@@ -111,7 +116,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 		return valid;
 	}
- 
+
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		if (portExclusionProvider.hasNoExclusions()) {
@@ -147,7 +152,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	 */
 	@NonNull
 	private Set<IPort> getExclusionsForVessel(@NonNull final IVessel vessel) {
-		Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel);
+		final Set<IPort> exclusions = portExclusionProvider.getExcludedPorts(vessel);
 		assert exclusions != null;
 		return exclusions;
 	}
