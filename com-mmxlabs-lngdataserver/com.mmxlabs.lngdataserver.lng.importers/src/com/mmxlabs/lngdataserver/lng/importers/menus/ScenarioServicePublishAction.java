@@ -233,7 +233,7 @@ public class ScenarioServicePublishAction {
 				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
 
 				// Evaluate scenario
-				final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, false, false, null);
+				final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioDataProvider, true, false, false, null);
 				assert optimisationPlan != null;
 
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
@@ -281,7 +281,8 @@ public class ScenarioServicePublishAction {
 
 			final List<DataOptions> dataTypesToUpload = new LinkedList<>();
 			dataTypesToUpload.add(DataOptions.PricingData);
-
+			dataTypesToUpload.add(DataOptions.PaperData);
+			
 			if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 				dataTypesToUpload.add(DataOptions.PortData);
 			}
@@ -303,9 +304,10 @@ public class ScenarioServicePublishAction {
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
 				final String pricingVersion = ScenarioModelUtil.getPricingModel(scenarioDataProvider).getMarketCurvesVersionRecord().getVersion();
+				final String paperVersion = ScenarioModelUtil.getCargoModel(scenarioDataProvider).getPaperDealsVersionRecord().getVersion();
 
 				response = BaseCaseServiceClient.INSTANCE.uploadBaseCase(tmpScenarioFile, scenarioInstance.getName(), notes, //
-						pricingVersion, //
+						pricingVersion, paperVersion, //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final BasecaseServiceLockedException e) {
 				throw new PublishBasecaseException("Error uploading scenario.", Type.FAILED_SERVICE_LOCKED, e);

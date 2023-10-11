@@ -74,9 +74,9 @@ public class OptioniserTask {
 
 				final Pair<String, UserSettings> p;
 				if (useDialogs) {
-					p = RunnerHelper.syncExecFunc(display -> OptimisationHelper.getOptimiserSettings(sdp.getTypedScenario(LNGScenarioModel.class), useDialogs, useDialogs, np));
+					p = RunnerHelper.syncExecFunc(display -> OptimisationHelper.getOptimiserSettings(sdp, useDialogs, useDialogs, np));
 				} else {
-					p = OptimisationHelper.getOptimiserSettings(sdp.getTypedScenario(LNGScenarioModel.class), useDialogs, useDialogs, np);
+					p = OptimisationHelper.getOptimiserSettings(sdp, useDialogs, useDialogs, np);
 				}
 
 				if (p == null) {

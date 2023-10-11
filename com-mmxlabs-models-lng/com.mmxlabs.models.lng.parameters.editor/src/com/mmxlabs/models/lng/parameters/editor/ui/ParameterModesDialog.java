@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.parameters.editor.ui;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,12 +41,17 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.validation.model.Category;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseListener;
@@ -67,7 +73,16 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IValidationService;
+import com.mmxlabs.models.ui.validation.gui.GroupedValidationStatusContentProvider;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusComparator;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusLabelProvider;
+import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
  * A Dialog to present options for running an optimisation or evaluation that
@@ -81,11 +96,11 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	private static final String SWTBOT_KEY = "org.eclipse.swtbot.widget.key";
 
 	public enum DataType {
-		Boolean, PositiveInt, Date, MonthYear, Choice, Label, Button
+		Boolean, PositiveInt, Date, MonthYear, Choice, Label, Button, Tree
 	}
 
 	public enum DataSection {
-		General, Controls, Toggles, Advanced
+		General, Controls, Toggles, Advanced, Validation
 	}
 
 	public static class ChoiceData {
@@ -117,6 +132,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final String label;
 		final String swtBotId;
 		final EditingDomain editingDomain;
+		final IScenarioDataProvider scenarioProvider;
 		final String tooltip;
 		Control control;
 		MouseListener listener;
@@ -135,7 +151,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		public final List<Consumer<IObservableValue<?>>> validatorCallbacks = new LinkedList<>();
 
 		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final String tooltip, final EObject data,
-				final EObject defaultData, final DataType dataType, final ChoiceData choiceData, String swtBotId, final EStructuralFeature... features) {
+				final EObject defaultData, final DataType dataType, final ChoiceData choiceData, String swtBotId, IScenarioDataProvider scenarioProvider, final EStructuralFeature... features) {
 			this.dataSection = dataSection;
 			this.group = group;
 			this.data = data;
@@ -146,6 +162,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			this.features = features;
 			this.editingDomain = editingDomain;
 			this.label = label;
+			this.scenarioProvider = scenarioProvider;
 			this.tooltip = tooltip;
 		}
 	}
@@ -278,7 +295,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			createOptionSetControls(form.getBody(), groupMap, options);
 		}
 
-		if (optionsMap.containsKey(DataSection.Controls) || optionsMap.containsKey(DataSection.Toggles)) {
+		if (optionsMap.containsKey(DataSection.Controls) || optionsMap.containsKey(DataSection.Toggles) || optionsMap.containsKey(DataSection.Validation)) {
 			final Composite middle = toolkit.createComposite(form.getBody());
 			middle.setLayout(new GridLayout(2, false));
 			// Create Controls
@@ -301,6 +318,19 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					toolkit.adapt(group);
 					group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
 					// group.setText("Toggles");
+					group.setLayout(new GridLayout(1, true));
+					createOptionSetControls(group, groupMap, options);
+				}
+			}
+			
+			// Create validation output
+			{
+				final List<Option> options = optionsMap.get(DataSection.Validation);
+				if (options != null) {
+					final Group group = new Group(middle, SWT.NONE);
+					toolkit.adapt(group);
+					group.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).span(2,1).create());
+					group.setText("Validation");
 					group.setLayout(new GridLayout(1, true));
 					createOptionSetControls(group, groupMap, options);
 				}
@@ -333,6 +363,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 			advanced.setClient(area);
 		}
+		
+		
+		
+		
 		hookAggregatedValidationStatusWithResize();
 	}
 
@@ -398,6 +432,11 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			option.control = button;
 			parent.setLayout(GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).create());
 
+			break;
+		case Tree:
+			IStatus status = getStatus(option.scenarioProvider, null, true, true, Collections.emptySet());
+			option.control = createTreeViewer(parent, option, status);
+	
 			break;
 		default:
 			break;
@@ -750,6 +789,77 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		return area;
 
 	}
+	
+	protected IStatus getStatus(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, final boolean optimising, final boolean relaxedValidation, Set<String> extraCategories) {
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		validator.addConstraintFilter((constraint, target) -> {
+			for (final Category cat : constraint.getCategories()) {
+				if (cat.getId().endsWith(".base")) {
+					return true;
+				} else if (optimising && cat.getId().endsWith(".optimisation")) {
+					return true;
+				} else if (!optimising && cat.getId().endsWith(".evaluation")) {
+					return true;
+				}
+				// Any extra validation category suffixes to include e.g. for sandbox
+				for (String catSuffix : extraCategories) {
+					if (cat.getId().endsWith(catSuffix)) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		});
+		
+		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
+		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
+			return helper.runValidation(validator, extraContext, rootObject, extraTarget);
+		});
+		
+		return status;
+		
+	}
+	
+	private Composite createTreeViewer(final Composite parent, final Option option, IStatus status) {
+		Composite area = toolkit.createComposite(parent, SWT.NONE);
+		
+		area.setLayout(new GridLayout(1, false));
+		area.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).create());
+		
+		final TreeViewer viewer = new TreeViewer(area, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
+
+		// Change status message if OK and num == 1
+		int count = UserSettingsHelper.countStatusMessages(status) + UserSettingsHelper.countStatusSeverities(status).size();
+		if(status.getSeverity() == IStatus.OK && count == 1){
+			status = new Status(status.getSeverity(), status.getPlugin(), "No errors or warnings found.");
+		}
+		
+		
+		{
+			final GridData gdViewer = new GridData(SWT.FILL, SWT.FILL, true, true);
+			// Make text scrolling 
+			// Make height variable to number of status messages
+			gdViewer.heightHint = (int) Math.min(200, 16.6666 * count);
+			gdViewer.widthHint = 450; 
+			viewer.getControl().setLayoutData(gdViewer);
+		}
+
+		viewer.getTree().setLinesVisible(true);
+
+		viewer.setContentProvider(new GroupedValidationStatusContentProvider());
+		viewer.setLabelProvider(new ValidationStatusLabelProvider());
+		viewer.setComparator(new ValidationStatusComparator());
+		
+		viewer.setInput(status);
+		viewer.expandAll();
+		
+		return area;
+	}
+	
 
 	public OptionGroup createGroup(final DataSection dataSection, final String name) {
 		final OptionGroup group = new OptionGroup();
@@ -771,8 +881,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param features
 	 */
 	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final String tooltip, final EObject data,
-			final EObject defaultData, final DataType dataType, String swtBotIdPrefix, final EStructuralFeature... features) {
-		return addOption(dataSection, group, editingDomian, label, tooltip, data, defaultData, dataType, null, swtBotIdPrefix, features);
+			final EObject defaultData, final DataType dataType, String swtBotIdPrefix, final IScenarioDataProvider scenarioProvider, final EStructuralFeature... features) {
+		return addOption(dataSection, group, editingDomian, label, tooltip, data, defaultData, dataType, null, swtBotIdPrefix, scenarioProvider, features);
 	}
 
 	/**
@@ -788,7 +898,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param features
 	 */
 	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final String tooltip, final EObject data,
-			final EObject defaultData, final DataType dataType, final ChoiceData choiceData, String swtBotIdPrefix, final EStructuralFeature... features) {
+			final EObject defaultData, final DataType dataType, final ChoiceData choiceData, String swtBotIdPrefix, final IScenarioDataProvider scenarioDataProvider, final EStructuralFeature... features) {
 
 		if (group != null) {
 			if (dataSection != group.dataSection) {
@@ -796,7 +906,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 		}
 
-		final Option option = new Option(dataSection, group, editingDomian, label, tooltip, data, defaultData, dataType, choiceData, swtBotIdPrefix, features);
+		final Option option = new Option(dataSection, group, editingDomian, label, tooltip, data, defaultData, dataType, choiceData, swtBotIdPrefix, scenarioDataProvider, features);
 		final List<Option> options;
 		if (optionsMap.containsKey(dataSection)) {
 			options = optionsMap.get(dataSection);

@@ -58,13 +58,16 @@ public class BaseCaseServiceClient {
 
 	public String uploadBaseCase(final File file, //
 			final String scenarioName, ///
-			final @Nullable String notes, final String pricingVersion, final IProgressListener progressListener) throws IOException {
+			final @Nullable String notes,
+			final String pricingVersion, final String paperVersion,
+			final IProgressListener progressListener) throws IOException {
 
 		return DataHubServiceProvider.getInstance().doPostRequest(BASECASE_UPLOAD_URL, request -> {
 
 			final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 			formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 			formDataBuilder.addTextBody("pricingVersionUUID", pricingVersion);
+			formDataBuilder.addTextBody("paperVersionUUID", paperVersion);
 			formDataBuilder.addTextBody("portsVersionUUID", "");
 			formDataBuilder.addTextBody("vesselsVersionUUID", "");
 			formDataBuilder.addTextBody("distancesVersionUUID", "");

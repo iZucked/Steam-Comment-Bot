@@ -57,8 +57,9 @@ import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefiniti
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupsVersion;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
 import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVersion;
-import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
+import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
+import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSelectionPage.DataOptionGroup;
@@ -68,6 +69,8 @@ import com.mmxlabs.lngdataserver.lng.io.distances.DistancesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.distances.DistancesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesToScenarioImporter;
+import com.mmxlabs.lngdataserver.lng.io.paper.PaperFromScenarioCopier;
+import com.mmxlabs.lngdataserver.lng.io.paper.PaperToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsFromScenarioCopier;
@@ -152,7 +155,8 @@ public final class SharedScenarioDataUtils {
 		PricingData("Price Curves"), //
 		// SettledPriceData("Settled Price Curves"), //
 		ADPData("ADP"), //
-		CargoData("Cargoes") //
+		CargoData("Cargoes"), //
+		PaperData("Paper Deals")
 		;
 
 		private DataOptions(final String name) {
@@ -190,6 +194,7 @@ public final class SharedScenarioDataUtils {
 					final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);
 					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(sdp);
 					final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(sdp);
+					final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 
 					for (final DataOptions option : dataOptions) {
 						switch (option) {
@@ -216,6 +221,9 @@ public final class SharedScenarioDataUtils {
 							break;
 						case CargoData:
 							dataToUpdater.put(DataOptions.CargoData, createCargoUpdater(sdp));
+							break;
+						case PaperData:
+							dataToUpdater.put(DataOptions.PaperData, createPaperUpdater(cargoModel));
 							break;
 						default:
 							break;
@@ -1062,6 +1070,31 @@ public final class SharedScenarioDataUtils {
 				});
 			};
 		}
+		
+		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPaperUpdater(final CargoModel cargoModel) throws JsonProcessingException {
+			final PaperVersion paperVersion = PaperFromScenarioCopier.generateVersion(cargoModel);
+
+			return (cmd, target) -> {
+				cmd.append(new CompoundCommand() {
+
+					@Override
+					protected boolean prepare() {
+						super.prepare();
+						return true;
+					}
+
+					@Override
+					public void execute() {
+						super.execute();
+						final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(target);
+						final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(target);
+						final EditingDomain editingDomain = target.getEditingDomain();
+						final Command command = PaperToScenarioCopier.getUpdateCommand(editingDomain, cargoModel, commercialModel, paperVersion);
+						appendAndExecute(command);
+					}
+				});
+			};
+		}
 
 		public static BiConsumer<CompoundCommand, IScenarioDataProvider> createPortAndDistanceUpdater(final PortModel portModel) {
 			final DistancesVersion distancesVersion = DistancesFromScenarioCopier.generateVersion(portModel);
@@ -1370,6 +1403,11 @@ public final class SharedScenarioDataUtils {
 
 		return marketOk && settledOK;
 	}
+	
+	public static boolean checkPaperDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
+		final boolean paperOk = checkMatch(LNGScenarioSharedModelTypes.PAPER_DEALS.getID(), provider, targetVersions);
+		return paperOk;
+	}
 
 	public static boolean checkFleetDataMatch(final IBaseCaseVersionsProvider provider, final Map<String, String> targetVersions) {
 
@@ -1403,6 +1441,7 @@ public final class SharedScenarioDataUtils {
 	public static List<DataOptionGroup> createGroups(final IBaseCaseVersionsProvider p, final Map<String, String> scenarioDataVersions) {
 		final List<DataOptionGroup> groups = new LinkedList<>();
 		groups.add(new DataOptionGroup("Pricing", !SharedScenarioDataUtils.checkPricingDataMatch(p, scenarioDataVersions), true, true, DataOptions.PricingData));
+		groups.add(new DataOptionGroup("Paper", !SharedScenarioDataUtils.checkPaperDataMatch(p, scenarioDataVersions), true, true, DataOptions.PaperData));
 		if (LicenseFeatures.isPermitted("features:hub-sync-distances")) {
 			groups.add(new DataOptionGroup("Ports && Distances", !checkPortAndDistanceDataMatch(p, scenarioDataVersions), true, false, DataOptions.PortData));
 		}

@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
@@ -35,6 +36,7 @@ public final class LNGScenarioSharedModelTypes {
 	public static final ISharedDataModelType<PortModel> PORT_GROUPS = ISharedDataModelType.make("lingo-port-groups", null);
 
 	public static final ISharedDataModelType<PricingModel> MARKET_CURVES = ISharedDataModelType.make("lingo-market-curves", makeMarketCurvesProvider());
+	public static final ISharedDataModelType<PaperDeal> PAPER_DEALS = ISharedDataModelType.make("lingo-paper-deals", null);
 
 	public static final ISharedDataModelType<LNGScenarioModel> GENERATED_NOMINATIONS = ISharedDataModelType.make("lingo-generated-nominations", makeGeneratedNominationsProvider());
 

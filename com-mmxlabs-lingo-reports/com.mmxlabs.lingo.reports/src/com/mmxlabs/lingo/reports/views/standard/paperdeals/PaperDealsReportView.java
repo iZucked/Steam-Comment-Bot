@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.standard.paperdeals;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,10 +34,16 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
+import com.mmxlabs.lingo.reports.components.ColumnManager;
+import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
+import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
@@ -61,7 +68,7 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 /**
  */
 
-public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
+public class PaperDealsReportView extends SimpleTabularReportView<PaperDeal> implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	private ScenarioComparisonService selectedScenariosService;
 	private boolean expand = true;
@@ -145,7 +152,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 			}
 		});
 
-		paperDealViewer.setContentProvider(new PaperDealTreeContentProvider());
+		//paperDealViewer.setContentProvider(new PaperDealTreeContentProvider());
 
 		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
@@ -161,7 +168,8 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 
 	}
 
-	private void makeActions() {
+	@Override
+	protected void makeActions() {
 
 		final Action expandCollapseAll = createExpandButton();
 		getViewSite().getActionBars().getToolBarManager().add(expandCollapseAll);
@@ -274,6 +282,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	private ISelection selection;
 
 	public PaperDealsReportView() {
+		super("com.mmxlabs.lingo.doc.Reports_PaperDeals");
 		this.selectedScenariosServiceListener = new PaperDealSelectedScenariosServiceListener();
 	}
 
@@ -303,6 +312,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		ViewerHelper.setFocus(paperDealViewer);
 	}
 
+	@Override
 	protected void refresh() {
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
@@ -431,63 +441,87 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		}
 	}
 
-	private final class PaperDealTreeContentProvider implements ITreeContentProvider {
+	@Override
+	protected SimpleTabularReportContentProvider createContentProvider() {
+		return new SimpleTabularReportContentProvider() {
+			@Override
+			public boolean hasChildren(final Object element) {
+				if (element instanceof PaperDealAllocation) {
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public Object getParent(final Object element) {
+				if (element instanceof PaperDealAllocationEntry) {
+					return ((PaperDealAllocationEntry) element).eContainer();
+				}
+				return null;
+			}
+
+			@Override
+			public Object[] getElements(final Object inputElement) {
+				if (inputElement instanceof Object[]) {
+					return (Object[]) inputElement;
+				}
+				if (inputElement instanceof Collection<?>) {
+					final Collection<?> collection = (Collection<?>) inputElement;
+					return collection.toArray();
+				}
+				if (inputElement instanceof PaperDealAllocation) {
+					final PaperDealAllocation pda = (PaperDealAllocation) inputElement;
+					return pda.getEntries().toArray();
+				}
+				return new Object[0];
+			}
+
+			@Override
+			public Object[] getChildren(final Object parentElement) {
+				if (parentElement instanceof Object[]) {
+					return (Object[]) parentElement;
+				}
+				if (parentElement instanceof Collection<?>) {
+					final Collection<?> collection = (Collection<?>) parentElement;
+					return collection.toArray();
+				}
+				if (parentElement instanceof PaperDealAllocation) {
+					final PaperDealAllocation pda = (PaperDealAllocation) parentElement;
+					return pda.getEntries().toArray();
+				}
+				return new Object[0];
+			}
+		};
+	}
+
+	protected class PaperDealData implements AbstractSimpleTabularReportTransformer<PaperDeal>{
+
 		@Override
-		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		public @NonNull List<@NonNull ColumnManager<PaperDeal>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider) {
+			// TODO Auto-generated method stub
+			final List<ColumnManager<PaperDeal>> result = new ArrayList<>();
+			if (selectedDataProvider.getAllScenarioResults().isEmpty()) {
+				return result;
+			}
+
+			
+			
+			return result;
 		}
 
 		@Override
-		public void dispose() {
+		public @NonNull List<PaperDeal> createData(@Nullable Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
+				@NonNull List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
+			// TODO Auto-generated method stub
+			return new ArrayList<>();
 		}
-
-		@Override
-		public boolean hasChildren(final Object element) {
-
-			if (element instanceof PaperDealAllocation) {
-				return true;
-			}
-			return false;
-		}
-
-		@Override
-		public Object getParent(final Object element) {
-			if (element instanceof PaperDealAllocationEntry) {
-				return ((PaperDealAllocationEntry) element).eContainer();
-			}
-			return null;
-		}
-
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof Object[]) {
-				return (Object[]) inputElement;
-			}
-			if (inputElement instanceof Collection<?>) {
-				final Collection<?> collection = (Collection<?>) inputElement;
-				return collection.toArray();
-			}
-			if (inputElement instanceof PaperDealAllocation) {
-				final PaperDealAllocation pda = (PaperDealAllocation) inputElement;
-				return pda.getEntries().toArray();
-			}
-			return new Object[0];
-		}
-
-		@Override
-		public Object[] getChildren(final Object parentElement) {
-			if (parentElement instanceof Object[]) {
-				return (Object[]) parentElement;
-			}
-			if (parentElement instanceof Collection<?>) {
-				final Collection<?> collection = (Collection<?>) parentElement;
-				return collection.toArray();
-			}
-			if (parentElement instanceof PaperDealAllocation) {
-				final PaperDealAllocation pda = (PaperDealAllocation) parentElement;
-				return pda.getEntries().toArray();
-			}
-			return new Object[0];
-		}
+		
+	}
+	
+	@Override
+	protected AbstractSimpleTabularReportTransformer<PaperDeal> createTransformer() {
+		// TODO Auto-generated method stub
+		return new PaperDealData();
 	}
 
 }

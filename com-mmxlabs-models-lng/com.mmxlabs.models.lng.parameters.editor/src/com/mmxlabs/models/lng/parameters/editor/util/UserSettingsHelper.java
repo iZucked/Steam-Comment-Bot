@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -23,9 +25,12 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -52,6 +57,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public final class UserSettingsHelper {
 
@@ -144,7 +150,7 @@ public final class UserSettingsHelper {
 
 	public static final String SWTBOT_IDLE_DAYS = "swtbot.idledays";
 
-	public static UserSettings promptForUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+	public static UserSettings promptForUserSettings(final IScenarioDataProvider sdp, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
 			final NameProvider nameProvider, UserSettings previousSettings) {
 
 		final UserSettings userSettings = createDefaultUserSettings();
@@ -155,7 +161,7 @@ public final class UserSettingsHelper {
 		// Permit the user to override the settings object. Use the previous settings as
 		// the initial value
 		if (promptUser) {
-			previousSettings = openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, false);
+			previousSettings = openUserDialog(sdp, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, false, true);
 		}
 
 		if (previousSettings == null) {
@@ -172,15 +178,16 @@ public final class UserSettingsHelper {
 		return userSettings;
 	}
 
-	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
-			final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP) {
-		return openUserDialog(scenario, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
-				displayOnlyIfOptionsEnabled, nameProvider, forADP);
+	public static UserSettings openUserDialog(final IScenarioDataProvider sdp, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
+			final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP, final boolean displayValidation) {
+		return openUserDialog(sdp, PlatformUI.getWorkbench().getDisplay(), PlatformUI.getWorkbench().getDisplay().getActiveShell(), forEvaluation, previousSettings, defaultSettings,
+				displayOnlyIfOptionsEnabled, nameProvider, forADP, displayValidation);
 	}
 
-	public static UserSettings openUserDialog(final LNGScenarioModel scenario, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
-			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP) {
+	public static UserSettings openUserDialog(final IScenarioDataProvider sdp, final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings,
+			final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled, final NameProvider nameProvider, final boolean forADP, final boolean displayValidation) {
 
+		final LNGScenarioModel scenario = sdp.getTypedScenario(LNGScenarioModel.class);
 		final boolean[] optionsAdded = new boolean[2];
 
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
@@ -197,6 +204,18 @@ public final class UserSettingsHelper {
 				super.configureShell(newShell);
 				newShell.setText(forEvaluation ? "Evaluation Settings" : "Optimisation Settings");
 			}
+			
+			@Override
+		    protected void createButtonsForButtonBar(Composite parent) {
+		        super.createButtonsForButtonBar(parent);
+
+		        // Access the OK button and set it to disabled if the condition is met
+		        final Button okButton = getButton(IDialogConstants.OK_ID);
+		        if (okButton != null) {
+		        	final IStatus status = this.getStatus(sdp, null, true, true, Collections.emptySet());
+		            okButton.setEnabled(!UserSettingsHelper.statusHasErrors(status));
+		        }
+		    }
 		};
 
 		final UserSettings copy = EMFCopier.copy(previousSettings);
@@ -239,6 +258,11 @@ public final class UserSettingsHelper {
 				createSpotCargoMarketsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 				createCharterOutGenerationOption(scenario, defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			}
+			
+			// Validation output
+			if (displayValidation){
+				createValidationOutput(sdp, defaultSettings, editingDomain, dialog, copy, optionsAdded);
+			}
 		}
 		if (!forEvaluation) {
 			createIdleDaysOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
@@ -261,6 +285,10 @@ public final class UserSettingsHelper {
 		if (nameProvider != null) {
 			nameProvider.nameSuggestion = dialog.getNameSuggestion();
 		}
+		
+		// Stop validation errors dialog from showing up
+		System.setProperty("lingo.suppress.validation.dialog", "true");
+		
 		return copy;
 	}
 
@@ -384,6 +412,7 @@ public final class UserSettingsHelper {
 
 	public static UserSettings promptForSandboxUserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
 			final NameProvider nameProvider) {
+		
 		UserSettings previousSettings = null;
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
@@ -618,7 +647,7 @@ public final class UserSettingsHelper {
 			choiceData.enabledHook = (u -> (u.getMode() == OptimisationMode.ADP && u.isCleanSlateOptimisation() || u.getMode() == OptimisationMode.STRATEGIC));
 		}
 		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Nominal Only: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_NOMINAL_ADP_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_NominalOnly());
+				null, ParametersPackage.eINSTANCE.getUserSettings_NominalOnly());
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
 
@@ -660,7 +689,7 @@ public final class UserSettingsHelper {
 				copy.setDualMode(false);
 			}
 			dialog.addOption(DataSection.Toggles, null, editingDomain, "Dual mode: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_DUAL_MODE_PREFIX,
-					ParametersPackage.eINSTANCE.getUserSettings_DualMode());
+					null, ParametersPackage.eINSTANCE.getUserSettings_DualMode());
 
 			optionsAdded[IDX_OPTION_ADDED] |= true;
 			optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
@@ -671,7 +700,7 @@ public final class UserSettingsHelper {
 			final boolean[] optionsAdded) {
 		if (LicenseFeatures.isPermitted("features:optimisation-idle-days")) {
 			final Option idleDays = dialog.addOption(DataSection.Toggles, null, editingDomain, "Netback idle day tolerance", "", copy, defaultSettings, DataType.PositiveInt, SWTBOT_IDLE_DAYS,
-					ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
+					null, ParametersPackage.eINSTANCE.getUserSettings_FloatingDaysLimit());
 
 			optionsAdded[IDX_OPTION_ADDED] |= true;
 			optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
@@ -694,7 +723,7 @@ public final class UserSettingsHelper {
 		// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
 		// ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
 		final Option gcoOption = dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", "", copy, defaultSettings, DataType.Choice, choiceData,
-				SWTBOT_CHARTEROUTGENERATION_PREFIX, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
+				SWTBOT_CHARTEROUTGENERATION_PREFIX, null, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
 
 		if (scenario != null) {
 			final SpotMarketsModel model = ScenarioModelUtil.getSpotMarketsModel(scenario);
@@ -736,7 +765,7 @@ public final class UserSettingsHelper {
 
 		final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
 		final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "From (dd/mm/yyyy)", "", copy, defaultSettings, DataType.Date, SWTBOT_PERIOD_START,
-				ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
+				null, ParametersPackage.eINSTANCE.getUserSettings_PeriodStartDate());
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 			// Added a button. Had to extend Option and DataType classes.
@@ -756,7 +785,7 @@ public final class UserSettingsHelper {
 		}
 		// TODO set the optToday button size
 		final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", "", copy, defaultSettings, DataType.MonthYear, SWTBOT_PERIOD_END,
-				ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+				null, ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_PERIOD)) {
 
 			final Option optThreeMonth = dialog.addOption(DataSection.Controls, group, editingDomain, "+3m", "Three months", copy, defaultSettings, DataType.Button, SWTBOT_PERIOD_THREE_MONTH, null);
@@ -850,7 +879,7 @@ public final class UserSettingsHelper {
 			choiceData.enabledHook = (us -> us.getMode() == OptimisationMode.ADP);
 		}
 		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_SLATE_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_CleanSlateOptimisation());
+				null, ParametersPackage.eINSTANCE.getUserSettings_CleanSlateOptimisation());
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
 
@@ -873,7 +902,7 @@ public final class UserSettingsHelper {
 		choiceData.addChoice("Off", Boolean.FALSE);
 		choiceData.addChoice("On", Boolean.TRUE);
 		dialog.addOption(DataSection.Toggles, null, editingDomain, "Spot cargo markets: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_WITH_SPOT_CARGO_MARKETS_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
+				null, ParametersPackage.eINSTANCE.getUserSettings_WithSpotCargoMarkets());
 
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
@@ -890,7 +919,7 @@ public final class UserSettingsHelper {
 			copy.setWithCharterLength(false);
 		}
 		dialog.addOption(DataSection.Toggles, null, editingDomain, "Charter Length: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CHARTERLENGTH_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
+				null, ParametersPackage.eINSTANCE.getUserSettings_WithCharterLength());
 
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
@@ -902,8 +931,16 @@ public final class UserSettingsHelper {
 		choiceData.addChoice("Off", Boolean.FALSE);
 		choiceData.addChoice("On", Boolean.TRUE);
 		dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SHIPPING_ONLY_PREFIX,
-				ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
+				null, ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
 
+		optionsAdded[IDX_OPTION_ADDED] |= true;
+		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
+	}
+	
+	private static void createValidationOutput(final IScenarioDataProvider sdp, final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog,
+			final UserSettings copy, final boolean[] optionsAdded) {			
+		
+		dialog.addOption(DataSection.Validation, null, editingDomain, "", "", copy, defaultSettings, DataType.Tree, "", sdp, ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
 	}
@@ -934,7 +971,7 @@ public final class UserSettingsHelper {
 		// !u.isAdpOptimisation()));
 
 		final Option option = dialog.addOption(group.dataSection, group, editingDomain, "", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_OPTIMISATION_MODE_PREFIX,
-				ParametersPackage.Literals.USER_SETTINGS__MODE);
+				null, ParametersPackage.Literals.USER_SETTINGS__MODE);
 
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= choiceData.enabled;
@@ -997,7 +1034,7 @@ public final class UserSettingsHelper {
 		choiceData.enabledHook = (u -> (u.getMode() == OptimisationMode.SHORT_TERM));
 
 		final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_SIMILARITY_PREFIX,
-				ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
+				null, ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
 
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= choiceData.enabled;
@@ -1023,4 +1060,56 @@ public final class UserSettingsHelper {
 		userSettings.setFloatingDaysLimit(15);
 		return userSettings;
 	}
+	
+	public static boolean statusHasErrors(IStatus status) {
+		if(status != null) {
+			if(status.getSeverity() == IStatus.ERROR) {
+				return true;
+			}
+			
+			if(status.isMultiStatus()) {
+				for(IStatus child : status.getChildren()) {
+					if(statusHasErrors(child))
+						return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public static int countStatusMessages(IStatus status) {
+        int count = 0;
+
+        if (status != null) {
+            if (status.getMessage() != null) {
+                count++;
+            }
+
+            if (status.isMultiStatus()) {
+                IStatus[] children = status.getChildren();
+                for (IStatus child : children) {
+                    count += countStatusMessages(child);
+                }
+            }
+        }
+
+        return count;
+    }
+	
+	public static Set<Integer> countStatusSeverities(IStatus status) {
+		Set<Integer> severitySet = new HashSet<>();
+        if (status != null) {
+        	if(status.getSeverity() != IStatus.OK)
+        		severitySet.add(status.getSeverity());
+
+            if (status.isMultiStatus()) {
+                for (IStatus child : status.getChildren()) {
+                	severitySet.addAll(countStatusSeverities(child));
+                }
+            }
+        }
+
+        return severitySet;
+    }
 }

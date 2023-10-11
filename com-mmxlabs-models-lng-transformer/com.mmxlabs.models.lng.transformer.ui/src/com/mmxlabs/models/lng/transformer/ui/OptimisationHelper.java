@@ -72,10 +72,12 @@ public final class OptimisationHelper {
 	public static final int EPOCH_LENGTH_FULL = 10_000;
 
 	@Nullable
-	public static Pair<String, UserSettings> getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+	public static Pair<String, UserSettings> getOptimiserSettings(@NonNull final IScenarioDataProvider sdp, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
 			final NameProvider nameProvider) {
 
 		UserSettings previousSettings = null;
+		
+		final LNGScenarioModel scenario = sdp.getTypedScenario(LNGScenarioModel.class);
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
 		}
@@ -107,7 +109,7 @@ public final class OptimisationHelper {
 				return null;
 			}
 
-			previousSettings = UserSettingsHelper.openUserDialog(scenario, false, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
+			previousSettings = UserSettingsHelper.openUserDialog(sdp, false, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP, true);
 		}
 
 		if (previousSettings == null) {
@@ -131,10 +133,12 @@ public final class OptimisationHelper {
 	}
 
 	@Nullable
-	public static OptimisationPlan getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
+	public static OptimisationPlan getOptimiserSettings(@NonNull final IScenarioDataProvider sdp, final boolean forEvaluation, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled,
 			final NameProvider nameProvider) {
 
 		UserSettings previousSettings = null;
+		
+		final LNGScenarioModel scenario = sdp.getTypedScenario(LNGScenarioModel.class);
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
 		}
@@ -166,7 +170,7 @@ public final class OptimisationHelper {
 				return null;
 			}
 
-			previousSettings = UserSettingsHelper.openUserDialog(scenario, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP);
+			previousSettings = UserSettingsHelper.openUserDialog(sdp, forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled, nameProvider, forADP, true);
 		}
 
 		if (previousSettings == null) {
@@ -190,9 +194,11 @@ public final class OptimisationHelper {
 	}
 
 	@Nullable
-	public static UserSettings getEvaluationSettings(@NonNull final LNGScenarioModel scenario, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
+	public static UserSettings getEvaluationSettings(@NonNull final IScenarioDataProvider sdp, final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
 
 		UserSettings previousSettings = null;
+		
+		final LNGScenarioModel scenario = sdp.getTypedScenario(LNGScenarioModel.class);
 		if (scenario != null) {
 			previousSettings = scenario.getUserSettings();
 		}
@@ -213,7 +219,7 @@ public final class OptimisationHelper {
 		if (promptUser) {
 			final boolean forADP = scenario.getAdpModel() != null;
 
-			previousSettings = UserSettingsHelper.openUserDialog(scenario, true, previousSettings, userSettings, promptOnlyIfOptionsEnabled, null, forADP);
+			previousSettings = UserSettingsHelper.openUserDialog(sdp, true, previousSettings, userSettings, promptOnlyIfOptionsEnabled, null, forADP, true);
 		}
 
 		if (previousSettings == null) {

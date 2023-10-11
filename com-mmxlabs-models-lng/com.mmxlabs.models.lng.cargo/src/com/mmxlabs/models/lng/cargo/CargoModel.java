@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.VersionRecord;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +31,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDeals <em>Paper Deals</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getDealSets <em>Deal Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDealsVersionRecord <em>Paper Deals Version Record</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel()
@@ -252,6 +254,28 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<GroupedDischargeSlotsConstraint> getGroupedDischargeSlots();
+
+	/**
+	 * Returns the value of the '<em><b>Paper Deals Version Record</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Paper Deals Version Record</em>' containment reference.
+	 * @see #setPaperDealsVersionRecord(VersionRecord)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_PaperDealsVersionRecord()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	VersionRecord getPaperDealsVersionRecord();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDealsVersionRecord <em>Paper Deals Version Record</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Paper Deals Version Record</em>' containment reference.
+	 * @see #getPaperDealsVersionRecord()
+	 * @generated
+	 */
+	void setPaperDealsVersionRecord(VersionRecord value);
 
 	/**
 	 * <!-- begin-user-doc -->

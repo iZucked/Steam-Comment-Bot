@@ -61,7 +61,7 @@ public class SandboxTask {
 					if (sandbox.getMode() == SandboxModeConstants.MODE_DEFINE) {
 						userSettings[0] = UserSettingsHelper.promptForSandboxUserSettings(root, false, useDialogs, false, null, previousSettings);
 					} else if (sandbox.getMode() == SandboxModeConstants.MODE_OPTIMISE) {
-						userSettings[0] = UserSettingsHelper.promptForUserSettings(root, false, useDialogs, false, null, previousSettings);
+						userSettings[0] = UserSettingsHelper.promptForUserSettings(sdp, false, useDialogs, false, null, previousSettings);
 					} else if (sandbox.getMode() == SandboxModeConstants.MODE_OPTIONISE) {
 						userSettings[0] = UserSettingsHelper.promptForInsertionUserSettings(root, false, useDialogs, false, null, previousSettings);
 					}

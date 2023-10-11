@@ -36,7 +36,8 @@ abstract class Chunk {
 	void setFromDirectory(final File file) {
 		if (isZip(file)) {
 			setFromZip(file.getAbsolutePath());
-		} else if (file != null){
+		} 
+		else if (file != null){
 			for (final Map.Entry<String, String> entry : friendlyNames.entrySet()) {
 				final String k = entry.getKey();
 				final String v = entry.getValue();

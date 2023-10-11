@@ -744,5 +744,12 @@
             plugin.xml="risk.plugin.xml">
       </PluginXMLEnablement>
    </extension>
+   
+     <extension
+         point="com.mmxlabs.scenario.service.model.WrappedCommandExtension">
+      <WrappedCommandExtension
+            class="com.mmxlabs.models.lng.cargo.ui.commands.PaperDealsVersionCommandWrapper">
+      </WrappedCommandExtension>
+   </extension>
 
 </plugin>
