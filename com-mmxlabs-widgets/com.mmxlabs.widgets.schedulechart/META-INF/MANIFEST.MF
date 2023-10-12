@@ -8,11 +8,11 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.core.runtime,
  org.eclipse.swt;bundle-version="3.7.2",
  com.mmxlabs.common.common-util,
- org.eclipse.jface,
- slf4j.api
+ org.eclipse.jface
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.widgets.schedulechart,
  com.mmxlabs.widgets.schedulechart.draw,
  com.mmxlabs.widgets.schedulechart.providers,
  com.mmxlabs.widgets.schedulechart.viewer
+Import-Package: org.slf4j
