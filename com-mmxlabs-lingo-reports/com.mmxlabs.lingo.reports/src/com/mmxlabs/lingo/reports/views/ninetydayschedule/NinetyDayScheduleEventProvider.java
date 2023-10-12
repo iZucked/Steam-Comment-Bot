@@ -26,6 +26,7 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentForma
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.widgets.schedulechart.EditableScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartRowsDataProvider;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
@@ -56,8 +58,9 @@ import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 
-public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<ScheduleModel> {
 
+public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<NinetyDayScheduleInput> {
+	
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 	private final EquivalentsManager equivalentsManager;
 	private final IScheduleChartSettings settings;
@@ -70,11 +73,31 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 	}
 
 	@Override
-	public List<ScheduleEvent> getEvents(ScheduleModel input) {
-		final Schedule schedule = input.getSchedule();
-
+	public List<ScheduleEvent> getEvents(NinetyDayScheduleInput input) {
+		List<ScheduleEvent> res = new ArrayList<>();
+		res.addAll(getEventForScenarioResult(input.pinned(), true));
+		for (ScenarioResult sr : input.other()) {
+			res.addAll(getEventForScenarioResult(sr, false));
+		}
+		return res;
+	}
+	
+	private List<ScheduleEvent> getEventForScenarioResult(ScenarioResult sr, boolean isPinned) {
+		if (sr == null) {
+			return Collections.emptyList();
+		}
+		final LNGScenarioModel scenarioModel = sr.getTypedRoot(LNGScenarioModel.class);
+		if (scenarioModel == null) {
+			return Collections.emptyList();
+		}
+		final ScheduleModel schedule = sr.getTypedResult(ScheduleModel.class);
+		final Schedule lastScheduleFromScenario = schedule == null ? null : schedule.getSchedule();
+		if (lastScheduleFromScenario == null) {
+			return Collections.emptyList();
+		}
+		
 		// contains Sequence, CombinedSequence and PositionsSequence
-		final List<Object> sequences = getSequences(schedule);
+		final List<Object> sequences = getSequences(lastScheduleFromScenario);
 		final List<Event> events = new ArrayList<>();
 		final List<ScheduleEvent> positionSequenceScheduleEvents = new ArrayList<>();
 
@@ -92,6 +115,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 		final List<ScheduleEvent> scheduleEvents = events.stream().map(this::makeScheduleEvent).collect(Collectors.toList());
 		scheduleEvents.addAll(positionSequenceScheduleEvents);
 		return scheduleEvents;
+		
 	}
 
 	@Override
@@ -310,7 +334,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Sc
 		final List<ScheduleChartRow> classified = IScheduleEventProvider.super.classifyEventsIntoRows(events);
 		return classified;
 	}
-
+	
 	@Override
 	public IScheduleChartRowsDataProvider getRowsDataProvider() {
 		return scheduleCharRowsDataProvider;

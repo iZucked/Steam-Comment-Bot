@@ -30,7 +30,6 @@ import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -51,7 +50,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private Action showAnnotationsAction;
 
 	
-	private ScheduleChartViewer<ScheduleModel> viewer;
+	private ScheduleChartViewer<NinetyDayScheduleInput> viewer;
 	private IMemento memento;
 	private NinetyDayScheduleChartSettings settings;
 	
@@ -74,13 +73,10 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			ViewerHelper.runIfViewerValid(viewer, block, () -> {
 				if (selectedDataProvider != null) {
-					List<ScenarioResult> rs = selectedDataProvider.getAllScenarioResults();
-					if (rs.isEmpty()) return;
-					ScheduleModel sm = rs.get(0).getTypedResult(ScheduleModel.class);
-					if (sm != null) {
-						viewer.typedSetInput(sm);
-						viewer.getCanvas().getTimeScale().pack();
-					}
+					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+					List<ScenarioResult> other = selectedDataProvider.getAllScenarioResults().stream().filter(f -> f != null).toList();
+					viewer.typedSetInput(new NinetyDayScheduleInput(pinned, other));
+					viewer.getCanvas().getTimeScale().pack();
 				}
 			});
 		}

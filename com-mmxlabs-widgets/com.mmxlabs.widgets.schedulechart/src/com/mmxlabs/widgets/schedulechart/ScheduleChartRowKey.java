@@ -11,9 +11,16 @@ public class ScheduleChartRowKey {
 	private final String name;
 	private final Object data;
 	
-	public ScheduleChartRowKey(final String name, final Object data) {
+	private final ScheduleChartRowKeyGrouping keyGrouping;
+	
+	public ScheduleChartRowKey(final String name, final Object data, final ScheduleChartRowKeyGrouping keyGrouping) {
 		this.name = name;
 		this.data = data;
+		this.keyGrouping = keyGrouping;
+	}
+	
+	public ScheduleChartRowKey(final String name, final Object data) {
+		this(name, data, null);
 	}
 	
 	public String getName() {
@@ -23,7 +30,11 @@ public class ScheduleChartRowKey {
 	public Object getData() {
 		return data;
 	}
-
+	
+	public ScheduleChartRowKeyGrouping getGrouping() {
+		return keyGrouping;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(name);
@@ -40,5 +51,5 @@ public class ScheduleChartRowKey {
 		ScheduleChartRowKey other = (ScheduleChartRowKey) obj;
 		return Objects.equals(data, other.data);
 	}
-
+	
 }

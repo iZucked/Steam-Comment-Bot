@@ -25,6 +25,10 @@ public class ScheduleChartRow {
 	public ScheduleChartRowKey getKey() {
 		return key;
 	}
+	
+	public ScheduleChartRowKeyGrouping getKeyGrouping() {
+		return key.getGrouping();
+	}
 
 	public String getName() {
 		return key.getName();
