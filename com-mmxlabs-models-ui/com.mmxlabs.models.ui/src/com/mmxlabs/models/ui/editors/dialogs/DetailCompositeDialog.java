@@ -280,18 +280,19 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				final EObject originalOne = rangeIterator.next();
 				final EObject duplicateOne = duplicateRangeIterator.next();
 				
-				// Set name of duplicate objects Copy of + original name
-				// Check if original contains name attribute
-				if (originalOne.eClass().getEAllAttributes().contains(MMXCorePackage.eINSTANCE.getNamedObject_Name())){
-					String originalName = originalOne.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()).toString();
-					duplicateOne.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "Copy of " + originalName);
+				if (returnDuplicates) {
+					// Set name of duplicate objects Copy of + original name
+					// Check if original contains name attribute
+					if (originalOne.eClass().getEAllAttributes().contains(MMXCorePackage.eINSTANCE.getNamedObject_Name())){
+						String originalName = originalOne.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()).toString();
+						duplicateOne.eSet(MMXCorePackage.eINSTANCE.getNamedObject_Name(), "Copy of " + originalName);
+					}
+					
+					dialogValidationSupport.getValidationContext().setApparentContainment(duplicateOne, originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
 				}
 				
 				duplicateToOriginal.put(duplicateOne, originalOne);
 				originalToDuplicate.put(originalOne, duplicateOne);
-				if (returnDuplicates) {
-					dialogValidationSupport.getValidationContext().setApparentContainment(duplicateOne, originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
-				}
 			}
 			final Iterator<EObject> rangeIterator2 = range.iterator();
 			final Iterator<EObject> duplicateIterator = duplicateRange.iterator();
