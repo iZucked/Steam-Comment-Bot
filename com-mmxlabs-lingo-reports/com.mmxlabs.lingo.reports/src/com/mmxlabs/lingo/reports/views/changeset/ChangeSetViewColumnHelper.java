@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -538,9 +539,7 @@ public class ChangeSetViewColumnHelper {
 			this.column_LoadVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_LoadVolume.getColumn().setText("tBtu");
 			this.column_LoadVolume.getColumn().setWidth(55);
-			
-			this.column_LoadVolume.setLabelProvider(createLambdaLabelProvider(true, false, false, false, row -> ChangeSetKPIUtil.getPurchaseVolume(row, ResultType.Before),
-					row -> ChangeSetKPIUtil.getPurchaseVolume(row, ResultType.After)));
+			this.column_LoadVolume.setLabelProvider(createVolumeLabelProvider());
 			
 //			this.column_LoadVolume.setLabelProvider(
 //					createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
@@ -599,9 +598,7 @@ public class ChangeSetViewColumnHelper {
 			this.column_DischargeVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_DischargeVolume.getColumn().setText("tBtu");
 			this.column_DischargeVolume.getColumn().setWidth(55);
-			
-			this.column_DischargeVolume.setLabelProvider(createLambdaLabelProvider(true, false, false, false, row -> ChangeSetKPIUtil.getSalesVolume(row, ResultType.Before),
-					row -> ChangeSetKPIUtil.getSalesVolume(row, ResultType.After)));
+			this.column_DischargeVolume.setLabelProvider(createVolumeLabelProvider());
 			
 //			this.column_DischargeVolume.setLabelProvider(createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
 //					SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
@@ -1329,7 +1326,7 @@ public class ChangeSetViewColumnHelper {
 	protected CellLabelProvider createDateLabelProvider(final boolean isLoadSide) {
 		return new CellLabelProvider() {
 
-			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
+			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay());
 
 			@Override
 			public String getToolTipText(final Object element) {
@@ -1399,7 +1396,7 @@ public class ChangeSetViewColumnHelper {
 							// Check start times are non-null as well, can happen for grouped events
 							if (beforeEvent != null && beforeEvent.getStart() != null) {
 
-								sb.append(String.format("Before: %s ", beforeEvent.getStart().toLocalDate().format(formatter)));
+								sb.append(String.format("Before: %s ", beforeEvent.getStart().toLocalDateTime().format(formatter)));
 								newLine = true;
 								hasDate = true;
 							}
@@ -1408,7 +1405,7 @@ public class ChangeSetViewColumnHelper {
 								if (newLine) {
 									sb.append("\n");
 								}
-								sb.append(String.format("After: %s ", afterEvent.getStart().toLocalDate().format(formatter)));
+								sb.append(String.format("After: %s ", afterEvent.getStart().toLocalDateTime().format(formatter)));
 								newLine = true;
 								hasDate = true;
 							}
@@ -1419,7 +1416,7 @@ public class ChangeSetViewColumnHelper {
 							// Check start times are non-null as well, can happen for grouped events
 							if (beforeRHSEvent != null && beforeRHSEvent.getStart() != null) {
 
-								sb.append(String.format("Before: %s ", beforeRHSEvent.getStart().toLocalDate().format(formatter)));
+								sb.append(String.format("Before: %s ", beforeRHSEvent.getStart().toLocalDateTime().format(formatter)));
 								newLine = true;
 								hasDate = true;
 							}
@@ -1428,7 +1425,7 @@ public class ChangeSetViewColumnHelper {
 								if (newLine) {
 									sb.append("\n");
 								}
-								sb.append(String.format("After: %s ", afterRHSEvent.getStart().toLocalDate().format(formatter)));
+								sb.append(String.format("After: %s ", afterRHSEvent.getStart().toLocalDateTime().format(formatter)));
 								newLine = true;
 								hasDate = true;
 							}
@@ -1450,7 +1447,7 @@ public class ChangeSetViewColumnHelper {
 				cell.setFont(null);
 				if (element instanceof ChangeSetTableRow tableRow) {
 					boolean isSpot = false;
-					LocalDate windowStart = null;
+					LocalDateTime windowStart = null;
 					boolean isDelta = false;
 					int deltaHours = 0;
 
@@ -1462,12 +1459,12 @@ public class ChangeSetViewColumnHelper {
 						if (newLoadAllocation != null) {
 							final Slot slot = newLoadAllocation.getSlot();
 							if (slot != null) {
-								windowStart = slot.getWindowStart();
+								windowStart = slot.getWindowStart().atStartOfDay();
 							}
 						} else if (originalLoadAllocation != null) {
 							final Slot slot = originalLoadAllocation.getSlot();
 							if (slot != null) {
-								windowStart = slot.getWindowStart();
+								windowStart = slot.getWindowStart().atStartOfDay();
 							}
 						}
 
@@ -1478,7 +1475,7 @@ public class ChangeSetViewColumnHelper {
 							}
 						} else {
 
-							final Function<Event, LocalDate> dateFunc = (e) -> {
+							final Function<Event, LocalDateTime> dateFunc = (e) -> {
 								// Does it make sense to use the user defined window here instead of the
 								// scheduled date?
 								// if (e instanceof VesselEventVisit) {
@@ -1488,7 +1485,7 @@ public class ChangeSetViewColumnHelper {
 								if (e != null) {
 									var d = e.getStart();
 									if (d != null) {
-										return d.toLocalDate();
+										return d.toLocalDateTime();
 									}
 								}
 								return null;
@@ -1532,12 +1529,7 @@ public class ChangeSetViewColumnHelper {
 
 						if (windowStart != null) {
 
-							final String windowDate;
-							if (isSpot) {
-								windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
-							} else {
-								windowDate = windowStart.format(formatter);
-							}
+							final String windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
 
 							if (isDelta) {
 								if (textualVesselMarkers) {
@@ -1577,12 +1569,12 @@ public class ChangeSetViewColumnHelper {
 						if (newDischargeAllocation != null) {
 							final Slot<?> slot = newDischargeAllocation.getSlot();
 							if (slot != null) {
-								windowStart = slot.getWindowStart();
+								windowStart = slot.getWindowStart().atStartOfDay();
 							}
 						} else if (originalDischargeAllocation != null) {
 							final Slot slot = originalDischargeAllocation.getSlot();
 							if (slot != null) {
-								windowStart = slot.getWindowStart();
+								windowStart = slot.getWindowStart().atStartOfDay();
 							}
 						}
 
@@ -1594,13 +1586,7 @@ public class ChangeSetViewColumnHelper {
 						}
 
 						if (windowStart != null) {
-
-							final String windowDate;
-							if (isSpot) {
-								windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
-							} else {
-								windowDate = windowStart.format(formatter);
-							}
+							final String windowDate = String.format("%02d/%04d", windowStart.getMonthValue(), windowStart.getYear());
 
 							if (isDelta) {
 								if (textualVesselMarkers) {
@@ -3076,6 +3062,8 @@ public class ChangeSetViewColumnHelper {
 				cell.setFont(null);
 				cell.setImage(null);
 				double delta = 0;
+				
+				/* COMMENTED OUT TO REMOVE HEADER SUM
 				if (element instanceof ChangeSetTableGroup) {
 					// cell.setFont(boldFont);
 					final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
@@ -3085,7 +3073,10 @@ public class ChangeSetViewColumnHelper {
 							delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
 						}
 					}
-				} else if (element instanceof ChangeSetTableRow) {
+				} else 
+				*/
+					
+				if (element instanceof ChangeSetTableRow) {
 
 					final ChangeSetTableRow change = (ChangeSetTableRow) element;
 					delta += deltaDoubleUpdater.applyAsDouble(calcF.apply(change), calcT.apply(change));
@@ -3225,6 +3216,86 @@ public class ChangeSetViewColumnHelper {
 						return sb.toString();
 					}
 				}
+				return null;
+			}
+		};
+	}
+	
+	protected CellLabelProvider createVolumeLabelProvider() {
+		final ToIntBiFunction<Number, Number> deltaIntegerUpdater = (f, t) -> {
+			int delta = 0;
+			if (f != null) {
+				delta -= f.intValue();
+			}
+			if (t != null) {
+				delta += t.intValue();
+			}
+			return delta;
+		};
+
+		return new CellLabelProvider() {			
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+				cell.setImage(null);
+				cell.setFont(null);
+				double delta = 0;
+				if (element instanceof ChangeSetTableGroup group) {
+					cell.setFont(boldFont);
+					final List<ChangeSetTableRow> rows = group.getRows();
+					if (rows != null) {
+						for (final ChangeSetTableRow change : rows) {
+							delta += deltaIntegerUpdater.applyAsInt(ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.Before), ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.After));
+							
+						}
+					}
+				} else if (element instanceof ChangeSetTableRow change) {
+					delta += deltaIntegerUpdater.applyAsInt(ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.Before), ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.After));
+				}
+
+				
+				delta = delta / 1000000.0;
+				if (Math.abs(delta) > 0.001) {
+					if (textualVesselMarkers) {
+						cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					} else {
+						cell.setText(String.format("%,.3f", Math.abs(delta)));
+					}
+					if (delta < 0) {
+						cell.setImage(imageDarkArrowDown);
+					} else {
+						cell.setImage(imageDarkArrowUp);
+					}
+				}
+			}
+		
+			@Override
+			public String getToolTipText(final Object element) {
+				if (element instanceof ChangeSetTableRow tableRow) {
+					final StringBuilder sb = new StringBuilder();
+					sb.append("Volumes:\n");
+
+					boolean newLine = false;
+					
+					final Integer beforeVolume = ChangeSetKPIUtil.getPurchaseVolume(tableRow, ResultType.Before);
+					if (beforeVolume != null) {
+						sb.append(String.format("Before: %.3f ", beforeVolume / 1000000.f));
+						newLine = true;
+					}
+					
+					
+					final Integer afterVolume = ChangeSetKPIUtil.getPurchaseVolume(tableRow, ResultType.After);
+					if (afterVolume != null) {
+						if (newLine) {
+							sb.append("\n");
+						}
+						sb.append(String.format("After: %.3f ", afterVolume / 1000000.f));
+					}
+					
+					return sb.toString();
+				}
+				
 				return null;
 			}
 		};
