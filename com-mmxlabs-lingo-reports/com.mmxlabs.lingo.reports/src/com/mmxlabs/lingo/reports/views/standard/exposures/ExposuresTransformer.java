@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ExposureDetail;
@@ -226,6 +227,20 @@ public class ExposuresTransformer {
 			throw (new IllegalArgumentException());
 		}
 	}
+	
+	public static List<Object> expandFilter(final Collection<Object> filterOn){
+		final List<Object> result = new ArrayList<>();
+		for (final Object o : filterOn) {
+			if (o instanceof final DealSet ds) {
+				result.addAll(ds.getPaperDeals());
+				result.addAll(ds.getSlots());
+			} else {
+				result.add(o);
+			}
+		}
+		
+		return result;
+	}
 
 	protected static IndexExposureData addDealSetData(final IndexExposureData ied, final @NonNull IScenarioDataProvider scenarioDataProvider) {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
@@ -404,6 +419,14 @@ public class ExposuresTransformer {
 			}
 			reCalculateChildExposures(iedFoo);
 			result.add(iedFoo);
+		}
+		// remove empty deal sets
+		final Iterator<IndexExposureData> iter = result.iterator();
+		while (iter.hasNext()) {
+			final IndexExposureData datum = iter.next();
+			if(datum.children.isEmpty()) {
+				iter.remove();
+			}
 		}
 
 		return result;

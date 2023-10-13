@@ -53,6 +53,7 @@ import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData.IndexExposureType;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
@@ -300,6 +301,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 				@Override
 				public int compare(final IndexExposureData o1, final IndexExposureData o2) {
+					if (o1.dealSet != null && o2.dealSet != null) {
+						return o1.dealSet.compareTo(o2.dealSet);
+					}
 					if (o1.isChild && o2.isChild) {
 						return o1.childName.compareTo(o2.childName);
 					} else if (!o1.isChild && !o2.isChild) {
@@ -370,10 +374,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				return Collections.emptyList();
 			}
 
-			List<Object> selected = (!selectionMode || selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
-			selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
+			List<Object> selected = (!selectionMode || selection == null) ? //
+					Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
+			selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal || s instanceof DealSet)
 					.collect(Collectors.toList());
-
+			selected = ExposuresTransformer.expandFilter(selected);
 			return getExposuresByMonth(schedule, scenarioResult, ymStart, ymEnd, selected);
 		}
 
@@ -997,11 +1002,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected void applyExpansionOnNewElements(final Object[] expanded, final List<?> rowElements) {
 		final List<Object> newToExpand = new ArrayList<>();
 		for (var e : expanded) {
-			if (e instanceof IndexExposureData) {
+			if (e instanceof final IndexExposureData oldE) {
 				for (var elem : rowElements) {
-					if (elem instanceof IndexExposureData) {
-						final IndexExposureData newE = (IndexExposureData) elem;
-						final IndexExposureData oldE = (IndexExposureData) e;
+					if (elem instanceof final IndexExposureData newE) {
 
 						if (newE.date.equals(oldE.date) && Objects.equals(newE.scenarioResult, oldE.scenarioResult)) {
 							newToExpand.add(newE);

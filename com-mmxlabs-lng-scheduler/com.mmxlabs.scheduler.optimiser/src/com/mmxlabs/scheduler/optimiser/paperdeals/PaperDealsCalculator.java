@@ -335,12 +335,13 @@ public class PaperDealsCalculator {
 
 				final int internalPrice = OptimiserUnitConvertor.convertToInternalPrice(price);
 				final long quantity = days == 0 ? 0 : ((isBuy ? 1 : -1) * basicPaperDealData.getPaperVolume() / days);
-				long value;
+				final int intSpread;
 				if (generated) {
-					value = (quantity * (basicPaperDealData.getPaperUnitPrice() - internalPrice)) / 1_000_000;
+					intSpread = basicPaperDealData.getPaperUnitPrice() - internalPrice;
 				} else {
-					value = (quantity * (internalPrice - basicPaperDealData.getPaperUnitPrice())) / 1_000_000;
+					intSpread = (internalPrice - basicPaperDealData.getPaperUnitPrice());
 				}
+				long value = (quantity * intSpread) / 1_000_000;
 
 				final BasicPaperDealAllocationEntry entry = 
 						new BasicPaperDealAllocationEntry(start, hedgingStart, hedgingEnd, quantity, internalPrice, value, settled);
@@ -354,7 +355,7 @@ public class PaperDealsCalculator {
 					exposure.setTime(start);
 					exposure.setHedgingStart(hedgingStart);
 					exposure.setHedgingEnd(hedgingEnd);
-					exposure.setUnitPrice(internalPrice);
+					exposure.setUnitPrice(intSpread);
 					exposure.setVolumeNative(quantity);
 
 					// Is the record unit in mmBtu? Then either it always was mmBtu OR we have
