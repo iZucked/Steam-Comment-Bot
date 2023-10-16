@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -1005,7 +1006,7 @@ public class ContractPage extends ADPComposite {
 		if (scenarioModel != null) {
 			previewViewer = constructPreviewViewer(editorData, previewGroup);
 		}
-		final List<Object> objects = new LinkedList<>();
+		final List<Object> objects;
 		if (scenarioModel != null && adpModel != null) {
 			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
 			commercialModel.eAdapters().add(commercialModelAdapter);
@@ -1013,12 +1014,9 @@ public class ContractPage extends ADPComposite {
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 			cargoModel.eAdapters().add(cargoModelAdapter);
 
+			objects = getSelectableObjects(adpModel, commercialModel);
+
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-				MullProfile profile = adpModel.getMullProfile();
-				if (profile == null) {
-					profile = ADPFactory.eINSTANCE.createMullProfile();
-				}
-				objects.add(profile);
 				ServiceHelper.withOptionalServiceConsumer(IInventoryBasedGenerationPresentationCustomiser.class, presentationCustomiser -> {
 					if (presentationCustomiser != null && presentationCustomiser.showSummaryPane()) {
 						mullSummaryAdapter.setTarget(adpModel);
@@ -1034,13 +1032,7 @@ public class ContractPage extends ADPComposite {
 						};
 					}
 				});
-
 			} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
-				SpacingProfile profile = adpModel.getSpacingProfile();
-				if (profile == null) {
-					profile = ADPFactory.eINSTANCE.createSpacingProfile();
-				}
-				objects.add(profile);
 				releaseAdaptersRunnable = () -> {
 					commercialModel.eAdapters().remove(commercialModelAdapter);
 					cargoModel.eAdapters().remove(cargoModelAdapter);
@@ -1057,6 +1049,8 @@ public class ContractPage extends ADPComposite {
 			final List<SalesContract> sortedSalesContracts = new ArrayList<>(commercialModel.getSalesContracts());
 			sortedSalesContracts.sort((c1, c2) -> c1.getName().compareTo(c2.getName()));
 			objects.addAll(sortedSalesContracts);
+		} else {
+			objects = new LinkedList<>();
 		}
 		// Try to retain current selection
 		final ISelection selection = new StructuredSelection(objectSelector.getSelection());
@@ -1069,7 +1063,36 @@ public class ContractPage extends ADPComposite {
 		if (adpModel == null) {
 			updateDetailPaneInput(null);
 		}
+	}
 
+	private static @NonNull List<Object> getSelectableObjects(final @NonNull ADPModel adpModel, final @NonNull CommercialModel commercialModel) {
+		final List<Object> objects = new LinkedList<>();
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			MullProfile profile = adpModel.getMullProfile();
+			if (profile == null) {
+				profile = ADPFactory.eINSTANCE.createMullProfile();
+			}
+			objects.add(profile);
+		}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+			SpacingProfile profile = adpModel.getSpacingProfile();
+			if (profile == null) {
+				profile = ADPFactory.eINSTANCE.createSpacingProfile();
+			}
+			objects.add(profile);
+		}
+
+		final Comparator<Contract> comparator = (c1, c2) -> ScenarioElementNameHelper.getName(c1, "<Unknown>").compareTo(ScenarioElementNameHelper.getName(c2, "<Unknown>"));
+
+		final List<PurchaseContract> sortedPurchaseContracts = new ArrayList<>(commercialModel.getPurchaseContracts());
+		sortedPurchaseContracts.sort(comparator);
+		objects.addAll(sortedPurchaseContracts);
+
+		final List<SalesContract> sortedSalesContracts = new ArrayList<>(commercialModel.getSalesContracts());
+		sortedSalesContracts.sort(comparator);
+		objects.addAll(sortedSalesContracts);
+
+		return objects;
 	}
 
 	@Override
@@ -1207,26 +1230,8 @@ public class ContractPage extends ADPComposite {
 			if (msg.getFeature() == CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS //
 					|| msg.getFeature() == CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS) {
 				final CommercialModel commercialModel = (CommercialModel) msg.getNotifier();
-				final List<Object> objects = new LinkedList<>();
-
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-					MullProfile profile = editorData.adpModel.getMullProfile();
-					if (profile == null) {
-						profile = ADPFactory.eINSTANCE.createMullProfile();
-					}
-					objects.add(profile);
-				}
-				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
-					SpacingProfile profile = editorData.adpModel.getSpacingProfile();
-					if (profile == null) {
-						profile = ADPFactory.eINSTANCE.createSpacingProfile();
-					}
-					objects.add(profile);
-				}
-
-				objects.addAll(commercialModel.getPurchaseContracts());
-				objects.addAll(commercialModel.getSalesContracts());
-
+				
+				final List<Object> objects = getSelectableObjects(editorData.adpModel, commercialModel);
 				RunnerHelper.runNowOrAsync(() -> {
 					if (objectSelector.getControl().isDisposed()) {
 						return;
@@ -1243,6 +1248,24 @@ public class ContractPage extends ADPComposite {
 					}
 				});
 			} else if (msg.getNotifier() instanceof Contract) {
+				if (msg.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME && editorData.getRootObject() instanceof LNGScenarioModel sm) {
+					final List<Object> objects = getSelectableObjects(editorData.adpModel, ScenarioModelUtil.getCommercialModel(sm));
+					RunnerHelper.runNowOrAsync(() -> {
+						if (objectSelector.getControl().isDisposed()) {
+							return;
+						}
+						Object selected = objectSelector.getStructuredSelection().getFirstElement();
+						objectSelector.setInput(objects);
+						if (selected != null && !objects.contains(selected)) {
+							if (objects.isEmpty()) {
+								objectSelector.setSelection(StructuredSelection.EMPTY);
+							} else {
+								objectSelector.setSelection(new StructuredSelection(objects.get(0)));
+							}
+							objectSelector.refresh(true);
+						}
+					});
+				}
 				RunnerHelper.asyncExec(() -> {
 					if (!objectSelector.getControl().isDisposed()) {
 						objectSelector.refresh(true);
