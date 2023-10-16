@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.adp.presentation.valueproviders;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,10 +19,9 @@ import org.eclipse.emf.ecore.EcorePackage;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
-import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
-import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -49,6 +49,9 @@ public class SubContractProfilePortValueProviderFactory implements IReferenceVal
 			return new IReferenceValueProvider() {
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
+					if (changedFeature == ADPPackage.eINSTANCE.getSubContractProfile_ContractType()) {
+						return true;
+					}
 					return delegateFactory.updateOnChangeToFeature(changedFeature);
 				}
 				
@@ -61,29 +64,30 @@ public class SubContractProfilePortValueProviderFactory implements IReferenceVal
 				public List<Pair<String, EObject>> getAllowedValues(EObject target, ETypedElement field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 					
-					if (target instanceof SubContractProfile) {
-						final SubContractProfile subContractProfile = (SubContractProfile) target;
-						final EObject targetContainer = target.eContainer();
-						final PortCapability expectedCapability;
-						if (targetContainer instanceof SalesContractProfile) {
-							expectedCapability = PortCapability.DISCHARGE;
-						} else if (targetContainer instanceof PurchaseContractProfile) {
-							expectedCapability = PortCapability.LOAD;
+					if (target instanceof SubContractProfile<?, ?> subContractProfile) {
+						final ContractType contractType = subContractProfile.getContractType();
+						final Set<PortCapability> expectedCapabilities = new HashSet<>();
+						if (contractType == ContractType.FOB) {
+							expectedCapabilities.add(PortCapability.LOAD);
+						} else if (contractType == ContractType.DES) {
+							expectedCapabilities.add(PortCapability.DISCHARGE);
 						} else {
-							throw new IllegalStateException();
+							expectedCapabilities.add(PortCapability.LOAD);
+							expectedCapabilities.add(PortCapability.DISCHARGE);
 						}
-						final Contract contract = ((ContractProfile) targetContainer).getContract();
-						final ArrayList<Pair<String, EObject>> filterPassOne = new ArrayList<Pair<String, EObject>>();
+						final EObject targetContainer = target.eContainer();
+						final Contract contract = ((ContractProfile<?, ?>) targetContainer).getContract();
+						final ArrayList<Pair<String, EObject>> filterPassOne = new ArrayList<>();
 						for (final Pair<String, EObject> p : delegateValue) {
-							if (((Port) p.getSecond()).getCapabilities().contains(expectedCapability)) {
+							if (((Port) p.getSecond()).getCapabilities().stream().anyMatch(expectedCapabilities::contains)) {
 								filterPassOne.add(p);
 							}
 						}
 						if (contract == null) {
 							return filterPassOne;
 						}
-						final ArrayList<Pair<String, EObject>> filterPassTwo = new ArrayList<Pair<String, EObject>>();
-						Set<Port> contractAllowedPorts = SetUtils.getObjects(contract.getAllowedPorts());
+						final ArrayList<Pair<String, EObject>> filterPassTwo = new ArrayList<>();
+						final Set<Port> contractAllowedPorts = SetUtils.getObjects(contract.getAllowedPorts());
 						if (contractAllowedPorts != null && !contractAllowedPorts.isEmpty()) {
 							for (final Pair<String, EObject> value : filterPassOne) {
 								if (contractAllowedPorts.contains(value.getSecond())) {
