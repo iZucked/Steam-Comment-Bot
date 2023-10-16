@@ -274,7 +274,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					if (data.isChild) {
 						return data.childName;
 					}
-					if (viewMode.equals(AggregationMode.BY_DEALSET)) {
+					if (aggregationMode.equals(AggregationMode.BY_DEALSET)) {
 						if (data.dealSet != null) {
 							return data.dealSet;
 						}
@@ -394,7 +394,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					output.add(exposuresByMonth);
 				}
 			}
-			return ExposuresTransformer.aggregateBy(viewMode, output, scenarioResult);
+			return ExposuresTransformer.aggregateBy(aggregationMode, output, scenarioResult);
 		}
 
 		protected void customiseColumnList(final List<String> columnNames) {
@@ -500,7 +500,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	protected ValueMode mode = ValueMode.VOLUME_MMBTU;
-	protected AggregationMode viewMode = AggregationMode.BY_MONTH;
+	protected AggregationMode aggregationMode = AggregationMode.BY_MONTH;
 	protected boolean selectionMode = false;
 
 	protected ISelection selection;
@@ -651,19 +651,23 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", showGeneratedPaperDeals);
 		}
 
-		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
-			@Override
-			public void run() {
-
-				final int modeIdx = (mode.ordinal() + 1) % ValueMode.values().length;
-				mode = ValueMode.values()[modeIdx];
-				setUnitsActionText(this);
-				getViewSite().getActionBars().updateActionBars();
-				ExposureReportView.this.refresh();
-			}
-		};
-		setUnitsActionText(modeToggle);
-		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", modeToggle);
+//		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
+//			@Override
+//			public void run() {
+//
+//				final int modeIdx = (mode.ordinal() + 1) % ValueMode.values().length;
+//				mode = ValueMode.values()[modeIdx];
+//				setUnitsActionText(this);
+//				getViewSite().getActionBars().updateActionBars();
+//				ExposureReportView.this.refresh();
+//			}
+//		};
+//		setUnitsActionText(modeToggle);
+//		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", modeToggle);
+		
+		final ValueModeActionMenu valueModeAction = new ValueModeActionMenu("Units: currency");
+		setUnitsActionText(valueModeAction);
+		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", valueModeAction);
 
 		final Action selectionToggle = new Action("View: " + (selectionMode ? "Selection" : "All"), Action.AS_PUSH_BUTTON) {
 			@Override
@@ -678,19 +682,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		};
 		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", selectionToggle);
 
-		final Action viewModeToggle = new Action("Group: Month", Action.AS_PUSH_BUTTON) {
-			@Override
-			public void run() {
-
-				final int modeIdx = (viewMode.ordinal() + 1) % AggregationMode.values().length;
-				viewMode = AggregationMode.values()[modeIdx];
-				setAggregationModeActionText(this);
-				getViewSite().getActionBars().updateActionBars();
-				ExposureReportView.this.refresh();
-			}
-		};
-		setAggregationModeActionText(viewModeToggle);
-		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", viewModeToggle);
+		final AggregationModeActionMenu aggregationModeAction = new AggregationModeActionMenu("Group: Month");
+		setAggregationModeActionText(aggregationModeAction);
+		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", aggregationModeAction);
 		
 		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
 		filterAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
@@ -788,7 +782,54 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			};
 			addActionToMenu(dmcaAssetTypes, menu);
 		}
+	}
+	
+	private class AggregationModeActionMenu extends DefaultMenuCreatorAction {
 
+		public AggregationModeActionMenu(String label) {
+			super(label);
+		}
+
+		@Override
+		protected void populate(Menu menu) {
+			for (final AggregationMode am : AggregationMode.values()) {
+				final Action amAction = new Action(getAggregationMode(am)) {
+					@Override
+					public void run() {
+						aggregationMode = am;
+						setAggregationModeActionText(AggregationModeActionMenu.this);
+						getViewSite().getActionBars().updateActionBars();
+						ExposureReportView.this.refresh();
+					}
+				};
+				amAction.setChecked(aggregationMode == am);
+				addActionToMenu(amAction, menu);
+			}
+		}
+	}
+	
+	private class ValueModeActionMenu extends DefaultMenuCreatorAction{
+		
+		public ValueModeActionMenu(String label) {
+			super(label);
+		}
+		
+		@Override
+		protected void populate(Menu menu) {
+			for (final ValueMode vm : ValueMode.values()) {
+				final Action vmAction = new Action(getUnitsActionText(vm)) {
+					@Override
+					public void run() {
+						mode = vm;
+						setUnitsActionText(ValueModeActionMenu.this);
+						getViewSite().getActionBars().updateActionBars();
+						ExposureReportView.this.refresh();
+					}
+				};
+				vmAction.setChecked(mode == vm);
+				addActionToMenu(vmAction, menu);
+			}
+		}
 	}
 
 	@Override
@@ -800,38 +841,31 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	private void setUnitsActionText(final Action a) {
-		String modeStr = null;
-		switch (mode) {
-		case NATIVE_VALUE:
-			modeStr = "currency";
-			break;
-		case VOLUME_MMBTU:
-			modeStr = "mmBtu";
-			break;
-		case VOLUME_TBTU:
-			modeStr = "TBtu";
-			break;
-		case VOLUME_NATIVE:
-			modeStr = "native";
-			break;
-		default:
-			assert false;
-			break;
-
-		}
-		assert modeStr != null;
-		a.setText("Units: " + modeStr);
+		a.setText(String.format("Units: %s", getUnitsActionText(mode)));
+	}
+	
+	private String getUnitsActionText(final ValueMode valueMode) {
+		return switch (valueMode) {
+		case NATIVE_VALUE -> "currency";
+		case VOLUME_MMBTU -> "mmBtu";
+		case VOLUME_TBTU -> "TBtu";
+		case VOLUME_NATIVE -> "native";
+		default -> throw new IllegalArgumentException();
+		};
 	}
 
 	private void setAggregationModeActionText(final Action a) {
-		final String modeStr = switch (viewMode) {
+		a.setText(String.format("Group: %s", getAggregationMode(aggregationMode)));
+	}
+	
+	private String getAggregationMode(final AggregationMode am) {
+		return switch (am) {
 		case BY_MONTH -> "Month";
 		case BY_CALENDAR_YEAR -> "Calendar Year";
 		case BY_DEALSET -> "Deal Set";
 		case BY_MONTH_NO_TOTAL -> "Month (No total)";
 		default -> throw new IllegalArgumentException();
 		};
-		a.setText("Group: " + modeStr);
 	}
 
 	@Override

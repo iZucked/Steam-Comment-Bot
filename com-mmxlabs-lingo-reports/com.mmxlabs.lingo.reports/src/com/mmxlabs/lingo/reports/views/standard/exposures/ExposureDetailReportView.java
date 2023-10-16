@@ -98,7 +98,7 @@ public class ExposureDetailReportView extends ViewPart {
 		createColumn("Unit", volumeGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT);
 
 		final GridColumnGroup currencyGroup = createGroup("Currency");
-		createColumn("Price", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE);
+		createColumn("Price/Spread", "Physical deal price or paper deal spread", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE);
 		createColumn("Value", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__NATIVE_VALUE);
 		createColumn("Unit", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__CURRENCY_UNIT);
 
@@ -215,13 +215,17 @@ public class ExposureDetailReportView extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 	}
-
-	private GridViewerColumn createColumn(final String title, final GridColumnGroup colGroup, final EStructuralFeature reference) {
+	
+	private GridViewerColumn createColumn(final String title, final String tooltip, final GridColumnGroup colGroup, final EStructuralFeature reference) {
 		final GridColumn column = new GridColumn(colGroup, SWT.NONE);
 		final GridViewerColumn col = new GridViewerColumn(viewer, column);
 		GridViewerHelper.configureLookAndFeel(col);
 
-		return createColumn(col, title, reference);
+		return createColumn(col, title, tooltip, reference);
+	}
+
+	private GridViewerColumn createColumn(final String title, final GridColumnGroup colGroup, final EStructuralFeature reference) {
+		return createColumn(title, null, colGroup, reference);
 	}
 
 	private GridColumnGroup createGroup(final String title) {
@@ -260,8 +264,8 @@ public class ExposureDetailReportView extends ViewPart {
 		GridViewerHelper.configureLookAndFeel(col);
 		return createColumn(col, title, reference);
 	}
-
-	private GridViewerColumn createColumn(final GridViewerColumn col, final String title, final EStructuralFeature reference) {
+	
+	private GridViewerColumn createColumn(final GridViewerColumn col, final String title, final String tooltip, final EStructuralFeature reference) {
 		col.getColumn().setText(title);
 
 		col.setLabelProvider(new CellLabelProvider() {
@@ -292,7 +296,14 @@ public class ExposureDetailReportView extends ViewPart {
 		});
 
 		col.getColumn().setWidth(120);
+		if (tooltip != null) {
+			col.getColumn().setHeaderTooltip(tooltip);
+		}
 		return col;
+	}
+
+	private GridViewerColumn createColumn(final GridViewerColumn col, final String title, final EStructuralFeature reference) {
+		return createColumn(col, title, null, reference);
 	}
 
 	private void updateCellForEAttributeReference(final ViewerCell cell, final Object element, final EStructuralFeature reference) {
