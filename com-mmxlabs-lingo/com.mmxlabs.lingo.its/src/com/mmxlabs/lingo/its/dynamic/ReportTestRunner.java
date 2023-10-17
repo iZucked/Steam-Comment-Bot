@@ -26,9 +26,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
+import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
 import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper.ReportRecord;
+import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;
@@ -36,7 +39,9 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPubl
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.ReportPublisherExtensionUtil;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.TodayProvider;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ReportTestRunner {
 
@@ -73,44 +78,48 @@ public class ReportTestRunner {
 
 								scenarioCases.add(DynamicTest.dynamicTest(name + " " + reportID, () -> {
 									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
+										// A side-effect is the initial evaluation.
+										LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
 
-										final File todayFile = new File(scenarioFile.getParentFile(), "today.json");
-										try {
-											if (todayFile.exists()) {
-												final ObjectMapper mapper = new ObjectMapper();
-												mapper.registerModule(new JavaTimeModule());
-												final LocalDateTime todayValue = mapper.readValue(todayFile, LocalDateTime.class);
-												TodayProvider.getInstance().setOverrride(todayValue);
+											final File todayFile = new File(scenarioFile.getParentFile(), "today.json");
+											try {
+												if (todayFile.exists()) {
+													final ObjectMapper mapper = new ObjectMapper();
+													mapper.registerModule(new JavaTimeModule());
+													final LocalDateTime todayValue = mapper.readValue(todayFile, LocalDateTime.class);
+													TodayProvider.getInstance().setOverrride(todayValue);
+												}
+
+												// Files.writeString(reportFile.toPath(), actual);
+												final IReportContent reportContent = t.publishReport(version, scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+
+												String actual = reportContent.getContent();
+												final String ext = t.getFileExtension();
+												if (".json".equals(ext)) {
+													// Run JSON through pretty printer
+													final ObjectMapper mapper = new ObjectMapper();
+													final Object json = mapper.readValue(actual, Object.class);
+
+													actual = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+												}
+
+												final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
+												resultsFolder.mkdir();
+												final File reportFile = new File(resultsFolder, "hub-" + reportID + ext);
+
+												if (TestingModes.ReportTestMode == TestMode.Generate) {
+													Files.writeString(reportFile.toPath(), actual);
+												} else if (TestingModes.ReportTestMode == TestMode.Run) {
+													final String expected = Files.readString(reportFile.toPath());
+													Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n") //
+															, actual.replaceAll("\\r\\n", "\n") //
+															, String.format("Mismatching result: %s for %s", reportID, f.getName()));
+												}
+											} finally {
+												TodayProvider.getInstance().unsetOverrride();
 											}
 
-											// Files.writeString(reportFile.toPath(), actual);
-											final IReportContent reportContent = t.publishReport(version, scenarioDataProvider, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
-
-											String actual = reportContent.getContent();
-											final String ext = t.getFileExtension();
-											if (".json".equals(ext)) {
-												// Run JSON through pretty printer
-												final ObjectMapper mapper = new ObjectMapper();
-												final Object json = mapper.readValue(actual, Object.class);
-
-												actual = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-											}
-
-											final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
-											resultsFolder.mkdir();
-											final File reportFile = new File(resultsFolder, "hub-" + reportID + ext);
-
-											if (TestingModes.ReportTestMode == TestMode.Generate) {
-												Files.writeString(reportFile.toPath(), actual);
-											} else if (TestingModes.ReportTestMode == TestMode.Run) {
-												final String expected = Files.readString(reportFile.toPath());
-												Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n") //
-														, actual.replaceAll("\\r\\n", "\n") //
-														, String.format("Mismatching result: %s for %s", reportID, f.getName()));
-											}
-										} finally {
-											TodayProvider.getInstance().unsetOverrride();
-										}
+										});
 									});
 								}));
 							}
