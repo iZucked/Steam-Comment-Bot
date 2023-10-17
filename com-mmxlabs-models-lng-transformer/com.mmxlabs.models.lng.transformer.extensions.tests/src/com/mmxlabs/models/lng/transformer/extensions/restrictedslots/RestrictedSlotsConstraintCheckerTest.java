@@ -17,6 +17,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 
 public class RestrictedSlotsConstraintCheckerTest {
 
@@ -86,6 +87,8 @@ public class RestrictedSlotsConstraintCheckerTest {
 			@Override
 			protected void configure() {
 				bind(IRestrictedSlotsProvider.class).toInstance(restrictedElementsProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides

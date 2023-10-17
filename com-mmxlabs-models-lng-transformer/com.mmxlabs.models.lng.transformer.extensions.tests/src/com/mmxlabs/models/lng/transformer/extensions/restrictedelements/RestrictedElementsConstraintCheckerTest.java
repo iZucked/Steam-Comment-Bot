@@ -17,6 +17,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -193,6 +194,8 @@ public class RestrictedElementsConstraintCheckerTest {
 				bind(IRestrictedElementsProvider.class).toInstance(restrictedElementsProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides

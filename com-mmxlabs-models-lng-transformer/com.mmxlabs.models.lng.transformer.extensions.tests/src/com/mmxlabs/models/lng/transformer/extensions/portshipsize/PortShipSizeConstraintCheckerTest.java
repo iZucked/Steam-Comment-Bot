@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -170,6 +171,8 @@ public class PortShipSizeConstraintCheckerTest {
 				bind(IPortShipSizeProvider.class).toInstance(portShipSizeProvider);
 				bind(INominatedVesselProvider.class).toInstance(nominatedVesselProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides

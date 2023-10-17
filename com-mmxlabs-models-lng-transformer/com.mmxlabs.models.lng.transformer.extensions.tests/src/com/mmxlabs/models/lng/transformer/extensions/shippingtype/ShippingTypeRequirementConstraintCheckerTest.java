@@ -17,6 +17,7 @@ import com.google.inject.Provides;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -140,6 +141,8 @@ public class ShippingTypeRequirementConstraintCheckerTest {
 			protected void configure() {
 				bind(IShippingTypeRequirementProvider.class).toInstance(restrictedElementsProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides
