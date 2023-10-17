@@ -845,6 +845,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		{
 			canalBookings.getPanamaSeasonalityRecords().clear();
 			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 5, 15);
+			canalBookings.getPanamaSeasonalityRecords().add(psr);
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);

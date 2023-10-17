@@ -440,8 +440,8 @@ public class CargoModelBuilder {
 		psr.setStartDay(startDay);
 		psr.setStartMonth(startMonth);
 		psr.setStartYear(startYear);
-		psr.setNorthboundWaitingDays(0);
-		psr.setSouthboundWaitingDays(0);
+		psr.setNorthboundWaitingDays(nb);
+		psr.setSouthboundWaitingDays(sb);
 		return psr;
 	}
 }
