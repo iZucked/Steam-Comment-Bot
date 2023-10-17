@@ -17,6 +17,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -279,6 +280,8 @@ public class RoundTripVesselPermissionConstraintCheckerTest {
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IRoundTripVesselPermissionProvider.class).toInstance(roundTripProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 		});
 

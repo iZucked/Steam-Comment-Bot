@@ -21,6 +21,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+import com.mmxlabs.optimiser.common.components.InternalElementNameMapper;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
@@ -178,6 +179,7 @@ public class ResourceAllocationConstraintCheckerTest {
 			@Override
 			public void configure() {
 				bind(IResourceAllocationConstraintDataComponentProvider.class).toInstance(provider);
+				bind(InternalElementNameMapper.class).toInstance(new InternalElementNameMapper() { });
 
 			}
 		});

@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -125,6 +126,8 @@ public class ContractCvConstraintCheckerTest {
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
 				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides

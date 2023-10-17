@@ -20,6 +20,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -131,6 +132,8 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 				bind(INominatedVesselProvider.class).toInstance(nvp);
 				bind(IDivertibleDESShippingTimesCalculator.class).toInstance(divertibleDESShippingTimesCalculator);
 				bind(IDivertibleFOBShippingTimesCalculator.class).toInstance(divertibleFOBShippingTimesCalculator);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides

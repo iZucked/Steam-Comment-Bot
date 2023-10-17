@@ -17,6 +17,7 @@ import com.google.inject.Provides;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
@@ -255,6 +256,8 @@ public class TimeSortConstraintCheckerTest {
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IStartEndRequirementProvider.class).toInstance(Mockito.mock(IStartEndRequirementProvider.class));
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 
 			}
 

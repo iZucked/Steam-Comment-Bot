@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -753,6 +754,8 @@ public class PortTypeConstraintCheckerTest {
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IOrderedSequenceElementsDataComponentProvider.class).toInstance(orderedSequenceProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides

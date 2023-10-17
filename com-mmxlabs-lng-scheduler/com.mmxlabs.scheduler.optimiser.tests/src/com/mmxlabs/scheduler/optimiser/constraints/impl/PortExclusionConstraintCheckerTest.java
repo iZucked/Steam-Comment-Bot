@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.scheduler.optimiser.InternalNameMapper;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
@@ -164,6 +165,8 @@ public class PortExclusionConstraintCheckerTest {
 				bind(IElementPortProvider.class).toInstance(portProvider);
 				bind(IPortExclusionProvider.class).toInstance(portExclusionProvider);
 				bind(INominatedVesselProvider.class).toInstance(nominatedVesselProvider);
+				bind(InternalNameMapper.class).toInstance(new InternalNameMapper() { });
+
 			}
 
 			@Provides

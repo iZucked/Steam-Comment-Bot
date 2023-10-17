@@ -21,6 +21,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+import com.mmxlabs.optimiser.common.components.InternalElementNameMapper;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -28,8 +29,8 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
-import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 
 public class OrderedSequenceElementsConstraintCheckerTest {
 
@@ -234,6 +235,8 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 			@Override
 			public void configure() {
 				bind(IOrderedSequenceElementsDataComponentProvider.class).toInstance(provider);
+
+				bind(InternalElementNameMapper.class).toInstance(new InternalElementNameMapper() { });
 
 			}
 		});
