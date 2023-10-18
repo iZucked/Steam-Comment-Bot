@@ -88,5 +88,11 @@
             class="com.mmxlabs.rcp.common.generalprefs.LingoGeneralPreferencesPage"
             id="org.eclipse.ui.preferencePages.Workbench">
       </page>
+      <page
+            name="Appearance"
+            class="com.mmxlabs.rcp.common.appearance.AppearancePreferencePage"
+            id="com.mmxlabs.rcp.common.appearance.AppearancePreferencePage"
+            category="com.mmxlabs.lingo.app.preferences.AppPreferencesPage">
+      </page>
    </extension>
 </plugin>
