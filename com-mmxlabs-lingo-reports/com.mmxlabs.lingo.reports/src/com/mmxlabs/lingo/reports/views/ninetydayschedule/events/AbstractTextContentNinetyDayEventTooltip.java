@@ -25,6 +25,7 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 public abstract class AbstractTextContentNinetyDayEventTooltip extends AbstractNinetyDayEventTooltip {
 	
 	protected static final Font SYSTEM_FONT = Display.getDefault().getSystemFont();
+	protected static final int SYSTEM_FONT_SIZE = SYSTEM_FONT.getFontData()[0].getHeight();
 	protected static final int LINE_SPACING = 5;
 	protected static final int TEXT_PADDING = 10;
 	private int textExtent = -1;
@@ -40,7 +41,7 @@ public abstract class AbstractTextContentNinetyDayEventTooltip extends AbstractN
 
 	@Override
 	protected int getBodyHeight(final DrawerQueryResolver resolver) {
-		textExtent = (textExtent < 0) ? resolver.findSizeOfText("Jg", SYSTEM_FONT).y : textExtent;
+		textExtent = (textExtent < 0) ? resolver.findSizeOfText("Jg", SYSTEM_FONT, SYSTEM_FONT_SIZE).y : textExtent;
 		int numFields = tooltip.bodyFields().size();
 		return (numFields == 0) ? 0 : 2 * TEXT_PADDING + numFields * (textExtent + LINE_SPACING) - LINE_SPACING;
 	}

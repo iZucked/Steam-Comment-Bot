@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IMemento;
 
+import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.IScheduleEventLabelElementGenerator;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
@@ -32,31 +33,33 @@ public class NinetyDayDrawableEventLabelProvider implements IDrawableScheduleEve
 	private TogglableLabel showDays;
 	private TogglableLabel showDestinationLabels;
 	private TogglableLabel showCanals;
+	private IScheduleChartSettings settings;
 
 	private List<ILabellingOption> knownLabels = new ArrayList<>();
 	private Map<ILabellingOption, Action> applyActions = new HashMap<>();
 	
-	public NinetyDayDrawableEventLabelProvider(IMemento memento) {
+	public NinetyDayDrawableEventLabelProvider(IMemento memento, IScheduleChartSettings settings) {
 		this.showCanals = new TogglableLabel(NinetyDayScheduleViewConstants.SHOW_CANALS, memento);
 		this.showDestinationLabels = new TogglableLabel(NinetyDayScheduleViewConstants.SHOW_DESTINATION_LABELS, memento);
 		this.showDays = new TogglableLabel(NinetyDayScheduleViewConstants.SHOW_DAYS, memento);
+		this.settings = settings;
 		applyActions.put(showCanals, new Action() {
 			@Override
 			public void run() {
-				eventLabelGenerators = NinetyDayLabelFactory.buildCanalLabels();
+				eventLabelGenerators = NinetyDayLabelFactory.buildCanalLabels(settings);
 			}
 		});
 
 		applyActions.put(showDestinationLabels, new Action() {
 			@Override
 			public void run() {
-				eventLabelGenerators = NinetyDayLabelFactory.buildDestinationLabels();
+				eventLabelGenerators = NinetyDayLabelFactory.buildDestinationLabels(settings);
 			}
 		});
 		applyActions.put(showDays, new Action() {
 			@Override
 			public void run() {
-				eventLabelGenerators = NinetyDayLabelFactory.buildShowDaysLabels();
+				eventLabelGenerators = NinetyDayLabelFactory.buildShowDaysLabels(settings);
 			}
 		});
 

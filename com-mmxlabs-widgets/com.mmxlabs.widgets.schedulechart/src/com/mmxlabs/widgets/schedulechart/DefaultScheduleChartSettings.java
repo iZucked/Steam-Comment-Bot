@@ -17,7 +17,7 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 
 	@Override
 	public int getEventHeight() {
-		return 24;
+		return 19;
 	}
 
 	@Override
@@ -49,6 +49,11 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	public int getRowHeaderRightPadding() {
 		return 15;
 	}
+	
+	@Override
+	public int getEventLabelFontSize() {
+		return 9;
+	}
 
 	@Override
 	public boolean showAnnotations() {
@@ -64,5 +69,7 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	public int filterModeCheckboxColumnWidth() {
 		return getRowHeight();
 	}
+
+	
 
 }

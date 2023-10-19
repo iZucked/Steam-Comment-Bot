@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.NonShippedIdle;
 import com.mmxlabs.models.lng.schedule.NonShippedJourney;
 import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.IScheduleEventLabelElementGenerator;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
@@ -40,12 +41,13 @@ public class NinetyDayLabelFactory {
 	
 	private NinetyDayLabelFactory() {}
 	
-	public static List<List<IScheduleEventLabelElementGenerator>> buildShowDaysLabels() {
+	public static List<List<IScheduleEventLabelElementGenerator>> buildShowDaysLabels(IScheduleChartSettings settings) {
 		final List<List<IScheduleEventLabelElementGenerator>> alignments = new ArrayList<>();
-		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, new Padding(3, 3, 0, 0), se -> {
+		final int fontSize = settings.getEventLabelFontSize();
+		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, SWT.CENTER, new Padding(3, 3, 0, 0), fontSize, se -> {
 			return ScheduleChartFormatters.formatAsDays(se.getStart().until(se.getEnd(), ChronoUnit.DAYS));
 		})));
-		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, new Padding(3, 3, 0, 0), se -> {
+		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, SWT.CENTER, new Padding(3, 3, 0, 0), fontSize, se -> {
 			long hours = se.getStart().until(se.getEnd(), ChronoUnit.DAYS);
 			final long integerDivDays = hours / 24L;
 			final long remainingHours = hours % 24L;
@@ -55,34 +57,36 @@ public class NinetyDayLabelFactory {
 		return alignments;
 	}
 	
-	public static List<List<IScheduleEventLabelElementGenerator>> buildDestinationLabels() {
+	public static List<List<IScheduleEventLabelElementGenerator>> buildDestinationLabels(IScheduleChartSettings settings) {
 		final List<List<IScheduleEventLabelElementGenerator>> alignments = new ArrayList<>();
 		final int horizontalPadding = 2;
+		final int fontSize = settings.getEventLabelFontSize();
 		final Padding labelPadding = new Padding(horizontalPadding, horizontalPadding, 0, 0);
 		alignments.add(List.of(
-				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.LEFT_100P, SWT.LEFT, labelPadding,
+				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.LEFT_100P, SWT.LEFT, SWT.CENTER, labelPadding, fontSize,
 						se -> getDestinationLabel(se, Event::getPreviousEvent, Journey::getPort, NonShippedJourney::getPort, NinetyDayLabelFactory::formatDateMedium)),
-				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.RIGHT_100P, SWT.RIGHT, labelPadding,
+				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.RIGHT_100P, SWT.RIGHT, SWT.CENTER, labelPadding, fontSize,
 						se -> getDestinationLabel(se, Event::getNextEvent, Journey::getDestination, NonShippedJourney::getDestination, NinetyDayLabelFactory::formatDateMedium))));
 
 		alignments.add(List.of(
-				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.LEFT_100P, SWT.LEFT, labelPadding,
+				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.LEFT_100P, SWT.LEFT, SWT.CENTER, labelPadding, fontSize,
 						se -> getDestinationLabel(se, Event::getPreviousEvent, Journey::getPort, NonShippedJourney::getPort, NinetyDayLabelFactory::formatDateShort)),
-				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.RIGHT_100P, SWT.RIGHT, labelPadding,
+				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.RIGHT_100P, SWT.RIGHT, SWT.CENTER, labelPadding, fontSize,
 						se -> getDestinationLabel(se, Event::getNextEvent, Journey::getDestination, NonShippedJourney::getDestination, NinetyDayLabelFactory::formatDateShort))));
 
 		alignments.add(List.of(
-				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.LEFT_100P, SWT.LEFT, labelPadding,
+				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.LEFT_100P, SWT.LEFT, SWT.CENTER, labelPadding, fontSize,
 						se -> getDestinationLabel(se, Event::getPreviousEvent, Journey::getPort, NonShippedJourney::getPort, zdt -> "")),
-				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.RIGHT_100P, SWT.RIGHT, labelPadding,
+				getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.RIGHT_100P, SWT.RIGHT, SWT.CENTER, labelPadding, fontSize,
 						se -> getDestinationLabel(se, Event::getNextEvent, Journey::getDestination, NonShippedJourney::getDestination, zdt -> ""))));
 
 		return alignments;
 	}
 	
-	public static List<List<IScheduleEventLabelElementGenerator>> buildCanalLabels() {
+	public static List<List<IScheduleEventLabelElementGenerator>> buildCanalLabels(IScheduleChartSettings settings) {
 		final List<List<IScheduleEventLabelElementGenerator>> alignments = new ArrayList<>();
-		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, new Padding(3, 3, 0, 0), se -> {
+		final int fontSize = settings.getEventLabelFontSize();
+		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, SWT.CENTER, new Padding(3, 3, 0, 0), fontSize, se -> {
 			final Object object = se.getData();
 			if (object instanceof Journey j) {
 				final RouteOption routeOption = j.getRouteOption();
@@ -95,9 +99,17 @@ public class NinetyDayLabelFactory {
 		return alignments;
 	}
 	
-	private static IScheduleEventLabelElementGenerator getLabelElementGeneratorFromTextGenerator(RelativeBounds relBounds, int textAlignment, Padding p, Function<ScheduleEvent, String> textGenerator) {
+	private static IScheduleEventLabelElementGenerator getLabelElementGeneratorFromTextGenerator(RelativeBounds relBounds, int textHorizontalAlignment, int textVerticalAlignment, Padding p, Function<ScheduleEvent, String> textGenerator) {
 		return (se, dse) -> {
-			final var elem = new DrawableScheduleEventLabel(dse.getLabelTextColour(), textGenerator, textAlignment, p, se);
+			final var elem = new DrawableScheduleEventLabel(dse.getLabelTextColour(), textGenerator, textHorizontalAlignment, textVerticalAlignment, p, se);
+			elem.setRelativeBounds(relBounds);
+			return elem;
+		};
+	}
+	
+	private static IScheduleEventLabelElementGenerator getLabelElementGeneratorFromTextGenerator(RelativeBounds relBounds, int textHorizontalAlignment, int textVerticalAlignment, Padding p, int fontSize, Function<ScheduleEvent, String> textGenerator) {
+		return (se, dse) -> {
+			final var elem = new DrawableScheduleEventLabel(dse.getLabelTextColour(), textGenerator, textHorizontalAlignment, textVerticalAlignment, p, fontSize, se);
 			elem.setRelativeBounds(relBounds);
 			return elem;
 		};

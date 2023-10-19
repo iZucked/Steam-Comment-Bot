@@ -16,6 +16,8 @@ public interface IScheduleChartSettings {
 	int getRowHeaderRightPadding();
 	int filterModeCheckboxColumnWidth();
 	
+	int getEventLabelFontSize();
+	
 	boolean showAnnotations();
 	default boolean allowResizing() {
 		return showAnnotations();

@@ -12,6 +12,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Transform;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Image;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Line;
@@ -82,28 +84,48 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				final org.eclipse.swt.graphics.Rectangle bb = t.boundingBox();
 
 				String s = t.text();
-				Point extent = findSizeOfText(s, t.font());
+				Point extent = findSizeOfText(s, t.font(), t.fontSize());
 
 				if (p.top() + extent.y + p.bottom() > bb.height) {
-					throw new IllegalArgumentException("The given text is too tall for its bounding box.");
+					//throw new IllegalArgumentException("The given text is too tall for its bounding box.");
 				}
 				
 				if (p.left() + extent.x + p.right() > bb.width) {
 					s = "...";
-					extent = findSizeOfText(s, t.font());
+					extent = findSizeOfText(s, t.font(), t.fontSize());
 				}
 				
-				int x = switch (t.alignment()) {
+				int x = switch (t.horizontalAlignment()) {
 					case SWT.LEFT -> bb.x + p.left();
 					case SWT.RIGHT -> bb.x + bb.width - extent.x - p.right();
-					case SWT.CENTER -> bb.x + bb.width / 2 - extent.x / 2;
-					default -> throw new IllegalArgumentException("Unexpected value for alignment: " + t.alignment());
+					case SWT.CENTER -> bb.x + bb.width / 2 - extent.x / 2; 
+					default -> throw new IllegalArgumentException("Unexpected value for alignment: " + t.horizontalAlignment());
 				};
 				
-				int y = bb.y + p.top();
+				int y = switch (t.verticalAlignment()) {
+					case SWT.TOP -> bb.y + p.top();
+					case SWT.BOTTOM -> bb.y + bb.height - extent.y - p.bottom();
+					case SWT.CENTER -> bb.y + bb.height / 2 - extent.y / 2;
+					default -> throw new IllegalArgumentException("Unexpected value for alignment: " + t.verticalAlignment());
+				};
+					
 				
 				gc.setFont(t.font());
-				gc.drawString(s, x, y, t.backgroundColour() == null);
+				
+				// Create a Transform to scale the text to a font size
+				final Transform transform = new Transform(Display.getCurrent());
+				final float originalFontSize = t.font().getFontData()[0].height;
+				final float fontScaling = t.fontSize() / originalFontSize;
+				
+				transform.scale(fontScaling, fontScaling);
+				gc.setTransform(transform);
+
+				gc.drawString(s, (int)(x / fontScaling), (int)(y / fontScaling), t.backgroundColour() == null);
+
+				// Restore the original transform
+				transform.identity();
+				gc.setTransform(transform);
+				transform.dispose();
 			
 			} else if (b instanceof Image i) {
 				gc.drawImage(i.img(), i.x(), i.y());
@@ -116,14 +138,19 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 	}
 
 	@Override
-	public Point findSizeOfText(String text, Font f) {
+	public Point findSizeOfText(String text, Font f, int fontSize) {
 		gc.setFont(f);
-		return gc.textExtent(text);
+		Point extent = gc.textExtent(text);
+		final float originalFontSize = f.getFontData()[0].height;
+		final float fontScaling = fontSize / originalFontSize;
+		extent.x *= fontScaling;
+		extent.y *= fontScaling;
+		return extent;
 	}
 
 	@Override
 	public Point findSizeOfText(Text text) {
-		Point textExtent = findSizeOfText(text.text(), text.font());
+		Point textExtent = findSizeOfText(text.text(), text.font(), text.fontSize());
 		Padding p = text.p();
 		return new Point(p.left() + textExtent.x + p.right(), p.top() + textExtent.y + p.bottom());
 	}

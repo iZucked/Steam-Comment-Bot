@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.common.Pair;
@@ -131,7 +132,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 				LocalDateTime currYear = (LocalDateTime) TemporalAdjusters.firstDayOfNextMonth().adjustInto(startDate);
 				if (!currYear.isEqual(date)) {
 					int currYearX = sts.getXForDateTime(currYear);
-					res.add(BasicDrawableElements.Text.from(currYearX, y, f.getDateString(currYear, unit)).padding(2).textColour(colourScheme.getHeaderTextColour(headerNum)).create());
+					res.add(BasicDrawableElements.Text.from(currYearX, y, currYearX - headerBounds.x, headerBounds.height, f.getDateString(currYear, unit)).padding(2).textColour(colourScheme.getHeaderTextColour(headerNum)).verticalAlignment(SWT.CENTER).create());
 					res.add(BasicDrawableElements.Rectangle.withBounds(headerBounds.x, y, currYearX - headerBounds.x, headerBounds.height).borderColour(colourScheme.getHeaderOutlineColour()).create());
 				}
 			}
@@ -144,7 +145,7 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			int width = unitWidth.orElseGet(() -> sts.getXForDateTime(nextDate) - currX);
 
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).bgColour(colourScheme.getHeaderBgColour(headerNum)).create());
-			res.add(BasicDrawableElements.Text.from(x, y, f.getDateString(date, unit)).padding(2).textColour(colourScheme.getHeaderTextColour(headerNum)).create());
+			res.add(BasicDrawableElements.Text.from(x, y, width, headerBounds.height, f.getDateString(date, unit)).padding(2).textColour(colourScheme.getHeaderTextColour(headerNum)).verticalAlignment(SWT.CENTER).create());
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).borderColour(colourScheme.getGridStrokeColour()).create());
 			date = nextDate;
 			x += width;

@@ -11,6 +11,6 @@ import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Text;
 
 public interface DrawerQueryResolver {
-	Point findSizeOfText(String text, Font f);
+	Point findSizeOfText(String text, Font f, int fontSize);
 	Point findSizeOfText(Text text);
 }

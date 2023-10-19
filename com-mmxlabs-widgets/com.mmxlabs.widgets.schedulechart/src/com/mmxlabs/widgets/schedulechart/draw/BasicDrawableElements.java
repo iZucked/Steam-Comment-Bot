@@ -102,9 +102,9 @@ public interface BasicDrawableElements {
 		}
 	}
 	
-	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int alignment, Color textColour, Color backgroundColour, Font font, Padding p, int alpha) implements BasicDrawableElement {
+	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int horizontalAlignment, int verticalAlignment, Color textColour, Color backgroundColour, Font font, int fontSize, Padding p, int alpha) implements BasicDrawableElement {
 		public Text(int x, int y, String text) {
-			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, null, null, Display.getDefault().getSystemFont(), new Padding(0, 0, 0, 0), MAX_ALPHA);
+			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, SWT.TOP, null, null, Display.getDefault().getSystemFont(), Display.getDefault().getSystemFont().getFontData()[0].getHeight(), new Padding(0, 0, 0, 0), MAX_ALPHA);
 		}
 
 		@Override
@@ -121,6 +121,11 @@ public interface BasicDrawableElements {
 			return new TextBuilder(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), s);
 		}
 		
+		public static TextBuilder from(int x, int y, int width, int height, String s) {
+			return new TextBuilder(new org.eclipse.swt.graphics.Rectangle(x, y, width, height), s);
+		}
+
+		
 		public static class TextBuilder {
 			private final org.eclipse.swt.graphics.Rectangle bb;
 			private final String s;
@@ -128,12 +133,17 @@ public interface BasicDrawableElements {
 			private Color bgc = null;
 			private Padding p = new Padding(0, 0, 0, 0);
 			private int alpha = MAX_ALPHA;
-			private int alignment = SWT.LEFT;
+			private int horizontalAlignment = SWT.LEFT;
+			private int verticalAlignment = SWT.TOP;
 			private Font f = Display.getDefault().getSystemFont();
+			private int fontSize = 9;
 			
 			private TextBuilder(org.eclipse.swt.graphics.Rectangle boundingBox, String s) {
 				this.bb = boundingBox;
 				this.s = s;
+				
+				if(f.getFontData().length != 0)
+					fontSize = f.getFontData()[0].getHeight();
 			}
 			
 			public TextBuilder padding(int p) {
@@ -161,8 +171,13 @@ public interface BasicDrawableElements {
 				return this;
 			}
 			
-			public TextBuilder alignment(int alignment) {
-				this.alignment = alignment;
+			public TextBuilder horizontalAlignment(int alignment) {
+				this.horizontalAlignment = alignment;
+				return this;
+			}
+			
+			public TextBuilder verticalAlignment(int alignment) {
+				this.verticalAlignment = alignment;
 				return this;
 			}
 			
@@ -170,9 +185,14 @@ public interface BasicDrawableElements {
 				this.f = f;
 				return this;
 			}
+			
+			public TextBuilder fontSize(int fontSize) {
+				this.fontSize = fontSize;
+				return this;
+			}
 
 			public Text create() {
-				return new Text(bb, s, alignment, tc, bgc, f, p, alpha);
+				return new Text(bb, s, horizontalAlignment, verticalAlignment, tc, bgc, f, fontSize, p, alpha);
 			}
 		}
 

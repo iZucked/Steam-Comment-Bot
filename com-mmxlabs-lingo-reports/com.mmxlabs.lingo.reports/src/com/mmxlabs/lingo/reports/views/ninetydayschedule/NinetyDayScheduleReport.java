@@ -121,7 +121,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
 		this.eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
-		this.eventLabelProvider = new NinetyDayDrawableEventLabelProvider(memento);
+		this.eventLabelProvider = new NinetyDayDrawableEventLabelProvider(memento, settings);
 		this.modelUpdater = new NinetyDayScheduleModelUpdater(this::getDefaultCommandHandler);
 
 		super.init(viewSite, memento);
