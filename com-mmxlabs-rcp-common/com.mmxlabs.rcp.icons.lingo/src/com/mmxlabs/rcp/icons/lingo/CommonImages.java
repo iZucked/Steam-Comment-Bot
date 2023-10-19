@@ -81,6 +81,7 @@ public final class CommonImages {
 		Filter(16, "icons/16x16/filter.png"), //
 		Folder(16, "icons/16x16/folder.png"), //
 		Fuel(16, "icons/16x16/fuel.png"), //
+		Group(16, "icons/16x16/group.png"), //
 		Highlighter(16, "icons/16x16/highlighter.png"), //
 		Hub(16, "icons/16x16/hub.png"), //
 		Inventory(16, "icons/16x16/inventory.png"), //
@@ -105,9 +106,11 @@ public final class CommonImages {
 		Scenario(16, "icons/16x16/scenario.png"), //
 		ScenarioDiff(16, "icons/16x16/scenario_diff.png"), //
 		ScenarioFragment(16, "icons/16x16/scenario_fragment.png"), //
+		Selected(16, "icons/16x16/selected.png"), //
 		Sigma(16, "icons/16x16/sigma.png"), //
 		Sort(16, "icons/16x16/sort.png"), //
 		Transfer_16(16, "icons/16x16/transfer.png"), //
+		Units(16, "icons/16x16/units.png"), //
 		ZoomIn(16, "icons/16x16/zoom_in.png"), //
 		ZoomOut(16, "icons/16x16/zoom_out.png"), //
 

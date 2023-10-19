@@ -634,38 +634,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 		};
 		
+		period.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Date, IconMode.Enabled));
 		getViewSite().getActionBars().getToolBarManager().prependToGroup("dates", period);
 		
 		getViewSite().getActionBars().getToolBarManager().add(new GroupMarker("filters"));
 		
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
-			final Action showGeneratedPaperDeals = new Action("Generated : No", Action.AS_PUSH_BUTTON) {
-				@Override
-				public void run() {
-					showGenerated = !showGenerated;
-					setText(String.format("Generated : %s", showGenerated ? "Yes" : "No"));
-					getViewSite().getActionBars().updateActionBars();
-					ExposureReportView.this.refresh();
-				}
-			};
-			getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", showGeneratedPaperDeals);
-		}
-
-//		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
-//			@Override
-//			public void run() {
-//
-//				final int modeIdx = (mode.ordinal() + 1) % ValueMode.values().length;
-//				mode = ValueMode.values()[modeIdx];
-//				setUnitsActionText(this);
-//				getViewSite().getActionBars().updateActionBars();
-//				ExposureReportView.this.refresh();
-//			}
-//		};
-//		setUnitsActionText(modeToggle);
-//		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", modeToggle);
-		
 		final ValueModeActionMenu valueModeAction = new ValueModeActionMenu("Units: currency");
+		valueModeAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Units, IconMode.Enabled));
 		setUnitsActionText(valueModeAction);
 		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", valueModeAction);
 
@@ -680,9 +655,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 			}
 		};
+		selectionToggle.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Selected, IconMode.Enabled));
 		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", selectionToggle);
 
 		final AggregationModeActionMenu aggregationModeAction = new AggregationModeActionMenu("Group: Month");
+		aggregationModeAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Group, IconMode.Enabled));
 		setAggregationModeActionText(aggregationModeAction);
 		getViewSite().getActionBars().getToolBarManager().appendToGroup("filters", aggregationModeAction);
 		
@@ -707,11 +684,26 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					selectedEntity = null;
 					selectedFiscalYear = -1;
 					selectedAssetType = AssetType.NET;
+					showGenerated = false;
 					ExposureReportView.this.refresh();
 				}
 			};
 
 			addActionToMenu(clearAction, menu);
+			
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+				final Action showGeneratedPaperDeals = new Action("Generated") {
+					@Override
+					public void run() {
+						showGenerated = !showGenerated;
+						this.setChecked(showGenerated);
+						ExposureReportView.this.refresh();
+					}
+				};
+				showGeneratedPaperDeals.setChecked(showGenerated);
+				addActionToMenu(showGeneratedPaperDeals, menu);
+				
+			}
 
 			final DefaultMenuCreatorAction dmcaEntity = new DefaultMenuCreatorAction("Entity") {
 
