@@ -42,7 +42,7 @@ public class SandboxTask {
 			// New optimisation, so check there are no validation errors.
 			final boolean relaxedValidation = "Period Scenario".equals(scenarioName);
 			final boolean optimising = true;
-			final boolean displayErrors = System.getProperty("lingo.suppress.dialogs") == null;
+			final boolean displayErrors = System.getProperty("lingo.suppress.dialogs") == null && System.getProperty("lingo.suppress.validation.dialog") == null;
 			final Set<String> extraCategories = Sets.newHashSet(".cargosandbox");
 			return OptimisationHelper.validateScenario(sdp, extraTarget, optimising, displayErrors, relaxedValidation, extraCategories);
 		};
@@ -50,7 +50,7 @@ public class SandboxTask {
 
 	private static CheckedFunction<IScenarioDataProvider, @Nullable String, Exception> createParametersFactory(final ScenarioInstance si, final OptionAnalysisModel sandbox) {
 		return sdp -> {
-			final boolean useDialogs = System.getProperty("lingo.suppress.dialogs") == null;
+			final boolean useDialogs = System.getProperty("lingo.suppress.dialogs") == null ;
 
 			SandboxSettings settings = null;
 			{
