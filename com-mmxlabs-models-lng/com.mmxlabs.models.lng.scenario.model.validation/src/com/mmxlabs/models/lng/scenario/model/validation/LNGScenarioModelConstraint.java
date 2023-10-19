@@ -43,7 +43,7 @@ public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 			}
 			if (promptPeriodStart != null && promptPeriodStart.isBefore(earliestSlotDate)) {
 				statuses.add(DetailConstraintStatusFactory.makeStatus() //
-						.withMessage("Prompt start date preceeds earliest slots' window start") //
+						.withMessage("Prompt start date precedes earliest slot's window start") //
 						.withObjectAndFeature(lngScenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) //
 						.make(ctx));
 			}
