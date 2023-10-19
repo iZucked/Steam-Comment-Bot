@@ -21,7 +21,6 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.UnitConversion;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
@@ -131,8 +130,6 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			String type = "";
 			if (index instanceof CurrencyCurve) {
 				type = " (currency conversion)";
-			} else if (index instanceof final PricingBasis pb) {
-				type = ":[" + pb.getExpression() + "]";
 			} else if (index instanceof final CommodityCurve cc && cc.isSetExpression()) {
 				type = ":[" + cc.getExpression() + "]";
 			}

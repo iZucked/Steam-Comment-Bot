@@ -42,7 +42,6 @@ import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.CurrencyCurve;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConstants;
 import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;

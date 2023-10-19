@@ -25,7 +25,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
-import com.mmxlabs.models.mmxcore.validation.internal.Activator;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;

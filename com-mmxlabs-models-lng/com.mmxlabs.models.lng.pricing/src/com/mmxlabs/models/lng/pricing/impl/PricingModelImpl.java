@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.pricing.CurrencyCurve;
 import com.mmxlabs.models.lng.pricing.DatePointContainer;
 import com.mmxlabs.models.lng.pricing.HolidayCalendar;
 import com.mmxlabs.models.lng.pricing.MarketIndex;
-import com.mmxlabs.models.lng.pricing.PricingBasis;
 import com.mmxlabs.models.lng.pricing.PricingCalendar;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;

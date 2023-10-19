@@ -76,6 +76,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.FormulaeNameUniquenessConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.FormulaeNameUniquenessConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Formulae name uniqueness"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CommodityCurve">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.pricing.validation.CooldownPricingConstraint"
                   id="com.mmxlabs.models.lng.pricing.validation.cooldownPricing"
                   isEnabledByDefault="true"
