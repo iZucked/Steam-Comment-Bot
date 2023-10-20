@@ -107,8 +107,11 @@ public class ExposureDataTransformer implements ISlotTransformer {
 				final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 				if (pricingModel != null) {
 					final ExposuresLookupData lookupData = new ExposuresLookupData();
-					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
-						lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();
+					if (lngScenarioModel.getPromptPeriodStart() != null) {
+						lookupData.aggregationDate = lngScenarioModel.getPromptPeriodStart();
+						if (cutoffAtPromptStart) {
+							lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();
+						}
 					}
 					if (individualExposures) {
 						cargoModel.getLoadSlots().forEach( s-> {

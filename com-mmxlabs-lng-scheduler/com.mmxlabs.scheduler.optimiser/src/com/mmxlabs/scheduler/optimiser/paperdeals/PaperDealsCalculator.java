@@ -317,10 +317,16 @@ public class PaperDealsCalculator {
 			++days;
 		}
 		start = basicPaperDealData.getPricingStart();
+		if (exposuresLookupData.aggregationDate.isAfter(start) || exposuresLookupData.aggregationDate.isEqual(start)) {
+			days = 1;
+			start = basicPaperDealData.getPricingEnd();
+			while(isWeekend(start)) {
+				start = start.minusDays(1);
+			}
+		}
 		// MTM Part
-		// Count trading days
 		while (!start.isAfter(basicPaperDealData.getPricingEnd())) {
-			final boolean isWeekend = start.getDayOfWeek() == DayOfWeek.SATURDAY || start.getDayOfWeek() == DayOfWeek.SUNDAY;
+			final boolean isWeekend = isWeekend(start);
 			if (!isWeekend) {
 				double price = series.evaluate(dateProvider.convertTime(start), Collections.emptyMap()).doubleValue();
 				boolean settled = false;
@@ -387,6 +393,10 @@ public class PaperDealsCalculator {
 			start = start.plusDays(1);
 		}
 		return result;
+	}
+	
+	private boolean isWeekend(final LocalDate date) {
+		return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
 	}
 
 }

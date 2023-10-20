@@ -32,4 +32,5 @@ public class ExposuresLookupData {
 	public List<String> slotsToInclude = new ArrayList<>();
 
 	public LocalDate cutoffDate = LocalDate.MIN;
+	public LocalDate aggregationDate = LocalDate.MIN;
 }
