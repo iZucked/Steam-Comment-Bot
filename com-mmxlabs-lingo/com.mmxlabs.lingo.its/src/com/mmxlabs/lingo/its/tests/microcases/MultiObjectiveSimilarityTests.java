@@ -19,6 +19,7 @@ import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
 import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -82,7 +83,7 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setMode(OptimisationMode.SHORT_TERM);
-		userSettings.setCleanSlateOptimisation(false);
+		userSettings.setAdpOptimisationMode(AdpOptimisationMode.NON_CLEAN_SLATE);
 
 		userSettings.setShippingOnly(true);
 		userSettings.setWithSpotCargoMarkets(true);

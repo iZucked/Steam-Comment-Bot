@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -91,7 +92,7 @@ public class ADPCargoPNLCalculationTests extends AbstractADPAndLightWeightTests 
 
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setMode(OptimisationMode.ADP);
-		userSettings.setCleanSlateOptimisation(true);
+		userSettings.setAdpOptimisationMode(AdpOptimisationMode.CLEAN_SLATE);
 
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);

@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases.adp;
 
 import java.util.Iterator;
 
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
@@ -28,7 +29,7 @@ public class OptimisationEMFTestUtils {
 
 		userSettings.setWithSpotCargoMarkets(true);
 		userSettings.setMode(OptimisationMode.ADP);
-		userSettings.setCleanSlateOptimisation(true);
+		userSettings.setAdpOptimisationMode(AdpOptimisationMode.CLEAN_SLATE);
 
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
 		optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(optimisationPlan);

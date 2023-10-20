@@ -19,6 +19,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.models.lng.adp.ext.ISlotTemplateFactory;
 import com.mmxlabs.models.lng.adp.ext.impl.AbstractSlotTemplateFactory;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -67,7 +68,7 @@ public abstract class AbstractADPAndLightWeightTests extends AbstractMicroTestCa
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setMode(OptimisationMode.ADP);
-		userSettings.setCleanSlateOptimisation(true);
+		userSettings.setAdpOptimisationMode(AdpOptimisationMode.CLEAN_SLATE);
 		userSettings.setNominalOnly(nominalADP);
 
 		userSettings.setShippingOnly(false);
