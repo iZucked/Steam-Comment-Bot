@@ -53,10 +53,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ILazyExpressionManagerEditor;
 
 /**
- * Small helper class which is intended to be injected into external
- * {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with
- * date and time conversion. This also has some routines for creating
- * {@link ICurve}s
+ * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
+ * for creating {@link ICurve}s
  * 
  */
 public class DateAndCurveHelper implements IInternalDateProvider {
@@ -91,8 +89,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 	}
 
 	/**
-	 * Convert a date into relative hours; returns the number of hours between
-	 * windowStart and earliest.
+	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
 	 * 
 	 * @param earliest
 	 * @param windowStart
@@ -113,6 +110,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 
 	/**
 	 * Please keep in sync with DefaultTransferModelDataProviderEditor#generateExpressionCurve (FM)
+	 * 
 	 * @param priceExpression
 	 * @param seriesParser
 	 * @return
@@ -128,7 +126,13 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 				for (final int i : series.getChangePoints()) {
 					intervals.put(i, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, params).doubleValue()));
 				}
-				return Pair.of(0, intervals);
+
+				// For `expr = curve + constant` we can end up with a value 0 instead of constant for times prior to the first change point.
+				// To address this we can evaluate the expression prior to the first change point and use that as a default value. 
+				final int minTime = Math.min(0, intervals.firstKey());
+				final int beforeCurveValue = OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(minTime - 1, params).doubleValue());
+
+				return Pair.of(beforeCurveValue, intervals);
 			}
 		}, series.getParameters());
 	}
@@ -143,16 +147,23 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 		if (series.getChangePoints().length == 0) {
 			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(0, Collections.emptyMap()).doubleValue()));
 		} else {
-			curve.setDefaultValue(0);
+			int minTime = 0;
 			for (final int i : series.getChangePoints()) {
 				// SPECIAL CASE THS?
-				
-//				WHAT ABOUT SPLIT M<ONTH?>
-//				if (i == Integer.MIN_VALUE) {
-//					curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, Collections.emptyMap()).doubleValue()));
-//				}
+
+				// WHAT ABOUT SPLIT M<ONTH?>
+				// if (i == Integer.MIN_VALUE) {
+				// curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, Collections.emptyMap()).doubleValue()));
+				// }
 				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(i, Collections.emptyMap()).doubleValue()));
+				minTime = Math.min(i, minTime);
 			}
+			
+			// For `expr = curve + constant` we can end up with a value 0 instead of constant for times prior to the first change point.
+			// To address this we can evaluate the expression prior to the first change point and use that as a default value. 
+			final int beforeCurveValue = OptimiserUnitConvertor.convertToInternalPrice(series.evaluate(minTime - 1,  Collections.emptyMap()).doubleValue());
+			curve.setDefaultValue(0);
+
 		}
 		return curve;
 	}
@@ -232,8 +243,7 @@ public class DateAndCurveHelper implements IInternalDateProvider {
 	}
 
 	/**
-	 * Returns the minutes that need to be added to a date that has been rounded
-	 * down elsewhere in the application (e.g. in convertTime())
+	 * Returns the minutes that need to be added to a date that has been rounded down elsewhere in the application (e.g. in convertTime())
 	 * 
 	 * @param timeZone
 	 * @return
