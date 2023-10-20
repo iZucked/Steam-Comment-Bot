@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.Li
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.LightWeightFitnessFunctionRegistry;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.impl.SimpleCargoToCargoCostCalculator;
 import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
+import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightInitialCargoesConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightShippingRestrictionsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.constraints.LightWeightVesselUsageConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.fitnessfunctions.DefaultPNLLightWeightFitnessFunctionFactory;
@@ -99,6 +100,7 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 	LightWeightConstraintCheckerRegistry getLightweightConstraintCheckerRegistry() {
 		LightWeightConstraintCheckerRegistry registry = new LightWeightConstraintCheckerRegistry();
 		registry.registerConstraintCheckerFactory(new LightWeightShippingRestrictionsConstraintCheckerFactory());
+		registry.registerConstraintCheckerFactory(new LightWeightInitialCargoesConstraintCheckerFactory());
 		return registry;
 	}
 	@Provides
@@ -127,7 +129,7 @@ public class LightWeightSchedulerStage1Module extends AbstractModule {
 	@Provides
 	@Named(LIGHTWEIGHT_CONSTRAINT_CHECKER_NAMES)
 	List<String> getConstraintCheckerNames() {
-		return CollectionsUtil.makeLinkedList("LightWeightShippingRestrictionsConstraintChecker");
+		return CollectionsUtil.makeLinkedList("LightWeightShippingRestrictionsConstraintChecker", "LightWeightInitialCargoesConstraintChecker");
 	}
 	
 	@Provides

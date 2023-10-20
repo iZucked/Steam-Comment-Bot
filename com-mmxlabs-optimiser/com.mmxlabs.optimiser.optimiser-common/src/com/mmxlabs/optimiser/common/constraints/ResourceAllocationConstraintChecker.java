@@ -93,8 +93,9 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		final boolean result = checkElement(first, resource, messages) && checkElement(second, resource, messages);
-		if (messages != null && !result)
+		if (messages != null && !result) {
 			messages.add(explain(first, second, resource));
+		}
 		return result;
 	}
 
