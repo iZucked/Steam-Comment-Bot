@@ -21,6 +21,7 @@ import com.google.inject.Module;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -197,8 +198,10 @@ public class LNGOptimisationBuilder {
 						.withModuleBindInstance(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPModel.class, adpModel)//
 						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, ADPScenarioModuleHelper.createExtraDataModule(adpModel))//
 				;
-				if (!evaluationOnly && localOptimisationPlan.getUserSettings().isCleanSlateOptimisation()) {
+				if (!evaluationOnly && (localOptimisationPlan.getUserSettings().getAdpOptimisationMode() == AdpOptimisationMode.CLEAN_SLATE)) {
 					serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, ADPScenarioModuleHelper.createEmptySolutionModule());
+				} else if(!evaluationOnly && (localOptimisationPlan.getUserSettings().getAdpOptimisationMode() == AdpOptimisationMode.PARTIAL_CLEAN_SLATE)) {
+					serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, ADPScenarioModuleHelper.createPartialSolutionModule(adpModel));
 				}
 				// FIXME: This replaces any local overrides!
 				extraOptimiserInjectorServices.add(serviceMaker.make());

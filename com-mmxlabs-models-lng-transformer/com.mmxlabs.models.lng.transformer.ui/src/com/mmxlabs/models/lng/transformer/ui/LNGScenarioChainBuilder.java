@@ -18,6 +18,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -67,7 +68,7 @@ public class LNGScenarioChainBuilder {
 
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
-			if (optimisationPlan.getUserSettings().getMode() == OptimisationMode.ADP && !optimisationPlan.getUserSettings().isCleanSlateOptimisation()) {
+			if (optimisationPlan.getUserSettings().getMode() == OptimisationMode.ADP && (optimisationPlan.getUserSettings().getAdpOptimisationMode() == AdpOptimisationMode.NON_CLEAN_SLATE)) {
 				LNGCheckForViolatedConstraintsUnit.chain(builder, optimisationPlan.getUserSettings(), 1);
 			}
 

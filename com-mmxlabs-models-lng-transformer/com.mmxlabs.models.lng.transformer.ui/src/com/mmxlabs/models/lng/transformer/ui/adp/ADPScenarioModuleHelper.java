@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Exposed;
@@ -21,6 +22,7 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.analytics.ui.views.evaluators.CargoModelToScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -30,10 +32,12 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
+import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -42,14 +46,77 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
+import com.mmxlabs.scheduler.optimiser.providers.IAdpFrozenAssignmentProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class ADPScenarioModuleHelper {
 	private static final String KEY_EMPTY_SOLUTION = "EMPTY_SOLUTION";
 
 	private ADPScenarioModuleHelper() {
 
+	}
+
+	public static @NonNull Module createPartialSolutionModule(final @NonNull ADPModel adpModel) {
+		return new PrivateModule() {
+
+			@Provides
+			@Singleton
+			@Named(KEY_EMPTY_SOLUTION)
+			@NonNullByDefault
+			private ISequences provideSequences(final ModelEntityMap modelEntityMap, final IAdpFrozenAssignmentProvider adpFrozenAssignmentProvider,
+					final IPortSlotProvider portSlotProvider, final CargoModelToScheduleSpecification builder,
+					final ScheduleSpecificationTransformer scheduleSpecificationTransformer, final IOptimisationData optData, final Injector injector, final IScenarioDataProvider sdp) {
+				var spec = builder.generateScheduleSpecifications(sdp, ScenarioModelUtil.getCargoModel(sdp));
+				final ISequences collectedSequences =  scheduleSpecificationTransformer.createSequences(spec, modelEntityMap, optData, injector, true);
+				
+				final IModifiableSequences lockedSequences = SequenceHelper.createEmptySequences(injector, optData.getResources());
+				
+				List<ISequenceElement> unusedElements = new LinkedList<>();
+				for(IResource resource : collectedSequences.getResources()) {
+					ISequence sequence = collectedSequences.getSequence(resource);
+					for(ISequenceElement element : sequence) {
+						final IPortSlot slot = portSlotProvider.getPortSlot(element);
+						if(slot.getPortType() == PortType.Load || slot.getPortType() == PortType.Discharge) {
+							if(adpFrozenAssignmentProvider.isPaired(slot)) {
+								lockedSequences.getModifiableSequence(resource).insert(lockedSequences.getSequence(resource).size() - 1, element);
+							} else {
+								unusedElements.add(element);
+							}
+						} else if(slot.getPortType() != PortType.Start && slot.getPortType() != PortType.End){
+							lockedSequences.getModifiableSequence(resource).insert(lockedSequences.getSequence(resource).size() - 1, element);
+						}
+					}
+				}
+				
+				lockedSequences.getModifiableUnusedElements().addAll(unusedElements);
+				lockedSequences.getModifiableUnusedElements().addAll(collectedSequences.getUnusedElements());
+				return lockedSequences;
+			}
+
+
+			@Override
+			protected void configure() {
+			}
+
+			@Provides
+			@Singleton
+			@Named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)
+			@Exposed
+			private ISequences provideInitialSequences(@Named(KEY_EMPTY_SOLUTION) final ISequences sequences) {
+				return sequences;
+			}
+
+			@Provides
+			@Singleton
+			@Named(LNGInitialSequencesModule.KEY_GENERATED_SOLUTION_PAIR)
+			@Exposed
+			private IMultiStateResult provideSolutionPair(@Named(KEY_EMPTY_SOLUTION) final ISequences sequences) {
+
+				return new MultiStateResult(sequences, new HashMap<>());
+			}
+		};
 	}
 
 	public static @NonNull Module createExtraDataModule(final @NonNull ADPModel adpModel) {

@@ -40,6 +40,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
@@ -284,7 +285,7 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			final long startTime = System.currentTimeMillis();
 			
 			// Don't run an evaluation if we are in clean state as this will unpair the starting point 
-			if (!userSettings.isCleanSlateOptimisation()) {
+			if (userSettings.getAdpOptimisationMode() != AdpOptimisationMode.CLEAN_SLATE) {
 				sdp.setLastEvaluationFailed(true);
 				runner.evaluateInitialState();
 			}

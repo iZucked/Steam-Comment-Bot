@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOptionalElem
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.providers.*;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAdpFrozenProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultBaseFuelProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultCharterLengthElementProviderEditor;
@@ -403,5 +404,9 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultMinTravelTimeProviderEditor.class).in(Singleton.class);
 		bind(IMinTravelTimeProvider.class).to(DefaultMinTravelTimeProviderEditor.class);
 		bind(IMinTravelTimeProviderEditor.class).to(DefaultMinTravelTimeProviderEditor.class);
+
+		bind(DefaultAdpFrozenProvider.class).in(Singleton.class);
+		bind(IAdpFrozenAssignmentProvider.class).to(DefaultAdpFrozenProvider.class);
+		bind(IAdpFrozenAssignmentProviderEditor.class).to(DefaultAdpFrozenProvider.class);
 	}
 }

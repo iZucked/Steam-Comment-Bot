@@ -34,6 +34,8 @@ import com.mmxlabs.models.lng.adp.VesselUsageDistributionProfileConstraint;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
@@ -41,15 +43,22 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
+import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProviderEditor;
+import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProviderEditor;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint;
+import com.mmxlabs.scheduler.optimiser.providers.IAdpFrozenAssignmentProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselSlotCountFitnessProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselUsageConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
@@ -94,12 +103,26 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 	@Inject
 	private @NonNull IAllowedVesselProviderEditor allowedVesselProviderEditor;
 
+	@Inject
+	private @NonNull IOrderedSequenceElementsDataComponentProviderEditor orderElementsProviderEditor;
+
+	@Inject
+	private @NonNull IAdpFrozenAssignmentProvider frozenAssignmentProvider;
+
+	@Inject
+	private @NonNull IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProviderEditor;
+
+	@Inject
+	private @NonNull IVesselProvider vesselProvider;
+
+	@Inject
+	private UserSettings userSettings;
+
 	private LNGScenarioModel rootObject;
 
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
-
 	}
 
 	@Override
@@ -133,7 +156,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			// calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(start));
 
 			final List<Pair<ILoadOption, Integer>> oSlots = slots.stream() //
-					.<Pair<ILoadOption, Integer>> map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class),
+					.<Pair<ILoadOption, Integer>>map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, ILoadOption.class),
 							calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())))) //
 					.collect(Collectors.toList());
 
@@ -257,7 +280,7 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 
 			// Convert from LNG model slots to optimiser DischargeOptions.
 			final List<Pair<IDischargeOption, Integer>> oSlots = slots.stream() //
-					.<Pair<IDischargeOption, Integer>> map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class),
+					.<Pair<IDischargeOption, Integer>>map(s -> Pair.of(modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class),
 							calendarMonthMapper.mapChangePointToMonth(dateAndCurveHelper.convertTime(s.getWindowStart())))) //
 					.collect(Collectors.toList());
 
@@ -363,6 +386,9 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 			}
 		}
 		handleVesselConstraints(adpModel);
+		if (userSettings.getAdpOptimisationMode() == AdpOptimisationMode.PARTIAL_CLEAN_SLATE) {
+			handleOrderingConstraints();
+		}
 	}
 
 	public void handleVesselConstraints(@NonNull final ADPModel model) {
@@ -398,5 +424,26 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				}
 			}
 		}
+
+	}
+
+	private void handleOrderingConstraints() {
+		for(ILoadOption load: frozenAssignmentProvider.getCargoPairs().keySet()) {
+			ISequenceElement loadElement = portSlotProvider.getElement(load);
+			ISequenceElement dischargeElement = portSlotProvider.getElement(frozenAssignmentProvider.getCargoPairs().get(load));
+			orderElementsProviderEditor.setElementOrder(loadElement, dischargeElement);
+			optionalElementsProvider.setSoftRequired(loadElement, false);
+			optionalElementsProvider.setSoftRequired(dischargeElement, false);
+		}
+		final IVesselCharter nominalVesselCharter = (IVesselCharter)modelEntityMap.getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
+		assert nominalVesselCharter != null;
+		final IResource nomResource = vesselProvider.getResource(nominalVesselCharter);
+		
+		frozenAssignmentProvider.getLockedVesselCharters().stream().forEach(charter -> {
+			frozenAssignmentProvider.getCargoesFromVesselCharter(charter).stream().forEach(cargo -> {
+				resourceAllocationProviderEditor.setAllowedResources(portSlotProvider.getElement(cargo.getPortSlots().get(0)), Set.of(vesselProvider.getResource(charter), nomResource));
+				resourceAllocationProviderEditor.setAllowedResources(portSlotProvider.getElement(cargo.getPortSlots().get(1)), Set.of(vesselProvider.getResource(charter), nomResource));
+			});
+		});
 	}
 }

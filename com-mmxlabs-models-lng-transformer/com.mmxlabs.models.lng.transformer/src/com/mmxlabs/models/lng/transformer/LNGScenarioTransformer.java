@@ -207,6 +207,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenLoadPric
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PortfolioBreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IAdpFrozenAssignmentProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICounterPartyWindowProviderEditor;
@@ -435,6 +436,9 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IMinTravelTimeProviderEditor minTravelTimeProviderEditor;
+
+	@Inject
+	private IAdpFrozenAssignmentProviderEditor adpFrozenAssignmentProviderEditor;
 
 	@Inject
 	@Named(LIMIT_SPOT_SLOT_CREATION)
@@ -904,7 +908,30 @@ public class LNGScenarioTransformer {
 		buildRouteEntryPoints(portModel, portAssociation);
 
 		buildCanalDistances(portModel);
+		// TODO: MOVE TO FUNCTION
+		// loads into adp frozen assignment provider
+		{
+			for (Cargo cargo : rootObject.getCargoModel().getCargoes()) {
+				if (!cargo.isAllowRewiring()) {
+					IPortSlot oLoadSlot = modelEntityMap.getOptimiserObjectNullChecked(cargo.getSortedSlots().get(0), IPortSlot.class);
+					IPortSlot oDischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(cargo.getSortedSlots().get(1), IPortSlot.class);
+					assert oLoadSlot instanceof ILoadOption && oDischargeSlot instanceof IDischargeOption;
+					if (cargo.isLocked() && cargo.getVesselAssignmentType() != null) {
 
+						IVesselCharter oVesselCharter = null;
+						if (cargo.getVesselAssignmentType() instanceof VesselCharter vc) {
+							oVesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vc, IVesselCharter.class);
+						} else if (cargo.getVesselAssignmentType() instanceof @NonNull CharterInMarket cim) {
+							oVesselCharter = spotCharterInToAvailability.get(new NonNullPair<>(cim, cargo.getSpotIndex()));
+						}
+						assert oVesselCharter != null;
+						adpFrozenAssignmentProviderEditor.setVesselAssignment(oVesselCharter, (ILoadOption) oLoadSlot, (IDischargeOption) oDischargeSlot);
+					} else {
+						adpFrozenAssignmentProviderEditor.setCargoPair((ILoadOption) oLoadSlot, (IDischargeOption) oDischargeSlot);
+					}
+				}
+			}
+		}
 		// freeze any frozen assignments
 		freezeAssignmentModel(builder, modelEntityMap);
 
@@ -1144,8 +1171,8 @@ public class LNGScenarioTransformer {
 				// VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
 				final IHeelOptionSupplier heelSupplier = createHeelSupplier(charterOut.getAvailableHeel(), null);
 
-				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning,
-						ballastBonus, charterOut.isOptional());
+				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning, ballastBonus,
+						charterOut.isOptional());
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -1249,8 +1276,7 @@ public class LNGScenarioTransformer {
 			});
 		}
 
-		cargoModel.getCargoes()
-				.stream() //
+		cargoModel.getCargoes().stream() //
 				.filter(c -> cargoFilterFunctions.stream().allMatch(fun -> fun.test(c))) //
 				.forEach(eCargo -> {
 					final List<@NonNull ILoadOption> loadOptions = new LinkedList<>();

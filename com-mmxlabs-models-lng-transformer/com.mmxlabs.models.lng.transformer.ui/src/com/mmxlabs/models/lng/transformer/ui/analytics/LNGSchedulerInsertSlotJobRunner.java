@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
@@ -130,7 +131,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		// Reset settings not supplied to the user
 		this.userSettings.setShippingOnly(false);
-		this.userSettings.setCleanSlateOptimisation(false);
+		this.userSettings.setAdpOptimisationMode(AdpOptimisationMode.NON_CLEAN_SLATE);
 		this.userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		plan = ParametersFactory.eINSTANCE.createOptimisationPlan();

@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
@@ -343,7 +344,7 @@ public final class OptimisationHelper {
 			ScenarioUtils.removeConstraints(RoundTripVesselPermissionConstraintCheckerFactory.NAME, baseConstraintAndFitnessSettings);
 		}
 
-		if (userSettings.isCleanSlateOptimisation() || userSettings.getMode() == OptimisationMode.STRATEGIC) {
+		if (userSettings.getAdpOptimisationMode() != AdpOptimisationMode.NON_CLEAN_SLATE || userSettings.getMode() == OptimisationMode.STRATEGIC) {
 			shouldUseRestartingLSO = false;
 			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
 
