@@ -168,7 +168,7 @@ class LicenseTests {
 
 				final MultipartEntityBuilder formDataBuilder = MultipartEntityBuilder.create();
 				formDataBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-				formDataBuilder.addBinaryBody("license", license, ContentType.DEFAULT_BINARY, "license.p12");
+				formDataBuilder.addBinaryBody("file", license, ContentType.DEFAULT_BINARY, "license.p12");
 				final HttpEntity entity = formDataBuilder.build();
 
 				// Add file to post request
