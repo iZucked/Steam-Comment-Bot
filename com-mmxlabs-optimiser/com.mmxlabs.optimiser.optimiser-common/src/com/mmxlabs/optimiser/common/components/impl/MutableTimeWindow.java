@@ -80,8 +80,7 @@ public final class MutableTimeWindow implements ITimeWindow {
 			return true;
 		}
 
-		if (obj instanceof MutableTimeWindow) {
-			final MutableTimeWindow tw = (MutableTimeWindow) obj;
+		if (obj instanceof MutableTimeWindow tw) {
 			if (start != tw.start) {
 				return false;
 			}
