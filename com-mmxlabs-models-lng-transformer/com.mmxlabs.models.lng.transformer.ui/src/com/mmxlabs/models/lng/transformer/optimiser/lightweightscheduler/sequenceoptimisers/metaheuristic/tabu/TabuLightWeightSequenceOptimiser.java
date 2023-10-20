@@ -49,16 +49,14 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	private int seed;
 
 	@Override
-	public List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers, List<IFullLightWeightConstraintChecker> fullConstraintCheckers,
+	public List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<List<Integer>> initialSequences, List<ILightWeightConstraintChecker> constraintCheckers, List<IFullLightWeightConstraintChecker> fullConstraintCheckers,
 			List<ILightWeightFitnessFunction> fitnessFunctions, JobExecutor jobExecutor, IProgressMonitor monitor) {
 		int cargoCount = lightWeightOptimisationData.getShippedCargoes().size();
 		int vesselCount = lightWeightOptimisationData.getVessels().size();
 
 		TabuList tabuList = new TabuList();
 
-		List<List<Integer>> schedule = lightWeightOptimisationData.getVessels().stream() //
-				.map(v -> new LinkedList<Integer>()) //
-				.collect(Collectors.toList());
+		List<List<Integer>> schedule = initialSequences;
 
 		if (cargoCount == 0) {
 			// No shipped cargoes to allocate
