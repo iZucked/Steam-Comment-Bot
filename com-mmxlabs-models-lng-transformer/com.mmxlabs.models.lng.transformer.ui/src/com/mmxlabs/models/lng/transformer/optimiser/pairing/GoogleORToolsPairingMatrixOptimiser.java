@@ -606,7 +606,6 @@ public class GoogleORToolsPairingMatrixOptimiser<P, C> implements IPairingMatrix
 		data.optionalLoads = optionalLoads;
 		data.optionalDischarges = optionalDischarges;
 		data.validCargoes = valid;
-
 		data.minLoadSlots = minLoadSlotsConstraints;
 		data.maxLoadSlots = maxLoadSlotsConstraints;
 		data.minDischargeSlots = minDischargeSlotsConstraints;

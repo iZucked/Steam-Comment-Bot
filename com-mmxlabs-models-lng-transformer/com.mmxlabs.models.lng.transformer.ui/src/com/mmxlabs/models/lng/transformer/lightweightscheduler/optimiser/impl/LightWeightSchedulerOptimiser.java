@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.google.inject.name.Named;
 import com.minimaxlabs.rnd.representation.LightWeightOutputData;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.models.lng.transformer.lightweightscheduler.LightWeightSchedulerStage2Module;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.IFullLightWeightConstraintChecker;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintChecker;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
@@ -49,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Light weight scheduling optimisation.
@@ -88,6 +91,10 @@ public class LightWeightSchedulerOptimiser {
 	@Inject
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	private ISequences initialSequences;
+	
+	@Inject
+	@Named(LightWeightSchedulerStage2Module.LIGHTWEIGHT_INTIAL_SEQUENCES)
+	private List<List<Integer>> lightWeightInitialSequences;
 
 	@Inject
 	@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
@@ -105,7 +112,7 @@ public class LightWeightSchedulerOptimiser {
 	 */
 	public Pair<ISequences, Long> optimise(final IVesselCharter pnlVessel, @NonNull final IProgressMonitor monitor, JobExecutor jobExecutor) {
 		// Get optimised sequences from our injected sequences optimiser
-		final List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, constraintCheckers, fullConstraintCheckers, fitnessFunctions, jobExecutor, monitor);
+		final List<List<Integer>> sequences = lightWeightSequenceOptimiser.optimise(lightWeightOptimisationData, lightWeightInitialSequences, constraintCheckers, fullConstraintCheckers, fitnessFunctions, jobExecutor, monitor);
 
 		// Export the pairings matrix to the raw sequences:
 
@@ -118,6 +125,33 @@ public class LightWeightSchedulerOptimiser {
 		updateSequences(rawSequences, sequences, lightWeightOptimisationData.getShippedCargoes(), lightWeightOptimisationData.getVessels());
 
 		return new Pair<>(rawSequences, 0L);
+	}
+	
+	private List<List<Integer>> getLightWeightInitialSequences() {
+		List<List<Integer>> result = new ArrayList<>();
+		List<IVesselCharter> vessels = lightWeightOptimisationData.getVessels();
+		for(int i = 0; i < vessels.size(); i++) {
+			List<Integer> cargoes = new ArrayList<>();
+			IResource resource = vesselProvider.getResource(vessels.get(i));
+			ISequence sequence = initialSequences.getSequence(resource);
+			for(int j = 0; j < sequence.size(); j++){
+				ISequenceElement element = sequence.get(j);
+				IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+				if(portSlot.getPortType() != PortType.Load && portSlot.getPortType() != PortType.Discharge) {
+					continue;
+				}
+				for(int cargoIndex = 0; cargoIndex < lightWeightOptimisationData.getShippedCargoes().size(); cargoIndex++) {
+					List<IPortSlot> cargo = lightWeightOptimisationData.getShippedCargoes().get(cargoIndex);
+					if(cargo.contains(portSlot)) {
+						cargoes.add(cargoIndex);
+						j += cargo.size() - 1;
+						break;
+					}
+				}
+			}
+			result.add(cargoes);
+		}
+		return result;
 	}
 
 	/**
