@@ -78,9 +78,9 @@ public class SeriesParserTest {
 
 				{ "TIERBLEND(50,1,50,2)", 1.0 }, // Expect lower bound
 				{ "TIERBLEND(100,1,50,2)", 1.5 }, // Expect blended price
-				{ "SWITCH(5, 2023-01-2, 10)", 5 }, // Expect LHS price
-				{ "SWITCH(5, 2023-01-1, 10)", 10 }, // Expect RHS price as >= 
-				{ "SWITCH(5, 2022-12-1, 10)", 10 }, // Expect RHS price
+				{ "UNTIL(5, 2023-01-2, 10)", 5 }, // Expect LHS price
+				{ "UNTIL(5, 2023-01-1, 10)", 10 }, // Expect RHS price as >= 
+				{ "UNTIL(5, 2022-12-1, 10)", 10 }, // Expect RHS price
 
 		});
 	}

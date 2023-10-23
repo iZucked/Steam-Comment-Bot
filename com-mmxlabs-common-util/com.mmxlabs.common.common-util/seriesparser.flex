@@ -91,7 +91,7 @@ white_space = {new_line} | [ \t\f]
 "S"           { return symbol("scurve", S); }
 "TIER"           { return symbol("tier", TIER); }
 "TIERBLEND"           { return symbol("tierblend", TIERBLEND); }
-"SWITCH"           { return symbol("switch", SWITCH); }
+"UNTIL"           { return symbol("until", UNTIL); }
  
  
  "JAN" { return symbol("jan",MONTH, Month.JANUARY); }

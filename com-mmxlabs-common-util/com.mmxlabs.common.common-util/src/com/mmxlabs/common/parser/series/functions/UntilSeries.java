@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.ISeries;
 
-public class SwitchSeries implements ISeries {
+public class UntilSeries implements ISeries {
 	private ISeries lhs;
 	private int switchPoint;
 	private ISeries rhs;
@@ -24,7 +24,7 @@ public class SwitchSeries implements ISeries {
 	private final Set<String> parameters;
 	private int earlyDate;
 
-	public SwitchSeries(ZonedDateTime firstDate, final ISeries lhs, final LocalDateTime ldt, final ISeries rhs, @NonNull final CalendarMonthMapper mapper) {
+	public UntilSeries(ZonedDateTime firstDate, final ISeries lhs, final LocalDateTime ldt, final ISeries rhs, @NonNull final CalendarMonthMapper mapper) {
 		this.lhs = lhs;
 		this.switchPoint = mapper.mapTimePoint(ldt);
 		this.earlyDate = mapper.mapTimePoint(firstDate.toLocalDateTime());

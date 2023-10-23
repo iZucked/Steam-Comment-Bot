@@ -458,7 +458,7 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 		final LocalDateTime endDate = startDate.plusDays(100);
 
 		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
-				.withCharterRate("SWITCH(10000, 2023-1-11,20000)")
+				.withCharterRate("UNTIL(10000, 2023-1-11,20000)")
 				.withStartWindow(startDate)
 				.withEndWindow(endDate)
 				.build();
@@ -510,7 +510,7 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 		final LocalDateTime endDate = startDate.plusDays(100);
 
 		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
-				.withCharterRate("SWITCH(10000, 2023-1-11,40000)")
+				.withCharterRate("UNTIL(10000, 2023-1-11,40000)")
 				.withStartWindow(startDate)
 				.withEndWindow(endDate)
 				.withStartPort(port1)
@@ -569,7 +569,7 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 		final LocalDateTime endDate = startDate.plusDays(100);
 
 		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
-				.withCharterRate("SWITCH(10000, 2023-1-1,40000)")
+				.withCharterRate("UNTIL(10000, 2023-1-1,40000)")
 				.withStartWindow(startDate)
 				.withEndWindow(endDate)
 				.withStartPort(port1)
@@ -628,7 +628,7 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 		final LocalDateTime endDate = startDate.plusDays(100);
 
 		VesselCharter charter = cargoModelBuilder.makeVesselCharter(vessel, entity) //
-				.withCharterRate("SWITCH(10000, 2023-1-11,SWITCH(20000, 2023-1-21,30000))")
+				.withCharterRate("UNTIL(10000, 2023-1-11,UNTIL(20000, 2023-1-21,30000))")
 				.withStartWindow(startDate)
 				.withEndWindow(endDate)
 				.withStartPort(port1)

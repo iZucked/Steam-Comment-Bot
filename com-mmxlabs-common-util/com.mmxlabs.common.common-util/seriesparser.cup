@@ -36,7 +36,7 @@ scan with {: return s.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
 terminal            PLUS, MINUS, TIMES, DIVIDE, UPLUS, UMINUS, LPAREN, RPAREN, LBRACKET, RBRACKET, COMMA, COLON, PERCENT, QUESTION;
-terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, SWITCH, TIER, TIERBLEND;
+terminal			CAP, FLOOR, MIN, MAX, SHIFT, DATEDAVG, SPLITMONTH, S, UNTIL, TIER, TIERBLEND;
 terminal            SEMICOLON, EQUALS;
 terminal ComparisonOperators    LT, LTE, GT, GTE;
 
@@ -128,7 +128,7 @@ expr      ::= expr:lhs PLUS expr:rhs                      {: RESULT = new Operat
 
              | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionASTNode(e1, e2, s); :}
              | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionASTNode(base, lower, higher, a1,b1,a2,b2,a3,b3); :}
-             | SWITCH LPAREN expr:lhs COMMA DATE:date COMMA expr:rhs RPAREN {: RESULT = new SwitchASTNode(lhs, date, rhs); :}
+             | UNTIL LPAREN expr:lhs COMMA DATE:date COMMA expr:rhs RPAREN {: RESULT = new UntilASTNode(lhs, date, rhs); :}
 /* new style */
              | TIER LPAREN expr:target COMMA expr:lowValue COMMA LTOPS:lowOp NUMBER:low COMMA expr:highValue RPAREN                                                   {: RESULT =  new Tier2FunctionASTNode(target, lowOp, low, lowValue, highValue); :}             
              | TIER LPAREN expr:target COMMA expr:lowValue COMMA LTOPS:lowOp NUMBER:low COMMA expr:midValue COMMA LTOPS:midOp NUMBER:mid COMMA expr:highValue RPAREN  {: RESULT =  new Tier3FunctionASTNode(target, lowOp, low, lowValue, midOp, mid, midValue, highValue); :}

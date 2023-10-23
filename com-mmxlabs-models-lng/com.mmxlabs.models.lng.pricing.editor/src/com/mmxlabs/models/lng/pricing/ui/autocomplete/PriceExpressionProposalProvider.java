@@ -214,16 +214,16 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 		{
 			
 			String tzQualifier = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_WEIGHTED_AVG_CHARTER_RATES) ? "The date is based on start of day in UTC time": "The date is based on start of day at the port";
-			final String proposal = "SWITCH(";
+			final String proposal = "UNTIL(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = matchCase(contents, proposal.substring(contents.length()));
 				list.add(new ContentProposal(c, proposal + "before, date, after)", String.format("""
-						SWITCH pricing. Uses the before expression before the date , or otherwise uses the after. The date format is yyyy-mm-dd (4 digit year, 1 or 2 digit month and 1 or 2 digit day). %s
+						Until pricing. Uses the before expression before the date , or otherwise uses the after. The date format is yyyy-mm-dd (4 digit year, 1 or 2 digit month and 1 or 2 digit day). %s
 						
 						For example
-						  SWITCH(HH,2023-7-21,JKM) will use HH before the start of 21st July 2023 otherwise JKM. 
+						  UNTIL(HH,2023-7-21,JKM) will use HH before the start of 21st July 2023 otherwise JKM. 
 						  
-						  SWITCH(100000,2023-1-1,150000) will use 100000 before 2023 and 150000 after.
+						  UNTIL(100000,2023-1-1,150000) will use 100000 before 2023 and 150000 after.
 						""", tzQualifier), c.length()));
 			}
 		}

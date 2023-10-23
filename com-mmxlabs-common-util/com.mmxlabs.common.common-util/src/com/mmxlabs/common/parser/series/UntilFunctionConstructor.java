@@ -10,9 +10,9 @@ import java.time.ZonedDateTime;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.series.functions.SwitchSeries;
+import com.mmxlabs.common.parser.series.functions.UntilSeries;
 
-public class SwitchFunctionConstructor implements IExpression<ISeries> {
+public class UntilFunctionConstructor implements IExpression<ISeries> {
 
 	private final CalendarMonthMapper calendarMonthMapper;
 	private final IExpression<ISeries> lhsSeries;
@@ -24,7 +24,7 @@ public class SwitchFunctionConstructor implements IExpression<ISeries> {
 		return calendarMonthMapper;
 	}
 
-	public SwitchFunctionConstructor(final SeriesParserData seriesParserData, IExpression<ISeries> lhsSeries, LocalDateTime threshold, IExpression<ISeries> rhsSeries) {
+	public UntilFunctionConstructor(final SeriesParserData seriesParserData, IExpression<ISeries> lhsSeries, LocalDateTime threshold, IExpression<ISeries> rhsSeries) {
 		this.calendarMonthMapper = seriesParserData.calendarMonthMapper;
 		firstDate = seriesParserData.earliestAndLatestTime.getFirst();
 		if (calendarMonthMapper == null) {
@@ -37,7 +37,7 @@ public class SwitchFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return new SwitchSeries(firstDate, lhsSeries.evaluate(), threshold, rhsSeries.evaluate(), calendarMonthMapper);
+		return new UntilSeries(firstDate, lhsSeries.evaluate(), threshold, rhsSeries.evaluate(), calendarMonthMapper);
 	}
 
 	@Override

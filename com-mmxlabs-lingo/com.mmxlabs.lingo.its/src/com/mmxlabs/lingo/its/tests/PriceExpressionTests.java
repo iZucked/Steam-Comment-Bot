@@ -243,9 +243,9 @@ public class PriceExpressionTests {
 			"MAX(1,2)", //
 			"CAP(1,2)", //
 			"SPLITMONTH(HH, HH, 15)", //
-			"SWITCH(HH, 2000-7-1, 15)", // Check date formats - single digits
-			"SWITCH(HH, 2023-07-01, 15)", // Check date formats - leading zeros
-			"SWITCH(HH, 2099-12-31, 15)", // Check date formats - max values
+			"UNTIL(HH, 2000-7-1, 15)", // Check date formats - single digits
+			"UNTIL(HH, 2023-07-01, 15)", // Check date formats - leading zeros
+			"UNTIL(HH, 2099-12-31, 15)", // Check date formats - max values
 	})
 	public void testASTNodeAsString(final String baseExpr) {
 
