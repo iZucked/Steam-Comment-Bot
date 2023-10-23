@@ -57,7 +57,8 @@ public class LoadTriggerHelper {
 			final List<SlotAllocation> loadSlotsToConsider = getSortedFilteredLoadSlots(model, start, selectedInventory, inventoryInsAndOuts);
 			processWithLoadsAndStartDate(loadSlotsToConsider, inventoryInsAndOuts, start);
 			// create new Loads
-			matchAndMoveSlotsLoadTrigger(model, selectedInventory.getPort(), inventoryInsAndOuts, globalLoadTrigger, cargoVolume, start);
+			standardLoadTrigger(model, selectedInventory.getPort(), inventoryInsAndOuts, globalLoadTrigger, cargoVolume, start);
+			//matchAndMoveSlotsLoadTrigger(model, selectedInventory.getPort(), inventoryInsAndOuts, globalLoadTrigger, cargoVolume, start);
 	}
 
 	public List<Pair<LocalDate, LoadSlot>> getLoadDatesForExistingSlotsFromLoadTrigger(final LNGScenarioModel model, final Inventory inventory, final int globalLoadTrigger, final Integer cargoVolume,
@@ -84,16 +85,26 @@ public class LoadTriggerHelper {
 	}
 
 	private void processWithLoadsAndStartDate(final List<SlotAllocation> loadSlotsToConsider, final TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, final LocalDate start) {
-		// get sum of feeds
-		int totalInventoryVolume = 0;
-		while (insAndOuts.firstKey().isBefore(start)) {
-			final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
-			totalInventoryVolume += event.netVolumeIn;
+		if (!loadSlotsToConsider.isEmpty() && !insAndOuts.isEmpty()) {
+			// get sum of feeds
+			int totalInventoryVolume = 0;
+			Iterator<Entry<LocalDate, InventoryDailyEvent>> iter = insAndOuts.entrySet().iterator();
+			while(iter.hasNext()) {
+				final Entry<LocalDate, InventoryDailyEvent> entry = iter.next();
+				final InventoryDailyEvent event = entry.getValue();
+				if (event != null && entry.getKey().isBefore(start)) {
+					totalInventoryVolume += event.netVolumeIn;
+					iter.remove();
+				}
+			}
+			
+			if (!insAndOuts.isEmpty()) {
+				// get sum of loads
+				final int totalVolumeOut = -1 * loadSlotsToConsider.stream().mapToInt(l -> l.getPhysicalVolumeTransferred()).sum();
+				final InventoryDailyEvent firstEvent = insAndOuts.firstEntry().getValue();
+				firstEvent.addVolume(totalInventoryVolume + totalVolumeOut);
+			}
 		}
-		// get sum of loads
-		final int totalVolumeOut = -1 * loadSlotsToConsider.stream().mapToInt(l -> l.getPhysicalVolumeTransferred()).sum();
-		final InventoryDailyEvent firstEvent = insAndOuts.firstEntry().getValue();
-		firstEvent.addVolume(totalInventoryVolume + totalVolumeOut);
 	}
 
 	/**
@@ -110,7 +121,7 @@ public class LoadTriggerHelper {
 			final LocalDate start) {
 		final List<LocalDate> loadDates = new LinkedList<>();
 		int runningVolume = 0;
-		clearCargoesAndSchedule(model, start);
+		//clearCargoesAndSchedule(model, start);
 		for (final Entry<LocalDate, InventoryDailyEvent> entry : insAndOuts.entrySet()) {
 			runningVolume += entry.getValue().netVolumeIn;
 			if (runningVolume > globalLoadTrigger) {
@@ -118,7 +129,7 @@ public class LoadTriggerHelper {
 				runningVolume -= cargoVolume;
 			}
 		}
-		createLoadSlots(model, port, loadDates, cargoVolume, start, true);
+		createLoadSlots(model, port, loadDates, cargoVolume, start, false);
 	}
 
 	/**
@@ -250,24 +261,25 @@ public class LoadTriggerHelper {
 	 * 
 	 */
 	public void createLoadSlots(final LNGScenarioModel scenario, final Port port, final List<LocalDate> dates, final int cargoVolume, final LocalDate start, final boolean clear) {
-		// First clear all load slots
-		final EList<LoadSlot> loadSlots = scenario.getCargoModel().getLoadSlots();
-		if (loadSlots != null) {
-			// Clear all cargoes
-			if (clear)
-				clearCargoesAndSchedule(scenario, start);
-		}
-		final CargoModelBuilder builder = new CargoModelBuilder(scenario.getCargoModel());
-		int i = 0;
-
-
-		for (final LocalDate slotDate : dates) {
-			assert port != null;
-			final SlotMaker<LoadSlot> loadMaker = new SlotMaker<>(builder);
-			loadMaker.withFOBPurchase(String.format("%s_%s", "load", ++i), slotDate, port, selectedContract, scenario.getReferenceModel().getCommercialModel().getEntities().get(0), null, null);
-			loadMaker.withVolumeLimits(0, cargoVolume, VolumeUnits.M3);
-			loadMaker.withWindowSize(0, TimePeriod.DAYS);
-			loadMaker.build();
+		if (dates != null && !dates.isEmpty()) {
+			// First clear all load slots
+			final EList<LoadSlot> loadSlots = scenario.getCargoModel().getLoadSlots();
+			if (loadSlots != null) {
+				// Clear all cargoes
+				if (clear)
+					clearCargoesAndSchedule(scenario, start);
+			}
+			final CargoModelBuilder builder = new CargoModelBuilder(scenario.getCargoModel());
+			int i = 0;
+	
+			for (final LocalDate slotDate : dates) {
+				assert port != null;
+				final SlotMaker<LoadSlot> loadMaker = new SlotMaker<>(builder);
+				loadMaker.withFOBPurchase(String.format("%s_%s", "load", ++i), slotDate, port, selectedContract, scenario.getReferenceModel().getCommercialModel().getEntities().get(0), null, null);
+				loadMaker.withVolumeLimits(0, cargoVolume, VolumeUnits.M3);
+				loadMaker.withWindowSize(0, TimePeriod.DAYS);
+				loadMaker.build();
+			}
 		}
 	}
 
