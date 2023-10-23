@@ -349,7 +349,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		long result = 0L;
 		for (final Map.Entry<IEntityBook, Long> e : entityPostTaxProfit.entrySet()) {
-			if (!e.getKey().getEntity().isThirdparty()) {
+			if (!e.getKey().getEntity().isThirdparty() && includeInGroupPNL(e.getKey().getEntity())) {
 				result += e.getValue();
 			}
 		}
@@ -373,7 +373,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							final long preTaxValue = (thirdparty || preTaxProfit == null) ? 0 : preTaxProfit.longValue();
 							final long postTaxValue = (thirdparty || postTaxProfit == null) ? 0 : postTaxProfit.longValue();
 
-							if (!thirdparty || (entityDetails != null && !entityDetails.getChildren().isEmpty())) {
+							if (includeInGroupPNL(entity) && (!thirdparty || (entityDetails != null && !entityDetails.getChildren().isEmpty()))) {
 								final IProfitAndLossEntry entry = new ProfitAndLossEntry(book, postTaxValue, preTaxValue, entityDetails);
 								entries.add(entry);
 							}
@@ -403,6 +403,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	}
 
+	/**
+	 * Allow subclasses to selectively include entities in group PNL for cargo
+	 * @param entity
+	 * @return
+	 */
+	protected boolean includeInGroupPNL(IEntity entity) {
+		return true;
+	}
+	
 	/**
 	 * Allow subclasses to post-process the P&L books before final data extraction
 	 * occurs. E.g. allow custom books to be merged
