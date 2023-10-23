@@ -56,7 +56,8 @@ public class NinetyDaySlotWindowAnnotation extends DrawableScheduleEventAnnotati
 
 		Color bg = getBgColour();
 		Color border = getBorderColour();
-		return List.of(BasicDrawableElements.Rectangle.withBounds(bounds).border(border, getBorderThickness()).bgColour(bg).alpha(dse.getAlpha()).create());
+		int alpha = settings.showAnnotations() ? Math.min(dse.getAlpha(), 150) : dse.getAlpha();
+		return List.of(BasicDrawableElements.Rectangle.withBounds(bounds).border(border, getBorderThickness()).bgColour(bg).alpha(alpha).create());
 	}
 	
 	protected int getHeight(Rectangle scheduleEventBounds) {

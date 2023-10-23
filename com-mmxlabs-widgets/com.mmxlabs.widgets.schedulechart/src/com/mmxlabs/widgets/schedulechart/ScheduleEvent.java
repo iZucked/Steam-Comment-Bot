@@ -16,6 +16,7 @@ public class ScheduleEvent {
 	private final Object data;
 	private boolean visible;
 	private boolean forceVisible;
+	private boolean showAnnotations;
 	private ScheduleEventSelectionState selectionState;
 	
 	private final List<ScheduleEventAnnotation> annotations;
@@ -26,6 +27,12 @@ public class ScheduleEvent {
 		this.data = data;
 		this.selectionState = ScheduleEventSelectionState.UNSELECTED;
 		this.annotations = annotations;
+		this.showAnnotations = true;
+	}
+	
+	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, List<ScheduleEventAnnotation> annotations, boolean showAnnotations) {
+		this(startDate, endDate, data, annotations);
+		this.showAnnotations = showAnnotations;
 	}
 
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate) {
@@ -66,6 +73,10 @@ public class ScheduleEvent {
 
 	public ScheduleEventSelectionState getSelectionState() {
 		return selectionState;
+	}
+	
+	public boolean showsAnnotations() {
+		return showAnnotations;
 	}
 
 }

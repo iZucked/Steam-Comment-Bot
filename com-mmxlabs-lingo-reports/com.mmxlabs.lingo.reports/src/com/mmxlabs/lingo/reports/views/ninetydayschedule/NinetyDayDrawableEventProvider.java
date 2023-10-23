@@ -13,7 +13,9 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDayCanalJourneyAnnotation;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDayCanalJourneyDefaultAnnotation;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDaySlotVisitLatenessAnnotation;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDaySlotVisitLatenessDefaultAnnotation;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDaySlotWindowAnnotation;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastIdleEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BallastJourneyEvent;
@@ -93,12 +95,21 @@ public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventPro
 	@Override
 	public DrawableScheduleEventAnnotation createDrawableScheduleEventAnnotation(ScheduleEventAnnotation sea, DrawableScheduleEvent dse, ToIntFunction<LocalDateTime> timeToXCoord, ScheduleCanvasState canvasState, IScheduleChartSettings settings) {
 		if (sea.getData() instanceof final NinetyDayScheduleEventAnnotationType type) {
-			return switch (type) {
-			case SLOT_WINDOW -> new NinetyDaySlotWindowAnnotation(sea, dse, settings, timeToXCoord);
-			case LATENESS_BAR -> new NinetyDaySlotVisitLatenessAnnotation(sea, dse, settings, timeToXCoord);
-			case CANAL_JOURNEY -> new NinetyDayCanalJourneyAnnotation(sea, dse, settings, timeToXCoord);
-			default -> throw new IllegalArgumentException("Unexpected value: " + sea.getData());
-			};
+			if (settings.showAnnotations()) {
+				return switch (type) {
+				case SLOT_WINDOW -> new NinetyDaySlotWindowAnnotation(sea, dse, settings, timeToXCoord);
+				case LATENESS_BAR -> new NinetyDaySlotVisitLatenessAnnotation(sea, dse, settings, timeToXCoord);
+				case CANAL_JOURNEY -> new NinetyDayCanalJourneyAnnotation(sea, dse, settings, timeToXCoord);
+				default -> throw new IllegalArgumentException("Unexpected value: " + sea.getData());
+				};
+			}
+			else {
+				return switch (type) {
+				case LATENESS_BAR -> new NinetyDaySlotVisitLatenessDefaultAnnotation(sea, dse, settings, timeToXCoord);
+				case CANAL_JOURNEY -> new NinetyDayCanalJourneyDefaultAnnotation(sea, dse, settings, timeToXCoord);
+				default -> null;
+				};
+			}
 		}
 		return null;
 	}

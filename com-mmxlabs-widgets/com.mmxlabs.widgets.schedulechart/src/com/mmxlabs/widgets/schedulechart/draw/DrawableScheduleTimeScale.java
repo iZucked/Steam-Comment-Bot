@@ -143,9 +143,10 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			LocalDateTime nextDate = date.plus(1, unit);
 			final int currX = x;
 			int width = unitWidth.orElseGet(() -> sts.getXForDateTime(nextDate) - currX);
+			int padding = settings.getHeaderLeftPadding();
 
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).bgColour(colourScheme.getHeaderBgColour(headerNum)).create());
-			res.add(BasicDrawableElements.Text.from(x, y, width, headerBounds.height, f.getDateString(date, unit)).padding(2).textColour(colourScheme.getHeaderTextColour(headerNum)).verticalAlignment(SWT.CENTER).create());
+			res.add(BasicDrawableElements.Text.from(x, y, width, headerBounds.height, f.getDateString(date, unit)).padding(padding).textColour(colourScheme.getHeaderTextColour(headerNum)).verticalAlignment(SWT.CENTER).create());
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).borderColour(colourScheme.getGridStrokeColour()).create());
 			date = nextDate;
 			x += width;

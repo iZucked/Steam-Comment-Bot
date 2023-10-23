@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.swt.graphics.Rectangle;
-
 import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvasState;
@@ -37,6 +36,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	private List<DrawableScheduleEvent> lastDrawnEvents = new ArrayList<>();
 	private List<DrawableScheduleEventAnnotation> lastDrawnAnnotations = new ArrayList<>();
 	private int actualHeight = -1;
+	private boolean showsAnnotations;
 
 	public DrawableScheduleChartRow(final ScheduleChartRow scr, final ScheduleCanvasState canvasState, final int rowNum, ScheduleTimeScale sts, IDrawableScheduleEventProvider drawableEventProvider, IScheduleEventStylingProvider eventStylingProvider,
 			IScheduleChartSettings settings, final boolean noSpacer) {
@@ -49,11 +49,14 @@ public class DrawableScheduleChartRow extends DrawableElement {
 		this.settings = settings;
 		this.drawableEventProvider = drawableEventProvider;
 		this.isNoSpacer = noSpacer;
-		this.actualHeight = noSpacer ? settings.getRowHeight() - 2 * settings.getSpacerWidth() : settings.getRowHeight();
+		this.showsAnnotations = true;
+		this.showsAnnotations = scr.getEvents().stream().anyMatch(e -> e.showsAnnotations());
+		this.actualHeight = getActualHeight();
 	}
 	
 	public int getActualHeight() {
-		return actualHeight ;
+		int rowHeight = showsAnnotations ? settings.getRowHeightWithAnnotations() : settings.getRowHeight();
+		return isNoSpacer ? rowHeight - 2 * settings.getSpacerWidth() : rowHeight;
 	}
 
 	@Override
@@ -74,7 +77,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 			}
 			lastDrawnEvents.add(drawableEvent);
 			if (!settings.showAnnotations()) {
-				continue;
+				//continue;
 			}
 			for (ScheduleEventAnnotation sea : se.getAnnotations()) {
 				DrawableScheduleEventAnnotation drawableAnnotation = drawableEventProvider.createDrawableScheduleEventAnnotation(sea, drawableEvent, sts::getXForDateTime, canvasState, settings);
@@ -116,7 +119,8 @@ public class DrawableScheduleChartRow extends DrawableElement {
 
 		int startX = sts.getXForDateTime(se.getStart());
 		int endX = sts.getXForDateTime(se.getEnd());
-		int y = bounds.y + (settings.showAnnotations() ? settings.getTopAnnotationHeight() + spacer : 0) + spacer;
+		
+		int y = bounds.y + (settings.showAnnotations() && se.showsAnnotations() ? settings.getTopAnnotationHeight() + spacer : 0) + spacer;
 		Rectangle eventBounds = new Rectangle(startX, y, endX - startX, eventHeight);
 		return drawableEventProvider.createDrawableScheduleEvent(se, eventBounds, canvasState);
 	}

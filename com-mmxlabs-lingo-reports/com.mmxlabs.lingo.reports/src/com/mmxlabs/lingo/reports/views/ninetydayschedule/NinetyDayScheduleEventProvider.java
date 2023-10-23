@@ -237,7 +237,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	private void collectEvents(final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence) {
 		for (final Object element : positionSequence.getElements()) {
 			final LocalDateTime startTime = PositionsSeqenceElements.getEventTime(element);
-			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), List.of());
+			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), List.of(), false);
 			scheduleEvent.forceVisible();
 			scheduleEvents.add(scheduleEvent);
 		}

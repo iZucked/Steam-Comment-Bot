@@ -70,6 +70,11 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 		return getRowHeight();
 	}
 
+	@Override
+	public int getHeaderLeftPadding() {
+		return 2;
+	}
+
 	
 
 }

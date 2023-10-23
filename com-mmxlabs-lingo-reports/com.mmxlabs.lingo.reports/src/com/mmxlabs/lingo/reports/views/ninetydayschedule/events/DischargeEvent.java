@@ -15,10 +15,10 @@ import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 
 public class DischargeEvent extends NinetyDayDrawableScheduleEvent {
-
+	
 	public DischargeEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
 		super(se, bounds, noneSelected);
-	}
+	}	
 
 	@Override
 	public Color getBackgroundColour() {

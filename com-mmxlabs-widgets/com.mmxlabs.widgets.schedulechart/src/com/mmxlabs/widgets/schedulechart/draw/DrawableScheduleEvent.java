@@ -16,8 +16,8 @@ import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
 
 public abstract class DrawableScheduleEvent extends DrawableElement {
 	
-	private final ScheduleEvent se;
-	private ScheduleEventSelectionState selectionState;
+	protected final ScheduleEvent se;
+	protected ScheduleEventSelectionState selectionState;
 	
 	
 	protected DrawableScheduleEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {

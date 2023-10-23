@@ -14,6 +14,7 @@ public interface IScheduleChartSettings {
 	int getMinimumRowHeaderWidth();
 	int getRowHeaderLeftPadding();
 	int getRowHeaderRightPadding();
+	int getHeaderLeftPadding();
 	int filterModeCheckboxColumnWidth();
 	
 	int getEventLabelFontSize();
@@ -22,10 +23,14 @@ public interface IScheduleChartSettings {
 	default boolean allowResizing() {
 		return showAnnotations();
 	}
+	
+	default int getRowHeightWithAnnotations() {
+		int withAnnotations = getTopAnnotationHeight() + getBottomAnnotationHeight() + getEventHeight() + 4 * getSpacerWidth();
+		return showAnnotations() ? withAnnotations : getRowHeight();
+	}
 
 	default int getRowHeight() {
-		int withAnnotations = getTopAnnotationHeight() + getBottomAnnotationHeight() + getEventHeight() + 4 * getSpacerWidth();
-		return showAnnotations() ? withAnnotations : getEventHeight() + 2 * getSpacerWidth();
+		return getEventHeight() + 2 * getSpacerWidth();
 	}
 	
 	IScheduleChartColourScheme getColourScheme();
