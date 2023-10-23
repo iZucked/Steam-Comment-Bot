@@ -26,7 +26,7 @@ public class AppearancePreferencePage extends FieldEditorPreferencePage implemen
 	private @NonNull ScopedPreferenceStore scopedPreferenceStore;
 
 	private Map<String, RGB> debugColouring;
-	private static final RGB TAB_BG_COLOUR = new RGB(75, 208, 115);
+	private static final RGB TAB_BG_COLOUR = new RGB(188, 224, 188);
 
 	@NonNull
 	private static final String TOOLBAR_EDITOR_NAME = "DebugColouringEnabled";
