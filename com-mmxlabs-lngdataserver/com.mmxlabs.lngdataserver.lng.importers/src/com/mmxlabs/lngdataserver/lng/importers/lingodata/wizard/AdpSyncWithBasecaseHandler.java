@@ -304,6 +304,8 @@ public class AdpSyncWithBasecaseHandler extends AbstractHandler {
 								final EObject cargoEObj = (EObject) jsonReader.readValue(cargoJson, cargo.eClass().getInstanceClass());
 								if (cargoEObj instanceof Cargo newCargo) {
 									newCargoesToAdd.add(newCargo);
+									newCargo.setAllowRewiring(false);
+									newCargo.setLocked(true);
 								}
 							} catch (JsonProcessingException e) {
 
