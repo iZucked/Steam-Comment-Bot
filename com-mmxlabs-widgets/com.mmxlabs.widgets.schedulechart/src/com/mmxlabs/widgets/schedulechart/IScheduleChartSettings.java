@@ -6,7 +6,9 @@ package com.mmxlabs.widgets.schedulechart;
 
 public interface IScheduleChartSettings {
 	int getHeaderHeight();
-	int getEventHeight();
+	default int getEventHeight() {
+		return getEventSizing().getEventHeight();
+	}
 	int getTopAnnotationHeight();
 	int getBottomAnnotationHeight();
 	int getSpacerWidth();
@@ -17,7 +19,9 @@ public interface IScheduleChartSettings {
 	int getHeaderLeftPadding();
 	int filterModeCheckboxColumnWidth();
 	
-	int getEventLabelFontSize();
+	default int getEventLabelFontSize() {
+		return getEventSizing().getFontSize();
+	}
 	
 	boolean showAnnotations();
 	default boolean allowResizing() {
@@ -34,5 +38,8 @@ public interface IScheduleChartSettings {
 	}
 	
 	IScheduleChartColourScheme getColourScheme();
+	
+	EventSize getEventSizing();
+	void setEventSizing(EventSize size);
 
 }

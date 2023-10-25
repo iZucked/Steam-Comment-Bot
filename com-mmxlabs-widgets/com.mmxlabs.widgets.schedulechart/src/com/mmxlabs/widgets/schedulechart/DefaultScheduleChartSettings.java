@@ -9,15 +9,11 @@ import com.mmxlabs.widgets.schedulechart.draw.DefaultScheduleChartColourScheme;
 public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	
 	private final IScheduleChartColourScheme defaultColourScheme = new DefaultScheduleChartColourScheme();
-
+	private EventSize size = EventSize.SMALL;  
+	
 	@Override
 	public int getHeaderHeight() {
 		return 24;
-	}
-
-	@Override
-	public int getEventHeight() {
-		return 19;
 	}
 
 	@Override
@@ -49,11 +45,6 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	public int getRowHeaderRightPadding() {
 		return 15;
 	}
-	
-	@Override
-	public int getEventLabelFontSize() {
-		return 9;
-	}
 
 	@Override
 	public boolean showAnnotations() {
@@ -75,6 +66,14 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 		return 2;
 	}
 
-	
+	@Override
+	public EventSize getEventSizing() {
+		return size;
+	}
+
+	@Override
+	public void setEventSizing(EventSize size) {
+		this.size = size;
+	}
 
 }

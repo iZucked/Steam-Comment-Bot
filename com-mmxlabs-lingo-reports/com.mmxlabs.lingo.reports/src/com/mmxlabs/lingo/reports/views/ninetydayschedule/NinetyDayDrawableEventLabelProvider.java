@@ -155,4 +155,22 @@ public class NinetyDayDrawableEventLabelProvider implements IDrawableScheduleEve
 	public boolean showDays() {
 		return showDays.isShowing();
 	}
+	
+	public TogglableLabel getToggledOption() {
+		if(showCanals())
+			return showCanals;
+		else if(showDestinationLabels())
+			return showDestinationLabels;
+		else if(showDays())
+			return showDays;
+		return null;
+	}
+	
+	public void reToggleLabel() {
+		TogglableLabel label = getToggledOption();
+		
+		if(label != null) {
+			applyActions.get(label).run();
+		}
+	}
 }
