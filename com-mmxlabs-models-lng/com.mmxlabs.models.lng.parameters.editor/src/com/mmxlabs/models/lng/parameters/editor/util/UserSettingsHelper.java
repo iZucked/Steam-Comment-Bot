@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
@@ -574,7 +575,8 @@ public final class UserSettingsHelper {
 		to.setWithSpotCargoMarkets(from.isWithSpotCargoMarkets());
 		to.setWithCharterLength(from.isWithCharterLength());
 		to.setMode(from.getMode());
-		to.setCleanSlateOptimisation(from.isCleanSlateOptimisation());
+		to.setAdpOptimisationMode(from.getAdpOptimisationMode());
+		// to.setCleanSlateOptimisation(from.isCleanSlateOptimisation());
 		to.setNominalOnly(from.isNominalOnly());
 		to.setDualMode(from.isDualMode());
 
@@ -590,16 +592,16 @@ public final class UserSettingsHelper {
 		resetDisabledFeatures(to);
 
 		if (to.getMode() == OptimisationMode.ADP) {
-			if (!to.isCleanSlateOptimisation()) {
-				// Only valid if clean slate is checked.
+			if (to.getAdpOptimisationMode() == AdpOptimisationMode.NON_CLEAN_SLATE) {
+				// Only valid if clean slate or partial clean slate is checked.
 				to.setNominalOnly(false);
 			}
 			to.setSimilarityMode(SimilarityMode.OFF);
 		} else if (to.getMode() == OptimisationMode.STRATEGIC) {
-			to.setCleanSlateOptimisation(false);
+			to.setAdpOptimisationMode(AdpOptimisationMode.NON_CLEAN_SLATE);
 			to.setSimilarityMode(SimilarityMode.OFF);
 		} else {
-			to.setCleanSlateOptimisation(false);
+			to.setAdpOptimisationMode(AdpOptimisationMode.NON_CLEAN_SLATE);
 			to.setNominalOnly(false);
 		}
  
@@ -644,7 +646,7 @@ public final class UserSettingsHelper {
 			choiceData.enabled = false;
 			choiceData.disabledMessage = adpVesselEventIssueMsg;
 		} else {
-			choiceData.enabledHook = (u -> (u.getMode() == OptimisationMode.ADP && u.isCleanSlateOptimisation() || u.getMode() == OptimisationMode.STRATEGIC));
+			choiceData.enabledHook = (u -> (u.getMode() == OptimisationMode.ADP && u.getAdpOptimisationMode() != AdpOptimisationMode.NON_CLEAN_SLATE || u.getMode() == OptimisationMode.STRATEGIC));
 		}
 		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Nominal Only: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_NOMINAL_ADP_PREFIX,
 				null, ParametersPackage.eINSTANCE.getUserSettings_NominalOnly());
@@ -870,8 +872,9 @@ public final class UserSettingsHelper {
 	private static void createADPCleanStateOption(final UserSettings defaultSettings, final boolean[] optionsAdded, final EditingDomain editingDomain, final ParameterModesDialog dialog,
 			final UserSettings copy, final boolean scenarioContainsForbiddedADPEvents, final String adpVesselEventIssueMsg, final OptionGroup group) {
 		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-		choiceData.addChoice("No", Boolean.FALSE);
-		choiceData.addChoice("Yes", Boolean.TRUE);
+		choiceData.addChoice("None", AdpOptimisationMode.NON_CLEAN_SLATE);
+		choiceData.addChoice("Partial", AdpOptimisationMode.PARTIAL_CLEAN_SLATE);
+		choiceData.addChoice("Clean", AdpOptimisationMode.CLEAN_SLATE);
 		if (scenarioContainsForbiddedADPEvents) {
 			choiceData.enabled = false;
 			choiceData.disabledMessage = adpVesselEventIssueMsg;
@@ -879,7 +882,7 @@ public final class UserSettingsHelper {
 			choiceData.enabledHook = (us -> us.getMode() == OptimisationMode.ADP);
 		}
 		final Option option = dialog.addOption(DataSection.General, group, editingDomain, "Clean slate: ", "", copy, defaultSettings, DataType.Choice, choiceData, SWTBOT_CLEAN_SLATE_PREFIX,
-				null, ParametersPackage.eINSTANCE.getUserSettings_CleanSlateOptimisation());
+				null, ParametersPackage.Literals.USER_SETTINGS__ADP_OPTIMISATION_MODE);
 		optionsAdded[IDX_OPTION_ADDED] |= true;
 		optionsAdded[IDX_OPTION_ENABLED_ADDED] |= true;
 
@@ -887,7 +890,7 @@ public final class UserSettingsHelper {
 
 			if (value instanceof UserSettings userSettings) {
 				if (userSettings.getMode() == OptimisationMode.ADP) {
-					if (userSettings.isCleanSlateOptimisation() && userSettings.isGenerateCharterOuts()) {
+					if ((userSettings.getAdpOptimisationMode() == AdpOptimisationMode.CLEAN_SLATE) && userSettings.isGenerateCharterOuts()) {
 						return ValidationStatus.error("Charter out generation must be disabled with clean slate ADP optimisation");
 					}
 				}
@@ -985,7 +988,7 @@ public final class UserSettingsHelper {
 				if ((event instanceof CharterOutEvent charterOutEvent)) {
 					if (charterOutEvent.isOptional()) {
 						scenarioContainsForbiddedADPEvents = true;
-						copy.setCleanSlateOptimisation(false);
+						copy.setAdpOptimisationMode(AdpOptimisationMode.NON_CLEAN_SLATE);
 						adpVesselEventIssueMsg = "Clean slate only supports non-optional charter out events.";
 						break;
 					}
@@ -997,7 +1000,7 @@ public final class UserSettingsHelper {
 
 			if (value instanceof UserSettings userSettings) {
 
-				if (userSettings.isCleanSlateOptimisation() && userSettings.isShippingOnly()) {
+				if ((userSettings.getAdpOptimisationMode() == AdpOptimisationMode.CLEAN_SLATE) && userSettings.isShippingOnly()) {
 					return ValidationStatus.error("Shipping only must be disabled if clean slate optimisation is on.");
 				}
 
