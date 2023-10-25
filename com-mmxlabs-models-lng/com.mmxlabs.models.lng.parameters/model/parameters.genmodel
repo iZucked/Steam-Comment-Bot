@@ -18,6 +18,11 @@
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/STRATEGIC"/>
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/LONG_TERM"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="parameters.ecore#//AdpOptimisationMode">
+      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//AdpOptimisationMode/NON_CLEAN_SLATE"/>
+      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//AdpOptimisationMode/PARTIAL_CLEAN_SLATE"/>
+      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//AdpOptimisationMode/CLEAN_SLATE"/>
+    </genEnums>
     <genClasses ecoreClass="parameters.ecore#//UserSettings">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/mode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/nominalOnly"/>
@@ -31,8 +36,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/charterLengthDays"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/withSpotCargoMarkets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/floatingDaysLimit"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/cleanSlateOptimisation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/generatedPapersInPNL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/adpOptimisationMode"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//Objective">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Objective/weight"/>

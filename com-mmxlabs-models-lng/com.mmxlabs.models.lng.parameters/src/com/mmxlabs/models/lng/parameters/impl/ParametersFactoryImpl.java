@@ -112,6 +112,8 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 				return createSimilarityModeFromString(eDataType, initialValue);
 			case ParametersPackage.OPTIMISATION_MODE:
 				return createOptimisationModeFromString(eDataType, initialValue);
+			case ParametersPackage.ADP_OPTIMISATION_MODE:
+				return createAdpOptimisationModeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -129,6 +131,8 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 				return convertSimilarityModeToString(eDataType, instanceValue);
 			case ParametersPackage.OPTIMISATION_MODE:
 				return convertOptimisationModeToString(eDataType, instanceValue);
+			case ParametersPackage.ADP_OPTIMISATION_MODE:
+				return convertAdpOptimisationModeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -402,6 +406,26 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * @generated
 	 */
 	public String convertOptimisationModeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AdpOptimisationMode createAdpOptimisationModeFromString(EDataType eDataType, String initialValue) {
+		AdpOptimisationMode result = AdpOptimisationMode.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertAdpOptimisationModeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

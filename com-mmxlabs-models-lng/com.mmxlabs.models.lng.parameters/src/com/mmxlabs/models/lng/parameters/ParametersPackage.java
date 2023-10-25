@@ -179,22 +179,22 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 11;
 
 	/**
-	 * The feature id for the '<em><b>Clean Slate Optimisation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = 12;
-
-	/**
 	 * The feature id for the '<em><b>Generated Papers In PNL</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__GENERATED_PAPERS_IN_PNL = 13;
+	int USER_SETTINGS__GENERATED_PAPERS_IN_PNL = 12;
+
+	/**
+	 * The feature id for the '<em><b>Adp Optimisation Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__ADP_OPTIMISATION_MODE = 13;
 
 	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
@@ -1304,6 +1304,17 @@ public interface ParametersPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.AdpOptimisationMode <em>Adp Optimisation Mode</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.AdpOptimisationMode
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getAdpOptimisationMode()
+	 * @generated
+	 */
+	int ADP_OPTIMISATION_MODE = 25;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.UserSettings <em>User Settings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1424,17 +1435,6 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getUserSettings_FloatingDaysLimit();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Clean Slate Optimisation</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation()
-	 * @see #getUserSettings()
-	 * @generated
-	 */
-	EAttribute getUserSettings_CleanSlateOptimisation();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isGeneratedPapersInPNL <em>Generated Papers In PNL</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1444,6 +1444,17 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getUserSettings_GeneratedPapersInPNL();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getAdpOptimisationMode <em>Adp Optimisation Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Adp Optimisation Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getAdpOptimisationMode()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_AdpOptimisationMode();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isDualMode <em>Dual Mode</em>}'.
@@ -2181,6 +2192,16 @@ public interface ParametersPackage extends EPackage {
 	EEnum getOptimisationMode();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.AdpOptimisationMode <em>Adp Optimisation Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Adp Optimisation Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.AdpOptimisationMode
+	 * @generated
+	 */
+	EEnum getAdpOptimisationMode();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2293,20 +2314,20 @@ public interface ParametersPackage extends EPackage {
 		EAttribute USER_SETTINGS__FLOATING_DAYS_LIMIT = eINSTANCE.getUserSettings_FloatingDaysLimit();
 
 		/**
-		 * The meta object literal for the '<em><b>Clean Slate Optimisation</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = eINSTANCE.getUserSettings_CleanSlateOptimisation();
-
-		/**
 		 * The meta object literal for the '<em><b>Generated Papers In PNL</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__GENERATED_PAPERS_IN_PNL = eINSTANCE.getUserSettings_GeneratedPapersInPNL();
+
+		/**
+		 * The meta object literal for the '<em><b>Adp Optimisation Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__ADP_OPTIMISATION_MODE = eINSTANCE.getUserSettings_AdpOptimisationMode();
 
 		/**
 		 * The meta object literal for the '<em><b>Dual Mode</b></em>' attribute feature.
@@ -2907,6 +2928,16 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum OPTIMISATION_MODE = eINSTANCE.getOptimisationMode();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.AdpOptimisationMode <em>Adp Optimisation Mode</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.AdpOptimisationMode
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getAdpOptimisationMode()
+		 * @generated
+		 */
+		EEnum ADP_OPTIMISATION_MODE = eINSTANCE.getAdpOptimisationMode();
 
 	}
 

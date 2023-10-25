@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings;
@@ -226,6 +227,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	private EEnum optimisationModeEEnum = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum adpOptimisationModeEEnum = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -406,7 +414,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_CleanSlateOptimisation() {
+	public EAttribute getUserSettings_GeneratedPapersInPNL() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -416,7 +424,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EAttribute getUserSettings_GeneratedPapersInPNL() {
+	public EAttribute getUserSettings_AdpOptimisationMode() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -1116,6 +1124,16 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
+	public EEnum getAdpOptimisationMode() {
+		return adpOptimisationModeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ParametersFactory getParametersFactory() {
 		return (ParametersFactory)getEFactoryInstance();
 	}
@@ -1152,8 +1170,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEAttribute(userSettingsEClass, USER_SETTINGS__CHARTER_LENGTH_DAYS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__WITH_SPOT_CARGO_MARKETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__FLOATING_DAYS_LIMIT);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__CLEAN_SLATE_OPTIMISATION);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__GENERATED_PAPERS_IN_PNL);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__ADP_OPTIMISATION_MODE);
 
 		objectiveEClass = createEClass(OBJECTIVE);
 		createEAttribute(objectiveEClass, OBJECTIVE__WEIGHT);
@@ -1245,6 +1263,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		// Create enums
 		similarityModeEEnum = createEEnum(SIMILARITY_MODE);
 		optimisationModeEEnum = createEEnum(OPTIMISATION_MODE);
+		adpOptimisationModeEEnum = createEEnum(ADP_OPTIMISATION_MODE);
 	}
 
 	/**
@@ -1308,8 +1327,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getUserSettings_CharterLengthDays(), ecorePackage.getEInt(), "charterLengthDays", "0", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_WithSpotCargoMarkets(), ecorePackage.getEBoolean(), "withSpotCargoMarkets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_FloatingDaysLimit(), ecorePackage.getEInt(), "floatingDaysLimit", "15", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_CleanSlateOptimisation(), ecorePackage.getEBoolean(), "cleanSlateOptimisation", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_GeneratedPapersInPNL(), ecorePackage.getEBoolean(), "generatedPapersInPNL", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_AdpOptimisationMode(), this.getAdpOptimisationMode(), "adpOptimisationMode", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1408,6 +1427,11 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.ADP);
 		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.STRATEGIC);
 		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.LONG_TERM);
+
+		initEEnum(adpOptimisationModeEEnum, AdpOptimisationMode.class, "AdpOptimisationMode");
+		addEEnumLiteral(adpOptimisationModeEEnum, AdpOptimisationMode.NON_CLEAN_SLATE);
+		addEEnumLiteral(adpOptimisationModeEEnum, AdpOptimisationMode.PARTIAL_CLEAN_SLATE);
+		addEEnumLiteral(adpOptimisationModeEEnum, AdpOptimisationMode.CLEAN_SLATE);
 
 		// Create resource
 		createResource(eNS_URI);

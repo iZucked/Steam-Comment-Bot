@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -41,8 +42,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getCharterLengthDays <em>Charter Length Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isGeneratedPapersInPNL <em>Generated Papers In PNL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getAdpOptimisationMode <em>Adp Optimisation Mode</em>}</li>
  * </ul>
  *
  * @generated
@@ -307,26 +308,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	protected int floatingDaysLimit = FLOATING_DAYS_LIMIT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isCleanSlateOptimisation() <em>Clean Slate Optimisation</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isCleanSlateOptimisation()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean CLEAN_SLATE_OPTIMISATION_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isCleanSlateOptimisation() <em>Clean Slate Optimisation</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isCleanSlateOptimisation()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean cleanSlateOptimisation = CLEAN_SLATE_OPTIMISATION_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #isGeneratedPapersInPNL() <em>Generated Papers In PNL</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -345,6 +326,26 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected boolean generatedPapersInPNL = GENERATED_PAPERS_IN_PNL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getAdpOptimisationMode() <em>Adp Optimisation Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdpOptimisationMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final AdpOptimisationMode ADP_OPTIMISATION_MODE_EDEFAULT = AdpOptimisationMode.NON_CLEAN_SLATE;
+
+	/**
+	 * The cached value of the '{@link #getAdpOptimisationMode() <em>Adp Optimisation Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdpOptimisationMode()
+	 * @generated
+	 * @ordered
+	 */
+	protected AdpOptimisationMode adpOptimisationMode = ADP_OPTIMISATION_MODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -655,29 +656,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @generated
 	 */
 	@Override
-	public boolean isCleanSlateOptimisation() {
-		return cleanSlateOptimisation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setCleanSlateOptimisation(boolean newCleanSlateOptimisation) {
-		boolean oldCleanSlateOptimisation = cleanSlateOptimisation;
-		cleanSlateOptimisation = newCleanSlateOptimisation;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION, oldCleanSlateOptimisation, cleanSlateOptimisation));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public boolean isGeneratedPapersInPNL() {
 		return generatedPapersInPNL;
 	}
@@ -693,6 +671,29 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		generatedPapersInPNL = newGeneratedPapersInPNL;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL, oldGeneratedPapersInPNL, generatedPapersInPNL));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AdpOptimisationMode getAdpOptimisationMode() {
+		return adpOptimisationMode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAdpOptimisationMode(AdpOptimisationMode newAdpOptimisationMode) {
+		AdpOptimisationMode oldAdpOptimisationMode = adpOptimisationMode;
+		adpOptimisationMode = newAdpOptimisationMode == null ? ADP_OPTIMISATION_MODE_EDEFAULT : newAdpOptimisationMode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION_MODE, oldAdpOptimisationMode, adpOptimisationMode));
 	}
 
 	/**
@@ -773,10 +774,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return isWithSpotCargoMarkets();
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return getFloatingDaysLimit();
-			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
-				return isCleanSlateOptimisation();
 			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
 				return isGeneratedPapersInPNL();
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION_MODE:
+				return getAdpOptimisationMode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -825,11 +826,11 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit((Integer)newValue);
 				return;
-			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
-				setCleanSlateOptimisation((Boolean)newValue);
-				return;
 			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
 				setGeneratedPapersInPNL((Boolean)newValue);
+				return;
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION_MODE:
+				setAdpOptimisationMode((AdpOptimisationMode)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -879,11 +880,11 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				setFloatingDaysLimit(FLOATING_DAYS_LIMIT_EDEFAULT);
 				return;
-			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
-				setCleanSlateOptimisation(CLEAN_SLATE_OPTIMISATION_EDEFAULT);
-				return;
 			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
 				setGeneratedPapersInPNL(GENERATED_PAPERS_IN_PNL_EDEFAULT);
+				return;
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION_MODE:
+				setAdpOptimisationMode(ADP_OPTIMISATION_MODE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -921,10 +922,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return withSpotCargoMarkets != WITH_SPOT_CARGO_MARKETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
 				return floatingDaysLimit != FLOATING_DAYS_LIMIT_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
-				return cleanSlateOptimisation != CLEAN_SLATE_OPTIMISATION_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
 				return generatedPapersInPNL != GENERATED_PAPERS_IN_PNL_EDEFAULT;
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION_MODE:
+				return adpOptimisationMode != ADP_OPTIMISATION_MODE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -963,10 +964,10 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(withSpotCargoMarkets);
 		result.append(", floatingDaysLimit: ");
 		result.append(floatingDaysLimit);
-		result.append(", cleanSlateOptimisation: ");
-		result.append(cleanSlateOptimisation);
 		result.append(", generatedPapersInPNL: ");
 		result.append(generatedPapersInPNL);
+		result.append(", adpOptimisationMode: ");
+		result.append(adpOptimisationMode);
 		result.append(')');
 		return result.toString();
 	}

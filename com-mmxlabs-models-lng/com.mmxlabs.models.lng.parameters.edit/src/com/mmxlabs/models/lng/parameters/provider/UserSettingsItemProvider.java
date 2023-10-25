@@ -78,8 +78,8 @@ public class UserSettingsItemProvider
 			addCharterLengthDaysPropertyDescriptor(object);
 			addWithSpotCargoMarketsPropertyDescriptor(object);
 			addFloatingDaysLimitPropertyDescriptor(object);
-			addCleanSlateOptimisationPropertyDescriptor(object);
 			addGeneratedPapersInPNLPropertyDescriptor(object);
+			addAdpOptimisationModePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -305,28 +305,6 @@ public class UserSettingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Clean Slate Optimisation feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCleanSlateOptimisationPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_UserSettings_cleanSlateOptimisation_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_cleanSlateOptimisation_feature", "_UI_UserSettings_type"),
-				 ParametersPackage.Literals.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Generated Papers In PNL feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -344,6 +322,28 @@ public class UserSettingsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Adp Optimisation Mode feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAdpOptimisationModePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UserSettings_adpOptimisationMode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UserSettings_adpOptimisationMode_feature", "_UI_UserSettings_type"),
+				 ParametersPackage.Literals.USER_SETTINGS__ADP_OPTIMISATION_MODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -443,8 +443,8 @@ public class UserSettingsItemProvider
 			case ParametersPackage.USER_SETTINGS__CHARTER_LENGTH_DAYS:
 			case ParametersPackage.USER_SETTINGS__WITH_SPOT_CARGO_MARKETS:
 			case ParametersPackage.USER_SETTINGS__FLOATING_DAYS_LIMIT:
-			case ParametersPackage.USER_SETTINGS__CLEAN_SLATE_OPTIMISATION:
 			case ParametersPackage.USER_SETTINGS__GENERATED_PAPERS_IN_PNL:
+			case ParametersPackage.USER_SETTINGS__ADP_OPTIMISATION_MODE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

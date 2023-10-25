@@ -32,8 +32,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getCharterLengthDays <em>Charter Length Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isWithSpotCargoMarkets <em>With Spot Cargo Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#isGeneratedPapersInPNL <em>Generated Papers In PNL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.UserSettings#getAdpOptimisationMode <em>Adp Optimisation Mode</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings()
@@ -366,33 +366,6 @@ public interface UserSettings extends EObject {
 	void setFloatingDaysLimit(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Clean Slate Optimisation</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Clean Slate Optimisation</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Clean Slate Optimisation</em>' attribute.
-	 * @see #setCleanSlateOptimisation(boolean)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_CleanSlateOptimisation()
-	 * @model default="false"
-	 * @generated
-	 */
-	boolean isCleanSlateOptimisation();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#isCleanSlateOptimisation <em>Clean Slate Optimisation</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Clean Slate Optimisation</em>' attribute.
-	 * @see #isCleanSlateOptimisation()
-	 * @generated
-	 */
-	void setCleanSlateOptimisation(boolean value);
-
-	/**
 	 * Returns the value of the '<em><b>Generated Papers In PNL</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -417,6 +390,31 @@ public interface UserSettings extends EObject {
 	 * @generated
 	 */
 	void setGeneratedPapersInPNL(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Adp Optimisation Mode</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.parameters.AdpOptimisationMode}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Adp Optimisation Mode</em>' attribute.
+	 * @see com.mmxlabs.models.lng.parameters.AdpOptimisationMode
+	 * @see #setAdpOptimisationMode(AdpOptimisationMode)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_AdpOptimisationMode()
+	 * @model
+	 * @generated
+	 */
+	AdpOptimisationMode getAdpOptimisationMode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.UserSettings#getAdpOptimisationMode <em>Adp Optimisation Mode</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Adp Optimisation Mode</em>' attribute.
+	 * @see com.mmxlabs.models.lng.parameters.AdpOptimisationMode
+	 * @see #getAdpOptimisationMode()
+	 * @generated
+	 */
+	void setAdpOptimisationMode(AdpOptimisationMode value);
 
 	/**
 	 * Returns the value of the '<em><b>Dual Mode</b></em>' attribute.
