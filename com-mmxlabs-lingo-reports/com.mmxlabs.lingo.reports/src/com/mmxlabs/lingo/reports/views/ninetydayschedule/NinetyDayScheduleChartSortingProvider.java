@@ -6,8 +6,6 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.util.Comparator;
 
-import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Sequence;

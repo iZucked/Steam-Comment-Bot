@@ -11,6 +11,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Pattern;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Display;
@@ -50,7 +51,13 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				gc.drawLine(l.x1(), l.y1(), l.x2(), l.y2());
 			} else if (b instanceof Rectangle r) {
 
-				if (r.backgroundColour() != null) {
+				Pattern pattern = null;
+				if(r.backgroundGradientColorStart() != null && r.backgroundGradientColorEnd() != null) {
+					pattern = new Pattern(gc.getDevice(), r.x(), r.y(), r.x(), r.y() + r.height(), r.backgroundGradientColorStart(), r.backgroundGradientColorEnd());
+					gc.setBackgroundPattern(pattern);
+					gc.fillRectangle(r.x(), r.y(), r.width(), r.height());
+				}
+				else if (r.backgroundColour() != null) {
 					gc.fillRectangle(r.x(), r.y(), r.width(), r.height());
 				}
 
@@ -67,6 +74,9 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 						gc.drawRectangle(r.x() + innerBorderShift, r.y() + innerBorderShift, r.width() - 2 * innerBorderShift, r.height() - 2 * innerBorderShift);
 					}
 				}
+				
+				if(pattern != null)
+					pattern.dispose();
 				
 			} else if (b instanceof Polygon p) {
 				int[] pointArray = p.points().stream().flatMapToInt(o -> List.of(o.x, o.y).stream().mapToInt(i -> i)).toArray();

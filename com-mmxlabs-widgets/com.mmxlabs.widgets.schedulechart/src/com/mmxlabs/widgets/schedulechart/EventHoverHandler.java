@@ -33,7 +33,7 @@ public class EventHoverHandler implements MouseMoveListener, MouseListener {
 			return;
 		}
 		canvasState.getHoveredEvent().ifPresent(event -> event.getScheduleEvent().setSelectionState(canvasState.getSelectedEvents().contains(event.getScheduleEvent()) ? ScheduleEventSelectionState.SELECTED : ScheduleEventSelectionState.UNSELECTED));
-		canvasState.setHoveredEvent((optHoveredEvent.isPresent() && !canvasState.getSelectedEvents().contains(optHoveredEvent.get().getScheduleEvent())) ? optHoveredEvent : Optional.empty());
+		canvasState.setHoveredEvent((optHoveredEvent.isPresent() ? optHoveredEvent : Optional.empty()));
 		canvasState.getHoveredEvent().ifPresent(event -> event.getScheduleEvent().setSelectionState(ScheduleEventSelectionState.HOVER));
 		canvas.redraw();
 	}

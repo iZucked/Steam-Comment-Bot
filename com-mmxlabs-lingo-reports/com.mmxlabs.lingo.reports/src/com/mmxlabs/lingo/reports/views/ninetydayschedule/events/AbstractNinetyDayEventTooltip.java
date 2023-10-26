@@ -25,11 +25,6 @@ public abstract class AbstractNinetyDayEventTooltip extends DrawableScheduleEven
 	protected AbstractNinetyDayEventTooltip(ScheduleEventTooltip tooltip) {
 		super(tooltip);
 	}
-	
-	@Override
-	protected int getWidth(DrawerQueryResolver r) {
-		return 200;
-	}
 
 	@Override
 	protected DrawableElement getTooltipBackground() {
@@ -39,8 +34,10 @@ public abstract class AbstractNinetyDayEventTooltip extends DrawableScheduleEven
 			protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver r) {
 				List<BasicDrawableElement> res = new ArrayList<>();
 				int shadowOffset = 2;
+				Color startColor = new Color(new RGB(255,255,255));
+				Color endColor = new Color(new RGB(219, 236, 255));
 				res.add(BasicDrawableElements.Rectangle.withBounds(anchor.x + shadowOffset, anchor.y + shadowOffset + yOffset, getWidth(r), getTotalHeight(r)).bgColour(getBackgroundShadowColour()).border(getBackgroundShadowColour(), 2).alpha(150).create());
-				res.add(BasicDrawableElements.Rectangle.withBounds(anchor.x, anchor.y + yOffset, getWidth(r), getTotalHeight(r)).bgColour(getBackgroundColour()).border(getStrokeColour(), 2).create());
+				res.add(BasicDrawableElements.Rectangle.withBounds(anchor.x, anchor.y + yOffset, getWidth(r), getTotalHeight(r)).bgGradient(startColor, endColor).border(getStrokeColour(), 2).create());
 				return res;
 			}
 		};
@@ -52,13 +49,5 @@ public abstract class AbstractNinetyDayEventTooltip extends DrawableScheduleEven
 	
 	protected Color getBackgroundShadowColour() {
 		return new Color(new RGB(64, 64, 64));
-	}
-
-	protected Color getStrokeColour() {
-		return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-	}
-	
-	protected Color getTextColour() {
-		return Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	}
 }

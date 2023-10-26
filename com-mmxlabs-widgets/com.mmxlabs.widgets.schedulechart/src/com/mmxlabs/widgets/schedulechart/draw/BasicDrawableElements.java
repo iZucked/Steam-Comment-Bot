@@ -7,7 +7,6 @@ package com.mmxlabs.widgets.schedulechart.draw;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -39,7 +38,7 @@ public interface BasicDrawableElements {
 		}
 	}
 
-	public record Rectangle(int x, int y, int width, int height, Color backgroundColour, Color borderColour, int borderThickness, boolean isBorderInner, int alpha) implements BasicDrawableElement {
+	public record Rectangle(int x, int y, int width, int height, Color backgroundColour, Color backgroundGradientColorStart, Color backgroundGradientColorEnd, Color borderColour, int borderThickness, boolean isBorderInner, int alpha) implements BasicDrawableElement {
 
 		public static RectangleBuilder withBounds(int x, int y, int width, int height) {
 			return new RectangleBuilder(x, y, width, height);
@@ -55,6 +54,8 @@ public interface BasicDrawableElements {
 			private final int width;
 			private final int height;
 			private Color bgColour = null;
+			private Color bgGradientStart = null;
+			private Color bgGradientEnd = null;
 			private Color borderColour = null;
 			private int borderThickness = 0;
 			private int alpha = MAX_ALPHA;
@@ -91,13 +92,19 @@ public interface BasicDrawableElements {
 				return this;
 			}
 			
+			public RectangleBuilder bgGradient(Color gradientColorStart, Color gradientColorEnd) {
+				this.bgGradientStart = gradientColorStart;
+				this.bgGradientEnd = gradientColorEnd;
+				return this;
+			}
+			
 			public RectangleBuilder alpha(int a) {
 				this.alpha = a;
 				return this;
 			}
 			
 			public Rectangle create() {
-				return new Rectangle(x, y, width, height, bgColour, borderColour, borderThickness, isBorderInner, alpha);
+				return new Rectangle(x, y, width, height, bgColour, bgGradientStart, bgGradientEnd, borderColour, borderThickness, isBorderInner, alpha);
 			}
 		}
 	}

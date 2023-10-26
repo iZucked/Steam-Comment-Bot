@@ -18,8 +18,12 @@ public record ScheduleEventTooltip( //
 		List<String> footerText //
 ) {
 
+	public static ScheduleEventTooltipBuilder of(ScheduleEvent se, Function<ScheduleEvent, Object> getData) {
+		return new ScheduleEventTooltipBuilder(se, getData);
+	}
+	
 	public static ScheduleEventTooltipBuilder of(ScheduleEvent se) {
-		return new ScheduleEventTooltipBuilder(se);
+		return new ScheduleEventTooltipBuilder(se, (s -> s.getData()));
 	}
 
 	public static class ScheduleEventTooltipBuilder {
@@ -29,9 +33,11 @@ public record ScheduleEventTooltip( //
 		private final Map<String, String> bodyFields = new LinkedHashMap<>();
 		private final List<String> footerText = new ArrayList<>();
 		private String eventType = null;
+		private Function<ScheduleEvent, Object> getData;
 
-		public ScheduleEventTooltipBuilder(ScheduleEvent se) {
+		public ScheduleEventTooltipBuilder(ScheduleEvent se, Function<ScheduleEvent, Object> getData) {
 			this.se = se;
+			this.getData = getData;
 		}
 
 		public ScheduleEventTooltipBuilder add(ScheduleEventTooltipData type, Function<ScheduleEvent, String> f) {
@@ -40,7 +46,7 @@ public record ScheduleEventTooltip( //
 		}
 
 		public <T> ScheduleEventTooltipBuilder add(ScheduleEventTooltipData type, Class<T> clazz, Function<T, String> f) {
-			addBasedOnType(type, f.apply(clazz.cast(se.getData())));
+			addBasedOnType(type, f.apply(clazz.cast(getData.apply(se))));
 			return this;
 		}
 
@@ -50,7 +56,7 @@ public record ScheduleEventTooltip( //
 		}
 
 		public <T> ScheduleEventTooltipBuilder addBodyField(final String key, Class<T> clazz, Function<T, String> f) {
-			bodyFields.put(key, f.apply(clazz.cast(se.getData())));
+			bodyFields.put(key, f.apply(clazz.cast(getData.apply(se))));
 			return this;
 		}
 
