@@ -37,7 +37,7 @@ public class DefaultPaperDealExcelExporter implements IPaperDealExporter{
 		
 		int sc = 0;
 		int fc = 0;
-		for(int i = 1; i < reader.getNumRows(); i++) {
+		for(int i = 1; i <= reader.getNumRows(); i++) {
 			PaperDeal paperDeal = null;
 			
 			try {
