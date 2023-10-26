@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicNode;
@@ -57,6 +58,11 @@ public abstract class DynamicTestCaseRunner {
 	@AfterAll
 	public static void disableCacheTesting() {
 		GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION = false;
+	}
+
+	@AfterEach
+	public void clearCache() {
+		ReportTestRunner.clearCache();
 	}
 
 	@TestFactory
