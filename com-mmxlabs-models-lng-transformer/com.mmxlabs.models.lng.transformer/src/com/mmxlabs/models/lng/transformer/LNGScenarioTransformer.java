@@ -94,6 +94,7 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselRouteParameters;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
@@ -911,23 +912,25 @@ public class LNGScenarioTransformer {
 		// TODO: MOVE TO FUNCTION
 		// loads into adp frozen assignment provider
 		{
-			for (Cargo cargo : rootObject.getCargoModel().getCargoes()) {
-				if (!cargo.isAllowRewiring()) {
-					IPortSlot oLoadSlot = modelEntityMap.getOptimiserObjectNullChecked(cargo.getSortedSlots().get(0), IPortSlot.class);
-					IPortSlot oDischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(cargo.getSortedSlots().get(1), IPortSlot.class);
-					assert oLoadSlot instanceof ILoadOption && oDischargeSlot instanceof IDischargeOption;
-					if (cargo.isLocked() && cargo.getVesselAssignmentType() != null) {
+			if (userSettings.getMode() == OptimisationMode.ADP && userSettings.getAdpOptimisationMode() == AdpOptimisationMode.PARTIAL_CLEAN_SLATE) {
+				for (Cargo cargo : rootObject.getCargoModel().getCargoes()) {
+					if (!cargo.isAllowRewiring()) {
+						IPortSlot oLoadSlot = modelEntityMap.getOptimiserObjectNullChecked(cargo.getSortedSlots().get(0), IPortSlot.class);
+						IPortSlot oDischargeSlot = modelEntityMap.getOptimiserObjectNullChecked(cargo.getSortedSlots().get(1), IPortSlot.class);
+						assert oLoadSlot instanceof ILoadOption && oDischargeSlot instanceof IDischargeOption;
+						if (cargo.isLocked() && cargo.getVesselAssignmentType() != null) {
 
-						IVesselCharter oVesselCharter = null;
-						if (cargo.getVesselAssignmentType() instanceof VesselCharter vc) {
-							oVesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vc, IVesselCharter.class);
-						} else if (cargo.getVesselAssignmentType() instanceof @NonNull CharterInMarket cim) {
-							oVesselCharter = spotCharterInToAvailability.get(new NonNullPair<>(cim, cargo.getSpotIndex()));
+							IVesselCharter oVesselCharter = null;
+							if (cargo.getVesselAssignmentType() instanceof VesselCharter vc) {
+								oVesselCharter = modelEntityMap.getOptimiserObjectNullChecked(vc, IVesselCharter.class);
+							} else if (cargo.getVesselAssignmentType() instanceof @NonNull CharterInMarket cim) {
+								oVesselCharter = spotCharterInToAvailability.get(new NonNullPair<>(cim, cargo.getSpotIndex()));
+							}
+							assert oVesselCharter != null;
+							adpFrozenAssignmentProviderEditor.setVesselAssignment(oVesselCharter, (ILoadOption) oLoadSlot, (IDischargeOption) oDischargeSlot);
+						} else {
+							adpFrozenAssignmentProviderEditor.setCargoPair((ILoadOption) oLoadSlot, (IDischargeOption) oDischargeSlot);
 						}
-						assert oVesselCharter != null;
-						adpFrozenAssignmentProviderEditor.setVesselAssignment(oVesselCharter, (ILoadOption) oLoadSlot, (IDischargeOption) oDischargeSlot);
-					} else {
-						adpFrozenAssignmentProviderEditor.setCargoPair((ILoadOption) oLoadSlot, (IDischargeOption) oDischargeSlot);
 					}
 				}
 			}
