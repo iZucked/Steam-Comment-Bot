@@ -183,7 +183,7 @@ public class AdpSyncWithBasecaseHandler extends AbstractHandler {
 												final PortVisit previousPv = getPreviousPortVisit(slotVisit, portVisitsToSkip);
 												final ZonedDateTime newVcStart = previousPv.getEnd();
 												final int eventStartHeel = previousPv.getHeelAtEnd();
-												final Port eventStartPort = slotVisit.getSlotAllocation().getCargoAllocation().getSlotAllocations().get(0).getPort();
+												final Port eventStartPort = previousPv.getPort();
 												final Optional<Port> optScenarioPortEquivalent = ScenarioModelUtil.getPortModel(scenarioSdp).getPorts().stream()
 														.filter(port -> port.getLocation().getMmxId().equalsIgnoreCase(eventStartPort.getLocation().getMmxId())).findAny();
 												final double heelPrice = previousPv.getHeelCostUnitPrice();
@@ -196,7 +196,7 @@ public class AdpSyncWithBasecaseHandler extends AbstractHandler {
 												final PortVisit previousPv = getPreviousPortVisit(vev);
 												final ZonedDateTime newVcStart = previousPv.getEnd();
 												final int eventStartHeel = previousPv.getHeelAtEnd();
-												final Port eventStartPort = currentEvent.getPort();
+												final Port eventStartPort = previousPv.getPort();
 												final Optional<Port> optScenarioPortEquivalent = ScenarioModelUtil.getPortModel(scenarioSdp).getPorts().stream()
 														.filter(port -> port.getLocation().getMmxId().equalsIgnoreCase(eventStartPort.getLocation().getMmxId())).findAny();
 												final double heelPrice = previousPv.getHeelCostUnitPrice();
