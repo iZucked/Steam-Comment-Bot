@@ -45,10 +45,23 @@ public class NinetyDayLabelFactory {
 		final List<List<IScheduleEventLabelElementGenerator>> alignments = new ArrayList<>();
 		final int fontSize = settings.getEventLabelFontSize();
 		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, SWT.CENTER, new Padding(3, 3, 0, 0), fontSize, se -> {
-			return ScheduleChartFormatters.formatAsDays(se.getStart().until(se.getEnd(), ChronoUnit.DAYS));
+			if(se.getData() instanceof Event sEvent) {
+				return ScheduleChartFormatters.formatAsDays(sEvent.getDuration());
+			}
+			
+			return ScheduleChartFormatters.formatAsDays(se.getStart().until(se.getEnd(), ChronoUnit.HOURS));
 		})));
 		alignments.add(List.of(getLabelElementGeneratorFromTextGenerator(RelativeBoundsCalculationFunctions.CENTER_100P, SWT.CENTER, SWT.CENTER, new Padding(3, 3, 0, 0), fontSize, se -> {
-			long hours = se.getStart().until(se.getEnd(), ChronoUnit.DAYS);
+			
+			long hours;
+			if(se.getData() instanceof Event sEvent) {
+				hours = sEvent.getDuration();
+			}
+			else {
+				hours = se.getStart().until(se.getEnd(), ChronoUnit.HOURS);
+			}
+			
+			
 			final long integerDivDays = hours / 24L;
 			final long remainingHours = hours % 24L;
 			final long valueToShow = remainingHours < 12 ? integerDivDays : integerDivDays + 1;
