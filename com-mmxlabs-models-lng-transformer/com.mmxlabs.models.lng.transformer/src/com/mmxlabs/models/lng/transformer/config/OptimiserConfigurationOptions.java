@@ -70,7 +70,10 @@ public class OptimiserConfigurationOptions {
 		if (rawNumThreads != null) {
 			return rawNumThreads;
 		}
-		return other.get("numThreads").asInt();
+		if (other.has("numThreads")) {
+			return other.get("numThreads").asInt();
+		}
+		return 0;
 	}
 
 	/**
