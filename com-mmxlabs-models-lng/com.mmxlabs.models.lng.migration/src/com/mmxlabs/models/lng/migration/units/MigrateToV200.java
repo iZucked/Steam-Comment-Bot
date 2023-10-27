@@ -43,9 +43,9 @@ public class MigrateToV200 extends AbstractMigrationUnit {
 		final EEnum enumAdpOptMode = MetamodelUtils.getEEnum(parametersPackage, "AdpOptimisationMode");
 
 		final EEnumLiteral cleanSlate = MetamodelUtils.getEEnum_Literal(enumAdpOptMode, AdpOptimisationMode.CLEAN_SLATE.getLiteral());
-		final EEnumLiteral nonCleanSlate = MetamodelUtils.getEEnum_Literal(enumAdpOptMode, AdpOptimisationMode.NON_CLEAN_SLATE.getLiteral());
+		final EEnumLiteral partialCleanSlate = MetamodelUtils.getEEnum_Literal(enumAdpOptMode, AdpOptimisationMode.PARTIAL_CLEAN_SLATE.getLiteral());
 		obj.unsetFeature(cleanSlateFeature);
-		obj.setAttrib(adpOptModeFeature, isCleanSlate ? cleanSlate : nonCleanSlate);
+		obj.setAttrib(adpOptModeFeature, isCleanSlate ? cleanSlate : partialCleanSlate);
 	}
 
 	// ADP partial clean slate mode

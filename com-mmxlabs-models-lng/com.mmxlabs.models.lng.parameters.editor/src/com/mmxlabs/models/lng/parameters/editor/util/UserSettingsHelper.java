@@ -872,9 +872,8 @@ public final class UserSettingsHelper {
 	private static void createADPCleanStateOption(final UserSettings defaultSettings, final boolean[] optionsAdded, final EditingDomain editingDomain, final ParameterModesDialog dialog,
 			final UserSettings copy, final boolean scenarioContainsForbiddedADPEvents, final String adpVesselEventIssueMsg, final OptionGroup group) {
 		final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-		choiceData.addChoice("None", AdpOptimisationMode.NON_CLEAN_SLATE);
-		choiceData.addChoice("Partial", AdpOptimisationMode.PARTIAL_CLEAN_SLATE);
-		choiceData.addChoice("Clean", AdpOptimisationMode.CLEAN_SLATE);
+		choiceData.addChoice("No", AdpOptimisationMode.PARTIAL_CLEAN_SLATE);
+		choiceData.addChoice("Yes", AdpOptimisationMode.CLEAN_SLATE);
 		if (scenarioContainsForbiddedADPEvents) {
 			choiceData.enabled = false;
 			choiceData.disabledMessage = adpVesselEventIssueMsg;
@@ -890,8 +889,8 @@ public final class UserSettingsHelper {
 
 			if (value instanceof UserSettings userSettings) {
 				if (userSettings.getMode() == OptimisationMode.ADP) {
-					if ((userSettings.getAdpOptimisationMode() == AdpOptimisationMode.CLEAN_SLATE) && userSettings.isGenerateCharterOuts()) {
-						return ValidationStatus.error("Charter out generation must be disabled with clean slate ADP optimisation");
+					if ((userSettings.getAdpOptimisationMode() == AdpOptimisationMode.CLEAN_SLATE || userSettings.getAdpOptimisationMode() == AdpOptimisationMode.PARTIAL_CLEAN_SLATE) && userSettings.isGenerateCharterOuts()) {
+						return ValidationStatus.error("Charter out generation must be disabled with ADP optimisation");
 					}
 				}
 			}
