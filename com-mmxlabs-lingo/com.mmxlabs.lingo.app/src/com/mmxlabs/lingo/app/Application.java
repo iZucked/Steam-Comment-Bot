@@ -181,7 +181,11 @@ public class Application implements IApplication {
 		}
 
 		if (!licenseCheck(subMonitor.split(1))) {
-			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
+			if (System.getProperty("lingo.suppress.dialogs") == null) {
+				MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
+			} else {
+				System.err.println( "Unable to validate license");
+			}
 			return IApplication.EXIT_OK;
 		}
 		if (System.getProperty("lingo.suppress.dialogs") == null) {
