@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.app;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.Collator;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,7 +15,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionException;
@@ -43,6 +46,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IPluginContribution;
 import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPage;
@@ -69,10 +73,13 @@ import org.eclipse.ui.views.IViewRegistry;
 import com.google.common.collect.Sets;
 
 /**
- * A <code>ShowViewMenu</code> is used to populate a menu manager with Show View actions. The visible views are determined by user preference from the Perspective Customize dialog.
+ * A <code>ShowViewMenu</code> is used to populate a menu manager with Show View
+ * actions. The visible views are determined by user preference from the
+ * Perspective Customize dialog.
  * 
  * 
- * Custom version to link up e4 views from perspective short cuts. TODO: Fix up dialog box
+ * Custom version to link up e4 views from perspective short cuts. TODO: Fix up
+ * dialog box
  * 
  * 
  * @author sg
@@ -81,7 +88,8 @@ import com.google.common.collect.Sets;
 @SuppressWarnings("restriction")
 public class ShowViewMenu extends ContributionItem {
 
-	// These are the display names for the category. The API's used here do no get the underlying id.
+	// These are the display names for the category. The API's used here do no get
+	// the underlying id.
 	private static final String CAT_USER_REPORTS = "User Reports";
 	private static final String CAT_TEAM_REPORTS = "Team Reports";
 	private static final String CAT_SCHEDULE = "Schedule";
@@ -110,7 +118,8 @@ public class ShowViewMenu extends ContributionItem {
 	private final Action showDlgAction;
 
 	// Maps pages to a list of opened views
-	// private final Map<IWorkbenchPage, List<String>> openedViews = new HashMap<>();
+	// private final Map<IWorkbenchPage, List<String>> openedViews = new
+	// HashMap<>();
 
 	private MenuManager menuManager;
 
@@ -127,10 +136,8 @@ public class ShowViewMenu extends ContributionItem {
 	/**
 	 * Creates a Show View menu.
 	 * 
-	 * @param window
-	 *            the window containing the menu
-	 * @param id
-	 *            the id
+	 * @param window the window containing the menu
+	 * @param id     the id
 	 */
 	public ShowViewMenu(final IWorkbenchWindow window, final String id) {
 		this(window, id, false);
@@ -139,12 +146,9 @@ public class ShowViewMenu extends ContributionItem {
 	/**
 	 * Creates a Show View menu.
 	 * 
-	 * @param window
-	 *            the window containing the menu
-	 * @param id
-	 *            the id
-	 * @param makeFast
-	 *            use the fact view variant of the command
+	 * @param window   the window containing the menu
+	 * @param id       the id
+	 * @param makeFast use the fact view variant of the command
 	 */
 	public ShowViewMenu(final IWorkbenchWindow window, final String id, final boolean makeFast) {
 		super(id);
@@ -216,28 +220,40 @@ public class ShowViewMenu extends ContributionItem {
 		final Set<String> viewIds = new HashSet<>(ALWAYS);
 
 		// Add the views based on the perspective.
-		// We don't use the following as this is the persisted state rather the hard-coded state.
+		// We don't use the following as this is the persisted state rather the
+		// hard-coded state.
 
 		// viewIds.addAll(Arrays.asList(page.getShowViewShortcuts()));
 
-		// Instead, use this snippet from page.resetPerspective() to create a new model element and then read the shortcuts from it.
+		// Instead, use this snippet from page.resetPerspective() to create a new model
+		// element and then read the shortcuts from it.
 		{
 			final MPerspective dummyPerspective = eModelService.createModelElement(MPerspective.class);
 			dummyPerspective.setElementId(page.getPerspective().getId());
-			final IPerspectiveDescriptor desc = page.getPerspective();
-			final IPerspectiveFactory factory = ((PerspectiveDescriptor) desc).createFactory();
+			PerspectiveDescriptor pDesc = (PerspectiveDescriptor) page.getPerspective();
+			if (pDesc.getConfigElement() == null) {
+				// If the current perspective has been created by the user, try to find the
+				// existing perspective it was generated from
+				IPerspectiveRegistry registry = window.getWorkbench().getPerspectiveRegistry();
+				pDesc = (PerspectiveDescriptor) registry.findPerspectiveWithId(pDesc.getOriginalId());
+			}
 
-			// The initial perspective factory definition
-			final ModeledPageLayout modelLayout = new ModeledPageLayout(((WorkbenchPage) page).getWindowModel(), eModelService, ePartService, dummyPerspective, desc, (WorkbenchPage) page, false);
-			factory.createInitialLayout(modelLayout);
+			if (pDesc.getConfigElement() != null) {
+				final IPerspectiveFactory factory = pDesc.createFactory();
+				// The initial perspective factory definition
+				final ModeledPageLayout modelLayout = new ModeledPageLayout(((WorkbenchPage) page).getWindowModel(), eModelService, ePartService, dummyPerspective, pDesc,
+						(WorkbenchPage) page, false);
+				factory.createInitialLayout(modelLayout);
 
-			// Then add in any perspective extensions
-			final PerspectiveExtensionReader reader = new PerspectiveExtensionReader();
-			reader.extendLayout(window.getExtensionTracker(), desc.getId(), modelLayout);
+				// Then add in any perspective extensions
+				final PerspectiveExtensionReader reader = new PerspectiveExtensionReader();
+				reader.extendLayout(window.getExtensionTracker(), pDesc.getId(), modelLayout);
+			} else {
+				viewIds.addAll(Arrays.asList(page.getShowViewShortcuts()));
+			}
 
 			// Finally the perspective shortcuts are tags in the format prefix:viewid
-			dummyPerspective.getTags()
-					.stream() //
+			dummyPerspective.getTags().stream() //
 					.filter(t -> t.startsWith(ModeledPageLayout.SHOW_VIEW_TAG)) //
 					.map(t -> t.substring(ModeledPageLayout.SHOW_VIEW_TAG.length())) //
 					.forEach(viewIds::add);
@@ -263,7 +279,8 @@ public class ShowViewMenu extends ContributionItem {
 		// Filter out views we are not interested in.
 		viewIds.removeAll(IGNORED);
 
-		// Next from the collection of id's, find the category and put the info in a grouped map
+		// Next from the collection of id's, find the category and put the info in a
+		// grouped map
 		final Map<String, List<CommandContributionItemParameter>> m = new HashMap<>();
 		for (final String id : viewIds) {
 			getItem(id, m);
@@ -373,14 +390,18 @@ public class ShowViewMenu extends ContributionItem {
 
 	private boolean getItem(final String viewId, final Map<String, List<CommandContributionItemParameter>> groupedViews) {
 		// This disabled code queried the view part before the view description.
-		// SG: I think we want to ignore this as we often get the wrong name/icon from the persisted state rather than original definition
+		// SG: I think we want to ignore this as we often get the wrong name/icon from
+		// the persisted state rather than original definition
 		// {
-		// List<MPart> findElements = eModelService.findElements(eApplication, viewId, MPart.class, (List) null);
+		// List<MPart> findElements = eModelService.findElements(eApplication, viewId,
+		// MPart.class, (List) null);
 		// if (findElements.size() == 1) {
 		// MPart p = findElements.get(0);
 		// String label = p.getLabel();
 		//
-		// CommandContributionItemParameter parms = new CommandContributionItemParameter(window, viewId, SHOW_VIEW_ID, CommandContributionItem.STYLE_PUSH);
+		// CommandContributionItemParameter parms = new
+		// CommandContributionItemParameter(window, viewId, SHOW_VIEW_ID,
+		// CommandContributionItem.STYLE_PUSH);
 		// parms.label = label;
 		// try {
 		// parms.icon = ImageDescriptor.createFromURL(new URL(p.getIconURI()));
@@ -392,7 +413,8 @@ public class ShowViewMenu extends ContributionItem {
 		//
 		// parms.parameters.put(VIEW_ID_PARM, viewId);
 		// if (makeFast) {
-		// parms.parameters.put(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW, "true"); //$NON-NLS-1$
+		// parms.parameters.put(IWorkbenchCommandConstants.VIEWS_SHOW_VIEW_PARM_FASTVIEW,
+		// "true"); //$NON-NLS-1$
 		// }
 		//
 		// groupedViews.computeIfAbsent(p.get, null)
@@ -444,7 +466,8 @@ public class ShowViewMenu extends ContributionItem {
 		return true;
 	}
 
-	// private List<String> addOpenedViews(final IWorkbenchPage page, final List<String> actions) {
+	// private List<String> addOpenedViews(final IWorkbenchPage page, final
+	// List<String> actions) {
 	// final List<String> views = getParts(page);
 	// final List<String> result = new ArrayList<>(views.size() + actions.size());
 	//
