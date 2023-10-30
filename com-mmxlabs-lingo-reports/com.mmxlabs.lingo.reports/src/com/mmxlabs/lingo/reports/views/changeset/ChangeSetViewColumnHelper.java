@@ -1327,6 +1327,7 @@ public class ChangeSetViewColumnHelper {
 		return new CellLabelProvider() {
 
 			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay());
+			private final DateTimeFormatter paperDealFormatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay());
 
 			@Override
 			public String getToolTipText(final Object element) {
@@ -1383,8 +1384,8 @@ public class ChangeSetViewColumnHelper {
 							if (paperDeal.getPricingPeriodStart() != null && paperDeal.getPricingPeriodEnd() != null) {
 								final StringBuilder sb1 = new StringBuilder();
 								sb1.append("Paper deal dates:\n");
-								sb1.append(String.format("First day: %s \n", paperDeal.getPricingPeriodStart().format(formatter)));
-								sb1.append(String.format("Final day: %s", paperDeal.getPricingPeriodEnd().format(formatter)));
+								sb1.append(String.format("First day: %s \n", paperDeal.getPricingPeriodStart().format(paperDealFormatter)));
+								sb1.append(String.format("Final day: %s", paperDeal.getPricingPeriodEnd().format(paperDealFormatter)));
 								return sb1.toString();
 							}
 						}
@@ -1555,7 +1556,7 @@ public class ChangeSetViewColumnHelper {
 								pda = tableRow.getLhsAfter().getPaperDealAllocation();
 							}
 							if (pda != null && pda.getPaperDeal() != null && pda.getPaperDeal().getPricingPeriodStart() != null) {
-								cell.setText(pda.getPaperDeal().getPricingPeriodStart().format(formatter));
+								cell.setText(pda.getPaperDeal().getPricingPeriodStart().format(paperDealFormatter));
 							}
 						}
 
