@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
@@ -49,6 +50,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
@@ -98,7 +100,7 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				}
 				return null;
 			}
-		}).setEditingSupport(null);;
+		}).setEditingSupport(null);
 		addTypicalColumn("Discharge Id", new BasicAttributeManipulator(TransfersPackage.eINSTANCE.getTransferRecord_Lhs(), getCommandHandler()) {
 			@Override
 			public String render(final Object object) {
@@ -135,15 +137,22 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 				getCommandHandler()));
 	}
 
+	@SuppressWarnings("unused")
 	private Action createAddAction() {
 		addAction = new RunnableAction("Add", CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled), () -> {
+			final IScenarioDataProvider scenarioDataProvider = getScenarioEditingLocation().getScenarioDataProvider();
+			final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
+			TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
+			if (tm == null || tm.getTransferAgreements() == null || tm.getTransferAgreements().isEmpty()) {
+				RunnerHelper.syncExec((display) -> {
+					MessageDialog.openError(display.getActiveShell(), "Error", "No transfer agreements present. \nCannot create a transfer record without a transfer agreement.");
+				});
+				return;
+			}
 			final CompoundCommand cmd = new CompoundCommand("New transfer record");
 			final TransferRecord tr = TransfersFactory.eINSTANCE.createTransferRecord();
 			tr.setCargoReleaseDate(LocalDate.now());
 			tr.setPricingDate(LocalDate.now());
-			final IScenarioDataProvider scenarioDataProvider = getScenarioEditingLocation().getScenarioDataProvider();
-			final LNGScenarioModel scenarioModel = ScenarioModelUtil.getScenarioModel(scenarioDataProvider);
-			TransferModel tm = ScenarioModelUtil.getTransferModel(scenarioModel);
 			if (tm == null) {
 				tm = TransfersFactory.eINSTANCE.createTransferModel();
 				tm.getTransferRecords().add(tr);
