@@ -25,18 +25,12 @@ public class VesselClassSafetyHeelConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Vessel) {
-			final Vessel vessel = (Vessel) target;
-			vessel.getVesselOrDelegateSafetyHeel();
-			
-			if (vessel.getVesselOrDelegateSafetyHeel() == 0) {
-			
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus("'" + vessel.getName() + "'"));
+		if (target instanceof Vessel vessel && !vessel.isMarker() && vessel.getVesselOrDelegateSafetyHeel() == 0) {
 
-				dcsd.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_SafetyHeel());
-				return dcsd;
-			}
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + vessel.getName() + "'"));
+
+			dcsd.addEObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_SafetyHeel());
+			return dcsd;
 		}
 		return ctx.createSuccessStatus();
 	}
