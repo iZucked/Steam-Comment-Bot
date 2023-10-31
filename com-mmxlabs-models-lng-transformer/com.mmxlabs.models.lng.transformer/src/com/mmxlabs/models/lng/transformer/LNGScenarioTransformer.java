@@ -3240,8 +3240,8 @@ public class LNGScenarioTransformer {
 
 			if (eVessel.isMarker() && (builder instanceof final SchedulerBuilder sBuilder)) {
 				final long capacity = OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrDelegateCapacity() * eVessel.getVesselOrDelegateFillCapacity()));
-
-				oVessel = sBuilder.createVirtualMarkerVessel(eVessel.getName(), capacity);
+				final int maxSpeed = OptimiserUnitConvertor.convertToInternalSpeed(eVessel.getVesselOrDelegateMaxSpeed());
+				oVessel = sBuilder.createVirtualMarkerVessel(eVessel.getName(), capacity, maxSpeed);
 			} else {
 				final IBaseFuel oTravelBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
 				IBaseFuel oIdleBaseFuel = null;

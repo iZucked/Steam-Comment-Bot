@@ -421,8 +421,11 @@ public class SchedulerBuilder implements ISchedulerBuilder {
 		return virtualVessel;
 	}
 
-	public IVessel createVirtualMarkerVessel(final String name, final long capacity) {
-		return createVessel(name, 0, 0, capacity, 0, virtualVessel.getTravelBaseFuel(), virtualVessel.getIdleBaseFuel(), virtualVessel.getInPortBaseFuel(), virtualVessel.getPilotLightBaseFuel(), 0, 0,
+	public IVessel createVirtualMarkerVessel(final String name, final long capacity, int maxSpeed) {
+		if (maxSpeed < 0) {
+			maxSpeed = 0;
+		}
+		return createVessel(name, 0, maxSpeed, capacity, 0, virtualVessel.getTravelBaseFuel(), virtualVessel.getIdleBaseFuel(), virtualVessel.getInPortBaseFuel(), virtualVessel.getPilotLightBaseFuel(), 0, 0,
 				0, 0, 0, false);
 	}
 
