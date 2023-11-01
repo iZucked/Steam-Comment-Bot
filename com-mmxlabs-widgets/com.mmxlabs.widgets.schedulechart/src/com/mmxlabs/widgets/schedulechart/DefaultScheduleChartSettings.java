@@ -15,6 +15,11 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	public int getHeaderHeight() {
 		return 24;
 	}
+	
+	@Override
+	public int getBuySellEventHeight() {
+		return 19;
+	}
 
 	@Override
 	public int getTopAnnotationHeight() {
@@ -74,6 +79,11 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	@Override
 	public void setEventSizing(EventSize size) {
 		this.size = size;
+	}
+
+	@Override
+	public boolean hasMultipleScenarios() {
+		return false;
 	}
 
 }

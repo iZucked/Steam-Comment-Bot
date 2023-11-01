@@ -15,6 +15,7 @@ import com.mmxlabs.widgets.schedulechart.IScheduleChartColourScheme;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvasState;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
+import com.mmxlabs.widgets.schedulechart.ScheduleChartRowPriorityType;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.ScheduleTimeScale;
@@ -55,8 +56,14 @@ public class DrawableScheduleChartRow extends DrawableElement {
 	}
 	
 	public int getActualHeight() {
-		int rowHeight = showsAnnotations ? settings.getRowHeightWithAnnotations() : settings.getRowHeight();
-		return isNoSpacer ? rowHeight - 2 * settings.getSpacerWidth() : rowHeight;
+		if(scr.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
+			int rowHeight = showsAnnotations ? settings.getRowHeightWithAnnotations() : settings.getRowHeight();
+			int rowHeightWithSpacer = isNoSpacer ? rowHeight - 2 * settings.getSpacerWidth() : rowHeight;
+			return settings.hasMultipleScenarios() ? rowHeightWithSpacer + 15 : rowHeightWithSpacer;
+		}
+		else {
+			return settings.getBuySellRowHeight();
+		}
 	}
 
 	@Override
@@ -115,7 +122,8 @@ public class DrawableScheduleChartRow extends DrawableElement {
 
 	private DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent se, Rectangle bounds) {
 		final int spacer = isNoSpacer ? 0 : settings.getSpacerWidth();
-		final int eventHeight = settings.getEventHeight();
+		
+		final int eventHeight = scr.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS) ? settings.getEventHeight() : settings.getBuySellEventHeight();
 
 		int startX = sts.getXForDateTime(se.getStart());
 		int endX = sts.getXForDateTime(se.getEnd());

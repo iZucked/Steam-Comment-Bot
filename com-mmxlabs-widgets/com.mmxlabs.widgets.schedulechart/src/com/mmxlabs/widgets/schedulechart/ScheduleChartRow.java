@@ -33,6 +33,13 @@ public class ScheduleChartRow {
 	public String getName() {
 		return key.getName();
 	}
+	
+	public String getScenarioName() {
+		if(!events.isEmpty()) {
+			return events.get(0).getScenarioName();
+		}
+		return "";
+	}
 
 	public ScheduleChartRowPriorityType getRowType() {
 		return rowType;

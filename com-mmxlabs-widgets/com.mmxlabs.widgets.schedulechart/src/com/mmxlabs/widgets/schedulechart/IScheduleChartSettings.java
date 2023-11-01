@@ -9,6 +9,7 @@ public interface IScheduleChartSettings {
 	default int getEventHeight() {
 		return getEventSizing().getEventHeight();
 	}
+	int getBuySellEventHeight();
 	int getTopAnnotationHeight();
 	int getBottomAnnotationHeight();
 	int getSpacerWidth();
@@ -37,9 +38,14 @@ public interface IScheduleChartSettings {
 		return getEventHeight() + 2 * getSpacerWidth();
 	}
 	
+	default int getBuySellRowHeight() {
+		return getBuySellEventHeight() + 2 * getSpacerWidth();
+	}
+	
 	IScheduleChartColourScheme getColourScheme();
 	
 	EventSize getEventSizing();
 	void setEventSizing(EventSize size);
+	boolean hasMultipleScenarios();
 
 }

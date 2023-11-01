@@ -9,6 +9,7 @@ import com.mmxlabs.widgets.schedulechart.DefaultScheduleChartSettings;
 public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings {
 	
 	private boolean showAnnotations;
+	private boolean hasMultipleScenarios;
 
 	@Override
 	public boolean showAnnotations() {
@@ -21,6 +22,15 @@ public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings
 
 	public boolean showNominalsByDefault() {
 		return false;
+	}
+	
+	@Override
+	public boolean hasMultipleScenarios() {
+		return hasMultipleScenarios;
+	}
+
+	public void sethasMultipleScenarios(boolean hasMultipleScenarios) {
+		this.hasMultipleScenarios = hasMultipleScenarios;
 	}
 
 }

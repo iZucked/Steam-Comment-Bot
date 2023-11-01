@@ -17,6 +17,7 @@ import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartMode;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartRowKey;
+import com.mmxlabs.widgets.schedulechart.ScheduleChartRowPriorityType;
 import com.mmxlabs.widgets.schedulechart.ScheduleFilterSupport;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
 
@@ -64,13 +65,24 @@ public class DrawableScheduleChartRowHeader extends DrawableElement {
 		
 		int textBoxStart = bounds.x + (isFilterMode ? checkBoxWidth : 0);
 		String name = dscr.getScheduleChartRow().getName();
+		String scenario = dscr.getScheduleChartRow().getScenarioName();
 		int heightOfText = queryResolver.findSizeOfText(name, Display.getDefault().getSystemFont(), Display.getDefault().getSystemFont().getFontData()[0].getHeight()).y;
+		final int scenarioPadding  = settings.hasMultipleScenarios() && dscr.getScheduleChartRow().getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS) ? 5 : 0;
+		
 		res.add(BasicDrawableElements.Text //
-				.from(textBoxStart, bounds.y + (bounds.height + 1) / 2 - heightOfText / 2, name) //
+				.from(textBoxStart, bounds.y + ((bounds.height + 1) / 2 - heightOfText / 2) - scenarioPadding, name) //
 				.padding(new Padding(settings.getRowHeaderLeftPadding(), settings.getRowHeaderRightPadding(), 0, 0)) //
 				.textColour(colourScheme.getRowHeaderTextColour(dscr.getRowNum())) //
-				.create() //
-		);
+				.create()); //
+		
+		if(settings.hasMultipleScenarios() && dscr.getScheduleChartRow().getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
+			res.add(BasicDrawableElements.Text //
+					.from(textBoxStart, bounds.y + ((bounds.height + 1) / 2 - heightOfText / 2) + scenarioPadding * 2, scenario) //
+					.padding(new Padding(settings.getRowHeaderLeftPadding(), settings.getRowHeaderRightPadding(), 0, 0)) //
+					.textColour(colourScheme.getRowHeaderTextColour(dscr.getRowNum())) //
+					.create()); //		
+		}
+		
 		return res;
 	}
 	

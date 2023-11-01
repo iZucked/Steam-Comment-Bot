@@ -12,6 +12,7 @@ public class ScheduleEvent {
 
 	private final LocalDateTime startDate;
 	private final LocalDateTime endDate;
+	private final String scenarioName;
 
 	private final Object data;
 	private boolean visible;
@@ -21,22 +22,23 @@ public class ScheduleEvent {
 	
 	private final List<ScheduleEventAnnotation> annotations;
 	
-	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, List<ScheduleEventAnnotation> annotations) {
+	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, String scenarioName, List<ScheduleEventAnnotation> annotations) {
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.scenarioName = scenarioName;
 		this.data = data;
 		this.selectionState = ScheduleEventSelectionState.UNSELECTED;
 		this.annotations = annotations;
 		this.showAnnotations = true;
 	}
 	
-	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, List<ScheduleEventAnnotation> annotations, boolean showAnnotations) {
-		this(startDate, endDate, data, annotations);
+	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, String scenarioName, List<ScheduleEventAnnotation> annotations, boolean showAnnotations) {
+		this(startDate, endDate, data, scenarioName, annotations);
 		this.showAnnotations = showAnnotations;
 	}
 
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate) {
-		this(startDate, endDate, null, Collections.emptyList());
+		this(startDate, endDate, null, "", Collections.emptyList());
 	}
 	
 	public LocalDateTime getStart() {
@@ -77,6 +79,10 @@ public class ScheduleEvent {
 	
 	public boolean showsAnnotations() {
 		return showAnnotations;
+	}
+	
+	public String getScenarioName() {
+		return scenarioName;
 	}
 
 }

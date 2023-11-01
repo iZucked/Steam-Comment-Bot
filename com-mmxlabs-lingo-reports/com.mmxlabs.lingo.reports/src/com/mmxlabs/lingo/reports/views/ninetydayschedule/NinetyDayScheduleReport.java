@@ -58,6 +58,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private Action packAction;
 	private NinetyDayScheduleLabelMenuAction labelMenuAction;
 	private NinetyDayScheduleFilterMenuAction filterMenuAction;
+	private NinetyDayScheduleSortMenuAction sortMenuAction;
 	private Action showAnnotationsAction;
 	private RunnableAction gotoPreferences;
 	
@@ -93,6 +94,8 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 				if (selectedDataProvider != null) {
 					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					List<ScenarioResult> other = selectedDataProvider.getAllScenarioResults().stream().filter(f -> f != null).toList();
+					settings.sethasMultipleScenarios(other.size() > 1);
+					
 					viewer.typedSetInput(new NinetyDayScheduleInput(pinned, other));
 					viewer.getCanvas().getTimeScale().pack();
 				}
@@ -184,6 +187,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		manager.add(packAction);
 		manager.add(labelMenuAction);
 		manager.add(filterMenuAction);
+		manager.add(sortMenuAction);
 		manager.add(showAnnotationsAction);
 		
 		final IActionBars bars = getViewSite().getActionBars();
@@ -200,6 +204,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		packAction = new PackAction(viewer.getCanvas());
 		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
 		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas(), settings);
+		sortMenuAction = new NinetyDayScheduleSortMenuAction(this, sortingProvider);
 		showAnnotationsAction = new ShowAnnotationsAction(viewer.getCanvas(), settings);
 		gotoPreferences = new RunnableAction("Preferences", () -> {
 			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage",
