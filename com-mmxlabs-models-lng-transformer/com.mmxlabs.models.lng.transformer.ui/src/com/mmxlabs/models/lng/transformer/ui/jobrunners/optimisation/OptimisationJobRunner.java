@@ -285,7 +285,7 @@ public class OptimisationJobRunner extends AbstractJobRunner {
 			final long startTime = System.currentTimeMillis();
 			
 			// Don't run an evaluation if we are in clean state as this will unpair the starting point 
-			if (userSettings.getAdpOptimisationMode() != AdpOptimisationMode.CLEAN_SLATE) {
+			if (userSettings.getAdpOptimisationMode() != AdpOptimisationMode.CLEAN_SLATE && userSettings.getAdpOptimisationMode() != AdpOptimisationMode.PARTIAL_CLEAN_SLATE) {
 				sdp.setLastEvaluationFailed(true);
 				runner.evaluateInitialState();
 			}
