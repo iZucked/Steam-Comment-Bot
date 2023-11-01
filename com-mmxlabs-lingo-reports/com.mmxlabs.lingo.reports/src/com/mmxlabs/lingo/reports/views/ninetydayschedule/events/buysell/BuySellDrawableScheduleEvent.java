@@ -65,13 +65,14 @@ public class BuySellDrawableScheduleEvent extends NinetyDayDrawableScheduleEvent
 				acutalPaddingBottom = 0;
 			} else {
 				actualPaddingTop = 0;
-				acutalPaddingBottom = VERTICAL_PADDING;
+				acutalPaddingBottom = 0;
 			}
 		} else {
 			actualPaddingTop = VERTICAL_PADDING;
 			acutalPaddingBottom = VERTICAL_PADDING;
 		}
-		return new Rectangle(bounds.x - HALF_WIDTH, bounds.y + actualPaddingTop, FULL_WIDTH, bounds.height - actualPaddingTop - acutalPaddingBottom);
+		
+		return new Rectangle(bounds.x - HALF_WIDTH, bounds.y + actualPaddingTop, FULL_WIDTH, bounds.height + actualPaddingTop - acutalPaddingBottom);
 	}
 
 	public boolean isBuyRow() {

@@ -155,7 +155,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		
 		// Move the start of the schedule area across by the width of the labels.
 		final int rowHeaderWidth = calculateRowHeaderWidth(resolver);
-		Rectangle mainBounds = new Rectangle(bounds.x + rowHeaderWidth, bounds.y, bounds.width - rowHeaderWidth, bounds.height);
+		Rectangle mainBounds = new Rectangle(bounds.x + rowHeaderWidth, bounds.y, bounds.width - rowHeaderWidth, bounds.height + 30);
 		canvasState.setMainBounds(mainBounds);
 		// Make sure the h-scroll thumb is updated.
 		horizontalScrollbarHandler.updateWidth(mainBounds.width);
@@ -227,6 +227,18 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		drawer.drawOne(dragSelectionZoomHandler.getDrawableSelectionRectangle(), resolver);
 	}
 	
+	private int calculateRowHeaderHeight(DrawerQueryResolver resolver) {
+		final Font systemFont = Display.getDefault().getSystemFont();
+		final int fontSize = systemFont.getFontData()[0].getHeight();
+		final int textHeight = resolver.findSizeOfText("Test", systemFont, fontSize).y;
+		
+		if(settings.hasMultipleScenarios()) {
+			return settings.getRowHeightWithAnnotations() + textHeight;
+		}else {
+			return settings.getRowHeightWithAnnotations();
+		}
+	}
+	
 	private int calculateRowHeaderWidth(DrawerQueryResolver resolver) {
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final int fontSize = systemFont.getFontData()[0].getHeight();
@@ -246,13 +258,19 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		for (final ScheduleChartRow scr : getSortedShownRows()) {
 			final DrawableScheduleChartRow drawableRow =  //
 					new DrawableScheduleChartRow(scr, canvasState, i, timeScale, drawableEventProvider, eventStylingProvider, settings, scheduleChartRowsDataProvider.isNoSpacerRow(scr));
-			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, drawableRow.getActualHeight()));
+			int currentRowHeight = drawableRow.getActualHeight();
+
+			// Make buy sell a defined height
+			if(!scr.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
+				currentRowHeight = settings.getBuySellRowHeight();
+			}
+			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, currentRowHeight));
 			if (canvasState.getScheduleChartMode() == ScheduleChartMode.FILTER && canvasState.getHiddenRowKeys().contains(scr.getKey())) {
 				drawableRow.setColourFilter(ScheduleChartColourUtils::getHiddenElementsFilter);
 			}
 			res.add(drawableRow);
 			i++;
-			y += drawableRow.getActualHeight();
+			y += currentRowHeight;
 		}
 		return res;
 	}
@@ -261,7 +279,12 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		List<DrawableScheduleChartRowHeader> res = new ArrayList<>();
 		int y = canvasState.getMainBounds().y + drawableTimeScale.getTotalHeaderHeight();
 		for (final DrawableScheduleChartRow drawableScheduleChartRow : drawnRows) {
-			final int currentRowHeight = drawableScheduleChartRow.getActualHeight();
+			int currentRowHeight = drawableScheduleChartRow.getActualHeight();
+
+			// Try to make buy sell a defined height
+			if(!drawableScheduleChartRow.getScheduleChartRow().getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
+				currentRowHeight = settings.getBuySellRowHeight();
+			}
 			final DrawableScheduleChartRowHeader rowHeader = new DrawableScheduleChartRowHeader(this, drawableScheduleChartRow, filterSupport, getScheduleChartMode(), settings);
 			rowHeader.setBounds(new Rectangle(canvasState.getOriginalBounds().x, y, rowHeaderWidth, currentRowHeight));
 			res.add(rowHeader);

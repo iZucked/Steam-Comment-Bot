@@ -18,7 +18,7 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	
 	@Override
 	public int getBuySellEventHeight() {
-		return 19;
+		return 15;
 	}
 
 	@Override
