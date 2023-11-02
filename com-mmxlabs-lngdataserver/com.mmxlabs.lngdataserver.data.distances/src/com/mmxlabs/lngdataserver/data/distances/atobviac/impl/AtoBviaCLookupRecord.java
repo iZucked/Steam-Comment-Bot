@@ -15,6 +15,10 @@ public class AtoBviaCLookupRecord {
 	private String errorCode;
 	private boolean antiPiracy = true;
 
+	/** Field used to track use in PostProcess class */
+	@JsonIgnore
+	public boolean used = false;
+
 	@JsonIgnore
 	private String id;
 

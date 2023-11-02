@@ -44,10 +44,10 @@ public class RefreshAllDistances {
 
 		String sourceData = "2023d"; //Source data for comparison
 		String destData = "2023e"; // Dest folder - expects ports.json to be present
-
+		
 		gatherNew(destData);
 
-		CompareDistanceSets.compare(sourceData, destData);
+		CompareDistanceSets.compare(sourceData, destData, true);
 	}
 
 	public static void gatherNew(String destData) throws Exception {
@@ -56,7 +56,7 @@ public class RefreshAllDistances {
 
 		final URL cacheFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distance-cache.txt"));
 		final File cacheFile = new File(cacheFileURL.toURI());
-		final URL newDistancesFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distances.json"));
+		final URL newDistancesFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distances-raw.json"));
 		final File newDistancesFile = new File(newDistancesFileURL.toURI());
 		final File newDistancesVersionFile = new File(newDistancesFile.getParent(), "distances-version.json");
 

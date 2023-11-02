@@ -396,7 +396,7 @@ public class LocationsToScenarioCopier {
 						final String southSide = t.getSouthernEntry();
 						if ((option == RouteOption.SUEZ && t.getIdentifier().equals("SUZ")) || (option == RouteOption.PANAMA && t.getIdentifier().equals("PAN"))) {
 
-							if (Math.abs(t.getDistance() - route.getDistance()) > 0.1) {
+							if (Math.abs(t.getDistance() - route.getDistance()) > 0.001) {
 								final UpdateStep step = new UserUpdateStep(String.format("Update canal distance (%s)", option.getName()), cmd -> {
 									cmd.append(SetCommand.create(editingDomain, pRoute, PortPackage.Literals.ROUTE__DISTANCE, t.getDistance()));
 								});

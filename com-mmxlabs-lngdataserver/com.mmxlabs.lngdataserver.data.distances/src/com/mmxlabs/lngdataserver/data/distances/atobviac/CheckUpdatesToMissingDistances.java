@@ -44,7 +44,7 @@ public class CheckUpdatesToMissingDistances {
 
 		gatherMissing(sourceData, destData);
 
-		CompareDistanceSets.compare(sourceData, destData);
+		CompareDistanceSets.compare(sourceData, destData, true);
 	}
 
 	private static final TypeReference<List<AtoBviaCLookupRecord>> DISTANCE_TYPE = new TypeReference<List<AtoBviaCLookupRecord>>() {
@@ -57,7 +57,7 @@ public class CheckUpdatesToMissingDistances {
 
 		final URL cacheFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distance-cache.txt"));
 		final File cacheFile = new File(cacheFileURL.toURI());
-		final URL newDistancesFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distances.json"));
+		final URL newDistancesFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distances-raw.json"));
 		final File newDistancesFile = new File(newDistancesFileURL.toURI());
 		final File newDistancesVersionFile = new File(newDistancesFile.getParent(), "distances-version.json");
 
@@ -66,7 +66,7 @@ public class CheckUpdatesToMissingDistances {
 				final ObjectMapper mapper = new ObjectMapper();
 
 				// Load in existing data set
-				final List<AtoBviaCLookupRecord> existingRecords = mapper.readValue(CheckUpdatesToMissingDistances.class.getResourceAsStream("/" + sourceData + "/distances.json"), DISTANCE_TYPE);
+				final List<AtoBviaCLookupRecord> existingRecords = mapper.readValue(CheckUpdatesToMissingDistances.class.getResourceAsStream("/" + sourceData + "/distances-raw.json"), DISTANCE_TYPE);
 
 				// Configure datastore with existing distance records
 				final LocalDataStore localDataStore = new LocalDataStore();

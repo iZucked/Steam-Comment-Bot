@@ -19,6 +19,7 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -44,11 +45,19 @@ public class DistanceUpdaterTests {
 				{ "2023a", "2023d", 796 }, //
 				{ "2023b", "2023d", 800 }, //
 				{ "2023c", "2023d", 806 }, //
+				{ "2023a", "2023e", 942 }, //
+				{ "2023b", "2023e", 946 }, //
+				{ "2023c", "2023e", 952 }, //
+				{ "2023d", "2023e", 146 }, //
+				{ "2023d", "2023f", 146 }, //
+				{ "2023e", "2023f", 0 }, //
 				{ "2023a", CURRENT, 942 }, //
 				{ "2023b", CURRENT, 946 }, //
 				{ "2023c", CURRENT, 952 }, //
 				{ "2023d", CURRENT, 146 }, //
-				{ "2023d", "2023e", 146 }, //
+				{ "2023d", CURRENT, 146 }, //
+				{ "2023e", CURRENT, 0 }, //
+				{ "2023f", CURRENT, 0 }, //
 
 		});
 	}
@@ -76,12 +85,14 @@ public class DistanceUpdaterTests {
 		// Compute basic stats
 		EnumMap<RouteOption, Integer> before = new EnumMap<>(RouteOption.class);
 		Map<Triple<RouteOption, Port, Port>, Integer> counter = new HashMap<>();
+		Map<Triple<RouteOption, Port, Port>, RouteLine> rlcounter = new HashMap<>();
 		for (var r : portModel.getRoutes()) {
 			before.put(r.getRouteOption(), r.getLines().size());
 			for (var l : r.getLines()) {
 				if (l.getDistance() >= 0.0) {
 					Triple<RouteOption, Port, Port> key = Triple.of(r.getRouteOption(), l.getFrom(), l.getTo());
 					counter.merge(key, -1, Math::addExact);
+					rlcounter.put(key,  l);
 				}
 			}
 		}
@@ -109,14 +120,18 @@ public class DistanceUpdaterTests {
 
 		// Make sure we have not lost any distance lines from the totals count
 		for (var ro : RouteOption.values()) {
-//			System.out.printf("%s %,d -> %,d%n", ro.getName(), before.get(ro), after.get(ro));
+			System.out.printf("%s %,d -> %,d%n", ro.getName(), before.get(ro), after.get(ro));
 //			Assertions.assertTrue(after.get(ro) >= before.get(ro));
 		}
+		
+//		LOST DIRECT ROUTES ARE A PROBLEM
+		
 		int lost = 0;
 		for (var e : counter.entrySet()) {
 			if (e.getValue() < 0) {
 				System.out.printf("Lost %s -> %s (%s)%n", e.getKey().getSecond().getName(), e.getKey().getThird().getName(), e.getKey().getFirst().getName());
 				lost++;
+				System.out.println(rlcounter.get(e.getKey()).getDistance());
 			}
 		}
 		Assertions.assertEquals(tolerance, lost);

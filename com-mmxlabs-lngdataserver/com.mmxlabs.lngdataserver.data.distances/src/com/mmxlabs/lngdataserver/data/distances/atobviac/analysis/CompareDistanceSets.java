@@ -18,17 +18,18 @@ import com.mmxlabs.lngdataserver.data.distances.atobviac.impl.AtoBviaCLookupReco
 public class CompareDistanceSets {
 
 	public static void main(String[] args) throws Exception {
-		compare("2023d", "2023e");
+		boolean rawDistances = true;
+		compare("2023d", "2023f", rawDistances);
 	}
 
 	private static TypeReference<List<AtoBviaCLookupRecord>> DISTANCE_TYPE = new TypeReference<List<AtoBviaCLookupRecord>>() {
 
 	};
 
-	public static void compare(String beforeSet, String afterSet) throws Exception {
+	public static void compare(String beforeSet, String afterSet, boolean rawDistances) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 
-		String fmt = "/%s/distances.json";
+		String fmt = rawDistances ? "/%s/distances-raw.json" : "/%s/distances.json";
 		String beforeFilename = String.format(fmt, beforeSet);
 		String afterFilename = String.format(fmt, afterSet);
 
@@ -44,10 +45,12 @@ public class CompareDistanceSets {
 					.filter(AtoBviaCLookupRecord::getAntiPiracy)
 					.collect(Collectors.toMap(r -> Pair.of(mapName(r.getFrom()), mapName(r.getTo())), Function.identity()));
 
+			int newDistanceRecord = 0;
 			int newDistance = 0;
 			int stillMissing = 0;
 			int fixedDistance = 0;
 			int similarDistance = 0;
+			int changedDistance = 0;
 			int newErrorDistance = 0;
 			// int updatedDistanceSmall = 0;
 			// int updatedDistanceLarge = 0;
@@ -66,7 +69,7 @@ public class CompareDistanceSets {
 					} else if (oldRecord.getDistance() < 0.0) {
 						fixedDistance++;
 						System.out.println(key + " Fixed " + newRecord.getFrom() + " -- " + oldRecord.getTo() + " --- " + newRecord.getDistance());
-
+						newDistance++;
 					} else if (newRecord.getDistance() < 0.0) {
 						System.out.println(key + "  " + newRecord.getErrorCode() + " -- " + +oldRecord.getDistance());
 
@@ -78,6 +81,11 @@ public class CompareDistanceSets {
 								b[1]++;
 								break;
 							}
+						}
+						if (delta == 0.0) {
+							 similarDistance++;
+						} else {
+							changedDistance++;
 						}
 
 						// if ( < 0.01) {
@@ -91,13 +99,15 @@ public class CompareDistanceSets {
 					}
 
 				} else {
-					newDistance++;
+					newDistanceRecord++;
 					AtoBviaCLookupRecord newRecord = newMap.get(key);
 
 					if (newRecord.getDistance() < 0.0) {
 						System.out.println(key + " New Missing " + newRecord.getFrom() + " -- " + newRecord.getTo() + " --- " + newRecord.getDistance());
 
 						newErrorDistance++;
+					} else {
+						newDistance++;
 					}
 				}
 			}
@@ -116,21 +126,27 @@ public class CompareDistanceSets {
 					newMap.entrySet().stream().filter(e -> e.getValue().getDistance() >= 0).count());
 			// System.out.printf("Missing both ways: %d\n", bothMissing);
 			// System.out.printf("Missing one way: %d\n", oneMissing);
-			System.out.printf("Added distance record: %d\n", newDistance);
+			System.out.printf("Added distance record: %d\n", newDistanceRecord);
 			// System.out.printf("Updated distance record < 10nm: %d\n",
 			// updatedDistanceSmall);
 			// System.out.printf("Updated distance record: %d\n", updatedDistanceLarge);
 			for (double[] b : updatedCount) {
-				System.out.printf("Updated distance record < %.2G nm: %.0f\n", b[0], b[1]);
+				System.out.printf("Distance record change < %.2G nm: %.0f\n", b[0], b[1]);
 
 				// System.out.printf("Updated distance record: %d\n", updatedDistanceLarge);
 			}
-			System.out.printf("Similar records: %d\n", similarDistance);
 			System.out.printf("Still missing: %d\n", stillMissing);
 			System.out.printf("Fixed: %d\n", fixedDistance);
 			System.out.printf("Lost: %d\n", lostDistance);
 			System.out.printf("New missing: %d\n", newErrorDistance);
 
+			int newBillable = changedDistance + newDistance;
+			
+			System.out.printf("Same distance: %d\n", similarDistance);
+			System.out.printf("New Distance: %d\n", newDistance);
+			System.out.printf("Changed Distances: %d\n", changedDistance);
+			System.out.printf("New billable: %d\n", newBillable);
+			
 		}
 	}
 

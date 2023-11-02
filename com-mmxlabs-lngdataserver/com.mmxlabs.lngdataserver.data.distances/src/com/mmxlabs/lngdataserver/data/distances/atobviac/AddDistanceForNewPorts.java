@@ -64,7 +64,7 @@ public class AddDistanceForNewPorts {
 		Collections.sort(newPorts);
 		gatherNew(sourceData, destData, newPorts);
 
-		CompareDistanceSets.compare(sourceData, destData);
+		CompareDistanceSets.compare(sourceData, destData, true);
 	}
 
 	private static TypeReference<List<AtoBviaCLookupRecord>> DISTANCE_TYPE = new TypeReference<List<AtoBviaCLookupRecord>>() {
@@ -77,7 +77,7 @@ public class AddDistanceForNewPorts {
 
 		final URL cacheFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distance-cache.txt"));
 		final File cacheFile = new File(cacheFileURL.toURI());
-		final URL newDistancesFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distances.json"));
+		final URL newDistancesFileURL = new URL(FileLocator.toFileURL(new URL(destPortJsonURL.toString())).toString().replace(" ", "%20").replace("ports.json", "distances-raw.json"));
 		final File newDistancesFile = new File(newDistancesFileURL.toURI());
 		final File newDistancesVersionFile = new File(newDistancesFile.getParent(), "distances-version.json");
 
@@ -86,7 +86,7 @@ public class AddDistanceForNewPorts {
 				ObjectMapper mapper = new ObjectMapper();
 
 				// Load in existing data set
-				List<AtoBviaCLookupRecord> existingRecords = mapper.readValue(AddDistanceForNewPorts.class.getResourceAsStream("/" + sourceData + "/distances.json"), DISTANCE_TYPE);
+				List<AtoBviaCLookupRecord> existingRecords = mapper.readValue(AddDistanceForNewPorts.class.getResourceAsStream("/" + sourceData + "/distances-raw.json"), DISTANCE_TYPE);
 
 				// Load in the list of (existing) ports
 				PortDistanceVersion portsConfig = mapper.readValue(destPortJsonURL.openStream(), PortDistanceVersion.class);

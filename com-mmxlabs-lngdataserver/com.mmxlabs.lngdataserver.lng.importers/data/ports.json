@@ -3409,11 +3409,11 @@
     "identifier" : "SUZ",
     "northernEntry" : "L_CP_PortS",
     "southernEntry" : "L_CP_Suez",
-    "distance" : 102.279
+    "distance" : 102.0
   }, {
     "identifier" : "PAN",
     "northernEntry" : "L_CP_Colon",
     "southernEntry" : "L_CP_Balbo",
-    "distance" : 39.97
+    "distance" : 40.0
   } ]
 }

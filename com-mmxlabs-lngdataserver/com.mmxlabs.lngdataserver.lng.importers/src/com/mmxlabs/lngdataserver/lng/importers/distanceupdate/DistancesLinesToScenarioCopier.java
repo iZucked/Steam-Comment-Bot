@@ -85,15 +85,15 @@ public class DistancesLinesToScenarioCopier {
 			}
 
 			routeMap.put(option, route);
-
+			// TODO Update the Route object
 			if (option == RouteOption.PANAMA) {
 				panamaA = route.getNorthEntrance().getPort();
 				panamaB = route.getSouthEntrance().getPort();
-				panamaDistance = route.getDistance();
+				panamaDistance = Math.round(route.getDistance());
 			} else if (option == RouteOption.SUEZ) {
 				suezA = route.getNorthEntrance().getPort();
 				suezB = route.getSouthEntrance().getPort();
-				suezDistance = route.getDistance();
+				suezDistance = Math.round(route.getDistance());
 			}
 		}
 		// Fill in direct distances
