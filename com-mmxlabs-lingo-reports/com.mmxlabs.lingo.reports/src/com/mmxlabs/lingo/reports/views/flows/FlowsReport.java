@@ -243,7 +243,7 @@ public class FlowsReport extends ViewPart {
 					for (final var e : m.entrySet()) {
 						final Flow flow = new Flow();
 						flow.from = e.getKey().getFirst();
-						flow.to = e.getKey().getSecond(); 
+						flow.to = e.getKey().getSecond();
 						flow.value = e.getValue();
 						state.lhsFlows.add(flow);
 					}
@@ -289,6 +289,14 @@ public class FlowsReport extends ViewPart {
 		canvas.addMouseMoveListener(e -> {
 			final Image img = pickerImage;
 			if (img != null) {
+				final var imgData = img.getImageData();
+				// 2023-11-02 - James saw this on his windows 11 laptop when clicking.
+				if (e.x >= imgData.width || e.y >= imgData.height || e.x < 0 || e.y < 0) {
+					// Out of bounds?
+					canvas.setToolTipText(null);
+					return;
+				}
+
 				// Shift off the alpha value
 				final int pixel = img.getImageData().getPixel(e.x, e.y) >> 8;
 				final Object o = pickerMap.get(pixel);
