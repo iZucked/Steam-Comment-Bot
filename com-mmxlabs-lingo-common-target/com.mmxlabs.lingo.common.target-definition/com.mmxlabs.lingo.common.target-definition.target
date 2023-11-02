@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="85">
+<target name="LiNGO Common Platform Target" sequenceNumber="85">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 			<unit id="org.eclipse.equinox.p2.touchpoint.natives" version="0.0.0"/>
