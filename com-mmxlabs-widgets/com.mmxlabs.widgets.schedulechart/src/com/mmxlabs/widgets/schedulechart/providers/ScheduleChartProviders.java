@@ -11,5 +11,6 @@ public record ScheduleChartProviders(
 		IDrawableScheduleEventProvider drawableEventProvider,
 		IDrawableScheduleEventTooltipProvider drawableTooltipProvider,
 		IScheduleChartSortingProvider sortingProvider,
-		IScheduleChartRowsDataProvider scheduleChartSizesProvider
+		IScheduleChartRowsDataProvider scheduleChartSizesProvider,
+		IDrawableLegendProvider drawableLegendProvider
 ) {}

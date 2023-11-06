@@ -11,8 +11,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
-
 import com.mmxlabs.widgets.schedulechart.ScheduleEventTooltip;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;

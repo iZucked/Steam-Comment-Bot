@@ -48,8 +48,26 @@ import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.widgets.schedulechart.EventSize;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
+import com.mmxlabs.widgets.schedulechart.providers.ILegendItem;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastIdleEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastJourneyEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterLengthEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterOutEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DryDockEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterLengthEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterOutEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenIdleEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenJourneyEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LateLoadEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LoadEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.MaintenanceEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.BuySellDrawableScheduleEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionStateType;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionType;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceClassification;
+
 
 public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport implements IPreferenceChangeListener {
 
@@ -60,6 +78,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private NinetyDayScheduleFilterMenuAction filterMenuAction;
 	private NinetyDayScheduleSortMenuAction sortMenuAction;
 	private Action showAnnotationsAction;
+	private Action showLegendAction;
 	private RunnableAction gotoPreferences;
 	
 	private static final Set<String> IGNORED_PREFERENCES = new HashSet<>();
@@ -80,6 +99,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private NinetyDayDrawableEventTooltipProvider drawableEventTooltipProvider;
 	private NinetyDayScheduleEventStylingProvider eventStylingProvider;
 	private NinetyDayDrawableEventLabelProvider eventLabelProvider;
+	private NinetyDayDrawableLegendProvider drawableLegendProvider;
 	private NinetyDayScheduleChartRowsDataProvider scheduleChartRowsDataProvider;
 	
 	private NinetyDayScheduleModelUpdater modelUpdater;
@@ -146,6 +166,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		this.eventStylingProvider = new NinetyDayScheduleEventStylingProvider();
 		this.eventLabelProvider = new NinetyDayDrawableEventLabelProvider(memento, settings);
 		this.modelUpdater = new NinetyDayScheduleModelUpdater(this::getDefaultCommandHandler);
+		this.drawableLegendProvider = new NinetyDayDrawableLegendProvider(getLegendItems());
 
 		super.init(viewSite, memento);
 	}
@@ -159,7 +180,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider, scheduleChartRowsDataProvider), eventProvider, modelUpdater, settings);
+		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider, scheduleChartRowsDataProvider, drawableLegendProvider), eventProvider, modelUpdater, settings);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
 		
@@ -196,6 +217,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	
 	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(gotoPreferences);
+		manager.add(showLegendAction);
 	}
 
 	private void makeActions() {
@@ -206,6 +228,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas(), settings);
 		sortMenuAction = new NinetyDayScheduleSortMenuAction(this, sortingProvider);
 		showAnnotationsAction = new ShowAnnotationsAction(viewer.getCanvas(), settings);
+		showLegendAction = new ShowLegendAction(viewer.getCanvas(), settings);
 		gotoPreferences = new RunnableAction("Preferences", () -> {
 			PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage",
 					new String[] { "com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage" }, null);
@@ -289,6 +312,26 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		}
 		
 	}
+	
+	private static class ShowLegendAction extends Action {
+		private final ScheduleCanvas canvas;
+		private final NinetyDayScheduleChartSettings settings;
+		
+		public ShowLegendAction(final ScheduleCanvas canvas, final NinetyDayScheduleChartSettings settings) {
+			super();
+			this.canvas = canvas;
+			this.settings = settings;
+
+			setText("Show Legend");
+		}
+		
+		@Override
+		public void run() {
+			settings.setShowLegend(!settings.showLegend());
+			canvas.redraw();
+		}
+		
+	}
 
 	@Override
 	public void preferenceChange(PreferenceChangeEvent event) {
@@ -332,6 +375,49 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		default -> EventSize.SMALL;
 		};
 		settings.setEventSizing(fontSize );
+	}
+	
+	private List<ILegendItem> getLegendItems(){
+		List<ILegendItem> legendItems = new ArrayList<>();
+		legendItems.add(new DefaultLegendItem("Laden travel/idle", (se, b) -> List.of(
+				new LadenJourneyEvent(se, b, true),
+				new LadenIdleEvent(se, b, true)
+				)));
+		legendItems.add(new DefaultLegendItem("Balast travel/idle", (se, b) -> List.of(
+				new BalastJourneyEvent(se, b, true), 
+				new BalastIdleEvent(se, b, true)
+				)));
+		legendItems.add(new DefaultLegendItem("Port visit, late", (se, b) -> List.of(
+				new LoadEvent(se, b, true),
+				new LateLoadEvent(se, b, true)
+				)));
+		legendItems.add(new DefaultLegendItem("Charter out real/generated", (se, b) -> List.of(
+				new CharterOutEvent(se, b, true), 
+				new GeneratedCharterOutEvent(se, b, true)
+				)));
+		legendItems.add(new DefaultLegendItem("Dry-dock/Maintenance", (se, b) -> List.of(
+				new DryDockEvent(se, b, true),
+				new MaintenanceEvent(se, b, true)
+				)));
+		legendItems.add(new DefaultLegendItem("Charter Length real/generated", (se, b) -> List.of(
+				new CharterLengthEvent(se, b, true),
+				new GeneratedCharterLengthEvent(se, b, true)
+				)));
+		legendItems.add(new BuySellLegendItem("FOB, open, multi", (se, b) -> List.of(
+				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPTIONAL, PositionType.FOB, false),
+				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPEN, PositionType.FOB, false),
+				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPTIONAL, PositionType.FOB, true)
+				)));
+		legendItems.add(new BuySellLegendItem("DES, open, multi", (se, b) -> List.of(
+				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPTIONAL, PositionType.DES, false),
+				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPEN, PositionType.DES, false),
+				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPTIONAL, PositionType.DES, true)
+				)));
+		legendItems.add(new BuySellLegendItem("Mixed FOB/DEZ", (se, b) -> List.of(
+				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.PAIRED, PositionType.MIXED, true)
+				)));
+		
+		return legendItems;
 	}
 
 }

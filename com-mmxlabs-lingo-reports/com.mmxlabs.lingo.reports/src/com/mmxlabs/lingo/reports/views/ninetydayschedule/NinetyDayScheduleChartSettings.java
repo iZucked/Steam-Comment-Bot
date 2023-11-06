@@ -10,7 +10,8 @@ public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings
 	
 	private boolean showAnnotations;
 	private boolean hasMultipleScenarios;
-
+	private boolean showLegend;
+	
 	@Override
 	public boolean showAnnotations() {
 		return showAnnotations;
@@ -31,6 +32,15 @@ public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings
 
 	public void sethasMultipleScenarios(boolean hasMultipleScenarios) {
 		this.hasMultipleScenarios = hasMultipleScenarios;
+	}
+	
+	@Override
+	public boolean showLegend() {
+		return showLegend;
+	}
+
+	public void setShowLegend(boolean showLegend) {
+		this.showLegend = showLegend;
 	}
 
 }

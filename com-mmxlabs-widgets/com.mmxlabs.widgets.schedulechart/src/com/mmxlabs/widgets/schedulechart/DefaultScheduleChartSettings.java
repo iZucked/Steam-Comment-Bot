@@ -85,5 +85,10 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	public boolean hasMultipleScenarios() {
 		return false;
 	}
+	
+	@Override
+	public boolean showLegend() {
+		return false;
+	}
 
 }

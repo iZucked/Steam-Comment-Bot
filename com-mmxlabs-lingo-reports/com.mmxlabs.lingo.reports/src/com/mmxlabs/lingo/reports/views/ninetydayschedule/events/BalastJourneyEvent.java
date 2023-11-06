@@ -12,9 +12,9 @@ import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 
-public class BallastJourneyEvent extends NinetyDayDrawableScheduleEvent {
+public class BalastJourneyEvent extends NinetyDayDrawableScheduleEvent {
 
-	public BallastJourneyEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
+	public BalastJourneyEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
 		super(se, bounds, noneSelected);
 	}
 

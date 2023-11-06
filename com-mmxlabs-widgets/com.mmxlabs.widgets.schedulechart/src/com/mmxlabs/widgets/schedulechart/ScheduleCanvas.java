@@ -35,6 +35,7 @@ import com.mmxlabs.widgets.schedulechart.draw.DrawerQueryResolver;
 import com.mmxlabs.widgets.schedulechart.draw.GCBasedScheduleElementDrawer;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleChartColourUtils;
 import com.mmxlabs.widgets.schedulechart.draw.ScheduleElementDrawer;
+import com.mmxlabs.widgets.schedulechart.providers.IDrawableLegendProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventLabelProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventTooltipProvider;
@@ -64,6 +65,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final IDrawableScheduleEventProvider drawableEventProvider;
 	private final IDrawableScheduleEventTooltipProvider drawableTooltipProvider;
 	private final IScheduleChartRowsDataProvider scheduleChartRowsDataProvider;
+	private final IDrawableLegendProvider drawableLegendProvider;
 	
 	private final List<IScheduleChartEventListener> listeners = new ArrayList<>();
 
@@ -83,6 +85,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.drawableTooltipProvider = providers.drawableTooltipProvider();
 		this.eventLabelProvider = providers.labelProvider();
 		this.scheduleChartRowsDataProvider = providers.scheduleChartSizesProvider();
+		this.drawableLegendProvider = providers.drawableLegendProvider();
 
 		this.timeScale = new ScheduleTimeScale(canvasState, this, settings);
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, settings);
@@ -223,6 +226,31 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 			dt.setAnchor(anchor, settings.getEventHeight() * 5 / 4);
 			drawer.drawOne(dt, resolver);
 		});
+		
+		// Draw legend
+		if(settings.showLegend()) {
+			final DrawableElement legend = drawableLegendProvider.getLegend();
+			
+			
+			int legendWidth = 200;
+			int legendHeight = 200;
+
+			int xpos = getBounds().width - legendWidth - 4;
+			int ypos = 0;
+			
+			// Take into account the RHS vertical scroll bar. We can't easily get the number,
+			// but we can infer it.
+			if (getVerticalBar().isVisible()) {
+				int a = getBounds().width;
+				int b = getClientArea().width;
+				int c = a - b;
+				xpos -= c;
+			}
+			
+			legend.setBounds(new Rectangle(xpos, ypos, legendWidth, legendHeight));
+			
+			drawer.drawOne(legend);
+		}
 		
 		drawer.drawOne(dragSelectionZoomHandler.getDrawableSelectionRectangle(), resolver);
 	}

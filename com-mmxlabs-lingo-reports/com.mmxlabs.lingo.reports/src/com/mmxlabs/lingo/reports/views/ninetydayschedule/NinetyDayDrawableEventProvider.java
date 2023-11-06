@@ -18,7 +18,7 @@ import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDaySl
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDaySlotVisitLatenessDefaultAnnotation;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.annotations.NinetyDaySlotWindowAnnotation;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastIdleEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BallastJourneyEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastJourneyEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterLengthEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterOutEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DischargeEvent;
@@ -55,7 +55,7 @@ import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventProvide
 public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventProvider {
 	@Override
 	public @Nullable DrawableScheduleEvent createDrawableScheduleEvent(ScheduleEvent scheduleEvent, Rectangle bounds, ScheduleCanvasState canvasState) {
-		boolean noneSelected = canvasState.getSelectedEvents().isEmpty();
+		final boolean noneSelected = canvasState != null ? canvasState.getSelectedEvents().isEmpty() : true;
 		final Object data = scheduleEvent.getData();
 		
 		if (data instanceof final PositionsSequenceElement positionsSequenceElement) {
@@ -63,7 +63,7 @@ public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventPro
 		}
 		if (data instanceof final Event event) {
 			if (event instanceof final Journey j) {
-				return j.isLaden() ? new LadenJourneyEvent(scheduleEvent, bounds, noneSelected) : new BallastJourneyEvent(scheduleEvent, bounds, noneSelected);
+				return j.isLaden() ? new LadenJourneyEvent(scheduleEvent, bounds, noneSelected) : new BalastJourneyEvent(scheduleEvent, bounds, noneSelected);
 			} else if (event instanceof Idle i) {
 				return i.isLaden() ? new LadenIdleEvent(scheduleEvent, bounds, noneSelected) : new BalastIdleEvent(scheduleEvent, bounds, noneSelected);
 			} else if (event instanceof SlotVisit sv) {
