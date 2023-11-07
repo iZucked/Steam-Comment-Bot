@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
@@ -23,6 +25,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.BuySellSplit;
@@ -70,6 +73,7 @@ import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<NinetyDayScheduleInput> {
 
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
+	private final Map<Event, ScheduleEvent> eventToScheduleEventMap = new HashMap<>();
 	private final EquivalentsManager equivalentsManager;
 	private final IScheduleChartSettings settings;
 	private final EnabledPositionsSequenceProviderTracker enabledPSPTracker = new EnabledPositionsSequenceProviderTracker();
@@ -97,8 +101,60 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		return res;
 	}
 
-	public void injectMembers(Injector injector) {
-		injector.injectMembers(this);
+	
+	@Override
+	public Map<ScheduleEvent, ScheduleEvent> getChangedEvents(NinetyDayScheduleInput input) {
+		Map<ScheduleEvent, ScheduleEvent> connections = new TreeMap<>((k, v) -> {
+			if(k.getStart().compareTo(v.getStart()) != 0) {
+				return k.getStart().compareTo(v.getStart());
+			} else if (k.getEnd().compareTo(v.getEnd()) != 0) {
+				return k.getEnd().compareTo(v.getEnd());
+			}
+			return 0;
+		});
+		if(input.selectedDataProvider() == null) {
+			return connections;
+		}
+		Collection<ChangeSetTableRow> changeSet = input.selectedDataProvider().getSelectedChangeSetRows();
+		if(changeSet == null) {
+			return connections;
+		}
+		for (ChangeSetTableRow row : changeSet) {
+			final SlotAllocation oldLHSAllocation = row.getLhsBefore() != null ? row.getLhsBefore().getLoadAllocation() : null;
+			final SlotAllocation newLHSAllocation = row.getLhsAfter() != null ? row.getLhsAfter().getLoadAllocation() : null;
+
+			addEventConnection(connections, row, oldLHSAllocation, newLHSAllocation);
+
+			final SlotAllocation oldRHSAllocation = row.getCurrentRhsBefore() != null ? row.getCurrentRhsBefore().getDischargeAllocation() : null;
+			final SlotAllocation newRHSAllocation = row.getCurrentRhsAfter() != null ? row.getCurrentRhsAfter().getDischargeAllocation() : null;
+
+			addEventConnection(connections, row, oldRHSAllocation, newRHSAllocation);
+		}
+		return connections;
+	}
+
+	private void addEventConnection(Map<ScheduleEvent, ScheduleEvent> connections, ChangeSetTableRow row, final SlotAllocation oldAllocation, final SlotAllocation newAllocation) {
+		final BiPredicate<SlotAllocation, SlotAllocation> differentSequenceChecker = (r1, r2) -> {
+			final SlotVisit v1 = r1.getSlotVisit();
+			final SlotVisit v2 = r2.getSlotVisit();
+			if (v1 == null || v2 == null) {
+				return false;
+			}
+			final Sequence s1 = v1.getSequence();
+			final Sequence s2 = v2.getSequence();
+			if (s1 == null && s2 == null) {
+				return true;
+			}
+			return !s1.getName().equals(s2.getName());
+		};
+		if (oldAllocation != null && newAllocation != null && differentSequenceChecker.test(oldAllocation, newAllocation)) {
+			final ScheduleEvent oldEvent = eventToScheduleEventMap.get(oldAllocation.getSlotVisit());
+			final ScheduleEvent newEvent = eventToScheduleEventMap.get(newAllocation.getSlotVisit());
+
+			if (oldEvent != null && newEvent != null) {
+				connections.put(oldEvent, newEvent);
+			}
+		}
 	}
 
 	private List<ScheduleEvent> getEventForScenarioResult(ScenarioResult sr, boolean isPinned) {
@@ -321,6 +377,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	private ScheduleEvent makeScheduleEvent(Event event, ScenarioResult scenarioResult, boolean isPinned) {
 		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, null, scenarioResult, isPinned, makeEventAnnotations(event));
 		se.setVisible(true);
+		eventToScheduleEventMap.put(event, se);
 		return se;
 	}
 

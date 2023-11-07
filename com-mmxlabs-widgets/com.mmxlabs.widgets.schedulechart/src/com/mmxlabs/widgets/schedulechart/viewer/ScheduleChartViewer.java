@@ -87,6 +87,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 
 		final List<ScheduleChartRow> newRows = eventProvider.classifyEventsIntoRows(events).stream().filter(r -> !r.getName().isBlank()).toList();
 		canvas.addAll(newRows);
+		canvas.setDiffEvents(eventProvider.getChangedEvents(input));
 		
 		if (oldInput == null) {
 			canvas.getFilterSupport().applyDefaultFilters();
@@ -145,7 +146,9 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 		if (control == null || control.isDisposed() || selection.equals(this.selection)) {
 			return;
 		}
-		
+		if(input != null) {
+			canvas.setDiffEvents(eventProvider.getChangedEvents(input));
+		}
 		this.selection = selection;
 		setSelectionToCanvas(selection, reveal);
 		fireSelectionChanged(new SelectionChangedEvent(this, selection));

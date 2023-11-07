@@ -23,7 +23,7 @@ public class ScheduleEvent {
 	private boolean forceVisible;
 	private boolean showAnnotations;
 	private ScheduleEventSelectionState selectionState;
-	
+
 	private final List<ScheduleEventAnnotation> annotations;
 	
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, Object element, ScenarioResult scenarioResult, boolean isPinned, List<ScheduleEventAnnotation> annotations) {
@@ -50,11 +50,11 @@ public class ScheduleEvent {
 	public LocalDateTime getStart() {
 		return startDate;
 	}
-	
+
 	public LocalDateTime getEnd() {
 		return endDate;
 	}
-	
+
 	public Object getData() {
 		return data;
 	}
@@ -66,7 +66,7 @@ public class ScheduleEvent {
 	public List<ScheduleEventAnnotation> getAnnotations() {
 		return annotations;
 	}
-	
+
 	public void forceVisible() {
 		this.forceVisible = true;
 	}
@@ -78,7 +78,7 @@ public class ScheduleEvent {
 	public boolean isVisible() {
 		return forceVisible || visible;
 	}
-	
+
 	public void setSelectionState(ScheduleEventSelectionState selectionState) {
 		this.selectionState = selectionState;
 	}

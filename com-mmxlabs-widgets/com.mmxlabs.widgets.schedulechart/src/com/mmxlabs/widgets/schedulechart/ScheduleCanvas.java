@@ -7,6 +7,7 @@ package com.mmxlabs.widgets.schedulechart;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -27,8 +29,10 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableDiffLine;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRow;
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleChartRowHeader;
@@ -61,7 +65,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private final EventHoverHandler eventHoverHandler;
 	private final EventResizingHandler eventResizingHandler;
 	private final RowFilterSupportHandler rowHeaderMenuHandler;
-	
+
 	private final IScheduleChartSettings settings;
 	private final IScheduleChartSortingProvider sortingProvider;
 	private final IScheduleEventStylingProvider eventStylingProvider;
@@ -132,7 +136,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	
 	private void initListeners() {
 		addPaintListener(e -> ScheduleCanvas.this.repaint(e.gc));
-		
+
 		addMouseWheelListener(e -> {
 			// TODO: change MOD1 and MOD2 to be dependent on settings object
 			if (e.stateMask == SWT.MOD1) { // CTRL + scroll wheel
@@ -144,7 +148,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 			}
 			redraw();
 		});
-		
+
 		addKeyListener(new KeyListener() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -157,7 +161,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 				redraw();
 			}
 		});
-		
+
 		// to listen for zoom events and adjust the scrollbar
 		addScheduleEventListener(horizontalScrollbarHandler.getEventListener());
 	}
@@ -166,7 +170,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		GCBasedScheduleElementDrawer gcBasedDrawer = new GCBasedScheduleElementDrawer(gc);
 		drawChartWithDrawer(gcBasedDrawer, gcBasedDrawer);
 	}
-	
+
 	private void drawChartWithDrawer(ScheduleElementDrawer drawer, DrawerQueryResolver resolver) {
 		// Always fill white to avoid occasional issue where we do not render over
 		// the unused area correctly.
@@ -224,6 +228,23 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		if (getVerticalBar().getThumb() != originalBounds.height) {
 			getVerticalBar().setThumb(originalBounds.height);
 		}
+
+		// FIXME: TEST TO DRAW ARROWS IN SCHEDULE CHART
+		List<DrawableScheduleEvent> seenEvents = new ArrayList<>();
+
+		List<DrawableScheduleEvent> events = canvasState.getLastDrawnContent().stream().flatMap(x -> x.getLastDrawnEvents().stream()).toList();
+		List<Pair<DrawableScheduleEvent, DrawableScheduleEvent>> mappings = canvasState.getDiffEvents().entrySet().stream()
+				.map(x -> Pair.of(events.stream().filter(y -> y.getScheduleEvent() == x.getKey()).findAny().get(), events.stream().filter(y -> y.getScheduleEvent() == x.getValue()).findAny().get()))
+				.toList();
+
+		List<DrawableElement> lines = new LinkedList<>();
+		mappings.stream().forEach(x -> {
+			var diffLine = new DrawableDiffLine(x.getFirst(), x.getSecond());
+			diffLine.setBounds(mainBounds);
+			lines.add(diffLine);
+		});
+		
+		drawer.draw(lines);
 		
 		// Draw labels
 		getDrawableLabels(canvasState.getLastDrawnContent(), resolver).forEach(l -> drawer.drawOne(l, resolver));
@@ -244,10 +265,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 			//drawer.drawOne(rowHeaderBottomRectangle);
 		}
 
-		
 		// Draw top left rectangle
-		final BasicDrawableElement topLeftRectangle = BasicDrawableElements.Rectangle.withBounds(originalBounds.x, originalBounds.y, rowHeaderWidth, drawableTimeScale.getTotalHeaderHeight()).bgColour(settings.getColourScheme().getRowHeaderBgColour(1))
-				.borderColour(settings.getColourScheme().getRowOutlineColour(-1)).create();
+		final BasicDrawableElement topLeftRectangle = BasicDrawableElements.Rectangle.withBounds(originalBounds.x, originalBounds.y, rowHeaderWidth, drawableTimeScale.getTotalHeaderHeight())
+				.bgColour(settings.getColourScheme().getRowHeaderBgColour(1)).borderColour(settings.getColourScheme().getRowOutlineColour(-1)).create();
 		drawer.drawOne(topLeftRectangle);
 		
 		// Update the tooltip info
@@ -326,7 +346,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private List<DrawableScheduleChartRow> getDrawableRows(DrawerQueryResolver r) {
 		List<DrawableScheduleChartRow> res = new ArrayList<>();
 		final Rectangle mainBounds = canvasState.getMainBounds();
-//		final int height = settings.getRowHeight();
+		// final int height = settings.getRowHeight();
 		final int startY = mainBounds.y + drawableTimeScale.getTotalHeaderHeight();
 
 		int i = 0;
@@ -351,7 +371,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		}
 		return res;
 	}
-	
+
 	private List<DrawableScheduleChartRowHeader> getDrawableRowHeaders(List<DrawableScheduleChartRow> drawnRows, int rowHeaderWidth, DrawerQueryResolver r) {
 		List<DrawableScheduleChartRowHeader> res = new ArrayList<>();
 		int y = canvasState.getMainBounds().y + drawableTimeScale.getTotalHeaderHeight();
@@ -369,11 +389,11 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		}
 		return res;
 	}
-	
+
 	private List<DrawableElement> getDrawableLabels(List<DrawableScheduleChartRow> drawnRows, DrawerQueryResolver r) {
 		List<DrawableElement> labels = new ArrayList<>();
-		for (final var row: drawnRows) {
-			for (final var event: row.getLastDrawnEvents()) {
+		for (final var row : drawnRows) {
+			for (final var event : row.getLastDrawnEvents()) {
 				labels.addAll(eventLabelProvider.getEventLabels(event, r));
 			}
 		}
@@ -384,15 +404,15 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	public boolean addScheduleEventListener(IScheduleChartEventListener l) {
 		return listeners.add(l);
 	}
-	
+
 	@Override
 	public boolean removeScheduleEventListener(IScheduleChartEventListener l) {
 		return listeners.remove(l);
 	}
-	
+
 	@Override
 	public void fireScheduleEvent(Consumer<IScheduleChartEventListener> f) {
-		for (final IScheduleChartEventListener l: listeners) {
+		for (final IScheduleChartEventListener l : listeners) {
 			f.accept(l);
 		}
 	}
@@ -404,22 +424,26 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	public ScheduleFilterSupport getFilterSupport() {
 		return filterSupport;
 	}
-	
+
 	public void addRow(ScheduleChartRow r) {
 		canvasState.getRows().add(r);
 		recalculateContentBounds();
 	}
-	
+
 	public void showHiddenRows() {
 		canvasState.getHiddenRowKeys().clear();
 		redraw();
 	}
-	
+
 	public void addAll(List<ScheduleChartRow> rs) {
 		canvasState.getRows().addAll(rs);
 		recalculateContentBounds();
 	}
-	
+
+	public void setDiffEvents(Map<ScheduleEvent, ScheduleEvent> df) {
+		canvasState.setDiffEvents(df);
+	}
+
 	public void clear() {
 		canvasState.getRows().clear();
 		recalculateContentBounds();
@@ -428,12 +452,12 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	private void recalculateContentBounds() {
 		int min = Integer.MAX_VALUE;
 		int max = Integer.MIN_VALUE;
-		
+
 		ScheduleEvent minEvent = null;
 		ScheduleEvent maxEvent = null;
 
-		for (final ScheduleChartRow row: canvasState.getShownRows()) {
-			for (final ScheduleEvent event: row.getEvents()) {
+		for (final ScheduleChartRow row : canvasState.getShownRows()) {
+			for (final ScheduleEvent event : row.getEvents()) {
 				var bounds = timeScale.getXBoundsFromEvent(event);
 				if (bounds.getFirst() < min) {
 					min = bounds.getFirst();
@@ -446,7 +470,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 				}
 			}
 		}
-		
+
 		canvasState.setLeftMostEvent(minEvent);
 		canvasState.setRightMostEvent(maxEvent);
 	}
@@ -461,56 +485,56 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 		canvasState.setSelectedEvents(newSelection);
 
-		for (final ScheduleEvent e: newSelection) {
+		for (final ScheduleEvent e : newSelection) {
 			e.setSelectionState(ScheduleEventSelectionState.SELECTED);
 		}
-		
+
 		redraw();
 	}
 
 	public Optional<DrawableScheduleEvent> findEvent(int x, int y) {
 		return findEvents(x, y, 0, 0).stream().findFirst();
 	}
-	
+
 	public List<DrawableScheduleEvent> findEvents(int x, int y, int hRadius, int vRadius) {
 		final List<DrawableScheduleChartRow> drawnRows = canvasState.getLastDrawnContent();
 		List<DrawableScheduleEvent> found = new ArrayList<>();
-		for (final DrawableScheduleChartRow row: drawnRows) {
+		for (final DrawableScheduleChartRow row : drawnRows) {
 			if (row.getBounds().contains(x, y)) {
 				if (canvasState.getHiddenRowKeys().contains(row.getScheduleChartRow().getKey())) {
 					continue;
 				}
 
-				for (final DrawableScheduleEvent evt: row.getLastDrawnEvents()) {
+				for (final DrawableScheduleEvent evt : row.getLastDrawnEvents()) {
 					Rectangle b = evt.getBounds();
 					Rectangle area = (hRadius == 0 && vRadius == 0) ? b : new Rectangle(b.x - hRadius, b.y - vRadius, b.width + 2 * hRadius, b.height + 2 * vRadius);
 					if (area.contains(x, y) && evt.getScheduleEvent().isVisible()) {
 						found.add(evt);
 					}
 				}
-				
+
 				if (vRadius == 0) {
 					return found;
 				}
 			}
 		}
-		
+
 		return found;
 	}
 
 	public Optional<DrawableScheduleEventAnnotation> findAnnotation(int x, int y) {
 		return findAnnotations(x, y, 0, 0).stream().findFirst();
 	}
-	
+
 	public List<DrawableScheduleEventAnnotation> findAnnotations(int x, int y, int hRadius, int vRadius) {
 		final List<DrawableScheduleChartRow> drawnRows = canvasState.getLastDrawnContent();
 		List<DrawableScheduleEventAnnotation> found = new ArrayList<>();
-		for (final DrawableScheduleChartRow row: drawnRows) {
+		for (final DrawableScheduleChartRow row : drawnRows) {
 			if (row.getBounds().contains(x, y)) {
 				if (canvasState.getHiddenRowKeys().contains(row.getScheduleChartRow().getKey())) {
 					continue;
 				}
-				
+
 				for (final DrawableScheduleEventAnnotation ann : row.getLastDrawnAnnotations()) {
 					Rectangle b = ann.getBounds();
 					Rectangle area = (hRadius == 0 && vRadius == 0) ? b : new Rectangle(b.x - hRadius, b.y - vRadius, b.width + 2 * hRadius, b.height + 2 * vRadius);
@@ -518,31 +542,31 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 						found.add(ann);
 					}
 				}
-				
+
 				if (vRadius == 0) {
 					return found;
 				}
 			}
 		}
-		
+
 		return found;
 	}
-	
+
 	public Optional<DrawableScheduleChartRowHeader> findRowHeader(int x, int y) {
-		for (final DrawableScheduleChartRowHeader header: canvasState.getLastDrawnRowHeaders()) {
+		for (final DrawableScheduleChartRowHeader header : canvasState.getLastDrawnRowHeaders()) {
 			Rectangle b = header.getBounds();
 			if (b.contains(new Point(x, y))) {
 				return Optional.of(header);
 			}
 		}
-		
+
 		return Optional.empty();
 	}
 
 	public boolean clickedRowHeaderRegion(int x, int y) {
 		return canvasState.getOriginalBounds().x <= x && x <= canvasState.getMainBounds().x;
 	}
-	
+
 	private List<ScheduleChartRow> getSortedShownRows() {
 		List<ScheduleChartRow> sortedRows = new ArrayList<>(canvasState.getShownRows());
 		sortedRows.sort(sortingProvider.getComparator());
@@ -552,7 +576,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	public void adjustEventVisiblity(Predicate<ScheduleEvent> selector, boolean b) {
 		canvasState.getRows().parallelStream().forEach(r -> r.getEvents().stream().filter(selector).forEach(e -> e.setVisible(b)));
 	}
-	
+
 	public void setScheduleChartMode(ScheduleChartMode scm) {
 		canvasState.setScheduleChartMode(scm);
 	}

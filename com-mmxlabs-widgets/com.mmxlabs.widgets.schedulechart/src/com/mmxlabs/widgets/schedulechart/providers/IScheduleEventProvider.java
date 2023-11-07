@@ -6,7 +6,7 @@ package com.mmxlabs.widgets.schedulechart.providers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartRowsDataProvider;
@@ -27,5 +27,7 @@ public interface IScheduleEventProvider<T> {
 			return existing;
 		})).entrySet().stream().map(e -> new ScheduleChartRow(e.getKey(), e.getValue(), getRowsDataProvider().getPriorityOf(e.getKey()))).toList();
 	}
+
+	Map<ScheduleEvent, ScheduleEvent> getChangedEvents(T input);
 
 }

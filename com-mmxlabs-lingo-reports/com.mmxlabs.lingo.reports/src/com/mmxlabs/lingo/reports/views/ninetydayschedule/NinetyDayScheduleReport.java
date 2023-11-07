@@ -92,6 +92,7 @@ import com.mmxlabs.widgets.schedulechart.EventSize;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.providers.ILegendItem;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
 
@@ -145,6 +146,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private List<IScheduleEventStylingProvider> highlighters;
 
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
+	private ISelectedDataProvider currentSelectedDataProvider;
 	private ReentrantSelectionManager selectionManager;
 	protected final ISelectedScenariosServiceListener scenariosServiceListener = new ISelectedScenariosServiceListener() {
 
@@ -152,12 +154,13 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			ViewerHelper.runIfViewerValid(viewer, block, () -> {
 				if (selectedDataProvider != null) {
+					currentSelectedDataProvider = selectedDataProvider;
 					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					List<ScenarioResult> other = selectedDataProvider.getAllScenarioResults().stream().filter(f -> f != null && !f.equals(pinned)).toList();
 					settings.sethasMultipleScenarios(pinned != null ? !other.isEmpty() : other.size() > 1);
 					
 					clearFobRotations();
-					viewer.typedSetInput(new NinetyDayScheduleInput(pinned, other));
+					viewer.typedSetInput(new NinetyDayScheduleInput(pinned, other, currentSelectedDataProvider));
 					viewer.getCanvas().getTimeScale().pack();
 				}
 			});
@@ -185,7 +188,6 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			}
 			ViewerHelper.setSelection(viewer, true, selection);
 		}
-
 	};
 
 	@Override
@@ -245,7 +247,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 
 		// Inject the extension points
 		injector.injectMembers(this);
-		eventProvider.injectMembers(injector);
+		injector.injectMembers(eventProvider);
 
 		viewer = new ScheduleChartViewer<>(parent,
 				new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider, scheduleChartRowsDataProvider, eventStylingProvider, drawableLegendProvider),

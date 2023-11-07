@@ -6,6 +6,7 @@ package com.mmxlabs.widgets.schedulechart.draw;
 
 import java.util.List;
 import java.util.function.UnaryOperator;
+import java.util.stream.IntStream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -20,6 +21,7 @@ import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Image;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Line;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Padding;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Polygon;
+import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Polyline;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Rectangle;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements.Text;
 
@@ -90,7 +92,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 				}
 
 			} else if (b instanceof Text t) {
-				final Padding p = t.p();
+				final Padding p = t.padding();
 				final org.eclipse.swt.graphics.Rectangle bb = t.boundingBox();
 
 				String s = t.text();
@@ -139,6 +141,9 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 			
 			} else if (b instanceof Image i) {
 				gc.drawImage(i.img(), i.x(), i.y());
+			} else if(b instanceof Polyline polyline) {
+				int[] pointArray = polyline.points().stream().flatMapToInt(o -> IntStream.of(o.x, o.y)).toArray();
+				gc.drawPolyline(pointArray);
 			} else {
 				throw new UnsupportedOperationException("Got a BasicDrawableElement that cannot be drawn by this ScheduleElementDrawer");
 			}
@@ -161,7 +166,7 @@ public class GCBasedScheduleElementDrawer implements ScheduleElementDrawer, Draw
 	@Override
 	public Point findSizeOfText(Text text) {
 		Point textExtent = findSizeOfText(text.text(), text.font(), text.fontSize());
-		Padding p = text.p();
+		Padding p = text.padding();
 		return new Point(p.left() + textExtent.x + p.right(), p.top() + textExtent.y + p.bottom());
 	}
 

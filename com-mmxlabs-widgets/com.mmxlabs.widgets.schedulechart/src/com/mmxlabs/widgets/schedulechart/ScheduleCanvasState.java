@@ -6,8 +6,10 @@ package com.mmxlabs.widgets.schedulechart;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,6 +37,16 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	private List<DrawableScheduleChartRowHeader> lastDrawnRowHeaders = new ArrayList<>();
 	
 	private Set<ScheduleChartRowKey> hiddenRowKeys = new HashSet<>();
+	
+	private Map<ScheduleEvent, ScheduleEvent> diffEvents = new HashMap<>(); 
+
+	public Map<ScheduleEvent, ScheduleEvent> getDiffEvents() {
+		return diffEvents;
+	}
+
+	public void setDiffEvents(Map<ScheduleEvent, ScheduleEvent> diffEvents) {
+		this.diffEvents = diffEvents;
+	}
 
 	public void setOriginalBounds(Rectangle originalBounds) {
 		this.originalBounds = originalBounds;

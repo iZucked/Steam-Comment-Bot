@@ -14,11 +14,11 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 public interface BasicDrawableElements {
-	
+
 	public static int MAX_ALPHA = 255;
 
 	public record Line(int x1, int y1, int x2, int y2, Color c, int alpha, int thickness) implements BasicDrawableElement {
-		public Line(int x1, int y1, int x2, int y2) { 
+		public Line(int x1, int y1, int x2, int y2) {
 			this(x1, y1, x2, y2, null, MAX_ALPHA, 1);
 		}
 
@@ -43,11 +43,11 @@ public interface BasicDrawableElements {
 		public static RectangleBuilder withBounds(int x, int y, int width, int height) {
 			return new RectangleBuilder(x, y, width, height);
 		}
-		
+
 		public static RectangleBuilder withBounds(org.eclipse.swt.graphics.Rectangle bounds) {
 			return new RectangleBuilder(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
-		
+
 		public static class RectangleBuilder {
 			private final int x;
 			private final int y;
@@ -60,19 +60,19 @@ public interface BasicDrawableElements {
 			private int borderThickness = 0;
 			private int alpha = MAX_ALPHA;
 			private boolean isBorderInner = false;
-			
+
 			private RectangleBuilder(int x, int y, int width, int height) {
 				this.x = x;
 				this.y = y;
 				this.width = width;
 				this.height = height;
 			}
-			
+
 			public RectangleBuilder borderColour(Color c) {
 				this.borderColour = c;
 				return this;
 			}
-			
+
 			public RectangleBuilder border(Color c, int thickness) {
 				this.borderColour = c;
 				this.borderThickness = thickness;
@@ -102,14 +102,14 @@ public interface BasicDrawableElements {
 				this.alpha = a;
 				return this;
 			}
-			
+
 			public Rectangle create() {
 				return new Rectangle(x, y, width, height, bgColour, bgGradientStart, bgGradientEnd, borderColour, borderThickness, isBorderInner, alpha);
 			}
 		}
 	}
 	
-	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int horizontalAlignment, int verticalAlignment, Color textColour, Color backgroundColour, Font font, int fontSize, Padding p, int alpha) implements BasicDrawableElement {
+	public record Text(org.eclipse.swt.graphics.Rectangle boundingBox, String text, int horizontalAlignment, int verticalAlignment, Color textColour, Color backgroundColour, Font font, int fontSize, Padding padding, int alpha) implements BasicDrawableElement {
 		public Text(int x, int y, String text) {
 			this(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), text, SWT.LEFT, SWT.TOP, null, null, Display.getDefault().getSystemFont(), Display.getDefault().getSystemFont().getFontData()[0].getHeight(), new Padding(0, 0, 0, 0), MAX_ALPHA);
 		}
@@ -123,7 +123,7 @@ public interface BasicDrawableElements {
 		public int borderThickness() {
 			return 0;
 		}
-		
+
 		public static TextBuilder from(int x, int y, String s) {
 			return new TextBuilder(new org.eclipse.swt.graphics.Rectangle(x, y, Integer.MAX_VALUE, Integer.MAX_VALUE), s);
 		}
@@ -152,22 +152,22 @@ public interface BasicDrawableElements {
 				if(f.getFontData().length != 0)
 					fontSize = f.getFontData()[0].getHeight();
 			}
-			
+
 			public TextBuilder padding(int p) {
 				this.p = new Padding(p, p, p, p);
 				return this;
 			}
-			
+
 			public TextBuilder padding(Padding p) {
 				this.p = p;
 				return this;
 			}
-			
+
 			public TextBuilder textColour(Color c) {
 				this.tc = c;
 				return this;
 			}
-			
+
 			public TextBuilder bgColour(Color c) {
 				this.bgc = c;
 				return this;
@@ -187,7 +187,7 @@ public interface BasicDrawableElements {
 				this.verticalAlignment = alignment;
 				return this;
 			}
-			
+
 			public TextBuilder font(Font f) {
 				this.f = f;
 				return this;
@@ -205,18 +205,30 @@ public interface BasicDrawableElements {
 
 	}
 
-	public record Polygon(List<Point> points, Color backgroundColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
-		
-		public static PolygonBuilder fromTriangle(Point a, Point b, Point c) {
-			return new PolygonBuilder(new ArrayList<>(List.of(a, b, c)));
+	public record Polyline(List<Point> points, Color colour, int lineThickness) implements BasicDrawableElement {
+
+		@Override
+		public Color backgroundColour() {
+			return colour;
+		}
+
+		@Override
+		public Color borderColour() {
+			return colour;
+		}
+
+		@Override
+		public int borderThickness() {
+			return lineThickness;
+		}
+
+		@Override
+		public int alpha() {
+			return MAX_ALPHA;
 		}
 		
-		public static PolygonBuilder fromTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-			return new PolygonBuilder(new ArrayList<>(List.of(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3))));
-		}
-		
-		public static PolygonBuilder fromPoints(List<Point> points) {
-			return new PolygonBuilder(points);
+		public static ShapeBuilder fromPoints(List<Point> points) {
+			return new ShapeBuilder(points);
 		}
 
 		public static class PolygonBuilder {
@@ -225,26 +237,26 @@ public interface BasicDrawableElements {
 			private Color borderColour = null;
 			private int borderThickness = 0;
 			private int alpha = MAX_ALPHA;
-			
+
 			private PolygonBuilder(List<Point> points) {
 				this.points = points;
 			}
-			
+
 			public PolygonBuilder addVertice(Point p) {
 				points.add(p);
 				return this;
 			}
-			
+
 			public PolygonBuilder addVertice(int x, int y) {
 				points.add(new Point(x, y));
 				return this;
 			}
-			
+
 			public PolygonBuilder borderColour(Color c) {
 				this.borderColour = c;
 				return this;
 			}
-			
+
 			public PolygonBuilder border(Color c, int thickness) {
 				this.borderColour = c;
 				this.borderThickness = thickness;
@@ -255,12 +267,75 @@ public interface BasicDrawableElements {
 				this.bgColour = c;
 				return this;
 			}
-			
+
 			public PolygonBuilder alpha(int a) {
 				this.alpha = a;
 				return this;
 			}
-			
+
+			public Polygon create() {
+				return new Polygon(points, bgColour, borderColour, borderThickness, alpha);
+			}
+		}
+
+	}
+
+	public record Polygon(List<Point> points, Color backgroundColour, Color borderColour, int borderThickness, int alpha) implements BasicDrawableElement {
+
+		public static PolygonBuilder fromTriangle(Point a, Point b, Point c) {
+			return new PolygonBuilder(new ArrayList<>(List.of(a, b, c)));
+		}
+
+		public static PolygonBuilder fromTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+			return new PolygonBuilder(new ArrayList<>(List.of(new Point(x1, y1), new Point(x2, y2), new Point(x3, y3))));
+		}
+
+		public static PolygonBuilder fromPoints(List<Point> points) {
+			return new PolygonBuilder(points);
+		}
+
+		public static class PolygonBuilder {
+			private final List<Point> points;
+			private Color bgColour = null;
+			private Color borderColour = null;
+			private int borderThickness = 0;
+			private int alpha = MAX_ALPHA;
+
+			private PolygonBuilder(List<Point> points) {
+				this.points = points;
+			}
+
+			public PolygonBuilder addVertice(Point p) {
+				points.add(p);
+				return this;
+			}
+
+			public PolygonBuilder addVertice(int x, int y) {
+				points.add(new Point(x, y));
+				return this;
+			}
+
+			public PolygonBuilder borderColour(Color c) {
+				this.borderColour = c;
+				return this;
+			}
+
+			public PolygonBuilder border(Color c, int thickness) {
+				this.borderColour = c;
+				this.borderThickness = thickness;
+				return this;
+			}
+
+			public PolygonBuilder bgColour(Color c) {
+				this.bgColour = c;
+				return this;
+			}
+
+			public PolygonBuilder alpha(int a) {
+				this.alpha = a;
+				return this;
+			}
+
 			public Polygon create() {
 				return new Polygon(points, bgColour, borderColour, borderThickness, alpha);
 			}
@@ -311,6 +386,7 @@ public interface BasicDrawableElements {
 
 	}
 
-	public record Padding(int left, int right, int top, int bottom) {}
+	public record Padding(int left, int right, int top, int bottom) {
+	}
 
 }
