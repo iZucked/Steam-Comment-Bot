@@ -251,6 +251,54 @@ public class ExcelReader {
 	}
 	
 	/**
+	 * Get a date in a particular row and column. 
+	 * <p>
+	 * Undefined cells or cells that don't evaluate to a date
+	 * are represented as null.
+	 * Formulas in formula cells are evaluated.
+	 * @param rowId - 0 based index of the row
+	 * @param colId - 0 based index of the column in 
+	 * which there is a date
+	 * @return The LocalDate of the specified cell 
+	 */
+	public LocalDateTime readDateTime(int rowId, int colId) {
+		Row row = workSheet.getRow(rowId);
+		
+		if(row == null)
+			return null;
+		
+		Cell cell = row.getCell(colId);
+			
+		if (cell == null) 
+			return null;
+			
+		try {
+			cell = evaluator.evaluateInCell(cell);
+		} catch (Exception e){
+			// Manually parse the date
+			return parseDateTime(cell);
+		}
+			
+		if(cell.getCellType().equals(CellType.NUMERIC)) {
+			if(DateUtil.isCellDateFormatted(cell)) {
+				LocalDateTime localDate = cell.getLocalDateTimeCellValue();
+					return localDate;
+			} else {
+				LOGGER.debug(String.format("Cell %s is not date-formatted.", 
+							cell.getAddress().toString()));
+				return null;
+			}
+		} else if(cell.getCellType().equals(CellType.STRING)){
+			String dateStr = cell.getStringCellValue();
+			return parseStringDateTime(dateStr, cell);
+		} else {
+			LOGGER.debug(String.format("Cell %s does not evaluate to a date.", 
+					cell.getAddress().toString()));
+			return null;
+		}
+	}
+	
+	/**
 	 * Get a list of all numerical values in a particular row. 
 	 * <p>
 	 * Undefined cells or cells that don't evaluate to a number
@@ -425,6 +473,29 @@ public class ExcelReader {
 	}
 	
 	/**
+	 * Manually parses the date in case it is a string. 
+	 * <p>
+	 * Cell must not be null.
+	 * Formulas in formula cells are evaluated using their cached value.
+	 * @param cell - the particular cell to be processed
+	 * @param date - the string inside the cell
+	 * @return LocalDate representing the contents of the cell.
+	 */
+	private LocalDateTime parseStringDateTime(String date, Cell cell) {
+		LocalDateTime localDate;
+		try {
+			DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("MMM-yy");
+			YearMonth yearMonthDate = YearMonth.parse(date, timeFormatter);
+			localDate = yearMonthDate.atDay(1).atStartOfDay();
+		} catch (Exception e){
+			LOGGER.debug(String.format("Could not parse the date stored in cell %s.", 
+					cell.getAddress().toString()));
+			return null;
+		}
+		return localDate;
+	}
+	
+	/**
 	 * Manually parses the date in case the evaluator could not. 
 	 * <p>
 	 * Cell must not be null.
@@ -437,6 +508,26 @@ public class ExcelReader {
 		if (type.equals(CellType.NUMERIC)){
 			String date = readCellField(cell);
 			return parseStringDate(date, cell);
+		} else {
+			LOGGER.debug(String.format("Cell %s does not evaluate to a date.", 
+					cell.getAddress().toString()));
+			return null;
+		}
+	}
+	
+	/**
+	 * Manually parses the date in case the evaluator could not. 
+	 * <p>
+	 * Cell must not be null.
+	 * Formulas in formula cells are evaluated using their cached value.
+	 * @param cell - the particular cell to be processed
+	 * @return LocalDate representing the contents of the cell.
+	 */
+	private LocalDateTime parseDateTime(Cell cell) {
+		CellType type = cell.getCachedFormulaResultType();
+		if (type.equals(CellType.NUMERIC)){
+			String date = readCellField(cell);
+			return parseStringDateTime(date, cell);
 		} else {
 			LOGGER.debug(String.format("Cell %s does not evaluate to a date.", 
 					cell.getAddress().toString()));
