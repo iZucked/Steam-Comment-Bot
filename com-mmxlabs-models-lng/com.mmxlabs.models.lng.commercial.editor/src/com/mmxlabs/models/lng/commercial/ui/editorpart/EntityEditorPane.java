@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -39,7 +40,7 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 
 		defaultSetTitle("Entities");
-		
+
 		final ToolBarManager toolbar = getToolBarManager();
 		final ActionContributionItem filter = filterField.getContribution();
 		if (toolbar != null && filter != null) {
@@ -81,7 +82,34 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 			}
 		};
 	}
-	
+
+	@Override
+	protected @Nullable Action createDuplicateAction() {
+		final DuplicateAction result = new DuplicateAction(getScenarioEditingLocation()) {
+			@Override
+			protected boolean isApplicableToSelection(ISelection selection) {
+				if (selection instanceof IStructuredSelection sel) {
+					if(sel.isEmpty()) {
+						return false;
+					}
+					// We cannot duplicate custom entities
+					final Iterator<?> itr = sel.iterator();
+					while (itr.hasNext()) {
+						final Object obj = itr.next();
+						if (!(obj instanceof LegalEntity)) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
+			}
+		};
+		scenarioViewer.addSelectionChangedListener(result);
+		return result;
+	}
+
 	@Override
 	protected Action createCopyToClipboardAction() {
 		return null;
