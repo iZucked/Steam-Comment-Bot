@@ -406,7 +406,6 @@ public class PNLBasedWindowTrimmer {
 
 	public ImmutableList<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> doComputeVoyagePlanResults(final PNLTrimmerShippedCacheKey key) {
 
-		System.out.println(key.hashCode());
 		final IPortTimeWindowsRecord portTimeWindowsRecord = key.ptwr;
 
 		final IResource resource = key.resource;
