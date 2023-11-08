@@ -105,7 +105,7 @@ public interface PanamaSeasonalityRecord extends EObject {
 	 * @return the value of the '<em>Start Year</em>' attribute.
 	 * @see #setStartYear(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPanamaSeasonalityRecord_StartYear()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat numberFormat='#0'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='####'"
 	 * @generated
 	 */
 	int getStartYear();

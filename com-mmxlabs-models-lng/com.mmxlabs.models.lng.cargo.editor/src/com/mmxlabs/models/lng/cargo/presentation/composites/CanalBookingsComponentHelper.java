@@ -196,6 +196,8 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 			addMonthColumn(b, "Start month", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_MONTH);
 
+			addNumericColumn(b, "Start year", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_YEAR);
+
 			addNumericColumn(b, "Northbound", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__NORTHBOUND_WAITING_DAYS);
 
 			addNumericColumn(b, "Southbound", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS);

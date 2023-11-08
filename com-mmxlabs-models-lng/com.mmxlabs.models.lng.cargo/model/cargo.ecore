@@ -765,7 +765,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startMonth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startYear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="numberFormat" value="#0"/>
+        <details key="formatString" value="####"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="northboundWaitingDays"

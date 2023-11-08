@@ -4906,7 +4906,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		  (getPanamaSeasonalityRecord_StartYear(),
 		   source,
 		   new String[] {
-			   "numberFormat", "#0"
+			   "formatString", "####"
 		   });
 		addAnnotation
 		  (getCIIStartOptions_YearToDateEmissions(),
