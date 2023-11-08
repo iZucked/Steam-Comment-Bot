@@ -16,6 +16,11 @@ public class MaintenanceEvent extends NinetyDayDrawableScheduleEvent {
 
 	public MaintenanceEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
 		super(se, bounds, noneSelected);
+		
+		// Fixing missing bottom pixel
+		Rectangle newBounds = getBounds();
+		newBounds.height += 1;
+		setBounds(newBounds);
 	}
 
 	@Override

@@ -16,6 +16,9 @@ public class GeneratedCharterOutEvent extends NinetyDayDrawableScheduleEvent {
 
 	public GeneratedCharterOutEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
 		super(se, bounds, noneSelected);
+		Rectangle newBounds = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
+		newBounds.height += 1;
+		setBounds(newBounds);
 	}
 
 	@Override
