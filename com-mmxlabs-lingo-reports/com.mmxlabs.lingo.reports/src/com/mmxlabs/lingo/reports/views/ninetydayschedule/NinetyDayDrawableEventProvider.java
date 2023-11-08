@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
@@ -147,7 +148,12 @@ public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventPro
 				return 0;
 			}
 			
-			return (o1 instanceof SlotVisit) ? -1 : (o2 instanceof SlotVisit) ? 1 : 0;
+			// If both or neither of events are port visits
+			if(!((o1 instanceof PortVisit) ^ (o2 instanceof PortVisit))) {
+				return 0;
+			}
+						
+			return (o1 instanceof PortVisit) ? 1 : -1;
 		};
 	}
 	

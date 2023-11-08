@@ -413,7 +413,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPEN, PositionType.DES, false),
 				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.OPTIONAL, PositionType.DES, true)
 				)));
-		legendItems.add(new BuySellLegendItem("Mixed FOB/DEZ", (se, b) -> List.of(
+		legendItems.add(new BuySellLegendItem("Mixed FOB/DES", (se, b) -> List.of(
 				new BuySellDrawableScheduleEvent(se, b, true, true, PositionStateType.PAIRED, PositionType.MIXED, true)
 				)));
 		
