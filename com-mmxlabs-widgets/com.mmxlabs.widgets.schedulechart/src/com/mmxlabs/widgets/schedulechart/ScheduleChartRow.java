@@ -40,6 +40,10 @@ public class ScheduleChartRow {
 		}
 		return "";
 	}
+	
+	public boolean isPinned() {
+		return events.stream().anyMatch(e -> e.isPinnedScenario());
+	}
 
 	public ScheduleChartRowPriorityType getRowType() {
 		return rowType;

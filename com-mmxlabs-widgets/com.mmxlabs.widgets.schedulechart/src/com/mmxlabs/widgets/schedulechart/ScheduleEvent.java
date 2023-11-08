@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.widgets.schedulechart;
 
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +14,8 @@ public class ScheduleEvent {
 
 	private final LocalDateTime startDate;
 	private final LocalDateTime endDate;
-	private final String scenarioName;
+	private final ScenarioResult scenarioResult;
+	private final boolean isPinned;
 
 	private final Object data;
 	private boolean visible;
@@ -22,23 +25,24 @@ public class ScheduleEvent {
 	
 	private final List<ScheduleEventAnnotation> annotations;
 	
-	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, String scenarioName, List<ScheduleEventAnnotation> annotations) {
+	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, ScenarioResult scenarioResult, boolean isPinned, List<ScheduleEventAnnotation> annotations) {
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.scenarioName = scenarioName;
+		this.scenarioResult = scenarioResult;
+		this.isPinned = isPinned;
 		this.data = data;
 		this.selectionState = ScheduleEventSelectionState.UNSELECTED;
 		this.annotations = annotations;
 		this.showAnnotations = true;
 	}
 	
-	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, String scenarioName, List<ScheduleEventAnnotation> annotations, boolean showAnnotations) {
-		this(startDate, endDate, data, scenarioName, annotations);
+	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, ScenarioResult scenarioResult, boolean isPinned, List<ScheduleEventAnnotation> annotations, boolean showAnnotations) {
+		this(startDate, endDate, data, scenarioResult, isPinned, annotations);
 		this.showAnnotations = showAnnotations;
 	}
 
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate) {
-		this(startDate, endDate, null, "", Collections.emptyList());
+		this(startDate, endDate, null, null, false, Collections.emptyList());
 	}
 	
 	public LocalDateTime getStart() {
@@ -82,7 +86,25 @@ public class ScheduleEvent {
 	}
 	
 	public String getScenarioName() {
-		return scenarioName;
+		if(scenarioResult == null)
+			return "";
+		
+		return scenarioResult.getModelRecord().getName();
+	}
+	
+	public ScheduleModel getScheduleModel() {
+		if(scenarioResult == null)
+			return null;
+		
+		return scenarioResult.getTypedResult(ScheduleModel.class);
+	}
+	
+	public ScenarioResult getScenarioResult() {
+		return scenarioResult;
+	}
+	
+	public boolean isPinnedScenario() {
+		return isPinned;
 	}
 
 }

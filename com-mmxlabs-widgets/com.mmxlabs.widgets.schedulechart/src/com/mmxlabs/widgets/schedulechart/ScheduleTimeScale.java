@@ -60,7 +60,10 @@ public class ScheduleTimeScale {
 	}
 
 	public void zoomBy(Point mouseLoc, Integer count, boolean isZoomIn) {
-		internalZoomBy(mouseLoc, count * scrollSensitivity, isZoomIn);
+		if(count != null) 
+			internalZoomBy(mouseLoc, count * scrollSensitivity, isZoomIn);
+		else
+			internalZoomBy(mouseLoc, count, isZoomIn);
 		eventEmitter.fireScheduleEvent(l -> l.timeScaleZoomLevelChanged(bounds, boundsProvider));
 	}
 	

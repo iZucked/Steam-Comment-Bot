@@ -100,7 +100,6 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		final List<Object> sequences = getSequences(lastScheduleFromScenario);
 		final List<Event> events = new ArrayList<>();
 		final List<ScheduleEvent> positionSequenceScheduleEvents = new ArrayList<>();
-		final String scenarioName = sr.getModelRecord().getName();
 
 		for (final Object sequenceObject : sequences) {
 			if (sequenceObject instanceof Sequence sequence) {
@@ -108,12 +107,12 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 			} else if (sequenceObject instanceof CombinedSequence combinedSequence) {
 				collectEvents(events, combinedSequence);
 			} else if (sequenceObject instanceof PositionsSequence positionSequence) {
-				collectEvents(positionSequenceScheduleEvents, positionSequence, scenarioName);
+				collectEvents(positionSequenceScheduleEvents, positionSequence, sr, isPinned);
 			}
 		}
 
 		events.stream().forEach(e -> equivalentsManager.collectEquivalents(e, this::generateEquivalents));
-		final List<ScheduleEvent> scheduleEvents = events.stream().map(e -> makeScheduleEvent(e, scenarioName)).collect(Collectors.toList());
+		final List<ScheduleEvent> scheduleEvents = events.stream().map(e -> makeScheduleEvent(e, sr, isPinned)).collect(Collectors.toList());
 		scheduleEvents.addAll(positionSequenceScheduleEvents);
 		return scheduleEvents;
 		
@@ -235,17 +234,17 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		}
 	}
 
-	private void collectEvents(final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence, String scenarioName) {
+	private void collectEvents(final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence, ScenarioResult scenarioResult, boolean isPinned) {
 		for (final Object element : positionSequence.getElements()) {
 			final LocalDateTime startTime = PositionsSeqenceElements.getEventTime(element);
-			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), scenarioName, List.of(), false);
+			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), scenarioResult, isPinned, List.of(), false);
 			scheduleEvent.forceVisible();
 			scheduleEvents.add(scheduleEvent);
 		}
 	}
 
-	private ScheduleEvent makeScheduleEvent(Event event, String scenarioName) {
-		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, scenarioName, makeEventAnnotations(event));
+	private ScheduleEvent makeScheduleEvent(Event event, ScenarioResult scenarioResult, boolean isPinned) {
+		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, scenarioResult, isPinned, makeEventAnnotations(event));
 		se.setVisible(true);
 		return se;
 	}

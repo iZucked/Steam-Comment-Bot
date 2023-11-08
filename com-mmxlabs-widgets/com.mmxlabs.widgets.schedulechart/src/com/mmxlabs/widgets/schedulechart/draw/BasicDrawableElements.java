@@ -288,6 +288,26 @@ public interface BasicDrawableElements {
 		public int alpha() {
 			return MAX_ALPHA;
 		}
+		
+		public static ImageBuilder from(org.eclipse.swt.graphics.Image image, int x, int y) {
+			return new ImageBuilder(image, x, y);
+		}
+
+		public static class ImageBuilder {
+			private final org.eclipse.swt.graphics.Image image;
+			private int x = 0;
+			private int y = 0;
+			
+			private ImageBuilder(org.eclipse.swt.graphics.Image image, int x, int y) {
+				this.image = image;
+				this.x = x;
+				this.y = y;
+			}
+			
+			public Image create() {
+				return new Image(image, x, y);
+			}
+		}
 
 	}
 

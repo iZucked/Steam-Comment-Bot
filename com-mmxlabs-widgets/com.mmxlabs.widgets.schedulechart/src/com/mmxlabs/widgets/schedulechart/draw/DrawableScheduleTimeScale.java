@@ -144,9 +144,14 @@ public class DrawableScheduleTimeScale<T extends ScheduleTimeScale> extends Draw
 			final int currX = x;
 			int width = unitWidth.orElseGet(() -> sts.getXForDateTime(nextDate) - currX);
 			int padding = settings.getHeaderLeftPadding();
+			int horizontalAlignment = unit.equals(ChronoUnit.YEARS) ? SWT.LEFT : SWT.CENTER;
+			String dateStr = f.getDateString(date, unit);
+					
+			// Remove Saturday and Sunday from text
+			dateStr = dateStr.equals("S") ? "" : dateStr;
 
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).bgColour(colourScheme.getHeaderBgColour(headerNum)).create());
-			res.add(BasicDrawableElements.Text.from(x, y, width, headerBounds.height, f.getDateString(date, unit)).padding(padding).textColour(colourScheme.getHeaderTextColour(headerNum)).verticalAlignment(SWT.CENTER).create());
+			res.add(BasicDrawableElements.Text.from(x, y, width, headerBounds.height, dateStr).padding(padding).textColour(colourScheme.getHeaderTextColour(headerNum)).horizontalAlignment(horizontalAlignment).verticalAlignment(SWT.CENTER).create());
 			res.add(BasicDrawableElements.Rectangle.withBounds(x, y, width, headerBounds.height).borderColour(colourScheme.getGridStrokeColour()).create());
 			date = nextDate;
 			x += width;
