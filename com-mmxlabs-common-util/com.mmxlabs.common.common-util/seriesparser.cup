@@ -56,6 +56,10 @@ non terminal ASTNode  full_expr, expr;  // used to store evaluated subexpression
 non terminal ASTNode  stmt;             // used to store evaluated subexpressions
 non terminal          stmt_list;        // used to store evaluated subexpressions
 non terminal List<ASTNode>         arg_list;
+non terminal List<TierBlendASTNode.ThresholdSeries>         tier_arg_list;
+non terminal List<TierBlendASTNode.ThresholdSeries>         tier_arg_pair_list;
+non terminal TierBlendASTNode.ThresholdSeries         tier_arg_pair;
+non terminal TierBlendASTNode.ThresholdSeries         tier_arg_single;
 
 non terminal Number NUMBER;
 non terminal ComparisonOperators LTOPS;
@@ -78,38 +82,52 @@ start with full_expr;
 
 
 
-full_expr       ::= expr:e {: RESULT =e;       :}
-            | stmt_list SEMICOLON expr:e {: RESULT =e;       :}
-;
-stmt_list    ::= stmt | stmt_list SEMICOLON stmt
-           
-;
+full_expr  ::= expr:e {: RESULT = e; :}
+             | stmt_list SEMICOLON expr:e {: RESULT = e; :}
+             ;
 
-stmt        ::= VAR:n EQUALS expr:e  {: userVariables.put(n,e);  :}
-         ;
+stmt_list    ::= stmt | stmt_list SEMICOLON stmt ;
+
+stmt        ::= VAR:n EQUALS expr:e  {: userVariables.put(n, e); :} ;
  
 LTOPS ::= LT:n {: RESULT = n; :} | LTE:n {: RESULT = n; :} ;
+
 NUMBER ::= INTEGER:n {: RESULT = n; :} | FLOAT:n {: RESULT = n; :} ;
 
 
-arg_list       ::= expr:e  {: RESULT = Lists.newArrayList(e);       :} | arg_list:l COMMA expr:e   {: l.add(e);  RESULT =l;       :} ;
+arg_list       ::= expr:e  {: RESULT = Lists.newArrayList(e);         :}
+                 | arg_list:l COMMA expr:e   {: l.add(e);  RESULT = l; :}
+                 ;
 
+tier_arg_single     ::= expr:e                      {: RESULT = new TierBlendASTNode.ThresholdSeries(e, Double.MAX_VALUE);       :} ;
+tier_arg_pair       ::= expr:e COMMA NUMBER:n COMMA {: RESULT = new TierBlendASTNode.ThresholdSeries(e, n);       :} ;
 
-expr      ::= expr:lhs PLUS expr:rhs                      {: RESULT = new OperatorASTNode(lhs, Operator.PLUS, rhs);      :}
-             | expr:lhs MINUS expr:rhs                    {: RESULT = new OperatorASTNode(lhs,Operator.MINUS, rhs);      :}
-             | expr:lhs TIMES expr:rhs                    {: RESULT = new OperatorASTNode(lhs,  Operator.TIMES, rhs);    :}
+tier_arg_pair_list  ::= tier_arg_pair:a    {: RESULT = Lists.newArrayList(a);      :}
+                      | tier_arg_pair_list:l tier_arg_pair:e          {: l.add(e);  RESULT = l;       :} 
+                      ;
+
+tier_arg_list       ::=  tier_arg_pair_list:l tier_arg_single:e  {: l.add(e);  RESULT = l;       :} ;
+ 
+
+expr      ::=  expr:lhs PLUS expr:rhs                     {: RESULT = new OperatorASTNode(lhs, Operator.PLUS, rhs);      :}
+             | expr:lhs MINUS expr:rhs                    {: RESULT = new OperatorASTNode(lhs, Operator.MINUS, rhs);     :}
+             | expr:lhs TIMES expr:rhs                    {: RESULT = new OperatorASTNode(lhs, Operator.TIMES, rhs);     :}
              | expr:lhs DIVIDE expr:rhs                   {: RESULT = new OperatorASTNode(lhs, Operator.DIVIDE, rhs);    :}
+
              | CAP LPAREN arg_list:l RPAREN               {: RESULT = new FunctionASTNode(l, FunctionType.CAP);          :}
              | FLOOR LPAREN arg_list:l RPAREN             {: RESULT = new FunctionASTNode(l, FunctionType.FLOOR);        :}
              | MIN LPAREN arg_list:l RPAREN               {: RESULT = new FunctionASTNode(l, FunctionType.MIN);          :}
-             | MAX LPAREN arg_list:l RPAREN       {: RESULT = new FunctionASTNode(l, FunctionType.MAX);          :}
+             | MAX LPAREN arg_list:l RPAREN               {: RESULT = new FunctionASTNode(l, FunctionType.MAX);          :}
 
              | INTEGER:lhs PERCENT expr:rhs               {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs), Operator.PERCENT, rhs); :}
              %prec PERCENT
+
              | VAR:v PERCENT expr:rhs                     {: RESULT = new OperatorASTNode(userVariables.get(v), Operator.PERCENT, rhs);     :}
              %prec PERCENT
+
              | NUMBER:lhs PERCENT expr:rhs                {: RESULT = new OperatorASTNode(new ConstantASTNode(lhs), Operator.PERCENT, rhs); :}
              %prec PERCENT
+
              | QUESTION:lhs PERCENT expr:rhs              {: RESULT = new OperatorASTNode(new BreakEvenASTNode(), Operator.PERCENT, rhs);   :}  
              %prec PERCENT
 
@@ -120,35 +138,41 @@ expr      ::= expr:lhs PLUS expr:rhs                      {: RESULT = new Operat
 
              | expr:e1 LBRACKET MONTH:m1 RBRACKET       {: RESULT = new MonthFunctionASTNode(e1, m1);       :}
              
-             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN     {: RESULT =  new DatedAvgFunctionASTNode(lhs, n1, n2, n3, DatedAvgFunctionASTNode.InputMode.FUNCTION); :}
-             | expr:lhs LBRACKET INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RBRACKET                {: RESULT =  new DatedAvgFunctionASTNode(lhs, n1, n2, n3, DatedAvgFunctionASTNode.InputMode.NOTATION_WITH_COMMA);       :}
-             | expr:lhs LBRACKET INTEGER:a1 RBRACKET                                                  {: RESULT =  new DatedAvgFunctionASTNode(lhs, a1, DatedAvgFunctionASTNode.InputMode.NOTATION_WITHOUT_COMMA);       :}
+             | DATEDAVG LPAREN expr:lhs COMMA INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RPAREN   {: RESULT = new DatedAvgFunctionASTNode(lhs, n1, n2, n3, DatedAvgFunctionASTNode.InputMode.FUNCTION); :}
+             | expr:lhs LBRACKET INTEGER:n1 COMMA INTEGER:n2 COMMA INTEGER:n3 RBRACKET              {: RESULT = new DatedAvgFunctionASTNode(lhs, n1, n2, n3, DatedAvgFunctionASTNode.InputMode.NOTATION_WITH_COMMA);       :}
+             | expr:lhs LBRACKET INTEGER:a1 RBRACKET                                                {: RESULT = new DatedAvgFunctionASTNode(lhs, a1, DatedAvgFunctionASTNode.InputMode.NOTATION_WITHOUT_COMMA);       :}
              
-             | TIERBLEND LPAREN expr:target COMMA expr:low COMMA NUMBER:n1 COMMA expr:high RPAREN      {: RESULT =  new TierBlendASTNode(target, low, n1, high);  :}
+             | TIERBLEND LPAREN expr:target COMMA tier_arg_list:l RPAREN       {: RESULT = new TierBlendASTNode(target, l);  :}
 
-             | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT =  new SplitMonthFunctionASTNode(e1, e2, s); :}
+             | SPLITMONTH LPAREN expr:e1 COMMA expr:e2 COMMA INTEGER:s RPAREN  {: RESULT = new SplitMonthFunctionASTNode(e1, e2, s); :}
+
              | S LPAREN expr:base COMMA NUMBER:lower COMMA NUMBER:higher COMMA NUMBER:a1 COMMA NUMBER:b1 COMMA NUMBER:a2 COMMA NUMBER:b2 COMMA NUMBER:a3 COMMA NUMBER:b3 RPAREN  {: RESULT =  new SCurveFunctionASTNode(base, lower, higher, a1,b1,a2,b2,a3,b3); :}
+
              | UNTIL LPAREN expr:lhs COMMA DATE:date COMMA expr:rhs RPAREN {: RESULT = new UntilASTNode(lhs, date, rhs); :}
+
 /* new style */
              | TIER LPAREN expr:target COMMA expr:lowValue COMMA LTOPS:lowOp NUMBER:low COMMA expr:highValue RPAREN                                                   {: RESULT =  new Tier2FunctionASTNode(target, lowOp, low, lowValue, highValue); :}             
              | TIER LPAREN expr:target COMMA expr:lowValue COMMA LTOPS:lowOp NUMBER:low COMMA expr:midValue COMMA LTOPS:midOp NUMBER:mid COMMA expr:highValue RPAREN  {: RESULT =  new Tier3FunctionASTNode(target, lowOp, low, lowValue, midOp, mid, midValue, highValue); :}
 /* Old style */                          
              | TIER LPAREN expr:target COMMA LTOPS:lowOp NUMBER:low COMMA expr:lowValue COMMA expr:highValue RPAREN                                                   {: RESULT =  new Tier2FunctionASTNode(target, lowOp, low, lowValue, highValue); :}             
              | TIER LPAREN expr:target COMMA LTOPS:lowOp NUMBER:low COMMA expr:lowValue COMMA LTOPS:midOp NUMBER:mid COMMA expr:midValue COMMA expr:highValue RPAREN  {: RESULT =  new Tier3FunctionASTNode(target, lowOp, low, lowValue, midOp, mid, midValue, highValue); :}             
-             
+
              | MINUS expr:e                 {: RESULT = new MinusASTNode(e);        :}
   	     %prec UMINUS
              | PLUS expr:e                 {: RESULT = e;         :}
   	     %prec UPLUS
-       | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
-       | SERIES:n	                     {: RESULT = n;           :}
-       | NAMED_ELEMENT:n                 {: RESULT = seriesParser.getNamedSeriesASTNode(n);  :}
-       | FLOAT:n	                     {: RESULT = new ConstantASTNode(n);                :}
-       | INTEGER:n	                     {: RESULT = new ConstantASTNode(n);                :}
-       | QUESTION:n	                     {: RESULT = new BreakEvenASTNode();                :}
-       | VAR:v	                         {: RESULT = userVariables.get(v);                   :}
-       | PARAM:n COLON NUMBER:v	         {: RESULT =  new ParamASTNode(n, v);         :}              
-       | PARAM:n	                     {: RESULT =  new ParamASTNode(n);         :}       
-       
-             ;     
-             
+
+             | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
+             | SERIES:n	                     {: RESULT = n;           :}
+
+             | NAMED_ELEMENT:n               {: RESULT = seriesParser.getNamedSeriesASTNode(n);  :}
+             | FLOAT:n	                     {: RESULT = new ConstantASTNode(n);                 :}
+             | INTEGER:n	                 {: RESULT = new ConstantASTNode(n);                 :}
+             | QUESTION:n	                 {: RESULT = new BreakEvenASTNode();                 :}
+             | VAR:v	                     {: RESULT = userVariables.get(v);                   :}
+
+             | PARAM:n COLON NUMBER:v        {: RESULT =  new ParamASTNode(n, v);      :}
+             | PARAM:n	                     {: RESULT =  new ParamASTNode(n);         :}
+
+       ;
+

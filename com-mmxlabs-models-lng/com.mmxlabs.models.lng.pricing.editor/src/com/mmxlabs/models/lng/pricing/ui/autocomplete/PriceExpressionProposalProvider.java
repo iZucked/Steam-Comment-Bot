@@ -245,9 +245,11 @@ public class PriceExpressionProposalProvider implements IMMXContentProposalProvi
 			final String proposal = "TIERBLEND(";
 			if (proposal.length() >= contents.length() && proposal.substring(0, contents.length()).equalsIgnoreCase(contents)) {
 				final String c = matchCase(contents, proposal.substring(contents.length()));
-				list.add(new ContentProposal(c, proposal + "target,lowerexpr,threshold,upperexpr)",
+				list.add(new ContentProposal(c, proposal + "target, exp1, threshold1, exp2, threshold2, ..., thresholdn, expn)",
 						"""
-								Tiered pricing with blending. Computes the average of lowerexpr and upperexpr weighted by value of target (index e.g. “HH”, or parameter with default, e.g. @VOL_M3:160000, @VOL_MMBTU:0) either side of threshold. If target is less than or equal to threshold then only the lowerexpr is returned.
+								Tiered pricing with blending. Computes the average of exp1, exp2 to expn weighted by value of target less than or equal to thresholds (index e.g. “HH”, or parameter with default, e.g. @VOL_M3:160000, @VOL_MMBTU:0) either side of threshold. 
+								
+								For example TIERBLEND(@VOL_MMBTU:3000000, JKM, 3000000, JKM-2, 3250000, 10) where the first 3tbtu is priced at JKM, the next 0.25tbtu is priced at JKM-2 and the remaining balance is priced at $10. Note 3tbtu is the default volume used when the computed volume in not available.								
 									""",
 						c.length()));
 			}

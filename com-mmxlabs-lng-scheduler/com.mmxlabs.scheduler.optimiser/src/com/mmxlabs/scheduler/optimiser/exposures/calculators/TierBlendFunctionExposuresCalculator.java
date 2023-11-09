@@ -4,14 +4,17 @@
  */
 package com.mmxlabs.scheduler.optimiser.exposures.calculators;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.parser.astnodes.TierBlendASTNode;
-import com.mmxlabs.common.parser.astnodes.TierBlendASTNode.ExprSelector;
 import com.mmxlabs.common.parser.astnodes.ConstantASTNode;
 import com.mmxlabs.common.parser.astnodes.Operator;
 import com.mmxlabs.common.parser.astnodes.OperatorASTNode;
+import com.mmxlabs.common.parser.astnodes.TierBlendASTNode;
+import com.mmxlabs.common.parser.astnodes.TierBlendASTNode.ThresholdSeries;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.exposures.IExposureNode;
 import com.mmxlabs.scheduler.optimiser.exposures.InputRecord;
@@ -23,20 +26,56 @@ public class TierBlendFunctionExposuresCalculator {
 		final Pair<Long, IExposureNode> baseNodeData = ExposuresASTToCalculator.getExposureNode(tierBlendNode.getTarget(), inputRecord);
 
 		final double baseValue = baseNodeData.getFirst();
-		final long threshold = Math.round(tierBlendNode.getThreshold().doubleValue() * Calculator.HighScaleFactor);
 
-		final var selected = tierBlendNode.select(baseValue, threshold);
-		if (selected == ExprSelector.LOW) {
-			return ExposuresASTToCalculator.getExposureNode(tierBlendNode.getLowTier(), inputRecord);
+		final List<ThresholdSeries> thresholds = tierBlendNode.getThresholds();
+		
+		// Compute the fraction each band contributes to the full value.
+		final List<OperatorASTNode> nodes = new LinkedList<>();
+		long usedValue = 0L;
+		for (final var t : thresholds) {
+			final double contribValue;
+			boolean breakLoop = false;
+			// MAX_VALUE should be the final band.
+			if (t.threshold().doubleValue() == Double.MAX_VALUE) {
+				contribValue = baseValue - usedValue;
+			} else {
+				// Compute the used part of the band
+				final long threshold = Math.round(t.threshold().doubleValue() * Calculator.HighScaleFactor);
+				contribValue = Math.min(baseValue, threshold) - usedValue;
+				usedValue = threshold;
+				if (baseValue <= threshold) {
+					// We have covered all the value and so there is no need to check further bands.
+					breakLoop = true;
+				}
+			}
+			final double fraction = 100.0 * contribValue / baseValue;
+			final OperatorASTNode n = new OperatorASTNode(new ConstantASTNode(fraction), Operator.PERCENT, t.series());
+			nodes.add(n);
+
+			if (breakLoop) {
+				// Terminate the loop
+				break;
+			}
+		}
+		assert !nodes.isEmpty();
+		
+		
+		if (nodes.size() == 1) {
+			// Only one option - 100%x - Unwrap and just return x
+			return ExposuresASTToCalculator.getExposureNode(nodes.get(0).getRHS(), inputRecord);
 		}
 
-		// Convert to a new expression of "x%low + (1-x)%high" to make it easier to compute
-		// x is the fraction of the total volume linked to the low tier.
-		// Note: how can we handle < vs <= ? Will it make a difference?
-		final double fraction = 100.0 * threshold / baseValue;
-		final OperatorASTNode low = new OperatorASTNode(new ConstantASTNode(fraction), Operator.PERCENT, tierBlendNode.getLowTier());
-		final OperatorASTNode high = new OperatorASTNode(new ConstantASTNode(100.0 - fraction), Operator.PERCENT, tierBlendNode.getHighTier());
-		final OperatorASTNode node = new OperatorASTNode(low, Operator.PLUS, high);
+		// Create a new expression which is the sum of each fracation. This should return the full 100% of the value/volume (but can be affected by rounding) 
+		OperatorASTNode node = null;
+		for (final var n : nodes) {
+			if (node == null) {
+				node = n;
+			} else {
+				node = new OperatorASTNode(node, Operator.PLUS, n);
+			}
+		}
+		assert node != null;
+
 		return ExposuresASTToCalculator.getExposureNode(node, inputRecord);
 	}
 }

@@ -570,6 +570,9 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 		pricingModelBuilder.makeCommodityDataCurve("TestHigh", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2020, 1), 30.0) //
 				.build();
+		pricingModelBuilder.makeCommodityDataCurve("TestHigher", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2020, 1), 40.0) //
+				.build();
 
 		final DESSalesMarket mkt = spotMarketsModelBuilder.makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_CHITA), entity, "0")
 				.withVolumeLimits(3_000_000, 3_000_000, VolumeUnits.MMBTU) //
@@ -612,6 +615,8 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				curve = "TestMid";
 			} else if (expectedPrice == 30) {
 				curve = "TestHigh";
+			} else if (expectedPrice == 40) {
+				curve = "TestHigher";
 			} else {
 				curve = null;
 			}
@@ -631,6 +636,8 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh)", 1_500_000, 10, YearMonth.of(2020, Month.JANUARY) }, //
 				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh)", 2_000_000, 12.5, YearMonth.of(2020, Month.JANUARY) }, //
 				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh)", 3_000_000, 15, YearMonth.of(2020, Month.JANUARY) }, //
+				// $19.1666 = (1,500,000 * 10 + (1,750,000 - 1,500,000) * 20 + (3,000,000 - 1,750,000) * 30) / 3,000,000
+				{ LocalDate.of(2020, 1, 1), "TIERBLEND(@VOL_MMBTU, TestLow, 1500000, TestHigh, 1750000, TestHigher)", 3_000_000, 19.1666, YearMonth.of(2020, Month.JANUARY) }, //
 
 		});
 	}
@@ -645,6 +652,9 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				.build();
 		pricingModelBuilder.makeCommodityDataCurve("TestHigh", "$", "mmBtu") //
 				.addIndexPoint(YearMonth.of(2020, 1), 20.0) //
+				.build();
+		pricingModelBuilder.makeCommodityDataCurve("TestHigher", "$", "mmBtu") //
+				.addIndexPoint(YearMonth.of(2020, 1), 30.0) //
 				.build();
 
 		final DESSalesMarket mkt = spotMarketsModelBuilder.makeDESSaleMarket("Market", portFinder.findPortById(InternalDataConstants.PORT_CHITA), entity, "0")
@@ -696,6 +706,13 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				// Financial + physical
 				Assertions.assertEquals(1 + 1, exposures.size());
 				Assertions.assertFalse(detail.isPresent());
+			} else if (expectedPrice > 18) {
+				// 2 x Financial + physical
+				Assertions.assertEquals(1 + 1 + 1 + 1, exposures.size());
+				Assertions.assertTrue(detail.isPresent());
+				Assertions.assertEquals(exposureMonth, detail.get().getDate());
+				// Expect excess between 1_500_000 and 1_750_000 - add delta of 1 for rounding issues
+				Assertions.assertEquals(-(1_750_000 - 1_500_000), detail.get().getVolumeInMMBTU(), 1.0);
 			} else if (expectedPrice > 10) {
 				// 2 x Financial + physical
 				Assertions.assertEquals(1 + 1 + 1, exposures.size());
@@ -703,6 +720,30 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 				Assertions.assertEquals(exposureMonth, detail.get().getDate());
 				// Expect excess over 1_500_000
 				Assertions.assertEquals(-(volumeMMBTU - 1_500_000), detail.get().getVolumeInMMBTU());
+			} else {
+				Assertions.fail();
+			}
+		}
+		// Expect higher curve
+		{
+			final String curve = "TestHigher";
+			final Optional<ExposureDetail> detail = exposures.stream().filter(d -> d.getDealType() == DealType.FINANCIAL).filter(d -> curve.equalsIgnoreCase(d.getIndexName())).findFirst();
+
+			if (expectedPrice == 10) {
+				// Financial + physical
+				Assertions.assertEquals(1 + 1, exposures.size());
+				Assertions.assertFalse(detail.isPresent());
+			} else if (expectedPrice > 18) {
+				// 3 x Financial + physical
+				Assertions.assertEquals(1 + 1 + 1 + 1, exposures.size());
+				Assertions.assertTrue(detail.isPresent());
+				Assertions.assertEquals(exposureMonth, detail.get().getDate());
+				// Expect excess over 1750000
+				Assertions.assertEquals(-(volumeMMBTU - 1750000), detail.get().getVolumeInMMBTU());
+			} else if (expectedPrice > 10) {
+				// 2 x Financial + physical
+				Assertions.assertEquals(1 + 1 + 1, exposures.size());
+				Assertions.assertFalse(detail.isPresent());
 			} else {
 				Assertions.fail();
 			}

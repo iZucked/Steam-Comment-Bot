@@ -4,33 +4,44 @@
  */
 package com.mmxlabs.common.parser.series;
 
+import java.util.List;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.astnodes.ComparisonOperators;
 import com.mmxlabs.common.parser.series.functions.TierBlendSeries;
 
+@NonNullByDefault
 public class TierBlendFunctionConstructor implements IExpression<ISeries> {
 
-	private final IExpression<ISeries> targetSeries;
-	private final IExpression<ISeries> tier1Series;
-	private final IExpression<ISeries> tier2Series;
-	private final double threshold;
+	@NonNullByDefault({ DefaultLocation.FIELD, DefaultLocation.RETURN_TYPE }) // Override the class level annotation to avoid compile error
+	public record ThresholdExprSeries(IExpression<ISeries> series, Number threshold) {
+	}
 
-	public TierBlendFunctionConstructor(final IExpression<ISeries> targetSeries, IExpression<ISeries> tier1Series, final Number threshold, IExpression<ISeries> tier2Series) {
+	private final IExpression<ISeries> targetSeries;
+	private final List<ThresholdExprSeries> thresholds;
+
+	public TierBlendFunctionConstructor(final IExpression<ISeries> targetSeries, final List<ThresholdExprSeries> thresholds) {
 		this.targetSeries = targetSeries;
-		this.tier1Series = tier1Series;
-		this.tier2Series = tier2Series;
-		this.threshold = threshold.doubleValue();
+		this.thresholds = thresholds;
 	}
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return new TierBlendSeries(targetSeries.evaluate(), tier1Series.evaluate(), threshold, tier2Series.evaluate());
+		final List<TierBlendSeries.ThresholdISeries> list = thresholds.stream().map(t -> new TierBlendSeries.ThresholdISeries(t.series().evaluate(), t.threshold().doubleValue())).toList();
+
+		return new TierBlendSeries(targetSeries.evaluate(), list);
 	}
 
 	@Override
 	public boolean canEvaluate() {
-		return targetSeries.canEvaluate() && tier1Series.canEvaluate() && tier2Series.canEvaluate();
+		for (final var t : thresholds) {
+			if (!t.series().canEvaluate()) {
+				return false;
+			}
+		}
+		return targetSeries.canEvaluate();
 	}
 }

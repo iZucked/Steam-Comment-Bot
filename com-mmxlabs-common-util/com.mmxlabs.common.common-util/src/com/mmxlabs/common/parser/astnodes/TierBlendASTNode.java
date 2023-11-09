@@ -4,33 +4,46 @@
  */
 package com.mmxlabs.common.parser.astnodes;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.series.TierBlendFunctionConstructor;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.parser.series.TierBlendFunctionConstructor;
+import com.mmxlabs.common.parser.series.TierBlendFunctionConstructor.ThresholdExprSeries;
 
 @NonNullByDefault
 public class TierBlendASTNode implements ASTNode {
+	// Internal data record. Expression that applies to the target up to and including threshold value. The final band should use Double.MAX_VALUE as the threshold.
+	@NonNullByDefault({ DefaultLocation.FIELD, DefaultLocation.RETURN_TYPE }) // Override the class level annotation to avoid compile error
+	public record ThresholdSeries(@NonNull ASTNode series, @NonNull Number threshold) {
+
+	}
 
 	private ASTNode target;
-	private ASTNode tier1Series;
-	private ASTNode tier2Series;
-	private final double threshold;
+	private final List<ThresholdSeries> thresholds;
+	private final List<ASTNode> children;
 
-	public TierBlendASTNode(final ASTNode target, final ASTNode tier1Series, final Number threshold, final ASTNode tier2Series) {
+	public TierBlendASTNode(final ASTNode target, final List<ThresholdSeries> thresholds) {
 
 		this.target = target;
-		this.tier1Series = tier1Series;
-		this.tier2Series = tier2Series;
-		this.threshold = threshold.doubleValue();
+		this.thresholds = thresholds;
+		children = new ArrayList<>(1 + thresholds.size());
+		children.add(target);
+		for (final var t : thresholds) {
+			children.add(t.series());
+		}
 	}
 
 	@Override
 	public Iterable<ASTNode> getChildren() {
-		return Lists.newArrayList(target, tier1Series, tier2Series);
+		return children;
 	}
 
 	@Override
@@ -38,11 +51,11 @@ public class TierBlendASTNode implements ASTNode {
 		if (original == target) {
 			target = replacement;
 		}
-		if (original == tier1Series) {
-			tier1Series = replacement;
-		}
-		if (original == tier2Series) {
-			tier2Series = replacement;
+		for (int i = 0; i < thresholds.size(); ++i) {
+			final var t = thresholds.get(i);
+			if (t.series() == original) {
+				thresholds.set(i, new ThresholdSeries(replacement, t.threshold()));
+			}
 		}
 	}
 
@@ -50,37 +63,27 @@ public class TierBlendASTNode implements ASTNode {
 		return target;
 	}
 
-	public Number getThreshold() {
-		return threshold;
-	}
-
-	public ASTNode getLowTier() {
-		return tier1Series;
-	}
-
-	public ASTNode getHighTier() {
-		return tier2Series;
-	}
-
 	@Override
 	public String asString() {
-		return String.format("TIERBLEND(%s, %s, %s, %s)", target.asString(), tier1Series.asString(), threshold, tier2Series.asString());
+		final String args = thresholds.stream().map(t -> {
+			if (t.threshold().doubleValue() == Double.MAX_VALUE) {
+				return String.format("%s", t.series().asString());
+			} else {
+				return String.format("%s, %s", t.series().asString(), t.threshold());
+			}
+		}).collect(Collectors.joining(", "));
+		return String.format("TIERBLEND(%s, %s)", target.asString(), args);
 	}
 
 	@Override
 	public IExpression<ISeries> asExpression(final SeriesParser seriesParser) {
-		return new TierBlendFunctionConstructor(target.asExpression(seriesParser), tier1Series.asExpression(seriesParser), threshold, tier2Series.asExpression(seriesParser));
+
+		final List<ThresholdExprSeries> list = thresholds.stream().map(t -> new TierBlendFunctionConstructor.ThresholdExprSeries(t.series().asExpression(seriesParser), t.threshold())).toList();
+		return new TierBlendFunctionConstructor(target.asExpression(seriesParser), list);
 	}
 
-	public enum ExprSelector {
-		LOW, BLEND
-	}
+	public List<ThresholdSeries> getThresholds() {
+		return thresholds;
 
-	public static ExprSelector select(final double value, final double threshold) {
-		if (value <= threshold) {
-			return ExprSelector.LOW;
-		} else {
-			return ExprSelector.BLEND;
-		}
 	}
 }

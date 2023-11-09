@@ -100,11 +100,11 @@ public class OperatorExposuresCalculator {
 			// return modify((ExposureRecords) c0, c -> new ExposureRecord(c.index,
 			// c.unitPrice(), -c.nativeVolume(), -c.nativeValue, -c.mmbtuVolume(), c.date));
 		} else if (c0 instanceof final Constant c0Const && c1 instanceof final ExposureRecords c1Records) {
-			final long constant = c0Const.getConstant() / 100;
-			return new Pair<>((ExposuresCalculatorUtils.multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) / 100),
+			final long constant = c0Const.getConstant() ;
+			return new Pair<>((ExposuresCalculatorUtils.multiplyConstantByConstant(pc0.getFirst(), pc1.getFirst()) / 100L),
 					ExposuresCalculatorUtils.modify(c1Records,
-							c -> new ExposureRecord(c.curveName(), c.currencyUnit(), c.unitPrice(), ExposuresCalculatorUtils.multiplyVolumeByConstant(c.nativeVolume(), constant),
-									ExposuresCalculatorUtils.multiplyVolumeByConstant(c.nativeValue(), constant), ExposuresCalculatorUtils.multiplyVolumeByConstant(c.mmbtuVolume(), constant),
+							c -> new ExposureRecord(c.curveName(), c.currencyUnit(), c.unitPrice(), ExposuresCalculatorUtils.multiplyVolumeByConstant(c.nativeVolume(), constant) / 100L,
+									ExposuresCalculatorUtils.multiplyVolumeByConstant(c.nativeValue(), constant)  / 100L, ExposuresCalculatorUtils.multiplyVolumeByConstant(c.mmbtuVolume(), constant) / 100L,
 									c.date(), c.volumeUnit())));
 		} else if (c0 instanceof final ExposureRecords c0Records && c1 instanceof final ExposureRecords c1Records) {
 			// return merge((ExposureRecords) c0, (ExposureRecords) c1, (c_0, c_1) -> new
