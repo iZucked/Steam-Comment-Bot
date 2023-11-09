@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.function.ToIntFunction;
 
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;

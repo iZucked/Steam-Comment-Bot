@@ -6,8 +6,9 @@
  */
 package com.mmxlabs.lngdataserver.browser;
 
-import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 
 /**
  * <!-- begin-user-doc -->

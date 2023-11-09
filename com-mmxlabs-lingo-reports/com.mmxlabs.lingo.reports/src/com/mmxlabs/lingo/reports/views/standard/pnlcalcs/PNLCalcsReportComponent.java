@@ -54,8 +54,6 @@ import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.IReportContentsGenerator;
-import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;

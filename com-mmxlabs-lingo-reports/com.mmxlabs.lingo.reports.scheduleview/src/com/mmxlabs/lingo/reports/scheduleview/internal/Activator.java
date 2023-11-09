@@ -12,7 +12,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

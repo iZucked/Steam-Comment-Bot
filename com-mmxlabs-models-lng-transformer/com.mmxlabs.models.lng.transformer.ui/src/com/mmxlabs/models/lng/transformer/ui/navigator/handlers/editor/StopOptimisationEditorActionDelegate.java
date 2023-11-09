@@ -10,10 +10,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.IJobManager;
-import com.mmxlabs.models.lng.transformer.ui.jobmanagers.LocalJobManager;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IProgressProvider;
 import com.mmxlabs.scenario.service.ui.IProgressProvider.IProgressChanged;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 

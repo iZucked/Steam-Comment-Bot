@@ -28,7 +28,6 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.lngdataserver.server.editors.model.layout.Column;
 import com.mmxlabs.lngdataserver.server.editors.model.layout.Group;
 import com.mmxlabs.lngdataserver.server.editors.model.layout.ILayoutElement;
@@ -37,6 +36,7 @@ import com.mmxlabs.lngdataserver.server.editors.model.layout.Row;
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.IInlineEditor;

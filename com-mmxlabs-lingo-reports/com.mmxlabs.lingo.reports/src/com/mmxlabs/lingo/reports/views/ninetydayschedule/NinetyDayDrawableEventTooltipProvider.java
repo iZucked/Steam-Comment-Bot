@@ -10,7 +10,6 @@ import java.util.Optional;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.JourneyEventTooltip;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.PortEventTooltip;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.BuySellEventTooltip;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;

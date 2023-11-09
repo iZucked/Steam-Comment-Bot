@@ -6,17 +6,15 @@
  */
 package com.mmxlabs.lngdataserver.browser.impl;
 
-import com.mmxlabs.lngdataserver.browser.BrowserPackage;
-import com.mmxlabs.lngdataserver.browser.CompositeNode;
-import com.mmxlabs.lngdataserver.browser.Node;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import com.mmxlabs.lngdataserver.browser.BrowserPackage;
+import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.Node;
 
 /**
  * <!-- begin-user-doc -->

@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;

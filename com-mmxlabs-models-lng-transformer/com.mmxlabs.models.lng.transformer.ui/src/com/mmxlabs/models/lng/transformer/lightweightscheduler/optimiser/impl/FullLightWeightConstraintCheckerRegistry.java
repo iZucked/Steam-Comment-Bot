@@ -11,7 +11,6 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.IFullLightWeightConstraintCheckerFactory;
-import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintCheckerFactory;
 
 public class FullLightWeightConstraintCheckerRegistry {
 	List<IFullLightWeightConstraintCheckerFactory> constraintCheckerFactories = new LinkedList<>();

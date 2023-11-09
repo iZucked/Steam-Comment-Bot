@@ -6,11 +6,16 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.util;
 
-import com.mmxlabs.lingo.reports.views.schedule.model.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
+import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 
 /**
  * <!-- begin-user-doc -->

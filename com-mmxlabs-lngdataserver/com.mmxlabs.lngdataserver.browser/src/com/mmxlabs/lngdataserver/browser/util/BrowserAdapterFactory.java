@@ -6,14 +6,16 @@
  */
 package com.mmxlabs.lngdataserver.browser.util;
 
-import com.mmxlabs.lngdataserver.browser.*;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.lngdataserver.browser.BrowserPackage;
+import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.Leaf;
+import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.browser.RootNode;
 
 /**
  * <!-- begin-user-doc -->

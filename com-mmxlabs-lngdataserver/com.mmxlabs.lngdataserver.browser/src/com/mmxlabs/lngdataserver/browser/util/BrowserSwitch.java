@@ -6,12 +6,15 @@
  */
 package com.mmxlabs.lngdataserver.browser.util;
 
-import com.mmxlabs.lngdataserver.browser.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import com.mmxlabs.lngdataserver.browser.BrowserPackage;
+import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.Leaf;
+import com.mmxlabs.lngdataserver.browser.Node;
+import com.mmxlabs.lngdataserver.browser.RootNode;
 
 /**
  * <!-- begin-user-doc -->

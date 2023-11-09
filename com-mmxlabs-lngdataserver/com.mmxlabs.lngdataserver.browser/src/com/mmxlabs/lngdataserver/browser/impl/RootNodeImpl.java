@@ -6,12 +6,11 @@
  */
 package com.mmxlabs.lngdataserver.browser.impl;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import com.mmxlabs.lngdataserver.browser.BrowserPackage;
 import com.mmxlabs.lngdataserver.browser.RootNode;
-
-import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

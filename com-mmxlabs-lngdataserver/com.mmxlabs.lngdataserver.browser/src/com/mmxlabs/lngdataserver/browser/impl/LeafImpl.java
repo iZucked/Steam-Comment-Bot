@@ -6,10 +6,10 @@
  */
 package com.mmxlabs.lngdataserver.browser.impl;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.lngdataserver.browser.BrowserPackage;
 import com.mmxlabs.lngdataserver.browser.Leaf;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->

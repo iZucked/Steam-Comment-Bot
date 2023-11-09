@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
@@ -27,8 +26,6 @@ import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
-import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
-import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceSaveHook;
 
 @SuppressWarnings("restriction")

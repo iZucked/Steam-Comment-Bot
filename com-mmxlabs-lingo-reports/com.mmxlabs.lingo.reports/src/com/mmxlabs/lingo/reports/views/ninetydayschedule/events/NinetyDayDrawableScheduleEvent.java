@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule.events;
 
 import org.eclipse.swt.graphics.Rectangle;
 
-import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;

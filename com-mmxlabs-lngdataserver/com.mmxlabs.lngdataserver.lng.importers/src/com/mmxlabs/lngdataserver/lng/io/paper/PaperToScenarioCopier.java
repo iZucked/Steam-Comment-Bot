@@ -17,12 +17,10 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lngdataserver.integration.paper.model.DatahubPaperDeal;
-import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 import com.mmxlabs.lngdataserver.integration.paper.model.DatahubPaperDeal.PricingType;
+import com.mmxlabs.lngdataserver.integration.paper.model.PaperVersion;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;

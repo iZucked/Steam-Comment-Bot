@@ -21,6 +21,7 @@ import javax.inject.Named;
 import org.apache.http.HttpHost;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.io.Files;
 import com.google.inject.AbstractModule;

@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.SWT;
 
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;

@@ -6,16 +6,29 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.*;
-import com.mmxlabs.models.lng.analytics.ChangeDescription;
-import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.scenario.service.ScenarioResult;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
+import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
+import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.models.lng.analytics.ChangeDescription;
+import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * <!-- begin-user-doc -->

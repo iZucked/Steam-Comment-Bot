@@ -8,8 +8,6 @@ import java.util.EnumSet;
 
 import org.eclipse.osgi.service.debug.DebugOptions;
 
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.debug.DebugOptionsLevel;
 import com.mmxlabs.rcp.common.debug.IDebugOptionsProvider;
 

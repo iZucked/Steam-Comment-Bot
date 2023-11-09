@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSONTran
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.optioniser.OptioniserSettings;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.insertion.OptioniserLogger;

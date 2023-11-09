@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsBuildHelper;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.jobmanagers.IJobManager;
 import com.mmxlabs.models.lng.transformer.ui.jobrunners.JobDataRecord;
@@ -32,7 +31,6 @@ import com.mmxlabs.models.lng.transformer.ui.jobrunners.RunnerUtils;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class PriceSensitivityTask {

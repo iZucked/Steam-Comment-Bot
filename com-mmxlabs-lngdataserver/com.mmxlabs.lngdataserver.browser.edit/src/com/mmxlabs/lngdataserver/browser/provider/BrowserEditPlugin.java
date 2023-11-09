@@ -7,7 +7,6 @@
 package com.mmxlabs.lngdataserver.browser.provider;
 
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**

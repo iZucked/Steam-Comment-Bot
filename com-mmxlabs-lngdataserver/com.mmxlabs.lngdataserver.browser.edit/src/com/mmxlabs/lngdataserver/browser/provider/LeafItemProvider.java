@@ -6,15 +6,14 @@
  */
 package com.mmxlabs.lngdataserver.browser.provider;
 
-import com.mmxlabs.lngdataserver.browser.Leaf;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+
+import com.mmxlabs.lngdataserver.browser.Leaf;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.lngdataserver.browser.Leaf} object.

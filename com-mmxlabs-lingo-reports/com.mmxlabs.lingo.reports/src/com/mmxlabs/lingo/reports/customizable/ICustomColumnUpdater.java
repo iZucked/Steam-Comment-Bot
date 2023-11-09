@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.customizable;
 
+import org.eclipse.jface.viewers.TableViewer;
+
 /**
  * Update various aspects of a columns from a viewer such {@link TableViewer}
  */

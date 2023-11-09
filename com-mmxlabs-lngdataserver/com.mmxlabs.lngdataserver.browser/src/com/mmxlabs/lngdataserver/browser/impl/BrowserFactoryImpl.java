@@ -6,17 +6,19 @@
  */
 package com.mmxlabs.lngdataserver.browser.impl;
 
-import com.mmxlabs.lngdataserver.browser.*;
-
-import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.lngdataserver.browser.BrowserFactory;
+import com.mmxlabs.lngdataserver.browser.BrowserPackage;
+import com.mmxlabs.lngdataserver.browser.CompositeNode;
+import com.mmxlabs.lngdataserver.browser.Leaf;
+import com.mmxlabs.lngdataserver.browser.RootNode;
+import com.mmxlabs.lngdataserver.commons.IDataBrowserActionsHandler;
 
 /**
  * <!-- begin-user-doc -->

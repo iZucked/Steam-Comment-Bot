@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.integration.ports.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.browser.util.DataBrowserNodeHandler;
 import com.mmxlabs.lngdataserver.integration.ports.PortsRepository;

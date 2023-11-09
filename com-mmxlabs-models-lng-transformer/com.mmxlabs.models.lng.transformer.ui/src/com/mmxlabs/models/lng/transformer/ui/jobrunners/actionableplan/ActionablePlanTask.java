@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.jobrunners.actionableplan;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
@@ -19,16 +18,11 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.CheckedFunction;
 import com.mmxlabs.common.util.ToBooleanFunction;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;

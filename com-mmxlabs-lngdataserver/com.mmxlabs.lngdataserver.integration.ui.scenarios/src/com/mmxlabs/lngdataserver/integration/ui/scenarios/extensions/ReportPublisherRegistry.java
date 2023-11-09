@@ -7,7 +7,6 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions;
 import java.io.IOException;
 
 import org.apache.http.util.EntityUtils;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mmxlabs.hub.DataHubServiceProvider;

@@ -60,9 +60,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.AllowedPanamaBookingsProviderImpl;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.IAllowedPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
-import com.mmxlabs.scheduler.optimiser.sequenceproviders.AllowedPanamaBookingsProviderImpl;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.VoyageSpecificationProviderImpl;
 
 public class MarketabilityCargoSequenceGenerator {

@@ -6,30 +6,27 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-
-import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-import com.mmxlabs.scenario.service.ScenarioResult;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
+import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
+import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * <!-- begin-user-doc -->

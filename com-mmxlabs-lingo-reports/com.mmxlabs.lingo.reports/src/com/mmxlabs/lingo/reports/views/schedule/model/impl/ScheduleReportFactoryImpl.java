@@ -12,7 +12,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import com.mmxlabs.lingo.reports.views.schedule.model.*;
+
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
+import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 
 /**
  * <!-- begin-user-doc -->

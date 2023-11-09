@@ -6,10 +6,7 @@ package com.mmxlabs.lngdataserver.integration.paper.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.browser.util.DataBrowserNodeHandler;
 import com.mmxlabs.lngdataserver.integration.paper.PaperRepository;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;

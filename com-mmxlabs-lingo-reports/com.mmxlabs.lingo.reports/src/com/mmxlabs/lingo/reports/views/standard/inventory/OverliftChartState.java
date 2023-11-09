@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.standard.inventory;
 
 import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.swt.graphics.Color;
 

@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.transformer.actionplan;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 
 public class LNGParameters_ActionPlanSettingsModule extends AbstractModule {

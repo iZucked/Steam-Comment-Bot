@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.integration.reports.schedule;
 
+import java.time.LocalDate;
+
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2018
  * All rights reserved.
@@ -12,7 +14,6 @@ package com.mmxlabs.lngdataserver.integration.reports.schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import java.time.LocalDate;
 
 public class ScheduleReportModelV1 {
 	private String vesselName;

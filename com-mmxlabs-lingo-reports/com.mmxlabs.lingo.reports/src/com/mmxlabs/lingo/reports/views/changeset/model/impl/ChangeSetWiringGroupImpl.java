@@ -6,24 +6,20 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetWiringGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 
 /**
  * <!-- begin-user-doc -->
