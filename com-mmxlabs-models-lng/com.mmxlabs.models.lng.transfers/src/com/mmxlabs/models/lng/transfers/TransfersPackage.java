@@ -588,13 +588,22 @@ public interface TransfersPackage extends EPackage {
 	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_TO_BU = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 6;
 
 	/**
+	 * The operation id for the '<em>Get Record Or Delegate Pricing Date</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_DATE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 7;
+
+	/**
 	 * The number of operations of the '<em>Transfer Record</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSFER_RECORD_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 7;
+	int TRANSFER_RECORD_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}' enum.
@@ -1023,6 +1032,16 @@ public interface TransfersPackage extends EPackage {
 	EOperation getTransferRecord__GetRecordOrDelegateToBU();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePricingDate() <em>Get Record Or Delegate Pricing Date</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Record Or Delegate Pricing Date</em>' operation.
+	 * @see com.mmxlabs.models.lng.transfers.TransferRecord#getRecordOrDelegatePricingDate()
+	 * @generated
+	 */
+	EOperation getTransferRecord__GetRecordOrDelegatePricingDate();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1339,6 +1358,13 @@ public interface TransfersPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_TO_BU = eINSTANCE.getTransferRecord__GetRecordOrDelegateToBU();
+		/**
+		 * The meta object literal for the '<em><b>Get Record Or Delegate Pricing Date</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_DATE = eINSTANCE.getTransferRecord__GetRecordOrDelegatePricingDate();
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.transfers.TransferIncoterm <em>Transfer Incoterm</em>}' enum.
 		 * <!-- begin-user-doc -->

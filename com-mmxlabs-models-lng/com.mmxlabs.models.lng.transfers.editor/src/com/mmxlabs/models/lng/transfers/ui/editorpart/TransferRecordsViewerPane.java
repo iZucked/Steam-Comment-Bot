@@ -152,7 +152,6 @@ public class TransferRecordsViewerPane extends ScenarioTableViewerPane {
 			final CompoundCommand cmd = new CompoundCommand("New transfer record");
 			final TransferRecord tr = TransfersFactory.eINSTANCE.createTransferRecord();
 			tr.setCargoReleaseDate(LocalDate.now());
-			tr.setPricingDate(LocalDate.now());
 			if (tm == null) {
 				tm = TransfersFactory.eINSTANCE.createTransferModel();
 				tm.getTransferRecords().add(tr);

@@ -1050,6 +1050,16 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public LocalDate getRecordOrDelegatePricingDate() {
+		return (LocalDate) getUnsetValueOrDelegate(TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE).getValue(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1294,6 +1304,8 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 				return getRecordOrDelegateFromBU();
 			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_TO_BU:
 				return getRecordOrDelegateToBU();
+			case TransfersPackage.TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_DATE:
+				return getRecordOrDelegatePricingDate();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -1385,6 +1397,37 @@ public class TransferRecordImpl extends NamedObjectImpl implements TransferRecor
 							}
 							return entity.getBusinessUnits().get(0);
 						}
+					}
+					return null;
+				}
+			};
+		} else if (transferPackage.getTransferRecord_PricingDate() == feature) {
+			return new DelegateInformation(null, null, null) {
+
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == TransfersPackage.Literals.TRANSFER_RECORD__PRICING_DATE)
+							// we need to handle change of the referenced slot
+							|| (changedFeature == TransfersPackage.Literals.TRANSFER_RECORD__LHS)
+							// and the transfer agreement in case it has buffer days
+							|| (changedFeature == TransfersPackage.Literals.TRANSFER_RECORD__TRANSFER_AGREEMENT);
+				}
+
+				@Override
+				public Object getValue(final EObject object) {
+					if (getLhs() != null) {
+						final Slot<?> slot = getLhs();
+						int bufferDays = 0;
+						if (getTransferAgreement() != null && getTransferAgreement().isSetBufferDays()) {
+							bufferDays = getTransferAgreement().getBufferDays();
+						}
+						final LocalDate result;
+						if (slot.getSchedulingTimeWindow().getStart() != null) {
+							result = slot.getSchedulingTimeWindow().getStart().toLocalDate();
+						} else {
+							result = getLhs().getWindowStart();
+						}
+						return result.plusDays(bufferDays);
 					}
 					return null;
 				}

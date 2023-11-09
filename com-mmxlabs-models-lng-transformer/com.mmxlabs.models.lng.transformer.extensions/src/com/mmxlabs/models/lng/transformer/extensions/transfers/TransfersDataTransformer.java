@@ -151,13 +151,13 @@ public class TransfersDataTransformer implements ISlotTransformer {
 					throw new IllegalStateException(String.format("Transfer record %s is missing the price data", tr.getName()));
 				}
 
-				if (ta != null && tr.getLhs() != null && tr.getPricingDate() != null) {
+				if (ta != null && tr.getLhs() != null && tr.getRecordOrDelegatePricingDate() != null) {
 
 					final BasicTransferAgreement basicTA = modelEntityMap.getOptimiserObjectNullChecked(ta, BasicTransferAgreement.class);
 					final Slot<?> slot = tr.getLhs();
 					final IPortSlot portSlot = modelToOptimiserSlots.get(slot);
 					
-					final int pricingDate = dateAndCurveHelper.convertTime(tr.getPricingDate());
+					final int pricingDate = dateAndCurveHelper.convertTime(tr.getRecordOrDelegatePricingDate());
 					final String nextTransferName = tr.getRhs() == null ? "" : tr.getRhs().getName();
 					final BasicTransferRecord basicTR;
 					

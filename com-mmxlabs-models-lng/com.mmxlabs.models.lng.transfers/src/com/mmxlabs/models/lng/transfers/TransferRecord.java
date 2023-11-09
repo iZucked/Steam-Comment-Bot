@@ -586,4 +586,12 @@ public interface TransferRecord extends NamedObject, UUIDObject {
 	 */
 	BusinessUnit getRecordOrDelegateToBU();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getRecordOrDelegatePricingDate();
+
 } // TransferRecord

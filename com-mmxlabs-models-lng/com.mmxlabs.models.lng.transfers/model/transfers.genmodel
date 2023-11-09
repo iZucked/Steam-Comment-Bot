@@ -75,6 +75,7 @@
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateIncoterm"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateFromBU"/>
       <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegateToBU"/>
+      <genOperations ecoreOperation="transfers.ecore#//TransferRecord/getRecordOrDelegatePricingDate"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

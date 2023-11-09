@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transfers.ui.commands;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.transfers.TransferAgreement;
 import com.mmxlabs.models.lng.transfers.TransferRecord;
 import com.mmxlabs.models.lng.transfers.TransfersPackage;
@@ -33,30 +35,41 @@ public class TransferRecordLHSUpdatingCommandProvider implements IModelCommandPr
 	public @Nullable Command provideAdditionalAfterCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, //
 			final Set<EObject> editSet, final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
-			if (parameter.getEOwner() instanceof TransferRecord transferRecord) {
+			if (parameter.getEOwner() instanceof TransferRecord transferRecord && transferRecord.eIsSet(TransfersPackage.eINSTANCE.getTransferRecord_PricingDate())) {
+				int bufferDays = 0;
+				LocalDate date = null;
+				
 				if (parameter.getEStructuralFeature() == TransfersPackage.eINSTANCE.getTransferRecord_Lhs()) {
-					if (parameter.getEValue() instanceof LoadSlot loadSlot) {
-						int bufferDays = 0;
+					if (parameter.getEValue() instanceof final Slot<?> slot) {
 						if (transferRecord.getTransferAgreement() != null) {
 							bufferDays = getBufferDays(transferRecord.getTransferAgreement());
 						}
-						if (loadSlot.getSchedulingTimeWindow().getStart() != null) {
-							return createSetCommand(editingDomain, transferRecord, loadSlot.getSchedulingTimeWindow().getStart().toLocalDate().plusDays(bufferDays));
-						} else {
-							return createSetCommand(editingDomain, transferRecord, loadSlot.getWindowStart().plusDays(bufferDays));
+						if (bufferDays != 0) {
+							if (slot.getSchedulingTimeWindow().getStart() != null) {
+								date = slot.getSchedulingTimeWindow().getStart().toLocalDate().plusDays(bufferDays);
+							} else {
+								date = slot.getWindowStart().plusDays(bufferDays);
+							}
 						}
 					}
 				} else if (parameter.getEStructuralFeature() == TransfersPackage.eINSTANCE.getTransferRecord_TransferAgreement()) {
 					if (parameter.getEValue() instanceof TransferAgreement transferAgreement) {
-						int bufferDays = getBufferDays(transferAgreement);
-						if (transferRecord.getLhs() instanceof LoadSlot loadSlot) {
-							if (loadSlot.getSchedulingTimeWindow().getStart() != null) {
-								return createSetCommand(editingDomain, transferRecord, loadSlot.getSchedulingTimeWindow().getStart().toLocalDate().plusDays(bufferDays));
+						bufferDays = getBufferDays(transferAgreement);
+						if (bufferDays != 0) {
+							if (transferRecord.getLhs() != null) {
+								final Slot<?> slot = transferRecord.getLhs();
+								if (slot.getSchedulingTimeWindow().getStart() != null) {
+									date = slot.getSchedulingTimeWindow().getStart().toLocalDate().plusDays(bufferDays);
+								} else {
+									date = slot.getWindowStart().plusDays(bufferDays);
 								}
-						} else {
-							return createSetCommand(editingDomain, transferRecord, transferRecord.getPricingDate().plusDays(bufferDays));
+							}
 						}
 					}
+				}
+				
+				if (bufferDays != 0 && date != null) {
+					return createSetCommand(editingDomain, transferRecord, date);
 				}
 			}
 		}

@@ -532,6 +532,16 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 	 * @generated
 	 */
 	@Override
+	public EOperation getTransferRecord__GetRecordOrDelegatePricingDate() {
+		return transferRecordEClass.getEOperations().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getTransferIncoterm() {
 		return transferIncotermEEnum;
 	}
@@ -624,6 +634,7 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_INCOTERM);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_FROM_BU);
 		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_TO_BU);
+		createEOperation(transferRecordEClass, TRANSFER_RECORD___GET_RECORD_OR_DELEGATE_PRICING_DATE);
 
 		// Create enums
 		transferIncotermEEnum = createEEnum(TRANSFER_INCOTERM);
@@ -722,6 +733,8 @@ public class TransfersPackageImpl extends EPackageImpl implements TransfersPacka
 		initEOperation(getTransferRecord__GetRecordOrDelegateFromBU(), theCommercialPackage.getBusinessUnit(), "getRecordOrDelegateFromBU", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getTransferRecord__GetRecordOrDelegateToBU(), theCommercialPackage.getBusinessUnit(), "getRecordOrDelegateToBU", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getTransferRecord__GetRecordOrDelegatePricingDate(), theDateTimePackage.getLocalDate(), "getRecordOrDelegatePricingDate", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(transferIncotermEEnum, TransferIncoterm.class, "TransferIncoterm");
