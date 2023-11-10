@@ -162,6 +162,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_ADP_BASECASE_INITIALISATION = "features:adp-basecase-initialisation";
 
+	public static final String FEATURE_PANAMA_SEASONALITY_YEAR = "features:panama-seasonality-year";
+
 	/**
 	 * Scenario repair features
 	 */

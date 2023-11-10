@@ -20,6 +20,8 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -158,15 +160,15 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 	@SuppressWarnings("unchecked")
 	private void findReferences(ICommandHandler ch, IStructuredSelection ss, final CanalBookings canalBookings, final CompoundCommand cc) {
-		ss.forEach( c -> {
+		ss.forEach(c -> {
 			if (c instanceof final VesselGroupCanalParameters vgcp) {
-				
-				canalBookings.getCanalBookingSlots().forEach( cbs -> {
+
+				canalBookings.getCanalBookingSlots().forEach(cbs -> {
 					if (vgcp.equals(cbs.getBookingCode())) {
 						cc.append(SetCommand.create(ch.getEditingDomain(), cbs, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_CODE, SetCommand.UNSET_VALUE));
 					}
 				});
-				canalBookings.getPanamaSeasonalityRecords().forEach( psr -> {
+				canalBookings.getPanamaSeasonalityRecords().forEach(psr -> {
 					if (vgcp.equals(psr.getVesselGroupCanalParameter())) {
 						cc.append(DeleteCommand.create(ch.getEditingDomain(), psr));
 					}
@@ -196,7 +198,9 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 
 			addMonthColumn(b, "Start month", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_MONTH);
 
-			addNumericColumn(b, "Start year", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_YEAR);
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PANAMA_SEASONALITY_YEAR)) {
+				addNumericColumn(b, "Start year", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_YEAR);
+			}
 
 			addNumericColumn(b, "Northbound", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__NORTHBOUND_WAITING_DAYS);
 
