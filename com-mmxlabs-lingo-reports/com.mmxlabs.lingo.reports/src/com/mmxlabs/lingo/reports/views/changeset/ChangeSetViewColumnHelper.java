@@ -538,7 +538,7 @@ public class ChangeSetViewColumnHelper {
 			this.column_LoadVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_LoadVolume.getColumn().setText("tBtu");
 			this.column_LoadVolume.getColumn().setWidth(55);
-			this.column_LoadVolume.setLabelProvider(createVolumeLabelProvider());
+			this.column_LoadVolume.setLabelProvider(createVolumeLabelProvider(true));
 			
 //			this.column_LoadVolume.setLabelProvider(
 //					createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
@@ -597,7 +597,7 @@ public class ChangeSetViewColumnHelper {
 			this.column_DischargeVolume.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			this.column_DischargeVolume.getColumn().setText("tBtu");
 			this.column_DischargeVolume.getColumn().setWidth(55);
-			this.column_DischargeVolume.setLabelProvider(createVolumeLabelProvider());
+			this.column_DischargeVolume.setLabelProvider(createVolumeLabelProvider(false));
 			
 //			this.column_DischargeVolume.setLabelProvider(createDeltaLabelProvider(true, false, false, true, ChangesetPackage.Literals.CHANGE_SET_ROW_DATA__DISCHARGE_ALLOCATION,
 //					SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
@@ -3221,7 +3221,8 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 	
-	protected CellLabelProvider createVolumeLabelProvider() {
+	protected CellLabelProvider createVolumeLabelProvider(final Boolean isPurchase) {
+		
 		final ToIntBiFunction<Number, Number> deltaIntegerUpdater = (f, t) -> {
 			int delta = 0;
 			if (f != null) {
@@ -3246,12 +3247,12 @@ public class ChangeSetViewColumnHelper {
 					final List<ChangeSetTableRow> rows = group.getRows();
 					if (rows != null) {
 						for (final ChangeSetTableRow change : rows) {
-							delta += deltaIntegerUpdater.applyAsInt(ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.Before), ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.After));
+							delta += deltaIntegerUpdater.applyAsInt(this.getVolume(change, ResultType.Before), getVolume(change, ResultType.After));
 							
 						}
 					}
 				} else if (element instanceof ChangeSetTableRow change) {
-					delta += deltaIntegerUpdater.applyAsInt(ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.Before), ChangeSetKPIUtil.getPurchaseVolume(change, ResultType.After));
+					delta += deltaIntegerUpdater.applyAsInt(this.getVolume(change, ResultType.Before), getVolume(change, ResultType.After));
 				}
 
 				
@@ -3270,6 +3271,14 @@ public class ChangeSetViewColumnHelper {
 				}
 			}
 		
+			private Integer getVolume(ChangeSetTableRow cstr, ResultType rt) {
+				if (isPurchase) {
+					return ChangeSetKPIUtil.getPurchaseVolume(cstr, rt);
+				} else {
+					return ChangeSetKPIUtil.getSalesVolume(cstr, rt);
+				}
+			}
+
 			@Override
 			public String getToolTipText(final Object element) {
 				if (element instanceof ChangeSetTableRow tableRow) {
@@ -3278,14 +3287,14 @@ public class ChangeSetViewColumnHelper {
 
 					boolean newLine = false;
 					
-					final Integer beforeVolume = ChangeSetKPIUtil.getPurchaseVolume(tableRow, ResultType.Before);
+					final Integer beforeVolume = getVolume(tableRow, ResultType.Before);
 					if (beforeVolume != null) {
 						sb.append(String.format("Before: %.3f ", beforeVolume / 1000000.f));
 						newLine = true;
 					}
 					
 					
-					final Integer afterVolume = ChangeSetKPIUtil.getPurchaseVolume(tableRow, ResultType.After);
+					final Integer afterVolume = getVolume(tableRow, ResultType.After);
 					if (afterVolume != null) {
 						if (newLine) {
 							sb.append("\n");
