@@ -3,11 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import java.time.LocalDateTime;
+
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
-import java.time.LocalDateTime;
 
 /**
  * <!-- begin-user-doc -->

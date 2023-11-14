@@ -6,10 +6,10 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->

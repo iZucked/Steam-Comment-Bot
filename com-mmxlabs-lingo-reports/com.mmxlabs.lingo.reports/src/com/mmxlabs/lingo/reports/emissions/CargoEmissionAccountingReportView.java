@@ -19,6 +19,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lingo.reports.modelbased.AbstractSimpleModelBasedReportView;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 
 public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedReportView<CargoEmissionAccountingReportModelV1> {
@@ -40,9 +43,12 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 		final List<CargoEmissionAccountingReportModelV1> rows = new LinkedList<>();
 		for (final var o : selectedDataProvider.getAllScenarioResults()) {
 			final ScheduleModel typedResult = o.getTypedResult(ScheduleModel.class);
+			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(o.getScenarioDataProvider());
+			final CIIReferenceData ciiReferenceData = fleetModel.getCiiReferences();
 			final String scenarioName = o.getScenarioInstance().getName();
 			if (typedResult != null) {
 				final List<CargoEmissionAccountingReportModelV1> data = CargoEmissionAccountingReportJSONGenerator.createReportData(typedResult, //
+						ciiReferenceData,
 						o.equals(selectedDataProvider.getPinnedScenarioResult()), scenarioName);
 				rows.addAll(data);
 			}

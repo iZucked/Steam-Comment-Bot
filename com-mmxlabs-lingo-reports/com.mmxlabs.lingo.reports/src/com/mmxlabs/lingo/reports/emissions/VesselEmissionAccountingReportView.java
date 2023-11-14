@@ -19,6 +19,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lingo.reports.modelbased.AbstractSimpleModelBasedReportView;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
@@ -42,9 +45,12 @@ public class VesselEmissionAccountingReportView extends AbstractSimpleModelBased
 		for (final ScenarioResult scenarioResult : selectedDataProvider.getAllScenarioResults()) {
 			final ScheduleModel typedResult = scenarioResult.getTypedResult(ScheduleModel.class);
 			final String scenarioName = scenarioResult.getScenarioInstance().getName();
+			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioResult.getScenarioDataProvider());
+			final CIIReferenceData ciiReferenceData = fleetModel.getCiiReferences();
 			if (typedResult != null) {
 				final List<VesselEmissionAccountingReportModelV1> data = //
 						VesselEmissionAccountingReportJSONGenerator.createReportData(typedResult, //
+								ciiReferenceData,
 								scenarioResult.equals(selectedDataProvider.getPinnedScenarioResult()), scenarioName);
 				rows.addAll(data);
 			}

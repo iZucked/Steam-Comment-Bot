@@ -9,8 +9,12 @@ import java.time.Period;
 import java.time.Year;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.util.EmissionsUtil;
 
 public class CIIGradeFinder {
 
@@ -19,9 +23,9 @@ public class CIIGradeFinder {
 
 	private static final double FULL_YEAR_VALUE_INTERPOLATION = 1.0;
 
-	public static String findCIIGradeForScheduleVesselYear(final ScheduleModel scheduleModel, final Vessel vessel, final Year year) {
+	public static String findCIIGradeForScheduleVesselYear(final ScheduleModel scheduleModel, final @NonNull CIIReferenceData ciiReferenceData, final Vessel vessel, final Year year) {
 
-		final List<CIIAccumulatableEventModel> vesselEventEmissionModels = ModelUtilsCII.createCIIDataForVessel(scheduleModel, vessel);
+		final List<CIIAccumulatableEventModel> vesselEventEmissionModels = EmissionsUtil.createCIIDataForVessel(scheduleModel, ciiReferenceData, vessel);
 		final CumulativeCII cumulativeCII = new CumulativeCII(vessel);
 
 		for (final CIIAccumulatableEventModel model : vesselEventEmissionModels) {
@@ -49,6 +53,6 @@ public class CIIGradeFinder {
 				}
 			}
 		}
-		return UtilsCII.getLetterGrade(vessel, cumulativeCII.findCII(), year);
+		return EmissionsUtil.getLetterGrade(ciiReferenceData, vessel, cumulativeCII.findCII(), year);
 	}
 }

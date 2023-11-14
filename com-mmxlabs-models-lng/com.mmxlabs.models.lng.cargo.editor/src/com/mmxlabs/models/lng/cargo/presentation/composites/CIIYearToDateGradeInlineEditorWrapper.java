@@ -15,8 +15,12 @@ import org.eclipse.swt.widgets.Label;
 import com.mmxlabs.models.lng.cargo.CIIStartOptions;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.schedule.cii.UtilsCII;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.util.EmissionsUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -62,9 +66,13 @@ public class CIIYearToDateGradeInlineEditorWrapper extends ReadOnlyInlineEditorW
 		
 		final Vessel vessel = vesselCharter.getVessel();
 		final CIIStartOptions ciiStartOptions = vesselCharter.getCiiStartOptions();
-		if (vessel != null && ciiStartOptions != null && vesselCharter.getStartBy() != null) {
-			final double ciiValue = UtilsCII.findCII(vessel, ciiStartOptions.getYearToDateEmissions(), ciiStartOptions.getYearToDateDistance());
-			resultingCIIGradeLabelTest = UtilsCII.getLetterGrade(vessel, ciiValue, Year.from(vesselCharter.getStartBy()));
+		if (this.scenario instanceof final LNGScenarioModel lngScenarioModel) {
+			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
+			final CIIReferenceData ciiReferenceData = fleetModel.getCiiReferences();
+			if (vessel != null && ciiStartOptions != null && vesselCharter.getStartBy() != null) {
+				final double ciiValue = EmissionsUtil.findCII(vessel, ciiStartOptions.getYearToDateEmissions(), ciiStartOptions.getYearToDateDistance());
+				resultingCIIGradeLabelTest = EmissionsUtil.getLetterGrade(ciiReferenceData, vessel, ciiValue, Year.from(vesselCharter.getStartBy()));
+			}
 		}
 		editor.setGrade(resultingCIIGradeLabelTest);
 	}

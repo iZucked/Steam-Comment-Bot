@@ -54,6 +54,8 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
@@ -258,6 +260,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				final ScenarioResult scenarioResult = selectedDataProviderForGrade.getScenarioResult(sequence);
 				if (scenarioResult != null && scenarioResult.getRootObject() instanceof final LNGScenarioModel lngScenarioModel) {
 					final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioResult.getScenarioDataProvider());
+					final CIIReferenceData ciiReferenceData = fleetModel.getCiiReferences();
 					final Year year = Year.now();
 					Vessel vesselForGrade = null;
 					final VesselCharter vesselCharter = sequence.getVesselCharter();
@@ -271,7 +275,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						}
 					}
 					if (vesselForGrade != null) {
-						grade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, vesselForGrade, year);
+						grade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, ciiReferenceData, vesselForGrade, year);
 					}
 				}
 			}

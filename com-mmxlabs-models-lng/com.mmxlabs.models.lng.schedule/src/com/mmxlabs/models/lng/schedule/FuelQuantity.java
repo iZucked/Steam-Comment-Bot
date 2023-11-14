@@ -3,9 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.fleet.BaseFuel;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 
 /**
  * <!-- begin-user-doc -->

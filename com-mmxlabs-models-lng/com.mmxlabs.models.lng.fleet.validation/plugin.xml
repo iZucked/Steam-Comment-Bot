@@ -43,6 +43,25 @@
                      class="VesselRouteParameters">
                </target>
             </constraint>
+            
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.CIIReferenceDataConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.CIIReferenceDataConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="CII Reference Data sense check"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  General sense check validation for the CII reference data
+               </description>
+               <target
+                     class="CIIReferenceData">
+               </target>
+            </constraint>
           
             <constraint
                   class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"

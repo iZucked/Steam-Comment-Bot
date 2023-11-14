@@ -11,16 +11,14 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 public class CapacityUtils {
 
 	public static boolean hasViolation(final Event e) {
-		if (e instanceof PortVisit) {
-			final PortVisit portVisit = (PortVisit) e;
+		if (e instanceof final PortVisit portVisit) {
 			return !portVisit.getViolations().isEmpty();
 		}
 		return false;
 	}
 
 	public static int getViolationCount(final Event event) {
-		if (event instanceof PortVisit) {
-			final PortVisit portVisit = (PortVisit) event;
+		if (event instanceof final PortVisit portVisit) {
 			return portVisit.getViolations().size();
 		}
 		return 0;

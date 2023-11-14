@@ -14,6 +14,8 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CIIEndOptions;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -40,7 +42,9 @@ public class VesselCharterCIIEndOptionsDesiredGradeConstraint extends AbstractMo
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (vessel != null && rootObject instanceof final LNGScenarioModel lngScenarioModel) {
 				final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
-				final String ciiGrade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, vessel, vesselCharterEndYear);
+				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
+				final CIIReferenceData ciiReferenceData = fleetModel.getCiiReferences();
+				final String ciiGrade = CIIGradeFinder.findCIIGradeForScheduleVesselYear(scheduleModel, ciiReferenceData, vessel, vesselCharterEndYear);
 				final String desiredCIIGrade = ciiEndOptions.getDesiredCIIGrade();
 				if (ciiGrade != null && !ciiGrade.isBlank()//
 						&& desiredCIIGrade != null && !desiredCIIGrade.isBlank()) {

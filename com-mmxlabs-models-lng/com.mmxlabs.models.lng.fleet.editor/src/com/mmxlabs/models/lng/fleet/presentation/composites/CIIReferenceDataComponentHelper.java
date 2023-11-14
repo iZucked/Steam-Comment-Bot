@@ -89,7 +89,7 @@ public class CIIReferenceDataComponentHelper extends DefaultComponentHelper {
 					.withRMMaker((ch, rvp) -> new StringAttributeManipulator(fp.getFuelEmissionReference_IsoReference(), ch)) //
 					.build();
 
-			b.buildColumn("CF (t-CO/t Fuel)", fp.getFuelEmissionReference_Cf()) //
+			b.buildColumn("CF (t-CO2/t Fuel)", fp.getFuelEmissionReference_Cf()) //
 					.withWidth(125) //
 					.withRMMaker((ch, rvp) -> new NumericAttributeManipulator(fp.getFuelEmissionReference_Cf(), ch)) //
 					.build();

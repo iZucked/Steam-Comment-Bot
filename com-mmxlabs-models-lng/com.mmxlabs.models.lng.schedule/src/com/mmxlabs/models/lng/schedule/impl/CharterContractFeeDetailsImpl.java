@@ -6,19 +6,16 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import com.mmxlabs.models.lng.schedule.CharterContractFeeDetails;
 import com.mmxlabs.models.lng.schedule.MatchingContractDetails;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->

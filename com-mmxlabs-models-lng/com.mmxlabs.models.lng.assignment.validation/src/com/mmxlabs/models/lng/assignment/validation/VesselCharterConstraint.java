@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
-import java.time.Year;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.cargo.CIIEndOptions;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -22,13 +20,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.cii.CIIComparator;
-import com.mmxlabs.models.lng.schedule.cii.CIIGradeFinder;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;

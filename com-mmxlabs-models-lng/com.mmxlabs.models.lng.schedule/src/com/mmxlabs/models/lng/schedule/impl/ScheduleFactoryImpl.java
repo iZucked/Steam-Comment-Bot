@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.schedule.*;
 import java.util.Calendar;
 import java.util.Map;
-
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -17,31 +15,57 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
+import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
+import com.mmxlabs.models.lng.schedule.CharterContractFeeDetails;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
+import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails;
+import com.mmxlabs.models.lng.schedule.LumpSumDetails;
+import com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.NonShippedIdle;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
+import com.mmxlabs.models.lng.schedule.NotionalJourneyBallastBonusTermDetails;
+import com.mmxlabs.models.lng.schedule.NotionalJourneyDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.OriginPortRepositioningFeeTermDetails;
+import com.mmxlabs.models.lng.schedule.OtherPNL;
+import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Purge;
+import com.mmxlabs.models.lng.schedule.SandboxReference;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -49,9 +73,11 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocationType;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.TransferRecordPNLDetails;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 

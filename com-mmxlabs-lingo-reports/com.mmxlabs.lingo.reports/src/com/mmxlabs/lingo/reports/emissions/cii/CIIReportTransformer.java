@@ -26,6 +26,8 @@ import com.mmxlabs.lingo.reports.emissions.cii.managers.CIIScenarioColumnManager
 import com.mmxlabs.lingo.reports.emissions.cii.managers.CIIVesselColumnManager;
 import com.mmxlabs.lingo.reports.emissions.cii.managers.CIIYearColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.models.lng.fleet.CIIReferenceData;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -34,7 +36,7 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.cii.CIIAccumulatableEventModel;
 import com.mmxlabs.models.lng.schedule.cii.CumulativeCII;
-import com.mmxlabs.models.lng.schedule.cii.UtilsCII;
+import com.mmxlabs.models.lng.schedule.util.EmissionsUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class CIIReportTransformer implements AbstractSimpleTabularReportTransformer<CIIGradesData> {
@@ -69,8 +71,10 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 		for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> scenarioPair : otherPairsWithMaybePinnedOneAsWell) {
 			final ScenarioResult scenarioResult = scenarioPair.getSecond();
 			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioResult.getScenarioDataProvider());
+			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioResult.getScenarioDataProvider());
+			final CIIReferenceData ciiReferenceData = fleetModel.getCiiReferences();
 			
-			final List<? extends CIIAccumulatableEventModel> vesselEventEmissionModels = VesselEmissionAccountingReportJSONGenerator.createReportData(scheduleModel, false, "-");
+			final List<? extends CIIAccumulatableEventModel> vesselEventEmissionModels = VesselEmissionAccountingReportJSONGenerator.createReportData(scheduleModel, ciiReferenceData, false, "-");
 
 			final Map<Vessel, Map<Year, CumulativeCII>> vesselYearCIIs = new HashMap<>();
 			for (final CIIAccumulatableEventModel model : vesselEventEmissionModels) {
@@ -97,7 +101,7 @@ public class CIIReportTransformer implements AbstractSimpleTabularReportTransfor
 			vesselYearCIIs.forEach((vessel, accumulatedCIIs) -> {
 				final Map<Year, String> vesselGradesMap = new HashMap<>();
 				accumulatedCIIs.forEach((year, cumulativeCII) -> {
-					final String letterGrade = UtilsCII.getLetterGrade(vessel, cumulativeCII.findCII(), year);
+					final String letterGrade = EmissionsUtil.getLetterGrade(ciiReferenceData, vessel, cumulativeCII.findCII(), year);
 					vesselGradesMap.put(year, letterGrade);
 				});
 				outputData.add(new CIIGradesData(vessel, vesselGradesMap, scenarioResult));

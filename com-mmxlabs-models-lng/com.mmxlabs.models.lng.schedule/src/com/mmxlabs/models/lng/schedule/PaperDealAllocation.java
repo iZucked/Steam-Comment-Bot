@@ -6,9 +6,9 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.lng.cargo.PaperDeal;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 
 /**
  * <!-- begin-user-doc -->

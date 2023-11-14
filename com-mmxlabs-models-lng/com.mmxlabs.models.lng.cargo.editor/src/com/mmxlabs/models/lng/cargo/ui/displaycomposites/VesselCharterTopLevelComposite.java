@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselCharterDetailComposite.VesselCharterDetailGroup;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIEndOptionsDetailComposite;
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.CIIStartOptionsDetailComposite;
-import com.mmxlabs.models.lng.cargo.ui.displaycomposites.cii.YearToDateGradeCIIDisplayComposite;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -146,7 +145,6 @@ public class VesselCharterTopLevelComposite extends DefaultTopLevelComposite {
 		ciiStartOptions = new CIIStartOptionsDetailComposite(groupForCIIStartOptionsStuff, SWT.NONE, toolkit);
 		ciiStartOptions.setCommandHandler(commandHandler);
 		ciiStartOptions.display(dialogContext, root, getCIIStartOptions(object), range, dbc);
-		//new YearToDateGradeCIIDisplayComposite(groupForCIIStartOptionsStuff, object).setVisible(true);
 		
 		//
 		// CII End Options Stuff

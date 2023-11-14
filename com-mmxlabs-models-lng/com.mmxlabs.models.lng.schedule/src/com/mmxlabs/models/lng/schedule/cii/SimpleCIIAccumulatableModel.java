@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Event;
 
-public class VerySImpleCIIAccumulatableModel implements CIIAccumulatableEventModel {
+public class SimpleCIIAccumulatableModel implements CIIAccumulatableEventModel {
 	
 	private double totalEmissionForCII;
 	private LocalDate eventStartForCII;

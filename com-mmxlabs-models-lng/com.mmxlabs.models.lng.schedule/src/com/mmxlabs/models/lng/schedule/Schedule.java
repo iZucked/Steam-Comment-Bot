@@ -3,10 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.cargo.PaperDeal;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**

@@ -9,7 +9,6 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.models.lng.schedule,
  com.mmxlabs.models.lng.schedule.cii,
- com.mmxlabs.models.lng.schedule.emissions,
  com.mmxlabs.models.lng.schedule.impl,
  com.mmxlabs.models.lng.schedule.util
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",

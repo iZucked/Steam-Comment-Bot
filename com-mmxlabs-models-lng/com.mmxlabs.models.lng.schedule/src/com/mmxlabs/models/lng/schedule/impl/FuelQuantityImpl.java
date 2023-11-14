@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.fleet.BaseFuel;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -16,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;

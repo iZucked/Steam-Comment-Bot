@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.schedule.cii;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class CIIComparator implements Comparator<String> {
 

@@ -3,16 +3,16 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
+import java.time.ZonedDateTime;
+
+import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
-
-import java.time.ZonedDateTime;
-
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

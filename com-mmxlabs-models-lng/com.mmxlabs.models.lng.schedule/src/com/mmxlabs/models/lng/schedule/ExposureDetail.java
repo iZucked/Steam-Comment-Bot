@@ -6,11 +6,12 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.lng.types.DealType;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.types.DealType;
 
 /**
  * <!-- begin-user-doc -->

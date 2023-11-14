@@ -6,18 +6,17 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
-import com.mmxlabs.models.lng.schedule.ExposureDetail;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import com.mmxlabs.models.lng.types.DealType;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.schedule.ExposureDetail;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.types.DealType;
 
 /**
  * <!-- begin-user-doc -->
