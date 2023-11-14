@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -77,7 +78,7 @@ public class SourcePortHighlighter extends ParameterisedColourScheme {
 		} else if (input instanceof final @NonNull Schedule schedule) {
 			return getOptions(schedule);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	private List<NamedObject> getOptions(final @NonNull Schedule schedule) {
