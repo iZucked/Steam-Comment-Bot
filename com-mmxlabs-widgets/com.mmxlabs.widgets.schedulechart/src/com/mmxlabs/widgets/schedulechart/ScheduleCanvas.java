@@ -135,7 +135,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		
 		addMouseWheelListener(e -> {
 			// TODO: change MOD1 and MOD2 to be dependent on settings object
-			if (e.stateMask == SWT.MOD1) {
+			if (e.stateMask == SWT.MOD1) { // CTRL + scroll wheel
 				timeScale.zoomBy(new Point(e.x, e.y), e.count * 5, e.count > 0);
 			} else if (e.stateMask == SWT.MOD2) { // SHIFT  + scroll wheel
 				horizontalScrollbarHandler.handle(e);
