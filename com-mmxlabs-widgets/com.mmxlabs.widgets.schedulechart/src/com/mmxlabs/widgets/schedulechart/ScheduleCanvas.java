@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -88,6 +89,10 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.filterSupport = new ScheduleFilterSupport(canvasState, settings);
 		
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
+		
+		getVerticalBar().setIncrement(10);
+		getVerticalBar().addListener(SWT.Selection, e -> redraw());
+
 		this.eventSelectionHandler = new EventSelectionHandler(this);
 		this.eventHoverHandler = new EventHoverHandler(this, canvasState);
 		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, settings, eventHoverHandler);
@@ -102,9 +107,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		
 		addMouseWheelListener(e -> {
 			// TODO: change MOD1 and MOD2 to be dependent on settings object
-			if (e.stateMask == SWT.MOD1) {
-				timeScale.zoomBy(new Point(e.x, e.y), e.count * 5, e.count > 0);
-			} else if (e.stateMask == SWT.MOD2) {
+			if (e.stateMask == SWT.MOD1) { // CTRL + scroll wheel
+				timeScale.zoomBy(new Point(e.x, e.y), e.count, e.count > 0);
+			} else if (e.stateMask == SWT.MOD2) { // SHIFT + scroll wheel
 				horizontalScrollbarHandler.handle(e);
 			} else {
 				// vertical scroll
@@ -118,7 +123,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 				// empty for now
 			}
 			
-			@Override
+			@Override	
 			public void keyPressed(KeyEvent e) {
 				horizontalScrollbarHandler.handle(e);
 				redraw();
@@ -144,13 +149,16 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		Rectangle originalBounds = getClientArea();
 		canvasState.setOriginalBounds(originalBounds);
 		
+		// Adjust bounds for vertical scroll. This moves the bound my the scroll quantity and increases the bounds height so the visible area is the same.
 		final int verticalScroll = getVerticalBar().isVisible() ? getVerticalBar().getSelection() : 0;
 		Rectangle bounds = new Rectangle(originalBounds.x, originalBounds.y - verticalScroll, originalBounds.width, originalBounds.height + verticalScroll);
 		
+		// Move the start of the schedule area across by the width of the labels.
 		final int rowHeaderWidth = calculateRowHeaderWidth(resolver);
 		Rectangle mainBounds = new Rectangle(bounds.x + rowHeaderWidth, bounds.y, bounds.width - rowHeaderWidth, bounds.height);
 		canvasState.setMainBounds(mainBounds);
-
+		// Make sure the h-scroll thumb is updated.
+		horizontalScrollbarHandler.updateWidth(mainBounds.width);
 		timeScale.setBounds(canvasState.getMainBounds());
 		drawableTimeScale.setBounds(mainBounds);
 		drawableTimeScale.setLockedHeaderY(originalBounds.y);
@@ -161,13 +169,34 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		// Draw content
 		canvasState.setLastDrawnContent(getDrawableRows(resolver));
 		canvasState.getLastDrawnContent().forEach(r -> drawer.drawOne(r, resolver));
+		// Now we have drawn the content try to determine the overall height for the scroll bar
+		// TODO: Is there a better way?
+		AtomicInteger maxHeight = new AtomicInteger(0);
+		canvasState.getLastDrawnContent().forEach(r -> {
+			int currentMaxHeight = maxHeight.get();
+			// Get position the object, add the height and add the current scroll offset.
+			int objectHeight = r.getBounds().y + r.getActualHeight() + verticalScroll;
+			if (objectHeight > currentMaxHeight) {
+				maxHeight.set(objectHeight);
+			}
+
+		});
+		// TODO: Should the row header be part of this?
+		
+		// Only update if needed
+		if (maxHeight.get() != getVerticalBar().getMaximum()) {
+			getVerticalBar().setMaximum(maxHeight.get());
+		}
+		if (getVerticalBar().getThumb() != originalBounds.height) {
+			getVerticalBar().setThumb(originalBounds.height);
+		}
 		
 		// Draw labels
 		getDrawableLabels(canvasState.getLastDrawnContent(), resolver).forEach(l -> drawer.drawOne(l, resolver));
 
 		// Draw header
 		drawer.drawOne(drawableTimeScale.getHeaders(), resolver);
-		
+
 		// Draw row headers
 		canvasState.setLastDrawnRowHeaders(getDrawableRowHeaders(canvasState.getLastDrawnContent(), rowHeaderWidth, resolver));
 		canvasState.getLastDrawnRowHeaders().forEach(rh -> drawer.drawOne(rh, resolver));

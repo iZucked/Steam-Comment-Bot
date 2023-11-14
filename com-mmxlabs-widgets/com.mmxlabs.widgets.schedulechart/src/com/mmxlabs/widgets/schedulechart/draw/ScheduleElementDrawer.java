@@ -36,8 +36,8 @@ public interface ScheduleElementDrawer {
 		if (d.getColourFilter().isPresent()) {
 			applyColourFilter(d.getColourFilter().get());
 		}
-
-		for (BasicDrawableElement b: d.getBasicDrawableElements(queryResolver)) {
+		List<BasicDrawableElement> basicElements = d.getBasicDrawableElements(queryResolver);
+		for (BasicDrawableElement b: basicElements) {
 			drawOne(b);
 		}
 		

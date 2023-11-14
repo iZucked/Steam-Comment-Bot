@@ -102,7 +102,7 @@ public class RowFilterSupportHandler implements MenuDetectListener, MouseListene
 		Optional<DrawableScheduleChartRowHeader> optRowHeader = canvas.findRowHeader(e.x, e.y);
 		if (optRowHeader.isPresent()) {
 			DrawableCheckboxButton btn =  optRowHeader.get().getCheckbox();
-			if (btn.getBounds().contains(e.x, e.y)) {
+			if (btn != null && btn.getBounds().contains(e.x, e.y)) {
 				btn.setChecked(!btn.getChecked());
 			}
 		}

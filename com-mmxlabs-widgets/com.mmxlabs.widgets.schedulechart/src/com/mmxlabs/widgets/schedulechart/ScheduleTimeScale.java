@@ -6,6 +6,7 @@ package com.mmxlabs.widgets.schedulechart;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
@@ -17,18 +18,25 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.mmxlabs.common.Pair;
 
 public class ScheduleTimeScale {
-	
+	/**
+	 * The date at the start of the visible range, after the row headers
+	 */
 	private LocalDateTime startTime;
 	private int startPixelOffset = 0;
+	
+	private final int scrollSensitivity = 5;
 
 	private TimeScaleUnitWidths unitWidths;
+	/**
+	 * The drawing bounds within the canvas. This will be shifted on the x-axis by the row headers and shifted and extended y-axis depending on the y scroll (permitting a negative y value) 
+	 */
 	private Rectangle bounds;
 	
 	private final IScheduleChartContentBoundsProvider boundsProvider;
 	private final IScheduleChartEventEmitter eventEmitter;
 	
 	public ScheduleTimeScale(IScheduleChartContentBoundsProvider boundsProvider, IScheduleChartEventEmitter eventEmitter, IScheduleChartSettings settings) {
-		this.startTime = ((LocalDateTime) TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY).adjustInto(LocalDateTime.now())).minusDays(1).minusYears(1);
+		this.startTime = ((LocalDateTime) TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY).adjustInto(LocalDate.now().atStartOfDay())).minusDays(1).minusYears(1);
 		// TODO: make this customisable with the settings object
 		this.unitWidths = calculateUnitWidths(new ScheduleTimeScaleSmoothZoomLevel(ScheduleTimeScaleZoomLevel.TS_ZOOM_DAY_NORMAL), 3);
 		this.boundsProvider = boundsProvider;
@@ -52,7 +60,7 @@ public class ScheduleTimeScale {
 	}
 
 	public void zoomBy(Point mouseLoc, Integer count, boolean isZoomIn) {
-		internalZoomBy(mouseLoc, count, isZoomIn);
+		internalZoomBy(mouseLoc, count * scrollSensitivity, isZoomIn);
 		eventEmitter.fireScheduleEvent(l -> l.timeScaleZoomLevelChanged(bounds, boundsProvider));
 	}
 	
@@ -75,6 +83,7 @@ public class ScheduleTimeScale {
 
 	public void fitSelection(int startX, int endX) {
 		internalZoomToFitXBounds(startX, endX);
+		eventEmitter.fireScheduleEvent(l -> l.timeScaleZoomLevelChanged(bounds, boundsProvider));
 	}
 	
 	public LocalDateTime getStartTime() {

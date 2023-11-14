@@ -48,7 +48,7 @@ public class PositionsSeqenceElements {
 	 */
 	public static LocalDateTime getEventTime(Object element) {
 		if (element instanceof final OpenSlotAllocation openSlotAllocation) {
-			return LocalDateTime.of(openSlotAllocation.getSlot().getWindowStart(), LocalTime.now());
+			return openSlotAllocation.getSlot().getSchedulingTimeWindow().getStart().toLocalDateTime();
 		}
 		if (element instanceof final SlotVisit slotVisit) {
 			return slotVisit.getStart().toLocalDateTime();

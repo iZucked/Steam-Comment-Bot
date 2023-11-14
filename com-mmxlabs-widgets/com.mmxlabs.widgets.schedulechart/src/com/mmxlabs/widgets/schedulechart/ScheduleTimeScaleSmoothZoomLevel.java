@@ -8,17 +8,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.function.UnaryOperator;
 
 public class ScheduleTimeScaleSmoothZoomLevel implements ITimeScaleZoomLevel {
-	
+
 	private static final int MAX_D = 100;
 	private static final int MIN_D = 0;
 
 	/*
-	 * Distance from the current zoom level.
-	 * 0 = current, 100 = next.
+	 * Distance from the current zoom level. 0 = current, 100 = next.
 	 */
 	private int d = 0;
 	private ScheduleTimeScaleZoomLevel zoomLevel;
-	
+
 	public ScheduleTimeScaleSmoothZoomLevel(ScheduleTimeScaleZoomLevel zoomLevel) {
 		this.zoomLevel = zoomLevel;
 	}
@@ -62,7 +61,7 @@ public class ScheduleTimeScaleSmoothZoomLevel implements ITimeScaleZoomLevel {
 		if (isMaxZoom()) {
 			return zoomLevel.getScalingFunction();
 		}
-		
+
 		return w -> {
 			int curr = zoomLevel.getScalingFunction().apply(w);
 			int next = zoomLevel.nextIn().getScalingFunction().apply(w);
@@ -73,10 +72,15 @@ public class ScheduleTimeScaleSmoothZoomLevel implements ITimeScaleZoomLevel {
 	public ScheduleTimeScaleSmoothZoomLevel zoomBy(Integer count) {
 		int levelsToZoom = Math.abs(count) / MAX_D;
 		int newD = d + count % MAX_D;
-		
+
 		levelsToZoom += Math.abs((newD < 0) ? -1 : newD / MAX_D);
 		boolean zoomIn = count > 0;
-
+		// Simon's mouse wheel gets a count of 15, resulting in levelsToZoom being 0.
+		// So make sure we zoom by one level. 
+		// TODO: Is it different on a touchpad?
+		if (levelsToZoom == 0 && count != 0) {
+			levelsToZoom = zoomIn ? 1 : -1;
+		}
 		while (levelsToZoom > 0 && !(zoomIn && isMaxZoom())) {
 			if (zoomIn) {
 				zoomLevel = (ScheduleTimeScaleZoomLevel) zoomLevel.nextIn();
@@ -88,7 +92,7 @@ public class ScheduleTimeScaleSmoothZoomLevel implements ITimeScaleZoomLevel {
 			}
 			levelsToZoom--;
 		}
-		
+
 		d = isMaxZoom() ? 0 : Math.floorMod(newD, MAX_D);
 		return this;
 	}

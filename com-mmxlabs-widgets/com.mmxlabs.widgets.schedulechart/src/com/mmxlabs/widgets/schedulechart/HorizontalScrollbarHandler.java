@@ -17,6 +17,8 @@ public class HorizontalScrollbarHandler {
 
 	private final ScrollBar hBar;
 	private final ScheduleTimeScale timeScale;
+	
+	private final int scrollSensitivity = 10;
 
 	private int lastScrollPosition;
 
@@ -25,12 +27,14 @@ public class HorizontalScrollbarHandler {
 		this.timeScale = timeScale;
 
 		hBar.addListener(SWT.Selection, this::handle);
+		hBar.setIncrement(scrollSensitivity);
 		hBar.setMaximum(hBar.getMaximum() * getUnitWidthForCurrentZoomLevel());
 	}
 
 	void handle(Event e) {
 		int offset = hBar.getSelection() - lastScrollPosition;
 		handle(offset, false);
+		hBar.getParent().redraw();
 	}
 
 	void handle(MouseEvent e) {
@@ -45,7 +49,8 @@ public class HorizontalScrollbarHandler {
 		int increment = getUnitWidthForCurrentZoomLevel();
 		int offset = (e.keyCode == SWT.ARROW_RIGHT) ? increment : -increment;
 		int newPos = hBar.getSelection() + offset;
-		if (newPos >= hBar.getMaximum() || newPos < hBar.getMinimum()) {
+		// Check expected position is within bounds
+		if (newPos >= (hBar.getMaximum() - hBar.getThumb()) || newPos < hBar.getMinimum()) {
 			return;
 		}
 
@@ -72,6 +77,10 @@ public class HorizontalScrollbarHandler {
 				hBar.setMaximum(max);
 				hBar.setSelection(pos);
 				hBar.setVisible(true);
+				// Adjust the scroll bar thumb to the correct size
+				hBar.setThumb(timeScale.getBounds().width);
+				// Update the scroll position for new zoom level
+				lastScrollPosition = pos;
 			}
 		};
 	}
@@ -83,12 +92,21 @@ public class HorizontalScrollbarHandler {
 
 		int actualPixelsScrolled = timeScale.scroll(pixelOffset, roundToBoundaries);
 		lastScrollPosition = lastScrollPosition + actualPixelsScrolled;
-		hBar.getParent().redraw();
+		//hBar.getParent().redraw();
 	}
 	
 	private int getUnitWidthForCurrentZoomLevel() {
 		// assumes width unit is a regular unit
 		return timeScale.getUnitWidthFromRegularUnit(timeScale.getUnitWidths().zoomLevel().getWidthUnit()).get();
 	}
-	
+
+	/**
+	 * Call when bounds change to update the scroll bar thumb size
+	 * 
+	 * @param width
+	 */
+	public void updateWidth(int width) {
+		hBar.setThumb(width);
+	}
+
 }
