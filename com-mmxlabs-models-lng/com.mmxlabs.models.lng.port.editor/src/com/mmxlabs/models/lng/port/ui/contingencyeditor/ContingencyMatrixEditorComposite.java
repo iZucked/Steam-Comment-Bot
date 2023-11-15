@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -262,6 +263,11 @@ public class ContingencyMatrixEditorComposite extends DefaultDetailComposite {
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		this.object = object;
+		final EClass eClass = object.eClass();
+
+		if (layoutProvider == null) {
+			layoutProvider = createLayoutProvider(eClass);
+		}
 		setLayout(layoutProvider.createDetailLayout(root, object));
 
 		createControls(dialogContext, root, object, dbc);
