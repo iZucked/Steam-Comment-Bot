@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import javax.inject.Inject;
-
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
@@ -50,15 +48,29 @@ import org.osgi.framework.FrameworkUtil;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastIdleEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastJourneyEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterLengthEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterOutEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DryDockEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterLengthEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterOutEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenIdleEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenJourneyEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LateLoadEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LoadEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.MaintenanceEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.BuySellDrawableScheduleEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionStateType;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionType;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.highlighters.ParameterisedColourScheme;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
@@ -81,22 +93,6 @@ import com.mmxlabs.widgets.schedulechart.providers.ILegendItem;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastIdleEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastJourneyEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterLengthEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterOutEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DryDockEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterLengthEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterOutEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenIdleEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenJourneyEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LateLoadEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LoadEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.MaintenanceEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.BuySellDrawableScheduleEvent;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionStateType;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionType;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceClassification;
 
 
 public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport implements IPreferenceChangeListener {
@@ -138,6 +134,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private @NonNull ENinteyDayNonShippedRotationSelection rotationSelection = ENinteyDayNonShippedRotationSelection.OFF;
 	private final @NonNull Set<Contract> fobRotationSelectedContracts = new HashSet<>();
 	private final @NonNull Set<Predicate<NonShippedSequence>> fobRotationsToShow = new HashSet<>();
+	
 
 	@Inject
 	private Iterable<INinetyDayHighlighterExtension> highlighterExtensionPoints;
@@ -293,7 +290,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
-		manager.add(highlightAction);		
+		manager.add(highlightAction);
 		manager.add(labelMenuAction);
 		manager.add(filterMenuAction);
 		manager.add(sortMenuAction);
@@ -331,7 +328,6 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		if (scenarioComparisonService != null) {
 			scenarioComparisonService.removeListener(scenariosServiceListener);
 		}
-		viewer.getCanvas().dispose();
 		super.dispose();
 	}
 

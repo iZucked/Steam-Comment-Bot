@@ -13,7 +13,6 @@ public record ScheduleChartProviders( //
 		IScheduleChartSortingProvider sortingProvider, //
 		IScheduleChartRowsDataProvider scheduleChartSizesProvider, //
 		IScheduleEventStylingProvider eventStylingProvider, //
-		IDrawableLegendProvider drawableLegendProvider //
+		IDrawableLegendProvider drawableLegendProvider
 ) {
-
 }

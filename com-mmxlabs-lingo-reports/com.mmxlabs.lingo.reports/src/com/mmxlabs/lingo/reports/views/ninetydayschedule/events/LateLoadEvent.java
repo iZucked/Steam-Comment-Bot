@@ -36,7 +36,7 @@ public class LateLoadEvent extends LoadEvent {
 	protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver) {
 		List<BasicDrawableElement> res = new ArrayList<>();
 
-		if (!se.isVisible()) {
+		if (!getScheduleEvent().isVisible()) {
 			return res;
 		}
 		
@@ -45,8 +45,8 @@ public class LateLoadEvent extends LoadEvent {
 		
 		res.add(BasicDrawableElements.Rectangle.withBounds(bounds)
 				.bgColour(getBackgroundColour())
-				.border(getBorderColour(), getBorderThickness(selectionState), getIsBorderInner())
-				.alpha(getAlpha(selectionState))
+				.border(getBorderColour(), getBorderThickness(getSelectionState()), getIsBorderInner())
+				.alpha(getAlpha(getSelectionState()))
 				.create());
 
 		return res;

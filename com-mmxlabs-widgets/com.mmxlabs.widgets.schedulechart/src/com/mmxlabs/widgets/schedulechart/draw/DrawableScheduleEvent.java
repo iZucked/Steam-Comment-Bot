@@ -15,12 +15,11 @@ import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
 public abstract class DrawableScheduleEvent extends DrawableElement {
-	
-	protected final ScheduleEvent se;
-	protected ScheduleEventSelectionState selectionState;
-	
-	
-	protected DrawableScheduleEvent(ScheduleEvent se, Rectangle bounds, boolean noneSelected) {
+
+	private final ScheduleEvent se;
+	private final ScheduleEventSelectionState selectionState;
+
+	protected DrawableScheduleEvent(final ScheduleEvent se, final Rectangle bounds, final boolean noneSelected) {
 		this.se = se;
 		this.selectionState = noneSelected ? ScheduleEventSelectionState.SELECTED : se.getSelectionState();
 		setBounds(bounds);
