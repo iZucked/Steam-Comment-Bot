@@ -4,15 +4,14 @@
  */
 package com.mmxlabs.widgets.schedulechart;
 
-import java.util.Collection;
-import java.util.List;
-
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Rectangle;
 
+@NonNullByDefault
 public interface IScheduleChartEventListener {
 	
-	void eventSelected(ScheduleEvent e, Collection<ScheduleEvent> allSelectedEvents, MouseEvent me);
+	void eventSelected(ScheduleEvent e, MouseEvent me);
 	
 	void annotationEdited(ScheduleEvent se, ScheduleEventAnnotation old, ScheduleEventAnnotation updated);
 

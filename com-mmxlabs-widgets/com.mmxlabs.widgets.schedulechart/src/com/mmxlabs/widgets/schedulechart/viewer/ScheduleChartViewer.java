@@ -5,7 +5,7 @@
 package com.mmxlabs.widgets.schedulechart.viewer;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -30,30 +31,31 @@ import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 
 public class ScheduleChartViewer<T> extends TypedViewer<T> {
-	
+
 	protected final ScheduleCanvas canvas;
 	protected final IScheduleEventProvider<T> eventProvider;
 	private IScheduleChartModelUpdater modelUpdater;
 	private IElementComparer comparer;
 	private ISelection selection;
-	
+
 	private T input;
 	private Map<Object, ScheduleEvent> internalDataMap = new HashMap<>();
-	
+
 	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider, IScheduleChartModelUpdater modelUpdater) {
 		this(new ScheduleCanvas(parent, providers), eventProvider, modelUpdater);
 	}
-	
-	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider, IScheduleChartModelUpdater modelUpdater, IScheduleChartSettings settings) {
+
+	public ScheduleChartViewer(final Composite parent, ScheduleChartProviders providers, IScheduleEventProvider<T> eventProvider, IScheduleChartModelUpdater modelUpdater,
+			IScheduleChartSettings settings) {
 		this(new ScheduleCanvas(parent, providers, settings), eventProvider, modelUpdater);
 	}
-	
+
 	public ScheduleChartViewer(final ScheduleCanvas canvas, IScheduleEventProvider<T> eventProvider, IScheduleChartModelUpdater modelUpdater) {
 		this.canvas = canvas;
 		this.eventProvider = eventProvider;
 		this.modelUpdater = modelUpdater;
 		this.input = null;
-		
+
 		hookControl(canvas);
 		initListeners();
 	}
@@ -62,14 +64,13 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	public void typedSetInput(T input) {
 		Control control = getControl();
 		if (control == null || control.isDisposed()) {
-			throw new IllegalStateException(
-					"Need an underlying widget to be able to set the input." + //$NON-NLS-1$
-							"(Has the widget been disposed?)"); //$NON-NLS-1$
+			throw new IllegalStateException("Need an underlying widget to be able to set the input." + //$NON-NLS-1$
+					"(Has the widget been disposed?)"); //$NON-NLS-1$
 		}
-		
+
 		T oldInput = getInput();
 		this.input = input;
-		
+
 		// Call hook
 		typedInputChanged(input, oldInput);
 	}
@@ -80,7 +81,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 
 		// Always pass in the same events for the internal map and to the classify function, otherwise selection won't work correctly.
 		final List<ScheduleEvent> events = eventProvider.getEvents(input);
-		
+
 		// Initialise internal map
 		internalDataMap.clear();
 		events.forEach(e -> internalDataMap.put(e.hasElement() ? e.getElement() : e.getData(), e));
@@ -125,7 +126,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	public Control getControl() {
 		return canvas;
 	}
-	
+
 	public ScheduleCanvas getCanvas() {
 		return canvas;
 	}
@@ -153,7 +154,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 		setSelectionToCanvas(selection, reveal);
 		fireSelectionChanged(new SelectionChangedEvent(this, selection));
 	}
-	
+
 	private void setSelectionToCanvas(ISelection selection, boolean reveal) {
 		if (selection instanceof IStructuredSelection ss) {
 			setSelectionToCanvas(ss.toList(), reveal);
@@ -165,8 +166,9 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	private void setSelectionToCanvas(List<?> l, boolean reveal) {
 		List<ScheduleEvent> selectedEvents = new ArrayList<>(l.size());
 
-		for (final var o: l) {
-			if (o == null) continue;
+		for (final var o : l) {
+			if (o == null)
+				continue;
 			if (internalDataMap.containsKey(o)) {
 				selectedEvents.add(internalDataMap.get(o));
 			} else if (getComparer() != null) {
@@ -178,7 +180,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 				}
 			}
 		}
-		
+
 		canvas.setSelectedEvents(selectedEvents);
 	}
 
@@ -186,28 +188,32 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	protected void hookControl(Control control) {
 		control.addDisposeListener(this::handleDispose);
 	}
-	
+
 	protected void handleDispose(DisposeEvent e) {
 		// Do nothing for now
 	}
 
 	private void initListeners() {
 		IScheduleChartEventListener l = new ScheduleChartEventListenerAdapter() {
-			
+
 			@Override
-			public void eventSelected(ScheduleEvent event, Collection<ScheduleEvent> allSelectedEvents, MouseEvent me) {
-				final List<Object> selectedObjects = allSelectedEvents.stream().map(e -> e.hasElement() ? e.getElement() : e.getData()).toList();
+			public void eventSelected(ScheduleEvent event, MouseEvent me) {
+				final List<Object> selectedObjects = new ArrayList<>();
+				selectedObjects.add(event.hasElement() ? event.getElement() : event.getData());
+				if ((me.stateMask & SWT.MOD1) != 0 && getSelection() instanceof IStructuredSelection sel) {
+					selectedObjects.addAll(Arrays.asList(sel.toArray()));
+				}
 				final StructuredSelection s = new StructuredSelection(selectedObjects, comparer);
 				setSelection(s);
 			}
-			
+
 			@Override
 			public void annotationEdited(ScheduleEvent se, ScheduleEventAnnotation old, ScheduleEventAnnotation updated) {
-				modelUpdater.annotationEdited(se.getData(), updated.getData(), updated.getDates().get(0), updated.getDates().get(1));		
+				modelUpdater.annotationEdited(se.getData(), updated.getData(), updated.getDates().get(0), updated.getDates().get(1));
 			}
-			
+
 		};
-		
+
 		canvas.addScheduleEventListener(l);
 	}
 
@@ -218,5 +224,5 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 	public void setComparer(IElementComparer comparer) {
 		this.comparer = comparer;
 	}
-	
+
 }

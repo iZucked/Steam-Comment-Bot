@@ -28,7 +28,8 @@ public class EventSelectionHandler implements MouseListener {
 		
 		if (optClickedEvent.isPresent()) {
 			ScheduleEvent clickedEvent = optClickedEvent.get();
-			canvas.fireScheduleEvent(l -> l.eventSelected(clickedEvent, List.of(clickedEvent), e));
+			
+			canvas.fireScheduleEvent(l -> l.eventSelected(clickedEvent, e));
 		}
 	}
 

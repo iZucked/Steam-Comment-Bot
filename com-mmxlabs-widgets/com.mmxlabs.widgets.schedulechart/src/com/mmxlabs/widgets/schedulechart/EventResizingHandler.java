@@ -101,7 +101,7 @@ public class EventResizingHandler implements MouseListener, MouseMoveListener {
 		resizing = true;
 		startX = e.x;
 		beforeResize = new ScheduleEventAnnotation(hoveredResizableAnnotation.get().getAnnotation());
-		canvas.fireScheduleEvent(l -> l.eventSelected(hoveredResizableAnnotation.get().getScheduleEvent(), List.of(hoveredResizableAnnotation.get().getScheduleEvent()), e));
+		canvas.fireScheduleEvent(l -> l.eventSelected(hoveredResizableAnnotation.get().getScheduleEvent(), e));
 		eventHoverHandler.disable();
 	}
 
