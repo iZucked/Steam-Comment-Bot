@@ -6,15 +6,19 @@ package com.mmxlabs.widgets.schedulechart;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
@@ -71,6 +75,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	
 	private final List<IScheduleChartEventListener> listeners = new ArrayList<>();
 
+	private final Map<Color, Color> hiddenElementColourCache = new HashMap<>();
+	private final UnaryOperator<Color> hiddenElementColourFilter = c -> hiddenElementColourCache.computeIfAbsent(c, ScheduleChartColourUtils::getHiddenElementsFilter);
+	
 	public ScheduleCanvas(Composite parent, ScheduleChartProviders providers) {
 		this(parent, providers, new DefaultScheduleChartSettings());
 	}
@@ -107,6 +114,14 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		initListeners();
 	}
 
+	@Override
+	public void dispose() {
+		// Make sure we clean up any colours we create
+		hiddenElementColourCache.values().forEach(Color::dispose);
+		hiddenElementColourCache.clear();
+		super.dispose();
+	}
+	
 	private void initListeners() {
 		addPaintListener(e -> ScheduleCanvas.this.repaint(e.gc));
 		
@@ -137,8 +152,6 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		
 		// to listen for zoom events and adjust the scrollbar
 		addScheduleEventListener(horizontalScrollbarHandler.getEventListener());
-		
-		
 	}
 
 	protected void repaint(GC gc) {
@@ -304,7 +317,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 			}
 			drawableRow.setBounds(new Rectangle(mainBounds.x, y, mainBounds.width, currentRowHeight));
 			if (canvasState.getScheduleChartMode() == ScheduleChartMode.FILTER && canvasState.getHiddenRowKeys().contains(scr.getKey())) {
-				drawableRow.setColourFilter(ScheduleChartColourUtils::getHiddenElementsFilter);
+				drawableRow.setColourFilter(hiddenElementColourFilter);
 			}
 			drawableRow.setStylingProvider(eventStylingProvider);
 			res.add(drawableRow);

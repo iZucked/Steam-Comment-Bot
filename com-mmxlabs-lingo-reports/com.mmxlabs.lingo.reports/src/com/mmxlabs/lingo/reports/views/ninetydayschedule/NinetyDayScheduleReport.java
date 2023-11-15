@@ -331,6 +331,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		if (scenarioComparisonService != null) {
 			scenarioComparisonService.removeListener(scenariosServiceListener);
 		}
+		viewer.getCanvas().dispose();
 		super.dispose();
 	}
 
