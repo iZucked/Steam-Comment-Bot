@@ -11,11 +11,14 @@ import java.util.function.UnaryOperator;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
+
 public abstract class DrawableElement {
 	
 	private Rectangle bounds;
 	private Optional<UnaryOperator<Color>> optColourFilter = Optional.empty();
-	
+	private IScheduleEventStylingProvider stylingProvider;
+
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
 	}
@@ -31,7 +34,15 @@ public abstract class DrawableElement {
 	public void setColourFilter(UnaryOperator<Color> colourFilter) {
 		optColourFilter = Optional.of(colourFilter);
 	}
-	
+
+	public IScheduleEventStylingProvider getStylingProvider() {
+		return stylingProvider;
+	}
+
+	public void setStylingProvider(final IScheduleEventStylingProvider stylingProvider) {
+		this.stylingProvider = stylingProvider;
+	}
+
 	public final List<BasicDrawableElement> getBasicDrawableElements() {
 		return getBasicDrawableElements((DrawerQueryResolver) null);
 	}

@@ -12,5 +12,9 @@ public class NinetyDayScheduleViewConstants {
 	public static final String SHOW_DAYS = "Show.Days";
 	public static final String SHOW_DESTINATION_LABELS = "Show.Destination.Labels";
 	public static final String SHOW_CANALS = "Show.Canals";
+	
+	public static final String Highlight_ = "Hi.";
+	public static final String Highlight_Riskies = "Hi.RiskyJourneys";
+	
 
 }

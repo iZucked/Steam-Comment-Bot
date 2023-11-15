@@ -75,7 +75,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this(parent, providers, new DefaultScheduleChartSettings());
 	}
 
-	public ScheduleCanvas(Composite parent, ScheduleChartProviders providers,  IScheduleChartSettings settings) {
+	public ScheduleCanvas(Composite parent, ScheduleChartProviders providers, IScheduleChartSettings settings) {
 		super(parent, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.V_SCROLL | SWT.H_SCROLL);
 
 		this.canvasState = new ScheduleCanvasState();
@@ -83,7 +83,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.settings = settings;
 		this.drawableEventProvider = providers.drawableEventProvider();
 		this.sortingProvider = providers.sortingProvider();
-		this.eventStylingProvider = null;
+		this.eventStylingProvider = providers.eventStylingProvider();
 		this.drawableTooltipProvider = providers.drawableTooltipProvider();
 		this.eventLabelProvider = providers.labelProvider();
 		this.scheduleChartRowsDataProvider = providers.scheduleChartSizesProvider();
@@ -92,7 +92,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.timeScale = new ScheduleTimeScale(canvasState, this, settings);
 		this.drawableTimeScale = new DrawableScheduleTimeScale<>(timeScale, settings);
 		this.filterSupport = new ScheduleFilterSupport(canvasState, settings);
-		
+
 		this.horizontalScrollbarHandler = new HorizontalScrollbarHandler(getHorizontalBar(), timeScale);
 		
 		getVerticalBar().setIncrement(10);
@@ -103,7 +103,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.dragSelectionZoomHandler = new DragSelectionZoomHandler(this, settings, eventHoverHandler);
 		this.eventResizingHandler = new EventResizingHandler(this, timeScale, settings, eventHoverHandler);
 		this.rowHeaderMenuHandler = new RowFilterSupportHandler(this, filterSupport);
-		
+
 		initListeners();
 	}
 
@@ -294,7 +294,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		int i = 0;
 		int y = startY;
 		for (final ScheduleChartRow scr : getSortedShownRows()) {
-			final DrawableScheduleChartRow drawableRow =  //
+			final DrawableScheduleChartRow drawableRow = //
 					new DrawableScheduleChartRow(scr, canvasState, i, timeScale, drawableEventProvider, eventStylingProvider, settings, scheduleChartRowsDataProvider.isNoSpacerRow(scr));
 			int currentRowHeight = drawableRow.getActualHeight();
 
@@ -306,6 +306,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 			if (canvasState.getScheduleChartMode() == ScheduleChartMode.FILTER && canvasState.getHiddenRowKeys().contains(scr.getKey())) {
 				drawableRow.setColourFilter(ScheduleChartColourUtils::getHiddenElementsFilter);
 			}
+			drawableRow.setStylingProvider(eventStylingProvider);
 			res.add(drawableRow);
 			i++;
 			y += currentRowHeight;

@@ -2,17 +2,17 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.widgets.schedulechart.draw; 
+package com.mmxlabs.widgets.schedulechart.draw;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventSelectionState;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
 public abstract class DrawableScheduleEvent extends DrawableElement {
 	
@@ -27,16 +27,19 @@ public abstract class DrawableScheduleEvent extends DrawableElement {
 	}
 
 	@Override
-	protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver queryResolver) {
-		List<BasicDrawableElement> res = new ArrayList<>();
+	protected List<BasicDrawableElement> getBasicDrawableElements(final Rectangle bounds, final DrawerQueryResolver queryResolver) {
+		final List<BasicDrawableElement> res = new ArrayList<>();
 
 		if (!se.isVisible()) {
 			return res;
 		}
-		
+		final IScheduleEventStylingProvider stylingProvider = getStylingProvider();
+		assert stylingProvider != null;
+
 		res.add(BasicDrawableElements.Rectangle.withBounds(bounds)
-				.bgColour(getBackgroundColour())
-				.border(getBorderColour(), getBorderThickness(selectionState), getIsBorderInner())
+				.bgColour(stylingProvider.getBackgroundColour(this, getBackgroundColour()))
+				.border(stylingProvider.getBackgroundColour(this, getBorderColour()), stylingProvider.getBorderThickness(this, getBorderThickness(selectionState)),
+						stylingProvider.getIsBorderInner(this, getIsBorderInner()))
 				.alpha(getAlpha(selectionState))
 				.create());
 

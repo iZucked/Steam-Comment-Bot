@@ -4,12 +4,19 @@
  */
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
+import static org.ops4j.peaberry.Peaberry.service;
+import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
+import static org.ops4j.peaberry.util.TypeLiterals.iterable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+
+import javax.inject.Inject;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
@@ -19,6 +26,9 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -26,13 +36,21 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.dialogs.PreferencesUtil;
+import org.ops4j.peaberry.Peaberry;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
@@ -41,21 +59,26 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.highlighters.ParameterisedColourScheme;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.widgets.schedulechart.ENinteyDayNonShippedRotationSelection;
 import com.mmxlabs.widgets.schedulechart.EventSize;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.providers.ILegendItem;
+import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 import com.mmxlabs.widgets.schedulechart.providers.ScheduleChartProviders;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.BalastIdleEvent;
@@ -81,6 +104,8 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private Action zoomInAction;
 	private Action zoomOutAction;
 	private Action packAction;
+	private HighlightAction highlightAction;
+
 	private NinetyDayScheduleLabelMenuAction labelMenuAction;
 	private NinetyDayScheduleFilterMenuAction filterMenuAction;
 	private NinetyDayScheduleSortMenuAction sortMenuAction;
@@ -94,11 +119,10 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		IGNORED_PREFERENCES.add(PreferenceConstants.P_REPORT_DURATION_FORMAT);
 	}
 
-	
 	private ScheduleChartViewer<NinetyDayScheduleInput> viewer;
 	private IMemento memento;
 	private NinetyDayScheduleChartSettings settings;
-	
+
 	private final EquivalentsManager equivalentsManager = new EquivalentsManager();
 	private NinetyDayScheduleEventProvider eventProvider;
 	private NinetyDayScheduleChartSortingProvider sortingProvider;
@@ -108,13 +132,17 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private NinetyDayDrawableEventLabelProvider eventLabelProvider;
 	private NinetyDayDrawableLegendProvider drawableLegendProvider;
 	private NinetyDayScheduleChartRowsDataProvider scheduleChartRowsDataProvider;
-	
+
 	private NinetyDayScheduleModelUpdater modelUpdater;
 	
 	private @NonNull ENinteyDayNonShippedRotationSelection rotationSelection = ENinteyDayNonShippedRotationSelection.OFF;
 	private final @NonNull Set<Contract> fobRotationSelectedContracts = new HashSet<>();
 	private final @NonNull Set<Predicate<NonShippedSequence>> fobRotationsToShow = new HashSet<>();
-	
+
+	@Inject
+	private Iterable<INinetyDayHighlighterExtension> highlighterExtensionPoints;
+	private List<IScheduleEventStylingProvider> highlighters;
+
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
 	private ReentrantSelectionManager selectionManager;
 	protected final ISelectedScenariosServiceListener scenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -133,7 +161,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 				}
 			});
 		}
-		
+
 		@Override
 		public void selectedObjectChanged(@Nullable MPart source, ISelection selection) {
 			if (selection instanceof final IStructuredSelection sel) {
@@ -156,7 +184,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			}
 			ViewerHelper.setSelection(viewer, true, selection);
 		}
-		
+
 	};
 
 	@Override
@@ -166,6 +194,13 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		}
 
 		this.memento = memento;
+
+		if (memento != null) {
+			if (memento.getChild(NinetyDayScheduleViewConstants.Highlight_) == null) {
+				memento.createChild(NinetyDayScheduleViewConstants.Highlight_);
+			}
+		}
+
 		this.settings = new NinetyDayScheduleChartSettings();
 		
 		setupPreferenceListener();
@@ -186,21 +221,62 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	@Override
 	public void saveState(final IMemento memento) {
 		memento.putMemento(this.memento);
+
+		for (final var highlighter : highlighters) {
+			boolean enabled = highlighter == eventStylingProvider.getDelegate();
+			memento.getChild(NinetyDayScheduleViewConstants.Highlight_).putBoolean(highlighter.getID(), enabled);
+		}
+
 		super.saveState(memento);
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		
-		viewer = new ScheduleChartViewer<>(parent, new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider, scheduleChartRowsDataProvider, drawableLegendProvider), eventProvider, modelUpdater, settings);
+		BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+		Injector injector = Guice.createInjector(Peaberry.osgiModule(context, eclipseRegistry()), new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(iterable(INinetyDayHighlighterExtension.class)).toProvider(service(INinetyDayHighlighterExtension.class).multiple());
+			}
+		});
+
+		// Inject the extension points
+		injector.injectMembers(this);
+
+		viewer = new ScheduleChartViewer<>(parent,
+				new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider, scheduleChartRowsDataProvider, eventStylingProvider, drawableLegendProvider),
+				eventProvider, modelUpdater, settings);
 		this.scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		selectionManager = new ReentrantSelectionManager(viewer, scenariosServiceListener, scenarioComparisonService);
-		
-		
+
+		{
+			this.highlighters = new LinkedList<>();
+			for (final INinetyDayHighlighterExtension ext : this.highlighterExtensionPoints) {
+				final IScheduleEventStylingProvider highlighter = ext.createInstance();
+				final String extID = ext.getID();
+				highlighter.setID(extID);
+				highlighters.add(highlighter);
+			}
+			// Restore highlighter settings
+			{
+				final IMemento highlightSettings = memento.getChild(NinetyDayScheduleViewConstants.Highlight_);
+				if (highlightSettings != null) {
+					for (final var hi : highlighters) {
+						if (highlightSettings.getBoolean(hi.getID()) == Boolean.TRUE) {
+							eventStylingProvider.setDelegate(hi);
+							// We only allow one highlighter currently
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		makeActions();
 		contributeToActionBars();
 		makeUndoActions();
-		
+
 		try {
 			scenarioComparisonService.triggerListener(scenariosServiceListener, false);
 		} catch (Exception e) {
@@ -217,6 +293,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
+		manager.add(highlightAction);		
 		manager.add(labelMenuAction);
 		manager.add(filterMenuAction);
 		manager.add(sortMenuAction);
@@ -226,7 +303,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		final IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
 	}
-	
+
 	private void fillLocalPullDown(final IMenuManager manager) {
 		manager.add(gotoPreferences);
 		manager.add(showLegendAction);
@@ -236,6 +313,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		zoomInAction = new ZoomAction(true, viewer.getCanvas());
 		zoomOutAction = new ZoomAction(false, viewer.getCanvas());
 		packAction = new PackAction(viewer.getCanvas());
+		highlightAction = new HighlightAction(viewer, viewer.getCanvas(), eventStylingProvider, highlighters);
 		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
 		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas(), settings);
 		sortMenuAction = new NinetyDayScheduleSortMenuAction(this, sortingProvider);
@@ -255,16 +333,16 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		}
 		super.dispose();
 	}
-	
+
 	public void redraw() {
 		viewer.getCanvas().redraw();
 	}
-	
+
 	private static class ZoomAction extends Action {
-		
+
 		private final boolean zoomIn;
 		private final ScheduleCanvas canvas;
-		
+
 		public ZoomAction(final boolean zoomIn, final ScheduleCanvas canvas) {
 			super();
 			this.zoomIn = zoomIn;
@@ -273,7 +351,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			setText(zoomIn ? "Zoom In" : "Zoom Out");
 			CommonImages.setImageDescriptors(this, zoomIn ? IconPaths.ZoomIn : IconPaths.ZoomOut);
 		}
-		
+
 		@Override
 		public void run() {
 			if (zoomIn) {
@@ -284,10 +362,10 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			canvas.redraw();
 		}
 	}
-	
+
 	private static class PackAction extends Action {
 		private final ScheduleCanvas canvas;
-		
+
 		public PackAction(final ScheduleCanvas canvas) {
 			super();
 			this.canvas = canvas;
@@ -295,19 +373,19 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			setText("Fit");
 			CommonImages.setImageDescriptors(this, IconPaths.Pack);
 		}
-		
+
 		@Override
 		public void run() {
 			canvas.getTimeScale().pack();
 			canvas.redraw();
 		}
-		
+
 	}
-	
+
 	private static class ShowAnnotationsAction extends Action {
 		private final ScheduleCanvas canvas;
 		private final NinetyDayScheduleChartSettings settings;
-		
+
 		public ShowAnnotationsAction(final ScheduleCanvas canvas, final NinetyDayScheduleChartSettings settings) {
 			super();
 			this.canvas = canvas;
@@ -316,13 +394,13 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			setText("Show Annotations");
 			CommonImages.setImageDescriptors(this, IconPaths.Lateness);
 		}
-		
+
 		@Override
 		public void run() {
 			settings.setShowAnnotations(!settings.showAnnotations());
 			canvas.redraw();
 		}
-		
+
 	}
 	
 	private static class ShowLegendAction extends Action {
@@ -473,4 +551,126 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		fobRotationsToShow.addAll(predicates);
 	}
 
+	private static class HighlightAction extends Action implements IMenuCreator {
+		private final ScheduleCanvas canvas;
+		private final NinetyDayScheduleEventStylingProvider settings;
+		private Menu lastMenu = null;
+
+		private List<IScheduleEventStylingProvider> highlighters;
+		private final ScheduleChartViewer<NinetyDayScheduleInput> viewer;
+
+		public HighlightAction(final ScheduleChartViewer<NinetyDayScheduleInput> viewer, final ScheduleCanvas canvas, final NinetyDayScheduleEventStylingProvider settings, List<IScheduleEventStylingProvider> highlighters) {
+
+			super("Highlight", IAction.AS_DROP_DOWN_MENU);
+			this.viewer = viewer;
+			setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Highlighter, IconMode.Enabled));
+
+			this.canvas = canvas;
+			this.settings = settings;
+
+			this.highlighters = highlighters;
+		}
+
+		@Override
+		public Menu getMenu(final Menu parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+
+			createMenuItems(lastMenu);
+
+			return lastMenu;
+		}
+
+		@Override
+		public Menu getMenu(final Control parent) {
+
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+			createMenuItems(lastMenu);
+			return lastMenu;
+		}
+
+		@Override
+		public IMenuCreator getMenuCreator() {
+			return this;
+		}
+
+		protected void createMenuItems(final Menu menu) {
+
+			final var current = settings.getDelegate();
+			for (final IScheduleEventStylingProvider highlighter : highlighters) {
+				if (highlighter instanceof final ParameterisedColourScheme parameterisedColourScheme) {
+					final List<NamedObject> options = parameterisedColourScheme.getOptions(viewer);
+					if (!options.isEmpty()) {
+						final Action a = new DefaultMenuCreatorAction(highlighter.getName()) {
+
+							@Override
+							protected void populate(final Menu menu) {
+								final Action off = new Action("off") {
+									@Override
+									public void run() {
+										parameterisedColourScheme.selectOption(null);
+										settings.setDelegate(null);
+										viewer.getCanvas().redraw();
+									}
+								};
+								addActionToMenu(off, menu);
+								for (final NamedObject option : options) {
+									final Action nextAction = new Action(option.getName()) {
+										@Override
+										public void run() {
+											parameterisedColourScheme.selectOption(option);
+											settings.setDelegate(highlighter);
+											setChecked(true);
+											viewer.getCanvas().redraw();
+										}
+									};
+									if (highlighter == current && parameterisedColourScheme.getOption() == option) {
+										nextAction.setChecked(true);
+									}
+									addActionToMenu(nextAction, menu);
+								}
+							}
+						};
+						final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
+						actionContributionItem.fill(menu, -1);
+					}
+				} else {
+					final Action a = new Action(highlighter.getName(), IAction.AS_CHECK_BOX) {
+
+						@Override
+						public void run() {
+							if (current == highlighter) {
+								settings.setDelegate(null);
+								setChecked(false);
+							} else {
+								settings.setDelegate(highlighter);
+								setChecked(true);
+							}
+							canvas.redraw();
+						}
+					};
+					final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
+					actionContributionItem.fill(menu, -1);
+
+					// Set initially checked item.
+					if (current == highlighter) {
+						a.setChecked(true);
+					}
+				}
+			}
+		}
+
+		@Override
+		public void dispose() {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+				lastMenu = null;
+			}
+		}
+	}
 }

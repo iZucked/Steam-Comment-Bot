@@ -4,63 +4,72 @@
  */
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.lingo.reports.ColourPalette;
-import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
-import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEvent;
+import com.mmxlabs.widgets.schedulechart.providers.AbstractScheduleEventStylingProvider;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventStylingProvider;
 
 public class NinetyDayScheduleEventStylingProvider implements IScheduleEventStylingProvider {
 
-	@Override
-	public Color getBackgroundColour(ScheduleEvent e) {
-		return getColourFor(e, ColourElements.Background);
+	private IScheduleEventStylingProvider delegate;
+	private static final IScheduleEventStylingProvider defaultProvider = new AbstractScheduleEventStylingProvider("default") { };
+
+	public NinetyDayScheduleEventStylingProvider(final @NonNull IScheduleEventStylingProvider delegate) {
+		this.delegate = delegate;
 	}
 
-	@Override
-	public Color getBorderColour(ScheduleEvent e) {
-		return getColourFor(e, ColourElements.Border);
+	public NinetyDayScheduleEventStylingProvider() {
+		this(defaultProvider);
 	}
 
-	@Override
-	public int getBorderThickness(ScheduleEvent e) {
-		return 1;
+	public IScheduleEventStylingProvider getDelegate() {
+		return delegate;
 	}
 
-	@Override
-	public boolean getIsBorderInner(ScheduleEvent e) {
-		return false;
-	}
-	
-	private Color getColourFor(ScheduleEvent e, ColourElements ce) {
-		if (!(e.getData() instanceof Event)) {
-			return null;
+	public void setDelegate(final IScheduleEventStylingProvider delegate) {
+		assert delegate != this;
+		if (delegate == null) {
+			this.delegate = defaultProvider;
+		} else {
+			this.delegate = delegate;
 		}
-		
-		ColourPaletteItems item = getItemForEvent((Event) e.getData());
-		return item == null ? null : ColourPalette.getInstance().getColourFor(item, ce);
 	}
 
-	private @Nullable ColourPaletteItems getItemForEvent(Event e) {
-		ColourPaletteItems item = null;
-		
-		if (e instanceof final Journey j) {
-			item = j.isLaden() ? ColourPaletteItems.Voyage_Laden_Journey : ColourPaletteItems.Voyage_Ballast_Journey;
-		} else if (e instanceof Idle i) {
-			item = i.isLaden() ? ColourPaletteItems.Voyage_Laden_Idle : ColourPaletteItems.Voyage_Ballast_Idle;
-		} else if (e instanceof SlotVisit sv) {
-			item = sv.getSlotAllocation().getSlot() instanceof LoadSlot ? ColourPaletteItems.Voyage_Load : ColourPaletteItems.Voyage_Discharge;
-		}
-		
-		return item;
+	@Override
+	public String getName() {
+		return delegate.getName();
 	}
 
+	@Override
+	public @Nullable Color getBackgroundColour(final DrawableScheduleEvent e, final Color defaultColour) {
+		return delegate.getBackgroundColour(e, defaultColour);
+	}
+
+	@Override
+	public @Nullable Color getBorderColour(final DrawableScheduleEvent e, final Color defaultColour) {
+		return delegate.getBorderColour(e, defaultColour);
+	}
+
+	@Override
+	public int getBorderThickness(final DrawableScheduleEvent e, final int defaultValue) {
+		return delegate.getBorderThickness(e, defaultValue);
+	}
+
+	@Override
+	public boolean getIsBorderInner(final DrawableScheduleEvent e, final boolean defaultValue) {
+		return delegate.getIsBorderInner(e, defaultValue);
+	}
+
+	@Override
+	public void setID(String id) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getID() {
+		return delegate.getID();
+	}
 }

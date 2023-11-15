@@ -82,6 +82,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 			if (drawableEvent == null) {
 				continue;
 			}
+			drawableEvent.setStylingProvider(getStylingProvider());
 			lastDrawnEvents.add(drawableEvent);
 			if (!settings.showAnnotations()) {
 				//continue;
