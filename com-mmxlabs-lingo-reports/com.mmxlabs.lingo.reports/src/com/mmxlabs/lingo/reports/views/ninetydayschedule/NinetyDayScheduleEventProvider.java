@@ -23,6 +23,7 @@ import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -103,6 +104,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		// contains Sequence, CombinedSequence and PositionsSequence
 		final List<Object> sequences = getSequences(lastScheduleFromScenario);
 		final List<Event> events = new ArrayList<>();
+		final List<Object> elements = new ArrayList<>();
 		final List<ScheduleEvent> positionSequenceScheduleEvents = new ArrayList<>();
 
 		for (final Object sequenceObject : sequences) {
@@ -113,10 +115,11 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 			} else if (sequenceObject instanceof CombinedSequence combinedSequence) {
 				collectEvents(events, combinedSequence);
 			} else if (sequenceObject instanceof PositionsSequence positionSequence) {
-				collectEvents(positionSequenceScheduleEvents, positionSequence, sr, isPinned);
+				collectEvents(elements, positionSequenceScheduleEvents, positionSequence, sr, isPinned);
 			}
 		}
 
+		elements.stream().forEach(e -> equivalentsManager.collectEquivalents(e, this::generateEquivalents));
 		events.stream().forEach(e -> equivalentsManager.collectEquivalents(e, this::generateEquivalents));
 		final List<ScheduleEvent> scheduleEvents = events.stream().map(e -> makeScheduleEvent(e, sr, isPinned)).collect(Collectors.toList());
 		scheduleEvents.addAll(positionSequenceScheduleEvents);
@@ -255,17 +258,19 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		}
 	}
 
-	private void collectEvents(final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence, ScenarioResult scenarioResult, boolean isPinned) {
+	private void collectEvents(final List<Object> elements, final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence, ScenarioResult scenarioResult, boolean isPinned) {
 		for (final Object element : positionSequence.getElements()) {
 			final LocalDateTime startTime = PositionsSeqenceElements.getEventTime(element);
-			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), scenarioResult, isPinned, List.of(), false);
+			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), element, scenarioResult, isPinned, List.of(), false);
 			scheduleEvent.forceVisible();
+			
+			elements.add(element);
 			scheduleEvents.add(scheduleEvent);
 		}
 	}
 
 	private ScheduleEvent makeScheduleEvent(Event event, ScenarioResult scenarioResult, boolean isPinned) {
-		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, scenarioResult, isPinned, makeEventAnnotations(event));
+		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, null, scenarioResult, isPinned, makeEventAnnotations(event));
 		se.setVisible(true);
 		return se;
 	}

@@ -80,11 +80,6 @@ public class BuySellDrawableScheduleEvent extends NinetyDayDrawableScheduleEvent
 	}
 
 	@Override
-	public int getAlpha(final ScheduleEventSelectionState scheduleEventSelectionState) {
-		return 255;
-	}
-
-	@Override
 	public int getBorderThickness(final ScheduleEventSelectionState scheduleEventSelectionState) {
 		return 1;
 	}

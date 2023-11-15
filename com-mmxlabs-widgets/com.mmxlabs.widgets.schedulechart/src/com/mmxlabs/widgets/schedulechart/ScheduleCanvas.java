@@ -415,7 +415,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 	// To be called only from the viewer
 	public void setSelectedEvents(Collection<ScheduleEvent> newSelection) {
 		// don't reassign so it keeps the references in the drawable rows
-
+		
 		for (final ScheduleEvent e: canvasState.getSelectedEvents()) {
 			e.setSelectionState(ScheduleEventSelectionState.UNSELECTED);
 		}

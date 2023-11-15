@@ -18,6 +18,7 @@ public class ScheduleEvent {
 	private final boolean isPinned;
 
 	private final Object data;
+	private final Object element;
 	private boolean visible;
 	private boolean forceVisible;
 	private boolean showAnnotations;
@@ -25,24 +26,25 @@ public class ScheduleEvent {
 	
 	private final List<ScheduleEventAnnotation> annotations;
 	
-	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, ScenarioResult scenarioResult, boolean isPinned, List<ScheduleEventAnnotation> annotations) {
+	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, Object element, ScenarioResult scenarioResult, boolean isPinned, List<ScheduleEventAnnotation> annotations) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.scenarioResult = scenarioResult;
 		this.isPinned = isPinned;
 		this.data = data;
+		this.element = element;
 		this.selectionState = ScheduleEventSelectionState.UNSELECTED;
 		this.annotations = annotations;
 		this.showAnnotations = true;
 	}
 	
-	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, ScenarioResult scenarioResult, boolean isPinned, List<ScheduleEventAnnotation> annotations, boolean showAnnotations) {
-		this(startDate, endDate, data, scenarioResult, isPinned, annotations);
+	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate, Object data, Object element, ScenarioResult scenarioResult, boolean isPinned, List<ScheduleEventAnnotation> annotations, boolean showAnnotations) {
+		this(startDate, endDate, data, element, scenarioResult, isPinned, annotations);
 		this.showAnnotations = showAnnotations;
 	}
 
 	public ScheduleEvent(LocalDateTime startDate, LocalDateTime endDate) {
-		this(startDate, endDate, null, null, false, Collections.emptyList());
+		this(startDate, endDate, null, null, null, false, Collections.emptyList());
 	}
 	
 	public LocalDateTime getStart() {
@@ -55,6 +57,10 @@ public class ScheduleEvent {
 	
 	public Object getData() {
 		return data;
+	}
+	
+	public Object getElement() {
+		return element;
 	}
 	 
 	public List<ScheduleEventAnnotation> getAnnotations() {
@@ -105,6 +111,10 @@ public class ScheduleEvent {
 	
 	public boolean isPinnedScenario() {
 		return isPinned;
+	}
+	
+	public boolean hasElement() {
+		return element != null;
 	}
 
 }

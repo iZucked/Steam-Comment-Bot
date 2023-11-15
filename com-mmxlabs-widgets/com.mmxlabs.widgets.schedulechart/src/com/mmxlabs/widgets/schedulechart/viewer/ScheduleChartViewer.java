@@ -19,7 +19,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
 import com.mmxlabs.widgets.schedulechart.IScheduleChartEventListener;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
@@ -84,7 +83,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 		
 		// Initialise internal map
 		internalDataMap.clear();
-		events.forEach(e -> internalDataMap.put(e.getData(), e));
+		events.forEach(e -> internalDataMap.put(e.hasElement() ? e.getElement() : e.getData(), e));
 
 		final List<ScheduleChartRow> newRows = eventProvider.classifyEventsIntoRows(events).stream().filter(r -> !r.getName().isBlank()).toList();
 		canvas.addAll(newRows);
@@ -174,7 +173,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 			
 			@Override
 			public void eventSelected(ScheduleEvent event, Collection<ScheduleEvent> allSelectedEvents, MouseEvent me) {
-				final List<Object> selectedObjects = allSelectedEvents.stream().map(e -> e.getData()).toList();
+				final List<Object> selectedObjects = allSelectedEvents.stream().map(e -> e.hasElement() ? e.getElement() : e.getData()).toList();
 				final StructuredSelection s = new StructuredSelection(selectedObjects, comparer);
 				setSelection(s);
 			}

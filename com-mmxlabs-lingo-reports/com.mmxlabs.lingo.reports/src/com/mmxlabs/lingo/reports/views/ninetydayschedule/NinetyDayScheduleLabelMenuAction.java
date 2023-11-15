@@ -101,9 +101,11 @@ public class NinetyDayScheduleLabelMenuAction extends NinetyDayScheduleAction {
 			final ScheduleModel schedule = result.getTypedResult(ScheduleModel.class);
 			
 			final Action fobSaleRotation = getFobSaleRotationMenu(schedule.getSchedule());
-			final ActionContributionItem actionContributionItem = new ActionContributionItem(fobSaleRotation);
-			actionContributionItem.fill(menu, -1);
 			
+			if(fobSaleRotation != null) {
+				final ActionContributionItem actionContributionItem = new ActionContributionItem(fobSaleRotation);
+				actionContributionItem.fill(menu, -1);
+			}
 		}
 	}
 	
