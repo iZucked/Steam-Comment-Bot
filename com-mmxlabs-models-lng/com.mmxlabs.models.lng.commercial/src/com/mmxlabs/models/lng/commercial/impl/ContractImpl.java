@@ -1898,7 +1898,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			return new DelegateInformation(null, null, null) {
 				@Override
 				public boolean delegatesTo(final Object changedFeature) {
-					return (CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT == changedFeature);
+					return (CommercialPackage.Literals.CONTRACT__BUSINESS_UNIT == changedFeature
+							|| CommercialPackage.Literals.CONTRACT__ENTITY == changedFeature);
 				}
 				
 				@Override
