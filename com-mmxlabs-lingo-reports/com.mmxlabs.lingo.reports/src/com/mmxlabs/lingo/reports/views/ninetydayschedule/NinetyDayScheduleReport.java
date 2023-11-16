@@ -205,11 +205,11 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
-		manager.add(packAction);
 		manager.add(labelMenuAction);
 		manager.add(filterMenuAction);
 		manager.add(sortMenuAction);
 		manager.add(showAnnotationsAction);
+		manager.add(packAction);
 		
 		final IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
