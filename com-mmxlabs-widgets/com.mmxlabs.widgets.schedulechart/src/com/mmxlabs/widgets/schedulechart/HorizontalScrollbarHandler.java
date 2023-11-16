@@ -62,8 +62,16 @@ public class HorizontalScrollbarHandler {
 		return new ScheduleChartEventListenerAdapter() {
 			@Override
 			public void timeScaleZoomLevelChanged(Rectangle mainBounds, IScheduleChartContentBoundsProvider boundsProvider) {
-				int leftmostX = timeScale.getXForDateTime(boundsProvider.getLeftmostEvent().getStart());
-				int rightmostX = timeScale.getXForDateTime(boundsProvider.getRightmostEvent().getEnd());
+				ScheduleEvent leftMost = boundsProvider.getLeftmostEvent();
+				ScheduleEvent rightMost = boundsProvider.getRightmostEvent();
+				
+				if(leftMost == null || rightMost == null) {
+					hBar.setVisible(false);
+					return;
+				}
+				
+				int leftmostX = timeScale.getXForDateTime(leftMost.getStart());
+				int rightmostX = timeScale.getXForDateTime(rightMost.getEnd());
 				
 				if (leftmostX >= mainBounds.x && rightmostX <= mainBounds.x + mainBounds.width) {
 					// all the content fits

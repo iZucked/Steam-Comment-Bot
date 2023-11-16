@@ -76,11 +76,14 @@ public class ScheduleTimeScale {
 		var leftmost = boundsProvider.getLeftmostEvent();
 		var rightmost = boundsProvider.getRightmostEvent();
 		
-		final int PADDING = 1;
-		final int leftmostX = getXForDateTime(leftmost.getStart().minusDays(PADDING));
-		final int rightmostX = getXForDateTime(rightmost.getStart().plusDays(PADDING));
+		// TODO: Find a better fix for causing leftmost == null
+		if(leftmost != null && rightmost != null) {
+			final int PADDING = 1;
+			final int leftmostX = getXForDateTime(leftmost.getStart().minusDays(PADDING));
+			final int rightmostX = getXForDateTime(rightmost.getStart().plusDays(PADDING));	
+			internalZoomToFitXBounds(leftmostX, rightmostX);
+		}
 		
-		internalZoomToFitXBounds(leftmostX, rightmostX);
 		eventEmitter.fireScheduleEvent(l -> l.timeScaleZoomLevelChanged(bounds, boundsProvider));
 	}
 
