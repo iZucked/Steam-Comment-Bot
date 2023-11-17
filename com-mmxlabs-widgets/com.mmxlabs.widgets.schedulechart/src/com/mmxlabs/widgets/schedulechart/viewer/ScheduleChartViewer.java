@@ -117,8 +117,7 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-		
+		typedSetInput(getInput());
 	}
 
 	@Override

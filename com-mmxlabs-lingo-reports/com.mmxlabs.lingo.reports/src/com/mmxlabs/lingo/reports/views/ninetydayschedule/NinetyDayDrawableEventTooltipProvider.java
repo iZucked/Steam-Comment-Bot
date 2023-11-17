@@ -33,6 +33,9 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedIdle;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -76,13 +79,25 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 						.add(ScheduleEventTooltipData.HEADER_NAME, Journey.class, j -> j.getDestination().getName()) //
 						.add(ScheduleEventTooltipData.EVENT_TYPE, Journey.class, j -> j.isLaden() ? "Laden" : "Ballast") //
 						.addBodyField("Travel time", Journey.class, j -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, j.getDuration()));
+			} else if (event instanceof NonShippedJourney) {
+				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, NonShippedJourney.class, j -> j.getPort().getName()) //
+				.add(ScheduleEventTooltipData.HEADER_NAME, NonShippedJourney.class, j -> j.getDestination().getName()) //
+				.add(ScheduleEventTooltipData.EVENT_TYPE, NonShippedJourney.class, j -> j.isLaden() ? "Laden" : "Ballast") //
+				.addBodyField("Travel time", NonShippedJourney.class, j -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, j.getDuration()));
 			} else if (event instanceof Idle) {
-				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, Idle.class, i -> getIdleHeader(i))
+				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, Idle.class, this::getIdleHeader)
 						.addBodyField("Idle time", Idle.class, i -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, i.getDuration()));
+			} else if (event instanceof NonShippedIdle) {
+				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, NonShippedIdle.class, this::getIdleHeader)
+				.addBodyField("Idle time", NonShippedIdle.class, i -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, i.getDuration()));
 			} else if (event instanceof SlotVisit) {
 				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, SlotVisit.class, sv -> "At " + sv.getPort().getName())
 						.addBodyField("Time in port", SlotVisit.class, sv -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, sv.getDuration()))
 						.addBodyField("Window end", SlotVisit.class, sv -> DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay()).format(sv.getSlotAllocation().getSlot().getSchedulingTimeWindow().getEnd()));
+			}
+			else if (event instanceof NonShippedSlotVisit) {
+				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, NonShippedSlotVisit.class, sv -> "At " + sv.getPort().getName())
+						.addBodyField("Time in port", NonShippedSlotVisit.class, sv -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, sv.getDuration()));
 			}
 			 else if (event instanceof PortVisit) {
 				 tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, PortVisit.class, pv -> "At " + pv.getPort().getName())
@@ -112,9 +127,9 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 	public Optional<DrawableScheduleEventTooltip> getDrawableTooltip(ScheduleEventTooltip tooltip) {
 		final Object scheduleEventData = tooltip.se().getData();
 		if (scheduleEventData instanceof final Event event) {
-			if (event instanceof Journey) {
+			if (event instanceof Journey || event instanceof NonShippedJourney) {
 				return Optional.of(new JourneyEventTooltip(tooltip));
-			} else if (event instanceof Idle || event instanceof PortVisit) {
+			} else if (event instanceof Idle || event instanceof PortVisit || event instanceof NonShippedIdle || event instanceof NonShippedSlotVisit) {
 				return Optional.of(new PortEventTooltip(tooltip));
 			}
 		}
@@ -124,12 +139,22 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 		return Optional.empty();
 	}
 	
-	private String getIdleHeader(Idle event) {
+	private String getIdleHeader(Event event) {
 		String header =  "";
 		if(event.getPort() != null)
 			header += "At " + event.getPort().getName() + " ";
 		
-		if(event.isLaden())
+		boolean laden;
+		if(event instanceof Idle i) {
+			laden = i.isLaden();
+		} else if (event instanceof NonShippedIdle nsi) {
+			laden = nsi.isLaden();
+		}
+		else {
+			return header;
+		}
+		
+		if(laden)
 			header += "(Laden idle)";
 		else
 			header += "(Ballast idle)";

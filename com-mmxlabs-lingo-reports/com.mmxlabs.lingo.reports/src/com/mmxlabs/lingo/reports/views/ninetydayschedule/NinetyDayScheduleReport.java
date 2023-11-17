@@ -5,9 +5,11 @@
 package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
@@ -31,6 +33,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -38,7 +42,9 @@ import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceViewWithUndoSupport;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -46,6 +52,7 @@ import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
+import com.mmxlabs.widgets.schedulechart.ENinteyDayNonShippedRotationSelection;
 import com.mmxlabs.widgets.schedulechart.EventSize;
 import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.providers.ILegendItem;
@@ -104,6 +111,10 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	
 	private NinetyDayScheduleModelUpdater modelUpdater;
 	
+	private @NonNull ENinteyDayNonShippedRotationSelection rotationSelection = ENinteyDayNonShippedRotationSelection.OFF;
+	private final @NonNull Set<Contract> fobRotationSelectedContracts = new HashSet<>();
+	private final @NonNull Set<Predicate<NonShippedSequence>> fobRotationsToShow = new HashSet<>();
+	
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
 	private ReentrantSelectionManager selectionManager;
 	protected final ISelectedScenariosServiceListener scenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -116,6 +127,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 					List<ScenarioResult> other = selectedDataProvider.getAllScenarioResults().stream().filter(f -> f != null && !f.equals(pinned)).toList();
 					settings.sethasMultipleScenarios(pinned != null ? !other.isEmpty() : other.size() > 1);
 					
+					clearFobRotations();
 					viewer.typedSetInput(new NinetyDayScheduleInput(pinned, other));
 					viewer.getCanvas().getTimeScale().pack();
 				}
@@ -159,7 +171,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		setupPreferenceListener();
 
 		this.scheduleChartRowsDataProvider = new NinetyDayScheduleChartRowsDataProvider();
-		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager, settings, this.scheduleChartRowsDataProvider);
+		this.eventProvider = new NinetyDayScheduleEventProvider(equivalentsManager, settings, this.scheduleChartRowsDataProvider, this);
 		this.sortingProvider = new NinetyDayScheduleChartSortingProvider();
 		this.drawableEventProvider = new NinetyDayDrawableEventProvider();
 		this.drawableEventTooltipProvider = new NinetyDayDrawableEventTooltipProvider();
@@ -418,6 +430,47 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 				)));
 		
 		return legendItems;
+	}
+	
+	public ScheduleChartViewer<NinetyDayScheduleInput> getViewer() {
+		return viewer;
+	}
+	
+	public boolean toggleSelectedContract(final Contract selectedContract) {
+		if (fobRotationSelectedContracts.contains(selectedContract)) {
+			fobRotationSelectedContracts.remove(selectedContract);
+			return false;
+		} else {
+			fobRotationSelectedContracts.add(selectedContract);
+			return true;
+		}
+	}
+
+	public Set<Contract> getSelectedContracts() {
+		return fobRotationSelectedContracts;
+	}
+
+	public ENinteyDayNonShippedRotationSelection getFobRotationOptionSelection() {
+		return rotationSelection;
+	}
+
+	public void setFobRotationOptionSelection(final @NonNull ENinteyDayNonShippedRotationSelection rotationSelection) {
+		this.rotationSelection = rotationSelection;
+	}
+	
+	public Set<Predicate<NonShippedSequence>> getFobRotationsToShow(){
+		return fobRotationsToShow;
+	}
+
+	public void clearFobRotations() {
+		setFobRotationOptionSelection(ENinteyDayNonShippedRotationSelection.OFF);
+		fobRotationsToShow.clear();
+		fobRotationSelectedContracts.clear();
+	}
+
+	public void replaceFobRotations(final @NonNull Collection<@NonNull Predicate<NonShippedSequence>> predicates) {
+		fobRotationsToShow.clear();
+		fobRotationsToShow.addAll(predicates);
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.Comparator;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
+import com.mmxlabs.models.lng.schedule.NonShippedSequence;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
@@ -61,7 +62,7 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 	}
 	
 	private enum Type {
-		INVENTORY, DES, FOB, FLEET, CHARTER
+		INVENTORY, DES, FOB, NON_SHIPPED, FLEET, CHARTER
 	}
 	
 	private Mode mode = Mode.INTERLEAVE;
@@ -81,6 +82,8 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 			} else if (s.getName().contains("FOB")) {
 				return Type.FOB;
 			}
+		} else if (obj instanceof NonShippedSequence) {
+			return Type.NON_SHIPPED;
 		} else if (obj instanceof InventoryEvents) {
 			return Type.INVENTORY;
 		} else if (obj instanceof PositionsSequence p) {

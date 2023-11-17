@@ -40,6 +40,8 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.NonShippedJourney;
+import com.mmxlabs.models.lng.schedule.NonShippedSlotVisit;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -65,6 +67,8 @@ public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventPro
 		if (data instanceof final Event event) {
 			if (event instanceof final Journey j) {
 				return j.isLaden() ? new LadenJourneyEvent(scheduleEvent, bounds, noneSelected) : new BalastJourneyEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof NonShippedJourney i) {
+				return i.isLaden() ? new LadenJourneyEvent(scheduleEvent, bounds, noneSelected) : new BalastJourneyEvent(scheduleEvent, bounds, noneSelected);
 			} else if (event instanceof Idle i) {
 				return i.isLaden() ? new LadenIdleEvent(scheduleEvent, bounds, noneSelected) : new BalastIdleEvent(scheduleEvent, bounds, noneSelected);
 			} else if (event instanceof SlotVisit sv) {
@@ -72,6 +76,11 @@ public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventPro
 					return sv.getSlotAllocation().getSlot() instanceof LoadSlot ? new LateLoadEvent(scheduleEvent, bounds, noneSelected) : new LateDischargeEvent(scheduleEvent, bounds, noneSelected);
 				}
 				return sv.getSlotAllocation().getSlot() instanceof LoadSlot ? new LoadEvent(scheduleEvent, bounds, noneSelected) : new DischargeEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof NonShippedSlotVisit sv) {
+				if (sv.getLateness() != null && sv.getLateness().getLatenessInHours() > 0) {
+					return sv.getSlot() instanceof LoadSlot ? new LateLoadEvent(scheduleEvent, bounds, noneSelected) : new LateDischargeEvent(scheduleEvent, bounds, noneSelected);
+				}
+				return sv.getSlot() instanceof LoadSlot ? new LoadEvent(scheduleEvent, bounds, noneSelected) : new DischargeEvent(scheduleEvent, bounds, noneSelected);
 			} else if (event instanceof VesselEventVisit vev) {
 				final VesselEvent ve = vev.getVesselEvent();
 				if (ve instanceof com.mmxlabs.models.lng.cargo.DryDockEvent) {

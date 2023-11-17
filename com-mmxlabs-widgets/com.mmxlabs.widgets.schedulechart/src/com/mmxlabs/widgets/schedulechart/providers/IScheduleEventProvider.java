@@ -6,6 +6,7 @@ package com.mmxlabs.widgets.schedulechart.providers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.mmxlabs.widgets.schedulechart.IScheduleChartRowsDataProvider;

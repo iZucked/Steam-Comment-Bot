@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 import com.mmxlabs.models.lng.schedule.util.PositionsSequence;
 import com.mmxlabs.scenario.service.ScenarioResult;
+import com.mmxlabs.widgets.schedulechart.ENinteyDayNonShippedRotationSelection;
 import com.mmxlabs.widgets.schedulechart.EditableScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartRowsDataProvider;
 import com.mmxlabs.widgets.schedulechart.IScheduleChartSettings;
@@ -65,11 +66,14 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	private final EquivalentsManager equivalentsManager;
 	private final IScheduleChartSettings settings;
 	private final IScheduleChartRowsDataProvider scheduleCharRowsDataProvider;
+	private final NinetyDayScheduleReport parent;
 
-	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, IScheduleChartSettings settings, IScheduleChartRowsDataProvider scheduleCharRowsDataProvider) {
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, IScheduleChartSettings settings, IScheduleChartRowsDataProvider scheduleCharRowsDataProvider, 
+			NinetyDayScheduleReport parent) {
 		this.equivalentsManager = equivalentsManager;
 		this.settings = settings;
 		this.scheduleCharRowsDataProvider = scheduleCharRowsDataProvider;
+		this.parent = parent;
 	}
 
 	@Override
@@ -104,6 +108,8 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		for (final Object sequenceObject : sequences) {
 			if (sequenceObject instanceof Sequence sequence) {
 				collectEvents(events, sequence);
+			} else if (sequenceObject instanceof NonShippedSequence nonShippedSequence) {
+				collectEvents(events, nonShippedSequence);
 			} else if (sequenceObject instanceof CombinedSequence combinedSequence) {
 				collectEvents(events, combinedSequence);
 			} else if (sequenceObject instanceof PositionsSequence positionSequence) {
@@ -125,6 +131,12 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 					positionsSequenceElement.getPositionsSequence());
 		}
 		if (event.getData() instanceof final Event e) {
+			// Check if event is a non-shipped event
+			if(e.eContainer() instanceof NonShippedSequence nss) {
+				var name = nss.getVessel() == null ? "" : nss.getVessel().getName();
+				return new ScheduleChartRowKey(name, nss);
+			}
+			
 			var name = vesselAssignmentFormatter.render(e);
 			return new ScheduleChartRowKey(name == null ? "" : name, e.getSequence());
 		}
@@ -181,24 +193,27 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	private void addPositionsSequences(List<Object> res, Schedule schedule) {
 		final Collection<Slot<?>> nonShippedSlots = new HashSet<>();
 		for (final NonShippedSequence seq : schedule.getNonShippedSequences()) {
-			res.add(seq);
-			for (final Event event : seq.getEvents()) {
-				if (event instanceof NonShippedSlotVisit slotVisit) {
-					nonShippedSlots.add(slotVisit.getSlot());
+			if (parent.getFobRotationsToShow().stream().anyMatch(p -> p.test(seq))) {
+				res.add(seq);
+				for (final Event event : seq.getEvents()) {
+					if (event instanceof NonShippedSlotVisit slotVisit) {
+						nonShippedSlots.add(slotVisit.getSlot());
+					}
 				}
 			}
 		}
 
 		final @NonNull Collection<@NonNull SlotVisit> slotVisitsToIgnore;
-		if (!nonShippedSlots.isEmpty()) {
+		if (parent.getFobRotationOptionSelection() == ENinteyDayNonShippedRotationSelection.OFF) {
+			slotVisitsToIgnore = Collections.emptySet();
+		} else {
 			slotVisitsToIgnore = schedule.getCargoAllocations().stream() //
+					.filter(ca -> !parent.getSelectedContracts().contains(ca.getSlotAllocations().get(0).getSlot().getContract()))
 					.map(CargoAllocation::getSlotAllocations) //
 					.flatMap(List::stream) //
 					.filter(sa -> nonShippedSlots.contains(sa.getSlot())) //
-					.map(SlotAllocation::getSlotVisit) //
+					.map(SlotAllocation::getSlotVisit)
 					.collect(Collectors.toSet());
-		} else {
-			slotVisitsToIgnore = Collections.emptySet();
 		}
 
 		res.addAll(PositionsSequence.makeBuySellSequences(schedule, slotVisitsToIgnore, ""));
@@ -231,6 +246,12 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	private void collectEvents(List<Event> res, CombinedSequence cs) {
 		for (final Sequence s : cs.getSequences()) {
 			collectEvents(res, s);
+		}
+	}
+	
+	private void collectEvents(List<Event> res, NonShippedSequence nss) {
+		for (final Event e : nss.getEvents()) {
+			res.add(e);
 		}
 	}
 

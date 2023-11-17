@@ -42,6 +42,10 @@ public class JourneyEventTooltip extends AbstractNinetyDayEventTooltip {
 			protected List<BasicDrawableElement> getBasicDrawableElements(Rectangle bounds, DrawerQueryResolver resolver) {
 				List<BasicDrawableElement> res = new ArrayList<>();
 				
+				if(tooltip.headerNames().isEmpty()) {
+					return res;
+				}
+				
 				final String from = tooltip.headerNames().get(0);
 				final String to = tooltip.headerNames().get(1);
 				final Point fromExtent = resolver.findSizeOfText(from, SYSTEM_FONT, SYSTEM_FONT_SIZE);
