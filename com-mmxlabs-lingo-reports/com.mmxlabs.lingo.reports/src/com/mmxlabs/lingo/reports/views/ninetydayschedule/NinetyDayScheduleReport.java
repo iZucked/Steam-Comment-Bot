@@ -72,6 +72,7 @@ import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.BuySellD
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionStateType;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionType;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.highlighters.ParameterisedColourScheme;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.ISchedulePositionsSequenceProviderExtension;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -138,6 +139,9 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 
 	@Inject
 	private Iterable<INinetyDayHighlighterExtension> highlighterExtensionPoints;
+	
+	@Inject
+	private Iterable<ISchedulePositionsSequenceProviderExtension> schedulePositionsExtensionPoints;
 	private List<IScheduleEventStylingProvider> highlighters;
 
 	private @Nullable ScenarioComparisonService scenarioComparisonService;
@@ -235,11 +239,13 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			@Override
 			protected void configure() {
 				bind(iterable(INinetyDayHighlighterExtension.class)).toProvider(service(INinetyDayHighlighterExtension.class).multiple());
+				bind(iterable(ISchedulePositionsSequenceProviderExtension.class)).toProvider(service(ISchedulePositionsSequenceProviderExtension.class).multiple());
 			}
 		});
 
 		// Inject the extension points
 		injector.injectMembers(this);
+		eventProvider.injectMembers(injector);
 
 		viewer = new ScheduleChartViewer<>(parent,
 				new ScheduleChartProviders(eventLabelProvider, drawableEventProvider, drawableEventTooltipProvider, sortingProvider, scheduleChartRowsDataProvider, eventStylingProvider, drawableLegendProvider),
@@ -312,8 +318,8 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 		packAction = new PackAction(viewer.getCanvas());
 		highlightAction = new HighlightAction(viewer, viewer.getCanvas(), eventStylingProvider, highlighters);
 		labelMenuAction = new NinetyDayScheduleLabelMenuAction(this, eventLabelProvider);
-		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer.getCanvas(), settings);
 		sortMenuAction = new NinetyDayScheduleSortMenuAction(this, sortingProvider);
+		filterMenuAction = new NinetyDayScheduleFilterMenuAction(this, viewer, settings, schedulePositionsExtensionPoints, eventProvider.getEnabledPositionsSequenceTracker());
 		showAnnotationsAction = new ShowAnnotationsAction(viewer.getCanvas(), settings);
 		showLegendAction = new ShowLegendAction(viewer.getCanvas(), settings);
 		gotoPreferences = new RunnableAction("Preferences", () -> {

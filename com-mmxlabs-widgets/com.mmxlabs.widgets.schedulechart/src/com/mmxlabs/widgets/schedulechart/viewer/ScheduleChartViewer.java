@@ -94,6 +94,26 @@ public class ScheduleChartViewer<T> extends TypedViewer<T> {
 
 		canvas.redraw();
 	}
+	
+	public void hardRefresh() {
+		canvas.clear();
+
+		// Always pass in the same events for the internal map and to the classify function, otherwise selection won't work correctly.
+		final List<ScheduleEvent> events = eventProvider.getEvents(input);
+		
+		// Initialise internal map
+		internalDataMap.clear();
+		events.forEach(e -> internalDataMap.put(e.getData(), e));
+
+		final List<ScheduleChartRow> newRows = eventProvider.classifyEventsIntoRows(events).stream().filter(r -> !r.getName().isBlank()).toList();
+		canvas.addAll(newRows);
+		
+		if (input == null) {
+			canvas.getFilterSupport().applyDefaultFilters();
+		}
+
+		canvas.redraw();
+	}
 
 	@Override
 	public T getInput() {

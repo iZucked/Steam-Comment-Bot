@@ -17,13 +17,20 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.lingo.reports.services.EquivalentsManager;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.BuySellSplit;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.EnabledPositionsSequenceProviderTracker;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.ISchedulePositionsSequenceProvider;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.ISchedulePositionsSequenceProviderExtension;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.PositionsSequenceProviderException;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -60,21 +67,24 @@ import com.mmxlabs.widgets.schedulechart.ScheduleEvent;
 import com.mmxlabs.widgets.schedulechart.ScheduleEventAnnotation;
 import com.mmxlabs.widgets.schedulechart.providers.IScheduleEventProvider;
 
-
 public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<NinetyDayScheduleInput> {
-	
+
 	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
 	private final EquivalentsManager equivalentsManager;
 	private final IScheduleChartSettings settings;
+	private final EnabledPositionsSequenceProviderTracker enabledPSPTracker = new EnabledPositionsSequenceProviderTracker();
 	private final IScheduleChartRowsDataProvider scheduleCharRowsDataProvider;
+	@Inject
+	private Iterable<ISchedulePositionsSequenceProviderExtension> positionsSequenceProviderExtensions;
 	private final NinetyDayScheduleReport parent;
 
-	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, IScheduleChartSettings settings, IScheduleChartRowsDataProvider scheduleCharRowsDataProvider, 
+	public NinetyDayScheduleEventProvider(EquivalentsManager equivalentsManager, IScheduleChartSettings settings, IScheduleChartRowsDataProvider scheduleCharRowsDataProvider,
 			NinetyDayScheduleReport parent) {
 		this.equivalentsManager = equivalentsManager;
 		this.settings = settings;
 		this.scheduleCharRowsDataProvider = scheduleCharRowsDataProvider;
 		this.parent = parent;
+
 	}
 
 	@Override
@@ -86,7 +96,11 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		}
 		return res;
 	}
-	
+
+	public void injectMembers(Injector injector) {
+		injector.injectMembers(this);
+	}
+
 	private List<ScheduleEvent> getEventForScenarioResult(ScenarioResult sr, boolean isPinned) {
 		if (sr == null) {
 			return Collections.emptyList();
@@ -100,7 +114,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		if (lastScheduleFromScenario == null) {
 			return Collections.emptyList();
 		}
-		
+
 		// contains Sequence, CombinedSequence and PositionsSequence
 		final List<Object> sequences = getSequences(lastScheduleFromScenario);
 		final List<Event> events = new ArrayList<>();
@@ -124,22 +138,22 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		final List<ScheduleEvent> scheduleEvents = events.stream().map(e -> makeScheduleEvent(e, sr, isPinned)).collect(Collectors.toList());
 		scheduleEvents.addAll(positionSequenceScheduleEvents);
 		return scheduleEvents;
-		
+
 	}
 
 	@Override
 	public ScheduleChartRowKey getKeyForEvent(ScheduleEvent event) {
 		if (event.getData() instanceof final PositionsSequenceElement positionsSequenceElement) {
-			return new ScheduleChartRowKey(positionsSequenceElement.isBuyRow() ? NinetyDayScheduleChartRowKeys.BUY_ROW : NinetyDayScheduleChartRowKeys.SELL_ROW,
-					positionsSequenceElement.getPositionsSequence());
+
+			return new ScheduleChartRowKey(positionsSequenceElement.getPositionsSequence().toString(), positionsSequenceElement.getPositionsSequence());
 		}
 		if (event.getData() instanceof final Event e) {
 			// Check if event is a non-shipped event
-			if(e.eContainer() instanceof NonShippedSequence nss) {
+			if (e.eContainer() instanceof NonShippedSequence nss) {
 				var name = nss.getVessel() == null ? "" : nss.getVessel().getName();
 				return new ScheduleChartRowKey(name, nss);
 			}
-			
+
 			var name = vesselAssignmentFormatter.render(e);
 			return new ScheduleChartRowKey(name == null ? "" : name, e.getSequence());
 		}
@@ -193,6 +207,42 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		return res;
 	}
 
+	private List<@NonNull PositionsSequence> addBuySellExtensions(Schedule schedule, Collection<SlotVisit> slotVisitsToIgnore) {
+		List<@NonNull PositionsSequence> result = new ArrayList<>();
+
+		if (enabledPSPTracker.hasInputChanged()) {
+			enabledPSPTracker.clearErrors();
+			enabledPSPTracker.collectErrors(positionsSequenceProviderExtensions, schedule, slotVisitsToIgnore);
+			enabledPSPTracker.setInputChanged(false);
+		}
+
+		if (positionsSequenceProviderExtensions.iterator().hasNext()) {
+			for (var ext : positionsSequenceProviderExtensions) {
+				ISchedulePositionsSequenceProvider provider = ext.createInstance();
+				try {
+					if (enabledPSPTracker.isEnabledWithNoError(provider.getId())) {
+						result.addAll(provider.provide(schedule, slotVisitsToIgnore));
+					}
+				} catch (PositionsSequenceProviderException e) {
+					enabledPSPTracker.addError(provider.getId(), e);
+					MessageDialog dialog = new MessageDialog(parent.getViewer().getControl().getShell(), e.getTitle(), null, e.getDescription(), 0, 0, "OK");
+					dialog.create();
+					dialog.open();
+				}
+			}
+		}
+
+		if (result.isEmpty()) {
+			try {
+				return new BuySellSplit().provide(schedule, slotVisitsToIgnore);
+			} catch (PositionsSequenceProviderException e) {
+				// BuySellSplit should never throw this exception
+			}
+		}
+
+		return result;
+	}
+
 	private void addPositionsSequences(List<Object> res, Schedule schedule) {
 		final Collection<Slot<?>> nonShippedSlots = new HashSet<>();
 		for (final NonShippedSequence seq : schedule.getNonShippedSequences()) {
@@ -211,15 +261,13 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 			slotVisitsToIgnore = Collections.emptySet();
 		} else {
 			slotVisitsToIgnore = schedule.getCargoAllocations().stream() //
-					.filter(ca -> !parent.getSelectedContracts().contains(ca.getSlotAllocations().get(0).getSlot().getContract()))
-					.map(CargoAllocation::getSlotAllocations) //
+					.filter(ca -> !parent.getSelectedContracts().contains(ca.getSlotAllocations().get(0).getSlot().getContract())).map(CargoAllocation::getSlotAllocations) //
 					.flatMap(List::stream) //
 					.filter(sa -> nonShippedSlots.contains(sa.getSlot())) //
-					.map(SlotAllocation::getSlotVisit)
-					.collect(Collectors.toSet());
+					.map(SlotAllocation::getSlotVisit).collect(Collectors.toSet());
 		}
-
-		res.addAll(PositionsSequence.makeBuySellSequences(schedule, slotVisitsToIgnore, ""));
+		res.addAll(addBuySellExtensions(schedule, slotVisitsToIgnore));
+		// res.addAll(PositionsSequence.makeBuySellSequences(schedule, slotVisitsToIgnore, ""));
 	}
 
 	private void collectEvents(List<Event> res, Sequence s) {
@@ -251,7 +299,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 			collectEvents(res, s);
 		}
 	}
-	
+
 	private void collectEvents(List<Event> res, NonShippedSequence nss) {
 		for (final Event e : nss.getEvents()) {
 			res.add(e);
@@ -261,9 +309,10 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	private void collectEvents(final List<Object> elements, final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence, ScenarioResult scenarioResult, boolean isPinned) {
 		for (final Object element : positionSequence.getElements()) {
 			final LocalDateTime startTime = PositionsSeqenceElements.getEventTime(element);
-			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), element, scenarioResult, isPinned, List.of(), false);
+			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), element, scenarioResult,
+					isPinned, List.of(), false);
 			scheduleEvent.forceVisible();
-			
+
 			elements.add(element);
 			scheduleEvents.add(scheduleEvent);
 		}
@@ -360,10 +409,13 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		final List<ScheduleChartRow> classified = IScheduleEventProvider.super.classifyEventsIntoRows(events);
 		return classified;
 	}
-	
+
 	@Override
 	public IScheduleChartRowsDataProvider getRowsDataProvider() {
 		return scheduleCharRowsDataProvider;
 	}
 
+	public EnabledPositionsSequenceProviderTracker getEnabledPositionsSequenceTracker() {
+		return enabledPSPTracker;
+	}
 }

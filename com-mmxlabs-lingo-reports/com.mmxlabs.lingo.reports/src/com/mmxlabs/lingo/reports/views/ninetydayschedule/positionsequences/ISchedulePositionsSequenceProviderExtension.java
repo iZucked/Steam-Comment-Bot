@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2023
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.scheduleview.views.positionssequences;
+package com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 

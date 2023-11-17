@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule;
 
 import java.util.Comparator;
 
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.NonShippedSequence;
@@ -60,15 +61,14 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 			return tooltip;
 		}
 	}
-	
+
 	private enum Type {
 		INVENTORY, DES, FOB, NON_SHIPPED, FLEET, CHARTER
 	}
-	
+
 	private Mode mode = Mode.INTERLEAVE;
 	private Category category = Category.BY_NAME;
-	
-	
+
 	private Type getSequenceType(final Object obj) {
 		if (obj instanceof CombinedSequence) {
 			return Type.FLEET;
@@ -88,11 +88,11 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 			return Type.INVENTORY;
 		} else if (obj instanceof PositionsSequence p) {
 			return Type.DES;
-//			return p.isBuy() ? Type.DES : Type.FOB;
+			// return p.isBuy() ? Type.DES : Type.FOB;
 		}
 		return Type.FLEET;
 	}
-	
+
 	private int getSequenceCapacity(final Object obj) {
 		if (obj instanceof final CombinedSequence combinedSequence) {
 			final Vessel vessel = combinedSequence.getVessel();
@@ -114,26 +114,51 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 		}
 		return 0;
 	}
-	
+
+	private int sortBuySellRows(ScheduleChartRow r1, ScheduleChartRow r2) {
+		Object r1RowData = r1.getKey().getData();
+		Object r2RowData = r2.getKey().getData();
+		// Sort positions sequences by partition description first and buy/sell later (pairs buys and sells)
+		if (r1RowData instanceof PositionsSequence ps1 && r2RowData instanceof PositionsSequence ps2) {
+			
+			final String desc1 = ps1.getDescription();
+			final String desc2 = ps2.getDescription();
+
+			final int c = desc1.compareTo(desc2);
+			if (c != 0) {
+				// Other group comes last
+				if (desc1.equals(PositionsSequence.OTHER_GROUP_DESCRIPTION)) {
+					return 1;
+				} else if (desc2.equals(PositionsSequence.OTHER_GROUP_DESCRIPTION)) {
+					return -1;
+				}
+				return c;
+			} else {
+				// Buy comes before sell
+				return Boolean.compare(!ps1.isBuy(), !ps2.isBuy());
+			}
+		}
+		return 0;
+	}
+
 	/**
 	 * Compares chart rows to decide which row should come first on the chart.
 	 * 
-	 * @implNote it might be a good idea to compare by scenario name first
-	 * in case of a pin diff mode. Otherwise rows will not be grouped by scenario. not implemented yet.
+	 * @implNote it might be a good idea to compare by scenario name first in case of a pin diff mode. Otherwise rows will not be grouped by scenario. not implemented yet.
 	 */
 	@Override
 	public Comparator<ScheduleChartRow> getComparator() {
 		return (firstRow, secondRow) -> {
-			
-			if(mode == Mode.STACK) {
+
+			if (mode == Mode.STACK) {
 				final String scenario1 = firstRow.getScenarioName();
 				final String scenario2 = secondRow.getScenarioName();
-				
+
 				// Group By scenario
-				if(!scenario1.equals(scenario2)) {
+				if (!scenario1.equals(scenario2)) {
 					return scenario1.compareTo(scenario2);
 				}
-				
+
 				// Group by fleet/spot
 				final Type s1Type = getSequenceType(firstRow.getKey().getData());
 				final Type s2Type = getSequenceType(secondRow.getKey().getData());
@@ -141,7 +166,7 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 				if (s1Type != s2Type) {
 					return s1Type.ordinal() - s2Type.ordinal();
 				}
-				
+
 				if (category == Category.BY_SIZE) {
 
 					// Sort by capacity
@@ -155,8 +180,7 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 
 				}
 
-				if (category == Category.BY_NAME)
-				{
+				if (category == Category.BY_NAME) {
 
 					// Sort by name
 					final String s1Name = firstRow.getName();
@@ -176,7 +200,7 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 				if (s1Type != s2Type) {
 					return s1Type.ordinal() - s2Type.ordinal();
 				}
-				
+
 				if (category == Category.BY_SIZE) {
 
 					// Sort by capacity
@@ -190,19 +214,18 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 
 				}
 
-				if (category == Category.BY_NAME)
-				{
+				if (category == Category.BY_NAME) {
 
 					// Sort by name
 					final String s1Name;
-					if(!firstRow.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
+					if (!firstRow.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
 						s1Name = "";
 					} else {
 						s1Name = firstRow.getName();
 					}
-					 
+
 					final String s2Name;
-					if(!secondRow.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
+					if (!secondRow.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
 						s2Name = "";
 					} else {
 						s2Name = secondRow.getName();
@@ -214,52 +237,52 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 					}
 
 				}
-				
+
 				final String scenario1 = firstRow.getScenarioName();
 				final String scenario2 = secondRow.getScenarioName();
-				
+
 				// Group By scenario
-				if(!scenario1.equals(scenario2)) {
+				if (!scenario1.equals(scenario2)) {
 					return scenario1.compareTo(scenario2);
-				} 
-				
-				
-			}
-			// Sort positions sequences by partition description first and buy/sell later (pairs buys and sells)
-			if (firstRow.getKey().getData() instanceof PositionsSequence ps1 && secondRow.getKey().getData() instanceof PositionsSequence ps2) {
-				int result = Boolean.compare(!ps1.isBuy(), !ps2.isBuy());
-				
-				if(result != 0) {
-					return result;
 				}
+
 			}
-			
-			
-			final int priorityComparison = 
-					Integer.compare(firstRow.getRowType().getPriority(), secondRow.getRowType().getPriority());
-			
+//			// Sort positions sequences by partition description first and buy/sell later (pairs buys and sells)
+//			if (firstRow.getKey().getData() instanceof PositionsSequence ps1 && secondRow.getKey().getData() instanceof PositionsSequence ps2) {
+//				int result = Boolean.compare(!ps1.isBuy(), !ps2.isBuy());
+//
+//				if (result != 0) {
+//					return result;
+//				}
+//			}
+			final int positionComparison = sortBuySellRows(firstRow, secondRow);
+			if(positionComparison != 0) {
+				return positionComparison;
+			}
+
+			final int priorityComparison = Integer.compare(firstRow.getRowType().getPriority(), secondRow.getRowType().getPriority());
+
 			if (priorityComparison != 0) {
 				return priorityComparison;
 			}
 			
+			
+
 			return firstRow.getName().compareTo(secondRow.getName());
 		};
 	}
-	
+
 	public Mode getMode() {
 		return mode;
 	}
-
 
 	public void setMode(Mode mode) {
 		this.mode = mode;
 	}
 
-
 	public Category getCategory() {
 		return category;
 	}
-
 
 	public void setCategory(Category category) {
 		this.category = category;
