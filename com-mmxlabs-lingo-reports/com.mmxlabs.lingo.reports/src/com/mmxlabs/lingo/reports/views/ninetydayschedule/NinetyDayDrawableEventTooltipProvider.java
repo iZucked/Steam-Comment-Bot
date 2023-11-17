@@ -90,7 +90,11 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 			} else if (event instanceof NonShippedIdle) {
 				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, NonShippedIdle.class, this::getIdleHeader)
 				.addBodyField("Idle time", NonShippedIdle.class, i -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, i.getDuration()));
-			} else if (event instanceof SlotVisit) {
+			} else if (event instanceof SlotVisit slotVisit) {
+				if(slotVisit.getSlotAllocation() != null && slotVisit.getSlotAllocation().getContract() != null) {
+					tooltipBuilder.addBodyField("Contract", SlotVisit.class, sv -> sv.getSlotAllocation().getContract().getName());
+				}
+				
 				tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, SlotVisit.class, sv -> "At " + sv.getPort().getName())
 						.addBodyField("Time in port", SlotVisit.class, sv -> Formatters.formatAsDays(DurationMode.DAYS_HOURS_HUMAN, sv.getDuration()))
 						.addBodyField("Window end", SlotVisit.class, sv -> DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay()).format(sv.getSlotAllocation().getSlot().getSchedulingTimeWindow().getEnd()));
