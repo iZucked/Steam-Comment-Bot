@@ -77,6 +77,13 @@ public class CargoEmissionAccountingReportJSONGenerator {
 		return models;
 	}
 	
+	/**
+	 * 
+	 * @param schedule
+	 * @param dis2disMode
+	 * @param includeEvents
+	 * @return
+	 */
 	private static List<CargoEmissionRecord> getObjectToEventsMap(final Schedule schedule,
 			final boolean dis2disMode, final boolean includeEvents){
 		final List<CargoEmissionRecord> records = new ArrayList<>();
@@ -93,7 +100,7 @@ public class CargoEmissionAccountingReportJSONGenerator {
 				
 				if (dis2disMode) {
 					// end condition for discharge to discharge mode
-					if (isDischarge(event) && isLastDischarge(event)) {
+					if (isDischarge(event) && isLastDischargeInCargo(event)) {
 						events.add(event);
 						records.add(new CargoEmissionRecord(vessel, getCargoAllocation(event), null, events));
 						events = new ArrayList<>();
@@ -163,15 +170,18 @@ public class CargoEmissionAccountingReportJSONGenerator {
 	}
 	
 	/**
-	 * Check if the event is on the last discharge
+	 * Check if the event is on the last discharge in cargo
 	 * @param event
 	 * @return
 	 */
-	private static boolean isLastDischarge(final Event event) {
+	private static boolean isLastDischargeInCargo(final Event event) {
 		if (event instanceof final SlotVisit visit && visit.getSlotAllocation() != null && visit.getSlotAllocation().getSlot() instanceof final DischargeSlot ds) {
 			final Cargo cargo = ds.getCargo();
 			if (cargo != null) {
-				return cargo.getSortedSlots().get(cargo.getSortedSlots().size() - 1) == ds;
+				final var sortedSlots = cargo.getSortedSlots();
+				if (!sortedSlots.isEmpty()) {
+					return sortedSlots.get(sortedSlots.size() - 1) == ds;
+				}
 			}
 		}
 		return false;
