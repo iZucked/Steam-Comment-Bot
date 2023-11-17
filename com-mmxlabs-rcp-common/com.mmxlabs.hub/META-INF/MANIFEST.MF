@@ -38,7 +38,9 @@ Require-Bundle: org.eclipse.ui,
  org.apache.httpcomponents.httpcore,
  org.eclipse.core.net,
  org.apache.httpcomponents.httpclient,
- com.google.guava
+ com.google.guava,
+ org.jsoup;bundle-version="1.14.3",
+ org.apache.commons.logging;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered
