@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.widgets.feature"
       label="Minimax Labs Widgets Feature"
-      version="6.11.4.qualifier"
+      version="6.11.6.RELEASE"
       provider-name="Minimax Labs Ltd.">
 
    <plugin
