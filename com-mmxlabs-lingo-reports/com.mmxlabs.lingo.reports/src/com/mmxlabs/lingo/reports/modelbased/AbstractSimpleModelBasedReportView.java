@@ -313,4 +313,8 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 			copyTableAction.setShowBackgroundColours(showBackgroundColours);
 		}
 	}
+	
+	protected void refresh() {
+		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
+	}
 }

@@ -11,6 +11,10 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.SWT;
 
+import com.mmxlabs.rcp.icons.lingo.CommonImages;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
+import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
+
 public class DeltaHelper {
 	private GridTableViewer viewer;
 	private boolean deltaMode;
@@ -43,6 +47,7 @@ public class DeltaHelper {
 				viewer.refresh();
 			}
 		};
+		deltaAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delta, IconMode.Enabled));
 		deltaAction.setToolTipText("Show Δ rows only");
 		return deltaAction;
 	}
