@@ -88,7 +88,7 @@ public class EmissionsUtil {
 		if (ciiReferenceData.getFuelEmissions() != null && !ciiReferenceData.getFuelEmissions().isEmpty()) {
 			for (final var entry : ciiReferenceData.getFuelEmissions()) {
 				final String name = entry.getName();
-				if (name != null && !name.isBlank() && name.toLowerCase().contains("LNG") && entry.getCf() != 0.0) {
+				if (name != null && !name.isBlank() && name.toLowerCase().contains("lng") && entry.getCf() != 0.0) {
 					return entry.getCf();
 				}
 			}
