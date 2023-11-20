@@ -57,7 +57,7 @@ public class PanamaSeasonalityRecordImpl extends EObjectImpl implements PanamaSe
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int START_DAY_EDEFAULT = 0;
+	protected static final int START_DAY_EDEFAULT = 1;
 
 	/**
 	 * The cached value of the '{@link #getStartDay() <em>Start Day</em>}' attribute.
@@ -77,7 +77,7 @@ public class PanamaSeasonalityRecordImpl extends EObjectImpl implements PanamaSe
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int START_MONTH_EDEFAULT = 0;
+	protected static final int START_MONTH_EDEFAULT = 1;
 
 	/**
 	 * The cached value of the '{@link #getStartMonth() <em>Start Month</em>}' attribute.
@@ -108,6 +108,15 @@ public class PanamaSeasonalityRecordImpl extends EObjectImpl implements PanamaSe
 	 * @ordered
 	 */
 	protected int startYear = START_YEAR_EDEFAULT;
+
+	/**
+	 * This is true if the Start Year attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean startYearESet;
 
 	/**
 	 * The default value of the '{@link #getNorthboundWaitingDays() <em>Northbound Waiting Days</em>}' attribute.
@@ -273,8 +282,35 @@ public class PanamaSeasonalityRecordImpl extends EObjectImpl implements PanamaSe
 	public void setStartYear(int newStartYear) {
 		int oldStartYear = startYear;
 		startYear = newStartYear;
+		boolean oldStartYearESet = startYearESet;
+		startYearESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PANAMA_SEASONALITY_RECORD__START_YEAR, oldStartYear, startYear));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.PANAMA_SEASONALITY_RECORD__START_YEAR, oldStartYear, startYear, !oldStartYearESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetStartYear() {
+		int oldStartYear = startYear;
+		boolean oldStartYearESet = startYearESet;
+		startYear = START_YEAR_EDEFAULT;
+		startYearESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.PANAMA_SEASONALITY_RECORD__START_YEAR, oldStartYear, START_YEAR_EDEFAULT, oldStartYearESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetStartYear() {
+		return startYearESet;
 	}
 
 	/**
@@ -396,7 +432,7 @@ public class PanamaSeasonalityRecordImpl extends EObjectImpl implements PanamaSe
 				setStartMonth(START_MONTH_EDEFAULT);
 				return;
 			case CargoPackage.PANAMA_SEASONALITY_RECORD__START_YEAR:
-				setStartYear(START_YEAR_EDEFAULT);
+				unsetStartYear();
 				return;
 			case CargoPackage.PANAMA_SEASONALITY_RECORD__NORTHBOUND_WAITING_DAYS:
 				setNorthboundWaitingDays(NORTHBOUND_WAITING_DAYS_EDEFAULT);
@@ -423,7 +459,7 @@ public class PanamaSeasonalityRecordImpl extends EObjectImpl implements PanamaSe
 			case CargoPackage.PANAMA_SEASONALITY_RECORD__START_MONTH:
 				return startMonth != START_MONTH_EDEFAULT;
 			case CargoPackage.PANAMA_SEASONALITY_RECORD__START_YEAR:
-				return startYear != START_YEAR_EDEFAULT;
+				return isSetStartYear();
 			case CargoPackage.PANAMA_SEASONALITY_RECORD__NORTHBOUND_WAITING_DAYS:
 				return northboundWaitingDays != NORTHBOUND_WAITING_DAYS_EDEFAULT;
 			case CargoPackage.PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS:
@@ -447,7 +483,7 @@ public class PanamaSeasonalityRecordImpl extends EObjectImpl implements PanamaSe
 		result.append(", startMonth: ");
 		result.append(startMonth);
 		result.append(", startYear: ");
-		result.append(startYear);
+		if (startYearESet) result.append(startYear); else result.append("<unset>");
 		result.append(", northboundWaitingDays: ");
 		result.append(northboundWaitingDays);
 		result.append(", southboundWaitingDays: ");

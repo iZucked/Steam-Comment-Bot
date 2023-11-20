@@ -56,12 +56,14 @@ public interface PanamaSeasonalityRecord extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Start Day</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start Day</em>' attribute.
 	 * @see #setStartDay(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPanamaSeasonalityRecord_StartDay()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat numberFormat='#0'"
+	 * @model default="1"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##'"
 	 * @generated
 	 */
 	int getStartDay();
@@ -78,12 +80,13 @@ public interface PanamaSeasonalityRecord extends EObject {
 
 	/**
 	 * Returns the value of the '<em><b>Start Month</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start Month</em>' attribute.
 	 * @see #setStartMonth(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPanamaSeasonalityRecord_StartMonth()
-	 * @model
+	 * @model default="1"
 	 * @generated
 	 */
 	int getStartMonth();
@@ -103,9 +106,12 @@ public interface PanamaSeasonalityRecord extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start Year</em>' attribute.
+	 * @see #isSetStartYear()
+	 * @see #unsetStartYear()
 	 * @see #setStartYear(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getPanamaSeasonalityRecord_StartYear()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='####'"
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='###0'"
 	 * @generated
 	 */
 	int getStartYear();
@@ -115,10 +121,35 @@ public interface PanamaSeasonalityRecord extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Start Year</em>' attribute.
+	 * @see #isSetStartYear()
+	 * @see #unsetStartYear()
 	 * @see #getStartYear()
 	 * @generated
 	 */
 	void setStartYear(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartYear <em>Start Year</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetStartYear()
+	 * @see #getStartYear()
+	 * @see #setStartYear(int)
+	 * @generated
+	 */
+	void unsetStartYear();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartYear <em>Start Year</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Start Year</em>' attribute is set.
+	 * @see #unsetStartYear()
+	 * @see #getStartYear()
+	 * @see #setStartYear(int)
+	 * @generated
+	 */
+	boolean isSetStartYear();
 
 	/**
 	 * Returns the value of the '<em><b>Northbound Waiting Days</b></em>' attribute.

@@ -4542,9 +4542,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(panamaSeasonalityRecordEClass, PanamaSeasonalityRecord.class, "PanamaSeasonalityRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPanamaSeasonalityRecord_VesselGroupCanalParameter(), this.getVesselGroupCanalParameters(), null, "vesselGroupCanalParameter", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPanamaSeasonalityRecord_StartDay(), ecorePackage.getEInt(), "startDay", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPanamaSeasonalityRecord_StartMonth(), ecorePackage.getEInt(), "startMonth", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPanamaSeasonalityRecord_StartYear(), ecorePackage.getEInt(), "startYear", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_StartDay(), ecorePackage.getEInt(), "startDay", "1", 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_StartMonth(), ecorePackage.getEInt(), "startMonth", "1", 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_StartYear(), ecorePackage.getEInt(), "startYear", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPanamaSeasonalityRecord_NorthboundWaitingDays(), ecorePackage.getEInt(), "northboundWaitingDays", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPanamaSeasonalityRecord_SouthboundWaitingDays(), ecorePackage.getEInt(), "southboundWaitingDays", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -4900,13 +4900,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		  (getPanamaSeasonalityRecord_StartDay(),
 		   source,
 		   new String[] {
-			   "numberFormat", "#0"
+			   "formatString", "##"
 		   });
 		addAnnotation
 		  (getPanamaSeasonalityRecord_StartYear(),
 		   source,
 		   new String[] {
-			   "formatString", "####"
+			   "formatString", "###0"
 		   });
 		addAnnotation
 		  (getCIIStartOptions_YearToDateEmissions(),
