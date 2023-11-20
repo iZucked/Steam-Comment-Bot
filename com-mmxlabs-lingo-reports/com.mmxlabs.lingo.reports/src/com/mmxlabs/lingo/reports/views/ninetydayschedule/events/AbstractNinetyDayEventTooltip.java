@@ -7,10 +7,10 @@ package com.mmxlabs.lingo.reports.views.ninetydayschedule.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
+
 import com.mmxlabs.widgets.schedulechart.ScheduleEventTooltip;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElement;
 import com.mmxlabs.widgets.schedulechart.draw.BasicDrawableElements;
@@ -23,7 +23,7 @@ public abstract class AbstractNinetyDayEventTooltip extends DrawableScheduleEven
 	protected AbstractNinetyDayEventTooltip(ScheduleEventTooltip tooltip) {
 		super(tooltip);
 	}
-
+	
 	@Override
 	protected DrawableElement getTooltipBackground() {
 		return new DrawableElement() {
@@ -34,8 +34,8 @@ public abstract class AbstractNinetyDayEventTooltip extends DrawableScheduleEven
 				int shadowOffset = 2;
 				Color startColor = new Color(new RGB(255,255,255));
 				Color endColor = new Color(new RGB(219, 236, 255));
-				res.add(BasicDrawableElements.Rectangle.withBounds(anchor.x + shadowOffset, anchor.y + shadowOffset + yOffset, getWidth(r), getTotalHeight(r)).bgColour(getBackgroundShadowColour()).border(getBackgroundShadowColour(), 2).alpha(150).create());
-				res.add(BasicDrawableElements.Rectangle.withBounds(anchor.x, anchor.y + yOffset, getWidth(r), getTotalHeight(r)).bgGradient(startColor, endColor).border(getStrokeColour(), 2).create());
+				res.add(BasicDrawableElements.Rectangle.withBounds(shadowOffset, shadowOffset, getWidth(), getTotalHeight(r)).bgColour(getBackgroundShadowColour()).border(getBackgroundShadowColour(), 2).alpha(150).create());
+				res.add(BasicDrawableElements.Rectangle.withBounds(0, 0, getWidth(), getTotalHeight(r)).bgGradient(startColor, endColor).border(getStrokeColour(), 2).create());
 				return res;
 			}
 		};

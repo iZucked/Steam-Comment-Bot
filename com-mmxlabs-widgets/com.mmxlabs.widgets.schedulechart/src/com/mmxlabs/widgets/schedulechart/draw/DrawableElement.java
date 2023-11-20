@@ -47,7 +47,7 @@ public abstract class DrawableElement {
 		return getBasicDrawableElements((DrawerQueryResolver) null);
 	}
 
-	public final List<BasicDrawableElement> getBasicDrawableElements(DrawerQueryResolver queryResolver) {
+	public List<BasicDrawableElement> getBasicDrawableElements(DrawerQueryResolver queryResolver) {
 		if (bounds == null) { 
 			throw new UnsupportedOperationException("Can't get basic drawable elements without bounds"); 
 		}

@@ -77,7 +77,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 	private final Map<Color, Color> hiddenElementColourCache = new HashMap<>();
 	private final UnaryOperator<Color> hiddenElementColourFilter = c -> hiddenElementColourCache.computeIfAbsent(c, ScheduleChartColourUtils::getHiddenElementsFilter);
-	
+
+	private ScheduleChartTooltip tooltipShell;
+
 	public ScheduleCanvas(Composite parent, ScheduleChartProviders providers) {
 		this(parent, providers, new DefaultScheduleChartSettings());
 	}
@@ -112,6 +114,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		this.rowHeaderMenuHandler = new RowFilterSupportHandler(this, filterSupport);
 
 		initListeners();
+		
+		tooltipShell = new ScheduleChartTooltip(parent.getShell(), SWT.TOOL | SWT.NO_TRIM | SWT.NO_FOCUS);
+		tooltipShell.setVisible(false);
 	}
 
 	@Override
@@ -119,6 +124,9 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		// Make sure we clean up any colours we create
 		hiddenElementColourCache.values().forEach(Color::dispose);
 		hiddenElementColourCache.clear();
+		
+		tooltipShell.dispose();
+		
 		super.dispose();
 	}
 	
@@ -241,15 +249,34 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		final BasicDrawableElement topLeftRectangle = BasicDrawableElements.Rectangle.withBounds(originalBounds.x, originalBounds.y, rowHeaderWidth, drawableTimeScale.getTotalHeaderHeight()).bgColour(settings.getColourScheme().getRowHeaderBgColour(1))
 				.borderColour(settings.getColourScheme().getRowOutlineColour(-1)).create();
 		drawer.drawOne(topLeftRectangle);
-
-		canvasState.getHoveredEvent().flatMap(de -> drawableTooltipProvider.getDrawableTooltip(de.getScheduleEvent())).ifPresent(dt -> {
-			final Rectangle bs = canvasState.getHoveredEvent().get().getBounds();
-			final Point anchor = new Point(bs.x, bs.y);
-			dt.setBounds(mainBounds);
-			dt.setAnchor(anchor, settings.getEventHeight() * 5 / 4);
-			drawer.drawOne(dt, resolver);
-		});
 		
+		// Update the tooltip info
+		boolean hasTooltip = false;
+		var hoveredEvent = canvasState.getHoveredEvent();
+		if (hoveredEvent.isPresent()) {
+			var he = hoveredEvent.get();
+			var tooltip = drawableTooltipProvider.getDrawableTooltip(he.getScheduleEvent());
+			// No all events have a tooltip
+			if (tooltip.isPresent()) {
+				// Determine where the tooltip should be rendered - based on event posision
+				final Rectangle bs = he.getBounds();
+				// Convert to display level coords for the tooltip shell
+				var loc = getParent().toDisplay(bs.x, bs.y);
+				// Shift a bit so the tooltip is not directly under the mouse
+				loc.y += settings.getEventHeight() * 5 / 4;
+				// Update the tooltip shell with the new rendering object
+				tooltipShell.setTooltipEvent(tooltip.get(), loc);
+				// Make sure we show the tooltip
+				hasTooltip = true;
+			} 
+		}
+		// Show or hide the tooltip as needed.
+		if (!hasTooltip) {
+			hideTooltip();
+		} else {
+			showTooltip();
+		}
+
 		// Draw legend
 		if(settings.showLegend()) {
 			final DrawableElement legend = drawableLegendProvider.getLegend();
@@ -534,6 +561,20 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 	public ScheduleChartMode getScheduleChartMode() {
 		return canvasState.getScheduleChartMode();
+	}
+
+	public void showTooltip() {
+		if (!tooltipShell.isVisible()) {
+			tooltipShell.setVisible(true);
+			tooltipShell.setEnabled(true);
+		}
+	}
+
+	public void hideTooltip() {
+		if (tooltipShell.isVisible()) {
+			tooltipShell.setVisible(false);
+			tooltipShell.setEnabled(false);
+		}
 	}
 
 }
