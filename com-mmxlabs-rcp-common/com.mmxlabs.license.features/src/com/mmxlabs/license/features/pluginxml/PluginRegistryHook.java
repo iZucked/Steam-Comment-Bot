@@ -20,6 +20,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.internal.FeatureEnablementModule;
 import com.mmxlabs.license.features.internal.PluginXMLEnablementExtension;
+import com.mmxlabs.license.ssl.LicenseManager;
 
 @SuppressWarnings("restriction")
 public class PluginRegistryHook {
@@ -32,6 +33,18 @@ public class PluginRegistryHook {
 	@Inject(optional = true)
 	private Iterable<PluginXMLEnablementExtension> featureEnablements;
 
+	private boolean isPermitted(final PluginXMLEnablementExtension ext) {
+		if (PluginXMLEnablementExtension.isDeveloper(ext) && LicenseManager.isDevLicense()) {
+			return true;
+		}
+		final String feature = ext.getFeature();
+		if (feature != null) {
+			final String permissionKey = "features:" + LicenseFeatures.clean(feature);
+			return LicenseFeatures.isPermitted(permissionKey);
+		}
+		return false;
+	}
+
 	public void registerEnablements() {
 
 		// Dynamically register UI elements.
@@ -40,9 +53,7 @@ public class PluginRegistryHook {
 			final Object token = reg.getTemporaryUserToken();
 
 			for (final PluginXMLEnablementExtension ext : featureEnablements) {
-
-				final String permissionKey = "features:" + LicenseFeatures.clean(ext.getFeature());
-				if (LicenseFeatures.isPermitted(permissionKey)) {
+				if (isPermitted(ext)) {
 					final Bundle bundle = ext.getBundle();
 
 					final IContributor contributor = ContributorFactoryOSGi.createContributor(bundle);

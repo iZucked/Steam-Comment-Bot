@@ -15,7 +15,14 @@ public interface PluginXMLEnablementExtension {
 	
 	@MapName("feature")
 	String getFeature();
-	
+
+	@MapName("developer")
+	String isDeveloperAsString();
+
+	static boolean isDeveloper(PluginXMLEnablementExtension ext) {
+		return Boolean.valueOf(ext.isDeveloperAsString());
+	}
+
 	@MapName("plugin.xml")
 	String getPluginXML();
 	

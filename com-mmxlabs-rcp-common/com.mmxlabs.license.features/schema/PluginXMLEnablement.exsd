@@ -49,7 +49,7 @@
 
    <element name="PluginXMLEnablement">
       <complexType>
-         <attribute name="feature" type="string" use="required">
+         <attribute name="feature" type="string">
             <annotation>
                <documentation>
                   
@@ -64,6 +64,13 @@
                <appinfo>
                   <meta.attribute kind="resource"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="developer" type="boolean">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

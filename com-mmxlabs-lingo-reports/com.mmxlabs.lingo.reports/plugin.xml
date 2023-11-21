@@ -950,6 +950,7 @@
       </PluginXMLEnablement>
       <PluginXMLEnablement
             feature="ninety-day-schedule-chart"
+            developer="true"
             plugin.xml="ninetydayschedulechart.plugin.xml">
       </PluginXMLEnablement>
    </extension>
