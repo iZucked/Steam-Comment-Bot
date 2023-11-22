@@ -383,6 +383,10 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 				currentRowHeight = settings.getBuySellRowHeight();
 			}
 			final DrawableScheduleChartRowHeader rowHeader = new DrawableScheduleChartRowHeader(this, drawableScheduleChartRow, filterSupport, getScheduleChartMode(), settings);
+			final Optional<UnaryOperator<Color>> optColourFilter = drawableScheduleChartRow.getColourFilter();
+			if (optColourFilter.isPresent()) {
+				rowHeader.setColourFilter(optColourFilter.get());
+			}
 			rowHeader.setBounds(new Rectangle(canvasState.getOriginalBounds().x, y, rowHeaderWidth, currentRowHeight));
 			res.add(rowHeader);
 			y += currentRowHeight;
