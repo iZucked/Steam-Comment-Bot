@@ -280,8 +280,6 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		// Draw legend
 		if(settings.showLegend()) {
 			final DrawableElement legend = drawableLegendProvider.getLegend();
-			
-			
 			int legendWidth = 220;
 			int legendHeight = 200;
 

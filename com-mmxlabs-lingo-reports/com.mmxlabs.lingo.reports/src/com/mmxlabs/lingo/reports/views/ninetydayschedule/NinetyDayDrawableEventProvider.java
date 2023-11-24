@@ -23,6 +23,7 @@ import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterLengthEve
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.CharterOutEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DischargeEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.DryDockEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.EndEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterLengthEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.GeneratedCharterOutEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LadenIdleEvent;
@@ -32,6 +33,7 @@ import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LateLoadEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.LoadEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.MaintenanceEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.NinetyDayPlaceholderEvent;
+import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.StartEvent;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -96,6 +98,10 @@ public class NinetyDayDrawableEventProvider implements IDrawableScheduleEventPro
 				return new GeneratedCharterOutEvent(scheduleEvent, bounds, noneSelected);
 			} else if (event instanceof com.mmxlabs.models.lng.schedule.GeneratedCharterLengthEvent) {
 				return new GeneratedCharterLengthEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof com.mmxlabs.models.lng.schedule.StartEvent) {
+				return new StartEvent(scheduleEvent, bounds, noneSelected);
+			} else if (event instanceof com.mmxlabs.models.lng.schedule.EndEvent) {
+				return new EndEvent(scheduleEvent, bounds, noneSelected);
 			}
 			return new NinetyDayPlaceholderEvent(scheduleEvent, bounds, noneSelected);
 		}

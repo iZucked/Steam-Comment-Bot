@@ -112,8 +112,8 @@ public final class ColourPalette {
 
 		setItemColour(ColourPaletteItems.Voyage_Discharge, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_Load, ColourElements.Background, Slot_White);
-		setItemColour(ColourPaletteItems.Voyage_Start, ColourElements.Background, Slot_White);
-		setItemColour(ColourPaletteItems.Voyage_End, ColourElements.Background, Slot_White);
+		setItemColour(ColourPaletteItems.Voyage_Start, ColourElements.Background, Black);
+		setItemColour(ColourPaletteItems.Voyage_End, ColourElements.Background, Black);
 		setItemColour(ColourPaletteItems.Voyage_Cooldown, ColourElements.Background, Slot_White);
 		setItemColour(ColourPaletteItems.Voyage_Purge, ColourElements.Background, Slot_White);
 		

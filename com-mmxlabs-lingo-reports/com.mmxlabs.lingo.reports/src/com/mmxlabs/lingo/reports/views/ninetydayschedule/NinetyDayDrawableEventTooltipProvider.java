@@ -19,12 +19,14 @@ import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.Position
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceClassification;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -53,6 +55,9 @@ import com.mmxlabs.widgets.schedulechart.providers.IDrawableScheduleEventTooltip
 
 public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleEventTooltipProvider {
 
+	private final VesselAssignmentFormatter vesselAssignmentFormatter = new VesselAssignmentFormatter();
+	private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay());
+
 	/**
 	 * Note that PositionsSequenceToolTip only has title and relies on other stuff when determining its body content
 	 */
@@ -65,11 +70,13 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 			tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, dontCareLambda -> null);
 			scheduleEventData = posElement.getElement();
 			tooltipBuilder = ScheduleEventTooltip.of(scheduleEvent, se -> ((PositionsSequenceElement) se.getData()).getElement());
-		}
+		} 
 		
-		if (scheduleEventData instanceof final Event event) {
-			final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateTimeStringDisplay());
-			
+		if(scheduleEventData instanceof final StartEvent) {
+			tooltipBuilder.add(ScheduleEventTooltipData.FOOTER_TEXT, StartEvent.class, e -> vesselAssignmentFormatter.render(e) + " avaliable until " + e.getEnd().format(dateTimeFormatter) ); //
+		} else if(scheduleEventData instanceof final EndEvent) {
+			tooltipBuilder.add(ScheduleEventTooltipData.FOOTER_TEXT, EndEvent.class, e -> vesselAssignmentFormatter.render(e) + " avaliable until " + e.getEnd().format(dateTimeFormatter) ); //
+		} else if (scheduleEventData instanceof final Event event) {
 			tooltipBuilder.addBodyField("ID", Event.class, Event::name) //
 			.addBodyField("Start", Event.class, j -> j.getStart().format(dateTimeFormatter)) //
 			.addBodyField("End", Event.class, j -> j.getEnd().format(dateTimeFormatter)); //
