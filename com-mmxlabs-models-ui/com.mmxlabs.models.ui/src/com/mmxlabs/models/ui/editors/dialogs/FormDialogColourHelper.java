@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2023
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.editors.dialogs;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
