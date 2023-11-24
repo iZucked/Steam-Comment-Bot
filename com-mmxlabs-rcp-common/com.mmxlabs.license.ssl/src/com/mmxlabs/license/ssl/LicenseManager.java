@@ -17,13 +17,22 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
+import javax.security.auth.x500.X500Principal;
+
 import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class LicenseManager {
+	
+	private static final String COMMON_NAME_KEY = "CN";
+	private static final String DEV_LICENCE_IDENTIFIER = "developers";
 
 	private static final Logger LOG = LoggerFactory.getLogger(LicenseManager.class);
 
@@ -39,6 +48,9 @@ public final class LicenseManager {
 	private static final String LICENSE_KEYSTORE = "license.p12";
 
 	private static File hubLicense = null;
+
+	private LicenseManager() {
+	}
 
 	public static KeyStore loadLicenseKeyFile(final InputStream inStream) throws Exception {
 		final KeyStore instance = KeyStore.getInstance(PKCS12);
@@ -178,16 +190,45 @@ public final class LicenseManager {
 		LicenseManager.hubLicense = hubLicense;
 	}
 
-	public static X509Certificate getClientLicense(final @Nullable KeyStore licenseKeystore) throws Exception {
+	public static @NonNull X509Certificate getClientLicense(final @Nullable KeyStore licenseKeystore) throws Exception {
 
 		// Hardcoded alias name in the keystore as part of generation process
 		final Certificate licenseCertificate = licenseKeystore.getCertificate("1");
 
 		// Check dates are valid. We expect a X509 certificate
-		if (licenseCertificate instanceof final X509Certificate x509Certificate) {
+		if (licenseCertificate instanceof final @NonNull X509Certificate x509Certificate) {
 			return x509Certificate;
 		} else {
 			throw new ClassCastException("Certificate is not an X509Certificate");
 		}
+	}
+
+	public static boolean isDevLicense() {
+		final @NonNull X509Certificate cert;
+		try {
+			cert = LicenseManager.getClientLicense(LicenseManager.getLicenseKeystore());
+		} catch (final Exception e) {
+			return false;
+		}
+
+		// Based on
+		// http://stackoverflow.com/questions/7933468/parsing-the-cn-out-of-a-certificate-dn
+		final X500Principal principal = cert.getSubjectX500Principal();
+		LdapName ln = null;
+		try {
+			ln = new LdapName(principal.getName());
+		} catch (final InvalidNameException e) {
+			// Ignore
+		}
+		String cn = null;
+		if (ln != null) {
+			for (final Rdn rdn : ln.getRdns()) {
+				if (rdn.getType().equalsIgnoreCase(COMMON_NAME_KEY)) {
+					cn = (String) rdn.getValue();
+					break;
+				}
+			}
+		}
+		return DEV_LICENCE_IDENTIFIER.equals(cn);
 	}
 }

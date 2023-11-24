@@ -16,7 +16,6 @@ import java.security.KeyStore;
 import java.security.KeyStore.PasswordProtection;
 import java.security.KeyStore.SecretKeyEntry;
 import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
@@ -30,10 +29,6 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
-import javax.security.auth.x500.X500Principal;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
@@ -80,7 +75,7 @@ public abstract class ClasspathDataHubKeystoreProvider implements IDataHubUpdate
 		headers.put("client", VersionHelper.getInstance().getClientCode());
 		headers.put("code", VersionHelper.getInstance().getClientCode());
 		// Set to true if we are using the developers license.
-		headers.put("dev", isDevLicense());
+		headers.put("dev", LicenseManager.isDevLicense());
 
 		final Algorithm algorithm = Algorithm.RSA256(null, privateKey);
 
@@ -114,42 +109,6 @@ public abstract class ClasspathDataHubKeystoreProvider implements IDataHubUpdate
 			sb.append(String.format("%02X", b));
 		}
 		return sb.toString();
-	}
-
-	private boolean isDevLicense() {
-		X509Certificate cert = null;
-		try {
-			cert = LicenseManager.getClientLicense(LicenseManager.getLicenseKeystore());
-		} catch (final Exception e) {
-			return false;
-		}
-
-		if (cert != null) {
-
-			// Based on
-			// http://stackoverflow.com/questions/7933468/parsing-the-cn-out-of-a-certificate-dn
-			final X500Principal principal = cert.getSubjectX500Principal();
-			LdapName ln = null;
-			try {
-				ln = new LdapName(principal.getName());
-			} catch (final InvalidNameException e) {
-				// Ignore
-			}
-			String cn = null;
-			if (ln != null) {
-				for (final Rdn rdn : ln.getRdns()) {
-					if (rdn.getType().equalsIgnoreCase("CN")) {
-						cn = (String) rdn.getValue();
-						break;
-					}
-				}
-			}
-
-			if ("developers".equals(cn)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
