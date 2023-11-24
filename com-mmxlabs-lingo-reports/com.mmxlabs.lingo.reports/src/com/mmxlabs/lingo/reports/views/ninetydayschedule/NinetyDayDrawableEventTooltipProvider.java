@@ -108,8 +108,9 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 				tooltipBuilder.add(ScheduleEventTooltipData.FOOTER_TEXT, Event.class, e -> footerText);
 			}
 		}
+		
 		// For Buy PositionSequence elements
-		else if(scheduleEventData instanceof final OpenSlotAllocation) {
+		if(scheduleEventData instanceof final OpenSlotAllocation) {
 			tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, OpenSlotAllocation.class, sa -> "At " + sa.getSlot().getPort().getName())
 						.addBodyField("ID", OpenSlotAllocation.class, sa -> sa.getSlot().getName())
 						.addBodyField("Window Start", OpenSlotAllocation.class, sa -> DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay()).format(sa.getSlot().getWindowStart()))
