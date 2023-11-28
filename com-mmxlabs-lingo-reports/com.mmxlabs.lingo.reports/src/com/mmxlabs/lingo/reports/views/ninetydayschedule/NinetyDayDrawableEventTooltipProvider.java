@@ -200,7 +200,7 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 		}
 		
 		if(event instanceof Journey jEvent)
-			line1Elements.add(decimalFormat.format(jEvent.getSpeed()) + " knots");
+			line1Elements.add(String.format("%.1f knots", jEvent.getSpeed()));
 			
 		// Add fuels
 		if(event instanceof FuelUsage fEvent) {
