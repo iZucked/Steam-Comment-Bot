@@ -98,7 +98,16 @@ public class NinetyDayScheduleLabelMenuAction extends NinetyDayScheduleAction {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NON_SHIPPED_FOB_ROTATIONS)) {
 			NinetyDayScheduleInput input = viewer.getInput();
 			ScenarioResult result = input.other().isEmpty() ? input.pinned() : input.other().get(0);
+			
+			if(result == null) {
+				return;
+			}
+			
 			final ScheduleModel schedule = result.getTypedResult(ScheduleModel.class);
+			
+			if(schedule == null) {
+				return;
+			}
 			
 			final Action fobSaleRotation = getFobSaleRotationMenu(schedule.getSchedule());
 			
