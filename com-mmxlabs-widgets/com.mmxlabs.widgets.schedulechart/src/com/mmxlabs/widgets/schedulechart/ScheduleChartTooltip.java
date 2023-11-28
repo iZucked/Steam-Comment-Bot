@@ -5,9 +5,11 @@
 package com.mmxlabs.widgets.schedulechart;
 
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.widgets.schedulechart.draw.DrawableScheduleEventTooltip;
@@ -21,6 +23,11 @@ public class ScheduleChartTooltip extends Shell {
 
 	public ScheduleChartTooltip(final Shell parentShell, final int style) {
 		super(parentShell, style);
+		
+		// Make shell not visible in case of ALT+TAB
+        getDisplay().addFilter(SWT.Deactivate, e -> { 
+            	setVisible(false);
+        });
 
 		// Create a local GC used for sizing outside of the paint events
 		fakeGC = new GC(this);
@@ -69,6 +76,17 @@ public class ScheduleChartTooltip extends Shell {
 			currentEvent.setBounds(new Rectangle(0,0, size.x, size.y));
 			setSize(size);
 		}
+	}
+	
+	public void show() {
+		this.setVisible(true);
+		this.setEnabled(true);
+		this.forceActive();
+	}
+	
+	public void hide() {
+		this.setVisible(false);
+		this.setEnabled(false);
 	}
 
 }

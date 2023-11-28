@@ -119,7 +119,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 		initListeners();
 		
-		tooltipShell = new ScheduleChartTooltip(parent.getShell(), SWT.TOOL | SWT.NO_TRIM | SWT.NO_FOCUS);
+		tooltipShell = new ScheduleChartTooltip(parent.getShell(), SWT.TOOL | SWT.ON_TOP | SWT.NO_TRIM);
 		tooltipShell.setVisible(false);
 	}
 
@@ -591,15 +591,13 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 
 	public void showTooltip() {
 		if (!tooltipShell.isVisible()) {
-			tooltipShell.setVisible(true);
-			tooltipShell.setEnabled(true);
+			tooltipShell.show();
 		}
 	}
 
 	public void hideTooltip() {
 		if (tooltipShell.isVisible()) {
-			tooltipShell.setVisible(false);
-			tooltipShell.setEnabled(false);
+			tooltipShell.hide();
 		}
 	}
 
