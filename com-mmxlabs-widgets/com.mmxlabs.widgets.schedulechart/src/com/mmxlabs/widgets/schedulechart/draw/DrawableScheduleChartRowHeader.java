@@ -91,7 +91,7 @@ public class DrawableScheduleChartRowHeader extends DrawableElement {
 		
 		String scenario = dscr.getScheduleChartRow().getScenarioName();
 		int heightOfText = queryResolver.findSizeOfText(name, Display.getDefault().getSystemFont(), Display.getDefault().getSystemFont().getFontData()[0].getHeight()).y;
-		final int scenarioPadding  = settings.hasMultipleScenarios() && dscr.getScheduleChartRow().getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS) ? 5 : 0;
+		final int scenarioPadding  = (settings.hasMultipleScenarios() && !settings.inCompareMode()) && dscr.getScheduleChartRow().getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS) ? 5 : 0;
 		
 		// Draw pinned icon
 		if(dscr.getScheduleChartRow().isPinned()) {
@@ -107,7 +107,7 @@ public class DrawableScheduleChartRowHeader extends DrawableElement {
 				.textColour(colourScheme.getRowHeaderTextColour(dscr.getRowNum())) //
 				.create()); //
 		
-		if(settings.hasMultipleScenarios() && dscr.getScheduleChartRow().getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
+		if(settings.hasMultipleScenarios() && !settings.inCompareMode() && dscr.getScheduleChartRow().getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
 			res.add(BasicDrawableElements.Text //
 					.from(textBoxStart, bounds.y + ((bounds.height + 1) / 2 - heightOfText / 2) + scenarioPadding * 2, scenario) //
 					.padding(new Padding(settings.getRowHeaderLeftPadding(), settings.getRowHeaderRightPadding(), 0, 0)) //

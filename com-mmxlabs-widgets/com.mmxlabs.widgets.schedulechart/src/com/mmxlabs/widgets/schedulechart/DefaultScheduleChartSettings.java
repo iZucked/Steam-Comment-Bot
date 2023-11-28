@@ -90,4 +90,9 @@ public class DefaultScheduleChartSettings implements IScheduleChartSettings {
 	public boolean showLegend() {
 		return false;
 	}
+
+	@Override
+	public boolean inCompareMode() {
+		return false;
+	}
 }

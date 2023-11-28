@@ -11,6 +11,7 @@ public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings
 	private boolean showAnnotations;
 	private boolean hasMultipleScenarios;
 	private boolean showLegend;
+	private boolean inCompareMode;
 	
 	@Override
 	public boolean showAnnotations() {
@@ -41,6 +42,15 @@ public class NinetyDayScheduleChartSettings extends DefaultScheduleChartSettings
 
 	public void setShowLegend(boolean showLegend) {
 		this.showLegend = showLegend;
+	}
+	
+	public void setInCompareMode(boolean inCompareMode) {
+		this.inCompareMode = inCompareMode;
+	}
+	
+	@Override
+	public boolean inCompareMode() {
+		return inCompareMode;
 	}
 
 }

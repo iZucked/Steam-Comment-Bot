@@ -59,7 +59,7 @@ public class DrawableScheduleChartRow extends DrawableElement {
 		if(scr.getRowType().equals(ScheduleChartRowPriorityType.REGULAR_ROWS)) {
 			int rowHeight = showsAnnotations ? settings.getRowHeightWithAnnotations() : settings.getRowHeight();
 			int rowHeightWithSpacer = isNoSpacer ? rowHeight - 2 * settings.getSpacerWidth() : rowHeight;
-			return settings.hasMultipleScenarios() ? rowHeightWithSpacer + 15 : rowHeightWithSpacer;
+			return (settings.hasMultipleScenarios() && !settings.inCompareMode()) ? rowHeightWithSpacer + 15 : rowHeightWithSpacer;
 		}
 		else {
 			return settings.getBuySellRowHeight();

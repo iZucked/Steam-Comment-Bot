@@ -158,6 +158,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					List<ScenarioResult> other = selectedDataProvider.getAllScenarioResults().stream().filter(f -> f != null && !f.equals(pinned)).toList();
 					settings.sethasMultipleScenarios(pinned != null ? !other.isEmpty() : other.size() > 1);
+					settings.setInCompareMode(pinned != null && other.size() == 1 && other.get(0).getModelRecord().getName().equals(pinned.getModelRecord().getName()));
 					
 					clearFobRotations();
 					viewer.typedSetInput(new NinetyDayScheduleInput(pinned, other, currentSelectedDataProvider));

@@ -47,5 +47,6 @@ public interface IScheduleChartSettings {
 	EventSize getEventSizing();
 	void setEventSizing(EventSize size);
 	boolean hasMultipleScenarios();
+	boolean inCompareMode();
 	boolean showLegend();
 }

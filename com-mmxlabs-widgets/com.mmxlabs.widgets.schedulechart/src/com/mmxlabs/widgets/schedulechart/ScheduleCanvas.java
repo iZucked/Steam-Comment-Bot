@@ -328,7 +328,7 @@ public class ScheduleCanvas extends Canvas implements IScheduleChartEventEmitter
 		final int fontSize = systemFont.getFontData()[0].getHeight();
 		final int textHeight = resolver.findSizeOfText("Test", systemFont, fontSize).y;
 		
-		if(settings.hasMultipleScenarios()) {
+		if(settings.hasMultipleScenarios() && !settings.inCompareMode()) {
 			return settings.getRowHeightWithAnnotations() + textHeight;
 		}else {
 			return settings.getRowHeightWithAnnotations();
