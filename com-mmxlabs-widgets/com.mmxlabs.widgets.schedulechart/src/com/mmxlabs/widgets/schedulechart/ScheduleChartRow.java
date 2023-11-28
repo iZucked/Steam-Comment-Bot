@@ -41,6 +41,10 @@ public class ScheduleChartRow {
 		return "";
 	}
 	
+	public boolean isOptimisationResult() {
+		return events.stream().anyMatch(e -> e.isOptimisationResult());
+	}
+	
 	public boolean isPinned() {
 		return events.stream().anyMatch(e -> e.isPinnedScenario());
 	}

@@ -94,9 +94,10 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	@Override
 	public List<ScheduleEvent> getEvents(NinetyDayScheduleInput input) {
 		List<ScheduleEvent> res = new ArrayList<>();
-		res.addAll(getEventForScenarioResult(input.pinned(), true));
+		res.addAll(getEventForScenarioResult(input.pinned(), true, false));
 		for (ScenarioResult sr : input.other()) {
-			res.addAll(getEventForScenarioResult(sr, false));
+			boolean isOptimisationScenario = input.pinned() != null && input.other().size() == 1 && input.pinned().getModelRecord().getName().equals(sr.getModelRecord().getName());
+			res.addAll(getEventForScenarioResult(sr, false, isOptimisationScenario));
 		}
 		return res;
 	}
@@ -157,7 +158,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		}
 	}
 
-	private List<ScheduleEvent> getEventForScenarioResult(ScenarioResult sr, boolean isPinned) {
+	private List<ScheduleEvent> getEventForScenarioResult(ScenarioResult sr, boolean isPinned, boolean isOptimisationScenario) {
 		if (sr == null) {
 			return Collections.emptyList();
 		}
@@ -185,13 +186,13 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 			} else if (sequenceObject instanceof CombinedSequence combinedSequence) {
 				collectEvents(events, combinedSequence);
 			} else if (sequenceObject instanceof PositionsSequence positionSequence) {
-				collectEvents(elements, positionSequenceScheduleEvents, positionSequence, sr, isPinned);
+				collectEvents(elements, positionSequenceScheduleEvents, positionSequence, sr, isPinned, isOptimisationScenario);
 			}
 		}
 
 		elements.stream().forEach(e -> equivalentsManager.collectEquivalents(e, this::generateEquivalents));
 		events.stream().forEach(e -> equivalentsManager.collectEquivalents(e, this::generateEquivalents));
-		final List<ScheduleEvent> scheduleEvents = events.stream().map(e -> makeScheduleEvent(e, sr, isPinned)).collect(Collectors.toList());
+		final List<ScheduleEvent> scheduleEvents = events.stream().map(e -> makeScheduleEvent(e, sr, isPinned, isOptimisationScenario)).collect(Collectors.toList());
 		scheduleEvents.addAll(positionSequenceScheduleEvents);
 		return scheduleEvents;
 
@@ -362,11 +363,11 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		}
 	}
 
-	private void collectEvents(final List<Object> elements, final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence, ScenarioResult scenarioResult, boolean isPinned) {
+	private void collectEvents(final List<Object> elements, final List<ScheduleEvent> scheduleEvents, final PositionsSequence positionSequence, ScenarioResult scenarioResult, boolean isPinned, boolean isOptimisationScenario) {
 		for (final Object element : positionSequence.getElements()) {
 			final LocalDateTime startTime = PositionsSeqenceElements.getEventTime(element);
 			final ScheduleEvent scheduleEvent = new ScheduleEvent(startTime, startTime, PositionsSequenceElement.of(element, positionSequence.isBuy(), positionSequence), element, scenarioResult,
-					isPinned, List.of(), false);
+					isPinned, isOptimisationScenario, List.of(), false);
 			scheduleEvent.forceVisible();
 
 			elements.add(element);
@@ -374,8 +375,8 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 		}
 	}
 
-	private ScheduleEvent makeScheduleEvent(Event event, ScenarioResult scenarioResult, boolean isPinned) {
-		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, null, scenarioResult, isPinned, makeEventAnnotations(event));
+	private ScheduleEvent makeScheduleEvent(Event event, ScenarioResult scenarioResult, boolean isPinned, boolean isOptimisationScenario) {
+		ScheduleEvent se = new ScheduleEvent(event.getStart().toLocalDateTime(), event.getEnd().toLocalDateTime(), event, null, scenarioResult, isPinned, isOptimisationScenario, makeEventAnnotations(event));
 		se.setVisible(true);
 		eventToScheduleEventMap.put(event, se);
 		return se;

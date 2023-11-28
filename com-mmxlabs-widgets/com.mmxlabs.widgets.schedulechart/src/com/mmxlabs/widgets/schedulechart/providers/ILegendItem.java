@@ -20,7 +20,7 @@ public interface ILegendItem {
 	int getItemHeight();
 	
 	default ScheduleEvent getDummyEvent() {
-		ScheduleEvent e = new ScheduleEvent(LocalDateTime.now(), LocalDateTime.now(), new Object(), null, null, false, Collections.emptyList(), false);
+		ScheduleEvent e = new ScheduleEvent(LocalDateTime.now(), LocalDateTime.now(), new Object(), null, null, false, false, Collections.emptyList(), false);
 		e.forceVisible();
 		return e;
 	}

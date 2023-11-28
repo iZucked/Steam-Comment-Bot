@@ -158,6 +158,12 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 				if (!scenario1.equals(scenario2)) {
 					return scenario1.compareTo(scenario2);
 				}
+				else if(firstRow.isOptimisationResult() ^ secondRow.isOptimisationResult()) {
+					return Boolean.compare(firstRow.isOptimisationResult(), secondRow.isOptimisationResult());
+				}
+				else if(firstRow.isPinned() ^ secondRow.isPinned()) {
+					return -Boolean.compare(firstRow.isPinned(), secondRow.isPinned());
+				}
 
 				// Group by fleet/spot
 				final Type s1Type = getSequenceType(firstRow.getKey().getData());
@@ -245,6 +251,12 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 				if (!scenario1.equals(scenario2)) {
 					return scenario1.compareTo(scenario2);
 				}
+				else if(firstRow.isOptimisationResult() ^ secondRow.isOptimisationResult()) {
+					return Boolean.compare(firstRow.isOptimisationResult(), secondRow.isOptimisationResult());
+				}
+				else if(firstRow.isPinned() ^ secondRow.isPinned()) {
+					return -Boolean.compare(firstRow.isPinned(), secondRow.isPinned());
+				}
 
 			}
 //			// Sort positions sequences by partition description first and buy/sell later (pairs buys and sells)
@@ -267,7 +279,6 @@ public class NinetyDayScheduleChartSortingProvider implements IScheduleChartSort
 			}
 			
 			
-
 			return firstRow.getName().compareTo(secondRow.getName());
 		};
 	}
