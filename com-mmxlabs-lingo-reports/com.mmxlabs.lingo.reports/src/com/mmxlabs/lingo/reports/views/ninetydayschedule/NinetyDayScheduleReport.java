@@ -298,9 +298,9 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
-		manager.add(highlightAction);
-		manager.add(labelMenuAction);
 		manager.add(filterMenuAction);
+		manager.add(labelMenuAction);
+		manager.add(highlightAction);
 		manager.add(sortMenuAction);
 		manager.add(showAnnotationsAction);
 		manager.add(packAction);
@@ -397,7 +397,7 @@ public class NinetyDayScheduleReport extends ScenarioInstanceViewWithUndoSupport
 			this.settings = settings;
 
 			setText("Show Annotations");
-			CommonImages.setImageDescriptors(this, IconPaths.Lateness);
+			CommonImages.setImageDescriptors(this, IconPaths.Edit);
 		}
 
 		@Override
