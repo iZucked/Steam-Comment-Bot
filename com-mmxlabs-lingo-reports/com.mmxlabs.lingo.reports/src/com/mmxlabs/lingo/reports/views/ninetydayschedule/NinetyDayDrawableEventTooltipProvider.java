@@ -15,9 +15,6 @@ import com.mmxlabs.lingo.reports.views.formatters.Formatters.DurationMode;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.JourneyEventTooltip;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.PortEventTooltip;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.BuySellEventTooltip;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionStateType;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSeqenceElements;
-import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceClassification;
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.events.buysell.PositionsSequenceElement;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
@@ -72,9 +69,9 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 			tooltipBuilder = ScheduleEventTooltip.of(scheduleEvent, se -> ((PositionsSequenceElement) se.getData()).getElement());
 		} 
 		
-		if(scheduleEventData instanceof final StartEvent) {
+		if(scheduleEventData instanceof StartEvent) {
 			tooltipBuilder.add(ScheduleEventTooltipData.FOOTER_TEXT, StartEvent.class, e -> vesselAssignmentFormatter.render(e) + " avaliable until " + e.getEnd().format(dateTimeFormatter) ); //
-		} else if(scheduleEventData instanceof final EndEvent) {
+		} else if(scheduleEventData instanceof EndEvent) {
 			tooltipBuilder.add(ScheduleEventTooltipData.FOOTER_TEXT, EndEvent.class, e -> vesselAssignmentFormatter.render(e) + " avaliable until " + e.getEnd().format(dateTimeFormatter) ); //
 		} else if (scheduleEventData instanceof final Event event) {
 			tooltipBuilder.addBodyField("ID", Event.class, Event::name) //
@@ -121,7 +118,7 @@ public class NinetyDayDrawableEventTooltipProvider implements IDrawableScheduleE
 		}
 		
 		// For Buy PositionSequence elements
-		if(scheduleEventData instanceof final OpenSlotAllocation) {
+		if(scheduleEventData instanceof OpenSlotAllocation) {
 			tooltipBuilder.add(ScheduleEventTooltipData.HEADER_NAME, OpenSlotAllocation.class, sa -> "At " + sa.getSlot().getPort().getName())
 						.addBodyField("ID", OpenSlotAllocation.class, sa -> sa.getSlot().getName())
 						.addBodyField("Window Start", OpenSlotAllocation.class, sa -> DateTimeFormatter.ofPattern(DateTimeFormatsProvider.INSTANCE.getDateStringDisplay()).format(sa.getSlot().getWindowStart()))
