@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
-    modelDirectory="/com.mmxlabs.lngdataserver.browser/src" editDirectory="/com.mmxlabs.lngdataserver.browser.edit/src"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.lngdataserver.browser/src" editDirectory="/com.mmxlabs.lngdataserver.browser.edit/src"
     editorDirectory="" modelPluginID="com.mmxlabs.lngdataserver.browser" modelName="Browser"
     modelPluginClass="" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     codeFormatting="true" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="8.0" copyrightFields="false" editPluginID="com.mmxlabs.lngdataserver.browser.edit"
+    complianceLevel="17.0" copyrightFields="false" editPluginID="com.mmxlabs.lngdataserver.browser.edit"
     editorPluginID="com.mmxlabs.lngdataserver.browser.editor" language="" operationReflection="true"
     importOrganizing="true">
   <foreignModel>browsermodel.ecore</foreignModel>
   <genPackages prefix="Browser" basePackage="com.mmxlabs.lngdataserver" disposableProviderFactory="true"
       ecorePackage="browsermodel.ecore#/">
+    <genDataTypes ecoreDataType="browsermodel.ecore#//IDataBrowserActionsHandler"/>
     <genClasses ecoreClass="browsermodel.ecore#//RootNode"/>
+    <genClasses ecoreClass="browsermodel.ecore#//CompositeNode">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference browsermodel.ecore#//CompositeNode/children"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute browsermodel.ecore#//CompositeNode/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference browsermodel.ecore#//CompositeNode/current"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute browsermodel.ecore#//CompositeNode/actionHandler"/>
+    </genClasses>
+    <genClasses ecoreClass="browsermodel.ecore#//Leaf"/>
+    <genClasses image="false" ecoreClass="browsermodel.ecore#//Node">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute browsermodel.ecore#//Node/displayName"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference browsermodel.ecore#//Node/parent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute browsermodel.ecore#//Node/published"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute browsermodel.ecore#//Node/versionIdentifier"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

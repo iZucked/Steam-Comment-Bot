@@ -5,7 +5,7 @@
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" modelName="LNGTypes" featureMapWrapperInternalInterface=""
     featureMapWrapperClass="" codeFormatting="true" testsDirectory="" booleanFlagsField=""
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="16.0" copyrightFields="false"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="17.0" copyrightFields="false"
     runtimeVersion="2.27" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore platform:/plugin/com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime"
     operationReflection="true">
   <foreignModel>lngtypes.ecore</foreignModel>
