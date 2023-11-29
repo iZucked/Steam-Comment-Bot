@@ -11,6 +11,7 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.lingo.reports.views.ninetydayschedule.positionsequences.EnabledPositionsSequenceProviderTracker;
@@ -22,7 +23,6 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.rcp.icons.lingo.CommonImages;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconMode;
 import com.mmxlabs.rcp.icons.lingo.CommonImages.IconPaths;
-import com.mmxlabs.widgets.schedulechart.ScheduleCanvas;
 import com.mmxlabs.widgets.schedulechart.ScheduleChartMode;
 import com.mmxlabs.widgets.schedulechart.ScheduleFilterSupport;
 import com.mmxlabs.widgets.schedulechart.viewer.ScheduleChartViewer;
@@ -57,7 +57,10 @@ public class NinetyDayScheduleFilterMenuAction extends NinetyDayScheduleAction {
 		} else {
 			setChecked(false);
 		}
-		viewer.getCanvas().redraw();
+		
+		// Hack fix to make the canvas render twice and remove excess area on the grid from hidden rows
+		Display.getDefault().asyncExec(() -> viewer.getCanvas().redraw());
+		Display.getDefault().asyncExec(() -> viewer.getCanvas().redraw());
 	}
 
 	@Override
