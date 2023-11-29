@@ -69,7 +69,8 @@ public class ScheduleCanvasState implements IScheduleChartContentBoundsProvider 
 	}
 	
 	public List<ScheduleChartRow> getShownRows() {
-		return rows.stream().filter(r -> scm == ScheduleChartMode.FILTER || !hiddenRowKeys.contains(r.getKey())).toList();
+		boolean inOptimisationCompareView = rows.stream().anyMatch(r -> r.getEvents().stream().anyMatch(e -> e.isOptimisationResult()));
+		return rows.stream().filter(r -> scm == ScheduleChartMode.FILTER || inOptimisationCompareView || !hiddenRowKeys.contains(r.getKey())).toList();
 	}
 
 	public void setRows(List<ScheduleChartRow> rows) {
