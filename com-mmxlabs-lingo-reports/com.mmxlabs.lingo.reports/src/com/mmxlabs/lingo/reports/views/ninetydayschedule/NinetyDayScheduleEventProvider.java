@@ -202,7 +202,7 @@ public class NinetyDayScheduleEventProvider implements IScheduleEventProvider<Ni
 	public ScheduleChartRowKey getKeyForEvent(ScheduleEvent event) {
 		if (event.getData() instanceof final PositionsSequenceElement positionsSequenceElement) {
 
-			return new ScheduleChartRowKey(positionsSequenceElement.getPositionsSequence().toString(), positionsSequenceElement.getPositionsSequence());
+			return new ScheduleChartRowKey(positionsSequenceElement.getPositionsSequence().toString(), positionsSequenceElement.getPositionsSequence().getElements());
 		}
 		if (event.getData() instanceof final Event e) {
 			// Check if event is a non-shipped event
