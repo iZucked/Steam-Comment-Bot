@@ -411,7 +411,7 @@ public class CargoModelBuilder {
 
 		final VesselGroupCanalParameters vgcp = createVesselGroupCanalParameters(DEFAULT_VESSEL_GROUP_CANAL_PARAMETERS_NAME);
 		cb.getVesselGroupCanalParameters().add(vgcp);
-		cb.getPanamaSeasonalityRecords().add(createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 0, 0));
+		cb.getPanamaSeasonalityRecords().add(createPanamaSeasonalityRecord(vgcp, 0, 0, null, 0, 0));
 	}
 
 	/**
@@ -437,12 +437,14 @@ public class CargoModelBuilder {
 	 * @param sb
 	 * @return
 	 */
-	public @NonNull PanamaSeasonalityRecord createPanamaSeasonalityRecord(final VesselGroupCanalParameters vgcp, int startDay, int startMonth, int startYear, int nb, int sb) {
+	public @NonNull PanamaSeasonalityRecord createPanamaSeasonalityRecord(final VesselGroupCanalParameters vgcp, int startDay, int startMonth, Integer startYear, int nb, int sb) {
 		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
 		psr.setVesselGroupCanalParameter(vgcp);
 		psr.setStartDay(startDay);
 		psr.setStartMonth(startMonth);
-		psr.setStartYear(startYear);
+		if (startYear != null) {
+			psr.setStartYear(startYear);
+		}
 		psr.setNorthboundWaitingDays(nb);
 		psr.setSouthboundWaitingDays(sb);
 		return psr;

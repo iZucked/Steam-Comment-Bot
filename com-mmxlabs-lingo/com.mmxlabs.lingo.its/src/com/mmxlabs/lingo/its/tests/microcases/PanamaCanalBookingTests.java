@@ -694,7 +694,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		int[] charterDurationThenTravelDuration = new int[2];
 		{
 			canalBookings.getPanamaSeasonalityRecords().add(//
-					cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 0, 0));
+					cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, null, 0, 0));
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
@@ -718,7 +718,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		// event duration into the journey time
 		{
 			canalBookings.getPanamaSeasonalityRecords().clear();
-			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 5, 15);
+			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, null, 5, 15);
 			canalBookings.getPanamaSeasonalityRecords().add(psr);
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
@@ -817,7 +817,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		int[] charterDurationThenTravelDuration = new int[2];
 		{
-			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 0, 0);
+			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, null, 0, 0);
 			canalBookings.getPanamaSeasonalityRecords().add(psr);
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
@@ -844,7 +844,7 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		// event duration into the journey time
 		{
 			canalBookings.getPanamaSeasonalityRecords().clear();
-			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 5, 15);
+			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, null, 5, 15);
 			canalBookings.getPanamaSeasonalityRecords().add(psr);
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
