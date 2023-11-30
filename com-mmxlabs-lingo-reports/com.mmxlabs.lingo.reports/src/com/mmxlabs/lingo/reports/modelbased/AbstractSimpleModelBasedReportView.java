@@ -26,8 +26,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -82,6 +86,8 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 	
 	protected EventHandler todayHandler;
 
+	protected IMemento memento;
+	
 	public AbstractSimpleModelBasedReportView(final Class<M> modelClass) {
 		this.modelClass = modelClass;
 	}
@@ -151,6 +157,47 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
 		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+		
+		final IMemento configMemento = memento.getChild(getConfigStateName());
+
+		if (configMemento != null) {
+			initConfigMemento(configMemento);
+		}
+		
+	}
+	
+	@Override
+	public void init(final IViewSite site, IMemento memento) throws PartInitException {
+		if (memento == null) {
+			memento = XMLMemento.createWriteRoot("workbench");
+		}
+		this.memento = memento;
+
+		super.init(site, memento);
+	}
+	
+	@Override
+	public void saveState(final IMemento memento) {
+		super.saveState(memento);
+		final IMemento configMemento;
+		if (memento.getChild(getConfigStateName()) != null) {
+			configMemento = memento.getChild(getConfigStateName());
+		} else {
+			configMemento = memento.createChild(getConfigStateName());
+		}
+		saveConfigState(configMemento);
+	}
+	
+	protected String getConfigStateName() {
+		return this.getClass().getName();
+	}
+
+	protected void saveConfigState(final IMemento configMemento) {
+
+	}
+	
+	protected void initConfigMemento(final IMemento configMemento) {
+		
 	}
 	
 	protected void snapTo(final LocalDate date) {

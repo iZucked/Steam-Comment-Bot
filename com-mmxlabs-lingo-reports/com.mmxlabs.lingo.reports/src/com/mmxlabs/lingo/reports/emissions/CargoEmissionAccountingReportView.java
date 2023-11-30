@@ -21,6 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IMemento;
 
 import com.mmxlabs.lingo.reports.modelbased.AbstractSimpleModelBasedReportView;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -148,6 +149,7 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 					public void run() {
 						aggregationMode = mode;
 						getViewSite().getActionBars().updateActionBars();
+						saveState(memento);
 						CargoEmissionAccountingReportView.this.refresh();
 					}
 				};
@@ -163,12 +165,36 @@ public class CargoEmissionAccountingReportView extends AbstractSimpleModelBasedR
 					public void run() {
 						groupingMode = mode;
 						getViewSite().getActionBars().updateActionBars();
+						saveState(memento);
 						CargoEmissionAccountingReportView.this.refresh();
 					}
 				};
 				action.setChecked(groupingMode == mode);
 				addActionToMenu(action, menu);
 			}
+		}
+	}
+
+	private static final String GROUPING_MODE = "CARGO_EMISSION_ACCOUNTING_GROUPING_MODE";
+	private static final String AGGREGATION_MODE = "CARGO_EMISSION_ACCOUNTING_AGGREGATION_MODE";
+	
+	@Override
+	protected void saveConfigState(final IMemento configMemento) {
+		final IMemento am = configMemento.createChild(AGGREGATION_MODE);
+		am.putBoolean(AGGREGATION_MODE, aggregationMode.getValue());
+		final IMemento gm = configMemento.createChild(GROUPING_MODE);
+		gm.putString(GROUPING_MODE, groupingMode.getLabel());
+	}
+	
+	@Override
+	protected void initConfigMemento(final IMemento configMemento) {
+		final IMemento am = configMemento.getChild(AGGREGATION_MODE);
+		if (am != null && am.getBoolean(AGGREGATION_MODE) != null) {
+			aggregationMode = am.getBoolean(AGGREGATION_MODE) ? AggregationMode.TRUE : AggregationMode.FALSE;
+		}
+		final IMemento gm = configMemento.getChild(GROUPING_MODE);
+		if (gm != null && gm.getString(GROUPING_MODE) != null){
+			groupingMode = gm.getString(GROUPING_MODE).equalsIgnoreCase(GroupingMode.INCLUDE.getLabel()) ? GroupingMode.INCLUDE : GroupingMode.SEPARATE; 
 		}
 	}
 	
