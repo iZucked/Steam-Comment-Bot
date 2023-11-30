@@ -62,7 +62,7 @@ public class RouteOptionBooking implements IRouteOptionBooking {
 	}
 
 	@Override
-	public int compareTo(@NonNull final IRouteOptionBooking other) {
-		return Integer.valueOf(this.getBookingDate()).compareTo(other.getBookingDate());
+	public int compareTo(final @NonNull IRouteOptionBooking other) {
+		return Integer.compare(this.getBookingDate(), other.getBookingDate());
 	}
 }

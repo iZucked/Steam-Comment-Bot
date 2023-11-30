@@ -10,57 +10,52 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
  * Class to represent Panama seasonal waiting days.
- * <p>Stores change points as hours from the scenario start.
- * <p>When vessel is null record applies to default group.
+ * <p>
+ * Stores change points as hours from the scenario start.
+ * <p>
+ * When vessel is null record applies to default group.
+ * 
  * @author FM
  * @version 1
  * @since 29-07-2021
  *
  */
 public class PanamaSeasonalityCurve {
-	
-	@Nullable IVessel vessel;
-	int changePoints[];
-	int waitingDaysNB[];
-	int waitingDaysSB[];
-	
+
+	private @Nullable IVessel vessel;
+	private int[] changePoints;
+	private int[] waitingDaysNB;
+	private int[] waitingDaysSB;
+
 	public PanamaSeasonalityCurve(IVessel vessel, int[] changePoints, int[] waitingDaysNB, int[] waitingDaysSB) {
+		assert changePoints.length != 0;
+
 		this.vessel = vessel;
 		this.changePoints = changePoints;
 		this.waitingDaysNB = waitingDaysNB;
 		this.waitingDaysSB = waitingDaysSB;
 	}
-	
+
 	public int getNorthboundMaxIdleDays(int date) {
-		for (int i = 0; i < changePoints.length; i++) {
-			if (changePoints[i] > date) {
-				if (i > 0) {
-					if (changePoints[i-1] < date) {
-						return waitingDaysNB[i-1];
-					}
-				}
-				return waitingDaysNB[i];
-			}
-		}
-		return Integer.MAX_VALUE;
+		return getWaitingDays(changePoints, waitingDaysNB, date);
 	}
-	
+
 	public int getSouthboundMaxIdleDays(int date) {
-		for (int i = 0; i < changePoints.length; i++) {
-			if (changePoints[i] > date) {
-				if (i > 0) {
-					if (changePoints[i-1] < date) {
-						return waitingDaysSB[i-1];
-					}
-				}
-				return waitingDaysSB[i];
+		return getWaitingDays(changePoints, waitingDaysSB, date);
+	}
+
+	private static int getWaitingDays(int[] changePoints, int[] waitingDays, int date) {
+		assert date >= changePoints[0];
+		for (int i = 1; i < changePoints.length; ++i) {
+			if (date < changePoints[i]) {
+				return waitingDays[i - 1];
 			}
 		}
-		return Integer.MAX_VALUE;
+		return waitingDays[waitingDays.length - 1];
 	}
-	
+
 	public IVessel getVessel() {
 		return this.vessel;
 	}
-	
+
 }

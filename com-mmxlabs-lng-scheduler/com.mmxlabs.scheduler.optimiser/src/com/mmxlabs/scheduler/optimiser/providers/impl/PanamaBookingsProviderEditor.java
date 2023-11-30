@@ -6,11 +6,13 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 
 /**
- * Implementation of {@link IPanamaBookingsProviderEditor} using a {@link HashMap} as backing data store.
+ * Implementation of {@link IPanamaBookingsProviderEditor} using a
+ * {@link HashMap} as backing data store.
  * 
  */
 public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEditor {
@@ -40,41 +43,40 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings;
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings;
-	
-	private ImmutableList<PanamaSeasonalityCurve> seasonalityCurve;
+
+	private ImmutableList<PanamaSeasonalityCurve> seasonalityCurves;
 
 	@Override
 	public void setBookings(final Map<ECanalEntry, List<IRouteOptionBooking>> bookings) {
 		final ImmutableMap.Builder<ECanalEntry, ImmutableList<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
-		bookings.forEach((k, v) -> {
-			builder.put(k, ImmutableList.copyOf(v));
-		});
-		
+		bookings.forEach((k, v) -> builder.put(k, ImmutableList.copyOf(v)));
+
 		panamaBookings = builder.build();
 
-		Map<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings = new HashMap<>();
-		Map<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings = new HashMap<>();
+		final Map<ECanalEntry, ImmutableList<@NonNull IRouteOptionBooking>> assignedBookings = new EnumMap<>(ECanalEntry.class);
+		final Map<ECanalEntry, ImmutableList<@NonNull IRouteOptionBooking>> unassignedBookings = new EnumMap<>(ECanalEntry.class);
 
 		panamaBookings.entrySet().forEach(e -> {
 			final Set<@NonNull IRouteOptionBooking> assigned = e.getValue().stream() //
 					.filter(j -> j.getVessels().size() == 1) //
 					.collect(Collectors.toSet());
 
-			final List<@NonNull IRouteOptionBooking> list_assigned = new ArrayList<>(assigned);
-			Collections.sort(list_assigned);
-			assignedBookings.put(e.getKey(), ImmutableList.copyOf(list_assigned));
+			final List<@NonNull IRouteOptionBooking> listAssigned = new ArrayList<>(assigned);
+			Collections.sort(listAssigned);
+			assignedBookings.put(e.getKey(), ImmutableList.copyOf(listAssigned));
 
-			final List<@NonNull IRouteOptionBooking> list_unassigned = new ArrayList<>(Sets.difference(new HashSet<>(e.getValue()), new HashSet<>(assigned)));
-			Collections.sort(list_unassigned);
-			unassignedBookings.put(e.getKey(), ImmutableList.copyOf(list_unassigned));
+			final List<@NonNull IRouteOptionBooking> listUnassigned = new ArrayList<>(Sets.difference(new HashSet<>(e.getValue()), new HashSet<>(assigned)));
+			Collections.sort(listUnassigned);
+			unassignedBookings.put(e.getKey(), ImmutableList.copyOf(listUnassigned));
 		});
 
-		//Make sure a list even if empty for both south-side + north-side bookings, in case no bookings set.
+		// Make sure a list even if empty for both south-side + north-side bookings, in
+		// case no bookings set.
 		for (ECanalEntry entryPoint : ECanalEntry.values()) {
 			assignedBookings.putIfAbsent(entryPoint, ImmutableList.of());
 			unassignedBookings.putIfAbsent(entryPoint, ImmutableList.of());
 		}
-		
+
 		this.assignedBookings = new ImmutableMap.Builder().putAll(assignedBookings).build();
 		this.unassignedBookings = new ImmutableMap.Builder().putAll(unassignedBookings).build();
 	}
@@ -120,40 +122,36 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 
 	@Override
 	public int getNorthboundMaxIdleDays(IVessel vessel, int startAtPanamaTZ) {
-		int defaultResult = Integer.MAX_VALUE;
-		for(final PanamaSeasonalityCurve psc : seasonalityCurve) {
-			if (psc.getVessel() == vessel) {
-				return psc.getNorthboundMaxIdleDays(startAtPanamaTZ);
-			} else if (psc.getVessel() == null) {
-				defaultResult = psc.getNorthboundMaxIdleDays(startAtPanamaTZ);
-			}
-		}
-		return defaultResult;
+		return getMaxIdleDays(vessel, startAtPanamaTZ, psr -> psr::getNorthboundMaxIdleDays);
 	}
 
 	@Override
 	public int getSouthboundMaxIdleDays(IVessel vessel, int startAtPanamaTZ) {
+		return getMaxIdleDays(vessel, startAtPanamaTZ, psr -> psr::getSouthboundMaxIdleDays);
+	}
+
+	private int getMaxIdleDays(final IVessel vessel, int startAtPanamaTZ, final Function<PanamaSeasonalityCurve, IntUnaryOperator> idleDaysProvider) {
 		int defaultResult = Integer.MAX_VALUE;
-		for(final PanamaSeasonalityCurve psc : seasonalityCurve) {
+		for (final PanamaSeasonalityCurve psc : seasonalityCurves) {
 			if (psc.getVessel() == vessel) {
-				return psc.getSouthboundMaxIdleDays(startAtPanamaTZ);
+				return idleDaysProvider.apply(psc).applyAsInt(startAtPanamaTZ);
 			} else if (psc.getVessel() == null) {
-				defaultResult = psc.getSouthboundMaxIdleDays(startAtPanamaTZ);
+				defaultResult = idleDaysProvider.apply(psc).applyAsInt(startAtPanamaTZ);
 			}
 		}
 		return defaultResult;
 	}
 
 	@Override
-	public void setPanamaMaxIdleDays(List<PanamaSeasonalityCurve> seasonalityCurve) {
-		this.seasonalityCurve = ImmutableList.copyOf(seasonalityCurve);
+	public void setPanamaMaxIdleDays(List<PanamaSeasonalityCurve> seasonalityCurves) {
+		this.seasonalityCurves = ImmutableList.copyOf(seasonalityCurves);
 	}
 
-	private int getWorstMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive, IntUnaryOperator operator) {
+	private int getWorstMaxIdleDays(int startDateInclusive, int endDateExclusive, IntUnaryOperator operator) {
 		int result = Integer.MIN_VALUE;
 		// We want to bind the end date value by three month after the start date
 		endDateExclusive = Math.min(endDateExclusive, startDateInclusive + 1 + (90 * 24));
-		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+		for (int i = startDateInclusive; i < endDateExclusive; i += 24) {
 			int temp = operator.applyAsInt(i);
 			if (result < temp) {
 				result = temp;
@@ -161,13 +159,13 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 		}
 		return result;
 	}
-	
+
 	private int getWorstNBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
-		return getWorstMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getNorthboundMaxIdleDays(vessel, time));
+		return getWorstMaxIdleDays(startDateInclusive, endDateExclusive, time -> getNorthboundMaxIdleDays(vessel, time));
 	}
 
 	private int getWorstSBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
-		return getWorstMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getSouthboundMaxIdleDays(vessel, time));
+		return getWorstMaxIdleDays(startDateInclusive, endDateExclusive, time -> getSouthboundMaxIdleDays(vessel, time));
 	}
 
 	public int getWorstIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound) {
@@ -182,12 +180,12 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 		assert days != Integer.MAX_VALUE;
 		return days * 24;
 	}
-	
+
 	private int getBestMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive, IntUnaryOperator operator) {
 		int result = Integer.MAX_VALUE;
 		// We want to bind the end date value by three month after the start date
 		endDateExclusive = Math.min(endDateExclusive, startDateInclusive + 1 + (90 * 24));
-		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+		for (int i = startDateInclusive; i < endDateExclusive; i += 24) {
 			int temp = operator.applyAsInt(i);
 			if (temp < result) {
 				result = temp;
@@ -195,13 +193,13 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 		}
 		return result;
 	}
-	
+
 	private int getBestNBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
-		return getBestMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getNorthboundMaxIdleDays(vessel, time));
+		return getBestMaxIdleDays(vessel, startDateInclusive, endDateExclusive, time -> getNorthboundMaxIdleDays(vessel, time));
 	}
 
 	private int getBestSBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
-		return getBestMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getSouthboundMaxIdleDays(vessel, time));
+		return getBestMaxIdleDays(vessel, startDateInclusive, endDateExclusive, time -> getSouthboundMaxIdleDays(vessel, time));
 	}
 
 	public int getBestIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound) {
