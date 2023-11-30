@@ -34,6 +34,10 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.XMLMemento;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.exposures.ExposureEnumerations.AggregationMode;
@@ -99,6 +103,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected boolean showPeriod = false;
 	
 	private DatesToolbarEditor dates;
+	
+	private IMemento memento;
 
 	// -------------------------------------Transformer class
 	// starts-------------------------------------
@@ -473,6 +479,136 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
 		fontBold = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+		
+		if (memento != null) {
+			final IMemento configMemento = memento.getChild(getConfigStateName());
+	
+			if (configMemento != null) {
+				initConfigMemento(configMemento);
+			}
+		}
+	}
+	
+	@Override
+	public void init(final IViewSite site, IMemento memento) throws PartInitException {
+		if (memento == null) {
+			memento = XMLMemento.createWriteRoot("workbench");
+		}
+		this.memento = memento;
+
+		super.init(site, memento);
+	}
+	
+	@Override
+	public void saveState(final IMemento memento) {
+		super.saveState(memento);
+		final IMemento configMemento;
+		if (memento.getChild(getConfigStateName()) != null) {
+			configMemento = memento.getChild(getConfigStateName());
+		} else {
+			configMemento = memento.createChild(getConfigStateName());
+		}
+		saveConfigState(configMemento);
+	}
+	
+	protected String getConfigStateName() {
+		return this.getClass().getName();
+	}
+
+	private static final String VALUE_MODE = "EXPOSURES_REPORT_GROUPING_MODE";
+	private static final String AGGREGATION_MODE = "EXPOSURES_REPORT_AGGREGATION_MODE";
+	private static final String PERIOD_MODE = "EXPOSURES_REPORT_PERIOD_MODE";
+	private static final String SHOW_GENERATED_MODE = "EXPOSURES_REPORT_SHOW_GENERATED_MODE";
+	private static final String ASSET_TYPE_MODE = "EXPOSURES_REPORT_ASSET_TYPE_MODE";
+	private static final String SELECTION_MODE = "EXPOSURES_REPORT_SELECTION_MODE";
+	
+	protected void saveConfigState(final IMemento configMemento) {
+		final IMemento am = configMemento.createChild(AGGREGATION_MODE);
+		am.putString(AGGREGATION_MODE, aggregationMode.name());
+		final IMemento vm = configMemento.createChild(VALUE_MODE);
+		vm.putString(VALUE_MODE, mode.name());
+		final IMemento pm = configMemento.createChild(PERIOD_MODE);
+		pm.putBoolean(PERIOD_MODE, showPeriod);
+		final IMemento sgm = configMemento.createChild(SHOW_GENERATED_MODE);
+		sgm.putBoolean(SHOW_GENERATED_MODE, showGenerated);
+		final IMemento atm = configMemento.createChild(ASSET_TYPE_MODE);
+		atm.putString(ASSET_TYPE_MODE, selectedAssetType.value);
+		final IMemento sm = configMemento.createChild(SELECTION_MODE);
+		sm.putBoolean(SELECTION_MODE, selectionMode);
+	}
+	
+	protected void initConfigMemento(final IMemento configMemento) {
+		final IMemento am = configMemento.getChild(AGGREGATION_MODE);
+		if (am != null && am.getBoolean(AGGREGATION_MODE) != null) {
+			aggregationMode = getAggregationModeFromName(am.getString(AGGREGATION_MODE));
+		}
+		final IMemento vm = configMemento.getChild(VALUE_MODE);
+		if (vm != null && vm.getString(VALUE_MODE) != null){
+			mode = getValueModeFromName(vm.getString(VALUE_MODE)); 
+		}
+		final IMemento sp = configMemento.getChild(PERIOD_MODE);
+		if (sp != null && sp.getBoolean(PERIOD_MODE) != null) {
+			showPeriod = sp.getBoolean(PERIOD_MODE);
+		}
+		final IMemento sgm = configMemento.getChild(SHOW_GENERATED_MODE);
+		if (sgm != null && sgm.getBoolean(SHOW_GENERATED_MODE) != null) {
+			showGenerated = sgm.getBoolean(SHOW_GENERATED_MODE);
+		}
+		final IMemento atm = configMemento.getChild(ASSET_TYPE_MODE);
+		if (atm != null && atm.getString(ASSET_TYPE_MODE) != null) {
+			selectedAssetType = getAssetTypeFromName(atm.getString(ASSET_TYPE_MODE));
+		}
+		final IMemento sm = configMemento.getChild(SELECTION_MODE);
+		if (sm != null && sm.getBoolean(SELECTION_MODE) != null) {
+			selectionMode = sm.getBoolean(SELECTION_MODE);
+		}
+	}
+	
+	private AggregationMode getAggregationModeFromName(final String name) {
+		switch (name) {
+		case "BY_MONTH_NO_TOTAL":
+			return AggregationMode.BY_MONTH_NO_TOTAL;
+		case "BY_MONTH":
+			return AggregationMode.BY_MONTH;
+		case "BY_DEALSET":
+			return AggregationMode.BY_DEALSET;
+		case "BY_CALENDAR_YEAR":
+			return AggregationMode.BY_CALENDAR_YEAR;
+		default:
+			return AggregationMode.BY_MONTH;
+		}
+	}
+	
+	private ValueMode getValueModeFromName(final String name) {
+		switch (name) {
+		case "VOLUME_MMBTU":
+			return ValueMode.VOLUME_MMBTU;
+		case "VOLUME_TBTU":
+			return ValueMode.VOLUME_TBTU;
+		case "VOLUME_NATIVE":
+			return ValueMode.VOLUME_NATIVE;
+		case "NATIVE_VALUE":
+			return ValueMode.NATIVE_VALUE;
+		default:
+			return ValueMode.VOLUME_MMBTU;
+		}
+	}
+	
+	private AssetType getAssetTypeFromName(final String name) {
+		switch(name) {
+		case "All":
+			return AssetType.NET;
+		case "Index":
+			return AssetType.FINANCIAL;
+		case "Paper":
+			return AssetType.PAPER;
+		case "Physical Index":
+			return AssetType.INDEX;
+		case "Physical":
+			return AssetType.PHYSICAL;
+		default:
+			return AssetType.NET;
+		}
 	}
 
 	@Override
@@ -630,6 +766,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					getViewSite().getActionBars().getToolBarManager().remove(dates);
 				}
 				getViewSite().getActionBars().updateActionBars();
+				saveState(memento);
 				ExposureReportView.this.refresh();
 			}
 		};
@@ -651,6 +788,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				selectionMode = !selectionMode;
 				setText("View: " + (selectionMode ? "Selection" : "All"));
 				getViewSite().getActionBars().updateActionBars();
+				saveState(memento);
 				ExposureReportView.this.refresh();
 
 			}
@@ -685,6 +823,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					selectedFiscalYear = -1;
 					selectedAssetType = AssetType.NET;
 					showGenerated = false;
+					saveState(memento);
 					ExposureReportView.this.refresh();
 				}
 			};
@@ -696,6 +835,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					@Override
 					public void run() {
 						showGenerated = !showGenerated;
+						saveState(memento);
 						this.setChecked(showGenerated);
 						ExposureReportView.this.refresh();
 					}
@@ -791,6 +931,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						aggregationMode = am;
 						setAggregationModeActionText(AggregationModeActionMenu.this);
 						getViewSite().getActionBars().updateActionBars();
+						saveState(memento);
 						ExposureReportView.this.refresh();
 					}
 				};
@@ -815,6 +956,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						mode = vm;
 						setUnitsActionText(ValueModeActionMenu.this);
 						getViewSite().getActionBars().updateActionBars();
+						saveState(memento);
 						ExposureReportView.this.refresh();
 					}
 				};
