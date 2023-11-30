@@ -22,12 +22,10 @@ public class UntilSeries implements ISeries {
 	private ISeries rhs;
 	private final int[] changePoints;
 	private final Set<String> parameters;
-	private int earlyDate;
 
-	public UntilSeries(ZonedDateTime firstDate, final ISeries lhs, final LocalDateTime ldt, final ISeries rhs, @NonNull final CalendarMonthMapper mapper) {
+	public UntilSeries(final ISeries lhs, final LocalDateTime ldt, final ISeries rhs, @NonNull final CalendarMonthMapper mapper) {
 		this.lhs = lhs;
 		this.switchPoint = mapper.mapTimePoint(ldt);
-		this.earlyDate = mapper.mapTimePoint(firstDate.toLocalDateTime());
 		this.rhs = rhs;
 		// Technically, we don't need to merge the two sets, but take the relevant segment from each.
 		final Set<Integer> changePointsSet = new TreeSet<>();

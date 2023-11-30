@@ -5,7 +5,6 @@
 package com.mmxlabs.common.parser.series;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -18,15 +17,13 @@ public class UntilFunctionConstructor implements IExpression<ISeries> {
 	private final IExpression<ISeries> lhsSeries;
 	private final IExpression<ISeries> rhsSeries;
 	private final LocalDateTime threshold;
-	private final ZonedDateTime firstDate;
 
 	public CalendarMonthMapper getCalendarMonthMapper() {
 		return calendarMonthMapper;
 	}
 
-	public UntilFunctionConstructor(final SeriesParserData seriesParserData, IExpression<ISeries> lhsSeries, LocalDateTime threshold, IExpression<ISeries> rhsSeries) {
+	public UntilFunctionConstructor(final SeriesParserData seriesParserData, final IExpression<ISeries> lhsSeries, final LocalDateTime threshold, final IExpression<ISeries> rhsSeries) {
 		this.calendarMonthMapper = seriesParserData.calendarMonthMapper;
-		firstDate = seriesParserData.earliestAndLatestTime.getFirst();
 		if (calendarMonthMapper == null) {
 			throw new IllegalStateException("No calender mapper function defined");
 		}
@@ -37,7 +34,7 @@ public class UntilFunctionConstructor implements IExpression<ISeries> {
 
 	@Override
 	public @NonNull ISeries evaluate() {
-		return new UntilSeries(firstDate, lhsSeries.evaluate(), threshold, rhsSeries.evaluate(), calendarMonthMapper);
+		return new UntilSeries(lhsSeries.evaluate(), threshold, rhsSeries.evaluate(), calendarMonthMapper);
 	}
 
 	@Override
