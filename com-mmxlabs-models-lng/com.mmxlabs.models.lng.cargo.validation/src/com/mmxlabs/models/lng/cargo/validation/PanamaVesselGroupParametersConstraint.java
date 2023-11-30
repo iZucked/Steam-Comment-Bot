@@ -6,8 +6,11 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import java.time.Month;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -30,12 +34,9 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Validation constraint to check Panama vessel group waiting time parameters
- * and Panama booking codes on bookings set correctly. Checks: 1. default group
- * is present (one where vessel groups list is empty). 2. No group has a vessel
- * group parameters specified on the same vessel twice. 3. Checks Panama
- * bookings vessel + vessel groups are compatible. 4. Checks that no parameters
- * consist of all empty vessel groups
+ * Validation constraint to check Panama vessel group waiting time parameters and Panama booking codes on bookings set correctly. Checks: 1. default group is present (one where vessel groups list is
+ * empty). 2. No group has a vessel group parameters specified on the same vessel twice. 3. Checks Panama bookings vessel + vessel groups are compatible. 4. Checks that no parameters consist of all
+ * empty vessel groups
  * 
  * @author Patrick, FM
  * @version 2
@@ -123,7 +124,7 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 	private List<VesselGroupCanalParameters> getParametersWithOnlyEmptyVesselGroups(List<VesselGroupCanalParameters> vesselGroupParameters) {
 		return vesselGroupParameters.stream() //
 				.filter(vgParams -> !vgParams.getVesselGroup().isEmpty() && SetUtils.getObjects(vgParams.getVesselGroup()).isEmpty()) //
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	private VesselGroupCanalParameters getOverlappingVesselGroups(final List<VesselGroupCanalParameters> vesselGroupParameters) {
@@ -156,42 +157,67 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 			final List<VesselGroupCanalParameters> vesselGroupParameters) {
 		final List<PanamaSeasonalityRecord> panamaSeasonalityRecords = canalBookings.getPanamaSeasonalityRecords();
 		for (final VesselGroupCanalParameters vgcp : vesselGroupParameters) {
-			final String name = vgcp.getName();
 			final List<PanamaSeasonalityRecord> matchingRecords = panamaSeasonalityRecords.stream()//
 					.filter(psr -> vgcp.equals(psr.getVesselGroupCanalParameter())).collect(Collectors.toList());
 			if (matchingRecords.isEmpty()) {
 				addValidationError(ctx, statuses, vgcp, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, //
 						String.format("Vessel group %s has no seasonality record.", vgcp.getName()));
 			}
-			final List<PanamaSeasonalityRecord> matchingAnyRecords = matchingRecords.stream()//
-					.filter(foo -> foo.getStartMonth() == 0).collect(Collectors.toList());
-			final List<PanamaSeasonalityRecord> matchingMonthRecords = matchingRecords.stream()//
-					.filter(foo -> foo.getStartMonth() > 0).collect(Collectors.toList());
+//			final List<PanamaSeasonalityRecord> matchingAnyRecords = matchingRecords.stream()//
+//					.filter(foo -> foo.getStartMonth() == 0).collect(Collectors.toList());
+//			final List<PanamaSeasonalityRecord> matchingMonthRecords = matchingRecords.stream()//
+//					.filter(foo -> foo.getStartMonth() > 0).collect(Collectors.toList());
 
-			if (matchingAnyRecords.size() > 1) {
-				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER, //
-						String.format("Only one \'ANY\' month can be set for each vessel group. Booking code: %s", name));
-			}
-			if (!matchingAnyRecords.isEmpty() && !matchingMonthRecords.isEmpty()) {
-				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER, //
-						String.format("\'ANY\' month setting can not be used with a specific month boundary setting. Booking code: %s", name));
-			}
-			if (matchingMonthRecords.size() == 1) {
-				addValidationError(ctx, statuses, matchingMonthRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER, //
-						String.format("At least two specified boundary settings must be provided. Booking code: %s", name));
-			}
-			for (final PanamaSeasonalityRecord psr : matchingRecords) {
-				final List<PanamaSeasonalityRecord> matchingDuplicates = matchingRecords.stream()//
-						.filter(psr2 -> (psr != psr2 && psr.getStartDay() == psr2.getStartDay() //
-								&& psr.getStartMonth() == psr2.getStartMonth() //
-								&& psr.getStartMonth() != 0 //
-								&& psr2.getStartMonth() != 0 //
-								&& psr.getStartYear() == psr2.getStartYear()))//
-						.collect(Collectors.toList());
-				if (!matchingDuplicates.isEmpty()) {
-					addValidationError(ctx, statuses, psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER, //
-							String.format("Duplicate seasonality record. Booking code: %s", name));
+//			if (matchingAnyRecords.size() > 1) {
+//				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER, //
+//						String.format("Only one \'ANY\' month can be set for each vessel group. Booking code: %s", name));
+//			}
+//			if (!matchingAnyRecords.isEmpty() && !matchingMonthRecords.isEmpty()) {
+//				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER, //
+//						String.format("\'ANY\' month setting can not be used with a specific month boundary setting. Booking code: %s", name));
+//			}
+//			if (matchingMonthRecords.size() == 1) {
+//				addValidationError(ctx, statuses, matchingMonthRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER, //
+//						String.format("At least two specified boundary settings must be provided. Booking code: %s", name));
+//			}
+
+			final Map<SeasonalityDateKey, List<PanamaSeasonalityRecord>> duplicatedDateRecords = new HashMap<>();
+
+			final PanamaSeasonalityRecord[] psrArr = new PanamaSeasonalityRecord[matchingRecords.size()];
+			matchingRecords.toArray(psrArr);
+			final boolean[] indicesToAvoid = new boolean[psrArr.length];
+
+			for (int i = 0; i < psrArr.length; ++i) {
+				if (indicesToAvoid[i]) {
+					continue;
 				}
+				final PanamaSeasonalityRecord psr1 = psrArr[i];
+				final SeasonalityDateKey key1 = SeasonalityDateKey.from(psr1);
+				for (int j = i+1; j < psrArr.length; ++j) {
+					if (indicesToAvoid[j]) {
+						continue;
+					}
+					final PanamaSeasonalityRecord psr2 = psrArr[j];
+					final SeasonalityDateKey key2 = SeasonalityDateKey.from(psr2);
+					if (key1.equals(key2)) {
+						duplicatedDateRecords.computeIfAbsent(key1, k -> {
+							final List<PanamaSeasonalityRecord> psrs = new LinkedList<>();
+							psrs.add(psr1);
+							return psrs;
+						}).add(psr2);
+						indicesToAvoid[j] = true;
+					}
+				}
+			}
+			for (final List<PanamaSeasonalityRecord> list : duplicatedDateRecords.values()) {
+				final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
+						.withName("Panama canal parameters") //
+						.copyName() //
+						.withMessage(String.format("Seasonality date duplicated for booking code: %s", ScenarioElementNameHelper.getName(vgcp, "<Unknown>")));
+				for (final PanamaSeasonalityRecord psr : list) {
+					factory.withObjectAndFeature(psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER);
+				}
+				statuses.add(factory.make(ctx));
 			}
 		}
 
@@ -233,6 +259,6 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 				}
 			}
 		}
-		return (cnt <= 1);
+		return cnt <= 1;
 	}
 }

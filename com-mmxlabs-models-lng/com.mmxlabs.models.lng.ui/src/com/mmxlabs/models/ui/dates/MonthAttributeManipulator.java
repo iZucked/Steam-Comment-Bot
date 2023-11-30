@@ -18,12 +18,11 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 public class MonthAttributeManipulator extends ValueListAttributeManipulator<Integer> {
 
-	private static final List<Pair<String, Integer>> VALUE;
+	private static final List<Pair<String, Integer>> VALUE = new ArrayList<>(12);
+
 	static {
-		VALUE = new ArrayList<>(13);
-		VALUE.add(new Pair<String, Integer>("ANY",0));
 		for (int i = 1; i <= 12; i++) {
-			VALUE.add(new Pair<String, Integer>(Month.of(i).getDisplayName(TextStyle.SHORT, Locale.getDefault()), i));
+			VALUE.add(Pair.of(Month.of(i).getDisplayName(TextStyle.SHORT, Locale.getDefault()), i));
 		}
 	}
 	
