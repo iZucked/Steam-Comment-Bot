@@ -158,10 +158,12 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
 		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
 		
-		final IMemento configMemento = memento.getChild(getConfigStateName());
-
-		if (configMemento != null) {
-			initConfigMemento(configMemento);
+		if (memento != null) {
+			final IMemento configMemento = memento.getChild(getConfigStateName());
+	
+			if (configMemento != null) {
+				initConfigMemento(configMemento);
+			}
 		}
 		
 	}
