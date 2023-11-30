@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FloatFormatter;
@@ -34,6 +35,11 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
  */
 public class NumericAttributeManipulator extends BasicAttributeManipulator {
 
+	private static final String NUMBER_FORMAT_FEATURE_ANNOTATION = "http://www.mmxlabs.com/models/ui/numberFormat";
+	private static final String DEFAULT_VALUE_ANNOTATION_KEY = "defaultValue";
+	private static final String FORMAT_STRING_ANNOTATION_KEY = "formatString";
+	private static final String SCALE_ANNOTATION_KEY = "scale";
+
 	private final EDataType type;
 	protected Object defaultValue;
 
@@ -45,79 +51,61 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		super(feature, commandHandler);
 		type = (EDataType) feature.getEType();
 
-		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
+		final EAnnotation annotation = feature.getEAnnotation(NUMBER_FORMAT_FEATURE_ANNOTATION);
 		String format = null;
 		String defaultValueString = "0";
 
 		if (annotation != null) {
-			if (annotation.getDetails().containsKey("defaultValue")) {
-				defaultValueString = annotation.getDetails().get("defaultValue");
-			}
-			
-			if (annotation.getDetails().containsKey("formatString")) {
-				format = annotation.getDetails().get("formatString");
+			if (annotation.getDetails().containsKey(DEFAULT_VALUE_ANNOTATION_KEY)) {
+				defaultValueString = annotation.getDetails().get(DEFAULT_VALUE_ANNOTATION_KEY);
 			}
 
-			if (annotation.getDetails().containsKey("scale")) {
-				scale = Integer.parseInt(annotation.getDetails().get("scale"));
+			if (annotation.getDetails().containsKey(FORMAT_STRING_ANNOTATION_KEY)) {
+				format = annotation.getDetails().get(FORMAT_STRING_ANNOTATION_KEY);
+			}
+
+			if (annotation.getDetails().containsKey(SCALE_ANNOTATION_KEY)) {
+				scale = Integer.parseInt(annotation.getDetails().get(SCALE_ANNOTATION_KEY));
 			}
 		}
-
 
 		if (type == EcorePackage.eINSTANCE.getELong()) {
 			defaultValue = Long.parseLong(defaultValueString);
 			final LongFormatter inner = format == null ? new LongFormatter() : new LongFormatter(format);
-			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(field);
-					inner.setValue(scale(v));
-					return inner.getDisplayString();
-				}
-				return null;
-			};
+			final Supplier<String> overrideStringSupplier = buildOverrideStringSupplier(inner);
 			formatter = format == null ? new ExtendedLongFormatter(overrideStringSupplier) : new ExtendedLongFormatter(format, overrideStringSupplier);
 
 		} else if (type == EcorePackage.eINSTANCE.getEInt()) {
 			defaultValue = Integer.parseInt(defaultValueString);
 			final IntegerFormatter inner = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
-			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(field);
-					inner.setValue(scale(v));
-					return inner.getDisplayString();
-				}
-				return null;
-			};
+			final Supplier<String> overrideStringSupplier = buildOverrideStringSupplier(inner);
 			formatter = format == null ? new ExtendedIntegerFormatter(overrideStringSupplier) : new ExtendedIntegerFormatter(format, overrideStringSupplier);
 
 		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
 			defaultValue = Float.parseFloat(defaultValueString);
 			final FloatFormatter inner = format == null ? new FloatFormatter() : new FloatFormatter(format);
-			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(field);
-					inner.setValue(scale(v));
-					return inner.getDisplayString();
-				}
-				return null;
-			};
+			final Supplier<String> overrideStringSupplier = buildOverrideStringSupplier(inner);
 			formatter = format == null ? new ExtendedFloatFormatter(overrideStringSupplier) : new ExtendedFloatFormatter(format, overrideStringSupplier);
 		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
 			defaultValue = Double.parseDouble(defaultValueString);
 			final DoubleFormatter inner = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
-			final Supplier<String> overrideStringSupplier = () -> {
-				if (input instanceof MMXObject) {
-					final Object v = ((MMXObject) input).getUnsetValue(field);
-					inner.setValue(scale(v));
-					return inner.getDisplayString();
-				}
-				return null;
-			};
+			final Supplier<String> overrideStringSupplier = buildOverrideStringSupplier(inner);
 			formatter = format == null ? new ExtendedDoubleFormatter(overrideStringSupplier) : new ExtendedDoubleFormatter(format, overrideStringSupplier);
 		}
 		if (format == null) {
 			formatter.setFixedLengths(false, false);
 		}
+	}
+
+	private @NonNull Supplier<String> buildOverrideStringSupplier(final @NonNull NumberFormatter numberFormatter) {
+		return () -> {
+			if (input instanceof MMXObject mmxObject) {
+				final Object v = mmxObject.getUnsetValue(field);
+				numberFormatter.setValue(scale(v));
+				return numberFormatter.getDisplayString();
+			}
+			return null;
+		};
 	}
 
 	//
@@ -134,15 +122,15 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public Comparable getComparable(final Object object) {
+	public Comparable<?> getComparable(final Object object) {
 		Object object2 = super.getValue(object);
 		if (object2 == null || object2 == SetCommand.UNSET_VALUE) {
-			if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
-				object2 = (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : null;
+			if ((object instanceof EObject eObj) && (field.isUnsettable()) && !eObj.eIsSet(field)) {
+				object2 = object instanceof MMXObject mmxObject ? mmxObject.getUnsetValue(field) : null;
 			}
 		}
-		if (object2 instanceof Comparable) {
-			return (Comparable) object2;
+		if (object2 instanceof Comparable<?> comparable) {
+			return comparable;
 		}
 		return -Integer.MAX_VALUE;
 	}
@@ -171,14 +159,14 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 			return internalValue;
 		}
 
-		if (internalValue instanceof Integer) {
-			return ((Integer) internalValue).intValue() * (double) scale;
-		} else if (internalValue instanceof Long) {
-			return ((Long) internalValue).longValue() * (double) scale;
-		} else if (internalValue instanceof Float) {
-			return ((Float) internalValue).floatValue() * (double) scale;
-		} else if (internalValue instanceof Double) {
-			return ((Double) internalValue).doubleValue() * (double) scale;
+		if (internalValue instanceof Integer integer) {
+			return integer.intValue() * (double) scale;
+		} else if (internalValue instanceof Long longObj) {
+			return longObj.longValue() * (double) scale;
+		} else if (internalValue instanceof Float floatObj) {
+			return floatObj.floatValue() * (double) scale;
+		} else if (internalValue instanceof Double doubleObj) {
+			return doubleObj.doubleValue() * scale;
 		}
 		return internalValue;
 	}
@@ -188,14 +176,14 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 			return displayValue;
 		}
 
-		if (displayValue instanceof Integer) {
-			return ((Integer) displayValue).intValue() / (double) scale;
-		} else if (displayValue instanceof Long) {
-			return ((Long) displayValue).longValue() / (double) scale;
-		} else if (displayValue instanceof Float) {
-			return ((Float) displayValue).floatValue() / (double) scale;
-		} else if (displayValue instanceof Double) {
-			return ((Double) displayValue).doubleValue() / (double) scale;
+		if (displayValue instanceof Integer integer) {
+			return integer.intValue() / (double) scale;
+		} else if (displayValue instanceof Long longObj) {
+			return longObj.longValue() / (double) scale;
+		} else if (displayValue instanceof Float floatObj) {
+			return floatObj.floatValue() / (double) scale;
+		} else if (displayValue instanceof Double doubleObj) {
+			return doubleObj.doubleValue() / scale;
 		}
 		return displayValue;
 	}

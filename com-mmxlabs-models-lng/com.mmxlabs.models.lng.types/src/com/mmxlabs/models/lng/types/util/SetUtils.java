@@ -39,7 +39,7 @@ public class SetUtils {
 	 * @return
 	 */
 	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final Iterable<T> objectSets) {
-		final HashSet<U> result = new HashSet<U>();
+		final HashSet<U> result = new HashSet<>();
 		addObjects(objectSets, result);
 		return result;
 	}
@@ -51,7 +51,7 @@ public class SetUtils {
 	 * @return
 	 */
 	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final T objectSet) {
-		final HashSet<U> result = new HashSet<U>();
+		final HashSet<U> result = new HashSet<>();
 		if (objectSet != null) {
 			addObjects(objectSet, result);
 		}
@@ -67,8 +67,9 @@ public class SetUtils {
 	/**
 	 */
 	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> objectSets, Collection<U> output, EList<T> marks) {
-		for (final T set : objectSets)
+		for (final T set : objectSets) {
 			addObjects(set, output, marks);
+		}
 	}
 
 	/**
