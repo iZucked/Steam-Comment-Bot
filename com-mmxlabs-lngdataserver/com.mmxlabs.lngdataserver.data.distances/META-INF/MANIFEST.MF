@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Distances Data
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.data.distances;singleton:=true
 Automatic-Module-Name: com.mmxlabs.lngdataserver.data.distances
-Bundle-Version: 6.11.8.RELEASE
+Bundle-Version: 6.11.9.qualifier
 Require-Bundle: org.eclipse.osgi,
  com.google.guava,
  org.eclipse.core.runtime,
@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.osgi,
  com.google.guava.failureaccess;bundle-version="1.0.1",
  org.apache.commons.logging;bundle-version="1.2.0",
  com.fasterxml.jackson.datatype.jackson-datatype-jsr310,
- com.mmxlabs.lngdataserver.lng.importers;bundle-version="6.11.8",
+ com.mmxlabs.lngdataserver.lng.importers;bundle-version="6.11.9",
  org.apache.httpcomponents.client5.httpclient5,
  org.apache.httpcomponents.core5.httpcore5
 Bundle-ActivationPolicy: lazy
