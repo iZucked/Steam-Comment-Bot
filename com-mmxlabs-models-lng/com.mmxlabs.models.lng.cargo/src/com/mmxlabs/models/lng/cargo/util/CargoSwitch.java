@@ -464,6 +464,18 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.EU_ETS_MODEL: {
+				EuEtsModel euEtsModel = (EuEtsModel)theEObject;
+				T1 result = caseEuEtsModel(euEtsModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.EMISSIONS_COVERED_TABLE: {
+				EmissionsCoveredTable emissionsCoveredTable = (EmissionsCoveredTable)theEObject;
+				T1 result = caseEmissionsCoveredTable(emissionsCoveredTable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1110,6 +1122,36 @@ public class CargoSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseCIIEndOptions(CIIEndOptions object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Eu Ets Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Eu Ets Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseEuEtsModel(EuEtsModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Emissions Covered Table</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Emissions Covered Table</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseEmissionsCoveredTable(EmissionsCoveredTable object) {
 		return null;
 	}
 

@@ -56,6 +56,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dealSets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/groupedDischargeSlots"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/paperDealsVersionRecord"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/EuEtsModel"/>
       <genOperations ecoreOperation="cargo.ecore#//CargoModel/getLoadSlotByName">
         <genParameters ecoreParameter="cargo.ecore#//CargoModel/getLoadSlotByName/name"/>
       </genOperations>
@@ -456,6 +457,15 @@
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//CIIEndOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CIIEndOptions/desiredCIIGrade"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//EuEtsModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//EuEtsModel/euaPriceExpression"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//EuEtsModel/euPortGroup"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//EuEtsModel/emissionsCovered"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//EmissionsCoveredTable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//EmissionsCoveredTable/startYear"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//EmissionsCoveredTable/emissionsCovered"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

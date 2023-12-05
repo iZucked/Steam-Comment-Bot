@@ -130,6 +130,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.GROUPED_DISCHARGE_SLOTS_CONSTRAINT: return createGroupedDischargeSlotsConstraint();
 			case CargoPackage.CII_START_OPTIONS: return createCIIStartOptions();
 			case CargoPackage.CII_END_OPTIONS: return createCIIEndOptions();
+			case CargoPackage.EU_ETS_MODEL: return createEuEtsModel();
+			case CargoPackage.EMISSIONS_COVERED_TABLE: return createEmissionsCoveredTable();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -594,6 +596,28 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public CIIEndOptions createCIIEndOptions() {
 		CIIEndOptionsImpl ciiEndOptions = new CIIEndOptionsImpl();
 		return ciiEndOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EuEtsModel createEuEtsModel() {
+		EuEtsModelImpl euEtsModel = new EuEtsModelImpl();
+		return euEtsModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EmissionsCoveredTable createEmissionsCoveredTable() {
+		EmissionsCoveredTableImpl emissionsCoveredTable = new EmissionsCoveredTableImpl();
+		return emissionsCoveredTable;
 	}
 
 	/**

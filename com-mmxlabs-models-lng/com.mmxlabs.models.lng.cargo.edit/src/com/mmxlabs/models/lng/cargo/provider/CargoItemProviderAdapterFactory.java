@@ -939,6 +939,52 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.EuEtsModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EuEtsModelItemProvider euEtsModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.EuEtsModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEuEtsModelAdapter() {
+		if (euEtsModelItemProvider == null) {
+			euEtsModelItemProvider = new EuEtsModelItemProvider(this);
+		}
+
+		return euEtsModelItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.EmissionsCoveredTable} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EmissionsCoveredTableItemProvider emissionsCoveredTableItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.EmissionsCoveredTable}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEmissionsCoveredTableAdapter() {
+		if (emissionsCoveredTableItemProvider == null) {
+			emissionsCoveredTableItemProvider = new EmissionsCoveredTableItemProvider(this);
+		}
+
+		return emissionsCoveredTableItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1107,6 +1153,8 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (groupedDischargeSlotsConstraintItemProvider != null) groupedDischargeSlotsConstraintItemProvider.dispose();
 		if (ciiStartOptionsItemProvider != null) ciiStartOptionsItemProvider.dispose();
 		if (ciiEndOptionsItemProvider != null) ciiEndOptionsItemProvider.dispose();
+		if (euEtsModelItemProvider != null) euEtsModelItemProvider.dispose();
+		if (emissionsCoveredTableItemProvider != null) emissionsCoveredTableItemProvider.dispose();
 	}
 
 }

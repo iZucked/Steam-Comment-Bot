@@ -826,16 +826,13 @@
         <details key="type" value="commodity"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="euPortGroup" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//PortGroup"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="emissionsCovered" upperBound="-1"
         eType="#//EmissionsCoveredTable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="euPortGroup" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//PortGroup"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EmissionsCoveredTable">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startYear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="formatString" value="####"/>
-      </eAnnotations>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startYear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="emissionsCovered" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
 </ecore:EPackage>

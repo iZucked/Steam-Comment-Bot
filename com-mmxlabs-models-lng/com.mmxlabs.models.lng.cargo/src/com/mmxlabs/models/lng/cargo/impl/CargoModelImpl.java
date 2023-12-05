@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.EuEtsModel;
 import com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -59,6 +60,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDealSets <em>Deal Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getPaperDealsVersionRecord <em>Paper Deals Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getEuEtsModel <em>Eu Ets Model</em>}</li>
  * </ul>
  *
  * @generated
@@ -204,6 +206,16 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected VersionRecord paperDealsVersionRecord;
+
+	/**
+	 * The cached value of the '{@link #getEuEtsModel() <em>Eu Ets Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEuEtsModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected EuEtsModel euEtsModel;
 
 	private Map< String, LoadSlot> lookupLoadSlotCache;
 	private Map< String, DischargeSlot> lookupDischargeSlotCache;
@@ -538,6 +550,74 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EuEtsModel getEuEtsModel() {
+		if (euEtsModel != null && euEtsModel.eIsProxy()) {
+			InternalEObject oldEuEtsModel = (InternalEObject)euEtsModel;
+			euEtsModel = (EuEtsModel)eResolveProxy(oldEuEtsModel);
+			if (euEtsModel != oldEuEtsModel) {
+				InternalEObject newEuEtsModel = (InternalEObject)euEtsModel;
+				NotificationChain msgs = oldEuEtsModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__EU_ETS_MODEL, null, null);
+				if (newEuEtsModel.eInternalContainer() == null) {
+					msgs = newEuEtsModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__EU_ETS_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO_MODEL__EU_ETS_MODEL, oldEuEtsModel, euEtsModel));
+			}
+		}
+		return euEtsModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EuEtsModel basicGetEuEtsModel() {
+		return euEtsModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetEuEtsModel(EuEtsModel newEuEtsModel, NotificationChain msgs) {
+		EuEtsModel oldEuEtsModel = euEtsModel;
+		euEtsModel = newEuEtsModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO_MODEL__EU_ETS_MODEL, oldEuEtsModel, newEuEtsModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEuEtsModel(EuEtsModel newEuEtsModel) {
+		if (newEuEtsModel != euEtsModel) {
+			NotificationChain msgs = null;
+			if (euEtsModel != null)
+				msgs = ((InternalEObject)euEtsModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__EU_ETS_MODEL, null, msgs);
+			if (newEuEtsModel != null)
+				msgs = ((InternalEObject)newEuEtsModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CARGO_MODEL__EU_ETS_MODEL, null, msgs);
+			msgs = basicSetEuEtsModel(newEuEtsModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO_MODEL__EU_ETS_MODEL, newEuEtsModel, newEuEtsModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -615,6 +695,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getGroupedDischargeSlots()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
 				return basicSetPaperDealsVersionRecord(null, msgs);
+			case CargoPackage.CARGO_MODEL__EU_ETS_MODEL:
+				return basicSetEuEtsModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -657,6 +739,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
 				if (resolve) return getPaperDealsVersionRecord();
 				return basicGetPaperDealsVersionRecord();
+			case CargoPackage.CARGO_MODEL__EU_ETS_MODEL:
+				if (resolve) return getEuEtsModel();
+				return basicGetEuEtsModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -724,6 +809,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
 				setPaperDealsVersionRecord((VersionRecord)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__EU_ETS_MODEL:
+				setEuEtsModel((EuEtsModel)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -778,6 +866,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
 				setPaperDealsVersionRecord((VersionRecord)null);
 				return;
+			case CargoPackage.CARGO_MODEL__EU_ETS_MODEL:
+				setEuEtsModel((EuEtsModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -818,6 +909,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return groupedDischargeSlots != null && !groupedDischargeSlots.isEmpty();
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS_VERSION_RECORD:
 				return paperDealsVersionRecord != null;
+			case CargoPackage.CARGO_MODEL__EU_ETS_MODEL:
+				return euEtsModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

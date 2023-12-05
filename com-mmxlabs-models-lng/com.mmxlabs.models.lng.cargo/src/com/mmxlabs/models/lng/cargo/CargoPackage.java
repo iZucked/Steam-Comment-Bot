@@ -222,13 +222,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__PAPER_DEALS_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
+	 * The feature id for the '<em><b>Eu Ets Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__EU_ETS_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -8706,6 +8715,107 @@ public interface CargoPackage extends EPackage {
 	int CII_END_OPTIONS_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.EuEtsModelImpl <em>Eu Ets Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.EuEtsModelImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEuEtsModel()
+	 * @generated
+	 */
+	int EU_ETS_MODEL = 43;
+
+	/**
+	 * The feature id for the '<em><b>Eua Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EU_ETS_MODEL__EUA_PRICE_EXPRESSION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Eu Port Group</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EU_ETS_MODEL__EU_PORT_GROUP = 1;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Covered</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EU_ETS_MODEL__EMISSIONS_COVERED = 2;
+
+	/**
+	 * The number of structural features of the '<em>Eu Ets Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EU_ETS_MODEL_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Eu Ets Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EU_ETS_MODEL_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.EmissionsCoveredTableImpl <em>Emissions Covered Table</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.EmissionsCoveredTableImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEmissionsCoveredTable()
+	 * @generated
+	 */
+	int EMISSIONS_COVERED_TABLE = 44;
+
+	/**
+	 * The feature id for the '<em><b>Start Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EMISSIONS_COVERED_TABLE__START_YEAR = 0;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Covered</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EMISSIONS_COVERED_TABLE__EMISSIONS_COVERED = 1;
+
+	/**
+	 * The number of structural features of the '<em>Emissions Covered Table</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EMISSIONS_COVERED_TABLE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Emissions Covered Table</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EMISSIONS_COVERED_TABLE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8713,7 +8823,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 43;
+	int CARGO_TYPE = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}' enum.
@@ -8723,7 +8833,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 44;
+	int VESSEL_TYPE = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFacilityType <em>Inventory Facility Type</em>}' enum.
@@ -8733,7 +8843,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 45;
+	int INVENTORY_FACILITY_TYPE = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -8743,7 +8853,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 46;
+	int INVENTORY_FREQUENCY = 48;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.PaperPricingType <em>Paper Pricing Type</em>}' enum.
@@ -8753,7 +8863,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 47;
+	int PAPER_PRICING_TYPE = 49;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
@@ -8763,7 +8873,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
 	 * @generated
 	 */
-	int FUEL_CHOICE = 48;
+	int FUEL_CHOICE = 50;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -8773,7 +8883,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 49;
+	int SCHEDULING_TIME_WINDOW = 51;
 
 
 	/**
@@ -8939,6 +9049,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargoModel_PaperDealsVersionRecord();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CargoModel#getEuEtsModel <em>Eu Ets Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Eu Ets Model</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getEuEtsModel()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_EuEtsModel();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String) <em>Get Load Slot By Name</em>}' operation.
@@ -12035,6 +12156,81 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCIIEndOptions_DesiredCIIGrade();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.EuEtsModel <em>Eu Ets Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Eu Ets Model</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EuEtsModel
+	 * @generated
+	 */
+	EClass getEuEtsModel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EuEtsModel#getEuaPriceExpression <em>Eua Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Eua Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EuEtsModel#getEuaPriceExpression()
+	 * @see #getEuEtsModel()
+	 * @generated
+	 */
+	EAttribute getEuEtsModel_EuaPriceExpression();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.EuEtsModel#getEmissionsCovered <em>Emissions Covered</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Emissions Covered</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EuEtsModel#getEmissionsCovered()
+	 * @see #getEuEtsModel()
+	 * @generated
+	 */
+	EReference getEuEtsModel_EmissionsCovered();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.EuEtsModel#getEuPortGroup <em>Eu Port Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Eu Port Group</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EuEtsModel#getEuPortGroup()
+	 * @see #getEuEtsModel()
+	 * @generated
+	 */
+	EReference getEuEtsModel_EuPortGroup();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.EmissionsCoveredTable <em>Emissions Covered Table</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Emissions Covered Table</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EmissionsCoveredTable
+	 * @generated
+	 */
+	EClass getEmissionsCoveredTable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EmissionsCoveredTable#getStartYear <em>Start Year</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Year</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EmissionsCoveredTable#getStartYear()
+	 * @see #getEmissionsCoveredTable()
+	 * @generated
+	 */
+	EAttribute getEmissionsCoveredTable_StartYear();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EmissionsCoveredTable#getEmissionsCovered <em>Emissions Covered</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Emissions Covered</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.EmissionsCoveredTable#getEmissionsCovered()
+	 * @see #getEmissionsCoveredTable()
+	 * @generated
+	 */
+	EAttribute getEmissionsCoveredTable_EmissionsCovered();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12249,6 +12445,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_MODEL__PAPER_DEALS_VERSION_RECORD = eINSTANCE.getCargoModel_PaperDealsVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Eu Ets Model</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__EU_ETS_MODEL = eINSTANCE.getCargoModel_EuEtsModel();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Load Slot By Name</b></em>' operation.
@@ -14653,6 +14857,66 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CII_END_OPTIONS__DESIRED_CII_GRADE = eINSTANCE.getCIIEndOptions_DesiredCIIGrade();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.EuEtsModelImpl <em>Eu Ets Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.EuEtsModelImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEuEtsModel()
+		 * @generated
+		 */
+		EClass EU_ETS_MODEL = eINSTANCE.getEuEtsModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Eua Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EU_ETS_MODEL__EUA_PRICE_EXPRESSION = eINSTANCE.getEuEtsModel_EuaPriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Emissions Covered</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EU_ETS_MODEL__EMISSIONS_COVERED = eINSTANCE.getEuEtsModel_EmissionsCovered();
+
+		/**
+		 * The meta object literal for the '<em><b>Eu Port Group</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EU_ETS_MODEL__EU_PORT_GROUP = eINSTANCE.getEuEtsModel_EuPortGroup();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.EmissionsCoveredTableImpl <em>Emissions Covered Table</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.EmissionsCoveredTableImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEmissionsCoveredTable()
+		 * @generated
+		 */
+		EClass EMISSIONS_COVERED_TABLE = eINSTANCE.getEmissionsCoveredTable();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Year</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EMISSIONS_COVERED_TABLE__START_YEAR = eINSTANCE.getEmissionsCoveredTable_StartYear();
+
+		/**
+		 * The meta object literal for the '<em><b>Emissions Covered</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EMISSIONS_COVERED_TABLE__EMISSIONS_COVERED = eINSTANCE.getEmissionsCoveredTable_EmissionsCovered();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

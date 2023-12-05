@@ -358,6 +358,24 @@ public interface CargoFactory extends EFactory {
 	CIIEndOptions createCIIEndOptions();
 
 	/**
+	 * Returns a new object of class '<em>Eu Ets Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Eu Ets Model</em>'.
+	 * @generated
+	 */
+	EuEtsModel createEuEtsModel();
+
+	/**
+	 * Returns a new object of class '<em>Emissions Covered Table</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Emissions Covered Table</em>'.
+	 * @generated
+	 */
+	EmissionsCoveredTable createEmissionsCoveredTable();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

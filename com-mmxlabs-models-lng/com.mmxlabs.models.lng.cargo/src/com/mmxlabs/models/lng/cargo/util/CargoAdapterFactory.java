@@ -266,6 +266,14 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCIIEndOptionsAdapter();
 			}
 			@Override
+			public Adapter caseEuEtsModel(EuEtsModel object) {
+				return createEuEtsModelAdapter();
+			}
+			@Override
+			public Adapter caseEmissionsCoveredTable(EmissionsCoveredTable object) {
+				return createEmissionsCoveredTableAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -954,6 +962,34 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCIIEndOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.EuEtsModel <em>Eu Ets Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.EuEtsModel
+	 * @generated
+	 */
+	public Adapter createEuEtsModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.EmissionsCoveredTable <em>Emissions Covered Table</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.EmissionsCoveredTable
+	 * @generated
+	 */
+	public Adapter createEmissionsCoveredTableAdapter() {
 		return null;
 	}
 

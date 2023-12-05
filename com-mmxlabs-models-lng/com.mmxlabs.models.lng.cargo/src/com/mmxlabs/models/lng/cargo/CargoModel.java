@@ -32,6 +32,7 @@ import com.mmxlabs.models.mmxcore.VersionRecord;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getDealSets <em>Deal Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getPaperDealsVersionRecord <em>Paper Deals Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getEuEtsModel <em>Eu Ets Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel()
@@ -276,6 +277,28 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	void setPaperDealsVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>Eu Ets Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Eu Ets Model</em>' containment reference.
+	 * @see #setEuEtsModel(EuEtsModel)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_EuEtsModel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EuEtsModel getEuEtsModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getEuEtsModel <em>Eu Ets Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Eu Ets Model</em>' containment reference.
+	 * @see #getEuEtsModel()
+	 * @generated
+	 */
+	void setEuEtsModel(EuEtsModel value);
 
 	/**
 	 * <!-- begin-user-doc -->

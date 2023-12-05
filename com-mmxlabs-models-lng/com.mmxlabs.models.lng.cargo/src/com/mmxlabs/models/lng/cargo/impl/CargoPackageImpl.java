@@ -34,6 +34,8 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.EmissionsCoveredTable;
+import com.mmxlabs.models.lng.cargo.EuEtsModel;
 import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint;
 import com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint;
@@ -383,6 +385,20 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass ciiEndOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass euEtsModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass emissionsCoveredTableEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1682,6 +1698,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EReference getCargoModel_PaperDealsVersionRecord() {
 		return (EReference)cargoModelEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCargoModel_EuEtsModel() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -3550,6 +3576,76 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getEuEtsModel() {
+		return euEtsModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEuEtsModel_EuaPriceExpression() {
+		return (EAttribute)euEtsModelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEuEtsModel_EmissionsCovered() {
+		return (EReference)euEtsModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEuEtsModel_EuPortGroup() {
+		return (EReference)euEtsModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEmissionsCoveredTable() {
+		return emissionsCoveredTableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEmissionsCoveredTable_StartYear() {
+		return (EAttribute)emissionsCoveredTableEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEmissionsCoveredTable_EmissionsCovered() {
+		return (EAttribute)emissionsCoveredTableEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getCargoType() {
 		return cargoTypeEEnum;
 	}
@@ -3658,6 +3754,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__DEAL_SETS);
 		createEReference(cargoModelEClass, CARGO_MODEL__GROUPED_DISCHARGE_SLOTS);
 		createEReference(cargoModelEClass, CARGO_MODEL__PAPER_DEALS_VERSION_RECORD);
+		createEReference(cargoModelEClass, CARGO_MODEL__EU_ETS_MODEL);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING);
 
@@ -3991,6 +4088,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		ciiEndOptionsEClass = createEClass(CII_END_OPTIONS);
 		createEAttribute(ciiEndOptionsEClass, CII_END_OPTIONS__DESIRED_CII_GRADE);
 
+		euEtsModelEClass = createEClass(EU_ETS_MODEL);
+		createEAttribute(euEtsModelEClass, EU_ETS_MODEL__EUA_PRICE_EXPRESSION);
+		createEReference(euEtsModelEClass, EU_ETS_MODEL__EU_PORT_GROUP);
+		createEReference(euEtsModelEClass, EU_ETS_MODEL__EMISSIONS_COVERED);
+
+		emissionsCoveredTableEClass = createEClass(EMISSIONS_COVERED_TABLE);
+		createEAttribute(emissionsCoveredTableEClass, EMISSIONS_COVERED_TABLE__START_YEAR);
+		createEAttribute(emissionsCoveredTableEClass, EMISSIONS_COVERED_TABLE__EMISSIONS_COVERED);
+
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
 		vesselTypeEEnum = createEEnum(VESSEL_TYPE);
@@ -4124,6 +4230,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_DealSets(), this.getDealSet(), null, "dealSets", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_GroupedDischargeSlots(), this.getGroupedDischargeSlotsConstraint(), null, "groupedDischargeSlots", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_PaperDealsVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "paperDealsVersionRecord", null, 0, 1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_EuEtsModel(), this.getEuEtsModel(), null, "EuEtsModel", null, 0, 1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getCargoModel__GetLoadSlotByName__String(), this.getLoadSlot(), "getLoadSlotByName", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -4564,6 +4671,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(ciiEndOptionsEClass, CIIEndOptions.class, "CIIEndOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCIIEndOptions_DesiredCIIGrade(), ecorePackage.getEString(), "desiredCIIGrade", null, 0, 1, CIIEndOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(euEtsModelEClass, EuEtsModel.class, "EuEtsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEuEtsModel_EuaPriceExpression(), ecorePackage.getEString(), "euaPriceExpression", null, 1, 1, EuEtsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEuEtsModel_EuPortGroup(), thePortPackage.getPortGroup(), null, "euPortGroup", null, 0, 1, EuEtsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEuEtsModel_EmissionsCovered(), this.getEmissionsCoveredTable(), null, "emissionsCovered", null, 0, -1, EuEtsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(emissionsCoveredTableEClass, EmissionsCoveredTable.class, "EmissionsCoveredTable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEmissionsCoveredTable_StartYear(), ecorePackage.getEInt(), "startYear", null, 0, 1, EmissionsCoveredTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEmissionsCoveredTable_EmissionsCovered(), ecorePackage.getEInt(), "emissionsCovered", null, 0, 1, EmissionsCoveredTable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
 		addEEnumLiteral(cargoTypeEEnum, CargoType.FLEET);
@@ -4920,6 +5036,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			   "formatString", "#####"
 		   });
+		addAnnotation
+		  (getEmissionsCoveredTable_StartYear(),
+		   source,
+		   new String[] {
+			   "formatString", "####"
+		   });
 	}
 
 	/**
@@ -4962,6 +5084,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   });
 		addAnnotation
 		  (getPaperDeal_Index(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getEuEtsModel_EuaPriceExpression(),
 		   source,
 		   new String[] {
 			   "type", "commodity"
