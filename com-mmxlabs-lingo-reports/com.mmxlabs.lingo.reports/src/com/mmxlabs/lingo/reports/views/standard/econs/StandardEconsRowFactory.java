@@ -240,12 +240,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				rows.add(createRow(EconsRowMarkers.SHIPPING_START + 40, "    Boil-off", true, "$", "", createShippingBOGTotal(options, RowType.COST), createBOGColourProvider(options)));
 				rows.add(
 						createRow(EconsRowMarkers.SHIPPING_START + 50, "    Charter Cost", true, "$", "", createShippingCharterCosts(options, RowType.COST), createCharterFeesColourProvider(options)));
+				rows.add(
+						createRow(EconsRowMarkers.SHIPPING_START + 60, "    Emissions Cost", true, "$", "", createShippingEmissionsCosts(options, RowType.COST)));
 			}
 			if (containsInCharterRepositioning) {
-				rows.add(createRow(EconsRowMarkers.SHIPPING_START + 60, "    Repositioning", true, "$", "", createCharterInRepositioning(options, RowType.COST)));
+				rows.add(createRow(EconsRowMarkers.SHIPPING_START + 70, "    Repositioning", true, "$", "", createCharterInRepositioning(options, RowType.COST)));
 			}
 			if (containsInCharterBallastBonus) {
-				rows.add(createRow(EconsRowMarkers.SHIPPING_START + 70, "    Ballast bonus", true, "$", "", createCharterInBallastBonus(options, RowType.COST)));
+				rows.add(createRow(EconsRowMarkers.SHIPPING_START + 80, "    Ballast bonus", true, "$", "", createCharterInBallastBonus(options, RowType.COST)));
 			}
 
 			if (containsCargo) {
@@ -941,8 +943,23 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return 0;
 	}
 
+	private static int genericShippingEmissionsCostsHelper(final Object object) {
+		int cost = 0;
+		if (object instanceof final EventGrouping grouping) {
+			for (final Event event : grouping.getEvents()) {
+				cost += event.getEmissionsCost();
+			}
+		}
+		
+		return cost;
+	}
+	
 	private @NonNull ICellRenderer createShippingCharterCosts(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingCharterCostsHelper));
+	}
+	
+	private @NonNull ICellRenderer createShippingEmissionsCosts(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::genericShippingEmissionsCostsHelper));
 	}
 
 	private @NonNull ICellRenderer createShippingPurgeCosts(final EconsOptions options, final RowType rowType) {
@@ -1274,6 +1291,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			if (event instanceof final Cooldown cooldown) {
 				shippingCost += cooldown.getCost();
 			}
+			
+			shippingCost += event.getEmissionsCost();
 		}
 
 		final GenericCharterContract genericCharterContract = getCharterContract(sequence);

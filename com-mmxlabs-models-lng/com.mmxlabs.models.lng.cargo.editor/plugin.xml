@@ -117,6 +117,12 @@
                modelClass="com.mmxlabs.models.lng.cargo.CanalBookings">
          </componentHelper>
          <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.EuEtsComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.EuEtsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.EuEtsModel">
+         </componentHelper>
+         <componentHelper
                helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
                id="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
                inheritable="true"
@@ -717,6 +723,17 @@
             icon="icons:/16/report"
             id="com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView"
             name="Panama Bookings"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="com.mmxlabs.lngdataserver.views.dataserver"
+            class="com.mmxlabs.models.lng.cargo.editor.editors.EuEtsEditorView"
+            icon="icons:/16/report"
+            id="com.mmxlabs.models.lng.cargo.editor.views.EuEtsEditorView"
+            name="EU ETS"
             restorable="true">
       </view>
    </extension>
