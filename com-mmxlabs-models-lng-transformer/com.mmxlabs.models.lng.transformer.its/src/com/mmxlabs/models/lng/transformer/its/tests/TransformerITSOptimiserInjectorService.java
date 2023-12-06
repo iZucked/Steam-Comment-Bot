@@ -17,6 +17,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.euets.EuEtsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealsExporterExtensionFactory;
@@ -92,6 +93,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 						transformerExtensionFactories.add(new PanamaSlotsTransformerFactory());
 						transformerExtensionFactories.add(new PortShipSizeTransformerFactory());
 						transformerExtensionFactories.add(new ContingencyIdleTimeTransformerFactory());
+						transformerExtensionFactories.add(new EuEtsTransformerFactory());
 						bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 						final List<@NonNull IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<>();

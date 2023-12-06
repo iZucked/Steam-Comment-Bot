@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.transformer.extensions.contracts.charter.CharterCo
 import com.mmxlabs.models.lng.transformer.extensions.contracts.regas.RegasContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.counterpartyvolume.CounterPartyVolumeDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.euets.EuEtsModule;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposureDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.fcl.FullCargoLotModule;
@@ -61,6 +62,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new HeelCarryDataModule());
 		install(new TransfersDataModule());
 		install(new FobSaleRotationModule());
+		install(new EuEtsModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
 		bindService(VolumeTierContractTransformerFactory.class).export();
