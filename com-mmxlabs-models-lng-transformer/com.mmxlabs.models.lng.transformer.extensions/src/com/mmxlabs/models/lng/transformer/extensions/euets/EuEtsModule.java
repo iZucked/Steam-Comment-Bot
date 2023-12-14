@@ -9,6 +9,9 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import com.mmxlabs.scheduler.optimiser.emissions.IEmissionsCaclculator;
+import com.mmxlabs.scheduler.optimiser.emissions.impl.EuEtsEmissionsCalculator;
+import com.mmxlabs.scheduler.optimiser.emissions.impl.EuEtsEmissionsExporterCalculator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IEuEtsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEuEtsProviderEditor;
@@ -19,6 +22,7 @@ public class EuEtsModule extends PeaberryActivationModule {
 	protected void configure() {
 		bindService(EuEtsInjectorService.class).export();
 		bindService(EuEtsTransformerFactory.class).export();
+		bindService(EuEtsExporterExtensionFactory.class).export();
 	}
 
 	public static class EuEtsInjectorService implements IOptimiserInjectorService {
@@ -29,8 +33,10 @@ public class EuEtsModule extends PeaberryActivationModule {
 					@Override
 					protected void configure() {
 						final IEuEtsProviderEditor euEtsProviderEditor = new DefaultEuEtsProviderEditor();
+						final IEmissionsCaclculator emissionsCalculator = new EuEtsEmissionsCalculator();
 						bind(IEuEtsProviderEditor.class).toInstance(euEtsProviderEditor);
 						bind(IEuEtsProvider.class).toInstance(euEtsProviderEditor);
+						bind(IEmissionsCaclculator.class).toInstance(emissionsCalculator);
 					}
 				};
 			}

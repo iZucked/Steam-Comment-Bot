@@ -4,20 +4,25 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.Collections;
+
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.curves.IParameterisedCurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.CharterContractConstants;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselStartState;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PricingEventHelper;
 import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -37,7 +42,7 @@ public class ShippingCostHelper {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
-
+	
 	public long getFuelCosts(final @NonNull VoyagePlan plan) {
 
 		return plan.getBaseFuelCost() + plan.getCooldownCost();
@@ -61,6 +66,11 @@ public class ShippingCostHelper {
 	public long getRouteExtraCosts(final @NonNull VoyagePlan plan) {
 
 		return plan.getTotalRouteCost();
+	}
+	
+	public long getEmissionsaCosts(final @NonNull VoyagePlan plan) {
+
+		return plan.getEmissionsCost();
 	}
 
 	public long getHireCosts(final @NonNull VoyagePlan plan) {
@@ -132,8 +142,9 @@ public class ShippingCostHelper {
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan);
 		final long portCosts = getPortCosts(plan);
 		final long hireCosts = includeCharterInCosts ? plan.getCharterCost() : 0L;
+		final long emissionsCosts = getEmissionsaCosts(plan);
 
-		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
+		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts + emissionsCosts;
 	}
 
 	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final @NonNull IPortSlot portSlot, final @NonNull IVesselCharter vesselCharter, final VesselStartState vesselStartState, final PreviousHeelRecord heelRecord) {

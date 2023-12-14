@@ -59,6 +59,7 @@ public final class VoyagePlan extends AbstractWriteLockable {
 	private long baseFuelCost;
 	private long totalRouteCost;
 	private long startHeelCost;
+	private long emissionsCost;
 
 	private long[] voyagePlanMetrics = new long[VoyagePlanMetrics.values().length];
 	private boolean ignoreEnd;
@@ -133,6 +134,14 @@ public final class VoyagePlan extends AbstractWriteLockable {
 		this.baseFuelCost = baseFuelCost;
 	}
 
+	public long getEmissionsCost() {
+		return emissionsCost;
+	}
+
+	public void setEmissionsCost(long emissionsCost) {
+		this.emissionsCost = emissionsCost;
+	}
+	
 	/**
 	 */
 	public final long[] getVoyagePlanMetrics() {
@@ -185,6 +194,7 @@ public final class VoyagePlan extends AbstractWriteLockable {
 					&& Objects.equal(startHeelCost, plan.startHeelCost)
 					&& Arrays.equals(voyagePlanMetrics, plan.voyagePlanMetrics)
 					&& Arrays.deepEquals(sequence, plan.sequence)
+					&& Objects.equal(emissionsCost, plan.emissionsCost)
 					;
 			// @formatter:on
 		}
@@ -207,6 +217,7 @@ public final class VoyagePlan extends AbstractWriteLockable {
 				.add("lngFuelCost", lngFuelCost) //
 				.add("cooldownCost", cooldownCost) //
 				.add("baseFuelCost", baseFuelCost) //
+				.add("emissionsCost", emissionsCost) //
 				.add("voyagePlanMetrics", voyagePlanMetrics) //
 				.add("startingHeelInM3", startingHeelInM3) //
 				.add("remainingHeelInM3", remainingHeelInM3) //

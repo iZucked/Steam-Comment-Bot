@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.mmxlabs.common.curves.IParameterisedCurve;
@@ -20,4 +21,5 @@ public interface IEuEtsProviderEditor extends IEuEtsProvider {
 	void setEuPorts(Set<IPort> ports);
 	void setSeasonalityCurve(EuEtsSeasonalityCurve curve);
 	void setPriceCurve(IParameterisedCurve curve);
+	void setFuelEmissionsRates(Map<String, Double> emissionRates);
 }

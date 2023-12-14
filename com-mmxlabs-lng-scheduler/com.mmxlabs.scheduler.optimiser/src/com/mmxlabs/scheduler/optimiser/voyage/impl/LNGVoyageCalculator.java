@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +39,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVessel
 import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
+import com.mmxlabs.scheduler.optimiser.emissions.IEmissionsCaclculator;
+import com.mmxlabs.scheduler.optimiser.emissions.impl.EuEtsEmissionsCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCooldownDataProvider;
@@ -97,6 +100,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	@Inject
 	private IPortCooldownDataProvider portCooldownDataProvider;
+	
+	@Inject
+	private IEmissionsCaclculator emissionsCalculator;
 
 	// See default binding in LNGTransformerModule
 	@Inject
@@ -1032,6 +1038,39 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		voyagePlanMetrics[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()] += checkCooldownViolations(loadIdx, dischargeIdx, sequence);
 
 		voyagePlan.setVoyagePlanMetrics(voyagePlanMetrics);
+		
+		// Calculate the emissions costs for EU ETS
+		long totalEmissionsInTonnes = 0;
+		int startTime = Integer.MAX_VALUE;
+		IPort start = loadIdx != -1 ? ((PortDetails)sequence[loadIdx]).getOptions().getPortSlot().getPort() : null;
+		IPort destination = loadIdx != -1 ? ((PortDetails)sequence[dischargeIdx]).getOptions().getPortSlot().getPort() : null;
+		if(isCargo) {
+			for(int i = 0; i < sequence.length - 1; i++) {
+				if(i % 2 == 0) {
+					PortDetails portDetails = (PortDetails) sequence[i];
+					
+					totalEmissionsInTonnes += emissionsCalculator.getPortVisitEmissions(portDetails);
+					
+					// Get start time
+					startTime = Math.min(startTime, portDetails.getOptions().getPortSlot().getTimeWindow().getInclusiveStart());
+				}
+				else if(i % 2 != 0) {
+					VoyageDetails voyageDetails = (VoyageDetails) sequence[i];
+					totalEmissionsInTonnes += emissionsCalculator.getJourneyEmissions(voyageDetails);
+					totalEmissionsInTonnes += emissionsCalculator.getIdleEmissions(voyageDetails);
+				}
+			}
+		
+			// Apply reductions
+			double reductionFactor = emissionsCalculator.getEmissionReductions(start, destination, startTime);
+			totalEmissionsInTonnes = Calculator.multiply(totalEmissionsInTonnes, reductionFactor);
+		}
+		
+		// Price in emissions at start of visit
+		long emissionsCost = emissionsCalculator.getEmissionsCost(totalEmissionsInTonnes, startTime);
+		
+		voyagePlan.setEmissionsCost(emissionsCost);
+		
 		return voyagePlanMetrics;
 	}
 

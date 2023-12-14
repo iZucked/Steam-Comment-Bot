@@ -62,12 +62,16 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselCharter;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SplitCharterOutVesselEventStartPortSlot;
+import com.mmxlabs.scheduler.optimiser.emissions.IEmissionsCaclculator;
+import com.mmxlabs.scheduler.optimiser.emissions.impl.EuEtsEmissionsExporterCalculator;
 import com.mmxlabs.scheduler.optimiser.evaluation.HeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.HeelValueRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
@@ -129,7 +133,10 @@ public class AnnotatedSolutionExporter {
 
 	@Inject
 	private Injector injector;
-
+	
+	@Inject
+	private IEmissionsCaclculator oldCalc;
+	
 	private boolean exportRuntimeAndFitness = false;
 
 	public boolean isExportRuntimeAndFitness() {
@@ -266,7 +273,6 @@ public class AnnotatedSolutionExporter {
 					// Setup next/prev events.
 					Event prev = null;
 					for (final Event event : events) {
-
 						if (prev != null) {
 							prev.setNextEvent(event);
 							event.setPreviousEvent(prev);
@@ -534,12 +540,15 @@ public class AnnotatedSolutionExporter {
 		PortDetails redirectedCharterOutStart = null;
 		GeneratedCharterLengthEvent charterLengthEvent = null;
 		VoyagePlanRecord previous = null;
+		EuEtsEmissionsExporterCalculator emissionsCalculator = new EuEtsEmissionsExporterCalculator(oldCalc);
 
 		while (vpi.hasNextObject()) {
 
 			final Object e = vpi.nextObject();
 			final int currentTime = vpi.getCurrentTime();
 			final VoyagePlanRecord vpr = vpi.getCurrentPlanRecord();
+			long totalEmissions = 0;
+			int emissionsCost = 0;
 
 			if (e instanceof final PortDetails details) {
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
@@ -606,7 +615,13 @@ public class AnnotatedSolutionExporter {
 						redirectedCharterOutStart = null;
 						patchupRedirectCharterEvent = false;
 					}
-
+					
+					// Calculate emissions
+					totalEmissions = emissionsCalculator.getPortVisitEmissions(details);
+					totalEmissions = Calculator.multiply(totalEmissions, emissionsCalculator.getEmissionReductions(currentPortSlot.getPort(), null, currentPortSlot.getTimeWindow().getInclusiveStart()));
+					emissionsCost = (int) emissionsCalculator.getEmissionsCost(totalEmissions, currentPortSlot.getTimeWindow().getInclusiveStart());
+					event.setEmissionsCost(emissionsCost);
+					
 					events.add(event);
 
 					final boolean thisEventIsSequenceEnd = currentPortSlot.getPortType() == PortType.Round_Trip_Cargo_End;
@@ -624,9 +639,19 @@ public class AnnotatedSolutionExporter {
 				int voyage_currentTime = currentTime;
 				final Journey journey = journeyDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				voyage_currentTime += details.getTravelTime();
-
+				
+				IPortSlot fromPortSlot = details.getOptions().getFromPortSlot();
+				IPortSlot toPortSlot = details.getOptions().getToPortSlot();
+				int time = Math.min(fromPortSlot.getTimeWindow().getInclusiveStart(), toPortSlot.getTimeWindow().getInclusiveStart());
+				
+				// Calculate emissions
+				
 				Event lastEvent = null;
 				if (journey != null) {
+					totalEmissions = emissionsCalculator.getJourneyEmissions(details);
+					totalEmissions = Calculator.multiply(totalEmissions, emissionsCalculator.getEmissionReductions(fromPortSlot.getPort(), toPortSlot.getPort(), time));
+					emissionsCost = (int) emissionsCalculator.getEmissionsCost(totalEmissions, time);
+					journey.setEmissionsCost(emissionsCost);
 					events.add(journey);
 
 					// Heel tracking
@@ -653,6 +678,11 @@ public class AnnotatedSolutionExporter {
 				} else {
 					final Idle idle = idleDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 					if (idle != null) {
+						IPort idlePort = toPortSlot.getPort() == null ? fromPortSlot.getPort() : toPortSlot.getPort();
+						totalEmissions = emissionsCalculator.getIdleEmissions(details);
+						totalEmissions = Calculator.multiply(totalEmissions, emissionsCalculator.getEmissionReductions(idlePort, idlePort, time));
+						emissionsCost = (int) emissionsCalculator.getEmissionsCost(totalEmissions, time);
+						idle.setEmissionsCost(emissionsCost);
 						events.add(idle);
 
 						// Heel tracking
@@ -670,6 +700,7 @@ public class AnnotatedSolutionExporter {
 
 				final Purge purge = purgeDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				if (purge != null) {
+					//purge.setEmissionsCost(emissionsCost);
 					events.add(purge);
 					if (lastEvent != null) {
 						purge.setHeelAtStart(lastEvent.getHeelAtEnd());
@@ -683,6 +714,7 @@ public class AnnotatedSolutionExporter {
 				}
 				final Cooldown cooldown = cooldownDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				if (cooldown != null) {
+					//cooldown.setEmissionsCost(emissionsCost);
 					events.add(cooldown);
 					if (lastEvent != null) {
 						assert lastEvent.getHeelAtEnd() == 0;
