@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -57,9 +58,12 @@ import com.mmxlabs.lngdataserver.lng.io.portconfig.PortConfig;
 import com.mmxlabs.lngdataserver.lng.io.portconfig.PortConfigType;
 import com.mmxlabs.lngdataserver.lng.io.vessels.VesselsToScenarioCopier;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.EmissionsCoveredTable;
+import com.mmxlabs.models.lng.cargo.EuEtsModel;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
@@ -144,6 +148,7 @@ public class ScenarioBuilder {
 		final LNGScenarioModel scenarioModel = scenarioModelBuilder.getLNGScenarioModel();
 		scenarioDataProvider = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), scenarioModel);
 		loadPortsAndDistances();
+		buildEuEtsModel(scenarioModelBuilder.getCargoModelBuilder().getCargoModel().getEuEtsModel(), scenarioModelBuilder.getPortModelBuilder().getPortModel().getPortGroups());
 	}
 
 	public ScenarioBuilder loadDefaultData() throws IOException {
@@ -265,6 +270,36 @@ public class ScenarioBuilder {
 		return this;
 	}
 
+	private ScenarioBuilder buildEuEtsModel(EuEtsModel euEtsModel, EList<PortGroup> portGroups) {
+		final String priceExpression = "";
+		euEtsModel.setEuaPriceExpression(priceExpression);
+
+		final EmissionsCoveredTable rampUpEntry1 = CargoFactory.eINSTANCE.createEmissionsCoveredTable();
+		rampUpEntry1.setStartYear(2023);
+		rampUpEntry1.setEmissionsCovered(0);
+		
+		final EmissionsCoveredTable rampUpEntry2 = CargoFactory.eINSTANCE.createEmissionsCoveredTable();
+		rampUpEntry2.setStartYear(2024);
+		rampUpEntry2.setEmissionsCovered(40);
+		
+		final EmissionsCoveredTable rampUpEntry3 = CargoFactory.eINSTANCE.createEmissionsCoveredTable();
+		rampUpEntry3.setStartYear(2025);
+		rampUpEntry3.setEmissionsCovered(70);
+		
+		final EmissionsCoveredTable rampUpEntry4 = CargoFactory.eINSTANCE.createEmissionsCoveredTable();
+		rampUpEntry4.setStartYear(2026);
+		rampUpEntry4.setEmissionsCovered(100);
+		
+		euEtsModel.getEmissionsCovered().addAll(List.of(rampUpEntry1, rampUpEntry2, rampUpEntry3, rampUpEntry4));
+		
+		final Optional<PortGroup> euPortGroup = portGroups.stream().filter(pg -> pg.getName().equals("Northern Europe")).findFirst();
+		if(euPortGroup.isPresent()) {
+			euEtsModel.setEuPortGroup(euPortGroup.get());
+		}
+	
+		return this;
+	}
+	
 	private ScenarioBuilder createDefaultCooldownCost(final String expr) {
 		final PortModelFinder portFinder = new PortModelFinder(ScenarioModelUtil.getPortModel(scenarioDataProvider));
 		final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioDataProvider);

@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.scenario.model.util;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -14,6 +13,7 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.util.ADPModelBuilder;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.EuEtsModel;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
@@ -79,6 +79,9 @@ public final class ScenarioModelBuilder {
 			psr.setVesselGroupCanalParameter(vgcp);
 			rootObject.getCargoModel().getCanalBookings().getPanamaSeasonalityRecords().add(psr);
 		}
+		
+		final EuEtsModel euEtsModel = CargoFactory.eINSTANCE.createEuEtsModel();
+		rootObject.getCargoModel().setEuEtsModel(euEtsModel);
 
 		rootObject.getNominationsModel().setNominationParameters(NominationsFactory.eINSTANCE.createNominationsParameters());
 
