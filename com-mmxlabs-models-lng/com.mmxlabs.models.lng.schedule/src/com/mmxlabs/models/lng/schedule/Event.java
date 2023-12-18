@@ -27,6 +27,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtStart <em>Heel At Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtEnd <em>Heel At End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getEmissionsCost <em>Emissions Cost</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent()
@@ -273,6 +274,28 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @generated
 	 */
 	void setHeelAtEnd(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Emissions Cost</em>' attribute.
+	 * @see #setEmissionsCost(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_EmissionsCost()
+	 * @model
+	 * @generated
+	 */
+	int getEmissionsCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getEmissionsCost <em>Emissions Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Emissions Cost</em>' attribute.
+	 * @see #getEmissionsCost()
+	 * @generated
+	 */
+	void setEmissionsCost(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -57,6 +57,7 @@ public class EventItemProvider
 			addCharterCostPropertyDescriptor(object);
 			addHeelAtStartPropertyDescriptor(object);
 			addHeelAtEndPropertyDescriptor(object);
+			addEmissionsCostPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -238,6 +239,28 @@ public class EventItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Emissions Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEmissionsCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Event_emissionsCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Event_emissionsCost_feature", "_UI_Event_type"),
+				 SchedulePackage.Literals.EVENT__EMISSIONS_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Event.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -280,6 +303,7 @@ public class EventItemProvider
 			case SchedulePackage.EVENT__CHARTER_COST:
 			case SchedulePackage.EVENT__HEEL_AT_START:
 			case SchedulePackage.EVENT__HEEL_AT_END:
+			case SchedulePackage.EVENT__EMISSIONS_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

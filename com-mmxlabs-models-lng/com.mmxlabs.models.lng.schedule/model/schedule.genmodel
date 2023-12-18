@@ -148,6 +148,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Event/charterCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Event/heelAtStart"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Event/heelAtEnd"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Event/emissionsCost"/>
       <genOperations ecoreOperation="schedule.ecore#//Event/getDuration"/>
       <genOperations ecoreOperation="schedule.ecore#//Event/type"/>
       <genOperations ecoreOperation="schedule.ecore#//Event/name"/>

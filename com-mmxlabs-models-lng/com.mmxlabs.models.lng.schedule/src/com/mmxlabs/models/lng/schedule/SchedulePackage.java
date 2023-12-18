@@ -1590,13 +1590,22 @@ public interface SchedulePackage extends EPackage {
 	int EVENT__HEEL_AT_END = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT__EMISSIONS_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1759,6 +1768,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int START_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2056,6 +2074,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int END_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2363,6 +2390,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2680,6 +2716,15 @@ public interface SchedulePackage extends EPackage {
 	int IDLE__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__EMISSIONS_COST = EVENT__EMISSIONS_COST;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2903,6 +2948,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -3137,6 +3191,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -3398,6 +3461,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int VESSEL_EVENT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -3697,6 +3769,15 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__HEEL_AT_END = PORT_VISIT__HEEL_AT_END;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__EMISSIONS_COST = PORT_VISIT__EMISSIONS_COST;
+
+	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3984,6 +4065,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int GENERATED_CHARTER_LENGTH_EVENT__HEEL_AT_END = PORT_VISIT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_LENGTH_EVENT__EMISSIONS_COST = PORT_VISIT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
@@ -4292,6 +4382,15 @@ public interface SchedulePackage extends EPackage {
 	int COOLDOWN__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__EMISSIONS_COST = EVENT__EMISSIONS_COST;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4507,6 +4606,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int PURGE__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURGE__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -5592,6 +5700,15 @@ public interface SchedulePackage extends EPackage {
 	int CHARTER_AVAILABLE_TO_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_AVAILABLE_TO_EVENT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
+
+	/**
 	 * The feature id for the '<em><b>Linked Sequence</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5780,6 +5897,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int CANAL_JOURNEY_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_JOURNEY_EVENT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Linked Sequence</b></em>' reference.
@@ -6009,6 +6135,15 @@ public interface SchedulePackage extends EPackage {
 	int CHARTER_AVAILABLE_FROM_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_AVAILABLE_FROM_EVENT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
+
+	/**
 	 * The feature id for the '<em><b>Linked Sequence</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6197,6 +6332,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int GROUPED_CHARTER_OUT_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -6404,6 +6548,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int GROUPED_CHARTER_LENGTH_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_LENGTH_EVENT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -8193,6 +8346,15 @@ public interface SchedulePackage extends EPackage {
 	int NON_SHIPPED_SLOT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_SLOT_VISIT__EMISSIONS_COST = EVENT__EMISSIONS_COST;
+
+	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8392,6 +8554,15 @@ public interface SchedulePackage extends EPackage {
 	int NON_SHIPPED_JOURNEY__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_JOURNEY__EMISSIONS_COST = EVENT__EMISSIONS_COST;
+
+	/**
 	 * The feature id for the '<em><b>Laden</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8589,6 +8760,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int NON_SHIPPED_IDLE__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Emissions Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NON_SHIPPED_IDLE__EMISSIONS_COST = EVENT__EMISSIONS_COST;
 
 	/**
 	 * The feature id for the '<em><b>Laden</b></em>' attribute.
@@ -9214,6 +9394,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getEvent_HeelAtEnd();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Event#getEmissionsCost <em>Emissions Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Emissions Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getEmissionsCost()
+	 * @see #getEvent()
+	 * @generated
+	 */
+	EAttribute getEvent_EmissionsCost();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getDuration() <em>Get Duration</em>}' operation.
@@ -12282,6 +12473,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EVENT__HEEL_AT_END = eINSTANCE.getEvent_HeelAtEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Emissions Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EVENT__EMISSIONS_COST = eINSTANCE.getEvent_EmissionsCost();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Duration</b></em>' operation.

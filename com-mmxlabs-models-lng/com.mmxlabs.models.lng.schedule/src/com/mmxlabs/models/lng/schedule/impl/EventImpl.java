@@ -42,6 +42,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getCharterCost <em>Charter Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getHeelAtStart <em>Heel At Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getHeelAtEnd <em>Heel At End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getEmissionsCost <em>Emissions Cost</em>}</li>
  * </ul>
  *
  * @generated
@@ -176,6 +177,26 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @ordered
 	 */
 	protected int heelAtEnd = HEEL_AT_END_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getEmissionsCost() <em>Emissions Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEmissionsCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int EMISSIONS_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getEmissionsCost() <em>Emissions Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEmissionsCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int emissionsCost = EMISSIONS_COST_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -521,6 +542,29 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getEmissionsCost() {
+		return emissionsCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEmissionsCost(int newEmissionsCost) {
+		int oldEmissionsCost = emissionsCost;
+		emissionsCost = newEmissionsCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__EMISSIONS_COST, oldEmissionsCost, emissionsCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getDuration() {
@@ -645,6 +689,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return getHeelAtStart();
 			case SchedulePackage.EVENT__HEEL_AT_END:
 				return getHeelAtEnd();
+			case SchedulePackage.EVENT__EMISSIONS_COST:
+				return getEmissionsCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -683,6 +729,9 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return;
 			case SchedulePackage.EVENT__HEEL_AT_END:
 				setHeelAtEnd((Integer)newValue);
+				return;
+			case SchedulePackage.EVENT__EMISSIONS_COST:
+				setEmissionsCost((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -723,6 +772,9 @@ public class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__HEEL_AT_END:
 				setHeelAtEnd(HEEL_AT_END_EDEFAULT);
 				return;
+			case SchedulePackage.EVENT__EMISSIONS_COST:
+				setEmissionsCost(EMISSIONS_COST_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -753,6 +805,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return heelAtStart != HEEL_AT_START_EDEFAULT;
 			case SchedulePackage.EVENT__HEEL_AT_END:
 				return heelAtEnd != HEEL_AT_END_EDEFAULT;
+			case SchedulePackage.EVENT__EMISSIONS_COST:
+				return emissionsCost != EMISSIONS_COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -813,6 +867,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 		result.append(heelAtStart);
 		result.append(", heelAtEnd: ");
 		result.append(heelAtEnd);
+		result.append(", emissionsCost: ");
+		result.append(emissionsCost);
 		result.append(')');
 		return result.toString();
 	}
