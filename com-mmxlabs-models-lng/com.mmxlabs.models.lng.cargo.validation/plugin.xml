@@ -608,6 +608,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.EuEtsConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.EuEtsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="EU ETS Constaint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="EuEtsModel">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.SlotPricingConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.SlotPricingConstraint"
                   isEnabledByDefault="true"
