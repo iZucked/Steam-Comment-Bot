@@ -1,1 +1,3 @@
 progressbar
+requests
+sty
