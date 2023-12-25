@@ -2,6 +2,13 @@ import json
 import requests
 from sty import fg, bg, ef, rs
 
+class Friend:
+    def __init__(self, steam_id: str) -> None:
+        self.steam_id = steam_id
+    
+    def get_steam_id(self) -> str:
+        return self.steam_id
+
 class CommentBot:
     """
     A class to comment on steam profiles.
@@ -12,25 +19,29 @@ class CommentBot:
         self.login_secure = login_secure
         self.session_id = session_id
 
-    def get_steam_ids(self) -> list[str]:
+    def get_friends(self) -> list[Friend]:
         """
-        Returns a list of steam IDs from the steam API.
-        @param api_key: The API key to use.
-        @param root_steam_id: The steam ID to get the friends of.
-        @return: A list of steam IDs.
+        Returns a list of Friends from the users root_stean_id using the steam API.
+        @return: A list of Friends which includes their steam IDs.
         """
-        steam_ids = []
+        friends = []
         endpoint = f"http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.api_key}&steamid={self.root_steam_id}&relationship=friend"
         resp = requests.get(endpoint, timeout=15)
+
+        if(resp.status_code != 200):
+            print(f"Error getting friends from steamID {self.root_steam_id}, reason: {resp.reason}")
+            return friends
+
         string = resp.text
         jdata = json.loads(string)
         table = jdata['friendslist']
-        friends = table['friends']
+        friends_table = table['friends']
 
-        for friend in friends:
-            steam_ids.append(friend['steamid'])
+        for friend in friends_table:
+            if "steamid" in friend:
+                friends.append(Friend(friend['steamid']))
 
-        return steam_ids
+        return friends
 
 
     def comment_on_profile(self, steam_id: str, comment: str) -> bool:
@@ -45,12 +56,27 @@ class CommentBot:
         data = {"comment": str(comment), "count": "6", "sessionid": self.session_id, 'feature2': "-1"}
         resp = (requests.post(f"https://steamcommunity.com/comment/Profile/post/{steam_id}/-1/",
                                     headers=headers, cookies=cookies, data=data, timeout=15)).json()
-        if resp['success']:
+        if 'success' in resp and resp['success'] == True:
             output = fg.green + f"Comment on {steam_id} posted" + fg.rs
             print(output)
             return True
-        else: #Caused by private profiles and comment settings by user   
-            output = fg.red + f"Comment on {steam_id} Failed!" + fg.rs
+        elif 'success' in resp and resp['success'] == False: #Caused by private profiles and comment settings by user   
+            output = fg.red + f"Comment on {steam_id} Failed! \nReason: {resp['error']}" + fg.rs
+
+            if "You've been posting too frequently" in resp['error']:
+                print(output)
+                raise Exception("Rate limit")
+
+            print(output)
+            return False
+        else:
+            if 'error' in resp:
+                output = fg.red + f"Comment on {steam_id} Failed! \nReason: {resp['error']}" + fg.rs
+                if "You've been posting too frequently" in resp['error']:
+                    print(output)
+                    raise Exception("Rate limit")
+            else:
+                output = fg.red + f"Comment on {steam_id} Failed! \nReason: Unknown" + fg.rs
             print(output)
             return False
         
