@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -12,16 +14,27 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.its.verifier.OptimiserDataMapper;
+import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
+import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.EmissionsCoveredTable;
 import com.mmxlabs.models.lng.cargo.EuEtsModel;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselCharter;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.AdpOptimisationMode;
+import com.mmxlabs.models.lng.parameters.OptimisationMode;
+import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -34,8 +47,16 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.EmissionsUtil;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 public class EuEtsTests extends AbstractMicroTestCase {
 
@@ -44,6 +65,7 @@ public class EuEtsTests extends AbstractMicroTestCase {
 	
 	@Nested
 	class EmissionsResultsTests {
+
 		
 		private static PortGroup portGroup;
 		private static Port loadPort;
@@ -236,6 +258,160 @@ public class EuEtsTests extends AbstractMicroTestCase {
 				}
 			}
 			assertWithPrecision(expectedTotalEmissions, actualTotalEmissions, precision);
+		}
+	}
+	
+	@Nested
+	class OptimisationTests{
+		
+		private Schedule setup(String euaPriceExpression) {
+			EuEtsModel euEtsModel = lngScenarioModel.getCargoModel().getEuEtsModel();
+			Port euPort = portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST);
+			Port jpnPort = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
+			Port usPort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+			distanceModelBuilder.setPortToPortDistance(usPort, euPort, RouteOption.DIRECT, 100, true);
+			distanceModelBuilder.setPortToPortDistance(usPort, jpnPort, RouteOption.DIRECT, 100, true);
+			PortGroup portGroup = portModelBuilder.makePortGroup("EU", List.of(euPort));
+			euEtsModel.setEuaPriceExpression(euaPriceExpression); 
+			euEtsModel.setEuPortGroup(portGroup);
+			
+			int year = 2026;
+			EmissionsCoveredTable yearEmissions = CargoFactory.eINSTANCE.createEmissionsCoveredTable();
+			yearEmissions.setEmissionsCovered(100);
+			yearEmissions.setStartYear(year);
+			euEtsModel.getEmissionsCovered().add(yearEmissions);
+			
+			
+			// Unpaired FOB US Purchase
+			cargoModelBuilder.makeCargo() //
+					.makeFOBPurchase("US_Slot", LocalDate.of(year, 1, 1), usPort, null, entity, "1.0") //
+					.build();
+			
+			// Unpaired DES EU Sale
+			cargoModelBuilder.makeCargo() //
+					.makeDESSale("EU_SLOT", LocalDate.of(year, 1, 1), euPort, null, entity, "1.0") //
+					.withOptional(true) // 
+					.build();
+			
+			// Unpaired DES JPN Sale
+			cargoModelBuilder.makeCargo() //
+					.makeDESSale("JPN_SLOT", LocalDate.of(year, 1, 1), jpnPort, null, entity, "1.0") //
+					.withOptional(true) // 
+					.build();
+			
+			evaluateTest();
+			
+			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+			Assertions.assertNotNull(schedule);
+			
+			return schedule;
+			
+		}
+		
+		private @NonNull UserSettings createUserSettings() {
+			final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+			userSettings.setGenerateCharterOuts(false);
+			userSettings.setMode(OptimisationMode.SHORT_TERM);
+			userSettings.setAdpOptimisationMode(AdpOptimisationMode.NON_CLEAN_SLATE);
+
+			userSettings.setShippingOnly(true);
+			userSettings.setWithSpotCargoMarkets(true);
+			userSettings.setSimilarityMode(SimilarityMode.OFF);
+			return userSettings;
+		}
+		
+		private OptimisationPlan createOptimisationPlan(final UserSettings userSettings) {
+			final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+
+			final OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, lngScenarioModel);
+
+			ScenarioUtils.setLSOStageIterations(optimisationPlan, 50_000);
+			ScenarioUtils.setHillClimbStageIterations(optimisationPlan, 10_000);
+			ScenarioUtils.createOrUpdateAllObjectives(optimisationPlan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
+
+			return optimisationPlan;
+		}
+		
+		@Test
+		@Tag(TestCategories.OPTIMISATION_TEST)
+		/**
+		 * Testing optimisation for unpaired trades where EUA price is cheap
+		 * 
+		 * Expected Result:
+		 * - US trade is paired to EU slot as emissions cost is 0
+		 */
+		public void testShipping_euaCheap() {
+			final UserSettings userSettings = createUserSettings();
+			OptimisationPlan optimisationPlan = createOptimisationPlan(userSettings);
+			final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+					.withOptimisationPlan(optimisationPlan) //
+					.withOptimiseHint() //
+					.withThreadCount(1) //
+					.buildDefaultRunner();
+
+			runnerBuilder.evaluateInitialState();
+			
+			Schedule schedule = setup("0.0");
+
+			runnerBuilder.run(false, runner -> {
+
+				// Run, get result and store to schedule model for inspection at EMF level if
+				// needed
+				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
+
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker() //
+						.withUsedDischarge("EU_SLOT") //
+						.anyFleetVessel() //
+						.build();
+
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+				Assertions.assertNotNull(solution);
+			});
+		}
+		
+		@Test
+		@Tag(TestCategories.OPTIMISATION_TEST)
+		/**
+		 * Testing optimisation for unpaired trades where EUA price is cheap
+		 * 
+		 * Expected Result:
+		 * - US trade is paired to JPN slot as emissions cost is 1,000
+		 */
+		public void testShipping_euaExpensive() {
+			final UserSettings userSettings = createUserSettings();
+			OptimisationPlan optimisationPlan = createOptimisationPlan(userSettings);
+			final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+					.withOptimisationPlan(optimisationPlan) //
+					.withOptimiseHint() //
+					.withThreadCount(1) //
+					.buildDefaultRunner();
+
+			runnerBuilder.evaluateInitialState();
+			Schedule schedule = setup("1000.0");
+			
+			// Solution 1
+			runnerBuilder.run(false, runner -> {
+
+				// Run, get result and store to schedule model for inspection at EMF level if
+				// needed
+				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
+
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker() //
+						.withUsedDischarge("JPN_SLOT") //
+						.anyFleetVessel() //
+						.build();
+
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+				Assertions.assertNotNull(solution);
+			});
 		}
 	}
 	
